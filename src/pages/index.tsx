@@ -6,14 +6,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
 import withRoot from '../withRoot';
 
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 
-const styles = (theme: any) => ({
+const styles = (theme: any) => createStyles({
   root: {
     textAlign: 'center',
     paddingTop: theme.spacing.unit * 20,
@@ -37,7 +37,7 @@ const styles = (theme: any) => ({
   },
 });
 
-interface Props { classes: any }
+interface Props extends WithStyles<typeof styles> { }
 interface State { open: boolean }
 
 class Index extends React.Component<Props, State> {
@@ -105,4 +105,4 @@ class Index extends React.Component<Props, State> {
   };
 }
 
-export default withRoot(withStyles(styles as any)(Index));
+export default withRoot(withStyles(styles)(Index));
