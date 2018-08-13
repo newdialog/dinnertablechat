@@ -31,6 +31,9 @@ const styles = (theme: any) => createStyles({
     color: theme.palette.text.secondary,
     whiteSpace: 'nowrap',
     marginBottom: theme.spacing.unit,
+    maxWidth: '400px',
+    marginRight: 'auto',
+    marginLeft: 'auto',
   },
   divider: {
     margin: `${theme.spacing.unit * 2}px 0`,
@@ -56,25 +59,25 @@ class Index extends React.Component<Props, State> {
           Material-UI Grid:
       </Typography>
         <Grid container spacing={24}>
-          <Grid item xs={3}>
-            <Paper className={classes.paper}>xs=3=================</Paper>
+          <Grid item xs={12} sm={12} md={3}>
+            <Paper className={classes.paper}>xs=3========|=|========</Paper>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item sm={12} md={3}>
             <Paper className={classes.paper}>xs=3</Paper>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item sm={12} md={3}>
             <Paper className={classes.paper}>xs=3</Paper>
           </Grid>
-          <Grid item xs={3}>
+          <Grid item sm={12} md={3}>
             <Paper className={classes.paper}>xs=3</Paper>
           </Grid>
-          <Grid item xs={8}>
+          <Grid item sm={12} md={8}>
             <Paper className={classes.paper}>xs=8</Paper>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item sm={12} md={4}>
             <Paper className={classes.paper}>xs=4</Paper>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item sm={12}>
             <Paper className={classes.paper}>xs=12</Paper>
           </Grid>
         </Grid>
