@@ -109,6 +109,7 @@
     ],
     "import-ordering": false,
     "ordered-imports": false,
-    "object-literal-sort-keys": false
+    "object-literal-sort-keys": false,
+    "no-var-requires": false
   }
 }
