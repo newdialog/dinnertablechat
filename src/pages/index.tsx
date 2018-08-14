@@ -12,6 +12,10 @@ import withRoot from '../withRoot';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+
+import Lottie from 'react-lottie';
+// import * as logoData from '../assets/logo.json';
+const logoData = require('../assets/logo.json')
 // import bannerImg from '../../public/assets/banner2.jpg'
 // const bannerImg = require('../assets/banner2.jpg')
 
@@ -50,7 +54,7 @@ const styles = (theme: any) =>
       width: '100%',
       maxHeight: '90%',
       height: 'calc(100vh - 55px)',
-      backgroundImage: 'url("./banner2.jpg")',
+      backgroundImage: 'url("./banner.jpg")',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
       color: 'white'
@@ -59,6 +63,15 @@ const styles = (theme: any) =>
       color: 'white'
     }
   });
+
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: logoData,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
 
 interface Props extends WithStyles<typeof styles> {}
 interface State {
@@ -74,21 +87,25 @@ class Index extends React.Component<Props, State> {
   public render() {
     const { classes } = this.props;
     const { open } = this.state;
-// <img className={classes.banner} src="./banner2.jpg" />
+    // <img className={classes.banner} src="./banner2.jpg" /> 
+    // s
     return (
       <React.Fragment>
         <div className={classes.banner}>
-          
           <Typography variant="display1" gutterBottom align="center" className={classes.bannerText}>
-            Have a polite talk with your opposite family
+            Have a polite talk with your opposite
           </Typography>
-          
         </div>
 
         <div className={classes.centered}>
           <Grid container spacing={24}>
-            <Grid item xs={12} md={12}>
-              <Paper className={classes.paper}>xs=12</Paper>
+            <Grid item xs={12} md={6}>
+            <Typography variant="body1" gutterBottom align="center">
+              Have a polite talk with your opposite
+            </Typography>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Lottie options={defaultOptions} height={300} width={500} />
             </Grid>
             <Grid item xs={12} md={4}>
               <Paper className={classes.paper}>xs=3</Paper>
