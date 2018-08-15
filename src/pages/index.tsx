@@ -56,17 +56,21 @@ const styles = (theme: any) =>
       height: 'calc(90vh - 55px)',
       backgroundImage: 'url("./banner.jpg")',
       backgroundSize: 'cover',
+      backgroundAttachment: 'fixed',
       backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center', 
+      backgroundPosition: 'center 0', 
       color: 'white',
       justifyContent: 'flex-end',
       flexFlow: 'column nowrap'
     },
     bannerText: {
+      fontFamily: 'Open Sans',
       color: 'white',
       // position: 'absolute',
       bottom: '20%',
-      marginBottom: '15vh'
+      marginBottom: '15vh',
+      backgroundColor: '#00000044',
+      fontWeight: 'bold'
       // left: ''
     }
   });
@@ -104,7 +108,7 @@ class Index extends React.Component<Props, State> {
           </Typography>
         </div>
 
-        <Paper className={classes.centered}>
+        <Paper className={classes.centered} elevation={7}>
           <Grid container spacing={24}>
             <Grid item xs={12} md={6}>
             <Typography variant="body1" gutterBottom align="center">
