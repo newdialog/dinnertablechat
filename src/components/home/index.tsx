@@ -7,15 +7,17 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
-import withRoot from '../withRoot';
+import withRoot from '../../withRoot';
 
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 
 import Lottie from 'react-lottie';
+
+import Content from './Content';
 // import * as logoData from '../assets/logo.json';
-const logoData = require('../assets/logo.json')
+const logoData = require('../../assets/logo.json');
 // import bannerImg from '../../public/assets/banner2.jpg'
 // const bannerImg = require('../assets/banner2.jpg')
 
@@ -58,7 +60,7 @@ const styles = (theme: any) =>
       backgroundSize: 'cover',
       backgroundAttachment: 'fixed',
       backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center 0', 
+      backgroundPosition: 'center 0',
       color: 'white',
       // justifyContent: 'center',
       // justifyContent: 'flex-end',
@@ -107,7 +109,7 @@ class Index extends React.Component<Props, State> {
   public render() {
     const { classes } = this.props;
     const { open } = this.state;
-    // <img className={classes.banner} src="./banner2.jpg" /> 
+    // <img className={classes.banner} src="./banner2.jpg" />
     // s
     /* 
     <Typography variant="display1" gutterBottom align="center" className={classes.bannerText}>
@@ -122,47 +124,7 @@ class Index extends React.Component<Props, State> {
           </div>
         </div>
 
-        <div className={classes.centered} >
-          <Grid container spacing={24}>
-            <Grid item xs={12} md={6}>
-            <Typography variant="body1" gutterBottom align="center">
-              Have a polite talk with your opposite
-            </Typography>
-            </Grid>
-            <Grid item xs={12} md={6}>
-            <Paper className={classes.paper}>xs=12</Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper className={classes.paper}>xs=3</Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper className={classes.paper}>xs=3</Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper className={classes.paper}>xs=3</Paper>
-            </Grid>
-            <Grid item xs={12} md={8}>
-              <Paper className={classes.paper}>xs=8</Paper>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Paper className={classes.paper}>xs=4</Paper>
-            </Grid>
-            <Grid item xs={12}>
-              <Paper className={classes.paper}>xs=12</Paper>
-            </Grid>
-          </Grid>
-
-          <Divider className={classes.divider} />
-          <Typography variant="display1" gutterBottom>
-            Material-UI
-          </Typography>
-          <Typography variant="subheading" gutterBottom>
-            example project
-          </Typography>
-          <Button variant="contained" color="secondary" onClick={this.handleClick}>
-            Super Secret Password
-          </Button>
-        </div>
+        <Content />
       </React.Fragment>
     );
   }

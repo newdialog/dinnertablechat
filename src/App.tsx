@@ -1,5 +1,5 @@
 import React from 'react';
-import Index from './pages/index';
+import Index from './components/home/index';
 import AppBar from './AppBar';
 
 class App extends React.Component {
