@@ -50,17 +50,24 @@ const styles = (theme: any) =>
       margin: `${theme.spacing.unit * 2}px 0`
     },
     banner: {
+      display: 'flex',
       objectFit: 'cover',
       width: '100%',
-      maxHeight: '90%',
-      height: 'calc(100vh - 55px)',
+      height: 'calc(90vh - 55px)',
       backgroundImage: 'url("./banner.jpg")',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat',
-      color: 'white'
+      backgroundPosition: 'center', 
+      color: 'white',
+      justifyContent: 'flex-end',
+      flexFlow: 'column nowrap'
     },
     bannerText: {
-      color: 'white'
+      color: 'white',
+      // position: 'absolute',
+      bottom: '20%',
+      marginBottom: '15vh'
+      // left: ''
     }
   });
 
@@ -97,7 +104,7 @@ class Index extends React.Component<Props, State> {
           </Typography>
         </div>
 
-        <div className={classes.centered}>
+        <Paper className={classes.centered}>
           <Grid container spacing={24}>
             <Grid item xs={12} md={6}>
             <Typography variant="body1" gutterBottom align="center">
@@ -137,7 +144,7 @@ class Index extends React.Component<Props, State> {
           <Button variant="contained" color="secondary" onClick={this.handleClick}>
             Super Secret Password
           </Button>
-        </div>
+        </Paper>
       </React.Fragment>
     );
   }
