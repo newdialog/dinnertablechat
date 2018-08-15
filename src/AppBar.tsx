@@ -13,6 +13,7 @@ const styles = createStyles({
   },
   flex: {
     flexGrow: 1,
+    fontFamily: 'Rochester,cursive!important'
   },
   menuButton: {
     marginLeft: -12,
