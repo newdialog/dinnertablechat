@@ -54,13 +54,14 @@ const styles = (theme: any) =>
       objectFit: 'cover',
       width: '100%',
       height: 'calc(90vh - 55px)',
-      backgroundImage: 'url("./banner.jpg")',
+      backgroundImage: 'url("./banner2.jpg")',
       backgroundSize: 'cover',
       backgroundAttachment: 'fixed',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center 0', 
       color: 'white',
-      justifyContent: 'flex-end',
+      // justifyContent: 'center',
+      // justifyContent: 'flex-end',
       flexFlow: 'column nowrap'
     },
     bannerText: {
@@ -72,11 +73,19 @@ const styles = (theme: any) =>
       backgroundColor: '#00000044',
       fontWeight: 'bold'
       // left: ''
+    },
+    logoanim: {
+      width: '100vw',
+      maxWidth: '600px',
+      // minHeight: '300px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      display: 'flex'
     }
   });
 
 const defaultOptions = {
-  loop: true,
+  loop: false,
   autoplay: true,
   animationData: logoData,
   rendererSettings: {
@@ -100,15 +109,20 @@ class Index extends React.Component<Props, State> {
     const { open } = this.state;
     // <img className={classes.banner} src="./banner2.jpg" /> 
     // s
+    /* 
+    <Typography variant="display1" gutterBottom align="center" className={classes.bannerText}>
+            Have a polite talk with your opposite
+          </Typography>
+    */
     return (
       <React.Fragment>
         <div className={classes.banner}>
-          <Typography variant="display1" gutterBottom align="center" className={classes.bannerText}>
-            Have a polite talk with your opposite
-          </Typography>
+          <div className={classes.logoanim}>
+            <Lottie options={defaultOptions} />
+          </div>
         </div>
 
-        <Paper className={classes.centered} elevation={7}>
+        <div className={classes.centered} >
           <Grid container spacing={24}>
             <Grid item xs={12} md={6}>
             <Typography variant="body1" gutterBottom align="center">
@@ -116,7 +130,7 @@ class Index extends React.Component<Props, State> {
             </Typography>
             </Grid>
             <Grid item xs={12} md={6}>
-              <Lottie options={defaultOptions} height={300} width={500} />
+            <Paper className={classes.paper}>xs=12</Paper>
             </Grid>
             <Grid item xs={12} md={4}>
               <Paper className={classes.paper}>xs=3</Paper>
@@ -148,7 +162,7 @@ class Index extends React.Component<Props, State> {
           <Button variant="contained" color="secondary" onClick={this.handleClick}>
             Super Secret Password
           </Button>
-        </Paper>
+        </div>
       </React.Fragment>
     );
   }
