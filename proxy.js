@@ -5,7 +5,7 @@ const PORT = 3001;
 
 console.log('listening on port ', PORT);
  
-//var proxy = httpProxy.createProxyServer(options); // See (†)
+// var proxy = httpProxy.createProxyServer(options); // See (†)
 httpProxy.createServer({
     ssl: {
       key: fs.readFileSync('cert/key.pem', 'utf8'),

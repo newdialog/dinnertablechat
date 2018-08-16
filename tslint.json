@@ -7,6 +7,7 @@
       "coverage/lcov-report/*.js"
     ]
   },
+  "jsRules": { "no-console": false },
   "rules": {
     "align": [
         true,
@@ -45,7 +46,7 @@
     "no-arg": true,
     "no-bitwise": true,
     "no-console": [
-        true,
+        false,
         "log",
         "error",
         "debug",
