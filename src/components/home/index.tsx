@@ -16,6 +16,8 @@ import Grid from '@material-ui/core/Grid';
 import Lottie from 'react-lottie';
 
 import Content from './Content';
+
+import Subcribe from './Subscribe'
 // import * as logoData from '../assets/logo.json';
 const logoData = require('../../assets/logo.json');
 // import bannerImg from '../../public/assets/banner2.jpg'
@@ -125,6 +127,7 @@ class Index extends React.Component<Props, State> {
         </div>
 
         <Content />
+        <div className={classes.centered}><Subcribe /></div>
       </React.Fragment>
     );
   }
