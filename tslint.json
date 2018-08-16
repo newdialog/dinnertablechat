@@ -111,6 +111,7 @@
     "import-ordering": false,
     "ordered-imports": false,
     "object-literal-sort-keys": false,
-    "no-var-requires": false
+    "no-var-requires": false,
+    "jsx-self-close": false
   }
 }
