@@ -115,7 +115,7 @@ class Index extends React.Component<Props, State> {
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <Paper className={classes.paper}>xs=12</Paper>
+            <div className={classes.paper}><Lottie options={defaultOptions} /></div>
           </Grid>
           <Grid item xs={12} md={6}>
            <Typography variant="title" gutterBottom align="left">
@@ -151,15 +151,6 @@ class Index extends React.Component<Props, State> {
         </Grid>
 
         <Divider className={classes.divider} />
-        <Typography variant="display1" gutterBottom>
-          Material-UI
-        </Typography>
-        <Typography variant="subheading" gutterBottom>
-          example project
-        </Typography>
-        <Button variant="contained" color="secondary" onClick={this.handleClick}>
-          Super Secret Password
-        </Button>
       </div>
     );
   }
