@@ -28,6 +28,8 @@
     "webpack",
     "jest",
     "src/setupTests.ts",
-    "proxy.js"
+    "proxy.js",
+    "*.md",
+    "CHANGELOG.md"
   ]
 }

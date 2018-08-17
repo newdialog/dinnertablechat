@@ -21,7 +21,7 @@
     "eject": "react-scripts-ts eject",
     "proxy": "node proxy.js",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d ."
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
