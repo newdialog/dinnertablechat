@@ -51,6 +51,9 @@ const styles = (theme: any) =>
     },
     divider: {
       margin: `${theme.spacing.unit * 2}px 0`
+    },
+    ff: {
+      fontFamily: 'Simpel'
     }
   });
 
@@ -103,7 +106,7 @@ class Index extends React.Component<Props, State> {
             <Paper className={classes.paper}>xs=12</Paper>
           </Grid>
           <Grid item xs={12} md={6}>
-           <Typography variant="title" gutterBottom align="left">
+           <Typography variant="title" gutterBottom align="left" className={classes.ff}>
               Enjoy talking about what’s truly meaningful
            </Typography>
             <Fade bottom>
