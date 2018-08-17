@@ -1,5 +1,6 @@
 {
-  "name": "dinnertable-homesite-ts",
+  "name": "dinnertable-homesite",
+  "homepage": "https://dinnertablechat.github.io/dinnertablechat-homesite/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
