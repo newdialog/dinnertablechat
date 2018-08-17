@@ -18,6 +18,7 @@ import Lottie from 'react-lottie';
 const Fade = require('react-reveal/Fade');
 // import * as logoData from '../assets/logo.json';
 const logoData = require('../../assets/logo.json');
+const mooseData = require('../../assets/moose.json');
 // import bannerImg from '../../public/assets/banner2.jpg'
 // const bannerImg = require('../assets/banner2.jpg')
 
@@ -43,10 +44,12 @@ const styles = (theme: any) =>
       marginBottom: theme.spacing.unit
     },
     centered: {
+      paddingLeft: '2em',
+      paddingRight: '2em',
       marginLeft: 'auto',
       marginRight: 'auto',
       width: 'auto',
-      maxWidth: '800px',
+      maxWidth: '900px',
       minWidth: '300px'
     },
     divider: {
@@ -58,6 +61,15 @@ const defaultOptions = {
   loop: false,
   autoplay: true,
   animationData: logoData,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
+
+const mooseOptions = {
+  loop: false,
+  autoplay: true,
+  animationData: mooseData,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -113,7 +125,7 @@ class Index extends React.Component<Props, State> {
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <div className={classes.paper}>....</div>
+          <div className={classes.paper}><Lottie options={mooseOptions} /></div>
           </Grid>
           <Grid item xs={12} md={6}>
            <Typography variant="title" gutterBottom align="left">
