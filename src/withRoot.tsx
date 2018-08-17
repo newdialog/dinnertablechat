@@ -22,9 +22,10 @@ const theme = createMuiTheme({
   typography: {
     // Use the system font instead of the default Roboto font.
     body1: {
-      fontSize: 16,
+      fontSize: '1.1em',
     },
     title: {
+      fontSize: '2em',
       fontFamily: [
         'Simpel'
       ].join(',')
