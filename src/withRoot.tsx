@@ -19,6 +19,17 @@ const theme = createMuiTheme({
       dark: green[700],
     },
   },
+  typography: {
+    // Use the system font instead of the default Roboto font.
+    body1: {
+      fontSize: 16,
+    },
+    title: {
+      fontFamily: [
+        'Simpel'
+      ].join(',')
+   }
+  }
 });
 
 function withRoot(Component:any) {

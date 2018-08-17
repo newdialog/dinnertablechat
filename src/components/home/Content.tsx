@@ -51,9 +51,6 @@ const styles = (theme: any) =>
     },
     divider: {
       margin: `${theme.spacing.unit * 2}px 0`
-    },
-    ff: {
-      fontFamily: 'Simpel'
     }
   });
 
@@ -91,9 +88,9 @@ class Index extends React.Component<Props, State> {
       <div className={classes.centered}>
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} md={6}>
-          <Typography variant="title" gutterBottom align="left">
-              Intro
-           </Typography>
+            <div className={classes.paper}><Lottie options={defaultOptions} /></div>
+          </Grid>
+          <Grid item xs={12} md={6}>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
                 In today’s polarizing environment, the news and social media only create isolating bubbles and benefit from instilling fear and singular narratives. Dinnertable.chat is a community that uses live
@@ -102,11 +99,9 @@ class Index extends React.Component<Props, State> {
               </Typography>
             </Fade>
           </Grid>
+          
           <Grid item xs={12} md={6}>
-            <Paper className={classes.paper}>xs=12</Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
-           <Typography variant="title" gutterBottom align="left" className={classes.ff}>
+           <Typography variant="title" gutterBottom align="left">
               Enjoy talking about what’s truly meaningful
            </Typography>
             <Fade bottom>
@@ -118,7 +113,7 @@ class Index extends React.Component<Props, State> {
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <div className={classes.paper}><Lottie options={defaultOptions} /></div>
+            <div className={classes.paper}>....</div>
           </Grid>
           <Grid item xs={12} md={6}>
            <Typography variant="title" gutterBottom align="left">
