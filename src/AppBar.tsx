@@ -1,11 +1,12 @@
 import React from 'react';
-import { withStyles, createStyles } from '@material-ui/core/styles';
+import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Store from './models/AppModel'
 
 const styles = createStyles({
   root: {
@@ -21,8 +22,16 @@ const styles = createStyles({
   },
 });
 
-function ButtonAppBar(props:any) {
-  const { classes } = props;
+interface Props extends WithStyles<typeof styles> {
+  store: typeof Store.Type
+}
+
+function onClick(store: typeof Store.Type) {
+  store.setTitle('clicked ' + Math.round(Math.random() * 10) )
+}
+
+function ButtonAppBar(props:Props) {
+  const { classes, store } = props;
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -31,9 +40,9 @@ function ButtonAppBar(props:any) {
             <MenuIcon />
           </IconButton>
           <Typography variant="title" color="inherit" className={classes.flex}>
-            Dinnertable.chat
+            Dinnertable.chat {store.text}
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>
         </Toolbar>
       </AppBar>
     </div>

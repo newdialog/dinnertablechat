@@ -97,15 +97,18 @@ const defaultOptions = {
   }
 };
 
-interface Props extends WithStyles<typeof styles> {}
+import AppModel from '../../models/AppModel'
+interface Props extends WithStyles<typeof styles> {
+  store: typeof AppModel.Type
+}
 interface State {
   open: boolean;
 }
-
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { open: false };
+
   }
 
   public render() {
