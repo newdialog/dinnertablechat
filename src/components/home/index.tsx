@@ -1,4 +1,5 @@
 import * as React from 'react';
+/*
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
@@ -6,22 +7,19 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
-
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+*/
+import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import withRoot from '../../withRoot';
 
 import Lottie from 'react-lottie';
-
 import Content from './Content';
 import { observer } from 'mobx-react';
 import Subcribe from './Subscribe'
-// import * as logoData from '../assets/logo.json';
+
 const logoData = require('../../assets/logo.json');
-// import bannerImg from '../../public/assets/banner2.jpg'
-// const bannerImg = require('../assets/banner2.jpg')
 
 const styles = (theme: any) =>
   createStyles({
