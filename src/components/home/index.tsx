@@ -16,7 +16,7 @@ import Grid from '@material-ui/core/Grid';
 import Lottie from 'react-lottie';
 
 import Content from './Content';
-
+import { observer } from 'mobx-react';
 import Subcribe from './Subscribe'
 // import * as logoData from '../assets/logo.json';
 const logoData = require('../../assets/logo.json');
@@ -97,15 +97,20 @@ const defaultOptions = {
   }
 };
 
-interface Props extends WithStyles<typeof styles> {}
+import AppModel from '../../models/AppModel'
+interface Props extends WithStyles<typeof styles> {
+  store: typeof AppModel.Type
+}
 interface State {
   open: boolean;
 }
 
+@observer
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { open: false };
+
   }
 
   public render() {
