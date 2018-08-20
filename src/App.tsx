@@ -1,14 +1,16 @@
 import React from 'react';
-import Index from './components/home/index';
+// import Index from './components/home/home';
 import AppBar from './components/AppBar';
+import AppRouter from './components/Router'
 
 import { observer, inject } from 'mobx-react'
 
 const App = inject('store')(
-  observer(({ store }) => {
+  observer(({ store, history }) => {
+    console.log('page', store.router.location)
     return (<React.Fragment>
       <AppBar store={store} />
-      <Index store={store} />
+      <AppRouter history={history}></AppRouter>
     </React.Fragment>)
   })
 )
