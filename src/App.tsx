@@ -1,6 +1,6 @@
 import React from 'react';
 import Index from './components/home/index';
-import AppBar from './AppBar';
+import AppBar from './components/AppBar';
 
 import { observer, inject } from 'mobx-react'
 
