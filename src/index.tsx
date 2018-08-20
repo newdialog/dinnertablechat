@@ -4,21 +4,24 @@ import * as ReactDOM from 'react-dom';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-// import Index from './pages/index';
-// import AWSApp from './aws/AWSApp';
 import App from './App'
-// import { Provider } from 'react-redux'
-// import { Provider } from 'mobx-react'
-// import { observable, reaction } from 'mobx'
+import { Provider } from 'mobx-react'
 import AppModel from './models/AppModel'
 
-// import makeInspectable from 'mobx-devtools-mst';
 import { connectReduxDevtools } from 'mst-middlewares'
+import createBrowserHistory from 'history/createBrowserHistory';
+import { RouterModel, syncHistoryWithStore } from '@jadbox/mst-react-router';
 
+// Setup History
+const routerModel = RouterModel.create();
+const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
+
+// Configure MST Store
 const fetcher = url => window.fetch(url).then(response => response.json())
 const store = AppModel.create(
   {
-    text: 'DEFAULT VAL'
+    text: 'DEFAULT VAL',
+    router: routerModel
   },
   {
       fetch: fetcher,
@@ -28,10 +31,11 @@ const store = AppModel.create(
 // makeInspectable(store);
 connectReduxDevtools(require('remotedev'), store)
 
-// import App from './App';
 ReactDOM.render(
   (
-    <App store={store} />
+    <Provider store={store}>
+        <App history={history} />
+    </Provider>
   ),
   document.getElementById('root') as HTMLElement
 );
