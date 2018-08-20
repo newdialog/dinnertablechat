@@ -17,7 +17,9 @@ import { connectReduxDevtools } from 'mst-middlewares'
 
 const fetcher = url => window.fetch(url).then(response => response.json())
 const store = AppModel.create(
-  {},
+  {
+    text: 'DEFAULT VAL'
+  },
   {
       fetch: fetcher,
       alert: m => console.log(m) // Noop for demo: window.alert(m)

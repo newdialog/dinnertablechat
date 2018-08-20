@@ -16,7 +16,7 @@ import Grid from '@material-ui/core/Grid';
 import Lottie from 'react-lottie';
 
 import Content from './Content';
-
+import { observer } from 'mobx-react';
 import Subcribe from './Subscribe'
 // import * as logoData from '../assets/logo.json';
 const logoData = require('../../assets/logo.json');
@@ -104,6 +104,8 @@ interface Props extends WithStyles<typeof styles> {
 interface State {
   open: boolean;
 }
+
+@observer
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
