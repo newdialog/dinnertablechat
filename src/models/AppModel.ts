@@ -1,10 +1,17 @@
 import { types } from 'mobx-state-tree'
 import { RouterModel } from '@jadbox/mst-react-router';
 
+const UserModel = types.model({
+    email: types.maybe(types.string),
+    name: types.string,
+    credits: types.integer,
+    karma: types.integer
+})
+
 const AppModel = types.model({
     text: 'DEFAULT VAL',
-    completed: false,
-    id: 0,
+    loggedIn: false,
+    user: types.maybe(UserModel),
     router: RouterModel
 })
 .actions(self => ({
