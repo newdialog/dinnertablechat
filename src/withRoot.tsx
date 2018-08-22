@@ -23,12 +23,15 @@ const theme = createMuiTheme({
     // Use the system font instead of the default Roboto font.
     body1: {
       fontSize: '1.1em',
+      fontFamily: 'Montserrat',
+      fontWeight: 'normal'
     },
     title: {
       fontSize: '2em',
       fontFamily: [
-        'Simpel'
-      ].join(',')
+        'Montserrat'
+      ].join(','),
+      fontWeight:'bold'
    }
   }
 });
