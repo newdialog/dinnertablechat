@@ -1,7 +1,7 @@
 const fs = require('fs')
 var httpProxy = require('http-proxy');
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 
 console.log('listening on port ', PORT);
  
