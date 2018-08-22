@@ -24,7 +24,7 @@ const theme = createMuiTheme({
     body1: {
       fontSize: '1.1em',
       fontFamily: 'Montserrat',
-      fontWeight: 'normal'
+      fontWeight: 'lighter'
     },
     title: {
       fontSize: '2em',

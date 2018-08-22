@@ -16,7 +16,7 @@ const styles = createStyles({
   flex: {
     flexGrow: 1,
     fontFamily: 'Montserrat!important',
-    fontWeight: 'bold'
+    fontWeight: 'bolder'
   },
   menuButton: {
     marginLeft: -12,

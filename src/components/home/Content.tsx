@@ -49,7 +49,7 @@ const styles = (theme: any) =>
       marginLeft: 'auto',
       marginRight: 'auto',
       width: 'auto',
-      maxWidth: '900px',
+      maxWidth: '1000px',
       minWidth: '300px'
     },
     divider: {
