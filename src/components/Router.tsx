@@ -8,10 +8,6 @@ const DTCRouter = ( {history}:{history:any} ) => (
       <Route exact="true" path="/" component={Home} />
       <Route path="/signin" component={Home} />
       <Route path="/signout" component={Home} />
-      
-      <Route exact="true" path="dinnertablechat-homesite/" component={Home} />
-      <Route path="dinnertablechat-homesite/signin" component={Home} />
-      <Route path="dinnertablechat-homesite/signout" component={Home} />
     </React.Fragment>
   </Router>
 );
