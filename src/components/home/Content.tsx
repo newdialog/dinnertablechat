@@ -176,7 +176,9 @@ class Index extends React.Component<Props, State> {
             <Paper className={classes.paper}>xs=12</Paper>
           </Grid>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>Curious to learn more and be notified when we launch, sign up below!</Paper>
+            <Paper className={classes.paper}>Curious to learn more and be notified when we launch, sign up below!
+            <Lottie options={defaultOptions} />
+            </Paper>
           </Grid>
         </Grid>
 

@@ -42,8 +42,9 @@ function ButtonAppBar(props:Props) {
           <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
             <MenuIcon />
           </IconButton>
+          <img src="./DTCsm.png"/>
           <Typography variant="title" color="inherit" className={classes.flex}>
-            Dinnertable.chat
+          &nbsp;Dinnertable.chat
           </Typography>
           <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>
         </Toolbar>
