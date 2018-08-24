@@ -17,7 +17,7 @@ import withRoot from '../../withRoot';
 import Lottie from 'react-lottie';
 import Content from './Content';
 import { observer } from 'mobx-react';
-import Subcribe from './Subscribe'
+import Subcribe from './Subscribe';
 
 const logoData = require('../../assets/logo.json');
 
@@ -95,9 +95,9 @@ const defaultOptions = {
   }
 };
 
-import AppModel from '../../models/AppModel'
+import AppModel from '../../models/AppModel';
 interface Props extends WithStyles<typeof styles> {
-  store: typeof AppModel.Type
+  store: typeof AppModel.Type;
 }
 interface State {
   open: boolean;
@@ -108,7 +108,6 @@ class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { open: false };
-
   }
 
   public render() {
@@ -125,12 +124,12 @@ class Index extends React.Component<Props, State> {
     */
     return (
       <React.Fragment>
-        <div className={classes.banner}>
-          
-        </div>
+        <div className={classes.banner} />
 
         <Content />
-        <div className={classes.centered}><Subcribe /></div>
+        <div className={classes.centered}>
+          <Subcribe />
+        </div>
       </React.Fragment>
     );
   }
