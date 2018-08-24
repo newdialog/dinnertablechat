@@ -41,7 +41,25 @@ const styles = (theme: any) =>
       textAlign: 'center',
       color: theme.palette.text.secondary,
       whiteSpace: 'nowrap',
-      marginBottom: theme.spacing.unit
+      marginBottom: theme.spacing.unit,
+      flex: '1 1 auto',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'relative'
+    },
+    'paperimg': {
+      height:'auto',
+      width: 'auto',
+      maxWidth: '100%',
+      margin: 'auto',
+      position:'absolute',
+      top:'0%',
+      bottom:'0%',
+      left:'0%',
+      right:'0%',
+      display:'block',
+      objectFit: 'contain',
     },
     centered: {
       paddingLeft: '2em',
@@ -100,7 +118,9 @@ class Index extends React.Component<Props, State> {
       <div className={classes.centered}>
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} md={6}>
-            <div className={classes.paper}><Lottie options={defaultOptions} /></div>
+            <div className={classes.paper}>
+              <img src="./section2.png" className={classes.paperimg}/>
+            </div>
           </Grid>
           <Grid item xs={12} md={6}>
             <Fade bottom>
@@ -125,7 +145,7 @@ class Index extends React.Component<Props, State> {
           </Grid>
           
           <Grid item xs={12} md={6}>
-          <div className={classes.paper}><Lottie options={mooseOptions} /></div>
+            <div className={classes.paper}><Lottie options={mooseOptions} /></div>
           </Grid>
           <Grid item xs={12} md={6}>
            <Typography variant="title" gutterBottom align="left">
