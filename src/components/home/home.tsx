@@ -55,7 +55,7 @@ const styles = (theme: any) =>
       display: 'flex',
       objectFit: 'cover',
       width: '100%',
-      height: 'calc(90vh - 55px)',
+      height: 'calc(70vh - 55px)',
       backgroundImage: 'url("./banner2.jpg")',
       backgroundSize: 'cover',
       backgroundAttachment: 'fixed',
@@ -118,13 +118,15 @@ class Index extends React.Component<Props, State> {
     <Typography variant="display1" gutterBottom align="center" className={classes.bannerText}>
             Have a polite talk with your opposite
           </Typography>
+
+          <div className={classes.logoanim}>
+            <Lottie options={defaultOptions} />
+          </div>
     */
     return (
       <React.Fragment>
         <div className={classes.banner}>
-          <div className={classes.logoanim}>
-            <Lottie options={defaultOptions} />
-          </div>
+          
         </div>
 
         <Content />
