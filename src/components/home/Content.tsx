@@ -30,7 +30,8 @@ const styles = (theme: Theme) =>
     },
     container: {
       marginTop: '30px',
-      padding: '3em',
+      paddingLeft: '3em',
+      paddingRight: '3em',
       // display: 'grid',
       // gridTemplateColumns: 'repeat(12, 1fr)',
       gridGap: `${theme.spacing.unit * 4}px`,
@@ -68,7 +69,7 @@ const styles = (theme: Theme) =>
       }
     },
     centered: {
-      paddingTop: '3em',
+      paddingTop: '0',
       paddingLeft: '1em',
       paddingRight: '1em',
       marginLeft: 'auto',
@@ -78,7 +79,7 @@ const styles = (theme: Theme) =>
       minWidth: '300px'
     },
     divider: {
-      margin: `${theme.spacing.unit * 2}px 0`
+      margin: `${theme.spacing.unit * 6}px 0`
     }
   });
 
@@ -123,7 +124,7 @@ class Index extends React.Component<Props, State> {
     */
     return (
       <div className={classes.centered}>
-        <div id="intro" style={{marginTop:'-50px', paddingBottom:'50px', height:0}} />
+        <div id="intro" style={{height:0}} />
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} md={6}>
             <div className="paperimg">
@@ -143,6 +144,7 @@ class Index extends React.Component<Props, State> {
           </Grid>
           
           <Grid item xs={12} md={6}>
+           <div className={classes.divider}/>
            <Typography variant="title" gutterBottom align="left">
               Enjoy talking about what’s truly meaningful
            </Typography>
@@ -158,6 +160,7 @@ class Index extends React.Component<Props, State> {
             <div className={classes.paper}><img src="./section2.png" className={classes.paperimg}/></div>
           </Grid>
           <Grid item xs={12} md={6}>
+          <div className={classes.divider}/>
            <Typography variant="title" gutterBottom align="left">
             Select your topic
            </Typography>
@@ -174,6 +177,7 @@ class Index extends React.Component<Props, State> {
 
           <Grid item xs={12} md={6}>
            <Typography variant="title" gutterBottom align="left">
+           <div className={classes.divider}/>
             What to bring to the table
            </Typography>
             <Fade bottom>
@@ -186,6 +190,7 @@ class Index extends React.Component<Props, State> {
             <Paper className={classes.paper}>xs=12</Paper>
           </Grid>
           <Grid item xs={12}>
+          <div className={classes.divider}/>
             <Paper className={classes.paper}>Curious to learn more and be notified when we launch, sign up below!
             </Paper>
           </Grid>
