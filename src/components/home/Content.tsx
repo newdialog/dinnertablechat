@@ -19,6 +19,8 @@ const Fade = require('react-reveal/Fade');
 // import * as logoData from '../assets/logo.json';
 const logoData = require('../../assets/logo.json');
 const mooseData = require('../../assets/moose.json');
+
+import Waypoint from 'react-waypoint';
 // import bannerImg from '../../public/assets/banner2.jpg'
 // const bannerImg = require('../assets/banner2.jpg')
 
@@ -128,6 +130,23 @@ class Index extends React.Component<Props, State> {
     this.state = { open: false };
   }
 
+  private logoRef = React.createRef<Lottie | any>()
+
+  private _handleWaypointEnter = () => {
+    if(this.logoRef.current) {
+      console.log('this.logoRef.current', this.logoRef.current)
+      this.logoRef.current.stop();
+      this.logoRef.current.play();
+    }
+  }
+
+  private _handleWaypointLeave = () => {
+    if(this.logoRef.current) {
+      console.log('this.logoRef.current', this.logoRef.current)
+      this.logoRef.current.stop();
+    }
+  }
+
   public render() {
     const { classes } = this.props;
     const { open } = this.state;
@@ -143,7 +162,11 @@ class Index extends React.Component<Props, State> {
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} md={6}>
             <div className="paperimg">
-              <Lottie options={logoOptions} />
+            <Waypoint
+              onEnter={this._handleWaypointEnter}
+              onLeave={this._handleWaypointLeave}
+            />
+              <Lottie options={logoOptions} ref={this.logoRef} />
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
