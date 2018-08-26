@@ -30,10 +30,13 @@ const styles = (theme: Theme) =>
     },
     container: {
       marginTop: '30px',
-      padding: '50px',
+      padding: '3em',
       // display: 'grid',
       // gridTemplateColumns: 'repeat(12, 1fr)',
       gridGap: `${theme.spacing.unit * 4}px`,
+      [theme.breakpoints.down('sm')]: {
+        padding: '0',
+      },
       
       // gridAutoFlow: 'column',
       // gridAutoColumns: '200px'
@@ -59,11 +62,15 @@ const styles = (theme: Theme) =>
       objectFit: 'contain',
       [theme.breakpoints.down('sm')]: {
         maxWidth: '80%',
+      },
+      [theme.breakpoints.down('xs')]: {
+        maxWidth: '100%',
       }
     },
     centered: {
-      paddingLeft: '2em',
-      paddingRight: '2em',
+      paddingTop: '3em',
+      paddingLeft: '1em',
+      paddingRight: '1em',
       marginLeft: 'auto',
       marginRight: 'auto',
       width: 'auto',
@@ -116,6 +123,7 @@ class Index extends React.Component<Props, State> {
     */
     return (
       <div className={classes.centered}>
+        <div id="intro" style={{marginTop:'-50px', paddingBottom:'50px', height:0}} />
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} md={6}>
             <div className="paperimg">
@@ -124,6 +132,7 @@ class Index extends React.Component<Props, State> {
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
+          
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
                 In today’s polarizing environment, the news and social media only create isolating bubbles and benefit from instilling fear and singular narratives. Dinnertable.chat is a community that uses live
