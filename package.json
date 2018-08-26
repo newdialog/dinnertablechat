@@ -30,7 +30,7 @@
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "proxy": "node proxy.js",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && cp -rf CNAME ./build/",
     "deploy": "gh-pages -d build"
   },
   "devDependencies": {
