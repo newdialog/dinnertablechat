@@ -7,7 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
 import Paper from '@material-ui/core/Paper';
@@ -22,7 +22,7 @@ const mooseData = require('../../assets/moose.json');
 // import bannerImg from '../../public/assets/banner2.jpg'
 // const bannerImg = require('../assets/banner2.jpg')
 
-const styles = (theme: any) =>
+const styles = (theme: Theme) =>
   createStyles({
     root: {
       textAlign: 'center',
@@ -30,9 +30,11 @@ const styles = (theme: any) =>
     },
     container: {
       marginTop: '30px',
+      padding: '50px',
       // display: 'grid',
       // gridTemplateColumns: 'repeat(12, 1fr)',
-      // gridGap: `${theme.spacing.unit * 3}px`
+      gridGap: `${theme.spacing.unit * 4}px`,
+      
       // gridAutoFlow: 'column',
       // gridAutoColumns: '200px'
     },
@@ -53,13 +55,11 @@ const styles = (theme: any) =>
       width: 'auto',
       maxWidth: '100%',
       margin: 'auto',
-      position:'absolute',
-      top:'0%',
-      bottom:'0%',
-      left:'0%',
-      right:'0%',
       display:'block',
       objectFit: 'contain',
+      [theme.breakpoints.down('sm')]: {
+        maxWidth: '80%',
+      }
     },
     centered: {
       paddingLeft: '2em',
@@ -75,7 +75,7 @@ const styles = (theme: any) =>
     }
   });
 
-const defaultOptions = {
+const logoOptions = {
   loop: false,
   autoplay: true,
   animationData: logoData,
@@ -118,8 +118,9 @@ class Index extends React.Component<Props, State> {
       <div className={classes.centered}>
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} md={6}>
-            <div className={classes.paper}>
-              <img src="./section2.png" className={classes.paperimg}/>
+            <div className="paperimg">
+              <Lottie options={logoOptions} />
+              
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -145,7 +146,7 @@ class Index extends React.Component<Props, State> {
           </Grid>
           
           <Grid item xs={12} md={6}>
-            <div className={classes.paper}><Lottie options={mooseOptions} /></div>
+            <div className={classes.paper}><img src="./section2.png" className={classes.paperimg}/></div>
           </Grid>
           <Grid item xs={12} md={6}>
            <Typography variant="title" gutterBottom align="left">
@@ -177,7 +178,6 @@ class Index extends React.Component<Props, State> {
           </Grid>
           <Grid item xs={12}>
             <Paper className={classes.paper}>Curious to learn more and be notified when we launch, sign up below!
-            <Lottie options={defaultOptions} />
             </Paper>
           </Grid>
         </Grid>
