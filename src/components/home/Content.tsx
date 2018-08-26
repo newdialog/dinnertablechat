@@ -143,7 +143,7 @@ class Index extends React.Component<Props, State> {
   private _handleWaypointLeave = () => {
     if(this.logoRef.current) {
       console.log('this.logoRef.current', this.logoRef.current)
-      this.logoRef.current.stop();
+      // this.logoRef.current.stop();
     }
   }
 
