@@ -149,11 +149,7 @@ class Index extends React.Component<Props, State> {
           <Grid item xs={12} md={6}>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-                In today’s polarizing environment, the news and social media only create isolating bubbles and benefit
-                from instilling fear and singular narratives. Dinnertable.chat is a community that uses live
-                conversational experiences to allow people to come together to express their viewpoints and feelings,
-                under the guidance of a moderator who will help keep the conversation flowing. Instead of fighting, we
-                can enjoy the activity of debating and learning from each other.
+              In today’s polarizing environment it can be hard to have thoughtful debates among differing ideologies. DTC is a virtual experience that connects you with the “other side” to playfully challenge each other under the guidance of a moderator. 
               </Typography>
             </Fade>
           </Grid>
@@ -202,14 +198,26 @@ class Index extends React.Component<Props, State> {
           <Grid item xs={12} md={6}>
             <div className={classes.divider} />
             <Typography variant="title" gutterBottom align="left">
+            Select your character
+            </Typography>
+            <Fade bottom>
+              <Typography variant="body1" gutterBottom align="left">
+              You will control a virtual character that will talk as you talk, listen to your matched partner, and also represents your mood. There’s several characters to choose from that all have their own personality and style. Unlock new characters as you perform in more debates.
+              </Typography>
+            </Fade>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Paper className={classes.paper}>xs=12</Paper>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <div className={classes.divider} />
+            <Typography variant="title" gutterBottom align="left">
               Select your topic
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-                Get started by selecting a desired topic. Sets of topics are picked by forecasted trends in the news and
-                online discussions, as well as user voting. After picking the topic, then you choose on how you roughly
-                feel about it. Example: do you support less gun regulations or more? This will allow the system to match
-                you with your opposite.
+              Get started by selecting a desired topic. Topics are selected via news trends, online discussions, and your vote in DTC polls. After picking the topic, gage your position on this issue. (Do you support more or less gun regulations?) Our system will then match you with someone who holds a contrasting viewpoint.
               </Typography>
             </Fade>
           </Grid>
@@ -224,9 +232,7 @@ class Index extends React.Component<Props, State> {
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-                We all have our own way of looking at the world and desire to share our thoughts and discoveries. DTC
-                provides a virtual experience that allows you to playfully talk with others that hold different views.
-                Perhaps you can share a perspective that is overlooked or be persuaded of a compelling viewpoint.
+              We all have our own way of looking at the world. Sharing our thoughts and discoveries is more fun when we respectfully challenge each other. Perhaps you can share a perspective that’s typically overlooked or can be persuaded to reframe your opinion. 
               </Typography>
             </Fade>
           </Grid>
