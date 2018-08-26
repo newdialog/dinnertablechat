@@ -19,6 +19,9 @@ import Content from './Content';
 import { observer } from 'mobx-react';
 import Subcribe from './Subscribe';
 
+import ArrowDown from '@material-ui/icons/KeyboardArrowDown'
+import IconButton from '@material-ui/core/IconButton'
+
 const logoData = require('../../assets/logo.json');
 
 const styles = (theme: any) =>
@@ -48,6 +51,12 @@ const styles = (theme: any) =>
       maxWidth: '800px',
       minWidth: '300px'
     },
+    centeredDown: {
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      paddingBottom: '5em',
+      color: '#ffffff88'
+    },
     divider: {
       margin: `${theme.spacing.unit * 2}px 0`
     },
@@ -55,7 +64,7 @@ const styles = (theme: any) =>
       display: 'flex',
       objectFit: 'cover',
       width: '100%',
-      height: 'calc(70vh - 55px)',
+      height: 'calc(100vh - 0px)',
       backgroundImage: 'url("./banner.jpg")',
       backgroundSize: 'cover',
       backgroundAttachment: 'fixed',
@@ -63,7 +72,7 @@ const styles = (theme: any) =>
       backgroundPosition: 'center 0',
       color: 'white',
       // justifyContent: 'center',
-      // justifyContent: 'flex-end',
+      justifyContent: 'flex-end',
       flexFlow: 'column nowrap'
     },
     bannerText: {
@@ -83,17 +92,12 @@ const styles = (theme: any) =>
       marginLeft: 'auto',
       marginRight: 'auto',
       display: 'flex'
+    },
+    largeIcon: {
+      width: 80,
+      height: 60,
     }
   });
-
-const defaultOptions = {
-  loop: false,
-  autoplay: true,
-  animationData: logoData,
-  rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice'
-  }
-};
 
 import AppModel from '../../models/AppModel';
 interface Props extends WithStyles<typeof styles> {
@@ -121,10 +125,18 @@ class Index extends React.Component<Props, State> {
           <div className={classes.logoanim}>
             <Lottie options={defaultOptions} />
           </div>
+           <ArrowDown style={{fontSize:'16em'}}/>
+           style={{color: 'inherit', textDecoration: 'inherit'}} 
     */
     return (
       <React.Fragment>
-        <div className={classes.banner} />
+        <div className={classes.banner}> 
+         <div className={classes.centeredDown}> 
+          <a href="#intro">
+            <IconButton style={{height:'9em', width:'9em'}}><ArrowDown style={{fontSize:'9em'}}/></IconButton>
+          </a>
+         </div>
+        </div>
 
         <Content />
         <div className={classes.centered}>
