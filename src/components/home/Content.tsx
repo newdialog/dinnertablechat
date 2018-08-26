@@ -36,11 +36,23 @@ const styles = (theme: Theme) =>
       // gridTemplateColumns: 'repeat(12, 1fr)',
       gridGap: `${theme.spacing.unit * 4}px`,
       [theme.breakpoints.down('sm')]: {
-        padding: '0',
-      },
-      
+        padding: '0'
+      }
+
       // gridAutoFlow: 'column',
       // gridAutoColumns: '200px'
+    },
+    containerRev: {
+      marginTop: '0px',
+      paddingLeft: '3em',
+      paddingRight: '3em',
+      // display: 'grid',
+      // gridTemplateColumns: 'repeat(12, 1fr)',
+      gridGap: `${theme.spacing.unit * 4}px`,
+      [theme.breakpoints.down('sm')]: {
+        padding: '0'
+      },
+      flexWrap: 'wrap-reverse'
     },
     paper: {
       padding: theme.spacing.unit,
@@ -54,18 +66,19 @@ const styles = (theme: Theme) =>
       alignItems: 'center',
       position: 'relative'
     },
-    'paperimg': {
-      height:'auto',
+    paperimg: {
+      height: 'auto',
       width: 'auto',
       maxWidth: '100%',
       margin: 'auto',
-      display:'block',
+      display: 'block',
       objectFit: 'contain',
       [theme.breakpoints.down('sm')]: {
-        maxWidth: '80%',
+        paddingTop: `${theme.spacing.unit * 5}px`,
+        maxWidth: '80%'
       },
       [theme.breakpoints.down('xs')]: {
-        maxWidth: '100%',
+        maxWidth: '100%'
       }
     },
     centered: {
@@ -79,7 +92,10 @@ const styles = (theme: Theme) =>
       minWidth: '300px'
     },
     divider: {
-      margin: `${theme.spacing.unit * 6}px 0`
+      margin: `${theme.spacing.unit * 6}px 0`,
+      [theme.breakpoints.down('sm')]: {
+        margin: `${theme.spacing.unit * 1}px 0`,
+      }
     }
   });
 
@@ -124,50 +140,40 @@ class Index extends React.Component<Props, State> {
     */
     return (
       <div className={classes.centered}>
-        
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} md={6}>
             <div className="paperimg">
               <Lottie options={logoOptions} />
-              
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
-          
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-                In today’s polarizing environment, the news and social media only create isolating bubbles and benefit from instilling fear and singular narratives. Dinnertable.chat is a community that uses live
-                conversational experiences to allow people to come together to express their viewpoints and feelings, under the guidance of a moderator who will help keep the conversation flowing. Instead of fighting, we
+                In today’s polarizing environment, the news and social media only create isolating bubbles and benefit
+                from instilling fear and singular narratives. Dinnertable.chat is a community that uses live
+                conversational experiences to allow people to come together to express their viewpoints and feelings,
+                under the guidance of a moderator who will help keep the conversation flowing. Instead of fighting, we
                 can enjoy the activity of debating and learning from each other.
               </Typography>
             </Fade>
           </Grid>
-          
+        </Grid>
+        <Grid container spacing={24} className={classes.containerRev}>
+        <Grid item xs={12}>
+            <div className={classes.divider} />
+            <Paper className={classes.paper}>
+              Curious to learn more and be notified when we launch, sign up below!
+            </Paper>
+          </Grid>
+
           <Grid item xs={12} md={6}>
-           <div className={classes.divider}/>
-           <Typography variant="title" gutterBottom align="left">
-              Enjoy talking about what’s truly meaningful
-           </Typography>
+            <Typography variant="title" gutterBottom align="left">
+              <div className={classes.divider} />
+              Basic Rules
+            </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              We all have our own way of looking at the world and desire to share our thoughts and discoveries. DTC provides a virtual experience that allows you to playfully talk with others that hold different 
-              views. Perhaps you can share a perspective that is overlooked or be persuaded of a compelling viewpoint. 
-              </Typography>
-            </Fade>
-          </Grid>
-          
-          <Grid item xs={12} md={6}>
-            <div className={classes.paper}><img src="./section2.png" className={classes.paperimg}/></div>
-          </Grid>
-          <Grid item xs={12} md={6}>
-          <div className={classes.divider}/>
-           <Typography variant="title" gutterBottom align="left">
-            Select your topic
-           </Typography>
-            <Fade bottom>
-              <Typography variant="body1" gutterBottom align="left">
-              Get started by selecting a desired topic. Sets of topics are picked by forecasted trends in the news and online discussions, as well as user voting. After picking the topic, then you choose on how 
-              you roughly feel about it. Example: do you support less gun regulations or more? This will allow the system to match you with your opposite.
+              DTC is a safe place to share often emotionally fueled discussions. Our community embraces being fully honest, passionate, and engaged with new ideas… even if it makes us a little frightened or warm blooded. On the other paw, personal attacks, being disrespectful, and otherwise being a jerk is not welcomed. There’s a zero tolerance for bad behavior, and the moderator is allowed to end sessions early as well as ban intentional bad actors.
               </Typography>
             </Fade>
           </Grid>
@@ -176,25 +182,62 @@ class Index extends React.Component<Props, State> {
           </Grid>
 
           <Grid item xs={12} md={6}>
-           <Typography variant="title" gutterBottom align="left">
-           <div className={classes.divider}/>
-            What to bring to the table
-           </Typography>
+            <Typography variant="title" gutterBottom align="left">
+              <div className={classes.divider} />
+              What to bring to the table
+            </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              Like any good dinner guest, you can bring your own food and drink. You effectively decide how much to tip the moderator, and you’ll be matched with a debate partner that selected the same amount. The higher the tip, the more likely you’ll be debating with someone who is as much of a upstanding individual as you are.
+                Like any good dinner guest, you can bring your own food and drink. You effectively decide how much to
+                tip the moderator, and you’ll be matched with a debate partner that selected the same amount. The higher
+                the tip, the more likely you’ll be debating with someone who is as much of a upstanding individual as
+                you are.
               </Typography>
             </Fade>
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper className={classes.paper}>xs=12</Paper>
           </Grid>
-          <Grid item xs={12}>
-          <div className={classes.divider}/>
-            <Paper className={classes.paper}>Curious to learn more and be notified when we launch, sign up below!
-            </Paper>
+
+          <Grid item xs={12} md={6}>
+            <div className={classes.divider} />
+            <Typography variant="title" gutterBottom align="left">
+              Select your topic
+            </Typography>
+            <Fade bottom>
+              <Typography variant="body1" gutterBottom align="left">
+                Get started by selecting a desired topic. Sets of topics are picked by forecasted trends in the news and
+                online discussions, as well as user voting. After picking the topic, then you choose on how you roughly
+                feel about it. Example: do you support less gun regulations or more? This will allow the system to match
+                you with your opposite.
+              </Typography>
+            </Fade>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Paper className={classes.paper}>xs=12</Paper>
+          </Grid>
+
+        <Grid item xs={12} md={6}>
+            <div className={classes.divider} />
+            <Typography variant="title" gutterBottom align="left">
+              Enjoy talking about what’s truly meaningful
+            </Typography>
+            <Fade bottom>
+              <Typography variant="body1" gutterBottom align="left">
+                We all have our own way of looking at the world and desire to share our thoughts and discoveries. DTC
+                provides a virtual experience that allows you to playfully talk with others that hold different views.
+                Perhaps you can share a perspective that is overlooked or be persuaded of a compelling viewpoint.
+              </Typography>
+            </Fade>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <div className={classes.paper}>
+              <img src="./section2.png" className={classes.paperimg} />
+            </div>
           </Grid>
         </Grid>
+
+        
 
         <Divider className={classes.divider} />
       </div>
