@@ -134,6 +134,7 @@ class Index extends React.Component<Props, State> {
          <div className={classes.centeredDown}> 
           <a href="#intro">
             <IconButton style={{height:'9em', width:'9em'}}><ArrowDown style={{fontSize:'9em'}}/></IconButton>
+            <div id="intro" style={{height:0}} />
           </a>
          </div>
         </div>
