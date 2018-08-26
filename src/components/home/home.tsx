@@ -56,7 +56,7 @@ const styles = (theme: any) =>
       objectFit: 'cover',
       width: '100%',
       height: 'calc(70vh - 55px)',
-      backgroundImage: 'url("./banner2.jpg")',
+      backgroundImage: 'url("./banner.jpg")',
       backgroundSize: 'cover',
       backgroundAttachment: 'fixed',
       backgroundRepeat: 'no-repeat',
