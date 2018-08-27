@@ -37,14 +37,14 @@ function ButtonAppBar(props:Props) {
   const { classes, store } = props;
   return (
     <div className={classes.root}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" color="default">
         <Toolbar variant="dense">
           <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
             <MenuIcon />
           </IconButton>
           <img src="./DTCsm.png"/>
           <Typography variant="title" color="inherit" className={classes.flex}>
-          &nbsp;Dinnertable.chat
+          &nbsp;DTC
           </Typography>
           <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>
         </Toolbar>
