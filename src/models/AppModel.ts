@@ -1,18 +1,13 @@
 import { types } from 'mobx-state-tree';
 import { RouterModel } from 'mst-react-router';
-
-const UserModel = types.model({
-  email: types.maybe(types.string),
-  name: types.string,
-  credits: types.integer,
-  karma: types.integer
-});
+import AuthModel from './AuthModel';
+import { Instance } from 'mobx-state-tree';
 
 const AppModel = types
   .model({
     text: 'DEFAULT VAL',
     loggedIn: false,
-    user: types.maybe(UserModel),
+    auth: AuthModel,
     router: RouterModel
   })
   .actions(self => ({
@@ -21,4 +16,17 @@ const AppModel = types
     }
   }));
 
-export default AppModel;
+export type Type = Instance<typeof AppModel>;
+
+export const create = (routerModel: RouterModel, fetcher: any) =>
+  AppModel.create(
+    {
+      text: 'DEFAULT VAL',
+      router: routerModel,
+      auth: AuthModel.create({})
+    },
+    {
+      fetch: fetcher,
+      alert: m => console.log(m) // Noop for demo: window.alert(m)
+    }
+  );
