@@ -11,6 +11,7 @@
 
 # misc
 /assets
+cert/
 .DS_Store
 .env.local
 .env.development.local
@@ -29,4 +30,3 @@ aws-exports.*
 awsmobilejs/.awsmobile/backend-build
 awsmobilejs/\#current-backend-info
 ~awsmobilejs-*/
-cert/

@@ -84,9 +84,9 @@ const styles = (theme: Theme) =>
     }
   });
 
-import AppModel from '../../models/AppModel';
+import * as AppModel from '../../models/AppModel';
 interface Props extends WithStyles<typeof styles> {
-  store: typeof AppModel.Type;
+  store: AppModel.Type;
 }
 interface State {
   open: boolean;
