@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
 import Lottie from 'react-lottie';
@@ -11,7 +11,7 @@ import Button from '@material-ui/core/Button';
 
 const logoData = require('../../assets/logo.json');
 
-const styles = (theme: any) =>
+const styles = (theme: Theme) =>
   createStyles({
     root: {
       textAlign: 'center',
@@ -41,7 +41,7 @@ const styles = (theme: any) =>
     centeredDown: {
       marginLeft: 'auto',
       marginRight: 'auto',
-      paddingBottom: '5em',
+      paddingBottom: '1em',
       color: '#ffffff88',
       textAlign: 'center'
     },
@@ -53,9 +53,9 @@ const styles = (theme: any) =>
       objectFit: 'cover',
       width: '100%',
       height: 'calc(100vh - 0px)',
-      backgroundImage: 'url("./banner.jpg")',
+      backgroundImage: 'url("./DTC-scene3.png")',
       backgroundSize: 'cover',
-      backgroundAttachment: 'fixed',
+      // backgroundAttachment: 'fixed',
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'center 0',
       color: 'white',
@@ -95,23 +95,27 @@ class Index extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
   }
-
+/*
+            <img src="./DTC-scene3.png"/>
+            <img src="./DTC-scene3-foreg.png" style={{width:'100%'}}/>
+*/
   public render() {
     const { classes } = this.props;
     return (
       <React.Fragment>
         <div className={classes.banner}>
           <div className={classes.centeredDown}>
+          
+            <a href="#intro">
+              <IconButton style={{ height: '11vh', width: '11vh' }}>
+                <ArrowDown style={{ fontSize: '11vh' }} />
+              </IconButton>
+              <div id="intro" style={{ height: 0 }} />
+            </a><br />
             <Button href="#intro" size="small" variant="contained" color="primary">
               Learn More
             </Button>
-            <br />
-            <a href="#intro">
-              <IconButton style={{ height: '9em', width: '9em' }}>
-                <ArrowDown style={{ fontSize: '9em' }} />
-              </IconButton>
-              <div id="intro" style={{ height: 0 }} />
-            </a>
+            
           </div>
         </div>
       </React.Fragment>
