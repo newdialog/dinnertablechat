@@ -44,7 +44,6 @@ function ButtonAppBar(props:Props) {
     <div className={classes.root}>
       <AppBar position="fixed" color="default">
         <Toolbar variant="dense">
-          
           <img src="./logos/appbar-logo-color.png" style={{height:'3em'}}/>
           <Typography variant="title" color="inherit" className={classes.flex}>
           </Typography>

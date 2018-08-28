@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
 import Lottie from 'react-lottie';
@@ -11,7 +11,7 @@ import Banner from './Banner';
 
 const logoData = require('../../assets/logo.json');
 
-const styles = (theme: any) =>
+const styles = (theme: Theme) =>
   createStyles({
     root: {
       textAlign: 'center',
