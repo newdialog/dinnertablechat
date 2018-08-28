@@ -13,13 +13,13 @@ const theme = createMuiTheme({
     primary: {
       light: red[100],
       main: red[200],
-      dark: red[400],
+      dark: red[400]
     },
     secondary: {
       light: blue[100],
       main: blue[200],
-      dark: blue[400],
-    },
+      dark: blue[400]
+    }
   },
   typography: {
     // Use the system font instead of the default Roboto font.
@@ -30,16 +30,35 @@ const theme = createMuiTheme({
     },
     title: {
       fontSize: '2em',
-      fontFamily: [
-        'Montserrat'
-      ].join(','),
-      fontWeight:'bold'
-   }
+      fontFamily: ['Montserrat'].join(','),
+      fontWeight: 'bold'
+    },
+    display4: {
+      fontSize: '3em',
+      color: 'white',
+      fontFamily: ['Montserrat'].join(','),
+      fontWeight: 600,
+      letterSpacing: '-0.02em'
+    },
+    display1: {
+      fontSize: '1.7em',
+      color: 'white',
+      fontFamily: ['Montserrat'].join(','),
+      fontWeight: 300,
+      letterSpacing: '0.02em'
+    }
   }
 });
 
-function withRoot(Component:any) {
-  function WithRoot(props:any) {
+// Patch for smaller screens overflowing
+theme.typography.display4 = Object.assign(theme.typography.display4, {
+  [theme.breakpoints.down('xs')]: {
+    fontSize: '2.4em'
+  }
+})
+
+function withRoot(Component: any) {
+  function WithRoot(props: any) {
     // MuiThemeProvider makes the theme available down the React tree
     // thanks to React context.
     return (

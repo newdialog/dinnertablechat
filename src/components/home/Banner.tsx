@@ -8,6 +8,7 @@ import { observer } from 'mobx-react';
 import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
+import { Typography } from '@material-ui/core';
 
 const logoData = require('../../assets/logo.json');
 
@@ -43,7 +44,8 @@ const styles = (theme: Theme) =>
       marginRight: 'auto',
       paddingBottom: '1em',
       color: '#ffffff88',
-      textAlign: 'center'
+      textAlign: 'center',
+      display: 'inline-block'
     },
     divider: {
       margin: `${theme.spacing.unit * 2}px 0`
@@ -53,7 +55,7 @@ const styles = (theme: Theme) =>
       objectFit: 'cover',
       width: '100%',
       height: 'calc(100vh - 0px)',
-      backgroundImage: 'url("./DTC-scene3.png")',
+      backgroundImage: 'url("./DTC-scene3-bg2.png")', // DTC-scene3.png
       backgroundSize: 'cover',
       // backgroundAttachment: 'fixed',
       backgroundRepeat: 'no-repeat',
@@ -63,15 +65,22 @@ const styles = (theme: Theme) =>
       justifyContent: 'flex-end',
       flexFlow: 'column nowrap'
     },
-    bannerText: {
-      fontFamily: 'Open Sans',
-      color: 'white',
+    bannerTextDivider: {
+      // fontFamily: 'Open Sans',
+      // color: 'white',
       // position: 'absolute',
-      bottom: '20%',
-      marginBottom: '15vh',
-      backgroundColor: '#00000044',
-      fontWeight: 'bold'
+      // bottom: '20%',
+      // marginBottom: '15vh',
+      // backgroundColor: '#00000044',
+      // fontWeight: 'bold'
       // left: ''
+      height:'14vh',
+      [theme.breakpoints.down('sm')]: {
+        height:'8vh'
+      },
+      [theme.breakpoints.down('xs')]: {
+        height:'8vh'
+      }
     },
     logoanim: {
       width: '100vw',
@@ -105,7 +114,13 @@ class Index extends React.Component<Props> {
       <React.Fragment>
         <div className={classes.banner}>
           <div className={classes.centeredDown}>
-          
+            <Typography variant="display4" gutterBottom align="center">
+              JOIN THE CONVERSATION
+            </Typography>
+            <Typography variant="display1" align="center">
+              share your perspective
+            </Typography>
+            <div className={classes.bannerTextDivider}/>
             <a href="#intro">
               <IconButton style={{ height: '11vh', width: '11vh' }}>
                 <ArrowDown style={{ fontSize: '11vh' }} />

@@ -18,7 +18,7 @@ import Lottie from 'react-lottie';
 const Fade = require('react-reveal/Fade');
 // import * as logoData from '../assets/logo.json';
 const logoData = require('../../assets/logo.json');
-const mooseData = require('../../assets/moose.json');
+const talkingData = require('../../assets/splash-talking.json');
 
 import Waypoint from 'react-waypoint';
 // import bannerImg from '../../public/assets/banner2.jpg'
@@ -110,10 +110,10 @@ const logoOptions = {
   }
 };
 
-const mooseOptions = {
-  loop: false,
+const talkingOptions = {
+  loop: true,
   autoplay: true,
-  animationData: mooseData,
+  animationData: talkingData,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -180,9 +180,11 @@ class Index extends React.Component<Props, State> {
         <Grid container spacing={24} className={classes.containerRev}>
         <Grid item xs={12}>
             <div className={classes.divider} />
-            <Paper className={classes.paper}>
+            
+            <Typography variant="body1" gutterBottom align="center">
               Curious to learn more and be notified when we launch, sign up below!
-            </Paper>
+              </Typography>
+            
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -261,7 +263,8 @@ class Index extends React.Component<Props, State> {
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
-              <img src="./section2.png" className={classes.paperimg} />
+              <Lottie options={talkingOptions}/>
+              
             </div>
           </Grid>
         </Grid>
@@ -272,7 +275,7 @@ class Index extends React.Component<Props, State> {
       </div>
     );
   }
-
+// <img src="./section2.png" className={classes.paperimg} />
   private handleClose = () => {
     this.setState({
       open: false
