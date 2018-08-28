@@ -55,7 +55,7 @@ const styles = (theme: Theme) =>
       objectFit: 'cover',
       width: '100%',
       height: 'calc(100vh - 0px)',
-      backgroundImage: 'url("./DTC-scene3-bg2.png")', // DTC-scene3.png
+      backgroundImage: 'url("./imgs/DTC-scene3-bg2.png")', // DTC-scene3.png
       backgroundSize: 'cover',
       // backgroundAttachment: 'fixed',
       backgroundRepeat: 'no-repeat',
