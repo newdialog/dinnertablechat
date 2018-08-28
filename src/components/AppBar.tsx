@@ -32,6 +32,11 @@ function onClick(store: typeof Store.Type) {
   store.setTitle('clicked ' + Math.round(Math.random() * 10) )
   store.router.push('/signin')
 }
+/*
+<IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+            <MenuIcon />
+          </IconButton>
+*/
 
 function ButtonAppBar(props:Props) {
   const { classes, store } = props;
@@ -39,12 +44,9 @@ function ButtonAppBar(props:Props) {
     <div className={classes.root}>
       <AppBar position="fixed" color="default">
         <Toolbar variant="dense">
-          <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            <MenuIcon />
-          </IconButton>
-          <img src="./DTCsm.png"/>
+          
+          <img src="./logos/appbar-logo-color.png" style={{height:'3em'}}/>
           <Typography variant="title" color="inherit" className={classes.flex}>
-          &nbsp;DTC
           </Typography>
           <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>
         </Toolbar>
