@@ -1,8 +1,32 @@
 import awsmobile from '../aws-exports.js';
 
 import Auth from '@aws-amplify/auth';
-import { Hub } from '@aws-amplify/core';
+// import { Logger } from 'aws-amplify';
+import { Hub, ConsoleLogger } from '@aws-amplify/core';
+import { injectConfig } from '../configs/auth';
 
+const logger: any = new ConsoleLogger('dtc_aws_log');
+logger.onHubCapsule = capsule => {
+  switch (capsule.payload.event) {
+    case 'signIn':
+      logger.error('user signed in'); // [ERROR] Alexander_the_auth_watcher - user signed in
+      break;
+    case 'signUp':
+      logger.error('user signed up');
+      break;
+    case 'signOut':
+      logger.error('user signed out');
+      break;
+    case 'signIn_failure':
+      logger.error('user sign in failed');
+      break;
+    case 'configured':
+      logger.error('the Auth module is configured');
+      break;
+    default:
+      break;
+  }
+};
 // import { withOAuth } from 'aws-amplify-react';
 
 // const config = Auth.configure(awsmobile) as any;
@@ -18,6 +42,9 @@ Auth.currentSession()
 */
 
 function onHubCapsule(cb: AwsCB, capsule: any) {
+  console.log('onHubCapsule', capsule);
+  logger.onHubCapsule(capsule);
+
   const { channel, payload } = capsule; // source
   Auth.currentSession()
     .then(data => {
@@ -37,8 +64,10 @@ function onHubCapsule(cb: AwsCB, capsule: any) {
 
 export function auth(cb: AwsCB) {
   console.log('configuring aws');
-  Auth.configure(awsmobile);
-  Hub.listen('auth', { onHubCapsule: onHubCapsule.bind(null, cb) });
+  const awsmobileInjected = injectConfig(awsmobile);
+  Auth.configure(awsmobileInjected);
+  Hub.listen('auth', logger);
+  checkUser(cb); // required by amplify, for existing login
 }
 
 type AwsCB = (auth: AwsAuth) => void;

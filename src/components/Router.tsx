@@ -6,6 +6,7 @@ const DTCRouter = ( {history}:{history:any} ) => (
   <Router history={history}>
     <React.Fragment>
       <Route exact={true} path="/" component={Home} />
+      <Route path="/callback" component={Home} />
       <Route path="/signin" component={Home} />
       <Route path="/signout" component={Home} />
     </React.Fragment>

@@ -50,7 +50,10 @@ function ButtonAppBar(props:Props) {
           <img src="./logos/appbar-logo-color.png" style={{height:'3em'}}/>
           <Typography variant="title" color="inherit" className={classes.flex}>
           </Typography>
-          <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>
+
+          {!store.auth.loggedIn && <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>}
+          {store.auth.loggedIn && <div>Hello {store.auth.user!.name}</div>}
+
           <AuthWrapper store={store} login={store.auth.doLogin} />
         </Toolbar>
       </AppBar>
