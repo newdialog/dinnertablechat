@@ -5,10 +5,10 @@
   "private": true,
   "dependencies": {
     "@jadbox/mst-react-router": "0.0.1",
-    "@material-ui/core": "^3.0.0",
-    "@material-ui/icons": "^3.0.0",
-    "aws-amplify": "^1.0.6",
-    "aws-amplify-react": "^1.0.6",
+    "@material-ui/core": "^3.0.1",
+    "@material-ui/icons": "^3.0.1",
+    "aws-amplify": "^1.0.8",
+    "aws-amplify-react": "^2.0.0",
     "history": "^4.7.2",
     "mobx": "^5.1.0",
     "mobx-react": "^5.2.5",
@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
-    "@types/node": "^10.9.2",
+    "@types/node": "^10.9.3",
     "@types/react": "^16.4.12",
     "@types/react-dom": "^16.0.7",
     "gh-pages": "^1.2.0",
