@@ -6,7 +6,6 @@ import { Instance } from 'mobx-state-tree';
 const AppModel = types
   .model({
     text: 'DEFAULT VAL',
-    loggedIn: false,
     auth: AuthModel,
     router: RouterModel
   })
