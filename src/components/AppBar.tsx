@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import * as Store from '../models/AppModel'
 import { observer } from 'mobx-react';
-import AuthWrapper from './aws/AuthWrapper'
 
 const styles = createStyles({
   root: {
@@ -54,7 +53,6 @@ function ButtonAppBar(props:Props) {
           {!store.auth.loggedIn && <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>}
           {store.auth.loggedIn && <div>Hello {store.auth.user!.name}</div>}
 
-          <AuthWrapper store={store} login={store.auth.doLogin} />
         </Toolbar>
       </AppBar>
     </div>
