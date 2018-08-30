@@ -9,6 +9,7 @@ import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
+import Waypoint from 'react-waypoint';
 
 const bgData = require('../../assets/background.json');
 
@@ -130,6 +131,18 @@ class Index extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
   }
+
+  private bannerRef = React.createRef<Lottie | any>()
+
+  private _handleWaypointEnter = () => {
+    if(!this.bannerRef.current) return
+    this.bannerRef.current.play();
+  }
+
+  private _handleWaypointLeave = () => {
+    if(!this.bannerRef.current) return
+    this.bannerRef.current.stop();
+  }
   /*
             <img src="./DTC-scene3.png"/>
             <img src="./DTC-scene3-foreg.png" style={{width:'100%'}}/>
@@ -138,8 +151,14 @@ class Index extends React.Component<Props> {
     const { classes } = this.props;
     return (
       <React.Fragment>
+        <Waypoint topOffset="-60%" bottomOffset="0"
+              onEnter={this._handleWaypointEnter}
+              onLeave={this._handleWaypointLeave}
+            />
         <div className={classes.banner}>
-          <div className={classes.bannerAnim}><Lottie options={bgOptions} /></div>
+          <div className={classes.bannerAnim}>
+            <Lottie options={bgOptions} ref={this.bannerRef} />
+          </div>
           <div className={classes.bannerAnimOverlay}></div>
           <div className={classes.centeredDown}>
             <Typography variant="display4" gutterBottom align="center">
