@@ -96,7 +96,7 @@ const styles = (theme: Theme) =>
     divider: {
       margin: `${theme.spacing.unit * 6}px 0`,
       [theme.breakpoints.down('sm')]: {
-        margin: `${theme.spacing.unit * 1}px 0`,
+        margin: `${theme.spacing.unit * 1}px 0`
       }
     }
   });
@@ -130,21 +130,19 @@ class Index extends React.Component<Props, State> {
     this.state = { open: false };
   }
 
-  private logoRef = React.createRef<Lottie | any>()
+  private logoRef = React.createRef<Lottie | any>();
 
   private _handleWaypointEnter = () => {
-    if(this.logoRef.current) {
-      console.log('this.logoRef.current', this.logoRef.current)
-      this.logoRef.current.stop();
-      this.logoRef.current.play();
-    }
+    if (!this.logoRef.current) return;
+    // console.log('this.logoRef.current', this.logoRef.current)
+    this.logoRef.current.stop();
+    this.logoRef.current.play();
   }
 
   private _handleWaypointLeave = () => {
-    if(this.logoRef.current) {
-      console.log('this.logoRef.current', this.logoRef.current)
-      // this.logoRef.current.stop();
-    }
+    if (!this.logoRef.current) return;
+    // console.log('this.logoRef.current', this.logoRef.current)
+    // this.logoRef.current.stop();
   }
 
   public render() {
@@ -162,29 +160,32 @@ class Index extends React.Component<Props, State> {
         <Grid container spacing={24} className={classes.container}>
           <Grid item xs={12} md={6}>
             <div className="paperimg">
-            <Waypoint
-              onEnter={this._handleWaypointEnter}
-              onLeave={this._handleWaypointLeave}
-            />
+              <Waypoint
+                topOffset="-10%"
+                bottomOffset="0"
+                onEnter={this._handleWaypointEnter}
+                onLeave={this._handleWaypointLeave}
+              />
               <Lottie options={logoOptions} ref={this.logoRef} />
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              In today’s polarizing environment it can be hard to have thoughtful debates among differing ideologies. DTC is a virtual experience that connects you with the “other side” to playfully challenge each other under the guidance of a moderator. 
+                In today’s polarizing environment it can be hard to have thoughtful debates among differing ideologies.
+                DTC is a virtual experience that connects you with the “other side” to playfully challenge each other
+                under the guidance of a moderator.
               </Typography>
             </Fade>
           </Grid>
         </Grid>
         <Grid container spacing={24} className={classes.containerRev}>
-        <Grid item xs={12}>
+          <Grid item xs={12}>
             <div className={classes.divider} />
-            
+
             <Typography variant="body1" gutterBottom align="center">
               Curious to learn more and be notified when we launch, sign up below!
-              </Typography>
-            
+            </Typography>
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -194,7 +195,11 @@ class Index extends React.Component<Props, State> {
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              DTC is a safe place to share often emotionally fueled discussions. Our community embraces being fully honest, passionate, and engaged with new ideas… even if it makes us a little frightened or warm blooded. On the other paw, personal attacks, being disrespectful, and otherwise being a jerk is not welcomed. There’s a zero tolerance for bad behavior, and the moderator is allowed to end sessions early as well as ban intentional bad actors.
+                DTC is a safe place to share often emotionally fueled discussions. Our community embraces being fully
+                honest, passionate, and engaged with new ideas… even if it makes us a little frightened or warm blooded.
+                On the other paw, personal attacks, being disrespectful, and otherwise being a jerk is not welcomed.
+                There’s a zero tolerance for bad behavior, and the moderator is allowed to end sessions early as well as
+                ban intentional bad actors.
               </Typography>
             </Fade>
           </Grid>
@@ -223,11 +228,13 @@ class Index extends React.Component<Props, State> {
           <Grid item xs={12} md={6}>
             <div className={classes.divider} />
             <Typography variant="title" gutterBottom align="left">
-            Select your character
+              Select your character
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              You will control a virtual character that will talk as you talk, listen to your matched partner, and also represents your mood. There’s several characters to choose from that all have their own personality and style. Unlock new characters as you perform in more debates.
+                You will control a virtual character that will talk as you talk, listen to your matched partner, and
+                also represents your mood. There’s several characters to choose from that all have their own personality
+                and style. Unlock new characters as you perform in more debates.
               </Typography>
             </Fade>
           </Grid>
@@ -242,7 +249,9 @@ class Index extends React.Component<Props, State> {
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              Get started by selecting a desired topic. Topics are selected via news trends, online discussions, and your vote in DTC polls. After picking the topic, gage your position on this issue. (Do you support more or less gun regulations?) Our system will then match you with someone who holds a contrasting viewpoint.
+                Get started by selecting a desired topic. Topics are selected via news trends, online discussions, and
+                your vote in DTC polls. After picking the topic, gage your position on this issue. (Do you support more
+                or less gun regulations?) Our system will then match you with someone who holds a contrasting viewpoint.
               </Typography>
             </Fade>
           </Grid>
@@ -250,32 +259,31 @@ class Index extends React.Component<Props, State> {
             <Paper className={classes.paper}>xs=12</Paper>
           </Grid>
 
-        <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6}>
             <div className={classes.divider} />
             <Typography variant="title" gutterBottom align="left">
               Enjoy talking about what’s truly meaningful
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              We all have our own way of looking at the world. Sharing our thoughts and discoveries is more fun when we respectfully challenge each other. Perhaps you can share a perspective that’s typically overlooked or can be persuaded to reframe your opinion. 
+                We all have our own way of looking at the world. Sharing our thoughts and discoveries is more fun when
+                we respectfully challenge each other. Perhaps you can share a perspective that’s typically overlooked or
+                can be persuaded to reframe your opinion.
               </Typography>
             </Fade>
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
-              <Lottie options={talkingOptions}/>
-              
+              <Lottie options={talkingOptions} />
             </div>
           </Grid>
         </Grid>
-
-        
 
         <Divider className={classes.divider} />
       </div>
     );
   }
-// <img src="./section2.png" className={classes.paperimg} />
+  // <img src="./section2.png" className={classes.paperimg} />
   private handleClose = () => {
     this.setState({
       open: false
