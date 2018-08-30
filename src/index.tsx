@@ -10,7 +10,7 @@ import AppModel from './models/AppModel'
 
 import { connectReduxDevtools } from 'mst-middlewares'
 import createBrowserHistory from 'history/createBrowserHistory';
-import { RouterModel, syncHistoryWithStore } from '@jadbox/mst-react-router';
+import { RouterModel, syncHistoryWithStore } from 'mst-react-router';
 
 // Setup History
 const routerModel = RouterModel.create();
