@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 
-const logoData = require('../../assets/logo.json');
+const bgData = require('../../assets/background.json');
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -55,7 +55,7 @@ const styles = (theme: Theme) =>
       objectFit: 'cover',
       width: '100%',
       height: 'calc(100vh - 0px)',
-      backgroundImage: 'url("./imgs/DTC-scene3-bg2.png")', // DTC-scene3.png
+      // backgroundImage: 'url("./imgs/DTC-scene3-bg2.png")', // DTC-scene3.png
       backgroundSize: 'cover',
       // backgroundAttachment: 'fixed',
       backgroundRepeat: 'no-repeat',
@@ -74,12 +74,12 @@ const styles = (theme: Theme) =>
       // backgroundColor: '#00000044',
       // fontWeight: 'bold'
       // left: ''
-      height:'14vh',
+      height: '14vh',
       [theme.breakpoints.down('sm')]: {
-        height:'8vh'
+        height: '8vh'
       },
       [theme.breakpoints.down('xs')]: {
-        height:'8vh'
+        height: '8vh'
       }
     },
     logoanim: {
@@ -90,21 +90,47 @@ const styles = (theme: Theme) =>
       marginRight: 'auto',
       display: 'flex'
     },
+    bannerAnim: {
+      zIndex:-1, 
+      position: 'absolute',
+      top:0, 
+      bottom:0, 
+      width:'100%', 
+      objectFit: 'cover', 
+      pointerEvents:'none'
+    },
+    bannerAnimOverlay: {
+      zIndex:-1, 
+      position: 'absolute',
+      top:0, 
+      bottom:0, 
+      width:'100%',
+      background:'rgba(0, 0, 0, 0.35)',
+      backgroundBlendMode: 'multiply'
+    },
     largeIcon: {
       width: 80,
       height: 60
     }
   });
 
-interface Props extends WithStyles<typeof styles> {
-}
+const bgOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: bgData,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
+
+interface Props extends WithStyles<typeof styles> {}
 
 @observer
 class Index extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
   }
-/*
+  /*
             <img src="./DTC-scene3.png"/>
             <img src="./DTC-scene3-foreg.png" style={{width:'100%'}}/>
 */
@@ -113,6 +139,8 @@ class Index extends React.Component<Props> {
     return (
       <React.Fragment>
         <div className={classes.banner}>
+          <div className={classes.bannerAnim}><Lottie options={bgOptions} /></div>
+          <div className={classes.bannerAnimOverlay}></div>
           <div className={classes.centeredDown}>
             <Typography variant="display4" gutterBottom align="center">
               JOIN THE CONVERSATION
@@ -120,17 +148,17 @@ class Index extends React.Component<Props> {
             <Typography variant="display1" align="center">
               share your perspective
             </Typography>
-            <div className={classes.bannerTextDivider}/>
+            <div className={classes.bannerTextDivider} />
             <a href="#intro">
               <IconButton style={{ height: '11vh', width: '11vh' }}>
                 <ArrowDown style={{ fontSize: '11vh' }} />
               </IconButton>
               <div id="intro" style={{ height: 0 }} />
-            </a><br />
+            </a>
+            <br />
             <Button href="#intro" size="small" variant="contained" color="primary">
               Learn More
             </Button>
-            
           </div>
         </div>
       </React.Fragment>
