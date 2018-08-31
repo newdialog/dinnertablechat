@@ -1,4 +1,4 @@
-import { types } from 'mobx-state-tree';
+import { types, Instance } from 'mobx-state-tree';
 
 const UserModel = types.model({
   email: types.string,
@@ -23,10 +23,10 @@ const AuthModel = types
     },
     authenticated(user: any) {
       const { email, name, username, email_verified } = user;
-      self.user = self.user || { name, token: username, email };
-      self.user.name = name;
-      self.user.email = name;
-      self.user.token = username;
+
+      const umodel: Instance<typeof UserModel> = { name, email, token: username };
+
+      self.user = umodel;
       self.loggedIn = true;
     }
   }));
