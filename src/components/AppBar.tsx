@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import Store from '../models/AppModel'
+import * as Store from '../models/AppModel'
 import { observer } from 'mobx-react';
 
 const styles = createStyles({
@@ -25,12 +25,14 @@ const styles = createStyles({
 });
 
 interface Props extends WithStyles<typeof styles> {
-  store: typeof Store.Type
+  store: Store.Type
 }
 
-function onClick(store: typeof Store.Type) {
-  store.setTitle('clicked ' + Math.round(Math.random() * 10) )
-  store.router.push('/signin')
+function onClick(store: Store.Type) {
+  // store.setTitle('clicked ' + Math.round(Math.random() * 10) )
+  // store.router.push('/signin')
+  store.auth.login()
+
 }
 /*
 <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
@@ -42,12 +44,15 @@ function ButtonAppBar(props:Props) {
   const { classes, store } = props;
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" color="default">
+      <AppBar position="fixed" color="default" style={{ backgroundColor:'rgb(255,255,255,0.9)' }}>
         <Toolbar variant="dense">
           <img src="./logos/appbar-logo-color.png" style={{height:'3em'}}/>
           <Typography variant="title" color="inherit" className={classes.flex}>
           </Typography>
-          <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>
+
+          {!store.auth.loggedIn && <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>}
+          {store.auth.loggedIn && <div>Hello {store.auth.user!.name}</div>}
+
         </Toolbar>
       </AppBar>
     </div>

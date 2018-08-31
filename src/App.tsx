@@ -4,11 +4,13 @@ import AppBar from './components/AppBar';
 import AppRouter from './components/Router'
 // import { withRouter } from 'react-router';
 import { observer, inject } from 'mobx-react'
+import AuthWrapper from './components/aws/AuthWrapper'
 
 const App = inject('store')(
   observer(({ store, history }) => {
     console.log('page', store.router.location)
     return (<React.Fragment>
+      <AuthWrapper store={store} login={store.auth.doLogin} />
       <AppBar store={store} />
       <AppRouter history={history}></AppRouter>
     </React.Fragment>)
