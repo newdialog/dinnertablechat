@@ -28,10 +28,15 @@ interface Props extends WithStyles<typeof styles> {
   store: Store.Type
 }
 
-function onClick(store: Store.Type) {
+function onLogin(store: Store.Type) {
   // store.setTitle('clicked ' + Math.round(Math.random() * 10) )
   // store.router.push('/signin')
   store.auth.login()
+
+}
+
+function onLogOut(store: Store.Type) {
+  store.auth.logout()
 
 }
 /*
@@ -42,6 +47,7 @@ function onClick(store: Store.Type) {
 
 function ButtonAppBar(props:Props) {
   const { classes, store } = props;
+  const auth = store.auth.loggedIn;
   return (
     <div className={classes.root}>
       <AppBar position="fixed" color="default" style={{ backgroundColor:'rgb(255,255,255,0.9)' }}>
@@ -50,8 +56,15 @@ function ButtonAppBar(props:Props) {
           <Typography variant="title" color="inherit" className={classes.flex}>
           </Typography>
 
-          {!store.auth.loggedIn && <Button color="inherit" onClick={ () => onClick(store) }>Login</Button>}
-          {store.auth.loggedIn && <div>Hello {store.auth.user!.name}</div>}
+          {!auth && 
+            <Button color="inherit" onClick={ () => onLogin(store) }>Login</Button>
+          }
+          {auth &&
+            <React.Fragment>
+              <div>{store.auth.user!.name}</div>
+              <Button color="inherit" onClick={ () => onLogOut(store) }>Log Out</Button>
+            </React.Fragment>
+          }
 
         </Toolbar>
       </AppBar>

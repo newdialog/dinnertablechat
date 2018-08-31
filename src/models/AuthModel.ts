@@ -1,4 +1,5 @@
 import { types, Instance } from 'mobx-state-tree';
+import * as Auth from '../services/AuthService';
 
 const UserModel = types.model({
   email: types.string,
@@ -20,6 +21,9 @@ const AuthModel = types
       // self.text = newTitle
       self.doLogin = true;
       console.log('login action');
+    },
+    logout() {
+      Auth.logout();
     },
     authenticated(user: any) {
       const { email, name, username, email_verified } = user;
