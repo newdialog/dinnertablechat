@@ -6,7 +6,8 @@ import registerServiceWorker from './registerServiceWorker';
 
 import App from './App'
 import { Provider } from 'mobx-react'
-import AppModel from './models/AppModel'
+import * as AppModel from './models/AppModel'
+import AuthModel from './models/AuthModel';
 
 import { connectReduxDevtools } from 'mst-middlewares'
 import createBrowserHistory from 'history/createBrowserHistory';
@@ -18,17 +19,8 @@ const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
 // Configure MST Store
 const fetcher = url => window.fetch(url).then(response => response.json())
-const store = AppModel.create(
-  {
-    text: 'DEFAULT VAL',
-    router: routerModel
-  },
-  {
-      fetch: fetcher,
-      alert: m => console.log(m) // Noop for demo: window.alert(m)
-  }
-)
-// makeInspectable(store);
+const store = AppModel.create(routerModel, history);
+
 connectReduxDevtools(require('remotedev'), store)
 
 ReactDOM.render(

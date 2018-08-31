@@ -3,11 +3,8 @@ import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/s
 import withRoot from '../../withRoot';
 
 import Lottie from 'react-lottie';
-import Content from './Content';
 import { observer } from 'mobx-react';
-import Subcribe from './Subscribe';
-
-import Banner from './Banner';
+import { Typography, Divider } from '@material-ui/core';
 
 const logoData = require('../../assets/logo.json');
 
@@ -104,11 +101,14 @@ class Index extends React.Component<Props, State> {
     const { open } = this.state;
     return (
       <React.Fragment>
-        <Banner/>
-
-        <Content />
         <div className={classes.centered}>
-          <Subcribe />
+            <Divider/><Divider/>
+            <Typography variant="display3" align="center">
+              JOIN THE CONVERSATION
+            </Typography>
+            <Typography variant="display3" align="center">
+              Debate home
+            </Typography>
         </div>
       </React.Fragment>
     );

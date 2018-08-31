@@ -8,6 +8,7 @@
     "@material-ui/icons": "^3.0.1",
     "aws-amplify": "^1.0.8",
     "aws-amplify-react": "^2.0.0",
+    "env-cmd": "^8.0.2",
     "history": "^4.7.2",
     "mobx": "^5.1.0",
     "mobx-react": "^5.2.5",
@@ -27,12 +28,14 @@
   },
   "scripts": {
     "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build",
+    "build": "env-cmd ./.env.staging react-scripts-ts build && cp -f CNAME ./build/",
+    "build:prod": "react-scripts-ts build && cp -f CNAME.PROD ./build/CNAME",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "proxy": "node proxy.js",
-    "predeploy": "npm run build && cp -rf CNAME ./build/",
-    "deploy": "gh-pages -d build"
+    "predeploy": "mkdir -p ./build",
+    "deploy": "npm run build && gh-pages -d build",
+    "deploy:prod": "npm run predeploy && npm run build:prod && gh-pages -d build"
   },
   "devDependencies": {
     "@types/jest": "^23.3.1",
