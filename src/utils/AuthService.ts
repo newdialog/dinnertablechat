@@ -42,10 +42,11 @@ Auth.currentSession()
 */
 
 function onHubCapsule(cb: AwsCB, capsule: any) {
-  console.log('onHubCapsule', capsule);
+  // console.log('onHubCapsule', capsule);
   logger.onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
+  /*
   Auth.currentSession()
     .then(data => {
       console.log('+++currentSession2', data);
@@ -53,8 +54,8 @@ function onHubCapsule(cb: AwsCB, capsule: any) {
     .catch((e: any) => {
       console.log('---currentSession2 err:', e);
     });
-
   console.log('payload.event ', channel, payload.event);
+  */
   if (channel === 'auth' && payload.event === 'signIn') {
     checkUser(cb);
   } else if (channel === 'auth' && (payload.event === 'configured' || payload.event === 'cognitoHostedUI')) {
@@ -66,7 +67,7 @@ export function auth(cb: AwsCB) {
   console.log('configuring aws');
   const awsmobileInjected = injectConfig(awsmobile);
   Auth.configure(awsmobileInjected);
-  Hub.listen('auth', logger);
+  Hub.listen('auth', { onHubCapsule: onHubCapsule.bind(null, cb) });
   checkUser(cb); // required by amplify, for existing login
 }
 

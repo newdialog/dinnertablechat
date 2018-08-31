@@ -7,10 +7,10 @@ const awsOauth = {
   scope: ['phone', 'email', 'profile', 'openid', 'aws.cognito.signin.user.admin'],
 
   // Callback URL
-  redirectSignIn: 'https://jadbox.asuscomm.com/callback',
+  redirectSignIn: 'https://dinnertable.chat/callback',
 
   // Sign out URL
-  redirectSignOut: 'https://jadbox.asuscomm.com/signout',
+  redirectSignOut: 'https://dinnertable.chat/signout',
 
   // 'code' for Authorization code grant,
   // 'token' for Implicit grant
@@ -25,13 +25,19 @@ const awsOauth = {
 
 export const oauth = awsOauth;
 
-export const injectConfig = (cfg: any, redirect?: string) => {
+export const injectConfig = (cfg: any) => {
   cfg.Auth = {
     oauth: awsOauth
   };
-  if (redirect) {
-    cfg.Auth.oath.redirectSignIn = redirect + '/callback';
-    cfg.Auth.oath.redirectSignOut = redirect + '/signout';
-  }
+
+  const localServer: string = process.env.REACT_APP_HOST_URL || 'https://jadbox.asuscomm.com';
+
+  cfg.Auth.oauth.redirectSignIn = localServer + '/callback';
+  cfg.Auth.oauth.redirectSignOut = localServer + '/signout';
+
+  console.log('REACT_APP_HOST_URL: ', localServer);
+
+  cfg.aws_user_pools_web_client_id = process.env.REACT_APP_aws_user_pools_web_client_id || '1a66tr0jclinub7j3ls0j3mutt';
+
   return cfg;
 };

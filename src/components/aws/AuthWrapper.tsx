@@ -38,8 +38,7 @@ class Auth extends React.Component<Props, State> {
   }
 
   private handleAuth(store: Store.Type, awsUser: AuthService.AwsAuth) {
-    console.log('handleAuth', awsUser)
-    // console.log('handleAuth', params);
+    // console.log('handleAuth', awsUser)
     store.auth.authenticated(awsUser.user);
   }
 }
