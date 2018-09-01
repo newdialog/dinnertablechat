@@ -9,6 +9,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import * as Store from '../models/AppModel'
 import { observer } from 'mobx-react';
 
+import Icon from '@material-ui/core/Icon';
+import QueueIcon from '@material-ui/icons/QueuePlayNext'
+
 const styles = createStyles({
   root: {
     flexGrow: 1,
@@ -30,14 +33,20 @@ interface Props extends WithStyles<typeof styles> {
 
 function onLogin(store: Store.Type) {
   // store.setTitle('clicked ' + Math.round(Math.random() * 10) )
-  // store.router.push('/signin')
   store.auth.login()
 
 }
 
 function onLogOut(store: Store.Type) {
   store.auth.logout()
+}
 
+function onStart(store: Store.Type) {
+  store.router.push('/play')
+}
+
+function onHome(store: Store.Type) {
+  store.router.push('/')
 }
 /*
 <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
@@ -52,7 +61,7 @@ function ButtonAppBar(props:Props) {
     <div className={classes.root}>
       <AppBar position="fixed" color="default" style={{ backgroundColor:'rgb(255,255,255,0.9)' }}>
         <Toolbar variant="dense">
-          <img src="./logos/appbar-logo-color.png" style={{height:'3em'}}/>
+          <img src="./logos/appbar-logo-color.png" style={{height:'3em', cursor: 'pointer'}} onClick={ onHome.bind(0,store) }/>
           <Typography variant="title" color="inherit" className={classes.flex}>
           </Typography>
 
@@ -61,7 +70,10 @@ function ButtonAppBar(props:Props) {
           }
           {auth &&
             <React.Fragment>
-              <div>{store.auth.user!.name}</div>
+              <Button variant="contained" color="primary" onClick={ () => onStart(store) }>
+                Start
+                <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
+              </Button>
               <Button color="inherit" onClick={ () => onLogOut(store) }>Log Out</Button>
             </React.Fragment>
           }
