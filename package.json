@@ -9,6 +9,7 @@
     "aws-amplify": "^1.0.8",
     "aws-amplify-react": "^2.0.0",
     "env-cmd": "^8.0.2",
+    "hark": "^1.2.3",
     "history": "^4.7.2",
     "mobx": "^5.1.0",
     "mobx-react": "^5.2.5",
@@ -24,6 +25,7 @@
     "react-scripts-ts": "2.17.0",
     "react-waypoint": "^8.0.3",
     "remotedev": "^0.2.7",
+    "simple-peer": "^9.1.2",
     "webfontloader": "^1.6.28"
   },
   "scripts": {
@@ -42,6 +44,7 @@
     "@types/node": "^10.9.4",
     "@types/react": "^16.4.13",
     "@types/react-dom": "^16.0.7",
+    "@types/simple-peer": "^6.1.5",
     "gh-pages": "^1.2.0",
     "http-proxy": "^1.17.0",
     "typescript": "^3.0.3"
