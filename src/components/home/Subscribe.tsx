@@ -5,8 +5,28 @@ import Button from '@material-ui/core/Button';
 // import { styleTextField } from '../components/SharedStyles';
 // import withLayout from '../lib/withLayout';
 // import { subscribeToNewsletter } from '../lib/api/public';
+import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import withRoot from '../../withRoot';
 
-class Subscribe extends React.Component {
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      textAlign: 'center',
+      paddingTop: theme.spacing.unit * 20
+    },
+    centered: {
+      paddingTop: '0',
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '1000px',
+      minWidth: '300px'
+    }
+  })
+
+class Subscribe extends React.Component<any,any> {
   public emailInput:any
   public onSubmit = async e => {
     e.preventDefault();
@@ -28,10 +48,11 @@ class Subscribe extends React.Component {
     }
   };
   public render() {
+    const { classes } = this.props;
     return (
-      <div style={{ padding: '10px 45px' }}>
+      <div className={classes.centered}>
         <br />
-        <form onSubmit={this.onSubmit}>
+        <form onSubmit={this.onSubmit} style={{ marginLeft: 'auto', marginRight: 'auto', width:'100%', textAlign:'center' }}>
           <p>We will email you when a new tutorial is released:</p>
           <TextField
             inputRef={ (elm) => {
@@ -51,4 +72,4 @@ class Subscribe extends React.Component {
     );
   }
 }
-export default Subscribe;
+export default (withStyles(styles)(Subscribe));
