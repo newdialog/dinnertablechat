@@ -205,7 +205,7 @@ class Index extends React.Component<Props, State> {
             </Fade>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Paper className={classes.paper}>xs=12</Paper>
+            <div className={classes.paper}><img src="./imgs/02-topics.png" className={classes.paperimg} /></div>
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -223,7 +223,7 @@ class Index extends React.Component<Props, State> {
             </Fade>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Paper className={classes.paper}>xs=12</Paper>
+            <div className={classes.paper}><img src="./imgs/02-topics.png" className={classes.paperimg} /></div>
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -240,7 +240,7 @@ class Index extends React.Component<Props, State> {
             </Fade>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Paper className={classes.paper}>xs=12</Paper>
+          <div className={classes.paper}><img src="./imgs/02-topics.png" className={classes.paperimg} /></div>
           </Grid>
 
           <Grid item xs={12} md={6}>
