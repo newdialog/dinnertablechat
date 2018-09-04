@@ -249,9 +249,7 @@ class Index extends React.Component<Props, State> {
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-                Get started by selecting a desired topic. Topics are selected via news trends, online discussions, and
-                your vote in DTC polls. After picking the topic, gage your position on this issue. (Do you support more
-                or less gun regulations?) Our system will then match you with someone who holds a contrasting viewpoint.
+              Get started by selecting a desired topic. Topics are selected via news trends, online discussions, and your vote in DTC polls. After picking the topic, gage your position on this issue. For example, do you support more or less regulations on certain rifles? Our system will then match you with someone who holds a contrasting viewpoint.
               </Typography>
             </Fade>
           </Grid>
