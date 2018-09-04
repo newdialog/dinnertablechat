@@ -38,7 +38,8 @@ const styles = (theme: Theme) =>
       // gridTemplateColumns: 'repeat(12, 1fr)',
       gridGap: `${theme.spacing.unit * 4}px`,
       [theme.breakpoints.down('sm')]: {
-        padding: '0'
+        paddingLeft: '2em',
+        paddingRight: '2em',
       }
 
       // gridAutoFlow: 'column',
@@ -52,7 +53,7 @@ const styles = (theme: Theme) =>
       // gridTemplateColumns: 'repeat(12, 1fr)',
       gridGap: `${theme.spacing.unit * 4}px`,
       [theme.breakpoints.down('sm')]: {
-        padding: '0'
+        // padding: '0'
       },
       flexWrap: 'wrap-reverse'
     },
