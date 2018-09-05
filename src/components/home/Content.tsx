@@ -1,18 +1,13 @@
 // tslint:disable-next-line:max-line-length
 import * as React from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
-import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
+
+import { translate } from 'react-i18next';
 
 import Lottie from 'react-lottie';
 const Fade = require('react-reveal/Fade');
@@ -120,7 +115,9 @@ const talkingOptions = {
   }
 };
 
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> {
+  t:any
+}
 interface State {
   open: boolean;
 }
@@ -147,7 +144,7 @@ class Index extends React.Component<Props, State> {
   }
 
   public render() {
-    const { classes } = this.props;
+    const { classes, t } = this.props;
     const { open } = this.state;
     // <img className={classes.banner} src="./banner2.jpg" />
     // s
@@ -173,7 +170,7 @@ class Index extends React.Component<Props, State> {
           <Grid item xs={12} md={6}>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              In today’s polarizing environment it can be hard to have thoughtful debates between different ideologies. DTC is a virtual experience that connects you with the “other side” to playfully challenge each other under the guidance of a moderator.
+              {t('home-intro')}
               </Typography>
             </Fade>
           </Grid>
@@ -183,18 +180,18 @@ class Index extends React.Component<Props, State> {
             <div className={classes.divider} />
 
             <Typography variant="body1" gutterBottom align="center">
-              Curious to learn more and be notified when we launch, sign up below!
+              {t('home-signup')}
             </Typography>
           </Grid>
 
           <Grid item xs={12} md={6}>
             <Typography variant="title" gutterBottom align="left">
               <div className={classes.divider} />
-              Basic Rules
+              {t('home-rules-title')}
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              DTC is a safe place to share emotionally fueled discussions. Our community embraces being fully honest, passionate, and engaged with new ideas… even if it makes us a little frightened or warm blooded. On the other paw, personal attacks, being disrespectful, and otherwise being a jerk is not welcomed. There’s a zero tolerance for bad behavior, and the moderator is allowed to end sessions early as well as ban intentional bad actors.
+              {t('home-rules')}
               </Typography>
             </Fade>
           </Grid>
@@ -205,11 +202,11 @@ class Index extends React.Component<Props, State> {
           <Grid item xs={12} md={6}>
             <Typography variant="title" gutterBottom align="left">
               <div className={classes.divider} />
-              What to bring to the table
+              {t('home-tiers-title')}
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              Like any good dinner guest, you can bring your own food and drink. You effectively decide how much to tip the moderator, and you’ll be matched with a debate partner that selected the same amount. The higher the tip, the more likely you’ll be debating with someone who is as much of a upstanding individual as you are.
+              {t('home-tiers')}
               </Typography>
             </Fade>
           </Grid>
@@ -220,11 +217,11 @@ class Index extends React.Component<Props, State> {
           <Grid item xs={12} md={6}>
             <div className={classes.divider} />
             <Typography variant="title" gutterBottom align="left">
-              Select your character
+              {t('home-char-title')}
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              You will control a virtual character that will talk as you talk, listen to your matched partner, and also represents your mood. There’s several characters to choose from that all have their own personality and style. Unlock new characters as you participate in more debates.
+              {t('home-char')}
               </Typography>
             </Fade>
           </Grid>
@@ -235,11 +232,11 @@ class Index extends React.Component<Props, State> {
           <Grid item xs={12} md={6}>
             <div className={classes.divider} />
             <Typography variant="title" gutterBottom align="left">
-              Select your topic
+            {t('home-topic-title')}
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              Get started by selecting a desired topic. Topics are selected via news trends, online discussions, and your vote in DTC polls. After picking the topic, gage your position on this issue. Do you support more or less regulations on certain rifles? Our system will then match you with someone who holds a contrasting viewpoint.
+              {t('home-topic')}
               </Typography>
             </Fade>
           </Grid>
@@ -250,11 +247,11 @@ class Index extends React.Component<Props, State> {
           <Grid item xs={12} md={6}>
             <div className={classes.divider} />
             <Typography variant="title" gutterBottom align="left">
-              Enjoy talking about what’s truly meaningful
+              {t('home-overview-title')}
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              We all have our own way of looking at the world. Sharing our thoughts and discoveries is more fun when we respectfully challenge each other. Maybe you can share a perspective that’s typically overlooked or can be persuaded to reframe your opinion. 
+                {t('home-overview')}
               </Typography>
             </Fade>
           </Grid>
@@ -283,4 +280,4 @@ class Index extends React.Component<Props, State> {
   };
 }
 
-export default withRoot(withStyles(styles)(Index));
+export default translate()(withRoot(withStyles(styles)(Index)));

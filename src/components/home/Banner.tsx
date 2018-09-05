@@ -10,6 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 import Waypoint from 'react-waypoint';
+import { translate } from 'react-i18next';
 
 const bgData = require('../../assets/background.json');
 
@@ -124,7 +125,7 @@ const bgOptions = {
   }
 };
 
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> { t:any }
 
 @observer
 class Index extends React.Component<Props> {
@@ -148,7 +149,7 @@ class Index extends React.Component<Props> {
             <img src="./DTC-scene3-foreg.png" style={{width:'100%'}}/>
 */
   public render() {
-    const { classes } = this.props;
+    const { classes, t } = this.props;
     return (
       <React.Fragment>
         <Waypoint topOffset="-60%" bottomOffset="0"
@@ -162,10 +163,10 @@ class Index extends React.Component<Props> {
           <div className={classes.bannerAnimOverlay}></div>
           <div className={classes.centeredDown}>
             <Typography variant="display4" gutterBottom align="center">
-              JOIN THE CONVERSATION
+              {t('home-banner-title1')}
             </Typography>
             <Typography variant="display1" align="center">
-              share your perspective
+              {t('home-banner-title2')}
             </Typography>
             <div className={classes.bannerTextDivider} />
             <a href="#intro">
@@ -185,4 +186,4 @@ class Index extends React.Component<Props> {
   }
 }
 
-export default withRoot(withStyles(styles)(Index));
+export default translate()(withRoot(withStyles(styles)(Index)));
