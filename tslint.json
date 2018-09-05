@@ -10,7 +10,7 @@
   "jsRules": { "no-console": false },
   "rules": {
     "align": [
-        true,
+        false,
         "parameters",
         "arguments",
         "statements"
