@@ -14,6 +14,7 @@ const Fade = require('react-reveal/Fade');
 // import * as logoData from '../assets/logo.json';
 const logoData = require('../../assets/logo.json');
 const talkingData = require('../../assets/splash-talking.json');
+const topicsData = require('../../assets/topics.json');
 
 import Waypoint from 'react-waypoint';
 // import bannerImg from '../../public/assets/banner2.jpg'
@@ -110,6 +111,15 @@ const talkingOptions = {
   loop: true,
   autoplay: true,
   animationData: talkingData,
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
+
+const topicsOptions = {
+  loop: true,
+  autoplay: true,
+  animationData: topicsData,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -241,7 +251,9 @@ class Index extends React.Component<Props, State> {
             </Fade>
           </Grid>
           <Grid item xs={12} md={6}>
-            <div className={classes.paper}><img src="./imgs/02-topics.png" className={classes.paperimg} /></div>
+            <div className={classes.paper}>
+                <Lottie options={topicsOptions} />
+            </div>
           </Grid>
 
           <Grid item xs={12} md={6}>
