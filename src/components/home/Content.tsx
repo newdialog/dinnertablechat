@@ -26,8 +26,8 @@ const styles = (theme: Theme) =>
       paddingLeft: '3em',
       paddingRight: '3em',
       // display: 'grid',
-      // gridTemplateColumns: 'repeat(12, 1fr)',
-      gridGap: `${theme.spacing.unit * 4}px`,
+      gridTemplateColumns: 'repeat(12, 1fr)',
+      // gridGap: `${theme.spacing.unit * 4}px`,
       [theme.breakpoints.down('sm')]: {
         paddingLeft: '2em',
         paddingRight: '2em',
@@ -42,7 +42,7 @@ const styles = (theme: Theme) =>
       paddingRight: '3em',
       // display: 'grid',
       // gridTemplateColumns: 'repeat(12, 1fr)',
-      gridGap: `${theme.spacing.unit * 4}px`,
+      // gridGap: `${theme.spacing.unit * 4}px`,
       [theme.breakpoints.down('sm')]: {
         // padding: '0'
       },
