@@ -20,11 +20,7 @@ const styles = createStyles({
     flexGrow: 1,
     fontFamily: 'Montserrat!important',
     fontWeight: 'bolder'
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
+  }
 });
 
 interface Props extends WithStyles<typeof styles> {
@@ -32,7 +28,6 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 function onLogin(store: Store.Type) {
-  // store.setTitle('clicked ' + Math.round(Math.random() * 10) )
   store.auth.login()
 
 }
@@ -48,25 +43,21 @@ function onStart(store: Store.Type) {
 function onHome(store: Store.Type) {
   store.router.push('/')
 }
-/*
-<IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
-            <MenuIcon />
-          </IconButton>
-*/
 
 function ButtonAppBar(props:Props) {
   const { classes, store } = props;
   const auth = store.auth.loggedIn;
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed" color="default" style={{ backgroundColor:'rgb(255,255,255,0.9)' }}>
         <Toolbar variant="dense">
           <img src="./logos/appbar-logo-color.png" style={{height:'3em', cursor: 'pointer'}} onClick={ onHome.bind(0,store) }/>
-          <Typography variant="title" color="inherit" className={classes.flex}>
-          </Typography>
+          { /* TODO BUG: empty component needed for alignment */ }
+          <Typography variant="title" className={classes.flex}></Typography>
 
           {!auth && 
-            <Button color="inherit" onClick={ () => onLogin(store) }>Login</Button>
+            <Button onClick={ () => onLogin(store) }>Login</Button>
           }
           {auth &&
             <React.Fragment>
@@ -74,7 +65,7 @@ function ButtonAppBar(props:Props) {
                 Start
                 <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
               </Button>
-              <Button color="inherit" onClick={ () => onLogOut(store) }>Log Out</Button>
+              <Button onClick={ () => onLogOut(store) }>Log Out</Button>
             </React.Fragment>
           }
 
