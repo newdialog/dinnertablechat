@@ -20,6 +20,7 @@ const AuthModel = types
     login() {
       // self.text = newTitle
       self.doLogin = true;
+
       console.log('login action');
     },
     logout() {
