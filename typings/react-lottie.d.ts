@@ -8,7 +8,8 @@ declare module 'react-lottie' {
   interface LottieBodymovinOptionProps {
     loop?: boolean;
     autoplay?: boolean;
-    animationData: any;
+    animationData?: any;
+    path?: string;
     rendererSettings?: {
       preserveAspectRatio?: any;
       context?: any; // the canvas context

@@ -6,7 +6,7 @@ import Lottie from 'react-lottie';
 import { observer } from 'mobx-react';
 import { Typography, Divider } from '@material-ui/core';
 
-const logoData = require('../../assets/logo.json');
+// const logoData = require('../../assets/logo.json');
 
 const styles = (theme: Theme) =>
   createStyles({

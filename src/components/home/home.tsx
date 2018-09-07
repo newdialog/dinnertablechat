@@ -2,14 +2,11 @@ import * as React from 'react';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
-import Lottie from 'react-lottie';
 import Content from './Content';
 import { observer } from 'mobx-react';
 import Subcribe from './Subscribe';
 
 import Banner from './Banner';
-
-const logoData = require('../../assets/logo.json');
 
 const styles = (theme: Theme) =>
   createStyles({

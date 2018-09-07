@@ -12,7 +12,7 @@ import { Typography } from '@material-ui/core';
 import Waypoint from 'react-waypoint';
 import { translate } from 'react-i18next';
 
-const bgData = require('../../assets/background.json');
+// const bgData = require('../../assets/background.json');
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -119,7 +119,7 @@ const styles = (theme: Theme) =>
 const bgOptions = {
   loop: true,
   autoplay: true,
-  animationData: bgData,
+  path: 'assets/background.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
