@@ -122,14 +122,6 @@ class Index extends React.Component<Props, State> {
   return (
     <React.Fragment>
       <CssBaseline />
-      <AppBar position="static" className={classes.appBar}>
-        <Toolbar>
-          <CameraIcon className={classes.icon} />
-          <Typography variant="title" color="inherit" noWrap>
-            Debate Topics
-          </Typography>
-        </Toolbar>
-      </AppBar>
       <main>
         {/* Hero unit */}
         <div className={classes.heroUnit}>
