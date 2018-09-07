@@ -11,13 +11,8 @@ import { translate } from 'react-i18next';
 
 import Lottie from 'react-lottie';
 const Fade = require('react-reveal/Fade');
-// import * as logoData from '../assets/logo.json';
-const logoData = require('../../assets/logo.json');
-const talkingData = require('../../assets/splash-talking.json');
-const topicsData = require('../../assets/topics.json');
 
 import Waypoint from 'react-waypoint';
-// import bannerImg from '../../public/assets/banner2.jpg'
 // const bannerImg = require('../assets/banner2.jpg')
 
 const styles = (theme: Theme) =>
@@ -101,7 +96,7 @@ const styles = (theme: Theme) =>
 const logoOptions = {
   loop: false,
   autoplay: true,
-  animationData: logoData,
+  path: 'assets/logo.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -110,7 +105,7 @@ const logoOptions = {
 const talkingOptions = {
   loop: true,
   autoplay: true,
-  animationData: talkingData,
+  path: 'assets/splash-talking.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -119,7 +114,7 @@ const talkingOptions = {
 const topicsOptions = {
   loop: true,
   autoplay: true,
-  animationData: topicsData,
+  path: 'assets/topics.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
