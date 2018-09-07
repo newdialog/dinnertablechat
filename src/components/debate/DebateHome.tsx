@@ -21,64 +21,14 @@ const styles = (theme: Theme) =>
       // gridAutoFlow: 'column',
       // gridAutoColumns: '200px'
     },
-    paper: {
-      padding: theme.spacing.unit,
-      textAlign: 'center',
-      color: theme.palette.text.secondary,
-      whiteSpace: 'nowrap',
-      marginBottom: theme.spacing.unit
-    },
     centered: {
+      marginTop: '60px',
       marginLeft: 'auto',
       marginRight: 'auto',
       width: 'auto',
       maxWidth: '800px',
       minWidth: '300px'
     },
-    centeredDown: {
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      paddingBottom: '5em',
-      color: '#ffffff88',
-      textAlign: 'center'
-    },
-    divider: {
-      margin: `${theme.spacing.unit * 2}px 0`
-    },
-    banner: {
-      display: 'flex',
-      objectFit: 'cover',
-      width: '100%',
-      height: 'calc(100vh - 0px)',
-      backgroundImage: 'url("./banner.jpg")',
-      backgroundSize: 'cover',
-      backgroundAttachment: 'fixed',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center 0',
-      color: 'white',
-      // justifyContent: 'center',
-      justifyContent: 'flex-end',
-      flexFlow: 'column nowrap'
-    },
-    bannerText: {
-      fontFamily: 'Open Sans',
-      color: 'white',
-      bottom: '20%',
-      marginBottom: '15vh',
-      backgroundColor: '#00000044',
-      fontWeight: 'bold'
-    },
-    logoanim: {
-      width: '100vw',
-      maxWidth: '600px',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      display: 'flex'
-    },
-    largeIcon: {
-      width: 80,
-      height: 60
-    }
   });
 
 import * as AppModel from '../../models/AppModel';
@@ -102,7 +52,6 @@ class Index extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <div className={classes.centered}>
-            <Divider/><Divider/>
             <Typography variant="display3" align="center">
               JOIN THE CONVERSATION
             </Typography>
