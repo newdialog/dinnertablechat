@@ -12,8 +12,19 @@ Dinnertable.chat
 
 ### Getting started
 
+Configure AWS to use your DTC aws account :
+* required: accessKeyId and secretAccessKey)
+* Use `us-east-1`
+```
+npm install -g awsmobile-cli
+awsmobile configure
+```
+
+After cloning project:
 ```
 npm install
+awsmobile init 842a85ef-0cf3-4602-beac-784388fbbf64
+
 npm start
 ```
 
