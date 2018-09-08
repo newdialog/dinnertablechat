@@ -10,7 +10,7 @@
     "@types/react-i18next": "^7.8.2",
     "aws-amplify": "^1.0.8",
     "aws-amplify-react": "^2.0.0",
-    "aws-sdk": "^2.310.0",
+    "aws-sdk": "^2.311.0",
     "env-cmd": "^8.0.2",
     "hark": "^1.2.3",
     "history": "^4.7.2",
@@ -50,7 +50,7 @@
     "i18n": "gstoi18n 1R85easxOUiw184YPJ3wI2-oC-yPyKZi_Xn6a38foQFc ./public/i18n/"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.1",
+    "@types/jest": "^23.3.2",
     "@types/node": "^10.9.4",
     "@types/react": "^16.4.13",
     "@types/react-dom": "^16.0.7",
