@@ -4,16 +4,17 @@ import { integer, float } from 'aws-sdk/clients/lightsail';
 let gameLift: AWS.GameLift;
 
 export function init() {
-  const options: AWS.GameLift.ClientConfiguration = {}
-  gameLift = new AWS.GameLift(options)
+  const options: AWS.GameLift.ClientConfiguration = {};
+  gameLift = new AWS.GameLift(options);
 }
 
 function onMatch(err: AWS.AWSError, data: AWS.GameLift.StartMatchmakingOutput) {
   if (err) {
-    console.log('onMatch', err)
+    console.log('onMatch', err);
     return;
   }
-  console.log('onMatch output', data.MatchmakingTicket)
+  console.log('onMatch output', data.MatchmakingTicket);
+  console.log('onMatch Status', data.MatchmakingTicket!.Status);
 }
 
 export function queueUp(topic: string, side: integer, playerId: string, donation: float) {
@@ -22,23 +23,23 @@ export function queueUp(topic: string, side: integer, playerId: string, donation
   const options: AWS.GameLift.StartMatchmakingInput = {
     ConfigurationName: 'dtc-match-config',
     // TicketId: 'STRING_VALUE', allow autogeneration
-    Players: [ /* required */
+    Players: [
+      /* required */
       {
-        LatencyInMs: {
-          '<NonEmptyString>': 0,
-          /* '<NonEmptyString>': ... */
-        },
+        /* LatencyInMs: {
+          '<NonEmptyString>': 0
+        },*/
         PlayerAttributes: {
-          'side': { 'N': side },
-          'donation': { 'N': donation },
-          'topic': { 'S': topic },
+          side: { N: side },
+          donation: { N: donation },
+          topic: { S: topic }
         },
         PlayerId: playerId,
         Team: teamName
       }
     ]
-  }
-  gameLift.startMatchmaking(options, onMatch)
+  };
+  gameLift.startMatchmaking(options, onMatch);
 }
 
 /*
