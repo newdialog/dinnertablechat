@@ -40,14 +40,14 @@ async function poll(id:string) {
       return;
     }
     if(ticket.Status === 'PLACING') {
-      console.log('entering placing, stopping poll')
+      // console.log('entering placing, stopping poll')
       // return;
     }
     if(ticket.Status === 'TIMED_OUT') {
       console.log('timed out, stopping poll')
       return;
     }
-    console.log('ticketinfo', ticket)
+    console.log('ticketinfo', ticket.Status, ticket)
     setTimeout(poll, 9000, id)
   });
   // console.log('info', info)
