@@ -1,56 +1,101 @@
 import * as React from 'react';
-import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import {
+  withStyles,
+  createStyles,
+  WithStyles,
+  Theme
+} from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { Typography, Divider } from '@material-ui/core';
 
-import QS from '../../services/QueueService'
+import * as QS from '../../services/QueueService';
+import { Formik, Form, Field } from 'formik';
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
+    },
+    centered: {
+      marginTop: '60px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '800px',
+      minWidth: '300px'
     }
   });
 
-class Index extends React.Component<any, any> {
+import * as AppModel from '../../models/AppModel';
+interface Props extends WithStyles<typeof styles> {
+  store: AppModel.Type;
+}
+@observer
+class Index extends React.Component<Props, any> {
+  private form: { [k: string]: React.RefObject<HTMLInputElement> } = {};
   constructor(props: any) {
     super(props);
-    this.state = { };
+    this.state = {};
   }
 
   public componentDidMount() {
-    
   }
 
-  public onSend(e:React.FormEvent<HTMLFormElement>) {
+  public onSend = (values: any) => {
+    // (e: React.FormEvent<HTMLFormElement>)
+    console.log('onSend values', values);
+    // e.preventDefault();
+    const topic = values.topic; // this.form.topic.current!.value;
+    const side = parseInt(values.side, 10); // parseInt(this.form.team.current!.value, 10);
+    const playerId = 'p' + Math.round(Math.random() * 100);
+    const donation = 5.5;
+    QS.queueUp(topic, side, playerId, donation);
+  };
 
-  }
+  private onChange = (e: React.ChangeEvent) => {};
 
   public render() {
-    const { classes } = this.props;
-    const { open } = this.state;
+    const { classes, store } = this.props;
+
+    if(this.props.store.auth.user && this.props.store.auth.aws) {
+      const options = this.props.store.auth.aws;
+      QS.init(options)
+    }
+    // const { open } = this.state;
+
     return (
-      <React.Fragment>
-        <div>
-          <div>
-            <h1>Hello, world!</h1>
-            <div id="video">
-              video tag
-              <video />
-            </div>
-            <form id="form" onSubmit={onSend}>
-              <textarea id="incoming" />
-              <button type="submit">submit</button>
-            </form>
-            <pre id="outgoing" />
-            <br />
-            Speaking: <pre id="speaking" />
-          </div>
-        </div>
-      </React.Fragment>
+      <div className={classes.centered}>
+        <h1>Match Queue Test</h1>
+        <Formik
+          initialValues={{ side: '0', topic: 'guns' }}
+          validate={values => {
+            const errors: any = {};
+            if (!values.topic) {
+              errors.topic = 'no topic';
+            }
+            return errors;
+          }}
+          onSubmit={(values, { setSubmitting }) => {
+            this.onSend(values);
+          }}
+        >
+          {({ errors, touched, isSubmitting }) => (
+            <Form>
+              <Field type="input" name="side" />
+              {errors.side && touched.side && errors.side}
+              <br />
+              <Field type="input" name="topic" />
+              {errors.topic && touched.topic && errors.topic}
+              <button type="submit" disabled={isSubmitting}>
+                Submit
+              </button>
+            </Form>
+          )}
+        </Formik>
+      </div>
     );
   }
 
@@ -67,4 +112,4 @@ class Index extends React.Component<any, any> {
   };
 }
 
-export default withRoot(withStyles(styles)(Index));
+export default inject('store')(withRoot(withStyles(styles)(Index)));
