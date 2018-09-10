@@ -3,8 +3,15 @@ import { integer, float } from 'aws-sdk/clients/lightsail';
 
 let gameLift: AWS.GameLift;
 
-export function init() {
-  const options: AWS.GameLift.ClientConfiguration = {};
+export function init(options: AWS.GameLift.ClientConfiguration) {
+  console.log('gamelift init accessKeyId sessionToken', options.accessKeyId);
+  if(!!gameLift) return;
+  /* const options: AWS.GameLift.ClientConfiguration = { 
+    region: 'us-east-1',
+    accessKeyId,
+    secretAccessKey,
+    sessionToken
+  }; */
   gameLift = new AWS.GameLift(options);
 }
 
@@ -18,8 +25,10 @@ function onMatch(err: AWS.AWSError, data: AWS.GameLift.StartMatchmakingOutput) {
 }
 
 export function queueUp(topic: string, side: integer, playerId: string, donation: float) {
+  
   const teamName = side === 0 ? 'red' : 'blue';
-  console.log('queueUp');
+  console.log('queueUp', topic, side, playerId, donation, 'teamName: ' + teamName)
+
   const options: AWS.GameLift.StartMatchmakingInput = {
     ConfigurationName: 'dtc-match-config',
     // TicketId: 'STRING_VALUE', allow autogeneration

@@ -6,13 +6,21 @@ const UserModel = types.model({
   name: types.string,
   // credits: types.integer,
   // karma: types.maybe(types.integer),
-  token: types.string
+  // token: types.string,
   // data: types.frozen({})
 });
+
+const AWSModel = types.model({
+  accessKeyId: types.string,
+  secretAccessKey: types.string,
+  sessionToken: types.string,
+  region: types.string,
+})
 
 const AuthModel = types
   .model({
     user: types.maybe(UserModel),
+    aws: types.maybe(AWSModel),
     doLogin: false,
     loggedIn: false
   })
@@ -26,11 +34,22 @@ const AuthModel = types
     logout() {
       Auth.logout();
     },
-    authenticated(user: any) {
-      const { email, name, username, email_verified } = user;
+    authenticated(authServiceData: any) {
+      const { user, accessKeyId, secretAccessKey, sessionToken, region } = authServiceData;
 
-      const umodel: Instance<typeof UserModel> = { name, email, token: username };
+      const umodel: Instance<typeof UserModel> = { 
+        name: user.name, 
+        email: user.email
+      };
 
+      const aws: Instance<typeof AWSModel> = { 
+        accessKeyId,
+        secretAccessKey, 
+        sessionToken,
+        region
+      };
+
+      self.aws = aws;
       self.user = umodel;
       self.loggedIn = true;
     }

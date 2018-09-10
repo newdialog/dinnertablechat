@@ -1,9 +1,26 @@
 import awsmobile from '../aws-exports.js';
-
+import AWS from 'aws-sdk';
 import Auth from '@aws-amplify/auth';
+
+/* Debug only
+import Amplify from 'aws-amplify';
+Amplify.Logger.LOG_LEVEL = 'DEBUG' */
+
 // import { Logger } from 'aws-amplify';
 import { Hub, ConsoleLogger } from '@aws-amplify/core';
 import { injectConfig } from '../configs/auth';
+
+const IdentityPoolId = injectConfig(awsmobile).Auth.identityPoolId;
+console.log('IdentityPoolId', IdentityPoolId);
+
+if(!AWS.config || !AWS.config.region) {
+  AWS.config = new AWS.Config({ region: 'us-east-1' });
+  /* AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+    IdentityPoolId,
+    RoleArn: 'arn:aws:iam::681274315116:role/dtc_auth_MOBILEHUB_871967846'
+    // data.pool.userPoolId
+  });*/
+}
 
 function getLoggger() {
   const logger: any = new ConsoleLogger('dtc_aws_log');
@@ -30,38 +47,19 @@ function getLoggger() {
   };
   return logger;
 }
-// import { withOAuth } from 'aws-amplify-react';
-
-// const config = Auth.configure(awsmobile) as any;
-// console.log('config', config.oauth);
-/*
-Auth.currentSession()
-  .then(data => {
-    console.log('currentSession---', data);
-  })
-  .catch((e: any) => {
-    console.log('--currentSession err:', e);
-  });
-*/
 
 function onHubCapsule(cb: AwsCB, capsule: any) {
-  // console.log('onHubCapsule', capsule);
+  console.log('onHubCapsule', capsule);
   getLoggger().onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
-  /*
-  Auth.currentSession()
-    .then(data => {
-      console.log('+++currentSession2', data);
-    })
-    .catch((e: any) => {
-      console.log('---currentSession2 err:', e);
-    });
-  console.log('payload.event ', channel, payload.event);
-  */
+
   if (channel === 'auth' && payload.event === 'signIn') {
     checkUser(cb);
-  } else if (channel === 'auth' && (payload.event === 'configured' || payload.event === 'cognitoHostedUI')) {
+  } else if (
+    channel === 'auth' &&
+    (payload.event === 'configured' || payload.event === 'cognitoHostedUI')
+  ) {
     checkUser(cb);
   }
 }
@@ -77,22 +75,46 @@ export function auth(cb: AwsCB) {
 type AwsCB = (auth: AwsAuth) => void;
 export interface AwsAuth {
   user: any;
-  username: string;
+  // username: string;
+  region: string;
+  AccessKeyId: string;
+  SecretAccessKey: string;
+  SessionToken: string;
 }
 
-function checkUser(cb: AwsCB) {
-  return Auth.currentAuthenticatedUser()
-    .then(data => {
-      console.log('+++currentAuthenticatedUser', data);
-      cb({
-        user: { ...data.attributes, username: data.username },
-        username: data.username
-      });
-      // that.setState({ user: { ...data.attributes, username: data.username }, loggedIn: true });
-    })
-    .catch((e: any) => {
-      console.log('---currentAuthenticatedUser err:', e);
-    });
+async function checkUser(cb: AwsCB) {
+  let data: any;
+  try {
+    data = await Auth.currentAuthenticatedUser();
+  } catch (e) {
+    console.log('---currentAuthenticatedUser err:', e);
+    return;
+  }
+  // .then(data => {
+  console.log('+++currentAuthenticatedUser', data);
+  // console.log('data.pool.userPoolId', data.pool.userPoolId);
+  
+  const user = { ...data.attributes, username: data.username };
+
+  // console.log('AWS.config.credentials', AWS.config.credentials)
+  // console.log('AWS.config', AWS.config)
+  const currentCredentials = await Auth.currentCredentials();
+  console.log('currentCredentials', currentCredentials);
+  const credentials = Auth.essentialCredentials(currentCredentials);
+  // console.log('credentials', credentials);
+  
+  AWS.config.credentials = new AWS.Credentials(credentials);
+
+  const authParams: any = {
+    accessKeyId: credentials.accessKeyId,
+    secretAccessKey: credentials.secretAccessKey,
+    sessionToken: credentials.sessionToken,
+    region: 'us-east-1'
+  };
+  cb({
+    user,
+    ...authParams
+  });
 }
 
 export function logout() {
