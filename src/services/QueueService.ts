@@ -1,4 +1,4 @@
-import AWS from 'aws-sdk';
+import AWS, { GameLift } from 'aws-sdk';
 import { integer, float } from 'aws-sdk/clients/lightsail';
 
 let gameLift: AWS.GameLift;
@@ -22,6 +22,36 @@ function onMatch(err: AWS.AWSError, data: AWS.GameLift.StartMatchmakingOutput) {
   }
   console.log('onMatch output', data.MatchmakingTicket);
   console.log('onMatch Status', data.MatchmakingTicket!.Status);
+
+  if(data.MatchmakingTicket!.Status==='QUEUED') {
+    console.log('data.MatchmakingTicket!.TicketId!', data.MatchmakingTicket!.TicketId!)
+    poll(data.MatchmakingTicket!.TicketId!);
+  }
+}
+
+async function poll(id:string) {
+  // const info = await 
+  // gameLift.dec
+  gameLift.describeMatchmaking({TicketIds: [id]}, (e:any, d:any) => {
+    if(e) return console.log('err', e);
+    const ticket = d.TicketList[0];
+    if(ticket.Players.length > 1) {
+      console.log('!!!', ticket.Players);
+      return;
+    }
+    if(ticket.Status === 'PLACING') {
+      console.log('entering placing, stopping poll')
+      // return;
+    }
+    if(ticket.Status === 'TIMED_OUT') {
+      console.log('timed out, stopping poll')
+      return;
+    }
+    console.log('ticketinfo', ticket)
+    setTimeout(poll, 9000, id)
+  });
+  // console.log('info', info)
+  // 
 }
 
 export function queueUp(topic: string, side: integer, playerId: string, donation: float) {
