@@ -13,7 +13,7 @@ import { injectConfig } from '../configs/auth';
 const IdentityPoolId = injectConfig(awsmobile).Auth.identityPoolId;
 console.log('IdentityPoolId', IdentityPoolId);
 
-if(!AWS.config || !AWS.config.region) {
+if (!AWS.config || !AWS.config.region) {
   AWS.config = new AWS.Config({ region: 'us-east-1' });
   /* AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId,
@@ -93,8 +93,8 @@ async function checkUser(cb: AwsCB) {
   // .then(data => {
   console.log('+++currentAuthenticatedUser', data);
   // console.log('data.pool.userPoolId', data.pool.userPoolId);
-  const { name, email } = data.attributes;
-  const user = { name, email }; // , username: data.username 
+  const user = data.attributes;
+  // const user = { name, email }; // , username: data.username
 
   // console.log('AWS.config.credentials', AWS.config.credentials)
   // console.log('AWS.config', AWS.config)
@@ -102,7 +102,7 @@ async function checkUser(cb: AwsCB) {
   console.log('currentCredentials', currentCredentials);
   const credentials = Auth.essentialCredentials(currentCredentials);
   // console.log('credentials', credentials);
-  
+
   AWS.config.credentials = new AWS.Credentials(credentials);
 
   const authParams: any = {
@@ -111,13 +111,13 @@ async function checkUser(cb: AwsCB) {
     sessionToken: credentials.sessionToken,
     region: 'us-east-1'
   };
-  if(!user.name || !user.email || !authParams.accessKeyId) {
-    console.log('aws: no valid returned');
+  if (!user.name || !user.email || !authParams.accessKeyId) {
+    console.log('aws: no valid returned-');
     cb(null);
     return;
   }
   cb({
-    user,
+    user: { name: user.name, email: user.email },
     ...authParams
   });
 }
