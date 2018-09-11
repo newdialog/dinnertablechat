@@ -73,6 +73,7 @@ const styles = (theme: Theme) =>
       margin: 'auto',
       display: 'block',
       objectFit: 'contain',
+      pointerEvents: 'none',
       [theme.breakpoints.down('sm')]: {
         paddingTop: `${theme.spacing.unit * 5}px`,
         maxWidth: '80%'
@@ -196,7 +197,7 @@ class Index extends React.Component<Props, State> {
                 onEnter={this._handleLogoWaypointEnter}
                 onLeave={this._handleLogoWaypointLeave}
               />
-              <Lottie options={logoOptions} ref={this.logoRef} />
+              <Lottie options={logoOptions} ref={this.logoRef} isClickToPauseDisabled={true} />
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -287,7 +288,7 @@ class Index extends React.Component<Props, State> {
                 onLeave={this.memoizedHandler('topicsRef', true)}
               >
                 <div>
-                  <Lottie options={topicsOptions} ref={this.topicsRef} />
+                  <Lottie options={topicsOptions} ref={this.topicsRef} isClickToPauseDisabled={true}/>
                 </div>
               </Waypoint>
             </div>
@@ -313,7 +314,7 @@ class Index extends React.Component<Props, State> {
                 onLeave={this.memoizedHandler('talkingRef', true)}
               >
                 <div>
-                  <Lottie options={talkingOptions} ref={this.talkingRef} />
+                  <Lottie options={talkingOptions} ref={this.talkingRef} isClickToPauseDisabled={true}/>
                 </div>
               </Waypoint>
             </div>
