@@ -158,7 +158,7 @@ class Index extends React.Component<Props> {
             />
         <div className={classes.banner}>
           <div className={classes.bannerAnim}>
-            <Lottie options={bgOptions} ref={this.bannerRef} />
+            <Lottie options={bgOptions} ref={this.bannerRef} isClickToPauseDisabled={true}/>
           </div>
           <div className={classes.bannerAnimOverlay}></div>
           <div className={classes.centeredDown}>
