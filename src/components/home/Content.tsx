@@ -1,7 +1,12 @@
 // tslint:disable-next-line:max-line-length
 import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import {
+  withStyles,
+  createStyles,
+  WithStyles,
+  Theme
+} from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
 import Divider from '@material-ui/core/Divider';
@@ -13,6 +18,7 @@ import Lottie from 'react-lottie';
 const Fade = require('react-reveal/Fade');
 
 import Waypoint from 'react-waypoint';
+import { AnyComponent } from '@material-ui/core';
 // const bannerImg = require('../assets/banner2.jpg')
 
 const styles = (theme: Theme) =>
@@ -30,7 +36,7 @@ const styles = (theme: Theme) =>
       // gridGap: `${theme.spacing.unit * 4}px`,
       [theme.breakpoints.down('sm')]: {
         paddingLeft: '2em',
-        paddingRight: '2em',
+        paddingRight: '2em'
       }
 
       // gridAutoFlow: 'column',
@@ -121,7 +127,7 @@ const topicsOptions = {
 };
 
 interface Props extends WithStyles<typeof styles> {
-  t:any
+  t: any;
 }
 interface State {
   open: boolean;
@@ -134,19 +140,40 @@ class Index extends React.Component<Props, State> {
   }
 
   private logoRef = React.createRef<Lottie | any>();
+  private topicsRef = React.createRef<Lottie | any>();
+  private talkingRef = React.createRef<Lottie | any>();
+  private handlers: { [k: string]: any } = {};
 
-  private _handleWaypointEnter = () => {
+  private _handleLogoWaypointEnter = () => {
     if (!this.logoRef.current) return;
     // console.log('this.logoRef.current', this.logoRef.current)
     this.logoRef.current.stop();
     this.logoRef.current.play();
-  }
+  };
 
-  private _handleWaypointLeave = () => {
+  private _handleLogoWaypointLeave = () => {
     if (!this.logoRef.current) return;
     // console.log('this.logoRef.current', this.logoRef.current)
     // this.logoRef.current.stop();
-  }
+  };
+
+  private memoizedHandler = (id: any, onLeave: boolean = false) => {
+    const handlers = this.handlers;
+    const _id = !onLeave ? id : id + 'leave';
+    if (handlers[_id]) {
+      return handlers[_id];
+    }
+    if (!onLeave)
+      return (handlers[_id] = () => {
+        // console.log('playing', _id);
+        this[id].current.play();
+      });
+    else
+      return (handlers[_id] = () => {
+        // console.log('stopping', _id);
+        this[id].current.stop();
+      });
+  };
 
   public render() {
     const { classes, t } = this.props;
@@ -166,8 +193,8 @@ class Index extends React.Component<Props, State> {
               <Waypoint
                 topOffset="-10%"
                 bottomOffset="0"
-                onEnter={this._handleWaypointEnter}
-                onLeave={this._handleWaypointLeave}
+                onEnter={this._handleLogoWaypointEnter}
+                onLeave={this._handleLogoWaypointLeave}
               />
               <Lottie options={logoOptions} ref={this.logoRef} />
             </div>
@@ -175,7 +202,7 @@ class Index extends React.Component<Props, State> {
           <Grid item xs={12} md={6}>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              {t('home-intro')}
+                {t('home-intro')}
               </Typography>
             </Fade>
           </Grid>
@@ -196,12 +223,14 @@ class Index extends React.Component<Props, State> {
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              {t('home-rules')}
+                {t('home-rules')}
               </Typography>
             </Fade>
           </Grid>
           <Grid item xs={12} md={6}>
-            <div className={classes.paper}><img src="./imgs/02-topics.png" className={classes.paperimg} /></div>
+            <div className={classes.paper}>
+              <img src="./imgs/02-topics.png" className={classes.paperimg} />
+            </div>
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -211,12 +240,14 @@ class Index extends React.Component<Props, State> {
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              {t('home-tiers')}
+                {t('home-tiers')}
               </Typography>
             </Fade>
           </Grid>
           <Grid item xs={12} md={6}>
-            <div className={classes.paper}><img src="./imgs/02-topics.png" className={classes.paperimg} /></div>
+            <div className={classes.paper}>
+              <img src="./imgs/02-topics.png" className={classes.paperimg} />
+            </div>
           </Grid>
 
           <Grid item xs={12} md={6}>
@@ -226,28 +257,39 @@ class Index extends React.Component<Props, State> {
             </Typography>
             <Fade bottom>
               <Typography variant="body1" gutterBottom align="left">
-              {t('home-char')}
-              </Typography>
-            </Fade>
-          </Grid>
-          <Grid item xs={12} md={6}>
-          <div className={classes.paper}><img src="./imgs/02-topics.png" className={classes.paperimg} /></div>
-          </Grid>
-
-          <Grid item xs={12} md={6}>
-            <div className={classes.divider} />
-            <Typography variant="title" gutterBottom align="left">
-            {t('home-topic-title')}
-            </Typography>
-            <Fade bottom>
-              <Typography variant="body1" gutterBottom align="left">
-              {t('home-topic')}
+                {t('home-char')}
               </Typography>
             </Fade>
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
-                <Lottie options={topicsOptions} />
+              <img src="./imgs/02-topics.png" className={classes.paperimg} />
+            </div>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <div className={classes.divider} />
+            <Typography variant="title" gutterBottom align="left">
+              {t('home-topic-title')}
+            </Typography>
+            <Fade bottom>
+              <Typography variant="body1" gutterBottom align="left">
+                {t('home-topic')}
+              </Typography>
+            </Fade>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <div className={classes.paper}>
+              <Waypoint
+                topOffset="-10%"
+                bottomOffset="0"
+                onEnter={this.memoizedHandler('topicsRef')}
+                onLeave={this.memoizedHandler('topicsRef', true)}
+              >
+                <div>
+                  <Lottie options={topicsOptions} ref={this.topicsRef} />
+                </div>
+              </Waypoint>
             </div>
           </Grid>
 
@@ -264,7 +306,16 @@ class Index extends React.Component<Props, State> {
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
-              <Lottie options={talkingOptions} />
+              <Waypoint
+                topOffset="-10%"
+                bottomOffset="0"
+                onEnter={this.memoizedHandler('talkingRef')}
+                onLeave={this.memoizedHandler('talkingRef', true)}
+              >
+                <div>
+                  <Lottie options={talkingOptions} ref={this.talkingRef} />
+                </div>
+              </Waypoint>
             </div>
           </Grid>
         </Grid>
