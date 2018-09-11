@@ -72,7 +72,7 @@ export function auth(cb: AwsCB) {
   checkUser(cb); // required by amplify, for existing login
 }
 
-type AwsCB = (auth: AwsAuth) => void;
+type AwsCB = (auth: AwsAuth | null) => void;
 export interface AwsAuth {
   user: any;
   // username: string;
@@ -93,8 +93,8 @@ async function checkUser(cb: AwsCB) {
   // .then(data => {
   console.log('+++currentAuthenticatedUser', data);
   // console.log('data.pool.userPoolId', data.pool.userPoolId);
-  
-  const user = { ...data.attributes, username: data.username };
+  const { name, email } = data.attributes;
+  const user = { name, email }; // , username: data.username 
 
   // console.log('AWS.config.credentials', AWS.config.credentials)
   // console.log('AWS.config', AWS.config)
@@ -111,6 +111,11 @@ async function checkUser(cb: AwsCB) {
     sessionToken: credentials.sessionToken,
     region: 'us-east-1'
   };
+  if(!user.name || !user.email || !authParams.accessKeyId) {
+    console.log('aws: no valid returned');
+    cb(null);
+    return;
+  }
   cb({
     user,
     ...authParams
