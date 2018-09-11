@@ -15,7 +15,7 @@ import Grid from '@material-ui/core/Grid';
 import { translate } from 'react-i18next';
 
 import Lottie from 'react-lottie';
-const Fade = require('react-reveal/Fade');
+import Reveal from 'react-reveal/Reveal';
 
 import Waypoint from 'react-waypoint';
 import { AnyComponent } from '@material-ui/core';
@@ -167,12 +167,12 @@ class Index extends React.Component<Props, State> {
     if (!onLeave)
       return (handlers[_id] = () => {
         // console.log('playing', _id);
-        if(this[id].current) this[id].current.play();
+        if (this[id].current) this[id].current.play();
       });
     else
       return (handlers[_id] = () => {
         // console.log('stopping', _id);
-        if(this[id].current) this[id].current.stop();
+        if (this[id].current) this[id].current.stop();
       });
   };
 
@@ -197,15 +197,17 @@ class Index extends React.Component<Props, State> {
                 onEnter={this._handleLogoWaypointEnter}
                 onLeave={this._handleLogoWaypointLeave}
               />
-              <Lottie options={logoOptions} ref={this.logoRef} isClickToPauseDisabled={true} />
+              <Lottie
+                options={logoOptions}
+                ref={this.logoRef}
+                isClickToPauseDisabled={true}
+              />
             </div>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Fade bottom>
-              <Typography variant="body1" gutterBottom align="left">
-                {t('home-intro')}
-              </Typography>
-            </Fade>
+            <Typography variant="body1" gutterBottom align="left">
+              {t('home-intro')}
+            </Typography>
           </Grid>
         </Grid>
         <Grid container spacing={24} className={classes.containerRev}>
@@ -218,15 +220,16 @@ class Index extends React.Component<Props, State> {
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <Typography variant="title" gutterBottom align="left">
-              <div className={classes.divider} />
-              {t('home-rules-title')}
-            </Typography>
-            <Fade bottom>
+            <Reveal effect="fadeInUp">
+              <Typography variant="title" gutterBottom align="left">
+                <div className={classes.divider} />
+                {t('home-rules-title')}
+              </Typography>
+
               <Typography variant="body1" gutterBottom align="left">
                 {t('home-rules')}
               </Typography>
-            </Fade>
+            </Reveal>
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
@@ -235,15 +238,16 @@ class Index extends React.Component<Props, State> {
           </Grid>
 
           <Grid item xs={12} md={6}>
-            <Typography variant="title" gutterBottom align="left">
-              <div className={classes.divider} />
-              {t('home-tiers-title')}
-            </Typography>
-            <Fade bottom>
+            <Reveal effect="fadeInUp">
+              <Typography variant="title" gutterBottom align="left">
+                <div className={classes.divider} />
+                {t('home-tiers-title')}
+              </Typography>
+
               <Typography variant="body1" gutterBottom align="left">
                 {t('home-tiers')}
               </Typography>
-            </Fade>
+            </Reveal>
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
@@ -253,14 +257,15 @@ class Index extends React.Component<Props, State> {
 
           <Grid item xs={12} md={6}>
             <div className={classes.divider} />
-            <Typography variant="title" gutterBottom align="left">
-              {t('home-char-title')}
-            </Typography>
-            <Fade bottom>
+            <Reveal effect="fadeInUp">
+              <Typography variant="title" gutterBottom align="left">
+                {t('home-char-title')}
+              </Typography>
+
               <Typography variant="body1" gutterBottom align="left">
                 {t('home-char')}
               </Typography>
-            </Fade>
+            </Reveal>
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
@@ -270,14 +275,15 @@ class Index extends React.Component<Props, State> {
 
           <Grid item xs={12} md={6}>
             <div className={classes.divider} />
-            <Typography variant="title" gutterBottom align="left">
-              {t('home-topic-title')}
-            </Typography>
-            <Fade bottom>
+            <Reveal effect="fadeInUp">
+              <Typography variant="title" gutterBottom align="left">
+                {t('home-topic-title')}
+              </Typography>
+
               <Typography variant="body1" gutterBottom align="left">
                 {t('home-topic')}
               </Typography>
-            </Fade>
+            </Reveal>
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
@@ -288,7 +294,11 @@ class Index extends React.Component<Props, State> {
                 onLeave={this.memoizedHandler('topicsRef', true)}
               >
                 <div>
-                  <Lottie options={topicsOptions} ref={this.topicsRef} isClickToPauseDisabled={true}/>
+                  <Lottie
+                    options={topicsOptions}
+                    ref={this.topicsRef}
+                    isClickToPauseDisabled={true}
+                  />
                 </div>
               </Waypoint>
             </div>
@@ -299,11 +309,10 @@ class Index extends React.Component<Props, State> {
             <Typography variant="title" gutterBottom align="left">
               {t('home-overview-title')}
             </Typography>
-            <Fade bottom>
-              <Typography variant="body1" gutterBottom align="left">
-                {t('home-overview')}
-              </Typography>
-            </Fade>
+
+            <Typography variant="body1" gutterBottom align="left">
+              {t('home-overview')}
+            </Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
@@ -314,7 +323,11 @@ class Index extends React.Component<Props, State> {
                 onLeave={this.memoizedHandler('talkingRef', true)}
               >
                 <div>
-                  <Lottie options={talkingOptions} ref={this.talkingRef} isClickToPauseDisabled={true}/>
+                  <Lottie
+                    options={talkingOptions}
+                    ref={this.talkingRef}
+                    isClickToPauseDisabled={true}
+                  />
                 </div>
               </Waypoint>
             </div>
