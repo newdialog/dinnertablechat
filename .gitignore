@@ -19,6 +19,11 @@ cert/
 .env.test.local
 .env.production.local
 
+# servers
+/backend/**/node_modules
+/backend/**/build
+/backend/**/aws-exports.*
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
