@@ -3,6 +3,7 @@ import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/s
 import withRoot from '../../withRoot';
 
 import Lottie from 'react-lottie';
+import Reveal from 'react-reveal/Reveal';
 import { observer } from 'mobx-react';
 
 import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
@@ -163,10 +164,14 @@ class Index extends React.Component<Props> {
           <div className={classes.bannerAnimOverlay}></div>
           <div className={classes.centeredDown}>
             <Typography variant="display4" gutterBottom align="center">
-              {t('home-banner-title1')}
+              <Reveal effect="fadeIn" duration="3500">
+               {t('home-banner-title1')}
+              </Reveal>
             </Typography>
             <Typography variant="display1" align="center">
-              {t('home-banner-title2')}
+              <Reveal effect="fadeIn" duration="5500">
+                {t('home-banner-title2')}
+              </Reveal>
             </Typography>
             <div className={classes.bannerTextDivider} />
             <a href="#intro">
