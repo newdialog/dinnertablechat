@@ -20,7 +20,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "skipLibCheck": false,
+    "skipLibCheck": true,
     "isolatedModules": false
   },
   "exclude": [
@@ -35,6 +35,8 @@
     "*.md",
     "CHANGELOG.md",
     "awsmobilejs",
-    "/assets"
+    "/assets",
+    "public",
+    "/backend"
   ]
 }
