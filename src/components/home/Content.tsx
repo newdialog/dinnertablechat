@@ -101,7 +101,7 @@ const styles = (theme: Theme) =>
 
 const logoOptions = {
   loop: false,
-  autoplay: true,
+  autoplay: false,
   path: 'assets/logo.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
@@ -110,7 +110,7 @@ const logoOptions = {
 
 const talkingOptions = {
   loop: true,
-  autoplay: true,
+  autoplay: false,
   path: 'assets/splash-talking.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
@@ -119,7 +119,7 @@ const talkingOptions = {
 
 const topicsOptions = {
   loop: true,
-  autoplay: true,
+  autoplay: false,
   path: 'assets/topics.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
@@ -166,12 +166,12 @@ class Index extends React.Component<Props, State> {
     if (!onLeave)
       return (handlers[_id] = () => {
         // console.log('playing', _id);
-        this[id].current.play();
+        if(this[id].current) this[id].current.play();
       });
     else
       return (handlers[_id] = () => {
         // console.log('stopping', _id);
-        this[id].current.stop();
+        if(this[id].current) this[id].current.stop();
       });
   };
 

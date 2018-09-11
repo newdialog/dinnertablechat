@@ -118,7 +118,7 @@ const styles = (theme: Theme) =>
 
 const bgOptions = {
   loop: true,
-  autoplay: true,
+  autoplay: false,
   path: 'assets/background.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
