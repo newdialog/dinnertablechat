@@ -37,9 +37,10 @@ class Auth extends React.Component<Props, State> {
     return <React.Fragment>{props.children}</React.Fragment>;
   }
 
-  private handleAuth(store: Store.Type, awsUser: AuthService.AwsAuth) {
+  private handleAuth(store: Store.Type, awsUser: AuthService.AwsAuth | null) {
+    if(!awsUser) return;
     // console.log('handleAuth', awsUser)
-    store.auth.authenticated(awsUser.user);
+    store.auth.authenticated(awsUser);
   }
 }
 
