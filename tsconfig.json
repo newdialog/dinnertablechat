@@ -24,6 +24,7 @@
     "isolatedModules": false
   },
   "exclude": [
+    "backend",
     "node_modules",
     "build",
     "scripts",
