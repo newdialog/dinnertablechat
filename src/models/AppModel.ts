@@ -1,11 +1,13 @@
 import { types } from 'mobx-state-tree';
 import { RouterModel } from 'mst-react-router';
 import AuthModel from './AuthModel';
+import DebateModel from './DebateModel';
 import { Instance } from 'mobx-state-tree';
 
 const AppModel = types.model({
   auth: AuthModel,
-  router: RouterModel
+  debate: DebateModel,
+  router: RouterModel,
 });
 
 export type Type = Instance<typeof AppModel>;
@@ -13,8 +15,9 @@ export type Type = Instance<typeof AppModel>;
 export const create = (routerModel: RouterModel, fetcher: any) =>
   AppModel.create(
     {
+      auth: AuthModel.create({}),
+      debate: DebateModel.create({}),
       router: routerModel,
-      auth: AuthModel.create({})
     },
     {
       fetch: fetcher,
