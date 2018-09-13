@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
-import { Button, Card, CardActions, CardContent, CardMedia, CssBaseline, Grid, Typography } from '@material-ui/core'
+import { Button, CssBaseline, Typography, Stepper, Step, StepLabel, StepContent, Paper } from '@material-ui/core'
 import * as AppModel from '../../models/AppModel';
 import PositionSelector from './PositionSelector';
+import ContributionSelector from './ContributionSelector';
 import withRoot from '../../withRoot';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 // const logoData = require('../../assets/logo.json');
 
 const styles = theme => 
@@ -23,32 +24,18 @@ const styles = theme =>
       margin: '0 auto',
       padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
     },
-    heroButtons: {
-      marginTop: theme.spacing.unit * 4,
+    stepper: {
+      padding: '10%',
     },
-    layout: {
-      width: 'auto',
-      marginLeft: theme.spacing.unit * 3,
-      marginRight: theme.spacing.unit * 3,
-      [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
-        width: 1100,
-        marginLeft: 'auto',
-        marginRight: 'auto',
-      },
+    button: {
+      marginTop: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
     },
-    cardGrid: {
-      padding: `${theme.spacing.unit * 8}px 0`,
+    actionsContainer: {
+      marginBottom: theme.spacing.unit * 2,
     },
-    card: {
-      height: '100%',
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    cardMedia: {
-      paddingTop: '56.25%', // 16:9
-    },
-    cardContent: {
-      flexGrow: 1,
+    resetContainer: {
+      padding: theme.spacing.unit * 3,
     },
     footer: {
       backgroundColor: theme.palette.background.paper,
@@ -61,40 +48,73 @@ interface Props extends WithStyles<typeof styles> {
 }
 interface State {
   open: boolean;
+  activeStep: number,
 }
 
-// function getSteps() {
-//   return ['Select campaign settings', 'Create an ad group', 'Create an ad'];
-// }
+function getSteps() {
+  return ['Select Postion', 'Set contribution'];
+}
 
-// function getStepContent(step) {
-//   switch (step) {
-//     case 0:
-//       return `For each ad campaign that you create, you can control how much
-//               you're willing to spend on clicks and conversions, which networks
-//               and geographical locations you want your ads to show on, and more.`;
-//     case 1:
-//       return 'An ad group contains one or more ads which target a shared set of keywords.';
-//     case 2:
-//       return `Try out different ad text to see what brings in the most customers,
-//               and learn how to enhance your ads using features like ad extensions.
-//               If you run into any problems with your ads, find out how to tell if
-//               they're running and how to resolve approval issues.`;
-//     default:
-//       return 'Unknown step';
-//   }
-// }
+function getStepContent(step: number, store: AppModel.Type) {
+  switch (step) {
+    case 0:
+      return <PositionSelector store={store} />
+    case 1:
+      return <ContributionSelector store={store} />
+    default:
+      return <Typography>Hmm, something went wrong. Please try again after refreshing the page.</Typography>;
+  }
+}
 
 @observer
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { open: false };
+    this.state = { open: false, activeStep: 0 };
   }
 
+  private handleNext = () => {
+    const { store } = this.props;
+    store.debate.setStep(store.debate.step + 1)
+  };
+
+  private handleBack = () => {
+    const { store } = this.props;
+    store.debate.setStep(store.debate.step - 1)
+  };
+
+  private handleReset = () => {
+    const { store } = this.props;
+    store.debate.resetQueue()
+  };
+
+  private renderStepButtons = (activeStep, classes, steps) => {
+    return (
+      <div className={classes.actionsContainer}>
+        <Button
+          disabled={activeStep === 0}
+          onClick={this.handleBack}
+          className={classes.button}
+        >
+          Back
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={this.handleNext}
+          className={classes.button}
+        >
+          {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+        </Button>
+      </div>
+    );
+  }
+
+
   public render() {
-    const { classes } = this.props;
-    const { open } = this.state;
+    const { classes, store } = this.props;
+    const { step } = store.debate
+    const steps = getSteps();
 
   return (
     <React.Fragment>
@@ -112,7 +132,29 @@ class Index extends React.Component<Props, State> {
           </div>
         </div>
         {/* End hero unit */}
-        <PositionSelector />
+        <div className={classes.stepper}>
+          <Stepper activeStep={step} orientation="vertical">
+            {steps.map((label, index) => {
+              return (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                  <StepContent>
+                    {getStepContent(index, store)}
+                    {(step === 0) ? null : this.renderStepButtons(step, classes, steps)}
+                  </StepContent>
+                </Step>
+              );
+            })}
+          </Stepper>
+          {step === steps.length && (
+            <Paper square elevation={0} className={classes.resetContainer}>
+              <Typography>All steps completed - you&quot;re about to enter the queue for {store.debate.topic}!</Typography>
+              <Button onClick={this.handleReset} className={classes.button}>
+                Reset
+              </Button>
+            </Paper>
+          )}
+        </div>
       </main>
       {/* Footer */}
       <footer className={classes.footer}>
@@ -121,18 +163,6 @@ class Index extends React.Component<Props, State> {
     </React.Fragment>
   );
   }
-
-  private handleClose = () => {
-    this.setState({
-      open: false
-    });
-  };
-
-  private handleClick = () => {
-    this.setState({
-      open: true
-    });
-  };
 }
 
-export default withRoot(withStyles(styles)(Index));
+export default inject('store')(withRoot(withStyles(styles)(Index)));

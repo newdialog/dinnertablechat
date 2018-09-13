@@ -5,28 +5,12 @@ import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } f
 import { data } from './sampleSelectionJSON';
 import withRoot from '../../withRoot';
 import { observer } from 'mobx-react';
+import * as AppModel from '../../models/AppModel';
 
 // const logoData = require('../../assets/logo.json');
 
 const styles = theme => 
   createStyles({
-    appBar: {
-      position: 'relative',
-    },
-    icon: {
-      marginRight: theme.spacing.unit * 2,
-    },
-    heroUnit: {
-      backgroundColor: theme.palette.background.paper,
-    },
-    heroContent: {
-      maxWidth: 600,
-      margin: '0 auto',
-      padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
-    },
-    heroButtons: {
-      marginTop: theme.spacing.unit * 4,
-    },
     layout: {
       width: 'auto',
       marginLeft: theme.spacing.unit * 3,
@@ -38,7 +22,7 @@ const styles = theme =>
       },
     },
     cardGrid: {
-      padding: `${theme.spacing.unit * 8}px 0`,
+      padding: `${theme.spacing.unit * 4}px 0`,
     },
     card: {
       height: '100%',
@@ -51,13 +35,8 @@ const styles = theme =>
     cardContent: {
       flexGrow: 1,
     },
-    footer: {
-      backgroundColor: theme.palette.background.paper,
-      padding: theme.spacing.unit * 6,
-    },
   });
 
-import * as AppModel from '../../models/AppModel';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
 }
@@ -72,8 +51,13 @@ class PositionSelector extends React.Component<Props, State> {
     this.state = { open: false };
   }
 
+  private onSelect = (position: string, proposition: string, topic: string) => {
+    this.props.store.debate.setPosition(position, proposition, topic)
+    this.props.store.debate.setStep(1)
+  }
+
   public render() {
-    const { classes } = this.props;
+    const { classes, store } = this.props;
     const { open } = this.state;
 
   return (
@@ -96,10 +80,10 @@ class PositionSelector extends React.Component<Props, State> {
                 </Typography>
                 </CardContent>
                 <CardActions>
-                <Button size="small" color="primary">
+                <Button size="small" color="primary" onClick={() => this.onSelect(card.positions[1], card.proposition, card.topic)}>
                     {card.positions[1]}
                 </Button>
-                <Button size="small" color="primary">
+                <Button size="small" color="primary"onClick={() => this.onSelect(card.positions[0], card.proposition, card.topic)}>
                     {card.positions[0]}
                 </Button>
                 </CardActions>
