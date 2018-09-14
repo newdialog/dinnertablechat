@@ -164,12 +164,12 @@ class Index extends React.Component<Props> {
           <div className={classes.bannerAnimOverlay}></div>
           <div className={classes.centeredDown}>
             <Typography variant="display4" gutterBottom align="center">
-              <Reveal effect="fadeIn" duration="3500">
+              <Reveal effect="fadeIn" duration={3500}>
                {t('home-banner-title1')}
               </Reveal>
             </Typography>
             <Typography variant="display1" align="center">
-              <Reveal effect="fadeIn" duration="5500">
+              <Reveal effect="fadeIn" duration={5500}>
                 {t('home-banner-title2')}
               </Reveal>
             </Typography>
