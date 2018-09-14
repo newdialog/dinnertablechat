@@ -1,15 +1,16 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-
+import { I18nextProvider } from 'react-i18next';
+import i18n from './i18n';
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
 
-import App from './App'
-import { Provider } from 'mobx-react'
-import * as AppModel from './models/AppModel'
+import App from './App';
+import { Provider } from 'mobx-react';
+import * as AppModel from './models/AppModel';
 import AuthModel from './models/AuthModel';
 
-import { connectReduxDevtools } from 'mst-middlewares'
+import { connectReduxDevtools } from 'mst-middlewares';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { RouterModel, syncHistoryWithStore } from 'mst-react-router';
 
@@ -18,19 +19,18 @@ const routerModel = RouterModel.create();
 const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
 // Configure MST Store
-const fetcher = url => window.fetch(url).then(response => response.json())
+const fetcher = url => window.fetch(url).then(response => response.json());
 const store = AppModel.create(routerModel, history);
 
-connectReduxDevtools(require('remotedev'), store)
+connectReduxDevtools(require('remotedev'), store);
 
 ReactDOM.render(
-  (
+  <I18nextProvider i18n={i18n} initialLanguage="en">
     <Provider store={store}>
-        <App history={history} />
+      <App history={history} />
     </Provider>
-  ),
+  </I18nextProvider>,
   document.getElementById('root') as HTMLElement
 );
-
 
 registerServiceWorker();
