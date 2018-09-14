@@ -1,3 +1,4 @@
+/* tslint:disable:no-bitwise */
 import awsmobile from '../aws-exports.js';
 import AWS from 'aws-sdk';
 import Auth from '@aws-amplify/auth';
@@ -105,10 +106,10 @@ async function checkUser(cb: AwsCB) {
   const currentCredentials = await Auth.currentCredentials();
   console.log('currentCredentials', currentCredentials);
   const credentials = Auth.essentialCredentials(currentCredentials);
-  initIot(currentCredentials._identityId, credentials);
   // console.log('credentials', credentials);
 
   AWS.config.credentials = new AWS.Credentials(credentials);
+  initIot(currentCredentials._identityId, credentials);
 
   const authParams: any = {
     accessKeyId: credentials.accessKeyId,
@@ -134,13 +135,17 @@ async function initIot(_identityId: string, credentials: EssentialCredentials) {
     console.warn('!!! no _identityId');
     return;
   }
-  PubSub.addPluggable(
-    new AWSIoTProvider({
+  const cfg = {
+    clientId: uuidv4(),
+    url: awsconfig.PubSub.aws_pubsub_endpoint
+  };
+  // console.log('log', cfg);
+  PubSub.addPluggable(new AWSIoTProvider(cfg));
+  /*
+  {
       aws_pubsub_region: 'us-east-1',
       aws_pubsub_endpoint: awsconfig.PubSub.aws_pubsub_endpoint
     })
-  );
-  /*
             Amplify.addPluggable(new AWSIoTProvider({
             ...config.pubSub,
             credentials,
@@ -149,17 +154,31 @@ async function initIot(_identityId: string, credentials: EssentialCredentials) {
   // Attach policy
   const iot = new AWS.Iot({
     region: 'us-east-1',
-    credentials
+    credentials,
+    sessionToken: credentials.sessionToken,
+    sslEnabled: true
   });
 
   const policyName = 'amplify-iot-policy';
   const target = _identityId;
   console.log('target', target);
 
-  const { policies } = await iot.listAttachedPolicies({ target }).promise();
+  let attachedPolicy: any = null;
+  try {
+    attachedPolicy = await iot.listAttachedPolicies({ target }).promise();
+  } catch (e) {
+    console.error('failed listAttachedPolicies');
+    return;
+  }
+  const { policies } = attachedPolicy;
 
   if (policies && !policies.find(policy => policy.policyName === policyName)) {
-    await iot.attachPolicy({ policyName, target }).promise();
+    try {
+      await iot.attachPolicy({ policyName, target }).promise();
+    } catch (e) {
+      console.error('failed attachPolicy');
+      return;
+    }
   } else {
     console.log('already has iot policy');
   }
@@ -182,4 +201,15 @@ export function logout() {
   Auth.signOut()
     .then()
     .catch((err: any) => console.log(err));
+}
+
+function uuidv4(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+    /[xy]/g,
+    (c: string) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    }
+  );
 }
