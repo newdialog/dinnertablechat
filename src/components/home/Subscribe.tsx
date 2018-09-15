@@ -23,6 +23,9 @@ const styles = (theme: Theme) =>
       width: 'auto',
       maxWidth: '1000px',
       minWidth: '300px'
+    },
+    textField: {
+      width: '90%' 
     }
   })
 
@@ -34,18 +37,31 @@ class Subscribe extends React.Component<any,any> {
     if (this.emailInput && !email) {
       return;
     }
-    // NProgress.start();
-    try {
-      // await subscribeToNewsletter({ email });
-      if (this.emailInput) {
-        this.emailInput.value = '';
+    console.log('valid email')
+    fetch('https://chat.us16.list-manage.com/subscribe/post?u=ec9c97b3719fdae8e2f8fd819&amp;id=6203522cf7', {
+      method: 'post',
+      mode: 'no-cors',
+      body : JSON.stringify({ EMAIL: email }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
       }
-      // NProgress.done();
-      console.log('non-error response is received');
-    } catch (err) {
-      console.log(err); // eslint-disable-line
-      // NProgress.done();
-    }
+    })
+    .then((res) => console.log('res', res)) 
+    .catch((err: any) => console.log('error---', err)
+    );
+    // // NProgress.start();
+    // try {
+    //   // await subscribeToNewsletter({ email });
+    //   if (this.emailInput) {
+    //     this.emailInput.value = '';
+    //   }
+    //   // NProgress.done();
+    //   console.log('non-error response is received');
+    // } catch (err) {
+    //   console.log(err); // eslint-disable-line
+    //   // NProgress.done();
+    // }
   };
   public render() {
     const { classes } = this.props;
@@ -55,12 +71,10 @@ class Subscribe extends React.Component<any,any> {
         <form onSubmit={this.onSubmit} style={{ marginLeft: 'auto', marginRight: 'auto', width:'100%', textAlign:'center' }}>
           <p>We will email you when a new tutorial is released:</p>
           <TextField
-            inputRef={ (elm) => {
-              this.emailInput = elm;
-            }}
+            inputRef={ (elm) => this.emailInput = elm }
             type="email"
             label="Your email"
-           //  style={styleTextField}
+            // style={classes.textField}
             required
           />
           <p />
