@@ -2,7 +2,7 @@ import awsExportsJs from './aws-exports.js';
 
 import * as express from 'express';
 
-var AWSXRay = require('aws-xray-sdk');
+// var AWSXRay = require('aws-xray-sdk');
 const bodyParser = require('body-parser');
 const CognitoExpress = require('cognito-express');
 const port = process.env.PORT || 8000;
@@ -14,7 +14,7 @@ console.log('cognitoUserPoolId', cognitoUserPoolId);
 const app = express();
 const authenticatedRoute = express.Router();
 
-app.use(AWSXRay.express.openSegment('MyApp'));
+// app.use(AWSXRay.express.openSegment('MyApp'));
 app.use('/api', authenticatedRoute);
 
 // Initializing CognitoExpress constructor
@@ -81,7 +81,7 @@ app.post('/', bodyParser.json(), (req: any, res: any, next: any) => {
 });
 
 // app.use(bodyParser.json());
-app.use(AWSXRay.express.closeSegment());
+// app.use(AWSXRay.express.closeSegment());
 app.listen(port, () => {
   console.log(`Live on port: ${port}!`);
 });
