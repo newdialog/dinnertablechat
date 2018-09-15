@@ -54,8 +54,4 @@ s.on('proxyRes', (proxyRes, req, res, next) => {
       res.end();
     }
   }
-<<<<<<< HEAD
 });
-=======
-});
->>>>>>> add trycatches to iot
