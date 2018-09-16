@@ -70,11 +70,11 @@ function getQParam(players, matchId) {
             "id": {
               S: matchId
             },
-            "Artist": {
-              S: "No One You Know"
+            "redkey": {
+              S: ""
             },
-            "SongTitle": {
-              S: "Call Me Today"
+            "bluekey": {
+              S: ""
             }
           }
         }
@@ -88,6 +88,7 @@ function getQParam(players, matchId) {
               "leader": {
                 BOOL: true
               },
+              "team": "red",
               "match": {
                 S: matchId
               }
@@ -103,6 +104,7 @@ function getQParam(players, matchId) {
               "leader": {
                 BOOL: false
               },
+              "team": "blue",
               "match": {
                 S: matchId
               }
