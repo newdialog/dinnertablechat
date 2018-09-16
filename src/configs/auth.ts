@@ -47,7 +47,7 @@ export const injectConfig = (cfg: any) => {
 
   const region = cfg.aws_cognito_region;
 
-  cfg.PubSub = pubSubCfg(region);
+  // cfg.PubSub = pubSubCfg(region);
 
   const localServer: string =
     process.env.REACT_APP_HOST_URL || 'https://jadbox.asuscomm.com';

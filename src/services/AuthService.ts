@@ -109,7 +109,7 @@ async function checkUser(cb: AwsCB) {
   // console.log('credentials', credentials);
 
   AWS.config.credentials = new AWS.Credentials(credentials);
-  initIot(currentCredentials._identityId, credentials);
+  // initIot(currentCredentials._identityId, credentials);
 
   const authParams: any = {
     accessKeyId: credentials.accessKeyId,
