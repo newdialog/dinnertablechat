@@ -19,7 +19,7 @@ console.log('IdentityPoolId', IdentityPoolId);
 
 if (!AWS.config || !AWS.config.region) {
   AWS.config = new AWS.Config({ region: 'us-east-1' });
-  Amplify.addPluggable(new AWSIoTProvider());
+  // Amplify.addPluggable(new AWSIoTProvider());
   /* AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId,
     RoleArn: 'arn:aws:iam::681274315116:role/dtc_auth_MOBILEHUB_871967846'
@@ -109,6 +109,10 @@ async function checkUser(cb: AwsCB) {
   // console.log('credentials', credentials);
 
   AWS.config.credentials = new AWS.Credentials(credentials);
+  // FIX: https://github.com/aws-amplify/amplify-js/issues/581
+  AWS.config.update({
+    dynamoDbCrc32: false
+  });
   // initIot(currentCredentials._identityId, credentials);
 
   const authParams: any = {
