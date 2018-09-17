@@ -1,10 +1,12 @@
 import AWS, { GameLift } from 'aws-sdk';
 import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
-import * as DebateModel from '../models/DebateModel'
+import * as DebateModel from '../models/DebateModel';
 type OnMatched = DebateModel.MatchModelType;
 
 let gameLift: AWS.GameLift;
+
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 export function init(options: AWS.GameLift.ClientConfiguration) {
   console.log('gamelift init accessKeyId sessionToken', options.accessKeyId);
@@ -18,7 +20,11 @@ export function init(options: AWS.GameLift.ClientConfiguration) {
   gameLift = new AWS.GameLift(options);
 }
 
-function onMatch(onMatchedCB: OnMatchedCB, err: AWS.AWSError, data: AWS.GameLift.StartMatchmakingOutput) {
+function onMatch(
+  onMatchedCB: OnMatchedCB,
+  err: AWS.AWSError,
+  data: AWS.GameLift.StartMatchmakingOutput
+) {
   if (err) {
     console.log('onMatch', err);
     return;
@@ -38,10 +44,10 @@ function onMatch(onMatchedCB: OnMatchedCB, err: AWS.AWSError, data: AWS.GameLift
   }
 }
 
-async function poll(onMatchedCB: OnMatchedCB, id: string, playerId: string) {
+async function poll(onMatchedCB: OnMatchedCB, tid: string, playerId: string) {
   // const info = await
   // gameLift.dec
-  gameLift.describeMatchmaking({ TicketIds: [id] }, (e: any, d: any) => {
+  gameLift.describeMatchmaking({ TicketIds: [tid] }, async (e: any, d: any) => {
     if (e) return console.log('err', e);
     const ticket = d.TicketList[0];
     if (ticket.Players.length > 1) {
@@ -51,10 +57,16 @@ async function poll(onMatchedCB: OnMatchedCB, id: string, playerId: string) {
     if (ticket.Status === 'PLACING') {
       console.log('entering placing, stopping poll');
       // return;
-      setTimeout(shake.sync, 2500, playerId); // allow time for lambda to save
-      /* onMatchedCB({
-
-      })*/
+      await delay(2500);
+      const player = await shake.sync(playerId); // allow time for lambda to save
+      onMatchedCB({
+        team: player.team as any,
+        leader: player.leader,
+        matchId: player.match,
+        sync: false,
+        userId: playerId,
+        timeStarted: 0
+      });
       return;
     }
     if (ticket.Status === 'TIMED_OUT') {
@@ -62,13 +74,13 @@ async function poll(onMatchedCB: OnMatchedCB, id: string, playerId: string) {
       return;
     }
     console.log('ticketinfo', ticket.Status, ticket);
-    setTimeout(poll, 9000, onMatchedCB, id, playerId);
+    setTimeout(poll, 9000, onMatchedCB, tid, playerId);
   });
   // console.log('info', info)
   //
 }
 
-type OnMatchedCB = (model:OnMatched)=>void;
+type OnMatchedCB = (model: OnMatched) => void;
 export function queueUp(
   topic: string,
   side: integer,
