@@ -18,7 +18,6 @@ import Lottie from 'react-lottie';
 import Reveal from 'react-reveal/Reveal';
 
 import Waypoint from 'react-waypoint';
-import { AnyComponent } from '@material-ui/core';
 // const bannerImg = require('../assets/banner2.jpg')
 
 const styles = (theme: Theme) =>

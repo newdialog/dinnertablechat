@@ -4,6 +4,7 @@ import Home from './home/home'
 import DebateHome from './menus/MenuHome'
 import RTCHome from './debate/DebateScene'
 import LoadingMatch from './debate/DebateTester'
+// import DebateRouter from './debate/DebateRouter'
 
 const DTCRouter = ( {history}:{history:any} ) => (
   <Router history={history}>

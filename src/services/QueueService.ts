@@ -1,6 +1,8 @@
 import AWS, { GameLift } from 'aws-sdk';
 import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
+import * as DebateModel from '../models/DebateModel'
+type OnMatched = DebateModel.MatchModelType;
 
 let gameLift: AWS.GameLift;
 
@@ -16,7 +18,7 @@ export function init(options: AWS.GameLift.ClientConfiguration) {
   gameLift = new AWS.GameLift(options);
 }
 
-function onMatch(err: AWS.AWSError, data: AWS.GameLift.StartMatchmakingOutput) {
+function onMatch(onMatchedCB: OnMatchedCB, err: AWS.AWSError, data: AWS.GameLift.StartMatchmakingOutput) {
   if (err) {
     console.log('onMatch', err);
     return;
@@ -32,11 +34,11 @@ function onMatch(err: AWS.AWSError, data: AWS.GameLift.StartMatchmakingOutput) {
 
     const pid: string = data.MatchmakingTicket!.Players![0].PlayerId!;
     console.log('pid', pid);
-    poll(data.MatchmakingTicket!.TicketId!, pid);
+    poll(onMatchedCB, data.MatchmakingTicket!.TicketId!, pid);
   }
 }
 
-async function poll(id: string, playerId: string) {
+async function poll(onMatchedCB: OnMatchedCB, id: string, playerId: string) {
   // const info = await
   // gameLift.dec
   gameLift.describeMatchmaking({ TicketIds: [id] }, (e: any, d: any) => {
@@ -50,6 +52,9 @@ async function poll(id: string, playerId: string) {
       console.log('entering placing, stopping poll');
       // return;
       setTimeout(shake.sync, 2500, playerId); // allow time for lambda to save
+      /* onMatchedCB({
+
+      })*/
       return;
     }
     if (ticket.Status === 'TIMED_OUT') {
@@ -57,17 +62,19 @@ async function poll(id: string, playerId: string) {
       return;
     }
     console.log('ticketinfo', ticket.Status, ticket);
-    setTimeout(poll, 9000, id, playerId);
+    setTimeout(poll, 9000, onMatchedCB, id, playerId);
   });
   // console.log('info', info)
   //
 }
 
+type OnMatchedCB = (model:OnMatched)=>void;
 export function queueUp(
   topic: string,
   side: integer,
   playerId: string,
-  donation: float
+  donation: float,
+  onMatchedCB: OnMatchedCB
 ) {
   const teamName = side === 0 ? 'red' : 'blue';
   console.log(
@@ -98,7 +105,7 @@ export function queueUp(
       }
     ]
   };
-  gameLift.startMatchmaking(options, onMatch);
+  gameLift.startMatchmaking(options, onMatch.bind(null, onMatchedCB));
 }
 
 /*
