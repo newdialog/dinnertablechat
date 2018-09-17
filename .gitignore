@@ -36,3 +36,9 @@ aws-exports.*
 awsmobilejs/.awsmobile/backend-build
 awsmobilejs/\#current-backend-info
 ~awsmobilejs-*/
+
+#awsamplifyjs
+# amplify/\#current-cloud-backend
+# project-config.json
+amplify/backend/function/*/src/node_modules/
+amplify/backend/function/*/dist/

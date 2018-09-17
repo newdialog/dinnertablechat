@@ -30,6 +30,7 @@ const styles = (theme: Theme) =>
   });
 
 import * as AppModel from '../../models/AppModel';
+
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
 }
@@ -44,7 +45,7 @@ class Index extends React.Component<Props, any> {
   public componentDidMount() {
   }
 
-  public onSend = (values: any) => {
+  private onSend = (values: any) => {
     // (e: React.FormEvent<HTMLFormElement>)
     console.log('onSend values', values);
     // e.preventDefault();
@@ -52,8 +53,13 @@ class Index extends React.Component<Props, any> {
     const side = parseInt(values.side, 10); // parseInt(this.form.team.current!.value, 10);
     const playerId = 'p' + Math.round(Math.random() * 100);
     const donation = 5.5;
-    QS.queueUp(topic, side, playerId, donation);
+    QS.queueUp(topic, side, playerId, donation, this.onMatched);
   };
+
+  private onMatched = (match:any) => {
+    // TODO
+    this.props.store.debate.createMatch(match);
+  } 
 
   private onChange = (e: React.ChangeEvent) => {};
 
