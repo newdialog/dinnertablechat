@@ -2,8 +2,8 @@ import * as React from 'react';
 import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
 import { Button, CssBaseline, Typography, Stepper, Step, StepLabel, StepContent, Paper } from '@material-ui/core'
 import * as AppModel from '../../models/AppModel';
-import PositionSelector from '../menus/PositionSelector';
-import ContributionSelector from '../menus/ContributionSelector';
+import PositionSelector from './PositionSelector';
+import ContributionSelector from './ContributionSelector';
 import withRoot from '../../withRoot';
 import { observer, inject } from 'mobx-react';
 // const logoData = require('../../assets/logo.json');
