@@ -41,10 +41,10 @@ class ContributionSelector extends React.Component<Props> {
 
   // private contributions = this.defaultContributions()
 
-  private onSelect = (position: string, proposition: string, topic: string) => {
+  /* private onSelect = (position: number, proposition: string, topic: string) => {
     this.props.store.debate.setPosition(position, proposition, topic)
     this.props.store.debate.setStep(1)
-  }
+  } */
 
   private onChipClick(item: any) {
     this.props.store.debate.setContribution(item.label)

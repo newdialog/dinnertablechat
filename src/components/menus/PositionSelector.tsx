@@ -51,7 +51,7 @@ class PositionSelector extends React.Component<Props, State> {
     this.state = { open: false };
   }
 
-  private onSelect = (position: string, proposition: string, topic: string) => {
+  private onSelect = (position: number, proposition: string, topic: string) => {
     this.props.store.debate.setPosition(position, proposition, topic)
     this.props.store.debate.setStep(1)
   }
@@ -80,10 +80,10 @@ class PositionSelector extends React.Component<Props, State> {
                 </Typography>
                 </CardContent>
                 <CardActions>
-                <Button size="small" color="primary" onClick={() => this.onSelect(card.positions[1], card.proposition, card.topic)}>
+                <Button size="small" color="primary" onClick={() => this.onSelect(1, card.proposition, card.topic)}>
                     {card.positions[1]}
                 </Button>
-                <Button size="small" color="primary"onClick={() => this.onSelect(card.positions[0], card.proposition, card.topic)}>
+                <Button size="small" color="primary"onClick={() => this.onSelect(0, card.proposition, card.topic)}>
                     {card.positions[0]}
                 </Button>
                 </CardActions>

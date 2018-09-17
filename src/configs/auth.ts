@@ -1,10 +1,18 @@
+/* tslint:disable:no-bitwise */
+
 // AWS Mobile Hub Project Constants
 const awsOauth = {
   // Domain name
   // domain : 'your-domain-prefix.auth.us-east-1.amazoncognito.com',
   domain: 'auth.dinnertable.chat',
   // Authorized scopes
-  scope: ['phone', 'email', 'profile', 'openid', 'aws.cognito.signin.user.admin'],
+  scope: [
+    'phone',
+    'email',
+    'profile',
+    'openid',
+    'aws.cognito.signin.user.admin'
+  ],
 
   // Callback URL
   redirectSignIn: 'https://dinnertable.chat/callback',
@@ -23,6 +31,13 @@ const awsOauth = {
   }
 };
 
+const pubSubCfg = (region: string) => ({
+  aws_pubsub_region: region,
+  aws_pubsub_endpoint:
+    'wss://a23rmqrj31k0l4-ats.iot.us-east-1.amazonaws.com/mqtt',
+  clientId: uuidv4()
+});
+
 export const oauth = awsOauth;
 
 export const injectConfig = (cfg: any) => {
@@ -30,7 +45,12 @@ export const injectConfig = (cfg: any) => {
     oauth: awsOauth
   };
 
-  const localServer: string = process.env.REACT_APP_HOST_URL || 'https://jadbox.asuscomm.com';
+  const region = cfg.aws_cognito_region;
+
+  // cfg.PubSub = pubSubCfg(region);
+
+  const localServer: string =
+    process.env.REACT_APP_HOST_URL || 'https://jadbox.asuscomm.com';
 
   cfg.Auth.oauth.redirectSignIn = localServer + '/callback';
   cfg.Auth.oauth.redirectSignOut = localServer + '/signout';
@@ -40,7 +60,22 @@ export const injectConfig = (cfg: any) => {
 
   console.log('REACT_APP_HOST_URL: ', localServer);
 
-  cfg.aws_user_pools_web_client_id = process.env.REACT_APP_aws_user_pools_web_client_id || '1a66tr0jclinub7j3ls0j3mutt';
+  cfg.aws_user_pools_web_client_id =
+    process.env.REACT_APP_aws_user_pools_web_client_id ||
+    '1a66tr0jclinub7j3ls0j3mutt';
 
   return cfg;
 };
+
+// https://github.com/aws-amplify/amplify-js/issues/684
+// https://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript#answer-2117523
+function uuidv4(): string {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+    /[xy]/g,
+    (c: string) => {
+      const r = (Math.random() * 16) | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    }
+  );
+}
