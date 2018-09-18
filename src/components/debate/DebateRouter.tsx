@@ -24,4 +24,4 @@ const DebateRouter = ( props: Props ) => {
 <Route path="/rtc" component={RTCHome}/>
 <DefaultRoute component={Home} />
 */
-export default inject('store')(withRoot(DebateRouter));
+export default inject('store')(withRoot(observer(DebateRouter)));

@@ -53,7 +53,10 @@ class Index extends React.Component<Props, any> {
     const side = parseInt(values.side, 10); // parseInt(this.form.team.current!.value, 10);
     const playerId = 'p' + Math.round(Math.random() * 100);
     const donation = 5.5;
-    QS.queueUp(topic, side, playerId, donation, this.onMatched);
+
+    this.props.store.debate.setContribution(5.5)
+    // this.props.store.debate.setPosition(0);
+    // QS.queueUp(topic, side, playerId, donation, this.onMatched);
   };
 
   private onMatched = (match:any) => {
