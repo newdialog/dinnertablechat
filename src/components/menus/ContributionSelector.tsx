@@ -29,25 +29,16 @@ interface Props extends WithStyles<typeof styles> {
 @observer
 class ContributionSelector extends React.Component<Props> {
 
-  private defaultContributions():Array<{ key:any, label:any, color:any }> {
+  private defaultContributions():Array<{ key:any, label:any, value:any, color:any }> {
     return [
-        { key: 0, label: 0, color: 'default' },
-        { key: 1, label: 5, color: 'default' },
-        { key: 2, label: 10, color: 'default' },
-        { key: 3, label: 15, color: 'default' },
-        { key: 4, label: 20, color: 'default' }
+        { key: 0, label: 'free', value: 0, color: 'default' },
+        { key: 1, label: '$1.50', value: 1.50, color: 'default' },
+        { key: 2, label: '$5.00', value: 5.00, color: 'default' }
       ];
   }
 
-  // private contributions = this.defaultContributions()
-
-  /* private onSelect = (position: number, proposition: string, topic: string) => {
-    this.props.store.debate.setPosition(position, proposition, topic)
-    this.props.store.debate.setStep(1)
-  } */
-
   private onChipClick(item: any) {
-    this.props.store.debate.setContribution(item.label)
+    this.props.store.debate.setContribution(item.value)
     // this.contributions = this.defaultContributions() // reset
     // this.contributions[item.key].color = 'primary' // update prop
     // console.log(this.contributions)

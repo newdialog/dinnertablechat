@@ -52,8 +52,7 @@ class PositionSelector extends React.Component<Props, State> {
   }
 
   private onSelect = (position: number, proposition: string, topic: string) => {
-    this.props.store.debate.setPosition(position, proposition, topic)
-    this.props.store.debate.setStep(1)
+    this.props.store.debate.setPosition(position, topic)
   }
 
   public render() {

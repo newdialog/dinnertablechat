@@ -15,15 +15,12 @@ const DebateModel = types
   .model({
     contribution: -1,
     position: -1,
-    propostion: '',
-    step: 0,
     topic: '',
     match: types.maybeNull(MatchModel)
   })
   .actions(self => ({
-    setPosition(position: number, proposition: string, topic: string) {
+    setPosition(position: number, topic: string) {
       self.position = position;
-      self.propostion = proposition;
       self.topic = topic;
 
     },
@@ -35,14 +32,9 @@ const DebateModel = types
     setContribution(amount: number) {
       self.contribution = amount;
     },
-    setStep(step: number) {
-      self.step = step;
-    },
     resetQueue() {
       self.contribution = -1;
       self.position = -1;
-      self.propostion = '';
-      self.step = 0;
       self.topic = '';
       self.match = null;
     }

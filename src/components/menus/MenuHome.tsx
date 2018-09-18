@@ -75,12 +75,11 @@ class Index extends React.Component<Props, State> {
 
   private handleNext = () => {
     const { store } = this.props;
-    store.debate.setStep(store.debate.step + 1)
   };
 
   private handleBack = () => {
     const { store } = this.props;
-    store.debate.setStep(store.debate.step - 1)
+    store.debate.setPosition(-1, '')
   };
 
   private handleReset = () => {
@@ -103,8 +102,9 @@ class Index extends React.Component<Props, State> {
           color="primary"
           onClick={this.handleNext}
           className={classes.button}
+          disabled={this.props.store.debate.contribution===-1}
         >
-          {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+          Finish
         </Button>
       </div>
     );
@@ -113,7 +113,10 @@ class Index extends React.Component<Props, State> {
 
   public render() {
     const { classes, store } = this.props;
-    const { step } = store.debate
+    let step = 0;
+    if(store.debate.position !== -1 && store.debate.contribution === -1) step = 1;
+    else if(store.debate.position !== -1 && store.debate.contribution !== -1) step = 2;
+    // console.log('step', step)
     const steps = getSteps();
 
   return (
