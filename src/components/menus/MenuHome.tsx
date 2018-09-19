@@ -116,6 +116,7 @@ class Index extends React.Component<Props, State> {
     let step = 0;
     if(store.debate.position !== -1 && store.debate.contribution === -1) step = 1;
     else if(store.debate.position !== -1 && store.debate.contribution !== -1) step = 2;
+    if(step===2) store.router.push('/match');
     // console.log('step', step)
     const steps = getSteps();
 
