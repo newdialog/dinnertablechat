@@ -14,7 +14,8 @@ function onData(onResponse, err, req, body) {
     // console.log(err)
     // console.log(body)
     if(err) {
-        onResponse(err.toString());
+        onResponse('unable to connect to internal MC service');
+        // err.toString()
     }
     else if(body && body.title && body.status > 299) {
         onResponse(body.title)
@@ -43,16 +44,26 @@ function mailChimpSend(email, onResponse) {
         })*/
 }
 
+app.get('/', (req, res, next) => {
+    res.send('no GET access');
+})
+
+app.get('/hello', (req, res, next) => {
+    res.send(`ok`)
+})
+
 app.post('/', bodyParser.json(), (req, res, next) => {
-    console.log('POST', req.body);
-    if (!req.body.email) {
-        res.status(400).send('no email given');
+    if (!req.body || !req.body.email) {
+        // res.status(400).send('no email given');
+        res.json({err:'no email given'})
+        return;
     }
+    console.log('POST', req.body);
     mailChimpSend(req.body.email, (err) => {
-        if(!err) res.send(`ok`)
-        else res.status(400).send(err);
+        if(!err) res.json({status:'ok'})
+        else res.json({err:err})
+        //res.status(400).send(err);
     })
-    
 });
 
 app.listen(port, () => {
