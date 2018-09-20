@@ -7,7 +7,7 @@ const MatchModel = types.model({
   matchId: types.string,
   timeStarted: types.maybe(types.number),
   sync: false
-})
+});
 
 export type MatchModelType = Instance<typeof MatchModel>;
 
@@ -22,12 +22,16 @@ const DebateModel = types
     setPosition(position: number, topic: string) {
       self.position = position;
       self.topic = topic;
-
     },
     createMatch(obj: Instance<typeof MatchModel>) {
       self.match = obj;
       // record match started time
-      if(!obj.timeStarted) self.match!.timeStarted = Math.floor((new Date()).getTime() / 1000);
+      if (!obj.timeStarted)
+        self.match!.timeStarted = Math.floor(new Date().getTime() / 1000);
+    },
+    syncMatch() {
+      if (!self.match) throw new Error('match not init');
+      self.match!.sync = true;
     },
     setContribution(amount: number) {
       self.contribution = amount;
