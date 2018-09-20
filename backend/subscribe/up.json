@@ -1,0 +1,13 @@
+{
+  "name": "subscribe",
+  "profile": "dinnertable",
+  "regions": ["us-east-1"],
+  "lambda": {
+    "memory": 128
+  },
+  "stages": {
+    "staging": {
+      "domain": "subscribe.api.dinnertable.chat"
+    }
+  }
+}

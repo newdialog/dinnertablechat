@@ -23,6 +23,9 @@ cert/
 /backend/**/node_modules
 /backend/**/build
 /backend/**/aws-exports.*
+/backend/**/.env.local
+/backend/**/.env.development.local
+/backend/**/.env.production.local
 
 npm-debug.log*
 yarn-debug.log*
