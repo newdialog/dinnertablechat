@@ -1,11 +1,8 @@
 import React from 'react';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-// import NProgress from 'nprogress';
-// import { styleTextField } from '../components/SharedStyles';
-// import withLayout from '../lib/withLayout';
-// import { subscribeToNewsletter } from '../lib/api/public';
+
+import { Typography, TextField, Button } from '@material-ui/core';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import Reveal from 'react-reveal/Reveal';
 import withRoot from '../../withRoot';
 
 const styles = (theme: Theme) =>
@@ -15,61 +12,122 @@ const styles = (theme: Theme) =>
       paddingTop: theme.spacing.unit * 20
     },
     centered: {
-      paddingTop: '0',
+      paddingTop: '2%',
       paddingLeft: '1em',
       paddingRight: '1em',
+      paddingBottom: '8%',
       marginLeft: 'auto',
       marginRight: 'auto',
       width: 'auto',
       maxWidth: '1000px',
       minWidth: '300px'
+    },
+    textField: {
+      // width: '90%', 
     }
   })
 
-class Subscribe extends React.Component<any,any> {
+  // const subscribeState = {
+  //   'form': {'label': ''}, 
+  //   'success': {'label': 'Thanks!'}, 
+  //   'error': {'label': 'Hmm, something went wrong. '}, 
+  // }
+  interface State {
+    subscribe: string;
+  }
+  
+class Subscribe extends React.Component<any,State> {
+  public state: State = {
+    subscribe: 'form',
+  }
+
   public emailInput:any
+
+  private validEmail(email: string) {
+    if (!email) return false;
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
   public onSubmit = async e => {
     e.preventDefault();
     const email = (this.emailInput && this.emailInput.value) || null;
-    if (this.emailInput && !email) {
-      return;
+    if (!this.validEmail(email)) {
+      this.setState({subscribe: 'Please enter a valid email first'})
+      return
     }
-    // NProgress.start();
-    try {
-      // await subscribeToNewsletter({ email });
-      if (this.emailInput) {
-        this.emailInput.value = '';
+    let subscribe = 'form'
+    fetch('https://subscribe.api.dinnertable.chat/', {
+      method: 'post',
+      body : JSON.stringify({ email }),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+         'X-Content-Type-Options': 'nosniff'
       }
-      // NProgress.done();
-      console.log('non-error response is received');
-    } catch (err) {
-      console.log(err); // eslint-disable-line
-      // NProgress.done();
-    }
+    })
+    .then((res: any) => {
+      subscribe = (res && res.status && res.status < 299) ? 'success' : res.err
+      this.setState({subscribe})
+    }) 
+    .catch((err: any) => {
+      subscribe = err
+      this.setState({subscribe})
+    });
   };
-  public render() {
-    const { classes } = this.props;
+
+  private renderForm(classes:any) {
     return (
       <div className={classes.centered}>
         <br />
         <form onSubmit={this.onSubmit} style={{ marginLeft: 'auto', marginRight: 'auto', width:'100%', textAlign:'center' }}>
-          <p>We will email you when a new tutorial is released:</p>
+          <Typography gutterBottom align="center" color="primary" variant="headline">
+            We will email you when a new tutorial is released:
+          </Typography>
           <TextField
-            inputRef={ (elm) => {
-              this.emailInput = elm;
-            }}
+            inputRef={ (elm) => this.emailInput = elm }
             type="email"
             label="Your email"
-           //  style={styleTextField}
+            fullWidth
+            style={{paddingTop:'2%', paddingBottom:'2%'}}
+            // style={classes.textField}
             required
           />
           <p />
           <Button variant="raised" color="primary" type="submit">
             Subscribe
           </Button>
+          <br/>
         </form>
       </div>
     );
+  }
+  public render() {
+    const { classes } = this.props;
+    const { subscribe } = this.state;
+    if (subscribe === 'success') {
+      return (
+        <div className={classes.centered}>
+          <Typography gutterBottom align="center" color="primary" variant="display1">
+            <Reveal effect="fadeIn" duration={1500}>
+              Thanks for subscribing to DTC!
+            </Reveal>
+          </Typography>
+        </div>
+      );
+    } else if (subscribe === 'error') {
+      return (
+        <div className={classes.centered}>
+          <Typography gutterBottom align="center" color="primary" variant="display1">
+            <Reveal effect="fadeIn" duration={1500}>
+              Hmm, something went wrong. {subscribe}
+            </Reveal>
+          </Typography>
+          { this.renderForm(classes) }
+        </div>
+      );
+    }
+    return this.renderForm(classes)
   }
 }
 export default (withStyles(styles)(Subscribe));
