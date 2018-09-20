@@ -210,13 +210,6 @@ class Index extends React.Component<Props, State> {
           </Grid>
         </Grid>
         <Grid container spacing={24} className={classes.containerRev}>
-          <Grid item xs={12}>
-            <div className={classes.divider} />
-
-            <Typography variant="body1" gutterBottom align="center">
-              {t('home-signup')}
-            </Typography>
-          </Grid>
 
           <Grid item xs={12} md={6}>
             <Reveal effect="fadeInUp">

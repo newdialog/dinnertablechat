@@ -4,6 +4,7 @@ import { Typography, TextField, Button } from '@material-ui/core';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Reveal from 'react-reveal/Reveal';
 import withRoot from '../../withRoot';
+import { translate } from 'react-i18next';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -34,11 +35,15 @@ const styles = (theme: Theme) =>
   // }
   interface State {
     subscribe: string;
+    submitting:boolean;
   }
-  
-class Subscribe extends React.Component<any,State> {
+  interface Props extends WithStyles<typeof styles> {
+    t: any;
+  }
+class Subscribe extends React.Component<Props,State> {
   public state: State = {
     subscribe: 'form',
+    submitting: false
   }
 
   public emailInput:any
@@ -57,6 +62,7 @@ class Subscribe extends React.Component<any,State> {
       return
     }
     let subscribe = 'form'
+    this.setState({submitting:true})
     fetch('https://subscribe.api.dinnertable.chat/', {
       method: 'post',
       body : JSON.stringify({ email }),
@@ -75,14 +81,13 @@ class Subscribe extends React.Component<any,State> {
       this.setState({subscribe})
     });
   };
-
-  private renderForm(classes:any) {
+  private renderForm(classes:any, t:any) {
     return (
       <div className={classes.centered}>
         <br />
         <form onSubmit={this.onSubmit} style={{ marginLeft: 'auto', marginRight: 'auto', width:'100%', textAlign:'center' }}>
           <Typography gutterBottom align="center" color="primary" variant="headline">
-            We will email you when a new tutorial is released:
+          {t('home-signup')}
           </Typography>
           <TextField
             inputRef={ (elm) => this.emailInput = elm }
@@ -90,11 +95,12 @@ class Subscribe extends React.Component<any,State> {
             label="Your email"
             fullWidth
             style={{paddingTop:'2%', paddingBottom:'2%'}}
+            disabled={this.state.submitting}
             // style={classes.textField}
             required
           />
           <p />
-          <Button variant="raised" color="primary" type="submit">
+          <Button variant="raised" color="primary" type="submit" disabled={this.state.submitting}>
             Subscribe
           </Button>
           <br/>
@@ -103,7 +109,7 @@ class Subscribe extends React.Component<any,State> {
     );
   }
   public render() {
-    const { classes } = this.props;
+    const { classes, t } = this.props;
     const { subscribe } = this.state;
     if (subscribe === 'success') {
       return (
@@ -123,11 +129,11 @@ class Subscribe extends React.Component<any,State> {
               Hmm, something went wrong. {subscribe}
             </Reveal>
           </Typography>
-          { this.renderForm(classes) }
+          { this.renderForm(classes, t) }
         </div>
       );
     }
-    return this.renderForm(classes)
+    return this.renderForm(classes, t)
   }
 }
-export default (withStyles(styles)(Subscribe));
+export default translate()(withStyles(styles)(Subscribe));
