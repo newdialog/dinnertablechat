@@ -2,6 +2,13 @@ import { bool } from 'aws-sdk/clients/signer';
 import Amplify, { PubSub } from 'aws-amplify';
 import AWS from 'aws-sdk';
 
+import Peer from 'simple-peer';
+import PS from './PeerService';
+
+import retry from 'async-retry';
+
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+
 // If leader, send out WEBRTC connection string
 // If other, wait to recieve leader msg
 // Or, for now, all parties create connection string and elected leader is the one accepted, via otherData on Queue.
@@ -35,9 +42,18 @@ export async function sync(userid: string) {
   return ticket.Item! as SyncCallback;
 }
 
-export async function handshake(matchid: string) {
+export async function handshake(
+  matchid: string,
+  isLeader: boolean,
+  stream: MediaStream
+) {
   // const matchid = ticket.Item!.match;
   // ===
+  const p = new PS(stream);
+  return isLeader ? handShakeLeader(matchid, p) : handShakeOther(matchid, p);
+}
+
+async function readMatch(matchid: string): Promise<HandShakeCallback> {
   const params2 = {
     Key: {
       id: matchid
@@ -48,6 +64,98 @@ export async function handshake(matchid: string) {
   console.log('t2,', ticket2.Item);
 
   return ticket2.Item! as HandShakeCallback;
+}
+
+async function readMatchWait(matchid: string, team: 'blue' | 'red') {
+  return await retry(
+    async bail => {
+      const match: HandShakeCallback = await readMatch(matchid);
+      const teamkey = team + 'key';
+      const keyval = match[teamkey];
+      if (
+        !keyval ||
+        keyval === '-' ||
+        keyval.length === 0 ||
+        keyval !== '{"renegotiate":true}'
+      ) {
+        // await delay(3000);
+        console.log('key not set yet');
+        throw new Error('key not set yet');
+      }
+      return keyval;
+    },
+    {
+      retries: 5
+    }
+  );
+}
+
+async function updateMatch(matchid: string, team: 'blue' | 'red', key: string) {
+  if (!matchid) throw new Error('no matchid provided');
+
+  const teamkey = team + 'key';
+  console.log('saving to key', teamkey);
+  const params2: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
+    Key: {
+      id: matchid
+    },
+    AttributeUpdates: {
+      [teamkey]: {
+        Action: 'PUT', // ADD | PUT | DELETE,
+        Value: key /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
+      }
+      /* '<AttributeName>': ... */
+    },
+    TableName: 'match'
+  };
+  const ticket2 = await docClient.update(params2).promise();
+  // console.log('ut2,', ticket2);
+  return ticket2;
+}
+
+async function handShakeLeader(matchid: string, p: PS) {
+  let givenSignal = false;
+  const cbs = {
+    onSignal: async (data: string) => {
+      console.log('onSignal', data);
+      if (givenSignal || data === '{"renegotiate":true}') return;
+      givenSignal = true;
+      await updateMatch(matchid, 'red', data);
+    }
+  };
+  p.init(true, cbs);
+
+  const otherKey = await readMatchWait(matchid, 'blue');
+  // console.log('otherKey', otherKey);
+  p.giveResponse(otherKey);
+
+  await p.onConnection();
+  console.log('leader rtc elected');
+  // new Peer({ initiator: true, trickle: false });
+
+  return p;
+}
+
+async function handShakeOther(matchid: string, p: PS) {
+  // const p = new PS();
+  let givenSignal = false;
+  const cbs = {
+    onSignal: async (data: string) => {
+      console.log('onSignal', data);
+      if (givenSignal || data === '{"renegotiate":true}') return;
+      givenSignal = true;
+      await updateMatch(matchid, 'blue', data);
+    }
+  };
+  p.init(false, cbs);
+  const leaderKey = await readMatchWait(matchid, 'red');
+  // console.log('leaderKey', leaderKey);
+  p.giveResponse(leaderKey);
+
+  await p.onConnection();
+  console.log('other rtc connection');
+
+  return p;
 }
 
 let docClient: AWS.DynamoDB.DocumentClient;
