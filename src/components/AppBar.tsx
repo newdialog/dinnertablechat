@@ -47,6 +47,8 @@ function onHome(store: Store.Type) {
 function ButtonAppBar(props:Props) {
   const { classes, store } = props;
   const auth = store.auth.loggedIn;
+  const notLive = window.location.hostname.indexOf('test') === -1 && window.location.hostname.indexOf('.dinnertable') === -1;
+  console.log('notLive', notLive, 'auth', auth)
 
   return (
     <div className={classes.root}>
@@ -56,10 +58,10 @@ function ButtonAppBar(props:Props) {
           { /* TODO BUG: empty component needed for alignment */ }
           <Typography variant="title" className={classes.flex}></Typography>
 
-          {!auth && 
+          {!auth && notLive &&
             <Button onClick={ () => onLogin(store) }>Login</Button>
           }
-          {auth &&
+          {auth && notLive &&
             <React.Fragment>
               <Button variant="contained" color="primary" onClick={ () => onStart(store) }>
                 Start
