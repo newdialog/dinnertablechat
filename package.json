@@ -49,7 +49,7 @@
     "proxy": "node proxy.js",
     "predeploy": "mkdir -p ./build",
     "deploy": "npm run build && gh-pages -d build",
-    "deploy:prod": "npm run predeploy && npm run build:prod && gh-pages -d build",
+    "deploy:prod": "npm run predeploy && npm run build:prod && gh-pages -d build -o prod",
     "i18n": "gstoi18n 1R85easxOUiw184YPJ3wI2-oC-yPyKZi_Xn6a38foQFc ./public/i18n/"
   },
   "devDependencies": {
