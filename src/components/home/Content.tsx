@@ -255,7 +255,9 @@ class Index extends React.Component<Props, State> {
                 {t('home-intro')}
               </Typography>
             </Grid>
-            <Grid item xs={12} md={12}><Divider className={classes.divider} /></Grid>
+            <Grid item xs={12} md={12}>
+              <Divider className={classes.divider} />
+            </Grid>
           </Grid>
         </div>
         <div className={classes.centered}>
@@ -266,7 +268,8 @@ class Index extends React.Component<Props, State> {
                   <div className={classes.divider} />
                   {t('home-rules-title')}
                 </Typography>
-
+              </Reveal>
+              <Reveal effect="fadeInUp" fraction={0.4}>
                 <Typography variant="body1" gutterBottom align="left">
                   {t('home-rules')}
                 </Typography>
@@ -280,14 +283,15 @@ class Index extends React.Component<Props, State> {
               </div>
             </Grid>
 
-            <Grid item xs={12} md={12} className={classes.divider2}></Grid>
+            <Grid item xs={12} md={12} className={classes.divider2} />
             <Grid item xs={12} md={12}>
               <Reveal effect="fadeInUp" fraction={0.9}>
                 <Typography variant="title" gutterBottom align="left">
                   <div className={classes.divider} />
                   {t('home-tiers-title')}
                 </Typography>
-
+              </Reveal>
+              <Reveal effect="fadeInUp" fraction={0.4}>
                 <Typography variant="body1" gutterBottom align="left">
                   {t('home-tiers')}
                 </Typography>
@@ -301,14 +305,15 @@ class Index extends React.Component<Props, State> {
               </div>
             </Grid>
 
-            <Grid item xs={12} md={12} className={classes.divider2}></Grid>
+            <Grid item xs={12} md={12} className={classes.divider2} />
             <Grid item xs={12} md={6}>
               <div className={classes.divider} />
               <Reveal effect="fadeInUp" fraction={0.9}>
                 <Typography variant="title" gutterBottom align="left">
                   {t('home-char-title')}
                 </Typography>
-
+              </Reveal>
+              <Reveal effect="fadeInUp" fraction={0.4}>
                 <Typography variant="body1" gutterBottom align="left">
                   {t('home-char')}
                 </Typography>
@@ -343,14 +348,15 @@ class Index extends React.Component<Props, State> {
               </div>
             </Grid>
 
-            <Grid item xs={12} md={12} className={classes.divider2}></Grid>
+            <Grid item xs={12} md={12} className={classes.divider2} />
             <Grid item xs={12} md={6}>
               <div className={classes.divider} />
               <Reveal effect="fadeInUp" fraction={0.9}>
                 <Typography variant="title" gutterBottom align="left">
                   {t('home-topic-title')}
                 </Typography>
-
+              </Reveal>
+              <Reveal effect="fadeInUp" fraction={0.4}>
                 <Typography variant="body1" gutterBottom align="left">
                   {t('home-topic')}
                 </Typography>
@@ -375,7 +381,7 @@ class Index extends React.Component<Props, State> {
               </div>
             </Grid>
 
-            <Grid item xs={12} md={12} className={classes.divider2}></Grid>
+            <Grid item xs={12} md={12} className={classes.divider2} />
             <Grid item xs={12} md={6}>
               <div className={classes.divider} />
               <Typography variant="title" gutterBottom align="left">
@@ -404,7 +410,6 @@ class Index extends React.Component<Props, State> {
                 </Waypoint>
               </div>
             </Grid>
-            
           </Grid>
 
           <Divider className={classes.divider} />
