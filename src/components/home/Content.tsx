@@ -16,8 +16,15 @@ import { translate } from 'react-i18next';
 
 import Lottie from 'react-lottie';
 import Reveal from 'react-reveal/Reveal';
-
+import Flip from 'react-reveal/Flip';
+import Slide from 'react-reveal/Slide';
 import Waypoint from 'react-waypoint';
+
+// import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick-theme.css';
+import '@glidejs/glide/dist/css/glide.core.min.css';
+import '@glidejs/glide/dist/css/glide.theme.min.css';
+import Glide from '@glidejs/glide';
 // const bannerImg = require('../assets/banner2.jpg')
 
 const styles = (theme: Theme) =>
@@ -46,7 +53,7 @@ const styles = (theme: Theme) =>
       paddingLeft: '3em',
       paddingRight: '3em',
       // display: 'grid',
-      // gridTemplateColumns: 'repeat(12, 1fr)',
+      gridTemplateColumns: 'repeat(12, 1fr)',
       // gridGap: `${theme.spacing.unit * 4}px`,
       [theme.breakpoints.down('sm')]: {
         // padding: '0'
@@ -126,6 +133,17 @@ const topicsOptions = {
   }
 };
 
+// import Slider from 'react-slick';
+/* const settings = {
+  autoPlay: true,
+  arrows: false,
+  dots: false,
+  infinite: true,
+  speed: 500,
+  slidesToShow: 1,
+  slidesToScroll: 1
+};*/
+
 interface Props extends WithStyles<typeof styles> {
   t: any;
 }
@@ -143,6 +161,15 @@ class Index extends React.Component<Props, State> {
   private topicsRef = React.createRef<Lottie | any>();
   private talkingRef = React.createRef<Lottie | any>();
   private handlers: { [k: string]: any } = {};
+
+  public componentDidMount() {
+    new Glide('.glide', {
+      autoplay: true,
+      animationDuration: 5000,
+      type: 'carousel',
+      gap: 180
+    }).mount();
+  }
 
   private _handleLogoWaypointEnter = () => {
     if (!this.logoRef.current) return;
@@ -210,9 +237,8 @@ class Index extends React.Component<Props, State> {
           </Grid>
         </Grid>
         <Grid container spacing={24} className={classes.containerRev}>
-
           <Grid item xs={12} md={6}>
-            <Reveal effect="fadeInUp">
+            <Reveal effect="fadeInUp" fraction={0.9}>
               <Typography variant="title" gutterBottom align="left">
                 <div className={classes.divider} />
                 {t('home-rules-title')}
@@ -225,12 +251,14 @@ class Index extends React.Component<Props, State> {
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
-              <img src="./imgs/02-topics.png" className={classes.paperimg} />
+              <Flip bottom={true} fraction={0.7}>
+                <img src="./imgs/05-troll.png" className={classes.paperimg} />
+              </Flip>
             </div>
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <Reveal effect="fadeInUp">
+          <Grid item xs={12} md={12}>
+            <Reveal effect="fadeInUp" fraction={0.9}>
               <Typography variant="title" gutterBottom align="left">
                 <div className={classes.divider} />
                 {t('home-tiers-title')}
@@ -241,15 +269,17 @@ class Index extends React.Component<Props, State> {
               </Typography>
             </Reveal>
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={12}>
             <div className={classes.paper}>
-              <img src="./imgs/02-topics.png" className={classes.paperimg} />
+              <Reveal effect="bounceIn" fraction={0.85}>
+                <img src="./imgs/06-table.png" className={classes.paperimg} />
+              </Reveal>
             </div>
           </Grid>
 
           <Grid item xs={12} md={6}>
             <div className={classes.divider} />
-            <Reveal effect="fadeInUp">
+            <Reveal effect="fadeInUp" fraction={0.9}>
               <Typography variant="title" gutterBottom align="left">
                 {t('home-char-title')}
               </Typography>
@@ -261,13 +291,36 @@ class Index extends React.Component<Props, State> {
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
-              <img src="./imgs/02-topics.png" className={classes.paperimg} />
+              <div className="glide">
+                <div data-glide-el="track" className="glide__track">
+                  <ul className="glide__slides">
+                    <li className="glide__slide">
+                      <img
+                        src="./imgs/04-select.png"
+                        className={classes.paperimg}
+                      />
+                    </li>
+                    <li className="glide__slide">
+                      <img
+                        src="./imgs/04-select2.png"
+                        className={classes.paperimg}
+                      />
+                    </li>
+                    <li className="glide__slide">
+                      <img
+                        src="./imgs/04-select3.png"
+                        className={classes.paperimg}
+                      />
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </Grid>
 
           <Grid item xs={12} md={6}>
             <div className={classes.divider} />
-            <Reveal effect="fadeInUp">
+            <Reveal effect="fadeInUp" fraction={0.9}>
               <Typography variant="title" gutterBottom align="left">
                 {t('home-topic-title')}
               </Typography>
