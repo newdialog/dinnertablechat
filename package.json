@@ -43,7 +43,7 @@
     "postinstall": "npm run i18n",
     "start": "react-scripts-ts start",
     "build": "env-cmd ./.env.staging react-scripts-ts build && cp -f CNAME ./build/ && npm run i18n",
-    "build:prod": "react-scripts-ts build && cp -f CNAME.PROD ./build/CNAME && npm run i18n",
+    "build:prod": "react-scripts-ts build && cp -f CNAME.PROD ./build/CNAME && npm run i18n && rm build/robot.txt",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "proxy": "node proxy.js",

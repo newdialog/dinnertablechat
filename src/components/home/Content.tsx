@@ -65,7 +65,7 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       color: theme.palette.text.secondary,
       whiteSpace: 'nowrap',
-      marginBottom: theme.spacing.unit,
+      // marginTop: theme.spacing.unit * 13,
       flex: '1 1 auto',
       display: 'flex',
       justifyContent: 'center',
@@ -78,6 +78,8 @@ const styles = (theme: Theme) =>
       maxWidth: '100%',
       margin: 'auto',
       display: 'block',
+      justifyContent: 'center',
+      alignItems: 'center',
       objectFit: 'contain',
       pointerEvents: 'none',
       [theme.breakpoints.down('sm')]: {
@@ -98,10 +100,27 @@ const styles = (theme: Theme) =>
       maxWidth: '1000px',
       minWidth: '300px'
     },
+    centered2: {
+      paddingTop: '0',
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      paddingBottom: '4em',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '1000px',
+      minWidth: '300px'
+    },
     divider: {
-      margin: `${theme.spacing.unit * 6}px 0`,
+      margin: `${theme.spacing.unit * 7}px 0`,
       [theme.breakpoints.down('sm')]: {
         margin: `${theme.spacing.unit * 1}px 0`
+      }
+    },
+    divider2: {
+      height: '13vh',
+      [theme.breakpoints.down('sm')]: {
+        height: '4vh'
       }
     }
   });
@@ -165,9 +184,9 @@ class Index extends React.Component<Props, State> {
   public componentDidMount() {
     new Glide('.glide', {
       autoplay: true,
-      animationDuration: 5000,
+      animationDuration: 4000,
       type: 'carousel',
-      gap: 180
+      gap: 150
     }).mount();
   }
 
@@ -207,180 +226,190 @@ class Index extends React.Component<Props, State> {
     const { open } = this.state;
     // <img className={classes.banner} src="./banner2.jpg" />
     // s
-    /* 
+    /*
     <Typography variant="display1" gutterBottom align="center" className={classes.bannerText}>
             Have a polite talk with your opposite
           </Typography>
     */
     return (
-      <div className={classes.centered}>
-        <Grid container spacing={24} className={classes.container}>
-          <Grid item xs={12} md={6}>
-            <div className="paperimg">
-              <Waypoint
-                topOffset="-10%"
-                bottomOffset="0"
-                onEnter={this._handleLogoWaypointEnter}
-                onLeave={this._handleLogoWaypointLeave}
-              />
-              <Lottie
-                options={logoOptions}
-                ref={this.logoRef}
-                isClickToPauseDisabled={true}
-              />
-            </div>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Typography variant="body1" gutterBottom align="left">
-              {t('home-intro')}
-            </Typography>
-          </Grid>
-        </Grid>
-        <Grid container spacing={24} className={classes.containerRev}>
-          <Grid item xs={12} md={6}>
-            <Reveal effect="fadeInUp" fraction={0.9}>
-              <Typography variant="title" gutterBottom align="left">
-                <div className={classes.divider} />
-                {t('home-rules-title')}
+      <React.Fragment>
+        <div className={classes.centered2}>
+          <Grid container spacing={24} className={classes.container}>
+            <Grid item xs={12} md={12}>
+              <div className="paperimg">
+                <Waypoint
+                  topOffset="-10%"
+                  bottomOffset="0"
+                  onEnter={this._handleLogoWaypointEnter}
+                  onLeave={this._handleLogoWaypointLeave}
+                />
+                <Lottie
+                  options={logoOptions}
+                  ref={this.logoRef}
+                  isClickToPauseDisabled={true}
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <Typography variant="display2" gutterBottom align="center">
+                {t('home-intro')}
               </Typography>
+            </Grid>
+            <Grid item xs={12} md={12}><Divider className={classes.divider} /></Grid>
+          </Grid>
+        </div>
+        <div className={classes.centered}>
+          <Grid container spacing={24} className={classes.containerRev}>
+            <Grid item xs={12} md={6}>
+              <Reveal effect="fadeInUp" fraction={0.9}>
+                <Typography variant="title" gutterBottom align="left">
+                  <div className={classes.divider} />
+                  {t('home-rules-title')}
+                </Typography>
 
-              <Typography variant="body1" gutterBottom align="left">
-                {t('home-rules')}
-              </Typography>
-            </Reveal>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <div className={classes.paper}>
-              <Flip bottom={true} fraction={0.7}>
-                <img src="./imgs/05-troll.png" className={classes.paperimg} />
-              </Flip>
-            </div>
-          </Grid>
-
-          <Grid item xs={12} md={12}>
-            <Reveal effect="fadeInUp" fraction={0.9}>
-              <Typography variant="title" gutterBottom align="left">
-                <div className={classes.divider} />
-                {t('home-tiers-title')}
-              </Typography>
-
-              <Typography variant="body1" gutterBottom align="left">
-                {t('home-tiers')}
-              </Typography>
-            </Reveal>
-          </Grid>
-          <Grid item xs={12} md={12}>
-            <div className={classes.paper}>
-              <Reveal effect="bounceIn" fraction={0.85}>
-                <img src="./imgs/06-table.png" className={classes.paperimg} />
+                <Typography variant="body1" gutterBottom align="left">
+                  {t('home-rules')}
+                </Typography>
               </Reveal>
-            </div>
-          </Grid>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <div className={classes.paper}>
+                <Flip bottom={true} fraction={0.7}>
+                  <img src="./imgs/05-troll.png" className={classes.paperimg} />
+                </Flip>
+              </div>
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <div className={classes.divider} />
-            <Reveal effect="fadeInUp" fraction={0.9}>
-              <Typography variant="title" gutterBottom align="left">
-                {t('home-char-title')}
-              </Typography>
+            <Grid item xs={12} md={12} className={classes.divider2}></Grid>
+            <Grid item xs={12} md={12}>
+              <Reveal effect="fadeInUp" fraction={0.9}>
+                <Typography variant="title" gutterBottom align="left">
+                  <div className={classes.divider} />
+                  {t('home-tiers-title')}
+                </Typography>
 
-              <Typography variant="body1" gutterBottom align="left">
-                {t('home-char')}
-              </Typography>
-            </Reveal>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <div className={classes.paper}>
-              <div className="glide">
-                <div data-glide-el="track" className="glide__track">
-                  <ul className="glide__slides">
-                    <li className="glide__slide">
-                      <img
-                        src="./imgs/04-select.png"
-                        className={classes.paperimg}
-                      />
-                    </li>
-                    <li className="glide__slide">
-                      <img
-                        src="./imgs/04-select2.png"
-                        className={classes.paperimg}
-                      />
-                    </li>
-                    <li className="glide__slide">
-                      <img
-                        src="./imgs/04-select3.png"
-                        className={classes.paperimg}
-                      />
-                    </li>
-                  </ul>
+                <Typography variant="body1" gutterBottom align="left">
+                  {t('home-tiers')}
+                </Typography>
+              </Reveal>
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <div className={classes.paper}>
+                <Reveal effect="bounceIn" fraction={0.85}>
+                  <img src="./imgs/06-table.png" className={classes.paperimg} />
+                </Reveal>
+              </div>
+            </Grid>
+
+            <Grid item xs={12} md={12} className={classes.divider2}></Grid>
+            <Grid item xs={12} md={6}>
+              <div className={classes.divider} />
+              <Reveal effect="fadeInUp" fraction={0.9}>
+                <Typography variant="title" gutterBottom align="left">
+                  {t('home-char-title')}
+                </Typography>
+
+                <Typography variant="body1" gutterBottom align="left">
+                  {t('home-char')}
+                </Typography>
+              </Reveal>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <div className={classes.paper}>
+                <div className="glide">
+                  <div data-glide-el="track" className="glide__track">
+                    <ul className="glide__slides">
+                      <li className="glide__slide">
+                        <img
+                          src="./imgs/04-select.png"
+                          className={classes.paperimg}
+                        />
+                      </li>
+                      <li className="glide__slide">
+                        <img
+                          src="./imgs/04-select2.png"
+                          className={classes.paperimg}
+                        />
+                      </li>
+                      <li className="glide__slide">
+                        <img
+                          src="./imgs/04-select3.png"
+                          className={classes.paperimg}
+                        />
+                      </li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Grid>
+            </Grid>
 
-          <Grid item xs={12} md={6}>
-            <div className={classes.divider} />
-            <Reveal effect="fadeInUp" fraction={0.9}>
+            <Grid item xs={12} md={12} className={classes.divider2}></Grid>
+            <Grid item xs={12} md={6}>
+              <div className={classes.divider} />
+              <Reveal effect="fadeInUp" fraction={0.9}>
+                <Typography variant="title" gutterBottom align="left">
+                  {t('home-topic-title')}
+                </Typography>
+
+                <Typography variant="body1" gutterBottom align="left">
+                  {t('home-topic')}
+                </Typography>
+              </Reveal>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <div className={classes.paper}>
+                <Waypoint
+                  topOffset="-10%"
+                  bottomOffset="0"
+                  onEnter={this.memoizedHandler('topicsRef')}
+                  onLeave={this.memoizedHandler('topicsRef', true)}
+                >
+                  <div>
+                    <Lottie
+                      options={topicsOptions}
+                      ref={this.topicsRef}
+                      isClickToPauseDisabled={true}
+                    />
+                  </div>
+                </Waypoint>
+              </div>
+            </Grid>
+
+            <Grid item xs={12} md={12} className={classes.divider2}></Grid>
+            <Grid item xs={12} md={6}>
+              <div className={classes.divider} />
               <Typography variant="title" gutterBottom align="left">
-                {t('home-topic-title')}
+                {t('home-overview-title')}
               </Typography>
 
               <Typography variant="body1" gutterBottom align="left">
-                {t('home-topic')}
+                {t('home-overview')}
               </Typography>
-            </Reveal>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <div className={classes.paper}>
-              <Waypoint
-                topOffset="-10%"
-                bottomOffset="0"
-                onEnter={this.memoizedHandler('topicsRef')}
-                onLeave={this.memoizedHandler('topicsRef', true)}
-              >
-                <div>
-                  <Lottie
-                    options={topicsOptions}
-                    ref={this.topicsRef}
-                    isClickToPauseDisabled={true}
-                  />
-                </div>
-              </Waypoint>
-            </div>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <div className={classes.paper}>
+                <Waypoint
+                  topOffset="-10%"
+                  bottomOffset="0"
+                  onEnter={this.memoizedHandler('talkingRef')}
+                  onLeave={this.memoizedHandler('talkingRef', true)}
+                >
+                  <div>
+                    <Lottie
+                      options={talkingOptions}
+                      ref={this.talkingRef}
+                      isClickToPauseDisabled={true}
+                    />
+                  </div>
+                </Waypoint>
+              </div>
+            </Grid>
+            
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <div className={classes.divider} />
-            <Typography variant="title" gutterBottom align="left">
-              {t('home-overview-title')}
-            </Typography>
-
-            <Typography variant="body1" gutterBottom align="left">
-              {t('home-overview')}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <div className={classes.paper}>
-              <Waypoint
-                topOffset="-10%"
-                bottomOffset="0"
-                onEnter={this.memoizedHandler('talkingRef')}
-                onLeave={this.memoizedHandler('talkingRef', true)}
-              >
-                <div>
-                  <Lottie
-                    options={talkingOptions}
-                    ref={this.talkingRef}
-                    isClickToPauseDisabled={true}
-                  />
-                </div>
-              </Waypoint>
-            </div>
-          </Grid>
-        </Grid>
-
-        <Divider className={classes.divider} />
-      </div>
+          <Divider className={classes.divider} />
+        </div>
+      </React.Fragment>
     );
   }
   // <img src="./section2.png" className={classes.paperimg} />
