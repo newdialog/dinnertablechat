@@ -21,7 +21,7 @@ const styles = (theme: Theme) =>
       marginRight: 'auto',
       width: 'auto',
       maxWidth: '1000px',
-      minWidth: '300px'
+      minWidth: '300px',
     },
     textField: {
       // width: '90%', 

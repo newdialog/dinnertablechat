@@ -1,5 +1,10 @@
 import * as React from 'react';
-import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import {
+  withStyles,
+  createStyles,
+  WithStyles,
+  Theme
+} from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
 import Content from './Content';
@@ -17,7 +22,8 @@ const styles = (theme: Theme) =>
     container: {
       display: 'grid',
       gridTemplateColumns: 'repeat(12, 1fr)',
-      gridGap: `${theme.spacing.unit * 3}px`
+      // gridGap: `${theme.spacing.unit * 3}px`,
+      marginTop: '60px'
       // gridAutoFlow: 'column',
       // gridAutoColumns: '200px'
     },
@@ -78,6 +84,32 @@ const styles = (theme: Theme) =>
     largeIcon: {
       width: 80,
       height: 60
+    },
+    body: {
+      /*
+      width: '100%',
+      backgroundImage: 'url("./imgs/07-newsletter.png")', // DTC-scene3.png
+      backgroundSize: 'cover',
+      // backgroundAttachment: 'fixed',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'bottom 0px left'
+      */
+    },
+    paperimg: {
+      height: 'auto',
+      width: 'auto',
+      maxWidth: '300px',
+      margin: 'auto',
+      display: 'block',
+      objectFit: 'contain',
+      pointerEvents: 'none',
+      [theme.breakpoints.down('sm')]: {
+        paddingTop: `${theme.spacing.unit * 5}px`
+        // maxWidth: '80%'
+      },
+      [theme.breakpoints.down('xs')]: {
+        maxWidth: '100px'
+      }
     }
   });
 
@@ -88,7 +120,7 @@ interface Props extends WithStyles<typeof styles> {
 interface State {
   open: boolean;
 }
-
+import Grid from '@material-ui/core/Grid';
 @observer
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -100,14 +132,26 @@ class Index extends React.Component<Props, State> {
     const { classes } = this.props;
     const { open } = this.state;
     return (
-      <React.Fragment>
-        <Banner/>
+      <div>
+        <Banner />
 
         <Content />
         <div className={classes.centered}>
-          <Subcribe />
+          <Grid container spacing={24} className={classes.container}>
+            <Grid item xs={12} md={6}>
+              <div className={classes.paper}>
+                <img
+                  src="./imgs/07-newsletter.png"
+                  className={classes.paperimg}
+                />
+              </div>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Subcribe />
+            </Grid>
+          </Grid>
         </div>
-      </React.Fragment>
+      </div>
     );
   }
 
