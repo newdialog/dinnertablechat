@@ -26,7 +26,8 @@ const theme = createMuiTheme({
     body1: {
       fontSize: '1.1em',
       fontFamily: 'Montserrat',
-      fontWeight: 'lighter'
+      fontWeight: 300,
+      color: '#444444'
     },
     title: {
       fontSize: '2em',
@@ -39,6 +40,13 @@ const theme = createMuiTheme({
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 600,
       letterSpacing: '-0.02em'
+    },
+    display2: {
+      fontSize: '1.5em',
+      color: '#777777',
+      fontFamily: ['Montserrat'].join(','),
+      fontWeight: 300,
+      letterSpacing: '-0.05em'
     },
     display1: {
       fontSize: '1.7em',
