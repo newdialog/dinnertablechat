@@ -7,11 +7,12 @@ import {
 } from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
+
+import Banner from './Banner';
 import Content from './Content';
 import { observer } from 'mobx-react';
 import Subcribe from './Subscribe';
-
-import Banner from './Banner';
+import Footer from './Footer';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -156,6 +157,7 @@ class Index extends React.Component<Props, State> {
             </Grid>
           </Grid>
         </div>
+        <Footer />
       </div>
     );
   }
