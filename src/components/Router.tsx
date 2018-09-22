@@ -10,12 +10,12 @@ const DTCRouter = ( {history}:{history:any} ) => (
   <Router history={history}>
     <Switch>
       <Route exact={true} path="/" component={Home} />
+      <Route exact={true} path="/callback" component={Home} />
 
       <Route path="/play" component={MenuHome}/>
       <Route path="/match" component={DebateRouter}/>
 
       <Redirect from="/signin" to="/"/>
-      <Redirect from="/callback" to="/"/>
       <Redirect from="/signout" to="/"/>
     </Switch>
   </Router>

@@ -39,7 +39,7 @@ const pubSubCfg = (region: string) => ({
 });
 
 export const oauth = awsOauth;
-
+let initLog = false;
 export const injectConfig = (cfg: any) => {
   cfg.Auth = {
     oauth: awsOauth
@@ -58,7 +58,8 @@ export const injectConfig = (cfg: any) => {
   // For AWS -JD
   cfg.Auth.identityPoolId = 'us-east-1:5173fb21-e414-43bc-af6c-3a65de8caf22';
 
-  console.log('REACT_APP_HOST_URL: ', localServer);
+  if (!initLog) console.log('REACT_APP_HOST_URL: ', localServer);
+  initLog = true;
 
   cfg.aws_user_pools_web_client_id =
     process.env.REACT_APP_aws_user_pools_web_client_id ||

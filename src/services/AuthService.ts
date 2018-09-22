@@ -7,7 +7,10 @@ import Amplify, { PubSub } from 'aws-amplify';
 import { AWSIoTProvider } from '@aws-amplify/pubsub';
 /* Debug only
 import Amplify from 'aws-amplify';
-Amplify.Logger.LOG_LEVEL = 'DEBUG' */
+Amplify.Logger.LOG_LEVEL = 'DEBUG';
+(window as any).LOG_LEVEL = 'DEBUG';
+*/
+// https://github.com/aws-amplify/amplify-js/issues/1487
 
 // import { Logger } from 'aws-amplify';
 import { Hub, ConsoleLogger } from '@aws-amplify/core';
@@ -15,7 +18,7 @@ import { injectConfig } from '../configs/auth';
 
 const awsconfig = injectConfig(awsmobile);
 const IdentityPoolId = awsconfig.Auth.identityPoolId;
-console.log('IdentityPoolId', IdentityPoolId);
+// console.log('IdentityPoolId', IdentityPoolId);
 
 if (!AWS.config || !AWS.config.region) {
   AWS.config = new AWS.Config({ region: 'us-east-1' });
@@ -73,7 +76,11 @@ export function auth(cb: AwsCB) {
   console.log('configuring aws');
   const awsmobileInjected = injectConfig(awsmobile);
   Auth.configure(awsmobileInjected);
-  Hub.listen('auth', { onHubCapsule: onHubCapsule.bind(null, cb) });
+  Hub.listen(
+    'auth',
+    { onHubCapsule: onHubCapsule.bind(null, cb) },
+    'AuthService'
+  );
   checkUser(cb); // required by amplify, for existing login
 }
 
@@ -104,7 +111,7 @@ async function checkUser(cb: AwsCB) {
   // console.log('AWS.config.credentials', AWS.config.credentials)
   // console.log('AWS.config', AWS.config)
   const currentCredentials = await Auth.currentCredentials();
-  console.log('currentCredentials', currentCredentials);
+  // console.log('currentCredentials', currentCredentials);
   const credentials = Auth.essentialCredentials(currentCredentials);
   // console.log('credentials', credentials);
 

@@ -145,7 +145,7 @@ class Index extends React.Component<Props, State> {
         <Content />
         <div className={classes.centered}>
           <Grid container spacing={0} className={classes.container}>
-            <Grid item xs={2} sm={2} md={1} lg={1} alignContent="center" className={classes.centered}>
+            <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
                 <img
                   src="./imgs/07-newsletter.png"
                   className={classes.paperimg}
