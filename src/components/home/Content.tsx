@@ -269,7 +269,7 @@ class Index extends React.Component<Props, State> {
                   {t('home-rules-title')}
                 </Typography>
               </Reveal>
-              <Reveal effect="fadeInUp" fraction={0.4}>
+              <Reveal effect="fadeInUp" fraction={0.3}>
                 <Typography variant="body1" gutterBottom align="left">
                   {t('home-rules')}
                 </Typography>
@@ -291,7 +291,7 @@ class Index extends React.Component<Props, State> {
                   {t('home-tiers-title')}
                 </Typography>
               </Reveal>
-              <Reveal effect="fadeInUp" fraction={0.4}>
+              <Reveal effect="fadeInUp" fraction={0.3}>
                 <Typography variant="body1" gutterBottom align="left">
                   {t('home-tiers')}
                 </Typography>
@@ -313,7 +313,7 @@ class Index extends React.Component<Props, State> {
                   {t('home-char-title')}
                 </Typography>
               </Reveal>
-              <Reveal effect="fadeInUp" fraction={0.4}>
+              <Reveal effect="fadeInUp" fraction={0.3}>
                 <Typography variant="body1" gutterBottom align="left">
                   {t('home-char')}
                 </Typography>
@@ -356,7 +356,7 @@ class Index extends React.Component<Props, State> {
                   {t('home-topic-title')}
                 </Typography>
               </Reveal>
-              <Reveal effect="fadeInUp" fraction={0.4}>
+              <Reveal effect="fadeInUp" fraction={0.25}>
                 <Typography variant="body1" gutterBottom align="left">
                   {t('home-topic')}
                 </Typography>
