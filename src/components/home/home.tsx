@@ -21,11 +21,15 @@ const styles = (theme: Theme) =>
     },
     container: {
       display: 'grid',
-      gridTemplateColumns: 'repeat(12, 1fr)',
+      gridTemplateColumns: 'repeat(auto-fit, 300px)',
       // gridGap: `${theme.spacing.unit * 3}px`,
-      marginTop: '60px'
+      marginTop: '60px',
+      alignItems: 'center',
       // gridAutoFlow: 'column',
       // gridAutoColumns: '200px'
+      [theme.breakpoints.down('sm')]: {
+        gridTemplateColumns: '1fr',
+      }
     },
     paper: {
       padding: theme.spacing.unit,
@@ -96,10 +100,13 @@ const styles = (theme: Theme) =>
       */
     },
     paperimg: {
+      marginLeft: 'auto',
+      marginRight: 'auto',
       height: 'auto',
       width: 'auto',
       maxWidth: '300px',
-      margin: 'auto',
+      minWidth: '200px',
+      margin: 0,
       display: 'block',
       objectFit: 'contain',
       pointerEvents: 'none',
@@ -137,16 +144,14 @@ class Index extends React.Component<Props, State> {
 
         <Content />
         <div className={classes.centered}>
-          <Grid container spacing={24} className={classes.container}>
-            <Grid item xs={12} md={6}>
-              <div className={classes.paper}>
+          <Grid container spacing={0} className={classes.container}>
+            <Grid item xs={2} sm={2} md={1} lg={1} alignContent="center" className={classes.centered}>
                 <img
                   src="./imgs/07-newsletter.png"
                   className={classes.paperimg}
                 />
-              </div>
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
               <Subcribe />
             </Grid>
           </Grid>
