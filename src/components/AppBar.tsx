@@ -51,7 +51,6 @@ function ButtonAppBar(props:Props) {
   const isLive = h.indexOf('test') === -1 && 
     h.indexOf('.dinnertable') === -1 &&
     h.indexOf('dinnertable.chat') !== -1;
-  console.log('notLive', isLive, 'auth', auth)
 
   return (
     <div className={classes.root}>
