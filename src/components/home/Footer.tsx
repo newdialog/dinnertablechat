@@ -1,5 +1,5 @@
 import React from 'react';
-import { SvgIcon, Button, IconButton } from '@material-ui/core';
+import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
 import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import withRoot from '../../withRoot';
 
@@ -15,7 +15,9 @@ const styles = createStyles({
     centered: {
         marginLeft: 'auto',
         marginRight: 'auto',
-        width: 'auto',
+        width: '100%',
+        backgroundColor: '#484965',
+        textAlign:'center'
       },
 });
   
@@ -34,12 +36,15 @@ function TwitterIcon(props: any) {
 function Footer(props: Props) {
     const { classes } = props;
     return (
-        <div className={classes.centered}>
+        <footer className={classes.centered}>
+            <Typography>
+            Copyright © 2018 Dinnertable.chat
+            </Typography>
             <TwitterIcon color="secondary" />
             <IconButton color="secondary" aria-label="email">
                 <Email />
             </IconButton>
-        </div>
+        </footer>
     );
 }
 
