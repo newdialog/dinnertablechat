@@ -5,6 +5,7 @@ import MenuHome from './menus/MenuHome'
 // import RTCHome from './debate/DebateScene'
 // import LoadingMatch from './debate/DebateTester'
 import DebateRouter from './debate/DebateRouter'
+import Privacy from './privacy/Privacy';
 
 const DTCRouter = ( {history}:{history:any} ) => (
   <Router history={history}>
@@ -12,6 +13,7 @@ const DTCRouter = ( {history}:{history:any} ) => (
       <Route exact={true} path="/" component={Home} />
       <Route exact={true} path="/callback" component={Home} />
 
+     <Route path="/privacy" component={Privacy}/>
       <Route path="/play" component={MenuHome}/>
       <Route path="/match" component={DebateRouter}/>
 
