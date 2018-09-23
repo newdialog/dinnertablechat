@@ -44,6 +44,9 @@ function Footer(props: Props) {
             <IconButton color="secondary" aria-label="email">
                 <Email />
             </IconButton>
+            <Typography>
+            <a href="/privacy">Privacy Policy</a>
+            </Typography>
         </footer>
     );
 }
