@@ -44,7 +44,8 @@ const styles = (theme: Theme) =>
       marginRight: 'auto',
       width: 'auto',
       maxWidth: '800px',
-      minWidth: '300px'
+      minWidth: '300px',
+      textAlign: 'center'
     },
     centeredDown: {
       marginLeft: 'auto',
@@ -156,6 +157,11 @@ class Index extends React.Component<Props, State> {
               <Subcribe />
             </Grid>
           </Grid>
+          <div style={{marginTop:'50px'}}>
+            <a href="https://goo.gl/forms/KaZBtAxKRs2M1dY62"
+              className="minorlink">
+              click to take a quick survey</a>
+          </div>
         </div>
         <Footer />
       </div>

@@ -41,3 +41,13 @@
   #lab_social_icon_footer #social-em:hover {
     color: #f39c12;
   }
+
+  .minorlink {
+      text-decoration: 'none';
+      color: #888888
+  }
+
+  .minorlink:hover {
+    text-decoration: 'none';
+    color: #555588
+}
