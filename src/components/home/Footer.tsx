@@ -13,7 +13,7 @@ const styles = createStyles({
     justifyContent: 'center'
   },
   centered: {
-    marginTop: '4em',
+    marginTop: '2em',
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '100%',
