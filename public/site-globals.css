@@ -44,10 +44,10 @@
 
   .minorlink {
       text-decoration: 'none';
-      color: #888888
+      color: #f19899
   }
 
   .minorlink:hover {
     text-decoration: 'none';
-    color: #555588
+    color: #454579
 }

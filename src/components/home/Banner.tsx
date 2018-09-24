@@ -104,6 +104,7 @@ const styles = (theme: Theme) =>
     },
     bannerAnimOverlay: {
       zIndex:-1, 
+      transform: 'translateZ(0)',
       position: 'absolute',
       top:0, 
       bottom:0, 
