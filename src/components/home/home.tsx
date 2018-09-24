@@ -158,14 +158,18 @@ class Index extends React.Component<Props, State> {
               <Subcribe />
             </Grid>
           </Grid>
-          <div style={{marginTop:'50px'}}>
+          <div style={{marginTop:'3em'}}>
             <a href="https://goo.gl/forms/KaZBtAxKRs2M1dY62"
               className="minorlink" style={{textDecoration:'none'}}>
               <Announcement/>  help us out by taking a quick poll
               
               </a>
           </div>
+          <div style={{marginTop:'1em'}}>
+          also follow us on Twitter <a href="https://twitter.com/dintablechat" className="minorlink" style={{textDecoration:'none'}}>@dintablechat</a>
         </div>
+        </div>
+        
         <Footer />
       </div>
     );
