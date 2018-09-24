@@ -86,7 +86,7 @@ class Subscribe extends React.Component<Props,State> {
       <div className={classes.centered}>
         <br />
         <form onSubmit={this.onSubmit} style={{ marginLeft: 'auto', marginRight: 'auto', width:'100%', textAlign:'center' }}>
-          <Typography gutterBottom align="center" color="primary" variant="headline">
+          <Typography gutterBottom align="center" color="primary" variant="headline"  style={{color:'#61618e'}}>
           {t('home-signup')}
           </Typography>
           <TextField

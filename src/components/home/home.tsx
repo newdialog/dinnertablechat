@@ -13,6 +13,7 @@ import Content from './Content';
 import { observer } from 'mobx-react';
 import Subcribe from './Subscribe';
 import Footer from './Footer';
+import Announcement from '@material-ui/icons/RecordVoiceOver'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -159,8 +160,10 @@ class Index extends React.Component<Props, State> {
           </Grid>
           <div style={{marginTop:'50px'}}>
             <a href="https://goo.gl/forms/KaZBtAxKRs2M1dY62"
-              className="minorlink">
-              click to take a quick survey</a>
+              className="minorlink" style={{textDecoration:'none'}}>
+              <Announcement/>  help us out by taking a quick poll
+              
+              </a>
           </div>
         </div>
         <Footer />
