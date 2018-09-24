@@ -31,7 +31,7 @@ function Footer(props: Props) {
       <section id="lab_social_icon_footer">
         <div className="container">
           <div className="text-center center-block">
-            <a href="https://discordapp.com/channels/@me/481918153203384351">
+            <a href="https://discord.gg/U6h8pE9">
               <i
                 id="social-discord"
                 className="fab fa-discord fa-3x social"
