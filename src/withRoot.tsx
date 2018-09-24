@@ -33,7 +33,7 @@ const theme = createMuiTheme({
       fontSize: '2em',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 'bold',
-      color: '#61618e'
+      color: '#484965'
     },
     display4: {
       fontSize: '3em',
