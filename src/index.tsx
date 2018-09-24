@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './services/i18n';
 import './index.css';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 import App from './App';
 import { Provider } from 'mobx-react';
@@ -33,4 +33,4 @@ ReactDOM.render(
   document.getElementById('root') as HTMLElement
 );
 
-registerServiceWorker();
+// registerServiceWorker();
