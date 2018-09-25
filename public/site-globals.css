@@ -15,7 +15,7 @@
   #lab_social_icon_footer .social {
     -webkit-transform: scale(0.8);
     /* Browser Variations: */
-    padding: 0 3px 0 3px;
+    padding: 0 8px 0 8px;
     -moz-transform: scale(0.8);
     -o-transform: scale(0.8);
     -webkit-transition-duration: 0.5s;

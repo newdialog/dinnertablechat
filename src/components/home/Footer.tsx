@@ -13,8 +13,9 @@ const styles = createStyles({
     justifyContent: 'center'
   },
   centered: {
-    marginTop: '3em',
-    paddingBottom: '.5em',
+    marginTop: '3.2em',
+    paddingBottom: '1em',
+    paddingTop: '.8em',
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '100%',
@@ -32,12 +33,7 @@ function Footer(props: Props) {
       <section id="lab_social_icon_footer">
         <div className="container">
           <div className="text-center center-block">
-            <a href="https://discord.gg/U6h8pE9">
-              <i
-                id="social-discord"
-                className="fab fa-discord fa-3x social"
-              />
-            </a>
+            
             <a href="https://twitter.com/dintablechat">
               <i id="social-tw" className="fab fa-twitter-square social fa-3x "></i>
             </a>
@@ -58,5 +54,12 @@ function Footer(props: Props) {
     </footer>
   );
 }
-
+/*
+<a href="https://discord.gg/U6h8pE9">
+              <i
+                id="social-discord"
+                className="fab fa-discord fa-3x social"
+              />
+            </a>
+*/
 export default withRoot(withStyles(styles)(Footer));
