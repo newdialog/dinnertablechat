@@ -3,7 +3,7 @@ import Amplify, { PubSub } from 'aws-amplify';
 import AWS from 'aws-sdk';
 
 import Peer from 'simple-peer';
-import PS from './PeerService';
+import PeerService from './PeerService';
 
 import retry from 'async-retry';
 
@@ -49,7 +49,7 @@ export async function handshake(
 ) {
   // const matchid = ticket.Item!.match;
   // ===
-  const p = new PS(stream);
+  const p = new PeerService(stream);
   return isLeader ? handShakeLeader(matchid, p) : handShakeOther(matchid, p);
 }
 
@@ -136,7 +136,7 @@ async function updateMatch(matchid: string, team: 'blue' | 'red', key: string) {
   return ticket2;
 }
 
-async function handShakeLeader(matchid: string, p: PS) {
+async function handShakeLeader(matchid: string, p: PeerService) {
   let givenSignal = false;
   const cbs = {
     onSignal: async (data: string) => {
@@ -167,7 +167,7 @@ async function stopSyncing() {
   stopSync = true;
 }
 
-async function handShakeOther(matchid: string, p: PS) {
+async function handShakeOther(matchid: string, p: PeerService) {
   // const p = new PS();
   let givenSignal = false;
   const cbs = {
