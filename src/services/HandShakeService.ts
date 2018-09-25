@@ -66,28 +66,51 @@ async function readMatch(matchid: string): Promise<HandShakeCallback> {
   return ticket2.Item! as HandShakeCallback;
 }
 
+let lastValue: any = null;
+let stopSync: boolean = false;
 async function readMatchWait(matchid: string, team: 'blue' | 'red') {
-  return await retry(
-    async bail => {
-      const match: HandShakeCallback = await readMatch(matchid);
-      const teamkey = team + 'key';
-      const keyval = match[teamkey];
-      if (
-        !keyval ||
-        keyval === '-' ||
-        keyval.length === 0 ||
-        keyval !== '{"renegotiate":true}'
-      ) {
-        // await delay(3000);
-        console.log('key not set yet');
-        throw new Error('key not set yet');
-      }
-      return keyval;
-    },
+  if (stopSync) return;
+  // return await retry(
+  // async bail => {
+  // if (stopSync) return;
+  const match: HandShakeCallback = await readMatch(matchid);
+  const teamkey = team + 'key';
+  const keyval = match[teamkey];
+  if (!keyval || keyval === '-' || keyval === lastValue) {
+    lastValue = keyval;
+    // keyval !== '{"renegotiate":true}' ||
+    // await delay(3000);
+    console.log('key not set yet', teamkey);
+    // return;
+    // throw new Error('key not set yet ' + teamkey);
+    await delay(2000);
+    return await readMatchWait(matchid, team);
+  }
+  return keyval;
+  /* },
     {
-      retries: 5
-    }
-  );
+      retries: 8
+    }*/
+  // );
+}
+
+async function handshakeUntilConnected(
+  matchid: string,
+  team: 'blue' | 'red',
+  p: any
+): Promise<any> {
+  console.log('handshakeUntilConnected');
+  const otherKey = await readMatchWait(matchid, team);
+  if (!otherKey) {
+    console.log('handshakeUntilConnected ended');
+    return null; // just end
+  }
+  if (otherKey) p.giveResponse(otherKey);
+  else {
+    // TODO: remove
+  }
+  await delay(1000);
+  handshakeUntilConnected(matchid, team, p);
 }
 
 async function updateMatch(matchid: string, team: 'blue' | 'red', key: string) {
@@ -117,23 +140,31 @@ async function handShakeLeader(matchid: string, p: PS) {
   let givenSignal = false;
   const cbs = {
     onSignal: async (data: string) => {
-      console.log('onSignal', data);
-      if (givenSignal || data === '{"renegotiate":true}') return;
+      console.log('onSignal from other:', data);
+      // if (givenSignal || data === '{"renegotiate":true}') return;
       givenSignal = true;
       await updateMatch(matchid, 'red', data);
     }
   };
   p.init(true, cbs);
 
-  const otherKey = await readMatchWait(matchid, 'blue');
+  handshakeUntilConnected(matchid, 'blue', p);
+  // const otherKey = await readMatchWait(matchid, 'blue');
   // console.log('otherKey', otherKey);
-  p.giveResponse(otherKey);
+  // p.giveResponse(otherKey);
 
   await p.onConnection();
+  stopSyncing();
   console.log('leader rtc elected');
   // new Peer({ initiator: true, trickle: false });
 
   return p;
+}
+
+// Ensure any last minute sync messages are processed
+async function stopSyncing() {
+  await 3000;
+  stopSync = true;
 }
 
 async function handShakeOther(matchid: string, p: PS) {
@@ -141,18 +172,20 @@ async function handShakeOther(matchid: string, p: PS) {
   let givenSignal = false;
   const cbs = {
     onSignal: async (data: string) => {
-      console.log('onSignal', data);
-      if (givenSignal || data === '{"renegotiate":true}') return;
+      console.log('onSignal from leader:', data);
+      // if (givenSignal || data === '{"renegotiate":true}') return;
       givenSignal = true;
       await updateMatch(matchid, 'blue', data);
     }
   };
   p.init(false, cbs);
-  const leaderKey = await readMatchWait(matchid, 'red');
+  // const leaderKey = await readMatchWait(matchid, 'red');
   // console.log('leaderKey', leaderKey);
-  p.giveResponse(leaderKey);
+  // p.giveResponse(leaderKey);
+  handshakeUntilConnected(matchid, 'red', p);
 
   await p.onConnection();
+  stopSyncing();
   console.log('other rtc connection');
 
   return p;

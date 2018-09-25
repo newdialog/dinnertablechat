@@ -35,7 +35,14 @@ export default class PeerService {
   }
 
   public giveResponse(data: string) {
-    this._peer.signal(JSON.parse(data));
+    let parse: any = null;
+    try {
+      parse = JSON.parse(data);
+    } catch (error) {
+      console.warn('cant parse', data);
+      return;
+    }
+    this._peer.signal(parse);
   }
 
   public onStream(onStream: OnStream) {

@@ -107,7 +107,7 @@ class DebateScene extends React.Component<Props, any> {
       });
     });
 
-    p.addStream(stream);
+    // p.addStream(stream);
     console.log('addStream');
   }
 
