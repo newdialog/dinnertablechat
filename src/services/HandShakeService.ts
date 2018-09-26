@@ -58,9 +58,9 @@ export async function handshake(
   console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
 
   const cbs = {
-    onSignal: async (data: string) => {
-      console.log('onSignal gen:', mycolor, data);
-      await updateMatch(matchid, mycolor, data);
+    onSignal: async (sigdata: string) => {
+      console.log('onSignal gen:', mycolor, sigdata);
+      await updateMatch(matchid, mycolor, sigdata, state);
     }
   };
   p.init(isLeader, cbs);
@@ -104,9 +104,16 @@ async function readMatchWait(
   // if (stopSync) return;
   const match: HandShakeCallback = await readMatch(matchid);
   const teamkey = team + 'key';
+
   const statekey = team + 'state';
   const keyval = match[teamkey];
-  const stateval = JSON.parse(match[statekey]);
+
+  console.log('recalling state from other:', statekey, match[statekey]);
+
+  let stateval = null; // JSON.parse(match[statekey]);
+  try {
+    stateval = JSON.parse(match[statekey]);
+  } catch (err) {}
   if (!keyval || keyval === '-' || keyval === lastValue) {
     lastValue = keyval;
     // keyval !== '{"renegotiate":true}' ||
@@ -152,8 +159,10 @@ async function updateMatch(
   if (!matchid) throw new Error('no matchid provided');
 
   const teamkey = team + 'key';
+
   const statekey = team + 'state';
-  const stateStr = JSON.stringify(state);
+  const stateStr = state ? JSON.stringify(state) : '{}';
+
   console.log('saving to key', teamkey, 'state: ', statekey, stateStr);
   const params2: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
     Key: {

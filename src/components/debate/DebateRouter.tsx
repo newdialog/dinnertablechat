@@ -32,7 +32,7 @@ class DebateRouter extends React.Component<any,State> {
     else stage = 1;
     if(inSync) stage = 2;
   
-    console.log('stage', stage, ds.position, ds.contribution, 'ds.match set '+ !!ds.match, inSync)
+    console.log('debate route stage:', stage, ds.position, ds.contribution, 'ds.match set '+ !!ds.match, 'sync done:' + inSync)
   
     if(stage === 0) {
       console.log('lost state');
