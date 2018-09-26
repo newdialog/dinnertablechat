@@ -93,9 +93,10 @@ export function queueUp(
   console.log(
     'queueUp',
     topic,
-    side,
+    'side ' + side,
     playerId,
     donation,
+    'chararacter: ' + chararacter,
     'teamName: ' + teamName
   );
 

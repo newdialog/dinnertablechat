@@ -62,10 +62,11 @@ class LoadingScene extends React.Component<Props, any> {
     const topic = this.props.store.debate.topic;
     const position = this.props.store.debate.position;
     const contribution = this.props.store.debate.contribution;
+    const chararacter = this.props.store.debate.character;
 
     const sameUserSeed = Math.round(new Date().getTime() / 1000);
     const userid = this.props.store.auth.user!.email + '_' + sameUserSeed;
-    QS.queueUp(topic, position, userid, contribution, this.onMatched);
+    QS.queueUp(topic, position, userid, contribution, chararacter, this.onMatched);
   }
 
   private gotMedia = async (stream: MediaStream) => {
