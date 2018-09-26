@@ -80,7 +80,7 @@ class DebateScene extends React.Component<Props, any> {
       console.log('data: ' + data);
     });
 
-    p.on('stream', stream2 => {
+    p.onStream(stream2 => {
       console.log('stream found');
       // got remote video stream, now let's show it in a video tag
       /// var video = document.querySelector('video');
@@ -95,19 +95,19 @@ class DebateScene extends React.Component<Props, any> {
       this.speechEvents = hark(stream2, options);
 
       this.speechEvents.on('speaking', () => {
-        console.log('speaking');
+        // console.log('speaking');
         this.setState({speaking:true})
         // document.querySelector('#speaking').textContent = 'YES';
       });
 
       this.speechEvents.on('stopped_speaking', () => {
-        console.log('stopped_speaking');
+        // console.log('stopped_speaking');
         this.setState({speaking:false})
         // document.querySelector('#speaking').textContent = 'NO';
       });
     });
 
-    p.addStream(stream);
+    // p.addStream(stream);
     console.log('addStream');
   }
 
@@ -124,7 +124,7 @@ class DebateScene extends React.Component<Props, any> {
               <video ref={this.vidRef} autoPlay={true} />
             </div>
             <br />
-            Speaking: <pre id="speaking" />
+            {this.state.speaking && <div>Other is Speaking</div>}
           </div>
         </div>
       </React.Fragment>

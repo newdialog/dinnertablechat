@@ -65,6 +65,7 @@ async function poll(onMatchedCB: OnMatchedCB, tid: string, playerId: string) {
         matchId: player.match,
         sync: false,
         userId: playerId,
+        otherState: '{}',
         timeStarted: 0
       });
       return;
@@ -86,15 +87,17 @@ export function queueUp(
   side: integer,
   playerId: string,
   donation: float,
+  chararacter: integer,
   onMatchedCB: OnMatchedCB
 ) {
   const teamName = side === 0 ? 'red' : 'blue';
   console.log(
     'queueUp',
     topic,
-    side,
+    'side ' + side,
     playerId,
     donation,
+    'chararacter: ' + chararacter,
     'teamName: ' + teamName
   );
 

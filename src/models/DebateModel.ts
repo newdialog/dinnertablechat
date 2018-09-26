@@ -5,6 +5,7 @@ const MatchModel = types.model({
   leader: types.boolean,
   userId: types.string,
   matchId: types.string,
+  otherState: types.string, // serialized state of other person
   timeStarted: types.maybe(types.number),
   sync: false
 });
@@ -16,6 +17,7 @@ const DebateModel = types
     contribution: -1,
     position: -1,
     topic: '',
+    character: -1,
     match: types.maybeNull(MatchModel)
   })
   .actions(self => ({
@@ -36,9 +38,13 @@ const DebateModel = types
     setContribution(amount: number) {
       self.contribution = amount;
     },
+    setCharacter(character: number) {
+      self.character = character;
+    },
     resetQueue() {
       self.contribution = -1;
       self.position = -1;
+      self.character = -1;
       self.topic = '';
       self.match = null;
     }
