@@ -86,6 +86,7 @@ export function queueUp(
   side: integer,
   playerId: string,
   donation: float,
+  chararacter: integer,
   onMatchedCB: OnMatchedCB
 ) {
   const teamName = side === 0 ? 'red' : 'blue';
