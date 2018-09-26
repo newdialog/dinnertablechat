@@ -65,6 +65,7 @@ async function poll(onMatchedCB: OnMatchedCB, tid: string, playerId: string) {
         matchId: player.match,
         sync: false,
         userId: playerId,
+        otherState: '{}',
         timeStarted: 0
       });
       return;

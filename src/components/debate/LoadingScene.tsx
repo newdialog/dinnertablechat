@@ -70,9 +70,11 @@ class LoadingScene extends React.Component<Props, any> {
   }
 
   private gotMedia = async (stream: MediaStream) => {
+    console.log('gotMedia');
     const matchId = this.props.store.debate.match!.matchId;
     const isLeader = this.props.store.debate.match!.leader;
-    const peer = await shake.handshake(matchId, isLeader, stream);
+    const state = { char: this.props.store.debate.character }; // TODO pretect against premium chars
+    const peer = await shake.handshake(matchId, isLeader, state, stream);
     this.props.onPeer(peer);
     this.props.store.debate.syncMatch();
   }

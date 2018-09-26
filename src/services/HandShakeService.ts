@@ -6,6 +6,7 @@ import Peer from 'simple-peer';
 import PeerService from './PeerService';
 
 import retry from 'async-retry';
+import { Strings } from 'aws-sdk/clients/opsworkscm';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -45,12 +46,32 @@ export async function sync(userid: string) {
 export async function handshake(
   matchid: string,
   isLeader: boolean,
+  state: any,
   stream: MediaStream
 ) {
   // const matchid = ticket.Item!.match;
   // ===
   const p = new PeerService(stream);
-  return isLeader ? handShakeLeader(matchid, p) : handShakeOther(matchid, p);
+  // ====
+  const mycolor = isLeader ? 'red' : 'blue';
+  const otherColor = isLeader ? 'blue' : 'red';
+  console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
+
+  const cbs = {
+    onSignal: async (data: string) => {
+      console.log('onSignal gen:', mycolor, data);
+      await updateMatch(matchid, mycolor, data);
+    }
+  };
+  p.init(isLeader, cbs);
+
+  handshakeUntilConnected(matchid, otherColor, p);
+
+  await p.onConnection();
+  stopSyncing();
+  console.log(mycolor + ' rtc elected');
+
+  return p;
 }
 
 async function readMatch(matchid: string): Promise<HandShakeCallback> {
@@ -66,16 +87,26 @@ async function readMatch(matchid: string): Promise<HandShakeCallback> {
   return ticket2.Item! as HandShakeCallback;
 }
 
+export interface DBState {
+  key: string;
+  state: any;
+}
+
 let lastValue: any = null;
 let stopSync: boolean = false;
-async function readMatchWait(matchid: string, team: 'blue' | 'red') {
-  if (stopSync) return;
+async function readMatchWait(
+  matchid: string,
+  team: 'blue' | 'red'
+): Promise<DBState | null> {
+  if (stopSync) return null;
   // return await retry(
   // async bail => {
   // if (stopSync) return;
   const match: HandShakeCallback = await readMatch(matchid);
   const teamkey = team + 'key';
+  const statekey = team + 'state';
   const keyval = match[teamkey];
+  const stateval = JSON.parse(match[statekey]);
   if (!keyval || keyval === '-' || keyval === lastValue) {
     lastValue = keyval;
     // keyval !== '{"renegotiate":true}' ||
@@ -86,7 +117,7 @@ async function readMatchWait(matchid: string, team: 'blue' | 'red') {
     await delay(2000);
     return await readMatchWait(matchid, team);
   }
-  return keyval;
+  return { key: keyval, state: stateval };
   /* },
     {
       retries: 8
@@ -100,24 +131,30 @@ async function handshakeUntilConnected(
   p: any
 ): Promise<any> {
   console.log('handshakeUntilConnected');
-  const otherKey = await readMatchWait(matchid, team);
-  if (!otherKey) {
+  const result = await readMatchWait(matchid, team);
+  if (!result) {
     console.log('handshakeUntilConnected ended');
     return null; // just end
   }
-  if (otherKey) p.giveResponse(otherKey);
-  else {
-    // TODO: remove
-  }
+  const { key, state } = result;
+  p.giveResponse(key);
+
   await delay(1000);
   handshakeUntilConnected(matchid, team, p);
 }
 
-async function updateMatch(matchid: string, team: 'blue' | 'red', key: string) {
+async function updateMatch(
+  matchid: string,
+  team: 'blue' | 'red',
+  key: string,
+  state: any = {}
+) {
   if (!matchid) throw new Error('no matchid provided');
 
   const teamkey = team + 'key';
-  console.log('saving to key', teamkey);
+  const statekey = team + 'state';
+  const stateStr = JSON.stringify(state);
+  console.log('saving to key', teamkey, 'state: ', statekey, stateStr);
   const params2: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
     Key: {
       id: matchid
@@ -126,6 +163,10 @@ async function updateMatch(matchid: string, team: 'blue' | 'red', key: string) {
       [teamkey]: {
         Action: 'PUT', // ADD | PUT | DELETE,
         Value: key /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
+      },
+      [statekey]: {
+        Action: 'PUT', // ADD | PUT | DELETE,
+        Value: stateStr /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
       }
       /* '<AttributeName>': ... */
     },
@@ -136,39 +177,16 @@ async function updateMatch(matchid: string, team: 'blue' | 'red', key: string) {
   return ticket2;
 }
 
-async function handShakeLeader(matchid: string, p: PeerService) {
-  let givenSignal = false;
-  const cbs = {
-    onSignal: async (data: string) => {
-      console.log('onSignal from other:', data);
-      // if (givenSignal || data === '{"renegotiate":true}') return;
-      givenSignal = true;
-      await updateMatch(matchid, 'red', data);
-    }
-  };
-  p.init(true, cbs);
-
-  handshakeUntilConnected(matchid, 'blue', p);
-  // const otherKey = await readMatchWait(matchid, 'blue');
-  // console.log('otherKey', otherKey);
-  // p.giveResponse(otherKey);
-
-  await p.onConnection();
-  stopSyncing();
-  console.log('leader rtc elected');
-  // new Peer({ initiator: true, trickle: false });
-
-  return p;
-}
-
 // Ensure any last minute sync messages are processed
 async function stopSyncing() {
   await 3000;
   stopSync = true;
 }
 
-async function handShakeOther(matchid: string, p: PeerService) {
-  // const p = new PS();
+// async function handShake(matchid: string, state:any, p: PeerService, isLeader:boolean) {}
+
+/*
+async function handShakeOther(matchid: string, state:any, p: PeerService) {
   let givenSignal = false;
   const cbs = {
     onSignal: async (data: string) => {
@@ -179,9 +197,7 @@ async function handShakeOther(matchid: string, p: PeerService) {
     }
   };
   p.init(false, cbs);
-  // const leaderKey = await readMatchWait(matchid, 'red');
-  // console.log('leaderKey', leaderKey);
-  // p.giveResponse(leaderKey);
+
   handshakeUntilConnected(matchid, 'red', p);
 
   await p.onConnection();
@@ -189,7 +205,7 @@ async function handShakeOther(matchid: string, p: PeerService) {
   console.log('other rtc connection');
 
   return p;
-}
+}*/
 
 let docClient: AWS.DynamoDB.DocumentClient;
 export function init(): void {

@@ -5,6 +5,7 @@ const MatchModel = types.model({
   leader: types.boolean,
   userId: types.string,
   matchId: types.string,
+  otherState: types.string, // serialized state of other person
   timeStarted: types.maybe(types.number),
   sync: false
 });
