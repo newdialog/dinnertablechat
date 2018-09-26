@@ -10,8 +10,10 @@ interface CallBacks {
 
 export default class PeerService {
   public _peer: Peer.Instance & any; // typing is incomplete
-  private _stream;
+  private _stream: MediaStream;
+  private clientStream: any;
   constructor(stream: MediaStream) {
+    if (!stream) throw new Error('no stream given');
     this._stream = stream;
   }
 
@@ -21,7 +23,15 @@ export default class PeerService {
       cbs.onSignal(JSON.stringify(data));
     });
     if (cbs.onConnected) this._peer.on('connect', cbs.onConnected);
-    if (cbs.onStream) this._peer.on('stream', cbs.onStream);
+
+    this._peer.on('stream', stream => {
+      this.clientStream = stream;
+      if (cbs.onStream) cbs.onStream!(stream);
+    });
+  }
+
+  public getClientStream() {
+    return this.clientStream;
   }
 
   public async onConnection() {
@@ -35,10 +45,18 @@ export default class PeerService {
   }
 
   public giveResponse(data: string) {
-    this._peer.signal(JSON.parse(data));
+    let parse: any = null;
+    try {
+      parse = JSON.parse(data);
+    } catch (error) {
+      console.warn('cant parse', data);
+      return;
+    }
+    this._peer.signal(parse);
   }
 
   public onStream(onStream: OnStream) {
+    if (this.clientStream) onStream(this.clientStream);
     this.on('stream', onStream);
   }
 

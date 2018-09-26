@@ -6,6 +6,7 @@ import PositionSelector from './PositionSelector';
 import ContributionSelector from './ContributionSelector';
 import withRoot from '../../withRoot';
 import { observer, inject } from 'mobx-react';
+import CharacterSelection from './CharacterSelection';
 // const logoData = require('../../assets/logo.json');
 
 const styles = theme => 
@@ -52,7 +53,7 @@ interface State {
 }
 
 function getSteps() {
-  return ['Select Postion', 'Set contribution'];
+  return ['Select Postion', 'Pick your character', 'Set contribution'];
 }
 
 function getStepContent(step: number, store: AppModel.Type) {
@@ -60,6 +61,8 @@ function getStepContent(step: number, store: AppModel.Type) {
     case 0:
       return <PositionSelector store={store} />
     case 1:
+      return <CharacterSelection store={store} />
+    case 2:
       return <ContributionSelector store={store} />
     default:
       return <Typography>Hmm, something went wrong. Please try again after refreshing the page.</Typography>;
@@ -79,7 +82,8 @@ class Index extends React.Component<Props, State> {
 
   private handleBack = () => {
     const { store } = this.props;
-    store.debate.setPosition(-1, '')
+    // store.debate.setPosition(-1, '')
+    store.debate.resetQueue()
   };
 
   private handleReset = () => {
@@ -94,17 +98,9 @@ class Index extends React.Component<Props, State> {
           disabled={activeStep === 0}
           onClick={this.handleBack}
           className={classes.button}
+          color="secondary"
         >
-          Back
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={this.handleNext}
-          className={classes.button}
-          disabled={this.props.store.debate.contribution===-1}
-        >
-          Finish
+          Reset Selections
         </Button>
       </div>
     );
@@ -113,10 +109,15 @@ class Index extends React.Component<Props, State> {
 
   public render() {
     const { classes, store } = this.props;
-    let step = 0;
-    if(store.debate.position !== -1 && store.debate.contribution === -1) step = 1;
-    else if(store.debate.position !== -1 && store.debate.contribution !== -1) step = 2;
-    if(step===2) store.router.push('/match');
+    let step = 3;
+    
+    if(store.debate.contribution===-1) step = 2;
+    if(store.debate.character===-1) step = 1;
+    if(!store.debate.topic || store.debate.position===-1) step = 0;
+    
+    // if(store.debate.position !== -1 && store.debate.contribution !== -1) step = 2;
+    // if(store.debate.character !== -1) step = 3;
+    if(step===3) store.router.push('/match');
     // console.log('step', step)
     const steps = getSteps();
 
@@ -150,7 +151,7 @@ class Index extends React.Component<Props, State> {
               );
             })}
           </Stepper>
-          {step === steps.length && (
+          {step > steps.length && (
             <Paper square elevation={0} className={classes.resetContainer}>
               <Typography>All steps completed - you&quot;re about to enter the queue for {store.debate.topic}!</Typography>
               <Button onClick={this.handleReset} className={classes.button}>

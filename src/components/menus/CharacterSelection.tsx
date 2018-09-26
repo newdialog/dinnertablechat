@@ -27,26 +27,23 @@ interface Props extends WithStyles<typeof styles> {
 
 
 @observer
-class ContributionSelector extends React.Component<Props> {
+class CharacterSelector extends React.Component<Props> {
 
   private defaultContributions():Array<{ key:any, label:any, value:any, color:any }> {
     return [
-        { key: 0, label: 'free', value: 0, color: 'default' },
-        { key: 1, label: '$1.00', value: 1.00, color: 'default' },
-        { key: 2, label: '$3.00', value: 3.00, color: 'default' }
+        { key: 0, label: 'Moose', value: 0, color: 'default' },
+        { key: 1, label: 'Rabbit', value: 1, color: 'default' },
+        { key: 2, label: 'Gecko', value: 2, color: 'default' }
       ];
   }
 
   private onChipClick(item: any) {
-    this.props.store.debate.setContribution(item.value)
-    // this.contributions = this.defaultContributions() // reset
-    // this.contributions[item.key].color = 'primary' // update prop
-    // console.log(this.contributions)
+    this.props.store.debate.setCharacter(item.value)
   }
 
   public render() {
     const { classes, store } = this.props;
-    // const selected = store.debate.contribution;
+    // const selected = store.debate.character;
 
     const contrib = this.defaultContributions()
     /* if(selected!==-1) {
@@ -80,4 +77,4 @@ className={classes.button} onClick={() => this.onChipClick(item)}>
 {item.label.valueOf()}
 </Button> */}
 
-export default withRoot(withStyles(styles)(ContributionSelector));
+export default withRoot(withStyles(styles)(CharacterSelector));

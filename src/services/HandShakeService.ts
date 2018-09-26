@@ -3,9 +3,10 @@ import Amplify, { PubSub } from 'aws-amplify';
 import AWS from 'aws-sdk';
 
 import Peer from 'simple-peer';
-import PS from './PeerService';
+import PeerService from './PeerService';
 
 import retry from 'async-retry';
+import { Strings } from 'aws-sdk/clients/opsworkscm';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -45,12 +46,32 @@ export async function sync(userid: string) {
 export async function handshake(
   matchid: string,
   isLeader: boolean,
+  state: any,
   stream: MediaStream
 ) {
   // const matchid = ticket.Item!.match;
   // ===
-  const p = new PS(stream);
-  return isLeader ? handShakeLeader(matchid, p) : handShakeOther(matchid, p);
+  const p = new PeerService(stream);
+  // ====
+  const mycolor = isLeader ? 'red' : 'blue';
+  const otherColor = isLeader ? 'blue' : 'red';
+  console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
+
+  const cbs = {
+    onSignal: async (sigdata: string) => {
+      console.log('onSignal gen:', mycolor, sigdata);
+      await updateMatch(matchid, mycolor, sigdata, state);
+    }
+  };
+  p.init(isLeader, cbs);
+
+  handshakeUntilConnected(matchid, otherColor, p);
+
+  await p.onConnection();
+  stopSyncing();
+  console.log(mycolor + ' rtc elected');
+
+  return p;
 }
 
 async function readMatch(matchid: string): Promise<HandShakeCallback> {
@@ -66,35 +87,83 @@ async function readMatch(matchid: string): Promise<HandShakeCallback> {
   return ticket2.Item! as HandShakeCallback;
 }
 
-async function readMatchWait(matchid: string, team: 'blue' | 'red') {
-  return await retry(
-    async bail => {
-      const match: HandShakeCallback = await readMatch(matchid);
-      const teamkey = team + 'key';
-      const keyval = match[teamkey];
-      if (
-        !keyval ||
-        keyval === '-' ||
-        keyval.length === 0 ||
-        keyval !== '{"renegotiate":true}'
-      ) {
-        // await delay(3000);
-        console.log('key not set yet');
-        throw new Error('key not set yet');
-      }
-      return keyval;
-    },
-    {
-      retries: 5
-    }
-  );
+export interface DBState {
+  key: string;
+  state: any;
 }
 
-async function updateMatch(matchid: string, team: 'blue' | 'red', key: string) {
+let lastValue: any = null;
+let stopSync: boolean = false;
+async function readMatchWait(
+  matchid: string,
+  team: 'blue' | 'red'
+): Promise<DBState | null> {
+  if (stopSync) return null;
+  // return await retry(
+  // async bail => {
+  // if (stopSync) return;
+  const match: HandShakeCallback = await readMatch(matchid);
+  const teamkey = team + 'key';
+
+  const statekey = team + 'state';
+  const keyval = match[teamkey];
+
+  console.log('recalling state from other:', statekey, match[statekey]);
+
+  let stateval = null; // JSON.parse(match[statekey]);
+  try {
+    stateval = JSON.parse(match[statekey]);
+  } catch (err) {}
+  if (!keyval || keyval === '-' || keyval === lastValue) {
+    lastValue = keyval;
+    // keyval !== '{"renegotiate":true}' ||
+    // await delay(3000);
+    console.log('key not set yet', teamkey);
+    // return;
+    // throw new Error('key not set yet ' + teamkey);
+    await delay(2000);
+    return await readMatchWait(matchid, team);
+  }
+  return { key: keyval, state: stateval };
+  /* },
+    {
+      retries: 8
+    }*/
+  // );
+}
+
+async function handshakeUntilConnected(
+  matchid: string,
+  team: 'blue' | 'red',
+  p: any
+): Promise<any> {
+  console.log('handshakeUntilConnected');
+  const result = await readMatchWait(matchid, team);
+  if (!result) {
+    console.log('handshakeUntilConnected ended');
+    return null; // just end
+  }
+  const { key, state } = result;
+  p.giveResponse(key);
+
+  await delay(1000);
+  handshakeUntilConnected(matchid, team, p);
+}
+
+async function updateMatch(
+  matchid: string,
+  team: 'blue' | 'red',
+  key: string,
+  state: any = {}
+) {
   if (!matchid) throw new Error('no matchid provided');
 
   const teamkey = team + 'key';
-  console.log('saving to key', teamkey);
+
+  const statekey = team + 'state';
+  const stateStr = state ? JSON.stringify(state) : '{}';
+
+  console.log('saving to key', teamkey, 'state: ', statekey, stateStr);
   const params2: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
     Key: {
       id: matchid
@@ -103,6 +172,10 @@ async function updateMatch(matchid: string, team: 'blue' | 'red', key: string) {
       [teamkey]: {
         Action: 'PUT', // ADD | PUT | DELETE,
         Value: key /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
+      },
+      [statekey]: {
+        Action: 'PUT', // ADD | PUT | DELETE,
+        Value: stateStr /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
       }
       /* '<AttributeName>': ... */
     },
@@ -113,50 +186,35 @@ async function updateMatch(matchid: string, team: 'blue' | 'red', key: string) {
   return ticket2;
 }
 
-async function handShakeLeader(matchid: string, p: PS) {
-  let givenSignal = false;
-  const cbs = {
-    onSignal: async (data: string) => {
-      console.log('onSignal', data);
-      if (givenSignal || data === '{"renegotiate":true}') return;
-      givenSignal = true;
-      await updateMatch(matchid, 'red', data);
-    }
-  };
-  p.init(true, cbs);
-
-  const otherKey = await readMatchWait(matchid, 'blue');
-  // console.log('otherKey', otherKey);
-  p.giveResponse(otherKey);
-
-  await p.onConnection();
-  console.log('leader rtc elected');
-  // new Peer({ initiator: true, trickle: false });
-
-  return p;
+// Ensure any last minute sync messages are processed
+async function stopSyncing() {
+  await 3000;
+  stopSync = true;
 }
 
-async function handShakeOther(matchid: string, p: PS) {
-  // const p = new PS();
+// async function handShake(matchid: string, state:any, p: PeerService, isLeader:boolean) {}
+
+/*
+async function handShakeOther(matchid: string, state:any, p: PeerService) {
   let givenSignal = false;
   const cbs = {
     onSignal: async (data: string) => {
-      console.log('onSignal', data);
-      if (givenSignal || data === '{"renegotiate":true}') return;
+      console.log('onSignal from leader:', data);
+      // if (givenSignal || data === '{"renegotiate":true}') return;
       givenSignal = true;
       await updateMatch(matchid, 'blue', data);
     }
   };
   p.init(false, cbs);
-  const leaderKey = await readMatchWait(matchid, 'red');
-  // console.log('leaderKey', leaderKey);
-  p.giveResponse(leaderKey);
+
+  handshakeUntilConnected(matchid, 'red', p);
 
   await p.onConnection();
+  stopSyncing();
   console.log('other rtc connection');
 
   return p;
-}
+}*/
 
 let docClient: AWS.DynamoDB.DocumentClient;
 export function init(): void {

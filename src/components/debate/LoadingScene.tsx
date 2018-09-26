@@ -62,16 +62,19 @@ class LoadingScene extends React.Component<Props, any> {
     const topic = this.props.store.debate.topic;
     const position = this.props.store.debate.position;
     const contribution = this.props.store.debate.contribution;
+    const chararacter = this.props.store.debate.character;
 
     const sameUserSeed = Math.round(new Date().getTime() / 1000);
     const userid = this.props.store.auth.user!.email + '_' + sameUserSeed;
-    QS.queueUp(topic, position, userid, contribution, this.onMatched);
+    QS.queueUp(topic, position, userid, contribution, chararacter, this.onMatched);
   }
 
   private gotMedia = async (stream: MediaStream) => {
+    console.log('gotMedia');
     const matchId = this.props.store.debate.match!.matchId;
     const isLeader = this.props.store.debate.match!.leader;
-    const peer = await shake.handshake(matchId, isLeader, stream);
+    const state = { char: this.props.store.debate.character }; // TODO pretect against premium chars
+    const peer = await shake.handshake(matchId, isLeader, state, stream);
     this.props.onPeer(peer);
     this.props.store.debate.syncMatch();
   }
