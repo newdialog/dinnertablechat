@@ -154,6 +154,15 @@ const topicsOptions = {
   }
 };
 
+const diningOptions = {
+  loop: true,
+  autoplay: false,
+  path: 'assets/mesa.json',
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
+
 // import Slider from 'react-slick';
 /* const settings = {
   autoPlay: true,
@@ -181,6 +190,7 @@ class Index extends React.Component<Props, State> {
   private logoRef = React.createRef<Lottie | any>();
   private topicsRef = React.createRef<Lottie | any>();
   private talkingRef = React.createRef<Lottie | any>();
+  private diningRef = React.createRef<Lottie | any>();
   private handlers: { [k: string]: any } = {};
 
   public componentDidMount() {
@@ -297,9 +307,20 @@ class Index extends React.Component<Props, State> {
             </Grid>
             <Grid item xs={12} md={12}>
               <div className={classes.paper}>
-                <Reveal effect="bounceIn" fraction={0.85}>
-                  <img src="./imgs/06-table.png" className={classes.paperimg} />
-                </Reveal>
+              <Waypoint
+                  topOffset="-10%"
+                  bottomOffset="0"
+                  onEnter={this.memoizedHandler('diningRef')}
+                  onLeave={this.memoizedHandler('diningRef', true)}
+                >
+                  <div style={{width:'120%', margin: '0 -1.8em 0 -1.8em'}}>
+                    <Lottie
+                      options={diningOptions}
+                      ref={this.diningRef}
+                      isClickToPauseDisabled={true}
+                    />
+                  </div>
+                </Waypoint>
               </div>
             </Grid>
 

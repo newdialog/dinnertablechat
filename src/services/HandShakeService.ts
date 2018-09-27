@@ -59,7 +59,7 @@ export async function handshake(
 
   const cbs = {
     onSignal: async (sigdata: string) => {
-      console.log('onSignal gen:', mycolor, sigdata);
+      // console.log('onSignal gen:', mycolor, sigdata);
       await updateMatch(matchid, mycolor, sigdata, state);
     }
   };
