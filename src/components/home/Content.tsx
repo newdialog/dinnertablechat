@@ -224,7 +224,12 @@ class Index extends React.Component<Props, State> {
     if (!onLeave)
       return (handlers[_id] = () => {
         // console.log('playing', _id);
-        if (this[id].current) this[id].current.play();
+        if (this[id].current) { 
+          // dining
+          if(id==='diningRef') this[id].current.setSpeed(1.6)
+          this[id].current.play();
+
+        }
       });
     else
       return (handlers[_id] = () => {
@@ -315,6 +320,7 @@ class Index extends React.Component<Props, State> {
                 >
                   <div style={{width:'120%', margin: '0 -1.8em 0 -1.8em'}}>
                     <Lottie
+                      speed={1.6}
                       options={diningOptions}
                       ref={this.diningRef}
                       isClickToPauseDisabled={true}
