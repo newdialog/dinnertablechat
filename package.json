@@ -10,9 +10,9 @@
     "@types/i18next": "^11.9.0",
     "@types/react-i18next": "^7.8.2",
     "async-retry": "^1.2.3",
-    "aws-amplify": "^1.1.3",
-    "aws-amplify-react": "^2.0.4",
-    "aws-sdk": "^2.322.0",
+    "aws-amplify": "^1.1.4",
+    "aws-amplify-react": "^2.0.5",
+    "aws-sdk": "^2.323.0",
     "env-cmd": "^8.0.2",
     "formik": "^1.3.0",
     "hark": "^1.2.3",
@@ -21,7 +21,7 @@
     "i18next-browser-languagedetector": "^2.2.3",
     "i18next-localstorage-backend": "^1.1.4",
     "i18next-xhr-backend": "^1.5.1",
-    "mobx": "^5.1.2",
+    "mobx": "^5.5.0",
     "mobx-react": "^5.2.8",
     "mobx-state-tree": "^3.4.0",
     "mst-middlewares": "^3.4.0",
@@ -54,13 +54,13 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.2",
-    "@types/node": "^10.11.0",
+    "@types/node": "^10.11.2",
     "@types/react": "^16.4.14",
-    "@types/react-dom": "^16.0.7",
+    "@types/react-dom": "^16.0.8",
     "@types/simple-peer": "^6.1.5",
     "gh-pages": "^2.0.0",
     "google-spreadsheet-i18n": "^1.0.4",
     "http-proxy": "^1.17.0",
-    "typescript": "^3.0.3"
+    "typescript": "^3.1.1"
   }
 }
