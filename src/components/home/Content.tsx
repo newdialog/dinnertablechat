@@ -182,8 +182,6 @@ interface State {
 }
 
 class Index extends React.Component<Props, State> {
-  // For GA 
-  private firstFireRules = false;
 
   constructor(props: Props) {
     super(props);
@@ -241,8 +239,7 @@ class Index extends React.Component<Props, State> {
   };
 
   private trackRulesView = () => {
-    if (!this.firstFireRules) gtag('event', 'scroll_rules', 'splash');
-    this.firstFireRules = true;
+    gtag('event', 'scroll_rules', 'splash');
   };
 
   public render() {
@@ -299,16 +296,12 @@ class Index extends React.Component<Props, State> {
             </Grid>
             <Grid item xs={12} md={6}>
               <div className={classes.paper}>
-                <Waypoint
-                  onEnter={this.trackRulesView}
-                >
-                  <Flip bottom={true} fraction={0.7}>
+                <Flip bottom={true} fraction={0.7} onReveal={this.trackRulesView}>
                     <img
                       src="./imgs/05-troll.png"
                       className={classes.paperimg}
                     />
-                  </Flip>
-                </Waypoint>
+                </Flip>
               </div>
             </Grid>
 
