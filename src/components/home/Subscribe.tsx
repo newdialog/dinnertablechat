@@ -112,6 +112,9 @@ class Subscribe extends React.Component<Props,State> {
     const { classes, t } = this.props;
     const { subscribe } = this.state;
     if (subscribe === 'success') {
+      ga('send', 'event', 'splash', 'subscribed', 'subscribed', {
+        nonInteraction: true
+      });
       return (
         <div className={classes.centered}>
           <Typography gutterBottom align="center" color="primary" variant="display1">
@@ -122,6 +125,9 @@ class Subscribe extends React.Component<Props,State> {
         </div>
       );
     } else if (subscribe === 'error') {
+      ga('send', 'event', 'splash', 'subscribe_error', 'subscribe_error', {
+        nonInteraction: true
+      });
       return (
         <div className={classes.centered}>
           <Typography gutterBottom align="center" color="primary" variant="display1">
