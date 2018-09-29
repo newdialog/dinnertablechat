@@ -182,6 +182,7 @@ interface State {
 }
 
 class Index extends React.Component<Props, State> {
+
   constructor(props: Props) {
     super(props);
     this.state = { open: false };
@@ -224,11 +225,10 @@ class Index extends React.Component<Props, State> {
     if (!onLeave)
       return (handlers[_id] = () => {
         // console.log('playing', _id);
-        if (this[id].current) { 
+        if (this[id].current) {
           // dining
-          if(id==='diningRef') this[id].current.setSpeed(1.6)
+          if (id === 'diningRef') this[id].current.setSpeed(1.6);
           this[id].current.play();
-
         }
       });
     else
@@ -236,6 +236,10 @@ class Index extends React.Component<Props, State> {
         // console.log('stopping', _id);
         if (this[id].current) this[id].current.stop();
       });
+  };
+
+  private trackRulesView = () => {
+    gtag('event', 'scroll_rules', 'splash');
   };
 
   public render() {
@@ -292,8 +296,11 @@ class Index extends React.Component<Props, State> {
             </Grid>
             <Grid item xs={12} md={6}>
               <div className={classes.paper}>
-                <Flip bottom={true} fraction={0.7}>
-                  <img src="./imgs/05-troll.png" className={classes.paperimg} />
+                <Flip bottom={true} fraction={0.7} onReveal={this.trackRulesView}>
+                    <img
+                      src="./imgs/05-troll.png"
+                      className={classes.paperimg}
+                    />
                 </Flip>
               </div>
             </Grid>
@@ -312,13 +319,13 @@ class Index extends React.Component<Props, State> {
             </Grid>
             <Grid item xs={12} md={12}>
               <div className={classes.paper}>
-              <Waypoint
+                <Waypoint
                   topOffset="-10%"
                   bottomOffset="0"
                   onEnter={this.memoizedHandler('diningRef')}
                   onLeave={this.memoizedHandler('diningRef', true)}
                 >
-                  <div style={{width:'120%', margin: '0 -1.8em 0 -1.8em'}}>
+                  <div style={{ width: '120%', margin: '0 -1.8em 0 -1.8em' }}>
                     <Lottie
                       speed={1.6}
                       options={diningOptions}
@@ -334,12 +341,12 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} md={6}>
               <div className={classes.divider} />
               <Reveal effect="fadeInUp" fraction={0.35}>
-              <Typography variant="title" gutterBottom align="left">
-                {t('home-char-title')}
-              </Typography>
-              <Typography variant="body1" gutterBottom align="left">
-                {t('home-char')}
-              </Typography>
+                <Typography variant="title" gutterBottom align="left">
+                  {t('home-char-title')}
+                </Typography>
+                <Typography variant="body1" gutterBottom align="left">
+                  {t('home-char')}
+                </Typography>
               </Reveal>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -374,15 +381,14 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} md={12} className={classes.divider2} />
             <Grid item xs={12} md={6}>
               <div className={classes.divider} />
-              
-                <Typography variant="title" gutterBottom align="left">
-                  {t('home-topic-title')}
-                </Typography>
-             
-                <Typography variant="body1" gutterBottom align="left">
-                  {t('home-topic')}
-                </Typography>
-              
+
+              <Typography variant="title" gutterBottom align="left">
+                {t('home-topic-title')}
+              </Typography>
+
+              <Typography variant="body1" gutterBottom align="left">
+                {t('home-topic')}
+              </Typography>
             </Grid>
             <Grid item xs={12} md={6}>
               <div className={classes.paper}>

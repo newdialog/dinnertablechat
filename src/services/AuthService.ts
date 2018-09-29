@@ -104,7 +104,7 @@ async function checkUser(cb: AwsCB) {
   }
   // .then(data => {
   console.log('+++currentAuthenticatedUser', data);
-  // console.log('data.pool.userPoolId', data.pool.userPoolId);
+  // console.log('data.pool.userPoolId', data.pool.userPoolId, data.username);
   const user = data.attributes;
   // const user = { name, email }; // , username: data.username
 
@@ -114,6 +114,9 @@ async function checkUser(cb: AwsCB) {
   // console.log('currentCredentials', currentCredentials);
   const credentials = Auth.essentialCredentials(currentCredentials);
   // console.log('credentials', credentials);
+
+  // Update analytics
+  gtag('set', 'userId', data.username);
 
   AWS.config.credentials = new AWS.Credentials(credentials);
   // FIX: https://github.com/aws-amplify/amplify-js/issues/581
