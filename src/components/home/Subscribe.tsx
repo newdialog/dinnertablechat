@@ -56,6 +56,11 @@ class Subscribe extends React.Component<Props,State> {
 
   public onSubmit = async e => {
     e.preventDefault();
+    gtag('event', 'subscribe_action', {
+      'event_category': 'splash',
+      'non_interaction': false
+    });
+
     const email = (this.emailInput && this.emailInput.value) || null;
     if (!this.validEmail(email)) {
       this.setState({subscribe: 'Please enter a valid email first'})
@@ -112,8 +117,9 @@ class Subscribe extends React.Component<Props,State> {
     const { classes, t } = this.props;
     const { subscribe } = this.state;
     if (subscribe === 'success') {
-      ga('send', 'event', 'splash', 'subscribed', 'subscribed', {
-        nonInteraction: true
+      gtag('event', 'subscribed', {
+        'event_category': 'splash',
+        'non_interaction': false
       });
       return (
         <div className={classes.centered}>
@@ -125,8 +131,9 @@ class Subscribe extends React.Component<Props,State> {
         </div>
       );
     } else if (subscribe === 'error') {
-      ga('send', 'event', 'splash', 'subscribe_error', 'subscribe_error', {
-        nonInteraction: true
+      gtag('event', 'subscribe_error', {
+        'event_category': 'splash',
+        'non_interaction': false
       });
       return (
         <div className={classes.centered}>

@@ -5,11 +5,13 @@ declare module 'json!*' {
   export = json;
 }
 
-declare function ga(
+declare function gtag(
   action: string,
   event: string,
-  eventCategory: string,
-  eventAction: string,
+  eventCategory?: any,
+  eventAction?: any,
   eventLabel?: any,
   eventValue?: any
 ): void;
+
+declare function trackOutboundLink(url:string):void;
