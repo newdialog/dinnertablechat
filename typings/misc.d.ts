@@ -14,4 +14,4 @@ declare function gtag(
   eventValue?: any
 ): void;
 
-declare function trackOutboundLink(url:string):void;
+declare function trackOutboundLink(url:string, interactive?:boolean):void;

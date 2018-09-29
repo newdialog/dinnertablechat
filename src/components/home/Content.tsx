@@ -239,7 +239,10 @@ class Index extends React.Component<Props, State> {
   };
 
   private trackRulesView = () => {
-    gtag('event', 'scroll_rules', 'splash');
+    gtag('event', 'scroll_rules', {
+      'event_category': 'splash',
+      'non_interaction': true
+    });
   };
 
   public render() {

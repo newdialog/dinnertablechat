@@ -35,11 +35,12 @@
     gtag('config', 'UA-119131630-1');
     gtag('create', 'UA-119131630-1', 'auto');
 
-    function trackOutboundLink(url) {
+    function trackOutboundLink(url, nonInteraction) {
       gtag('event', 'click', {
         'event_category': 'outbound',
         'event_label': url,
         'transport_type': 'beacon',
+        'non_interaction': nonInteraction ? true : false,
         'event_callback': function(){document.location = url;}
       });
       return false;
