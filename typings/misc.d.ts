@@ -15,3 +15,15 @@ declare function gtag(
 ): void;
 
 declare function trackOutboundLink(url:string, interactive?:boolean):void;
+
+declare global {
+  interface Window { 
+    gtag: typeof gtag; 
+    trackOutboundLink: typeof trackOutboundLink;
+  }
+}
+
+interface Window { 
+  gtag: typeof gtag; 
+  trackOutboundLink: typeof trackOutboundLink;
+}

@@ -1,14 +1,19 @@
-import AWS, { GameLift } from 'aws-sdk';
+// import AWS, { GameLift } from 'aws-sdk';
+
+import GameLift from 'aws-sdk/clients/gamelift'
+// import DynamoDB from 'aws-sdk/clients/dynamodb'
+import AWS from 'aws-sdk/global'
+
 import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
 import * as DebateModel from '../models/DebateModel';
 type OnMatched = DebateModel.MatchModelType;
 
-let gameLift: AWS.GameLift;
+let gameLift: GameLift;
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-export function init(options: AWS.GameLift.ClientConfiguration) {
+export function init(options: GameLift.ClientConfiguration) {
   console.log('gamelift init accessKeyId sessionToken', options.accessKeyId);
   if (!!gameLift) return;
   /* const options: AWS.GameLift.ClientConfiguration = { 
@@ -17,13 +22,13 @@ export function init(options: AWS.GameLift.ClientConfiguration) {
     secretAccessKey,
     sessionToken
   }; */
-  gameLift = new AWS.GameLift(options);
+  gameLift = new GameLift(options);
 }
 
 function onMatch(
   onMatchedCB: OnMatchedCB,
   err: AWS.AWSError,
-  data: AWS.GameLift.StartMatchmakingOutput
+  data: GameLift.StartMatchmakingOutput
 ) {
   if (err) {
     console.log('onMatch', err);
@@ -101,7 +106,7 @@ export function queueUp(
     'teamName: ' + teamName
   );
 
-  const options: AWS.GameLift.StartMatchmakingInput = {
+  const options: GameLift.StartMatchmakingInput = {
     ConfigurationName: 'dtc-match-config',
     // TicketId: 'STRING_VALUE', allow autogeneration
     Players: [

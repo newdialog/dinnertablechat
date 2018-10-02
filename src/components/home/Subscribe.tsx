@@ -117,7 +117,7 @@ class Subscribe extends React.Component<Props,State> {
     const { classes, t } = this.props;
     const { subscribe } = this.state;
     if (subscribe === 'success') {
-      gtag('event', 'subscribed', {
+      window.gtag('event', 'subscribed', {
         'event_category': 'splash',
         'non_interaction': false
       });
@@ -131,7 +131,7 @@ class Subscribe extends React.Component<Props,State> {
         </div>
       );
     } else if (subscribe === 'error') {
-      gtag('event', 'subscribe_error', {
+      window.gtag('event', 'subscribe_error', {
         'event_category': 'splash',
         'non_interaction': false
       });

@@ -1,6 +1,8 @@
 import { bool } from 'aws-sdk/clients/signer';
 import Amplify, { PubSub } from 'aws-amplify';
-import AWS from 'aws-sdk';
+
+import DynamoDB from 'aws-sdk/clients/dynamodb'
+import AWS from 'aws-sdk/global'
 
 import Peer from 'simple-peer';
 import PeerService from './PeerService';
@@ -164,7 +166,7 @@ async function updateMatch(
   const stateStr = state ? JSON.stringify(state) : '{}';
 
   console.log('saving to key', teamkey, 'state: ', statekey, stateStr);
-  const params2: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
+  const params2: DynamoDB.DocumentClient.UpdateItemInput = {
     Key: {
       id: matchid
     },
@@ -216,10 +218,10 @@ async function handShakeOther(matchid: string, state:any, p: PeerService) {
   return p;
 }*/
 
-let docClient: AWS.DynamoDB.DocumentClient;
+let docClient: DynamoDB.DocumentClient;
 export function init(): void {
   if (!docClient)
-    docClient = new AWS.DynamoDB.DocumentClient({
+    docClient = new DynamoDB.DocumentClient({
       apiVersion: '2012-08-10'
     });
 }
