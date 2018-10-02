@@ -1,15 +1,11 @@
 /* tslint:disable:no-bitwise */
 import awsmobile from '../aws-exports.js';
-// import AWS from 'aws-sdk';
-import 'aws-sdk/lib/node_loader';
+import 'aws-sdk/lib/node_loader'; // first time only
 
 import Core from 'aws-sdk/lib/core'
 import AWS from 'aws-sdk/global'
 
 import Auth from '@aws-amplify/auth';
-// import Amplify, { PubSub } from 'aws-amplify';
-// import { AWSIoTProvider } from 'aws-amplify/lib/PubSub/Providers';
-import { AWSIoTProvider } from '@aws-amplify/pubsub';
 /* Debug only
 import Amplify from 'aws-amplify';
 Amplify.Logger.LOG_LEVEL = 'DEBUG';
@@ -27,12 +23,6 @@ const IdentityPoolId = awsconfig.Auth.identityPoolId;
 
 if (!AWS.config || !AWS.config.region) {
   AWS.config = new AWS.Config({ region: 'us-east-1' });
-  // Amplify.addPluggable(new AWSIoTProvider());
-  /* AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId,
-    RoleArn: 'arn:aws:iam::681274315116:role/dtc_auth_MOBILEHUB_871967846'
-    // data.pool.userPoolId
-  });*/
 }
 
 function getLoggger() {
