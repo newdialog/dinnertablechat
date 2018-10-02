@@ -1,5 +1,4 @@
 import { bool } from 'aws-sdk/clients/signer';
-import Amplify, { PubSub } from 'aws-amplify';
 
 import DynamoDB from 'aws-sdk/clients/dynamodb'
 import AWS from 'aws-sdk/global'
@@ -8,7 +7,6 @@ import Peer from 'simple-peer';
 import PeerService from './PeerService';
 
 import retry from 'async-retry';
-import { Strings } from 'aws-sdk/clients/opsworkscm';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
