@@ -12,20 +12,28 @@ import Loadable from 'react-loadable';
 const asyncPlay = Loadable({
   loader: () => import('./menus/MenuHome'),
   loading: Loading,
-  delay: 200, // 0.3 seconds
+  delay: 200,
 });
 
 const asyncPrivacy = Loadable({
   loader: () => import('./privacy/Privacy'),
   loading: Loading,
-  delay: 200, // 0.3 seconds
+  delay: 200,
 });
 
 const asyncDebate = Loadable({
   loader: () => import('./debate/DebateRouter'),
   loading: Loading,
-  delay: 200, // 0.3 seconds
+  delay: 200,
 });
+
+const NoMatch = ({ location }) => (
+  <div>
+    <h1>...</h1>
+    <h3>No page match for <code>{location.pathname}</code></h3>
+    <p><a href="/">Return home</a></p>
+  </div>
+)
 
 const DTCRouter = ( {history}:{history:any} ) => (
   <Router history={history}>
@@ -39,6 +47,7 @@ const DTCRouter = ( {history}:{history:any} ) => (
 
       <Redirect from="/signin" to="/"/>
       <Redirect from="/signout" to="/"/>
+      <Route component={NoMatch} />
     </Switch>
   </Router>
 );
