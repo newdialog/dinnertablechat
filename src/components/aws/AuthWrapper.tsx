@@ -3,7 +3,7 @@ import React from 'react';
 import * as Store from '../../models/AppModel';
 import { observer } from 'mobx-react';
 import * as AuthService from '../../services/AuthService';
-import { withOAuth } from 'aws-amplify-react';
+// import { withOAuth } from 'aws-amplify-react';
 
 interface Props {
   store: Store.Type;
@@ -44,4 +44,5 @@ class Auth extends React.Component<Props, State> {
   }
 }
 
-export default withOAuth(Auth);
+export default (Auth);
+// withOAuth
