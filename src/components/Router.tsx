@@ -1,11 +1,31 @@
 import * as React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import Home from './home/home'
-import MenuHome from './menus/MenuHome'
+// import MenuHome from './menus/MenuHome'
+
 // import RTCHome from './debate/DebateScene'
 // import LoadingMatch from './debate/DebateTester'
-import DebateRouter from './debate/DebateRouter'
-import Privacy from './privacy/Privacy';
+// import DebateRouter from './debate/DebateRouter'
+// import Privacy from './privacy/Privacy';
+import Loadable from 'react-loadable';
+
+const asyncPlay = Loadable({
+  loader: () => import('./menus/MenuHome'),
+  loading: Loading,
+  delay: 200, // 0.3 seconds
+});
+
+const asyncPrivacy = Loadable({
+  loader: () => import('./privacy/Privacy'),
+  loading: Loading,
+  delay: 200, // 0.3 seconds
+});
+
+const asyncDebate = Loadable({
+  loader: () => import('./debate/DebateRouter'),
+  loading: Loading,
+  delay: 200, // 0.3 seconds
+});
 
 const DTCRouter = ( {history}:{history:any} ) => (
   <Router history={history}>
@@ -13,15 +33,26 @@ const DTCRouter = ( {history}:{history:any} ) => (
       <Route exact={true} path="/" component={Home} />
       <Route exact={true} path="/callback" component={Home} />
 
-     <Route path="/privacy" component={Privacy}/>
-      <Route path="/play" component={MenuHome}/>
-      <Route path="/match" component={DebateRouter}/>
+     <Route path="/privacy" component={asyncPrivacy}/>
+      <Route path="/play" component={asyncPlay}/>
+      <Route path="/match" component={asyncDebate}/>
 
       <Redirect from="/signin" to="/"/>
       <Redirect from="/signout" to="/"/>
     </Switch>
   </Router>
 );
+
+function Loading(props:any) {
+  if (props.error) {
+    return <div>Error! <button onClick={ props.retry }>Retry</button></div>;
+  } else if (props.pastDelay) {
+    return <div>Loading...</div>;
+  } else {
+    return null;
+  }
+}
+
 /*
 <Route path="/rtc" component={RTCHome}/>
 <DefaultRoute component={Home} />
