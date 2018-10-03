@@ -34,6 +34,7 @@ const NoMatch = ({ location }) => (
     <p><a href="/">Return home</a></p>
   </div>
 )
+// <Route component={NoMatch} />
 
 const DTCRouter = ( {history}:{history:any} ) => (
   <Router history={history}>
@@ -47,7 +48,8 @@ const DTCRouter = ( {history}:{history:any} ) => (
 
       <Redirect from="/signin" to="/"/>
       <Redirect from="/signout" to="/"/>
-      <Route component={NoMatch} />
+      
+      <Route render={() => <Redirect to="/" />} />
     </Switch>
   </Router>
 );
