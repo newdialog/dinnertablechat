@@ -20,11 +20,8 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
     },
-    centered: {
-      marginTop: '60px',
+    centered2: {
       paddingTop: '0',
-      paddingLeft: '1em',
-      paddingRight: '1em',
       marginLeft: 'auto',
       marginRight: 'auto',
       width: 'auto',
@@ -116,7 +113,7 @@ class DebateScene extends React.Component<Props, any> {
     const { open } = this.state;
     return (
       <React.Fragment>
-        <div className={classes.centered}>
+        <div className={classes.centered2}>
           <div>
             <h1>Debate Room System</h1>
             <div>Microphone is activating</div>
