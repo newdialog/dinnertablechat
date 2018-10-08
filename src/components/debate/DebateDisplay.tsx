@@ -73,14 +73,23 @@ const rabitTalkOptions = {
 interface Props extends WithStyles<typeof styles> {
   // store: AppModel.Type;
   talkingBlue: boolean;
+  talkingBlueBlend: number;
   talkingRed: boolean;
 }
 
 // interface State {}
 
 class DebateScene extends React.Component<Props, any> {
+  public static getDerivedStateFromProps(nextProps:Props, prevState:Props) {
+    if(nextProps.talkingBlue !== prevState.talkingBlue ) {
+      return {};
+    }
+    return {};
+  }
+
   public speechEvents: SpeechEvent;
   private vidRef = React.createRef<HTMLVideoElement>();
+
   constructor(props: Props) {
     super(props);
     this.state = { open: false };
@@ -90,6 +99,7 @@ class DebateScene extends React.Component<Props, any> {
 
   public render() {
     const { classes, talkingBlue, talkingRed } = this.props;
+    // if(this.state.talkingBlueBlend > 0 )
 
     console.log('talkingBlue', talkingBlue);
     // const { } = this.state;
@@ -103,7 +113,7 @@ class DebateScene extends React.Component<Props, any> {
                   speed={1}
                   options={aliceListenOptions}
                   isClickToPauseDisabled={true}
-                  width={200}
+                  width={600}
                 />
               </div>
               <div hidden={!talkingBlue}>
@@ -111,7 +121,7 @@ class DebateScene extends React.Component<Props, any> {
                   speed={1}
                   options={aliceTalkOptions}
                   isClickToPauseDisabled={true}
-                  width={200}
+                  width={600}
                 />
               </div>
             </div>
