@@ -54,9 +54,9 @@
 }
 
 .flip {
-  -moz-transform: scale(-1, 1);
-  -webkit-transform: scale(-1, 1);
-  -o-transform: scale(-1, 1);
-  -ms-transform: scale(-1, 1);
-  transform: scale(-1, 1);
+  -moz-transform: scale(-.5, .5);
+  -webkit-transform: scale(-.5, .5);
+  -o-transform: scale(-.5, .5);
+  -ms-transform: scale(-.5, .5);
+  transform: scale(-.5, .5);
 }

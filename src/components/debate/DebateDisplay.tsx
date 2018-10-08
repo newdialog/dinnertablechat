@@ -30,6 +30,17 @@ const styles = (theme: Theme) =>
       width: 'auto',
       maxWidth: '1000px',
       minWidth: '300px'
+    },
+    leftPos: {
+      position:'absolute',
+      left: 0,
+      width:300,
+      // transform: 'scale(1, 1)'
+    },
+    rightPos: {
+      position:'absolute',
+      right:0,
+      transform: 'scale(-.5, .5)'
     }
   });
 
@@ -73,7 +84,7 @@ const rabitTalkOptions = {
 interface Props extends WithStyles<typeof styles> {
   // store: AppModel.Type;
   talkingBlue: boolean;
-  talkingBlueBlend: number;
+  // talkingBlueBlend: number;
   talkingRed: boolean;
 }
 
@@ -106,14 +117,13 @@ class DebateScene extends React.Component<Props, any> {
     return (
       <React.Fragment>
         <div className={classes.centered}>
-          <div>
-            <div>
+          <div style={{margin:'0 auto 0 auto', width: '100%'}}>
+            <div className={classes.leftPos}>
               <div hidden={talkingBlue}>
                 <Lottie
                   speed={1}
                   options={aliceListenOptions}
                   isClickToPauseDisabled={true}
-                  width={600}
                 />
               </div>
               <div hidden={!talkingBlue}>
@@ -121,17 +131,15 @@ class DebateScene extends React.Component<Props, any> {
                   speed={1}
                   options={aliceTalkOptions}
                   isClickToPauseDisabled={true}
-                  width={600}
                 />
               </div>
             </div>
-            <div className="flip">
+            <div className="flip {classes.rightPos}">
               <div hidden={talkingRed}>
                 <Lottie
                   speed={1}
                   options={rabitListenOptions}
                   isClickToPauseDisabled={true}
-                  width={200}
                 />
               </div>
               <div hidden={!talkingRed}>
@@ -139,7 +147,6 @@ class DebateScene extends React.Component<Props, any> {
                   speed={1}
                   options={rabitTalkOptions}
                   isClickToPauseDisabled={true}
-                  width={200}
                 />
               </div>
             </div>
