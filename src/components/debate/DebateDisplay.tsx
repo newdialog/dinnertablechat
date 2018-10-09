@@ -50,7 +50,7 @@ const styles = (theme: Theme) =>
 const aliceListenOptions = {
   loop: true,
   autoplay: true,
-  path: 'assets/00_ALCE_LISTEN.json',
+  path: 'assets/debate/01_ALCE_TALK2.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -59,7 +59,7 @@ const aliceListenOptions = {
 const aliceTalkOptions = {
   loop: true,
   autoplay: true,
-  path: 'assets/00_ALCE_TALK.json',
+  path: 'assets/debate/01_ALCE_TALK2.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -93,6 +93,10 @@ interface Props extends WithStyles<typeof styles> {
 
 // interface State {}
 // flip
+/*
+  .mouthidle
+  .mouthtalking
+/*
 
 class DebateScene extends React.Component<Props, any> {
   public static getDerivedStateFromProps(nextProps:Props, prevState:Props) {
