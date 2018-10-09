@@ -60,3 +60,19 @@
   -ms-transform: scale(-1, 1);
   transform: scale(-1, 1);
 }
+
+.talking .mouthidle {
+  visibility: hidden;
+}
+
+.talking .mouthtalking {
+  visibility: visible;
+}
+
+.idle .mouthidle {
+  visibility: visible;
+}
+
+.idle .mouthtalking {
+  visibility: hidden;
+}

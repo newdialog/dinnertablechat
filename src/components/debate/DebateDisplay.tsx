@@ -32,17 +32,17 @@ const styles = (theme: Theme) =>
       minWidth: '300px'
     },
     leftPos: {
-      position:'absolute',
+      position: 'absolute',
       left: 'calc(50vw - 250px)',
       top: 'calc(50vh - 300px)',
-      width:300,
+      width: 300
       // transform: 'scale(1, 1)'
     },
     rightPos: {
-      position:'absolute',
+      position: 'absolute',
       left: 'calc(50vw)',
       top: 'calc(50vh - 298px)',
-      width:355,
+      width: 355
       // transform: 'scale(-.5, .5)'
     }
   });
@@ -50,7 +50,7 @@ const styles = (theme: Theme) =>
 const aliceListenOptions = {
   loop: true,
   autoplay: true,
-  path: 'assets/debate/01_ALCE_TALK2.json',
+  path: 'assets/debate/01_RABIT_IDLE.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -59,7 +59,7 @@ const aliceListenOptions = {
 const aliceTalkOptions = {
   loop: true,
   autoplay: true,
-  path: 'assets/debate/01_ALCE_TALK2.json',
+  path: 'assets/debate/01_RABIT_TALK2.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -68,7 +68,7 @@ const aliceTalkOptions = {
 const rabitListenOptions = {
   loop: true,
   autoplay: true,
-  path: 'assets/01_RABIT_LISTEN.json',
+  path: 'assets/debate/01_RABIT_IDLE.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -77,7 +77,7 @@ const rabitListenOptions = {
 const rabitTalkOptions = {
   loop: true,
   autoplay: true,
-  path: 'assets/01_RABIT_TALK.json',
+  path: 'assets/debate/01_RABIT_TALK2.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -96,15 +96,17 @@ interface Props extends WithStyles<typeof styles> {
 /*
   .mouthidle
   .mouthtalking
-/*
+*/
 
 class DebateScene extends React.Component<Props, any> {
-  public static getDerivedStateFromProps(nextProps:Props, prevState:Props) {
-    if(nextProps.talkingBlue !== prevState.talkingBlue ) {
+  public static getDerivedStateFromProps(nextProps: Props, prevState: Props) {
+    if (nextProps.talkingBlue !== prevState.talkingBlue) {
       return {};
     }
     return {};
   }
+  private blue = React.createRef<HTMLDivElement>();
+  private red = React.createRef<HTMLDivElement>();
 
   public speechEvents: SpeechEvent;
   private vidRef = React.createRef<HTMLVideoElement>();
@@ -114,7 +116,8 @@ class DebateScene extends React.Component<Props, any> {
     this.state = { open: false };
   }
 
-  public componentDidMount() {}
+  public componentDidMount() {
+  }
 
   public render() {
     const { classes, talkingBlue, talkingRed } = this.props;
@@ -122,12 +125,14 @@ class DebateScene extends React.Component<Props, any> {
 
     console.log('talkingBlue', talkingBlue);
     // const { } = this.state;
+    const blueCss = talkingBlue ? 'talking' : 'idle';
+    const redCss = talkingRed ? 'talking' : 'idle';
     return (
       <React.Fragment>
         <div className={classes.centered}>
-          <div style={{margin:'0 auto 0 auto', width: '100%'}}>
-            <div className={classes.leftPos}>
-              <div hidden={talkingBlue}>
+          <div style={{ margin: '0 auto 0 auto', width: '100%' }}>
+            <div className={classes.leftPos + ' ' + blueCss}>
+              <div hidden={talkingBlue} ref={this.blue}>
                 <Lottie
                   speed={1}
                   options={aliceListenOptions}
@@ -142,8 +147,8 @@ class DebateScene extends React.Component<Props, any> {
                 />
               </div>
             </div>
-            <div className={'flip ' + classes.rightPos}>
-              <div hidden={talkingRed}>
+            <div className={'flip ' + classes.rightPos + ' ' + redCss}>
+              <div hidden={talkingRed} ref={this.red}>
                 <Lottie
                   speed={1}
                   options={rabitListenOptions}
@@ -178,3 +183,23 @@ class DebateScene extends React.Component<Props, any> {
 }
 
 export default withRoot(withStyles(styles)(DebateScene));
+
+/*
+    if(!talkingBlue && this.blue.current) {
+      this.blue.current!.querySelector('.mouthtalking')!.setAttribute('style', 'visibility: none;');
+      this.blue.current!.querySelector('.mouthidle')!.setAttribute('style', 'visibility: visible;');
+    }
+    if(talkingBlue && this.blue.current) {
+      this.blue.current!.querySelector('.mouthtalking')!.setAttribute('style', 'visibility: visible;');
+      this.blue.current!.querySelector('.mouthidle')!.setAttribute('style', 'visibility: none;');
+    }
+    
+    if(!talkingRed && this.red.current) {
+      this.red.current!.querySelector('.mouthtalking')!.setAttribute('style', 'visibility: none;');
+      this.red.current!.querySelector('.mouthidle')!.setAttribute('style', 'visibility: visible;');
+    }
+    if(talkingRed && this.red.current) {
+      this.red.current!.querySelector('.mouthtalking')!.setAttribute('style', 'visibility: visible;');
+      this.red.current!.querySelector('.mouthidle')!.setAttribute('style', 'visibility: none;');
+    }
+    */
