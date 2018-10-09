@@ -33,14 +33,17 @@ const styles = (theme: Theme) =>
     },
     leftPos: {
       position:'absolute',
-      left: 0,
+      left: 'calc(50vw - 250px)',
+      top: 'calc(50vh - 300px)',
       width:300,
       // transform: 'scale(1, 1)'
     },
     rightPos: {
       position:'absolute',
-      right:0,
-      transform: 'scale(-.5, .5)'
+      left: 'calc(50vw)',
+      top: 'calc(50vh - 298px)',
+      width:355,
+      // transform: 'scale(-.5, .5)'
     }
   });
 
@@ -89,6 +92,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 // interface State {}
+// flip
 
 class DebateScene extends React.Component<Props, any> {
   public static getDerivedStateFromProps(nextProps:Props, prevState:Props) {
@@ -134,7 +138,7 @@ class DebateScene extends React.Component<Props, any> {
                 />
               </div>
             </div>
-            <div className="flip {classes.rightPos}">
+            <div className={'flip ' + classes.rightPos}>
               <div hidden={talkingRed}>
                 <Lottie
                   speed={1}
