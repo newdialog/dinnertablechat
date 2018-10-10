@@ -22,6 +22,7 @@ const theme = createMuiTheme({
     }
   },
   typography: {
+    suppressDeprecationWarnings: true,
     // Use the system font instead of the default Roboto font.
     body1: {
       fontSize: '1.1em',

@@ -37,12 +37,7 @@ function Footer(props: Props) {
             <a href="https://twitter.com/dintablechat" onClick={()=>trackOutboundLink('https://twitter.com/dintablechat')}>
               <i id="social-tw" className="fab fa-twitter-square social fa-3x "></i>
             </a>
-            <a href="mailto:admin@dinnertable.chat" onClick={()=>trackOutboundLink('mailto:admin@dinnertable.chat')}>
-              <i
-                id="social-em"
-                className="fa fa-envelope-square fa-3x social"
-              />
-            </a>
+            
           </div>
         </div>
       </section>
@@ -55,6 +50,12 @@ function Footer(props: Props) {
   );
 }
 /*
+<a href="mailto:admin@dinnertable.chat" onClick={()=>trackOutboundLink('mailto:admin@dinnertable.chat')}>
+              <i
+                id="social-em"
+                className="fa fa-envelope-square fa-3x social"
+              />
+            </a>
 <a href="https://discord.gg/U6h8pE9">
               <i
                 id="social-discord"
