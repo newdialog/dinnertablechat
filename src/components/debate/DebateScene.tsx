@@ -30,26 +30,27 @@ const styles = (theme: Theme) =>
       minWidth: '300px'
     }
   });
-  import * as AppModel from '../../models/AppModel';
+import * as AppModel from '../../models/AppModel';
 import PeerService from '../../services/PeerService';
 interface Props extends WithStyles<typeof styles> {
-  store: AppModel.Type,
-  peer: PeerService
+  store: AppModel.Type;
+  peer: PeerService;
 }
 
 interface State {
-  talkingBlue:boolean,
-  talkingRed:boolean,
+  talkingBlue: boolean;
+  talkingRed: boolean;
   // speaking:boolean
 }
 
 class DebateScene extends React.Component<Props, State> {
-  public peer:PeerService
-  public speechEvents:SpeechEvent
-  private vidRef = React.createRef<HTMLVideoElement>()
+  public peer: PeerService;
+  public speechEvents: SpeechEvent;
+  public speechSelfEvents: SpeechEvent;
+  private vidRef = React.createRef<HTMLVideoElement>();
   constructor(props: Props) {
     super(props);
-    this.state = { talkingBlue: false, talkingRed:false };
+    this.state = { talkingBlue: false, talkingRed: false };
     this.peer = props.peer;
   }
 
@@ -60,9 +61,29 @@ class DebateScene extends React.Component<Props, State> {
       this.gotMedia.bind(this),
       () => {}
     );*/
+    // stream: MediaStream
+  }
+
+  private setupSelfVoice() {
+    const options = {};
+    this.speechSelfEvents = hark(this.peer.getLocalStream(), options);
+
+    this.speechSelfEvents.on('speaking', () => {
+      // console.log('speaking');
+      this.setState({ talkingBlue: true });
+      // document.querySelector('#speaking').textContent = 'YES';
+    });
+
+    this.speechSelfEvents.on('stopped_speaking', () => {
+      // console.log('stopped_speaking');
+      this.setState({ talkingBlue: false });
+      // document.querySelector('#speaking').textContent = 'NO';
+    });
   }
 
   public gotMedia = (stream?: MediaStream) => {
+    this.setupSelfVoice();
+
     const isInit = false; // todo
     /* const p = new Peer({
       initiator: isInit,
@@ -74,11 +95,6 @@ class DebateScene extends React.Component<Props, State> {
     p.on('error', err => {
       console.log('error', err);
     });
-    /*document.querySelector('#form').addEventListener('submit', function (ev) {
-        ev.preventDefault()
-        console.log('sending')
-        p.signal(JSON.parse(document.querySelector('#incoming').value))
-    })*/
 
     p.on('data', data => {
       console.log('data: ' + data);
@@ -100,20 +116,20 @@ class DebateScene extends React.Component<Props, State> {
 
       this.speechEvents.on('speaking', () => {
         // console.log('speaking');
-        this.setState({talkingRed:true})
+        this.setState({ talkingRed: true });
         // document.querySelector('#speaking').textContent = 'YES';
       });
 
       this.speechEvents.on('stopped_speaking', () => {
         // console.log('stopped_speaking');
-        this.setState({talkingRed:false})
+        this.setState({ talkingRed: false });
         // document.querySelector('#speaking').textContent = 'NO';
       });
     });
 
     // p.addStream(stream);
     console.log('addStream');
-  }
+  };
 
   public render() {
     const { classes } = this.props;

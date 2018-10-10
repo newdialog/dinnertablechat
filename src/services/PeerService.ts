@@ -17,6 +17,10 @@ export default class PeerService {
     this._stream = stream;
   }
 
+  public getLocalStream(): MediaStream {
+    return this._stream;
+  }
+
   public init(initiator: boolean, cbs: CallBacks) {
     this._peer = new Peer({ initiator, trickle: false, stream: this._stream });
     this._peer.on('signal', (data: any) => {

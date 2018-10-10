@@ -172,7 +172,7 @@ class DebateScene extends React.Component<Props, State> {
     const animRed = this.state.redState === 'talking';
     // if(this.state.talkingBlueBlend > 0 )
 
-    console.log('talkingBlue', talkingBlue, blueTransition);
+    // console.log('talkingBlue', talkingBlue, blueTransition);
     // const { } = this.state;
     const blueCss = talkingBlue ? 'talking' : 'idle';
     const redCss = talkingRed ? 'talking' : 'idle';
