@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import Home from './home/home'
 // import MenuHome from './menus/MenuHome'
-
 // import RTCHome from './debate/DebateScene'
 // import LoadingMatch from './debate/DebateTester'
 // import DebateRouter from './debate/DebateRouter'
@@ -27,6 +26,13 @@ const asyncDebate = Loadable({
   delay: 200,
 });
 
+const asyncDisplay = Loadable({
+  loader: () => import('./debate/DebateTester'),
+  loading: Loading,
+  delay: 200,
+});
+
+
 const NoMatch = ({ location }) => (
   <div>
     <h1>...</h1>
@@ -45,6 +51,7 @@ const DTCRouter = ( {history}:{history:any} ) => (
      <Route path="/privacy" component={asyncPrivacy}/>
       <Route path="/play" component={asyncPlay}/>
       <Route path="/match" component={asyncDebate}/>
+      <Route path="/test" component={asyncDisplay}/>
 
       <Redirect from="/signin" to="/"/>
       <Redirect from="/signout" to="/"/>

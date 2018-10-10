@@ -13,6 +13,7 @@ import { Typography, Divider } from '@material-ui/core';
 
 import hark, { SpeechEvent } from 'hark';
 import Peer from 'simple-peer';
+import DebateDisplay from './DebateDisplay';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -20,11 +21,8 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
     },
-    centered: {
-      marginTop: '60px',
+    centered2: {
       paddingTop: '0',
-      paddingLeft: '1em',
-      paddingRight: '1em',
       marginLeft: 'auto',
       marginRight: 'auto',
       width: 'auto',
@@ -39,13 +37,19 @@ interface Props extends WithStyles<typeof styles> {
   peer: PeerService
 }
 
-class DebateScene extends React.Component<Props, any> {
+interface State {
+  talkingBlue:boolean,
+  talkingRed:boolean,
+  // speaking:boolean
+}
+
+class DebateScene extends React.Component<Props, State> {
   public peer:PeerService
   public speechEvents:SpeechEvent
   private vidRef = React.createRef<HTMLVideoElement>()
   constructor(props: Props) {
     super(props);
-    this.state = { open: false };
+    this.state = { talkingBlue: false, talkingRed:false };
     this.peer = props.peer;
   }
 
@@ -96,13 +100,13 @@ class DebateScene extends React.Component<Props, any> {
 
       this.speechEvents.on('speaking', () => {
         // console.log('speaking');
-        this.setState({speaking:true})
+        this.setState({talkingRed:true})
         // document.querySelector('#speaking').textContent = 'YES';
       });
 
       this.speechEvents.on('stopped_speaking', () => {
         // console.log('stopped_speaking');
-        this.setState({speaking:false})
+        this.setState({talkingRed:false})
         // document.querySelector('#speaking').textContent = 'NO';
       });
     });
@@ -113,35 +117,25 @@ class DebateScene extends React.Component<Props, any> {
 
   public render() {
     const { classes } = this.props;
-    const { open } = this.state;
+    const { talkingBlue, talkingRed } = this.state;
     return (
       <React.Fragment>
-        <div className={classes.centered}>
+        <div className={classes.centered2}>
           <div>
             <h1>Debate Room System</h1>
             <div>Microphone is activating</div>
-            <div id="video">
+            <div id="video" hidden={true}>
               <video ref={this.vidRef} autoPlay={true} />
             </div>
             <br />
-            {this.state.speaking && <div>Other is Speaking</div>}
+            {this.state.talkingBlue && <div>Other is Speaking</div>} --
+            {this.state.talkingRed && <div>Red is Speaking</div>}
           </div>
+          <DebateDisplay talkingBlue={talkingBlue} talkingRed={talkingRed} />
         </div>
       </React.Fragment>
     );
   }
-
-  private handleClose = () => {
-    this.setState({
-      open: false
-    });
-  };
-
-  private handleClick = () => {
-    this.setState({
-      open: true
-    });
-  };
 }
 
 export default withRoot(withStyles(styles)(DebateScene));
