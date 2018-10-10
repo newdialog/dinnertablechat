@@ -13,7 +13,7 @@ import { Typography, Divider } from '@material-ui/core';
 
 import hark, { SpeechEvent } from 'hark';
 import Peer from 'simple-peer';
-
+import DebateFloatMenu from './DebateFloatMenu';
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -34,16 +34,28 @@ const styles = (theme: Theme) =>
     leftPos: {
       position: 'absolute',
       left: 'calc(50vw - 250px)',
-      top: 'calc(50vh - 300px)',
+      // top: 'calc(50vh - 300px)',
+      bottom: 'calc(10vh)',
       width: 300
       // transform: 'scale(1, 1)'
     },
     rightPos: {
       position: 'absolute',
       left: 'calc(50vw)',
-      top: 'calc(50vh - 298px)',
+      // top: 'calc(50vh - 298px)',
+      bottom: 'calc(10vh)',
       width: 355
       // transform: 'scale(-.5, .5)'
+    },
+    bannerAnim: {
+      position: 'absolute',
+      left:0,
+      top:0,
+      bottom: 0,
+      right: 0
+    },
+    bannerRef: {
+
     }
   });
 
@@ -78,6 +90,24 @@ const rabitTalkOptions = {
   loop: true,
   autoplay: true,
   path: 'assets/debate/01_RABIT_TALK2.json',
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
+
+const bgOptions = {
+  loop: true,
+  autoplay: true,
+  path: 'assets/background.json',
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
+
+const tableOptions = {
+  loop: true,
+  autoplay: true,
+  path: 'assets/debate/Table.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -128,6 +158,11 @@ class DebateScene extends React.Component<Props, State> {
     this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
 
   };
+  /*
+  <div className={classes.bannerAnim}>
+              <Lottie options={tableOptions} ref={classes.bannerRef} isClickToPauseDisabled={true}/>
+            </div>
+  */
 
   public render() {
     const { classes, talkingBlue, talkingRed } = this.props;
@@ -145,6 +180,11 @@ class DebateScene extends React.Component<Props, State> {
       <React.Fragment>
         <div className={classes.centered}>
           <div style={{ margin: '0 auto 0 auto', width: '100%' }}>
+            <div className={classes.bannerAnim}>
+              <Lottie options={bgOptions} ref={classes.bannerRef} isClickToPauseDisabled={true}/>
+            </div>
+            
+
             <div className={classes.leftPos + ' ' + blueCss}>
               <div hidden={animBlue} ref={this.blue}>
                 <Lottie
@@ -182,6 +222,7 @@ class DebateScene extends React.Component<Props, State> {
             </div>
           </div>
         </div>
+        <DebateFloatMenu/>
       </React.Fragment>
     );
   }
