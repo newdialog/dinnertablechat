@@ -50,7 +50,7 @@ const styles = (theme: Theme) =>
 const aliceListenOptions = {
   loop: true,
   autoplay: true,
-  path: 'assets/debate/01_RABIT_IDLE.json',
+  path: 'assets/debate/00_ALCE_IDLE.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -59,7 +59,7 @@ const aliceListenOptions = {
 const aliceTalkOptions = {
   loop: true,
   autoplay: true,
-  path: 'assets/debate/01_RABIT_TALK2.json',
+  path: 'assets/debate/00_ALCE_TALK.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -87,21 +87,25 @@ const rabitTalkOptions = {
 interface Props extends WithStyles<typeof styles> {
   // store: AppModel.Type;
   talkingBlue: boolean;
-  // talkingBlueBlend: number;
   talkingRed: boolean;
 }
 
-// interface State {}
+interface State {
+  blueTransition: boolean;
+  blueState:string;
+  redTransition: boolean;
+  redState:string;
+}
 // flip
 /*
   .mouthidle
   .mouthtalking
 */
 
-class DebateScene extends React.Component<Props, any> {
+class DebateScene extends React.Component<Props, State> {
   public static getDerivedStateFromProps(nextProps: Props, prevState: Props) {
     if (nextProps.talkingBlue !== prevState.talkingBlue) {
-      return {};
+      return { blueTransition: false };
     }
     return {};
   }
@@ -113,17 +117,27 @@ class DebateScene extends React.Component<Props, any> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { open: false };
+    this.state = { blueTransition: false, blueState: 'idle', redTransition: false, redState: 'idle' };
   }
 
-  public componentDidMount() {
-  }
+  public componentDidMount() {}
+
+  private onLoopComplete = () => {
+    console.log('onLoopComplete', this.props.talkingBlue)
+    // if(this.props.talkingBlue) this.setState({ blueTransition: true });
+    this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
+
+  };
 
   public render() {
     const { classes, talkingBlue, talkingRed } = this.props;
+    const { blueTransition } = this.state;
+
+    const animBlue = this.state.blueState === 'talking';
+    const animRed = this.state.redState === 'talking';
     // if(this.state.talkingBlueBlend > 0 )
 
-    console.log('talkingBlue', talkingBlue);
+    console.log('talkingBlue', talkingBlue, blueTransition);
     // const { } = this.state;
     const blueCss = talkingBlue ? 'talking' : 'idle';
     const redCss = talkingRed ? 'talking' : 'idle';
@@ -132,32 +146,35 @@ class DebateScene extends React.Component<Props, any> {
         <div className={classes.centered}>
           <div style={{ margin: '0 auto 0 auto', width: '100%' }}>
             <div className={classes.leftPos + ' ' + blueCss}>
-              <div hidden={talkingBlue} ref={this.blue}>
+              <div hidden={animBlue} ref={this.blue}>
                 <Lottie
-                  speed={1}
+                  speed={1.2}
                   options={aliceListenOptions}
                   isClickToPauseDisabled={true}
+                  eventListeners={[
+                    { eventName: 'loopComplete', callback: this.onLoopComplete }
+                  ]}
                 />
               </div>
-              <div hidden={!talkingBlue}>
+              <div hidden={!animBlue}>
                 <Lottie
-                  speed={1}
+                  speed={1.2}
                   options={aliceTalkOptions}
                   isClickToPauseDisabled={true}
                 />
               </div>
             </div>
             <div className={'flip ' + classes.rightPos + ' ' + redCss}>
-              <div hidden={talkingRed} ref={this.red}>
+              <div hidden={animRed} ref={this.red}>
                 <Lottie
-                  speed={1}
+                  speed={1.2}
                   options={rabitListenOptions}
                   isClickToPauseDisabled={true}
                 />
               </div>
-              <div hidden={!talkingRed}>
+              <div hidden={!animRed}>
                 <Lottie
-                  speed={1}
+                  speed={1.2}
                   options={rabitTalkOptions}
                   isClickToPauseDisabled={true}
                 />
@@ -168,18 +185,6 @@ class DebateScene extends React.Component<Props, any> {
       </React.Fragment>
     );
   }
-
-  private handleClose = () => {
-    this.setState({
-      open: false
-    });
-  };
-
-  private handleClick = () => {
-    this.setState({
-      open: true
-    });
-  };
 }
 
 export default withRoot(withStyles(styles)(DebateScene));

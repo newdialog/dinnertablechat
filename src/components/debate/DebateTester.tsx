@@ -86,7 +86,7 @@ class DebateScene extends React.Component<Props, State> {
       rawSpeaking = false;
       setTimeout( () => {
           if(!rawSpeaking) this.setState({talkingBlue:false})
-      }, 100);
+      }, 140);
       // document.querySelector('#speaking').textContent = 'NO';
     });
   }
