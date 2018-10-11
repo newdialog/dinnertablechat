@@ -25,9 +25,13 @@ const styles = theme =>
       padding: `${theme.spacing.unit * 4}px 0`,
     },
     card: {
+      minWidth: '300px',
+      width: '50vw',
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
+      // width: '100%'
+      // width:'auto!important'
     },
     cardMedia: {
       paddingTop: '56.25%', // 16:9
@@ -61,32 +65,32 @@ class PositionSelector extends React.Component<Props, State> {
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
-        <Grid container spacing={40} justify="center">
+        <Grid container spacing={0} sm={1} md={1} lg={1} justify="center">
         {data.map((card, i) => (
-            <Grid item key={i} sm={6} md={4} lg={3}>
-            <Card className={classes.card}>
-                <CardMedia
-                className={classes.cardMedia}
-                image={card.photo}
-                title={card.topic}
-                />
-                <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="headline" component="h2">
-                    {card.topic}
-                </Typography>
-                <Typography>
-                    {card.proposition}
-                </Typography>
-                </CardContent>
-                <CardActions>
-                <Button size="small" color="primary" onClick={() => this.onSelect(1, card.proposition, card.topic)}>
-                    {card.positions[1]}
-                </Button>
-                <Button size="small" color="primary"onClick={() => this.onSelect(0, card.proposition, card.topic)}>
-                    {card.positions[0]}
-                </Button>
-                </CardActions>
-            </Card>
+            <Grid item key={i} sm={1} md={1} lg={1}>
+              <Card className={classes.card}>
+                  <CardMedia
+                  className={classes.cardMedia}
+                  image={card.photo}
+                  title={card.topic}
+                  />
+                  <CardContent className={classes.cardContent}>
+                  <Typography gutterBottom variant="headline" component="h2">
+                      {card.topic}
+                  </Typography>
+                  <Typography>
+                      {card.proposition}
+                  </Typography>
+                  </CardContent>
+                  <CardActions>
+                  <Button size="small" color="primary" onClick={() => this.onSelect(1, card.proposition, card.topic)}>
+                      {card.positions[1]}
+                  </Button>
+                  <Button size="small" color="primary"onClick={() => this.onSelect(0, card.proposition, card.topic)}>
+                      {card.positions[0]}
+                  </Button>
+                  </CardActions>
+              </Card>
             </Grid>
         ))}
         </Grid>
