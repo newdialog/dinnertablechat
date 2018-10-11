@@ -31,32 +31,49 @@ const styles = (theme: Theme) =>
       maxWidth: '1000px',
       minWidth: '300px'
     },
+    leftPos2: {
+      width: 300
+    },
+    rightPos2: {
+      width: 300,
+      float:'left'
+    },
     leftPos: {
       position: 'absolute',
-      left: 'calc(50vw - 250px)',
+      // left: 'calc(50vw - 250px)',
       // top: 'calc(50vh - 300px)',
       bottom: 'calc(10vh)',
-      width: 300
+      // width: 300,
+      // [theme.breakpoints.up('sm')]: {
+        left: 'calc(50vw - 70vh)',
+        width: '70vh',
+      // }
       // transform: 'scale(1, 1)'
     },
     rightPos: {
       position: 'absolute',
-      left: 'calc(50vw)',
+      // left: 'calc(50vw)',
       // top: 'calc(50vh - 298px)',
       bottom: 'calc(10vh)',
-      width: 355
+      // width: 355,
+      // [theme.breakpoints.up('sm')]: {
+        left: 'calc(50vw - 11vh)',
+        width: 'calc(60vh * 1.4)',
+      // }
       // transform: 'scale(-.5, .5)'
     },
     bannerAnim: {
       position: 'absolute',
-      left:0,
-      top:0,
+      left: 0,
+      top: 0,
       bottom: 0,
       right: 0
     },
-    bannerRef: {
-
-    }
+    foreground: {
+      margin: '0 auto 0 auto',
+      // bottom: 'calc(10vh)'
+    },
+    bannerRef: {}
   });
 
 const aliceListenOptions = {
@@ -122,9 +139,9 @@ interface Props extends WithStyles<typeof styles> {
 
 interface State {
   blueTransition: boolean;
-  blueState:string;
+  blueState: string;
   redTransition: boolean;
-  redState:string;
+  redState: string;
 }
 // flip
 /*
@@ -147,7 +164,12 @@ class DebateScene extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = { blueTransition: false, blueState: 'idle', redTransition: false, redState: 'idle' };
+    this.state = {
+      blueTransition: false,
+      blueState: 'idle',
+      redTransition: false,
+      redState: 'idle'
+    };
   }
 
   public componentDidMount() {}
@@ -156,7 +178,6 @@ class DebateScene extends React.Component<Props, State> {
     // console.log('onLoopComplete', this.props.talkingBlue)
     // if(this.props.talkingBlue) this.setState({ blueTransition: true });
     this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
-
   };
   /*
   <div className={classes.bannerAnim}>
@@ -181,48 +202,56 @@ class DebateScene extends React.Component<Props, State> {
         <div className={classes.centered}>
           <div style={{ margin: '0 auto 0 auto', width: '100%' }}>
             <div className={classes.bannerAnim}>
-              <Lottie options={bgOptions} ref={classes.bannerRef} isClickToPauseDisabled={true}/>
+              <Lottie
+                options={bgOptions}
+                ref={classes.bannerRef}
+                isClickToPauseDisabled={true}
+              />
             </div>
-            
 
-            <div className={classes.leftPos + ' ' + blueCss}>
-              <div hidden={animBlue} ref={this.blue}>
-                <Lottie
-                  speed={1.2}
-                  options={aliceListenOptions}
-                  isClickToPauseDisabled={true}
-                  eventListeners={[
-                    { eventName: 'loopComplete', callback: this.onLoopComplete }
-                  ]}
-                />
+            <div className={classes.foreground}>
+              <div className={classes.leftPos + ' ' + blueCss}>
+                <div hidden={animBlue} ref={this.blue}>
+                  <Lottie
+                    speed={1.2}
+                    options={aliceListenOptions}
+                    isClickToPauseDisabled={true}
+                    eventListeners={[
+                      {
+                        eventName: 'loopComplete',
+                        callback: this.onLoopComplete
+                      }
+                    ]}
+                  />
+                </div>
+                <div hidden={!animBlue}>
+                  <Lottie
+                    speed={1.2}
+                    options={aliceTalkOptions}
+                    isClickToPauseDisabled={true}
+                  />
+                </div>
               </div>
-              <div hidden={!animBlue}>
-                <Lottie
-                  speed={1.2}
-                  options={aliceTalkOptions}
-                  isClickToPauseDisabled={true}
-                />
-              </div>
-            </div>
-            <div className={'flip ' + classes.rightPos + ' ' + redCss}>
-              <div hidden={animRed} ref={this.red}>
-                <Lottie
-                  speed={1.2}
-                  options={rabitListenOptions}
-                  isClickToPauseDisabled={true}
-                />
-              </div>
-              <div hidden={!animRed}>
-                <Lottie
-                  speed={1.2}
-                  options={rabitTalkOptions}
-                  isClickToPauseDisabled={true}
-                />
+              <div className={'flip ' + classes.rightPos + ' ' + redCss}>
+                <div hidden={animRed} ref={this.red}>
+                  <Lottie
+                    speed={1.2}
+                    options={rabitListenOptions}
+                    isClickToPauseDisabled={true}
+                  />
+                </div>
+                <div hidden={!animRed}>
+                  <Lottie
+                    speed={1.2}
+                    options={rabitTalkOptions}
+                    isClickToPauseDisabled={true}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-        <DebateFloatMenu/>
+        <DebateFloatMenu />
       </React.Fragment>
     );
   }
