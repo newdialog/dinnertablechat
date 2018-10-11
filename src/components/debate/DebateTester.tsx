@@ -8,7 +8,7 @@ import {
 import withRoot from '../../withRoot';
 import hark, { SpeechEvent } from 'hark';
 import { observer } from 'mobx-react';
-import { Typography, Divider } from '@material-ui/core';
+import { Typography, Divider, Button } from '@material-ui/core';
 
 import DebateDisplay from './DebateDisplay';
 
@@ -109,8 +109,6 @@ class DebateScene extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <div className={classes.centered}>
-          <h1>Debate Room System</h1>
-          <div>Microphone is activating</div>
           <a href="#" onClick={this.onClick}>
             Toggle blue talking
           </a>{' '}
@@ -121,11 +119,14 @@ class DebateScene extends React.Component<Props, State> {
           <div id="video">
             <video ref={this.vidRef} autoPlay={true} hidden={true} />
           </div>
-          <div className={classes.centered}>
-            <a href="Start" onClick={this.onStart}>
-              Start
-            </a>
-          </div>
+          {!this.state.start && <Button
+            variant="contained"
+            color="primary"
+            href="Start"
+            onClick={this.onStart}
+          >
+            Start
+          </Button>}
         </div>
         {this.state.start && (
           <DebateDisplay

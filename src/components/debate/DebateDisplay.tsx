@@ -67,7 +67,8 @@ const styles = (theme: Theme) =>
       left: 0,
       top: 0,
       bottom: 0,
-      right: 0
+      right: 0,
+      zIndex: -1
     },
     foreground: {
       margin: '0 auto 0 auto',

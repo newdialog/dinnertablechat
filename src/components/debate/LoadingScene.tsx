@@ -11,6 +11,8 @@ import withRoot from '../../withRoot';
 import { observer } from 'mobx-react';
 import * as QS from '../../services/QueueService';
 import * as shake from '../../services/HandShakeService';
+import { Typography } from '@material-ui/core';
+import Reveal from 'react-reveal/Reveal';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -28,8 +30,49 @@ const styles = (theme: Theme) =>
       width: 'auto',
       maxWidth: '1000px',
       minWidth: '300px'
-    }
+    },
+    bannerRef: {},
+    bannerAnim: {
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      right: 0,
+      zIndex: -1
+    },
+    centeredDown: {
+      width:'100%',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      paddingBottom: '1em',
+      paddingTop:'23vh',
+      color: '#ffffff88',
+      textAlign: 'center',
+      display: 'inline-block'
+    },
+    bannerAnimOverlay: {
+      zIndex:-1, 
+      transform: 'translateZ(0)',
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      right: 0,
+      width:'100%',
+      background:'rgba(0, 0, 0, 0.35)',
+      backgroundBlendMode: 'multiply'
+    },
   });
+
+import Lottie from 'react-lottie';
+const bgOptions = {
+  loop: true,
+  autoplay: true,
+  path: 'assets/background.json',
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
 
 import * as AppModel from '../../models/AppModel';
 interface Props extends WithStyles<typeof styles> {
@@ -48,6 +91,8 @@ class LoadingScene extends React.Component<Props, any> {
   };
 
   public componentDidMount() {
+    // return; // TODO remove when back online
+
     if (!this.props.store.auth.user || !this.props.store.auth.aws)
       throw new Error('user not logged in');
     if (
@@ -66,7 +111,14 @@ class LoadingScene extends React.Component<Props, any> {
 
     const sameUserSeed = Math.round(new Date().getTime() / 1000);
     const userid = this.props.store.auth.user!.email + '_' + sameUserSeed;
-    QS.queueUp(topic, position, userid, contribution, chararacter, this.onMatched);
+    QS.queueUp(
+      topic,
+      position,
+      userid,
+      contribution,
+      chararacter,
+      this.onMatched
+    );
   }
 
   private gotMedia = async (stream: MediaStream) => {
@@ -77,7 +129,7 @@ class LoadingScene extends React.Component<Props, any> {
     const peer = await shake.handshake(matchId, isLeader, state, stream);
     this.props.onPeer(peer);
     this.props.store.debate.syncMatch();
-  }
+  };
 
   public async componentWillUpdate() {
     if (!this.props.store.debate.match) return;
@@ -98,12 +150,34 @@ class LoadingScene extends React.Component<Props, any> {
     const matchedUnsync = store.debate.match && !store.debate.match!.sync;
     const matchedsync = store.debate.match && store.debate.match!.sync;
 
+    let text = 'loading';
+    if(!store.debate.match) text = 'looking for match';
+    if(matchedUnsync) text = 'found match... handshaking';
+    if(matchedsync) text = 'handshaking complete';
+
     return (
       <div className={classes.centered}>
-        <h1>Loading...</h1>
-        {!store.debate.match && <h3>matching</h3>}
-        {matchedUnsync && <h3>found match... handshaking</h3>}
-        {matchedsync && <h3>found match and handshaking completed!</h3>}
+        <div className={classes.bannerAnim}>
+          <Lottie
+            options={bgOptions}
+            ref={classes.bannerRef}
+            isClickToPauseDisabled={true}
+          />
+        </div>
+        <div className={classes.bannerAnimOverlay}></div>
+
+        <div className={classes.centeredDown}>
+          <Typography variant="display4" gutterBottom align="center">
+            <Reveal effect="fadeIn" duration={3000}>
+              Loading...
+            </Reveal>
+          </Typography>
+          <Typography variant="display1" align="center">
+            <Reveal effect="fadeIn" duration={3000}>
+              {text}
+            </Reveal>
+          </Typography>
+        </div>
       </div>
     );
   }
