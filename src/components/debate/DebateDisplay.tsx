@@ -153,7 +153,7 @@ class DebateScene extends React.Component<Props, State> {
   public componentDidMount() {}
 
   private onLoopComplete = () => {
-    console.log('onLoopComplete', this.props.talkingBlue)
+    // console.log('onLoopComplete', this.props.talkingBlue)
     // if(this.props.talkingBlue) this.setState({ blueTransition: true });
     this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
 

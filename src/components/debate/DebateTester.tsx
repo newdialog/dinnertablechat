@@ -76,13 +76,13 @@ class DebateScene extends React.Component<Props, State> {
     this.speechEvents = hark(stream, options);
     this.speechEvents.on('speaking', () => {
       rawSpeaking = true;
-      console.log('speaking');
+      // console.log('speaking');
       this.setState({talkingBlue:true})
       // document.querySelector('#speaking').textContent = 'YES';
     });
 
     this.speechEvents.on('stopped_speaking', () => {
-      console.log('stopped_speaking');
+      // console.log('stopped_speaking');
       rawSpeaking = false;
       setTimeout( () => {
           if(!rawSpeaking) this.setState({talkingBlue:false})

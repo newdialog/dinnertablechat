@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './services/i18n';
 import './index.css';
-import register, {unregister} from './registerServiceWorker';
+import {unregister, register} from './registerServiceWorker';
 
 import App from './App';
 import { Provider } from 'mobx-react';

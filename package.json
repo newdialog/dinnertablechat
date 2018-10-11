@@ -1,6 +1,6 @@
 {
   "name": "dinnertable-homesite",
-  "homepage": "https://test.dinnertable.chat",
+  "homepage": "https://dinnertable.chat",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
