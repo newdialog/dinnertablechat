@@ -37,9 +37,10 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 interface State {
-  talkingBlue:boolean,
-  talkingRed:boolean,
-  speaking:boolean
+  talkingBlue: boolean;
+  talkingRed: boolean;
+  speaking: boolean;
+  start: boolean;
 }
 
 let rawSpeaking = false;
@@ -49,26 +50,36 @@ class DebateScene extends React.Component<Props, State> {
   private vidRef = React.createRef<HTMLVideoElement>();
   constructor(props: Props) {
     super(props);
-    this.state = { talkingBlue: false, talkingRed:false, speaking: false };
+    this.state = {
+      talkingBlue: false,
+      talkingRed: false,
+      speaking: false,
+      start: false
+    };
   }
 
-  private onClick = (e:React.MouseEvent) => {
+  private onClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    this.setState( {talkingBlue: !this.state.talkingBlue} )
-  }
+    this.setState({ talkingBlue: !this.state.talkingBlue });
+  };
 
-  private onClickRed = (e:React.MouseEvent) => {
+  private onClickRed = (e: React.MouseEvent) => {
     e.preventDefault();
-    this.setState( {talkingRed: !this.state.talkingRed} )
-  }
+    this.setState({ talkingRed: !this.state.talkingRed });
+  };
 
-  public componentDidMount() {
+  public componentDidMount() {}
+
+  public onStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    console.log('start');
+    this.setState({ start: true });
     navigator.getUserMedia(
       { video: false, audio: true },
       this.gotMedia.bind(this),
       () => {}
     );
-  }
+  };
 
   public gotMedia = (stream?: MediaStream) => {
     console.log('gotMedia');
@@ -77,19 +88,19 @@ class DebateScene extends React.Component<Props, State> {
     this.speechEvents.on('speaking', () => {
       rawSpeaking = true;
       // console.log('speaking');
-      this.setState({talkingBlue:true})
+      this.setState({ talkingBlue: true });
       // document.querySelector('#speaking').textContent = 'YES';
     });
 
     this.speechEvents.on('stopped_speaking', () => {
       // console.log('stopped_speaking');
       rawSpeaking = false;
-      setTimeout( () => {
-          if(!rawSpeaking) this.setState({talkingBlue:false})
+      setTimeout(() => {
+        if (!rawSpeaking) this.setState({ talkingBlue: false });
       }, 140);
       // document.querySelector('#speaking').textContent = 'NO';
     });
-  }
+  };
 
   public render() {
     const { classes } = this.props;
@@ -101,16 +112,28 @@ class DebateScene extends React.Component<Props, State> {
           <h1>Debate Room System</h1>
           <div>Microphone is activating</div>
           <a href="#" onClick={this.onClick}>
-              Toggle blue talking
-          </a> ---- 
+            Toggle blue talking
+          </a>{' '}
+          ----
           <a href="#" onClick={this.onClickRed}>
-              Toggle blue talking
+            Toggle blue talking
           </a>
           <div id="video">
             <video ref={this.vidRef} autoPlay={true} hidden={true} />
           </div>
+          <div className={classes.centered}>
+            <a href="Start" onClick={this.onStart}>
+              Start
+            </a>
+          </div>
         </div>
-        <DebateDisplay talkingBlue={talkingBlue} talkingRed={talkingRed} />
+        {this.state.start && (
+          <DebateDisplay
+            talkingBlue={talkingBlue}
+            talkingRed={talkingRed}
+            onClick={this.onStart}
+          />
+        )}
       </React.Fragment>
     );
   }
