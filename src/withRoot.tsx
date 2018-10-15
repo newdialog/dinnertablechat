@@ -22,35 +22,36 @@ const theme = createMuiTheme({
     }
   },
   typography: {
-    suppressDeprecationWarnings: true,
+    useNextVariants: true,
+    // suppressDeprecationWarnings: true,
     // Use the system font instead of the default Roboto font.
-    body1: {
+    body2: {
       fontSize: '1.1em',
       fontFamily: 'Montserrat',
       fontWeight: 300,
       color: '#444444'
     },
-    title: {
+    h6: {
       fontSize: '2em',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 'bold',
       color: '#484965'
     },
-    display4: {
+    h1: {
       fontSize: '3em',
       color: 'white',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 600,
       letterSpacing: '-0.02em'
     },
-    display2: {
+    h3: {
       fontSize: '1.5em',
       color: '#777777',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 300,
       letterSpacing: '-0.05em'
     },
-    display1: {
+    h4: {
       fontSize: '1.7em',
       color: 'white',
       fontFamily: ['Montserrat'].join(','),

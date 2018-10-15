@@ -128,10 +128,10 @@ class Index extends React.Component<Props, State> {
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
-            <Typography variant="display3" align="center" color="textPrimary" gutterBottom>
+            <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
               Debate Topics
             </Typography>
-            <Typography variant="title" align="center" color="textSecondary" paragraph>
+            <Typography variant="h6" align="center" color="textSecondary" paragraph>
               Select your position on a topic proposition to get started. 
             </Typography>
           </div>

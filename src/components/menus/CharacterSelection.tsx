@@ -152,7 +152,7 @@ class CharacterSelector extends React.Component<Props> {
                 <span className={classes.imageButton}>
                   <Typography
                     component="span"
-                    variant="subheading"
+                    variant="subtitle1"
                     color="inherit"
                     className={classes.imageTitle}
                   >

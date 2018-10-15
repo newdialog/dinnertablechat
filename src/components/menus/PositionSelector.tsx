@@ -75,7 +75,7 @@ class PositionSelector extends React.Component<Props, State> {
                   title={card.topic}
                   />
                   <CardContent className={classes.cardContent}>
-                  <Typography gutterBottom variant="headline" component="h2">
+                  <Typography gutterBottom variant="h5" component="h2">
                       {card.topic}
                   </Typography>
                   <Typography>

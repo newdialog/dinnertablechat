@@ -68,7 +68,14 @@ class DebateScene extends React.Component<Props, State> {
     this.setState({ talkingRed: !this.state.talkingRed });
   };
 
-  public componentDidMount() {}
+  public componentDidMount() {
+    // store:AppModel.Type, 
+    return;
+    this.props.store.debate.setPosition(0, 'guns')
+    this.props.store.debate.setContribution(0);
+    this.props.store.debate.setCharacter(0);
+    this.props.store.debate.syncMatch();
+  }
 
   public onStart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -79,6 +86,7 @@ class DebateScene extends React.Component<Props, State> {
       this.gotMedia.bind(this),
       () => {}
     );
+    
   };
 
   public gotMedia = (stream?: MediaStream) => {

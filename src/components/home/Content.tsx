@@ -251,7 +251,7 @@ class Index extends React.Component<Props, State> {
     // <img className={classes.banner} src="./banner2.jpg" />
     // s
     /*
-    <Typography variant="display1" gutterBottom align="center" className={classes.bannerText}>
+    <Typography variant="h4" gutterBottom align="center" className={classes.bannerText}>
             Have a polite talk with your opposite
           </Typography>
     */
@@ -275,7 +275,7 @@ class Index extends React.Component<Props, State> {
               </div>
             </Grid>
             <Grid item xs={12} md={12}>
-              <Typography variant="display2" gutterBottom align="center">
+              <Typography variant="h3" gutterBottom align="center">
                 {t('home-intro')}
               </Typography>
             </Grid>
@@ -288,11 +288,11 @@ class Index extends React.Component<Props, State> {
           <Grid container spacing={24} className={classes.containerRev}>
             <Grid item xs={12} md={6}>
               <Reveal effect="fadeInUp" fraction={0.35}>
-                <Typography variant="title" gutterBottom align="left">
+                <Typography variant="h6" gutterBottom align="left">
                   <div className={classes.divider} />
                   {t('home-rules-title')}
                 </Typography>
-                <Typography variant="body1" gutterBottom align="left">
+                <Typography variant="body2" gutterBottom align="left">
                   {t('home-rules')}
                 </Typography>
               </Reveal>
@@ -311,11 +311,11 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} md={12} className={classes.divider2} />
             <Grid item xs={12} md={12}>
               <Reveal effect="fadeInUp" fraction={0.35}>
-                <Typography variant="title" gutterBottom align="left">
+                <Typography variant="h6" gutterBottom align="left">
                   <div className={classes.divider} />
                   {t('home-tiers-title')}
                 </Typography>
-                <Typography variant="body1" gutterBottom align="left">
+                <Typography variant="body2" gutterBottom align="left">
                   {t('home-tiers')}
                 </Typography>
               </Reveal>
@@ -344,10 +344,10 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} md={6}>
               <div className={classes.divider} />
               <Reveal effect="fadeInUp" fraction={0.35}>
-                <Typography variant="title" gutterBottom align="left">
+                <Typography variant="h6" gutterBottom align="left">
                   {t('home-char-title')}
                 </Typography>
-                <Typography variant="body1" gutterBottom align="left">
+                <Typography variant="body2" gutterBottom align="left">
                   {t('home-char')}
                 </Typography>
               </Reveal>
@@ -385,11 +385,11 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} md={6}>
               <div className={classes.divider} />
 
-              <Typography variant="title" gutterBottom align="left">
+              <Typography variant="h6" gutterBottom align="left">
                 {t('home-topic-title')}
               </Typography>
 
-              <Typography variant="body1" gutterBottom align="left">
+              <Typography variant="body2" gutterBottom align="left">
                 {t('home-topic')}
               </Typography>
             </Grid>
@@ -415,11 +415,11 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} md={12} className={classes.divider2} />
             <Grid item xs={12} md={6}>
               <div className={classes.divider} />
-              <Typography variant="title" gutterBottom align="left">
+              <Typography variant="h6" gutterBottom align="left">
                 {t('home-overview-title')}
               </Typography>
 
-              <Typography variant="body1" gutterBottom align="left">
+              <Typography variant="body2" gutterBottom align="left">
                 {t('home-overview')}
               </Typography>
             </Grid>

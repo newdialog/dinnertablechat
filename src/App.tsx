@@ -8,6 +8,7 @@ import AuthWrapper from './components/aws/AuthWrapper'
 
 const App = inject('store')(
   observer(({ store, history }) => {
+    (window as any).__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true; // mui
     console.log('page', store.router.location)
     return (
         <React.Fragment>

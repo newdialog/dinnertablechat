@@ -41,7 +41,7 @@ function Footer(props: Props) {
           </div>
         </div>
       </section>
-      <Typography variant="body1" style={{fontSize:'0.8em', color:'white'}}>
+      <Typography variant="body2" style={{fontSize:'0.8em', color:'white'}}>
         Copyright © 2018 Dinnertable.chat
         <span style={{marginLeft: '10px', color: '#999999'}}>|</span>
         <a href="/privacy" style={{marginLeft: '10px', textDecoration: 'none', color: '#999999'}}>Privacy Policy</a>

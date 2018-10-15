@@ -167,12 +167,12 @@ class LoadingScene extends React.Component<Props, any> {
         <div className={classes.bannerAnimOverlay}></div>
 
         <div className={classes.centeredDown}>
-          <Typography variant="display4" gutterBottom align="center">
+          <Typography variant="h1" gutterBottom align="center">
             <Reveal effect="fadeIn" duration={3000}>
               Loading...
             </Reveal>
           </Typography>
-          <Typography variant="display1" align="center">
+          <Typography variant="h4" align="center">
             <Reveal effect="fadeIn" duration={3000}>
               {text}
             </Reveal>

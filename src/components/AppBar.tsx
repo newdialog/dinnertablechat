@@ -52,13 +52,17 @@ function ButtonAppBar(props:Props) {
     h.indexOf('.dinnertable') === -1 &&
     h.indexOf('dinnertable.chat') !== -1;
 
+  if(store.debate.match && store.debate.match.sync) {
+    return null; // <React.Fragment></React.Fragment>
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed" color="default" style={{ backgroundColor:'rgb(255,255,255,0.9)' }}>
         <Toolbar variant="dense">
           <img src="./logos/appbar-logo-color.png" style={{height:'3em', cursor: 'pointer'}} onClick={ onHome.bind(0,store) }/>
           { /* TODO BUG: empty component needed for alignment */ }
-          <Typography variant="title" className={classes.flex}></Typography>
+          <Typography variant="h6" className={classes.flex}></Typography>
 
           {!auth && !isLive &&
             <Button onClick={ () => onLogin(store) }>Login</Button>

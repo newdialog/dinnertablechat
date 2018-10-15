@@ -91,7 +91,7 @@ class Subscribe extends React.Component<Props,State> {
       <div className={classes.centered}>
         <br />
         <form onSubmit={this.onSubmit} style={{ marginLeft: 'auto', marginRight: 'auto', width:'100%', textAlign:'center' }}>
-          <Typography gutterBottom align="center" color="primary" variant="headline"  style={{color:'#61618e'}}>
+          <Typography gutterBottom align="center" color="primary" variant="h5"  style={{color:'#61618e'}}>
           {t('home-signup')}
           </Typography>
           <TextField
@@ -105,7 +105,7 @@ class Subscribe extends React.Component<Props,State> {
             required
           />
           <p />
-          <Button variant="raised" color="primary" type="submit" disabled={this.state.submitting}>
+          <Button variant="contained" color="primary" type="submit" disabled={this.state.submitting}>
             Subscribe
           </Button>
           <br/>
@@ -123,7 +123,7 @@ class Subscribe extends React.Component<Props,State> {
       });
       return (
         <div className={classes.centered}>
-          <Typography gutterBottom align="center" color="primary" variant="display1">
+          <Typography gutterBottom align="center" color="primary" variant="h4">
             <Reveal effect="fadeIn" duration={1500}>
               Thanks for subscribing to DTC!
             </Reveal>
@@ -137,7 +137,7 @@ class Subscribe extends React.Component<Props,State> {
       });
       return (
         <div className={classes.centered}>
-          <Typography gutterBottom align="center" color="primary" variant="display1">
+          <Typography gutterBottom align="center" color="primary" variant="h4">
             <Reveal effect="fadeIn" duration={1500}>
               Hmm, something went wrong. {subscribe}
             </Reveal>
