@@ -34,8 +34,15 @@ function Footer(props: Props) {
         <div className="container">
           <div className="text-center center-block">
             
-            <a href="https://twitter.com/dintablechat" onClick={()=>trackOutboundLink('https://twitter.com/dintablechat')}>
+            <a href="https://twitter.com/dintablechat" onClick={trackOutboundLinkClick('https://twitter.com/dintablechat')}>
               <i id="social-tw" className="fab fa-twitter-square social fa-3x "></i>
+            </a>
+
+            <a href="mailto:team@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:team@dinnertable.chat')}>
+              <i
+                id="social-em"
+                className="fa fa-envelope-square fa-3x social"
+              />
             </a>
             
           </div>
@@ -50,7 +57,7 @@ function Footer(props: Props) {
   );
 }
 /*
-<a href="mailto:admin@dinnertable.chat" onClick={()=>trackOutboundLink('mailto:admin@dinnertable.chat')}>
+<a href="mailto:team@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:admin@dinnertable.chat')}>
               <i
                 id="social-em"
                 className="fa fa-envelope-square fa-3x social"

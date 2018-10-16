@@ -14,16 +14,22 @@ declare function gtag(
   eventValue?: any
 ): void;
 
-declare function trackOutboundLink(url:string, interactive?:boolean):void;
+declare function trackOutboundLink(url: string, interactive?: boolean): void;
+declare function trackOutboundLinkClick(
+  url: string,
+  interactive?: boolean
+): (e: any) => any;
 
 declare global {
-  interface Window { 
-    gtag: typeof gtag; 
+  interface Window {
+    gtag: typeof gtag;
     trackOutboundLink: typeof trackOutboundLink;
+    trackOutboundLinkClick: typeof trackOutboundLinkClick;
   }
 }
 
-interface Window { 
-  gtag: typeof gtag; 
+interface Window {
+  gtag: typeof gtag;
   trackOutboundLink: typeof trackOutboundLink;
+  trackOutboundLinkClick: typeof trackOutboundLinkClick;
 }

@@ -37,18 +37,39 @@
     gtag('create', 'UA-119131630-1', 'auto');
 
     function trackOutboundLink(url, nonInteraction) {
+      var redirected = false;
+
       gtag('event', 'click', {
         'event_category': 'outbound',
         'event_label': url,
         'transport_type': 'beacon',
-        'non_interaction': nonInteraction ? true : false,
+        'non_interaction': nonInteraction===true,
         'event_callback': function () {
+          if(redirected) return;
+          redirected = true;
           document.location = url;
         }
       });
+      setTimeout(()=>{ 
+        if(redirected) return;
+        redirected = true;
+        document.location = url; 
+        console.log('failsafe link used');
+      }, 1000); // failsafe for gtag not loading
+
       return false;
     }
     window.trackOutboundLink = trackOutboundLink;
+
+    function trackOutboundLinkClick(url, nonInteraction) {
+      return (e) => {
+        e.preventDefault();
+        trackOutboundLink(url, nonInteraction);
+        return false;
+      }
+    }
+    window.trackOutboundLinkClick = trackOutboundLinkClick;
+
     window.gtag = gtag;
   </script>
 
