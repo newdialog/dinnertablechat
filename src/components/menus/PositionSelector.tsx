@@ -65,9 +65,9 @@ class PositionSelector extends React.Component<Props, State> {
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
-        <Grid container spacing={0} sm={1} md={1} lg={1} justify="center">
+        <Grid container spacing={0} justify="center">
         {data.map((card, i) => (
-            <Grid item key={i} sm={1} md={1} lg={1}>
+            <Grid key={i} sm={3} md={3} lg={3} item>
               <Card className={classes.card}>
                   <CardMedia
                   className={classes.cardMedia}
