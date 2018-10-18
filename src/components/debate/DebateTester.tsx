@@ -1,13 +1,10 @@
 import * as React from 'react';
 import {
-  withStyles,
   createStyles,
   WithStyles,
   Theme
 } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
 import hark, { SpeechEvent } from 'hark';
-import { observer } from 'mobx-react';
 import { Typography, Divider, Button } from '@material-ui/core';
 
 import DebateDisplay from './DebateDisplay';
@@ -32,6 +29,7 @@ const styles = (theme: Theme) =>
   });
 
 import * as AppModel from '../../models/AppModel';
+import HOC from '../HOC';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
 }
@@ -148,4 +146,4 @@ class DebateScene extends React.Component<Props, State> {
   }
 }
 
-export default withRoot(withStyles(styles)(DebateScene));
+export default HOC(DebateScene, styles);

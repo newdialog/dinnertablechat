@@ -2,13 +2,10 @@ import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import {
-  withStyles,
   createStyles,
   WithStyles,
   Theme
 } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
-import { observer } from 'mobx-react';
 import * as QS from '../../services/QueueService';
 import * as shake from '../../services/HandShakeService';
 import { Typography } from '@material-ui/core';
@@ -75,6 +72,7 @@ const bgOptions = {
 };
 
 import * as AppModel from '../../models/AppModel';
+import HOC from '../HOC';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   onPeer: (p: any) => void;
@@ -182,4 +180,4 @@ class LoadingScene extends React.Component<Props, any> {
     );
   }
 }
-export default withStyles(styles)(observer(LoadingScene));
+export default HOC(LoadingScene, styles);

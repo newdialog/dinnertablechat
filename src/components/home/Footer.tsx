@@ -1,12 +1,10 @@
 import React from 'react';
-import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import {
-  withStyles,
   createStyles,
   WithStyles,
-  Theme
 } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
+import HOC from '../HOC'
 
 const styles = createStyles({
   root: {
@@ -70,4 +68,4 @@ function Footer(props: Props) {
               />
             </a>
 */
-export default withRoot(withStyles(styles)(Footer));
+export default HOC(Footer, styles);

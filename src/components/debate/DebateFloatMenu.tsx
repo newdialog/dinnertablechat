@@ -3,12 +3,9 @@
 import React from 'react';
 import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
 import {
-  withStyles,
   createStyles,
-  WithStyles,
-  Theme
+  WithStyles
 } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
 
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -23,6 +20,7 @@ import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import green from '@material-ui/core/colors/green';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import HOC from '../HOC';
 
 const styles = theme =>
   createStyles({
@@ -89,4 +87,4 @@ class FloatMenu extends React.Component<Props, any> {
     );
   }
 }
-export default withRoot(withStyles(styles)(FloatMenu));
+export default HOC(FloatMenu, styles);

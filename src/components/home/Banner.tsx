@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
 import Lottie from 'react-lottie';
 import Reveal from 'react-reveal/Reveal';
@@ -11,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 import Waypoint from 'react-waypoint';
-import { translate } from 'react-i18next';
+import HOC from '../HOC';
 
 // const bgData = require('../../assets/background.json');
 
@@ -192,4 +191,4 @@ class Index extends React.Component<Props> {
   }
 }
 
-export default translate()(withRoot(withStyles(styles)(observer(Index))));
+export default HOC(Index, styles);

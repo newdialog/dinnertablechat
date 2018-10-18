@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { Typography, TextField, Button } from '@material-ui/core';
-import { withStyles, createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Reveal from 'react-reveal/Reveal';
-import withRoot from '../../withRoot';
-import { translate } from 'react-i18next';
+import HOC from '../HOC'
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -149,4 +148,4 @@ class Subscribe extends React.Component<Props,State> {
     return this.renderForm(classes, t)
   }
 }
-export default translate()(withStyles(styles)(Subscribe));
+export default HOC(Subscribe, styles);

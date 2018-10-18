@@ -1,16 +1,13 @@
 import React from 'react';
-import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import { createStyles, WithStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
 import * as Store from '../models/AppModel'
-import { observer } from 'mobx-react';
 
-import Icon from '@material-ui/core/Icon';
 import QueueIcon from '@material-ui/icons/QueuePlayNext'
+import HOC from './HOC';
 
 const styles = createStyles({
   root: {
@@ -83,4 +80,4 @@ function ButtonAppBar(props:Props) {
   );
 }
 
-export default withStyles(styles)(observer(ButtonAppBar));
+export default HOC(ButtonAppBar, styles);

@@ -1,13 +1,9 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import { createStyles, WithStyles } from '@material-ui/core/styles';
 import { Button, Card, CardActions, CardContent, CardMedia, Grid, Typography } from '@material-ui/core'
-import { data } from './sampleSelectionJSON';
-import withRoot from '../../withRoot';
-import { observer } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
-
-// const logoData = require('../../assets/logo.json');
+import HOC from '../HOC';
 
 const styles = theme => 
   createStyles({
@@ -43,6 +39,7 @@ const styles = theme =>
 
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
+  t: any;
 }
 interface State {
   open: boolean;
@@ -60,8 +57,18 @@ class PositionSelector extends React.Component<Props, State> {
   }
 
   public render() {
-    const { classes, store } = this.props;
+    const { classes, store, t } = this.props;
     const { open } = this.state;
+    const topics = Number.parseInt(t('topics-num'), 10);
+
+    const data:any[] = [];
+    for(let i = 0; i < topics; i++) data.push({
+      topic: t('topic' + i + '-topic'),
+      photo: t('topic' + i + '-photo'),
+      positions: t('topic' + i + '-positions').split(', '),
+      proposition: t('topic' + i + '-proposition'),
+    })
+    console.log('data', data)
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
@@ -84,10 +91,10 @@ class PositionSelector extends React.Component<Props, State> {
                   </CardContent>
                   <CardActions>
                   <Button size="small" color="primary" onClick={() => this.onSelect(1, card.proposition, card.topic)}>
-                      {card.positions[1]}
+                      {card.positions[0]}
                   </Button>
                   <Button size="small" color="primary"onClick={() => this.onSelect(0, card.proposition, card.topic)}>
-                      {card.positions[0]}
+                      {card.positions[1]}
                   </Button>
                   </CardActions>
               </Card>
@@ -99,4 +106,4 @@ class PositionSelector extends React.Component<Props, State> {
   }
 }
 
-export default withRoot(withStyles(styles)(observer(PositionSelector)));
+export default HOC(PositionSelector, styles);

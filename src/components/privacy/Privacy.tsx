@@ -1,13 +1,9 @@
 import * as React from 'react';
 import {
-  withStyles,
   createStyles,
   WithStyles,
   Theme
 } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
-
-import { observer } from 'mobx-react';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -125,6 +121,7 @@ interface State {
   open: boolean;
 }
 import Grid from '@material-ui/core/Grid';
+import HOC from '../HOC';
  
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -203,17 +200,6 @@ class Index extends React.Component<Props, State> {
     );
   }
 
-  private handleClose = () => {
-    this.setState({
-      open: false
-    });
-  };
-
-  private handleClick = () => {
-    this.setState({
-      open: true
-    });
-  };
 }
 
-export default withRoot(withStyles(styles)(observer(Index)));
+export default HOC(Index, styles);

@@ -1,11 +1,10 @@
 import * as React from 'react';
 import {
-  withStyles,
   createStyles,
   WithStyles,
   Theme
 } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
+import HOC from '../HOC';
 
 import Lottie from 'react-lottie';
 import { observer } from 'mobx-react';
@@ -258,7 +257,7 @@ class DebateScene extends React.Component<Props, State> {
   }
 }
 
-export default withRoot(withStyles(styles)(DebateScene));
+export default HOC(DebateScene, styles);
 
 /*
     if(!talkingBlue && this.blue.current) {

@@ -1,31 +1,24 @@
 // tslint:disable-next-line:max-line-length
 import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
+import HOC from '../HOC'
 import {
-  withStyles,
   createStyles,
   WithStyles,
   Theme
 } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
 
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 
-import { translate } from 'react-i18next';
-
 import Lottie from 'react-lottie';
 import Reveal from 'react-reveal/Reveal';
 import Flip from 'react-reveal/Flip';
-import Slide from 'react-reveal/Slide';
 import Waypoint from 'react-waypoint';
 
-// import 'slick-carousel/slick/slick.css';
-// import 'slick-carousel/slick/slick-theme.css';
 import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
 import Glide from '@glidejs/glide';
-// const bannerImg = require('../assets/banner2.jpg')
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -37,26 +30,18 @@ const styles = (theme: Theme) =>
       marginTop: '30px',
       paddingLeft: '3em',
       paddingRight: '3em',
-      // display: 'grid',
       gridTemplateColumns: 'repeat(12, 1fr)',
-      // gridGap: `${theme.spacing.unit * 4}px`,
       [theme.breakpoints.down('sm')]: {
         paddingLeft: '1.6em',
         paddingRight: '1.6em'
       }
-
-      // gridAutoFlow: 'column',
-      // gridAutoColumns: '200px'
     },
     containerRev: {
       marginTop: '0px',
       paddingLeft: '3em',
       paddingRight: '3em',
-      // display: 'grid',
       gridTemplateColumns: 'repeat(12, 1fr)',
-      // gridGap: `${theme.spacing.unit * 4}px`,
       [theme.breakpoints.down('sm')]: {
-        // padding: '0'
         paddingLeft: '0.5em',
         paddingRight: '0.5em'
       },
@@ -162,17 +147,6 @@ const diningOptions = {
     preserveAspectRatio: 'xMidYMid slice'
   }
 };
-
-// import Slider from 'react-slick';
-/* const settings = {
-  autoPlay: true,
-  arrows: false,
-  dots: false,
-  infinite: true,
-  speed: 500,
-  slidesToShow: 1,
-  slidesToScroll: 1
-};*/
 
 interface Props extends WithStyles<typeof styles> {
   t: any;
@@ -448,18 +422,6 @@ class Index extends React.Component<Props, State> {
       </React.Fragment>
     );
   }
-  // <img src="./section2.png" className={classes.paperimg} />
-  private handleClose = () => {
-    this.setState({
-      open: false
-    });
-  };
-
-  private handleClick = () => {
-    this.setState({
-      open: true
-    });
-  };
 }
 
-export default translate()(withRoot(withStyles(styles)(Index)));
+export default HOC(Index, styles);

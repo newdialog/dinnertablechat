@@ -32,6 +32,7 @@ const styles = (theme: Theme) =>
   });
 import * as AppModel from '../../models/AppModel';
 import PeerService from '../../services/PeerService';
+import HOC from '../HOC';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   peer: PeerService;
@@ -154,4 +155,4 @@ class DebateScene extends React.Component<Props, State> {
   }
 }
 
-export default withRoot(withStyles(styles)(DebateScene));
+export default HOC(DebateScene, styles);

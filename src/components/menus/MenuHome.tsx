@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import { createStyles, WithStyles } from '@material-ui/core/styles';
 import { Button, CssBaseline, Typography, Stepper, Step, StepLabel, StepContent, Paper } from '@material-ui/core'
 import * as AppModel from '../../models/AppModel';
 import PositionSelector from './PositionSelector';
 import ContributionSelector from './ContributionSelector';
-import withRoot from '../../withRoot';
-import { observer, inject } from 'mobx-react';
+import { inject } from 'mobx-react';
 import CharacterSelection from './CharacterSelection';
-// const logoData = require('../../assets/logo.json');
+import HOC from '../HOC';
 
 const styles = theme => 
   createStyles({
@@ -170,4 +169,4 @@ class Index extends React.Component<Props, State> {
   }
 }
 
-export default inject('store')(withRoot(withStyles(styles)(observer(Index))));
+export default inject('store')(HOC(Index, styles));

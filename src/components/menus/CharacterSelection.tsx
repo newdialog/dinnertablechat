@@ -1,11 +1,9 @@
 import * as React from 'react';
-import classNames from 'classnames';
-import { withStyles, createStyles, WithStyles } from '@material-ui/core/styles';
+import { createStyles, WithStyles } from '@material-ui/core/styles';
 import { Button, Chip, Paper, Typography } from '@material-ui/core';
-import withRoot from '../../withRoot';
-import { observer } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import HOC from '../HOC';
 
 // const logoData = require('../../assets/logo.json');
 
@@ -185,4 +183,4 @@ className={classes.button} onClick={() => this.onChipClick(item)}>
 </Button> */
 }
 
-export default withRoot(withStyles(styles)(observer(CharacterSelector)));
+export default HOC(CharacterSelector, styles);

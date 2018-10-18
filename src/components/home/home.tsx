@@ -1,13 +1,10 @@
 import * as React from 'react';
 import {
-  withStyles,
   createStyles,
   WithStyles,
   Theme
 } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
-
-
+import HOC from '../HOC'
 import Banner from './Banner';
 import Content from './Content';
 import { observer } from 'mobx-react';
@@ -189,4 +186,4 @@ class Index extends React.Component<Props, State> {
   };
 }
 
-export default withRoot(withStyles(styles)(observer(Index)));
+export default HOC(Index, styles);
