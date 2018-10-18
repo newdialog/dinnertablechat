@@ -48,7 +48,7 @@ interface State {
   open: boolean;
 }
 
-@observer
+ 
 class PositionSelector extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -99,4 +99,4 @@ class PositionSelector extends React.Component<Props, State> {
   }
 }
 
-export default withRoot(withStyles(styles)(PositionSelector));
+export default withRoot(withStyles(styles)(observer(PositionSelector)));

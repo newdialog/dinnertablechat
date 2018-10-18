@@ -131,7 +131,7 @@ interface State {
   open: boolean;
 }
 import Grid from '@material-ui/core/Grid';
-@observer
+ 
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -189,4 +189,4 @@ class Index extends React.Component<Props, State> {
   };
 }
 
-export default withRoot(withStyles(styles)(Index));
+export default withRoot(withStyles(styles)(observer(Index)));

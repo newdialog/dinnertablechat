@@ -26,7 +26,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 
-@observer
+ 
 class ContributionSelector extends React.Component<Props> {
 
   private defaultContributions():Array<{ key:any, label:any, value:any, color:any }> {
@@ -80,4 +80,4 @@ className={classes.button} onClick={() => this.onChipClick(item)}>
 {item.label.valueOf()}
 </Button> */}
 
-export default withRoot(withStyles(styles)(ContributionSelector));
+export default withRoot(withStyles(styles)(observer(ContributionSelector)));

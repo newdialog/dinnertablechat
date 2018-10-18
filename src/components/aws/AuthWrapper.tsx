@@ -17,7 +17,7 @@ interface State {
   init: boolean;
 }
 
-@observer
+//  
 class AuthComp extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -70,5 +70,5 @@ class AuthComp extends React.Component<Props, State> {
   }
 }
 
-export default (AuthComp);
+export default observer(AuthComp);
 // withOAuth

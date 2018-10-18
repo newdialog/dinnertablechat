@@ -129,7 +129,7 @@ const bgOptions = {
 
 interface Props extends WithStyles<typeof styles> { t:any }
 
-@observer
+ 
 class Index extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
@@ -192,4 +192,4 @@ class Index extends React.Component<Props> {
   }
 }
 
-export default translate()(withRoot(withStyles(styles)(Index)));
+export default translate()(withRoot(withStyles(styles)(observer(Index))));

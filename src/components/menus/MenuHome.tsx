@@ -69,7 +69,7 @@ function getStepContent(step: number, store: AppModel.Type) {
   }
 }
 
-@observer
+ 
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -170,4 +170,4 @@ class Index extends React.Component<Props, State> {
   }
 }
 
-export default inject('store')(withRoot(withStyles(styles)(Index)));
+export default inject('store')(withRoot(withStyles(styles)(observer(Index))));

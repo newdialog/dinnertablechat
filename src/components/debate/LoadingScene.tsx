@@ -79,7 +79,7 @@ interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   onPeer: (p: any) => void;
 }
-@observer
+ 
 class LoadingScene extends React.Component<Props, any> {
   constructor(props: any) {
     super(props);
@@ -182,4 +182,4 @@ class LoadingScene extends React.Component<Props, any> {
     );
   }
 }
-export default withStyles(styles)(LoadingScene);
+export default withStyles(styles)(observer(LoadingScene));

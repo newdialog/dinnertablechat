@@ -97,7 +97,7 @@ interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
 }
 
-@observer
+ 
 class CharacterSelector extends React.Component<Props> {
   private defaultContributions(): Array<{
     key: any;
@@ -185,4 +185,4 @@ className={classes.button} onClick={() => this.onChipClick(item)}>
 </Button> */
 }
 
-export default withRoot(withStyles(styles)(CharacterSelector));
+export default withRoot(withStyles(styles)(observer(CharacterSelector)));
