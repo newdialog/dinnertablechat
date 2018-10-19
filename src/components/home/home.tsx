@@ -7,7 +7,6 @@ import {
 import HOC from '../HOC'
 import Banner from './Banner';
 import Content from './Content';
-import { observer } from 'mobx-react';
 import Subcribe from './Subscribe';
 import Footer from './Footer';
 import Announcement from '@material-ui/icons/RecordVoiceOver'
@@ -43,13 +42,6 @@ const styles = (theme: Theme) =>
       width: 'auto',
       maxWidth: '800px',
       minWidth: '300px',
-      textAlign: 'center'
-    },
-    centeredDown: {
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      paddingBottom: '5em',
-      color: '#ffffff88',
       textAlign: 'center'
     },
     divider: {
@@ -143,7 +135,7 @@ class Index extends React.Component<Props, State> {
         <Banner />
 
         <Content />
-        <div className={classes.centered}>
+        <div className="pagebody">
           <Grid container spacing={0} className={classes.container}>
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
                 <img
