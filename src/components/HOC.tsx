@@ -10,12 +10,12 @@ function noop(comp:any):any {
     return comp;
 }
 
-function noopHOC():any {
+function noopHOC(noprop:any = null):any {
     return noop;
 }
 
 export default function HOC(Component:any, styles:any = null, noTranslate:boolean = false) {
-    const withStylesWrap = styles ? withStyles : noop;
+    const withStylesWrap = styles ? withStyles : noopHOC;
     const translateWrap = noTranslate ? noopHOC : translate;
     
     return translateWrap()(withRoot(withStylesWrap(styles)(observer(Component))));

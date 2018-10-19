@@ -16,6 +16,11 @@ interface State {
   store:AppModel.Type
 }
 class DebateRouter extends React.Component<any,State> {
+  constructor(props:any) {
+    super(props);
+    console.log('debate con');
+  }
+
   private onPeer = (peer:any) => {
     this.setState( {peer} )
   }
