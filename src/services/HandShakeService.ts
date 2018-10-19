@@ -59,17 +59,28 @@ export async function handshake(
 
   const cbs = {
     onSignal: async (sigdata: string) => {
-      //  console.log('onSignal gen:', mycolor, sigdata);
+      // console.log('onSignal gen:', mycolor, sigdata);
       await updateMatch(matchid, mycolor, sigdata, state);
     }
   };
   ps.init(isLeader, cbs);
 
-  const otherPlayerState = (await handshakeUntilConnected(
+  let otherPlayerState: PlayerTableData = { char: -1 };
+  handshakeUntilConnected(
+    matchid,
+    otherColor,
+    ps,
+    (otherState: PlayerTableData) => {
+      otherPlayerState = otherState;
+    }
+  );
+
+  // const otherPlayerState: PlayerTableData = { char: 1 };
+  /* (await handshakeUntilConnected(
     matchid,
     otherColor,
     ps
-  )) as PlayerTableData;
+  )) as PlayerTableData;*/
 
   await ps.onConnection();
   stopSyncing();
@@ -113,7 +124,7 @@ async function readMatchWait(
   const statekey = team + 'state';
   const keyval = match[teamkey];
 
-  console.log('recalling state from other:', statekey, match[statekey]);
+  // console.log('recalling state from other:', statekey, match[statekey]);
 
   if (!keyval || keyval === '-' || keyval === lastValue) {
     lastValue = keyval;
@@ -122,7 +133,7 @@ async function readMatchWait(
     console.log('key not set yet', teamkey);
     // return;
     // throw new Error('key not set yet ' + teamkey);
-    await delay(3000);
+    await delay(2000);
     return await readMatchWait(matchid, team);
   }
 
@@ -148,8 +159,9 @@ interface PlayerTableData {
 async function handshakeUntilConnected(
   matchid: string,
   team: 'blue' | 'red',
-  ps: PeerService
-): Promise<PlayerTableData | null> {
+  ps: PeerService,
+  onState?: (state: PlayerTableData) => void
+): Promise<null> {
   console.log('handshakeUntilConnected');
   const result = await readMatchWait(matchid, team);
   if (!result) {
@@ -158,10 +170,10 @@ async function handshakeUntilConnected(
   }
   const { key, state } = result;
   ps.giveResponse(key);
+  if (onState) onState(state);
 
   await delay(3000);
-  handshakeUntilConnected(matchid, team, ps);
-  return state;
+  return handshakeUntilConnected(matchid, team, ps);
 }
 
 async function updateMatch(
@@ -188,10 +200,9 @@ async function updateMatch(
         Value: key /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
       },
       [statekey]: {
-        Action: 'PUT', // ADD | PUT | DELETE,
-        Value: stateStr /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
+        Action: 'PUT',
+        Value: stateStr
       }
-      /* '<AttributeName>': ... */
     },
     TableName: 'match'
   };
@@ -206,30 +217,6 @@ async function stopSyncing() {
   stopSync = true;
 }
 
-// async function handShake(matchid: string, state:any, p: PeerService, isLeader:boolean) {}
-
-/*
-async function handShakeOther(matchid: string, state:any, p: PeerService) {
-  let givenSignal = false;
-  const cbs = {
-    onSignal: async (data: string) => {
-      console.log('onSignal from leader:', data);
-      // if (givenSignal || data === '{"renegotiate":true}') return;
-      givenSignal = true;
-      await updateMatch(matchid, 'blue', data);
-    }
-  };
-  p.init(false, cbs);
-
-  handshakeUntilConnected(matchid, 'red', p);
-
-  await p.onConnection();
-  stopSyncing();
-  console.log('other rtc connection');
-
-  return p;
-}*/
-
 let docClient: DynamoDB.DocumentClient;
 export function init(): void {
   if (!docClient)
@@ -237,15 +224,3 @@ export function init(): void {
       apiVersion: '2012-08-10'
     });
 }
-
-/* not needed, config in configs/auth
-  Amplify.addPluggable(new AWSIoTProvider({
-    aws_pubsub_region: 'us-east-1',
-    aws_pubsub_endpoint: 'wss://xxxxxxxxxxxxx.iot.<YOUR-AWS-REGION>.amazonaws.com/mqtt',
-  }));
-  */
-
-/*
-t, {user: "p80", ttl: "1537210403", team: "blue", leader: false, match: "e6428703-4766-4124-8563-84217c19a593"}
-t2, {ttl: "1537213823", redkey: "-", bluekey: "-", id: "e6428703-4766-4124-8563-84217c19a593"}
-*/

@@ -13,12 +13,12 @@ interface Props {
 }
 interface State {
   peer?:PeerService,
-  store:AppModel.Type
 }
 class DebateRouter extends React.Component<any,State> {
   constructor(props:any) {
     super(props);
     console.log('debate con');
+    this.state = {};
   }
 
   private onPeer = (peer:any) => {
