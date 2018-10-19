@@ -32,6 +32,11 @@ function onMatchEvent(
 ) {
   if (err) {
     console.log('onMatch', err);
+    if (err.toString().indexOf('expired') !== -1) {
+      onMatchedCB('expired_login');
+    } else {
+      onMatchedCB('qerror');
+    }
     return;
   }
   console.log('onMatch output', data.MatchmakingTicket);

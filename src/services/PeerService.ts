@@ -77,6 +77,7 @@ export default class PeerService {
   }
 
   public destroy() {
+    console.log('peer destroyed');
     this._peer.destroy();
   }
 }

@@ -13,12 +13,12 @@
     "@types/react-i18next": "^7.8.3",
     "async-retry": "^1.2.3",
     "aws-amplify-react": "^2.1.1",
-    "aws-sdk": "^2.337.0",
+    "aws-sdk": "^2.338.0",
     "env-cmd": "^8.0.2",
     "formik": "^1.3.1",
     "hark": "^1.2.3",
     "history": "^4.7.2",
-    "i18next": "^11.9.1",
+    "i18next": "^11.10.0",
     "i18next-browser-languagedetector": "^2.2.3",
     "i18next-localstorage-backend": "^1.1.4",
     "i18next-xhr-backend": "^1.5.1",
@@ -38,7 +38,7 @@
     "react-scripts-ts": "^3.1.0",
     "react-waypoint": "^8.0.3",
     "remotedev": "^0.2.7",
-    "simple-peer": "^9.1.2",
+    "simple-peer": "github:feross/simple-peer#master",
     "webfontloader": "^1.6.28"
   },
   "scripts": {
