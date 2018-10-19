@@ -133,8 +133,12 @@ class DebateScene extends React.Component<Props, State> {
   };
 
   public render() {
-    const { classes } = this.props;
+    const { classes, store } = this.props;
     const { talkingBlue, talkingRed } = this.state;
+
+    const blueChar = this.props.store.debate!.character;
+    const redChar = this.props.store.debate!.match!.otherState!.character;
+
     return (
       <React.Fragment>
         <div className={classes.centered2}>
@@ -148,7 +152,7 @@ class DebateScene extends React.Component<Props, State> {
             {this.state.talkingBlue && <div>Other is Speaking</div>} --
             {this.state.talkingRed && <div>Red is Speaking</div>}
           </div>
-          <DebateDisplay talkingBlue={talkingBlue} talkingRed={talkingRed} />
+          <DebateDisplay blueChar={blueChar} redChar={redChar} talkingBlue={talkingBlue} talkingRed={talkingRed} />
         </div>
       </React.Fragment>
     );

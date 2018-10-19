@@ -73,6 +73,7 @@ const bgOptions = {
 
 import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
+import DebateError from './DebateError';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   onPeer: (p: any) => void;
@@ -81,10 +82,15 @@ interface Props extends WithStyles<typeof styles> {
 class LoadingScene extends React.Component<Props, any> {
   constructor(props: any) {
     super(props);
+    this.state = {error:null}
   }
 
   private onMatched = (match: any) => {
     // TODO
+    if(typeof match === 'string') {
+      this.setState({error:match})
+      return;
+    }
     this.props.store.debate.createMatch(match);
   };
 
@@ -124,13 +130,14 @@ class LoadingScene extends React.Component<Props, any> {
     const matchId = this.props.store.debate.match!.matchId;
     const isLeader = this.props.store.debate.match!.leader;
     const state = { char: this.props.store.debate.character }; // TODO pretect against premium chars
-    const peer = await shake.handshake(matchId, isLeader, state, stream);
+    const { peer, otherPlayerState } = await shake.handshake(matchId, isLeader, state, stream);
     this.props.onPeer(peer);
+    if(otherPlayerState) this.props.store.debate.setOtherState({ character: otherPlayerState.char });
     this.props.store.debate.syncMatch();
   };
 
   public async componentWillUpdate() {
-    if (!this.props.store.debate.match) return;
+    if (!this.props.store.debate.match) return; // no match data yet
 
     console.log('ready for matching');
 
@@ -155,6 +162,7 @@ class LoadingScene extends React.Component<Props, any> {
 
     return (
       <div className={classes.centered}>
+        { this.state.error && <DebateError store={store} error={this.state.error}/>}
         <div className={classes.bannerAnim}>
           <Lottie
             options={bgOptions}

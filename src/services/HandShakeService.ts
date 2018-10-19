@@ -1,7 +1,7 @@
 import { bool } from 'aws-sdk/clients/signer';
 
-import DynamoDB from 'aws-sdk/clients/dynamodb'
-import AWS from 'aws-sdk/global'
+import DynamoDB from 'aws-sdk/clients/dynamodb';
+import AWS from 'aws-sdk/global';
 
 import Peer from 'simple-peer';
 import PeerService from './PeerService';
@@ -51,7 +51,7 @@ export async function handshake(
 ) {
   // const matchid = ticket.Item!.match;
   // ===
-  const p = new PeerService(stream);
+  const ps = new PeerService(stream);
   // ====
   const mycolor = isLeader ? 'red' : 'blue';
   const otherColor = isLeader ? 'blue' : 'red';
@@ -59,19 +59,24 @@ export async function handshake(
 
   const cbs = {
     onSignal: async (sigdata: string) => {
-      // console.log('onSignal gen:', mycolor, sigdata);
+      console.log('onSignal gen:', mycolor, sigdata);
       await updateMatch(matchid, mycolor, sigdata, state);
     }
   };
-  p.init(isLeader, cbs);
+  ps.init(isLeader, cbs);
 
-  handshakeUntilConnected(matchid, otherColor, p);
+  const otherPlayerState = (await handshakeUntilConnected(
+    matchid,
+    otherColor,
+    ps
+  )) as PlayerTableData;
 
-  await p.onConnection();
+  await ps.onConnection();
   stopSyncing();
+
   console.log(mycolor + ' rtc elected');
 
-  return p;
+  return { peer: ps, otherPlayerState };
 }
 
 async function readMatch(matchid: string): Promise<HandShakeCallback> {
@@ -82,7 +87,7 @@ async function readMatch(matchid: string): Promise<HandShakeCallback> {
     TableName: 'match'
   };
   const ticket2 = await docClient.get(params2).promise();
-  console.log('t2,', ticket2.Item);
+  // console.log('t2,', ticket2.Item);
 
   return ticket2.Item! as HandShakeCallback;
 }
@@ -110,10 +115,6 @@ async function readMatchWait(
 
   console.log('recalling state from other:', statekey, match[statekey]);
 
-  let stateval = null; // JSON.parse(match[statekey]);
-  try {
-    stateval = JSON.parse(match[statekey]);
-  } catch (err) {}
   if (!keyval || keyval === '-' || keyval === lastValue) {
     lastValue = keyval;
     // keyval !== '{"renegotiate":true}' ||
@@ -121,9 +122,17 @@ async function readMatchWait(
     console.log('key not set yet', teamkey);
     // return;
     // throw new Error('key not set yet ' + teamkey);
-    await delay(2000);
+    await delay(3000);
     return await readMatchWait(matchid, team);
   }
+
+  let stateval = null; // JSON.parse(match[statekey]);
+  try {
+    stateval = JSON.parse(match[statekey]);
+  } catch (err) {
+    throw new Error('couldnt parse other player');
+  }
+
   return { key: keyval, state: stateval };
   /* },
     {
@@ -132,11 +141,15 @@ async function readMatchWait(
   // );
 }
 
+interface PlayerTableData {
+  char: number;
+}
+
 async function handshakeUntilConnected(
   matchid: string,
   team: 'blue' | 'red',
-  p: any
-): Promise<any> {
+  ps: PeerService
+): Promise<PlayerTableData | null> {
   console.log('handshakeUntilConnected');
   const result = await readMatchWait(matchid, team);
   if (!result) {
@@ -144,10 +157,11 @@ async function handshakeUntilConnected(
     return null; // just end
   }
   const { key, state } = result;
-  p.giveResponse(key);
+  ps.giveResponse(key);
 
-  await delay(1000);
-  handshakeUntilConnected(matchid, team, p);
+  await delay(3000);
+  handshakeUntilConnected(matchid, team, ps);
+  return state;
 }
 
 async function updateMatch(

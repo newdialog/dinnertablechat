@@ -130,11 +130,19 @@ const tableOptions = {
   }
 };
 
+const characters = [
+  {talk:aliceTalkOptions, listen:aliceListenOptions},
+  {talk:rabitTalkOptions, listen:rabitListenOptions},
+  {talk:aliceTalkOptions, listen:aliceListenOptions}
+];
+
 // import * as AppModel from '../../models/AppModel';
 interface Props extends WithStyles<typeof styles> {
   // store: AppModel.Type;
   talkingBlue: boolean;
   talkingRed: boolean;
+  blueChar:number;
+  redChar:number;
 }
 
 interface State {
@@ -197,6 +205,9 @@ class DebateScene extends React.Component<Props, State> {
     // const { } = this.state;
     const blueCss = talkingBlue ? 'talking' : 'idle';
     const redCss = talkingRed ? 'talking' : 'idle';
+
+    const redChar = characters[ this.props.redChar ];
+    const blueChar = characters[ this.props.blueChar ];
     return (
       <React.Fragment>
         <div className={classes.centered}>
@@ -214,7 +225,7 @@ class DebateScene extends React.Component<Props, State> {
                 <div hidden={animBlue} ref={this.blue}>
                   <Lottie
                     speed={1.2}
-                    options={aliceListenOptions}
+                    options={blueChar.listen}
                     isClickToPauseDisabled={true}
                     eventListeners={[
                       {
@@ -227,7 +238,7 @@ class DebateScene extends React.Component<Props, State> {
                 <div hidden={!animBlue}>
                   <Lottie
                     speed={1.2}
-                    options={aliceTalkOptions}
+                    options={blueChar.talk}
                     isClickToPauseDisabled={true}
                   />
                 </div>
@@ -236,14 +247,14 @@ class DebateScene extends React.Component<Props, State> {
                 <div hidden={animRed} ref={this.red}>
                   <Lottie
                     speed={1.2}
-                    options={rabitListenOptions}
+                    options={redChar.listen}
                     isClickToPauseDisabled={true}
                   />
                 </div>
                 <div hidden={!animRed}>
                   <Lottie
                     speed={1.2}
-                    options={rabitTalkOptions}
+                    options={redChar.talk}
                     isClickToPauseDisabled={true}
                   />
                 </div>

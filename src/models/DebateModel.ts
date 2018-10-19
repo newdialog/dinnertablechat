@@ -1,11 +1,16 @@
 import { types, Instance } from 'mobx-state-tree';
+import { string, number } from 'prop-types';
+
+const OtherPlayerModel = types.model({
+  character: -1
+});
 
 const MatchModel = types.model({
   team: types.enumeration(['red', 'blue']),
   leader: types.boolean,
   userId: types.string,
   matchId: types.string,
-  otherState: types.string, // serialized state of other person
+  otherState: types.maybeNull(OtherPlayerModel), // serialized state of other person
   timeStarted: types.maybe(types.number),
   sync: false
 });
@@ -30,6 +35,10 @@ const DebateModel = types
       // record match started time
       if (!obj.timeStarted)
         self.match!.timeStarted = Math.floor(new Date().getTime() / 1000);
+    },
+    setOtherState(state: Instance<typeof OtherPlayerModel>) {
+      if (!self.match) throw new Error('match model not set yet');
+      self.match!.otherState = state;
     },
     syncMatch() {
       if (!self.match) throw new Error('match not init');

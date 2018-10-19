@@ -136,6 +136,8 @@ class DebateScene extends React.Component<Props, State> {
         </div>
         {this.state.start && (
           <DebateDisplay
+            redChar={1}
+            blueChar={2}
             talkingBlue={talkingBlue}
             talkingRed={talkingRed}
             onClick={this.onStart}
