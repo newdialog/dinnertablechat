@@ -73,14 +73,9 @@ export async function handshake(
     (otherState: PlayerTableData) => {
       otherPlayerState = otherState;
     }
-  );
-
-  // const otherPlayerState: PlayerTableData = { char: 1 };
-  /* (await handshakeUntilConnected(
-    matchid,
-    otherColor,
-    ps
-  )) as PlayerTableData;*/
+  ).catch( (e) => {
+    console.log('handshakeUntilConnected thrown error', e)
+  });
 
   await ps.onConnection();
   stopSyncing();
@@ -114,42 +109,48 @@ async function readMatchWait(
   matchid: string,
   team: 'blue' | 'red'
 ): Promise<DBState | null> {
-  if (stopSync) return null;
-  // return await retry(
-  // async bail => {
-  // if (stopSync) return;
-  const match: HandShakeCallback = await readMatch(matchid);
-  const teamkey = team + 'key';
+  // if (stopSync) return null;
+  return await retry(
+    async bail => {
+      if (stopSync) {
+        return bail(new Error('stopSync'));
+        // return;
+      }
+      const match: HandShakeCallback = await readMatch(matchid);
+      const teamkey = team + 'key';
 
-  const statekey = team + 'state';
-  const keyval = match[teamkey];
+      const statekey = team + 'state';
+      const keyval = match[teamkey];
 
-  // console.log('recalling state from other:', statekey, match[statekey]);
+      // console.log('recalling state from other:', statekey, match[statekey]);
 
-  if (!keyval || keyval === '-' || keyval === lastValue) {
-    lastValue = keyval;
-    // keyval !== '{"renegotiate":true}' ||
-    // await delay(3000);
-    console.log('key not set yet', teamkey);
-    // return;
-    // throw new Error('key not set yet ' + teamkey);
-    await delay(2000);
-    return await readMatchWait(matchid, team);
-  }
+      if (!keyval || keyval === '-' || keyval === lastValue) {
+        lastValue = keyval;
+        // keyval !== '{"renegotiate":true}' ||
+        // await delay(3000);
+        console.log('key not set yet', teamkey);
+        // return;
+        // throw new Error('key not set yet ' + teamkey);
+        // await delay(2000);
+        throw new Error('retry');
+        /// return await readMatchWait(matchid, team);
+      }
 
-  let stateval = null; // JSON.parse(match[statekey]);
-  try {
-    stateval = JSON.parse(match[statekey]);
-  } catch (err) {
-    throw new Error('couldnt parse other player');
-  }
+      let stateval = null; // JSON.parse(match[statekey]);
+      try {
+        stateval = JSON.parse(match[statekey]);
+      } catch (err) {
+        throw new Error('couldnt parse other player');
+      }
 
-  return { key: keyval, state: stateval };
-  /* },
+      return { key: keyval, state: stateval };
+    },
     {
-      retries: 8
-    }*/
-  // );
+      retries: 6,
+      maxTimeout: 3200,
+      minTimeout: 3000
+    }
+  );
 }
 
 interface PlayerTableData {
@@ -161,19 +162,38 @@ async function handshakeUntilConnected(
   team: 'blue' | 'red',
   ps: PeerService,
   onState?: (state: PlayerTableData) => void
-): Promise<null> {
-  console.log('handshakeUntilConnected');
-  const result = await readMatchWait(matchid, team);
-  if (!result) {
-    console.log('handshakeUntilConnected ended');
-    return null; // just end
-  }
-  const { key, state } = result;
-  ps.giveResponse(key);
-  if (onState) onState(state);
+) {
+  let stateFetched = false;
+  return await retry(
+    async bail => {
+      if (stopSync) return 'stopSync'; // bail(new Error('stopSync'));
+      console.log('handshakeUntilConnected');
 
-  await delay(3000);
-  return handshakeUntilConnected(matchid, team, ps);
+      let result: any = null;
+      try {
+        result = await readMatchWait(matchid, team);
+      } catch (e) {
+        console.log('readMatchWait aborted with:', e.Error);
+      }
+
+      if (!result) {
+        console.log('handshakeUntilConnected ended');
+        return 'ended'; // just end
+      }
+      const { key, state } = result;
+      ps.giveResponse(key);
+      if (onState && !stateFetched) onState(state);
+      stateFetched = true;
+
+      throw new Error('retry');
+    },
+    {
+      retries: 6 * 2,
+      factor: 1.5,
+      maxTimeout: 3000,
+      minTimeout: 1000
+    }
+  );
 }
 
 async function updateMatch(
@@ -213,7 +233,7 @@ async function updateMatch(
 
 // Ensure any last minute sync messages are processed
 async function stopSyncing() {
-  await 3000;
+  // await delay(3000);
   stopSync = true;
 }
 
