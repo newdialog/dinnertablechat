@@ -6,11 +6,8 @@ import {
 } from '@material-ui/core/styles';
 import HOC from '../HOC';
 
-import Lottie from 'react-lottie';
-import { observer } from 'mobx-react';
-import { Avatar, Button, Chip, Typography } from '@material-ui/core';
+import { Avatar, Button, Chip, Grid, Typography } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
-import DoneIcon from '@material-ui/icons/Done';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -43,28 +40,54 @@ interface Props extends WithStyles<typeof styles> {
     // store: AppModel.Type;
   }
 
-class DebateFeedback extends React.Component<Props, any> {
+interface State {
+    traitHash: { [key:string]:boolean }
+    agreed: string,
+}
 
-    private handleChipClick() { // TODO: process chip selection
-        return
+class DebateFeedback extends React.Component<Props, State> {
+    constructor(props:Props) {
+        super(props);
+        this.state = { traitHash: {}, agreed: 'na' };
     }
 
-    private handleAgreed = () => { // TODO: process agreement response
-        return
+    private handleChipClick(label: string) { 
+        const traitHash = this.state.traitHash;
+        traitHash[label] = !traitHash[label];
+        this.setState({ traitHash })
     }
 
-    private handleDidntAgree = () => { // TODO: process agreement response
-        return 
+    private handleAgreed = () => {
+        this.setState({ agreed: 'yes' });
+    }
+
+    private handleDidntAgree = () => {
+        this.setState({ agreed: 'no' });
     }
 
     private handleConfirm = () => { // TODO: update endpt w user selection, route back home
-        return
+        const hash = this.state.traitHash;
+        const selectedTraits = [];
+        for (const key in hash) {
+            // if (hash[key]) selectedTraits.push(key);
+        }
+        const response = { agreed: this.state.agreed, selectedTraits }
+        console.log('responses', response);
     }
 
     public render() {
         const { classes } = this.props; 
+        const { agreed } = this.state;
+        const traits = this.state.traitHash;
         return (
             <div className={classes.root}>
+            <Grid
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justify="center"
+                >
                 <div className={classes.agreeContainer}>
                     <Typography
                         component="span"
@@ -74,10 +97,12 @@ class DebateFeedback extends React.Component<Props, any> {
                     >
                         Did you find common ground?
                     </Typography>
-                    <Button color="secondary" variant="outlined" className={classes.button} onClick={this.handleAgreed}>
+                    <Button variant="contained" className={classes.button} onClick={this.handleAgreed}
+                            color={ (agreed === 'yes') ? 'primary': 'default' }>
                         Yes
                     </Button>
-                    <Button color="secondary" variant="outlined" className={classes.button} onClick={this.handleDidntAgree}>
+                    <Button variant="contained" className={classes.button} onClick={this.handleDidntAgree}
+                            color={ (agreed === 'no') ? 'primary': 'default' }>
                         No
                     </Button>
                 </div>
@@ -97,8 +122,8 @@ class DebateFeedback extends React.Component<Props, any> {
                                 icon={<FaceIcon />}
                                 label={label}
                                 className={classes.chip}
-                                color="secondary"
-                                onClick={this.handleChipClick}
+                                color={traits[label] ? 'primary': 'default'}
+                                onClick={() => this.handleChipClick(label)}
                                 clickable
                             />)
                     })}
@@ -118,16 +143,17 @@ class DebateFeedback extends React.Component<Props, any> {
                                 key={i}
                                 icon={<FaceIcon />}
                                 label={label}
-                                onClick={this.handleChipClick}
+                                onClick={() => this.handleChipClick(label)}
                                 className={classes.chip}
-                                color="secondary"
+                                color={traits[label] ? 'primary': 'default'}
                                 clickable
                             />)
                     })}
                 </div>
-                <Button color="primary" variant="contained" className={classes.button} onClick={this.handleConfirm}>
+                <Button color="secondary" variant="contained" className={classes.button} onClick={this.handleConfirm}>
                     Confirm
                 </Button>
+                </Grid>
             </div>
         );
     }
