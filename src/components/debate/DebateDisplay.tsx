@@ -180,7 +180,15 @@ class DebateScene extends React.Component<Props, State> {
     };
   }
 
-  public componentDidMount() {}
+  public componentDidMount() {
+    // Lock orientation if possible
+    const s = window.screen as any;
+    s.lockOrientationUniversal = s.lockOrientation || s.mozLockOrientation || s.msLockOrientation;
+    if (screen.orientation && typeof screen.orientation.lock === 'function') {
+      return window.screen.orientation.lock('landscape')
+    }
+    if(s.lockOrientationUniversal) s.lockOrientationUniversal('landscape');
+  }
 
   private onLoopComplete = () => {
     // console.log('onLoopComplete', this.props.talkingBlue)

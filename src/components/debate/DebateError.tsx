@@ -34,7 +34,8 @@ const errors = {
   'other_disconnected': 'Player disconnected.',
   'webrtc_error': 'Misc error: Webrtc connection failed',
   'handshake_timeout': 'Handshake with match timed out',
-  'handshake_error': 'Misc error with match handshake'
+  'handshake_error': 'Misc error with match handshake',
+  'mic_timeout': 'Failed to activate browser mic. Check browser settings.'
 }
 
 class DebateError extends React.Component<Props, any> {

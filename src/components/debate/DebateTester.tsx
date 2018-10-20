@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core/styles';
 import hark, { SpeechEvent } from 'hark';
 import { Typography, Divider, Button } from '@material-ui/core';
-
+import getMedia from '../../utils/getMedia';
 import DebateDisplay from './DebateDisplay';
 
 const styles = (theme: Theme) =>
@@ -67,24 +67,25 @@ class DebateScene extends React.Component<Props, State> {
   };
 
   public componentDidMount() {
-    // store:AppModel.Type, 
-    return;
-    this.props.store.debate.setPosition(0, 'guns')
-    this.props.store.debate.setContribution(0);
-    this.props.store.debate.setCharacter(0);
-    this.props.store.debate.syncMatch();
+    // this.props.store.debate.setPosition(0, 'guns')
+    // this.props.store.debate.setContribution(0);
+    // this.props.store.debate.setCharacter(0);
+    // this.props.store.debate.syncMatch();
   }
 
-  public onStart = (e: React.MouseEvent) => {
+  public onStart = async (e: React.MouseEvent) => {
     e.preventDefault();
     console.log('start');
     this.setState({ start: true });
-    navigator.getUserMedia(
-      { video: false, audio: true },
-      this.gotMedia.bind(this),
-      () => {}
-    );
-    
+
+    try {
+      const media = await getMedia(
+          { video: false, audio: true });
+
+      this.gotMedia(media);
+    } catch(e) {
+      console.error(e);
+    }
   };
 
   public gotMedia = (stream?: MediaStream) => {

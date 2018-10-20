@@ -1,15 +1,12 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import {
-  createStyles,
-  WithStyles,
-  Theme
-} from '@material-ui/core/styles';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import * as QS from '../../services/QueueService';
 import * as shake from '../../services/HandShakeService';
 import { Typography } from '@material-ui/core';
 import Reveal from 'react-reveal/Reveal';
+import getMedia from '../../utils/getMedia';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -38,27 +35,27 @@ const styles = (theme: Theme) =>
       zIndex: -1
     },
     centeredDown: {
-      width:'100%',
+      width: '100%',
       marginLeft: 'auto',
       marginRight: 'auto',
       paddingBottom: '1em',
-      paddingTop:'23vh',
+      paddingTop: '23vh',
       color: '#ffffff88',
       textAlign: 'center',
       display: 'inline-block'
     },
     bannerAnimOverlay: {
-      zIndex:-1, 
+      zIndex: -1,
       transform: 'translateZ(0)',
       position: 'absolute',
       left: 0,
       top: 0,
       bottom: 0,
       right: 0,
-      width:'100%',
-      background:'rgba(0, 0, 0, 0.35)',
+      width: '100%',
+      background: 'rgba(0, 0, 0, 0.35)',
       backgroundBlendMode: 'multiply'
-    },
+    }
   });
 
 import Lottie from 'react-lottie';
@@ -78,17 +75,17 @@ interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   onPeer: (p: any) => void;
 }
- 
+
 class LoadingScene extends React.Component<Props, any> {
   constructor(props: any) {
     super(props);
-    this.state = {error:null}
+    this.state = { error: null };
   }
 
   private onMatched = (match: any) => {
     // TODO
-    if(typeof match === 'string') {
-      this.setState({error:match})
+    if (typeof match === 'string') {
+      this.setState({ error: match });
       return;
     }
     this.props.store.debate.createMatch(match);
@@ -131,19 +128,22 @@ class LoadingScene extends React.Component<Props, any> {
     const isLeader = this.props.store.debate.match!.leader;
     const state = { char: this.props.store.debate.character }; // TODO pretect against premium chars
 
-    let result:any;
+    let result: any;
     try {
       result = await shake.handshake(matchId, isLeader, state, stream);
-    } catch(e) {
-      const retryError = e.toString().indexOf('retry')!==-1;
+    } catch (e) {
+      const retryError = e.toString().indexOf('retry') !== -1;
       console.warn('handshake error', retryError, e);
-      if(retryError) return this.setState({error:'handshake_timeout'});
-      else return this.setState({error:'handshake_error'});
+      if (retryError) return this.setState({ error: 'handshake_timeout' });
+      else return this.setState({ error: 'handshake_error' });
     }
-    const { peer, otherPlayerState } = result
+    const { peer, otherPlayerState } = result;
 
     this.props.onPeer(peer);
-    if(otherPlayerState) this.props.store.debate.setOtherState({ character: otherPlayerState.char });
+    if (otherPlayerState)
+      this.props.store.debate.setOtherState({
+        character: otherPlayerState.char
+      });
     this.props.store.debate.syncMatch();
   };
 
@@ -152,11 +152,13 @@ class LoadingScene extends React.Component<Props, any> {
 
     console.log('ready for matching');
 
-    navigator.getUserMedia(
-      { video: false, audio: true },
-      this.gotMedia,
-      () => {}
-    );
+    try {
+      const media = await getMedia();
+      this.gotMedia(media);
+    } catch (e) {
+      console.log('getMediaError', e);
+      this.setState({ error: 'mic_timeout' });
+    }
   }
 
   public render() {
@@ -167,13 +169,15 @@ class LoadingScene extends React.Component<Props, any> {
     const matchedsync = store.debate.match && store.debate.match!.sync;
 
     let text = 'loading';
-    if(!store.debate.match) text = 'looking for match';
-    if(matchedUnsync) text = 'found match... handshaking';
-    if(matchedsync) text = 'handshaking complete';
+    if (!store.debate.match) text = 'looking for match';
+    if (matchedUnsync) text = 'found match... handshaking';
+    if (matchedsync) text = 'handshaking complete';
 
     return (
       <div className={classes.centered}>
-        { this.state.error && <DebateError store={store} error={this.state.error}/>}
+        {this.state.error && (
+          <DebateError store={store} error={this.state.error} />
+        )}
         <div className={classes.bannerAnim}>
           <Lottie
             options={bgOptions}
@@ -181,7 +185,7 @@ class LoadingScene extends React.Component<Props, any> {
             isClickToPauseDisabled={true}
           />
         </div>
-        <div className={classes.bannerAnimOverlay}></div>
+        <div className={classes.bannerAnimOverlay} />
 
         <div className={classes.centeredDown}>
           <Typography variant="h1" gutterBottom align="center">
