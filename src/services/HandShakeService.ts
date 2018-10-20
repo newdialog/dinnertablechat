@@ -49,40 +49,62 @@ export async function handshake(
   state: any,
   stream: MediaStream
 ) {
-  // const matchid = ticket.Item!.match;
-  // ===
-  const ps = new PeerService(stream);
-  // ====
-  const mycolor = isLeader ? 'red' : 'blue';
-  const otherColor = isLeader ? 'blue' : 'red';
-  console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
+  return new Promise(async (resolve, reject) => {
+    // const matchid = ticket.Item!.match;
+    // ===
+    const ps = new PeerService(stream);
+    // ====
+    const mycolor = isLeader ? 'red' : 'blue';
+    const otherColor = isLeader ? 'blue' : 'red';
+    console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
 
-  const cbs = {
-    onSignal: async (sigdata: string) => {
-      // console.log('onSignal gen:', mycolor, sigdata);
-      await updateMatch(matchid, mycolor, sigdata, state);
+    const cbs = {
+      onSignal: async (sigdata: string) => {
+        // console.log('onSignal gen:', mycolor, sigdata);
+        await updateMatch(matchid, mycolor, sigdata, state);
+      }
+    };
+    ps.init(isLeader, cbs);
+
+    let otherPlayerState: PlayerTableData = { char: -1 };
+
+    // try {
+      handshakeUntilConnected(
+        matchid,
+        otherColor,
+        ps,
+        (otherState: PlayerTableData) => {
+          otherPlayerState = otherState;
+        }
+      ).catch( (e) => {
+        const retryError = e.toString().indexOf('retry')!==-1;
+        // if(retryError) throw new Error('retry');
+        reject('retry');
+        console.log('handshakeUntilConnected ended with', e);
+      })
+    /* .catch( (e) => {
+      const retryError = e.toString().indexOf('retry')!==-1;
+      if(retryError) throw new Error('retry');
+      console.log('handshakeUntilConnected thrown error', retryError, e)
+    });*/
+    try {
+      setTimeout(() => {
+        if(stopSync) return;
+        console.log('webrtc onConnection timeout')
+        stopSyncing();
+        reject('retry');
+        // throw new Error('retry');
+      }, 1000 * 13);
+    } catch(e) {
+      throw new Error(e);
     }
-  };
-  ps.init(isLeader, cbs);
+    await ps.onConnection();
+    stopSyncing();
 
-  let otherPlayerState: PlayerTableData = { char: -1 };
-  handshakeUntilConnected(
-    matchid,
-    otherColor,
-    ps,
-    (otherState: PlayerTableData) => {
-      otherPlayerState = otherState;
-    }
-  ).catch( (e) => {
-    console.log('handshakeUntilConnected thrown error', e)
-  });
+    console.log(mycolor + ' rtc elected');
 
-  await ps.onConnection();
-  stopSyncing();
-
-  console.log(mycolor + ' rtc elected');
-
-  return { peer: ps, otherPlayerState };
+    return resolve({ peer: ps, otherPlayerState });
+  })
 }
 
 async function readMatch(matchid: string): Promise<HandShakeCallback> {
@@ -113,8 +135,8 @@ async function readMatchWait(
   return await retry(
     async bail => {
       if (stopSync) {
-        return bail(new Error('stopSync'));
-        // return;
+        bail(new Error('stopSync'));
+        return;
       }
       const match: HandShakeCallback = await readMatch(matchid);
       const teamkey = team + 'key';
@@ -140,13 +162,15 @@ async function readMatchWait(
       try {
         stateval = JSON.parse(match[statekey]);
       } catch (err) {
-        throw new Error('couldnt parse other player');
+        console.error('couldnt parse other player');
+        bail(new Error('couldnt parse other player'));
+        return;
       }
 
       return { key: keyval, state: stateval };
     },
     {
-      retries: 6,
+      retries: 8,
       maxTimeout: 3200,
       minTimeout: 3000
     }
@@ -173,13 +197,22 @@ async function handshakeUntilConnected(
       try {
         result = await readMatchWait(matchid, team);
       } catch (e) {
-        console.log('readMatchWait aborted with:', e.Error);
+        const retryError = e.toString().indexOf('retry')!==-1;
+        // console.log(JSON.stringify(e), typeof e, );
+        if(retryError) {
+          console.log('RETRY error');
+          bail(new Error('retry'));
+          return // 'retry';
+        } else { 
+          console.log('readMatchWait aborted with:', e.Error);
+          return bail(new Error('error'));
+        }
       }
 
-      if (!result) {
+      /* if (!result) {
         console.log('handshakeUntilConnected ended');
-        return 'ended'; // just end
-      }
+        return bail(new Error('ended')); // just end
+      }*/
       const { key, state } = result;
       ps.giveResponse(key);
       if (onState && !stateFetched) onState(state);

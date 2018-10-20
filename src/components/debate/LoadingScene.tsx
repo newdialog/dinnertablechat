@@ -130,7 +130,18 @@ class LoadingScene extends React.Component<Props, any> {
     const matchId = this.props.store.debate.match!.matchId;
     const isLeader = this.props.store.debate.match!.leader;
     const state = { char: this.props.store.debate.character }; // TODO pretect against premium chars
-    const { peer, otherPlayerState } = await shake.handshake(matchId, isLeader, state, stream);
+
+    let result:any;
+    try {
+      result = await shake.handshake(matchId, isLeader, state, stream);
+    } catch(e) {
+      const retryError = e.toString().indexOf('retry')!==-1;
+      console.warn('handshake error', retryError, e);
+      if(retryError) return this.setState({error:'handshake_timeout'});
+      else return this.setState({error:'handshake_error'});
+    }
+    const { peer, otherPlayerState } = result
+
     this.props.onPeer(peer);
     if(otherPlayerState) this.props.store.debate.setOtherState({ character: otherPlayerState.char });
     this.props.store.debate.syncMatch();

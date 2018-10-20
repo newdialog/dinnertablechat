@@ -33,6 +33,8 @@ const errors = {
   'qerror': 'Something went wrong with the Queue!',
   'other_disconnected': 'Player disconnected.',
   'webrtc_error': 'Misc error: Webrtc connection failed',
+  'handshake_timeout': 'Handshake with match timed out',
+  'handshake_error': 'Misc error with match handshake'
 }
 
 class DebateError extends React.Component<Props, any> {
@@ -44,6 +46,7 @@ class DebateError extends React.Component<Props, any> {
   private handleClose = () => {
     this.setState({ open: false });
     this.props.store.debate.resetQueue();
+    this.props.store.router.push('/play');
   };
   
   public render() {
