@@ -1,8 +1,8 @@
 // import AWS, { GameLift } from 'aws-sdk';
 
-import GameLift from 'aws-sdk/clients/gamelift'
+import GameLift from 'aws-sdk/clients/gamelift';
 // import DynamoDB from 'aws-sdk/clients/dynamodb'
-import AWS from 'aws-sdk/global'
+import AWS from 'aws-sdk/global';
 
 import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
@@ -25,13 +25,18 @@ export function init(options: GameLift.ClientConfiguration) {
   gameLift = new GameLift(options);
 }
 
-function onMatch(
+function onMatchEvent(
   onMatchedCB: OnMatchedCB,
   err: AWS.AWSError,
   data: GameLift.StartMatchmakingOutput
 ) {
   if (err) {
     console.log('onMatch', err);
+    if (err.toString().indexOf('expired') !== -1) {
+      onMatchedCB('expired_login');
+    } else {
+      onMatchedCB('qerror');
+    }
     return;
   }
   console.log('onMatch output', data.MatchmakingTicket);
@@ -70,14 +75,15 @@ async function poll(onMatchedCB: OnMatchedCB, tid: string, playerId: string) {
         matchId: player.match,
         sync: false,
         userId: playerId,
-        otherState: '{}',
+        otherState: null,
         timeStarted: 0
       });
       return;
     }
     if (ticket.Status === 'TIMED_OUT') {
+      onMatchedCB('timeout');
       console.log('timed out, stopping poll');
-      return;
+      return; // not polling
     }
     console.log('ticketinfo', ticket.Status, ticket);
     setTimeout(poll, 9000, onMatchedCB, tid, playerId);
@@ -86,7 +92,8 @@ async function poll(onMatchedCB: OnMatchedCB, tid: string, playerId: string) {
   //
 }
 
-type OnMatchedCB = (model: OnMatched) => void;
+type ErrorString = string;
+type OnMatchedCB = (model: OnMatched | ErrorString) => void;
 export function queueUp(
   topic: string,
   side: integer,
@@ -118,6 +125,7 @@ export function queueUp(
         PlayerAttributes: {
           side: { N: side },
           donation: { N: donation },
+          character: { N: chararacter },
           topic: { S: topic }
         },
         PlayerId: playerId,
@@ -125,7 +133,7 @@ export function queueUp(
       }
     ]
   };
-  gameLift.startMatchmaking(options, onMatch.bind(null, onMatchedCB));
+  gameLift.startMatchmaking(options, onMatchEvent.bind(null, onMatchedCB));
 }
 
 /*

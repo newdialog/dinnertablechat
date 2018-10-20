@@ -33,6 +33,7 @@ const styles = (theme: Theme) =>
 import * as AppModel from '../../models/AppModel';
 import PeerService from '../../services/PeerService';
 import HOC from '../HOC';
+import DebateError from './DebateError';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   peer: PeerService;
@@ -41,6 +42,7 @@ interface Props extends WithStyles<typeof styles> {
 interface State {
   talkingBlue: boolean;
   talkingRed: boolean;
+  error?: string;
   // speaking:boolean
 }
 
@@ -94,6 +96,11 @@ class DebateScene extends React.Component<Props, State> {
     const p = this.peer;
 
     p.on('error', err => {
+      if(err.toString().indexOf('connection failed')!==-1) {
+        this.setState({error:'other_disconnected'})
+      } else {
+        this.setState({error:'webrtc_error'})
+      }
       console.log('error', err);
     });
 
@@ -133,10 +140,15 @@ class DebateScene extends React.Component<Props, State> {
   };
 
   public render() {
-    const { classes } = this.props;
+    const { classes, store } = this.props;
     const { talkingBlue, talkingRed } = this.state;
+
+    const blueChar = this.props.store.debate!.character;
+    const redChar = this.props.store.debate!.match!.otherState!.character;
+
     return (
       <React.Fragment>
+        { this.state.error && <DebateError error={this.state.error} store={store}/>}
         <div className={classes.centered2}>
           <div>
             <h1>Debate Room System</h1>
@@ -148,7 +160,7 @@ class DebateScene extends React.Component<Props, State> {
             {this.state.talkingBlue && <div>Other is Speaking</div>} --
             {this.state.talkingRed && <div>Red is Speaking</div>}
           </div>
-          <DebateDisplay talkingBlue={talkingBlue} talkingRed={talkingRed} />
+          <DebateDisplay blueChar={blueChar} redChar={redChar} talkingBlue={talkingBlue} talkingRed={talkingRed} />
         </div>
       </React.Fragment>
     );

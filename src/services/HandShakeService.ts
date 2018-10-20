@@ -1,7 +1,7 @@
 import { bool } from 'aws-sdk/clients/signer';
 
-import DynamoDB from 'aws-sdk/clients/dynamodb'
-import AWS from 'aws-sdk/global'
+import DynamoDB from 'aws-sdk/clients/dynamodb';
+import AWS from 'aws-sdk/global';
 
 import Peer from 'simple-peer';
 import PeerService from './PeerService';
@@ -49,29 +49,62 @@ export async function handshake(
   state: any,
   stream: MediaStream
 ) {
-  // const matchid = ticket.Item!.match;
-  // ===
-  const p = new PeerService(stream);
-  // ====
-  const mycolor = isLeader ? 'red' : 'blue';
-  const otherColor = isLeader ? 'blue' : 'red';
-  console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
+  return new Promise(async (resolve, reject) => {
+    // const matchid = ticket.Item!.match;
+    // ===
+    const ps = new PeerService(stream);
+    // ====
+    const mycolor = isLeader ? 'red' : 'blue';
+    const otherColor = isLeader ? 'blue' : 'red';
+    console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
 
-  const cbs = {
-    onSignal: async (sigdata: string) => {
-      // console.log('onSignal gen:', mycolor, sigdata);
-      await updateMatch(matchid, mycolor, sigdata, state);
+    const cbs = {
+      onSignal: async (sigdata: string) => {
+        // console.log('onSignal gen:', mycolor, sigdata);
+        await updateMatch(matchid, mycolor, sigdata, state);
+      }
+    };
+    ps.init(isLeader, cbs);
+
+    let otherPlayerState: PlayerTableData = { char: -1 };
+
+    // try {
+      handshakeUntilConnected(
+        matchid,
+        otherColor,
+        ps,
+        (otherState: PlayerTableData) => {
+          otherPlayerState = otherState;
+        }
+      ).catch( (e) => {
+        const retryError = e.toString().indexOf('retry')!==-1;
+        // if(retryError) throw new Error('retry');
+        reject('retry');
+        console.log('handshakeUntilConnected ended with', e);
+      })
+    /* .catch( (e) => {
+      const retryError = e.toString().indexOf('retry')!==-1;
+      if(retryError) throw new Error('retry');
+      console.log('handshakeUntilConnected thrown error', retryError, e)
+    });*/
+    try {
+      setTimeout(() => {
+        if(stopSync) return;
+        console.log('webrtc onConnection timeout')
+        stopSyncing();
+        reject('retry');
+        // throw new Error('retry');
+      }, 1000 * 13);
+    } catch(e) {
+      throw new Error(e);
     }
-  };
-  p.init(isLeader, cbs);
+    await ps.onConnection();
+    stopSyncing();
 
-  handshakeUntilConnected(matchid, otherColor, p);
+    console.log(mycolor + ' rtc elected');
 
-  await p.onConnection();
-  stopSyncing();
-  console.log(mycolor + ' rtc elected');
-
-  return p;
+    return resolve({ peer: ps, otherPlayerState });
+  })
 }
 
 async function readMatch(matchid: string): Promise<HandShakeCallback> {
@@ -82,7 +115,7 @@ async function readMatch(matchid: string): Promise<HandShakeCallback> {
     TableName: 'match'
   };
   const ticket2 = await docClient.get(params2).promise();
-  console.log('t2,', ticket2.Item);
+  // console.log('t2,', ticket2.Item);
 
   return ticket2.Item! as HandShakeCallback;
 }
@@ -98,56 +131,102 @@ async function readMatchWait(
   matchid: string,
   team: 'blue' | 'red'
 ): Promise<DBState | null> {
-  if (stopSync) return null;
-  // return await retry(
-  // async bail => {
-  // if (stopSync) return;
-  const match: HandShakeCallback = await readMatch(matchid);
-  const teamkey = team + 'key';
+  // if (stopSync) return null;
+  return await retry(
+    async bail => {
+      if (stopSync) {
+        bail(new Error('stopSync'));
+        return;
+      }
+      const match: HandShakeCallback = await readMatch(matchid);
+      const teamkey = team + 'key';
 
-  const statekey = team + 'state';
-  const keyval = match[teamkey];
+      const statekey = team + 'state';
+      const keyval = match[teamkey];
 
-  console.log('recalling state from other:', statekey, match[statekey]);
+      // console.log('recalling state from other:', statekey, match[statekey]);
 
-  let stateval = null; // JSON.parse(match[statekey]);
-  try {
-    stateval = JSON.parse(match[statekey]);
-  } catch (err) {}
-  if (!keyval || keyval === '-' || keyval === lastValue) {
-    lastValue = keyval;
-    // keyval !== '{"renegotiate":true}' ||
-    // await delay(3000);
-    console.log('key not set yet', teamkey);
-    // return;
-    // throw new Error('key not set yet ' + teamkey);
-    await delay(2000);
-    return await readMatchWait(matchid, team);
-  }
-  return { key: keyval, state: stateval };
-  /* },
+      if (!keyval || keyval === '-' || keyval === lastValue) {
+        lastValue = keyval;
+        // keyval !== '{"renegotiate":true}' ||
+        // await delay(3000);
+        console.log('key not set yet', teamkey);
+        // return;
+        // throw new Error('key not set yet ' + teamkey);
+        // await delay(2000);
+        throw new Error('retry');
+        /// return await readMatchWait(matchid, team);
+      }
+
+      let stateval = null; // JSON.parse(match[statekey]);
+      try {
+        stateval = JSON.parse(match[statekey]);
+      } catch (err) {
+        console.error('couldnt parse other player');
+        bail(new Error('couldnt parse other player'));
+        return;
+      }
+
+      return { key: keyval, state: stateval };
+    },
     {
-      retries: 8
-    }*/
-  // );
+      retries: 8,
+      maxTimeout: 3200,
+      minTimeout: 3000
+    }
+  );
+}
+
+interface PlayerTableData {
+  char: number;
 }
 
 async function handshakeUntilConnected(
   matchid: string,
   team: 'blue' | 'red',
-  p: any
-): Promise<any> {
-  console.log('handshakeUntilConnected');
-  const result = await readMatchWait(matchid, team);
-  if (!result) {
-    console.log('handshakeUntilConnected ended');
-    return null; // just end
-  }
-  const { key, state } = result;
-  p.giveResponse(key);
+  ps: PeerService,
+  onState?: (state: PlayerTableData) => void
+) {
+  let stateFetched = false;
+  return await retry(
+    async bail => {
+      if (stopSync) return 'stopSync'; // bail(new Error('stopSync'));
+      console.log('handshakeUntilConnected');
 
-  await delay(1000);
-  handshakeUntilConnected(matchid, team, p);
+      let result: any = null;
+      try {
+        result = await readMatchWait(matchid, team);
+      } catch (e) {
+        const retryError = e.toString().indexOf('retry')!==-1;
+        // console.log(JSON.stringify(e), typeof e, );
+        if(retryError) {
+          console.log('RETRY error');
+          bail(new Error('retry'));
+          return // 'retry';
+        } else { 
+          console.log('readMatchWait aborted with:', e.Error);
+          return bail(new Error('error'));
+        }
+      }
+
+      /* if (!result) {
+        console.log('handshakeUntilConnected ended');
+        return bail(new Error('ended')); // just end
+      }*/
+      const { key, state } = result;
+      ps.giveResponse(key);
+      if (onState && !stateFetched) onState(state);
+      stateFetched = true;
+
+      throw new Error('retry');
+    },
+    {
+      retries: 6 * 2,
+      factor: 1.5,
+      maxTimeout: 3000,
+      minTimeout: 1000
+    }
+  );
 }
 
 async function updateMatch(
@@ -174,10 +253,9 @@ async function updateMatch(
         Value: key /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
       },
       [statekey]: {
-        Action: 'PUT', // ADD | PUT | DELETE,
-        Value: stateStr /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
+        Action: 'PUT',
+        Value: stateStr
       }
-      /* '<AttributeName>': ... */
     },
     TableName: 'match'
   };
@@ -188,33 +266,9 @@ async function updateMatch(
 
 // Ensure any last minute sync messages are processed
 async function stopSyncing() {
-  await 3000;
+  // await delay(3000);
   stopSync = true;
 }
-
-// async function handShake(matchid: string, state:any, p: PeerService, isLeader:boolean) {}
-
-/*
-async function handShakeOther(matchid: string, state:any, p: PeerService) {
-  let givenSignal = false;
-  const cbs = {
-    onSignal: async (data: string) => {
-      console.log('onSignal from leader:', data);
-      // if (givenSignal || data === '{"renegotiate":true}') return;
-      givenSignal = true;
-      await updateMatch(matchid, 'blue', data);
-    }
-  };
-  p.init(false, cbs);
-
-  handshakeUntilConnected(matchid, 'red', p);
-
-  await p.onConnection();
-  stopSyncing();
-  console.log('other rtc connection');
-
-  return p;
-}*/
 
 let docClient: DynamoDB.DocumentClient;
 export function init(): void {
@@ -223,15 +277,3 @@ export function init(): void {
       apiVersion: '2012-08-10'
     });
 }
-
-/* not needed, config in configs/auth
-  Amplify.addPluggable(new AWSIoTProvider({
-    aws_pubsub_region: 'us-east-1',
-    aws_pubsub_endpoint: 'wss://xxxxxxxxxxxxx.iot.<YOUR-AWS-REGION>.amazonaws.com/mqtt',
-  }));
-  */
-
-/*
-t, {user: "p80", ttl: "1537210403", team: "blue", leader: false, match: "e6428703-4766-4124-8563-84217c19a593"}
-t2, {ttl: "1537213823", redkey: "-", bluekey: "-", id: "e6428703-4766-4124-8563-84217c19a593"}
-*/

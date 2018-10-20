@@ -13,12 +13,12 @@ interface Props {
 }
 interface State {
   peer?:PeerService,
-  store:AppModel.Type
 }
 class DebateRouter extends React.Component<any,State> {
   constructor(props:any) {
     super(props);
     console.log('debate con');
+    this.state = {};
   }
 
   private onPeer = (peer:any) => {
@@ -31,7 +31,7 @@ class DebateRouter extends React.Component<any,State> {
     let stage = 0;
   
     const ds = props.store.debate;
-    const inSync = ds.match && ds.match!.sync;
+    const inSync = ds.match && ds.match!.sync && this.state.peer;
     
     if(ds.position === -1 || ds.contribution === -1) stage = 0;
     else stage = 1;
