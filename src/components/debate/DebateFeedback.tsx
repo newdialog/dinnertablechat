@@ -8,7 +8,8 @@ import HOC from '../HOC';
 
 import { Avatar, Button, Chip, Grid, Typography } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
-
+import * as AppModel from '../../models/AppModel';
+import { inject } from 'mobx-react';
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -37,7 +38,7 @@ const goodTraits = ['Articulate', 'Funny', 'Helpful', 'Insightful', 'Logical', '
 const badTraits = ['Aggressive', 'Arrogant', 'Crude', 'Ignorant', 'Interrupts', 'Logical fallacies'];
 
 interface Props extends WithStyles<typeof styles> {
-    // store: AppModel.Type;
+    store: AppModel.Type;
   }
 
 interface State {
@@ -67,12 +68,15 @@ class DebateFeedback extends React.Component<Props, State> {
 
     private handleConfirm = () => { // TODO: update endpt w user selection, route back home
         const hash = this.state.traitHash;
-        const selectedTraits = [];
+        const selectedTraits:string[] = [];
         for (const key in hash) {
-            // if (hash[key]) selectedTraits.push(key);
+            if (hash[key]) selectedTraits.push(key);
         }
         const response = { agreed: this.state.agreed, selectedTraits }
-        console.log('responses', response);
+        // console.log('responses', response);
+        // TODO: call endpoint
+        this.props.store.debate.resetQueue();
+        this.props.store.router.push('/play');
     }
 
     public render() {
@@ -160,4 +164,4 @@ class DebateFeedback extends React.Component<Props, State> {
 
 }
 
-export default HOC(DebateFeedback, styles);
+export default inject('store')(HOC(DebateFeedback, styles));
