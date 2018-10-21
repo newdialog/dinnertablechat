@@ -68,7 +68,7 @@ function onHubCapsule(cb: AwsCB, capsule: any) {
 }
 
 export function auth(cb: AwsCB) {
-  console.log('configuring aws');
+  // console.log('configuring aws');
   const awsmobileInjected = injectConfig(awsmobile);
   Auth.configure(awsmobileInjected);
   Hub.listen(

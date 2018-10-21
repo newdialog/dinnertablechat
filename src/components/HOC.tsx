@@ -1,5 +1,5 @@
 
-import { translate } from 'react-i18next';
+import { withNamespaces } from 'react-i18next';
 import withRoot from '../withRoot';
 import {observer} from 'mobx-react';
 import {
@@ -16,7 +16,7 @@ function noopHOC(noprop:any = null):any {
 
 export default function HOC(Component:any, styles:any = null, noTranslate:boolean = false) {
     const withStylesWrap = styles ? withStyles : noopHOC;
-    const translateWrap = noTranslate ? noopHOC : translate;
+    const translateWrap = noTranslate ? noopHOC : withNamespaces;
     
     return translateWrap()(withRoot(withStylesWrap(styles)(observer(Component))));
 }
