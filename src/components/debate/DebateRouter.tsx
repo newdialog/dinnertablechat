@@ -5,6 +5,7 @@ import LoadingScene from './LoadingScene'
 import { inject } from 'mobx-react';
 import DebateScene from './DebateScene'
 import PeerService from '../../services/PeerService'
+import DebateFeedback from './DebateFeedback';
 
 import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
@@ -36,6 +37,7 @@ class DebateRouter extends React.Component<any,State> {
     if(ds.position === -1 || ds.contribution === -1) stage = 0;
     else stage = 1;
     if(inSync) stage = 2;
+    if(ds.finished) stage = 3;
   
     console.log('debate route stage:', stage, ds.position, ds.contribution, 'ds.match set '+ !!ds.match, 'sync done:' + inSync)
   
@@ -48,6 +50,7 @@ class DebateRouter extends React.Component<any,State> {
       <React.Fragment>
         { stage === 1 && <LoadingScene store={store} onPeer={this.onPeer} /> }
         { stage === 2 && this.state.peer && <DebateScene store={store} peer={this.state.peer!} /> }
+        { stage === 3 && <DebateFeedback store={store} /> }
       </React.Fragment>
     );
   }

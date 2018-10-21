@@ -23,7 +23,8 @@ const DebateModel = types
     position: -1,
     topic: '',
     character: -1,
-    match: types.maybeNull(MatchModel)
+    match: types.maybeNull(MatchModel),
+    finished: false, 
   })
   .actions(self => ({
     setPosition(position: number, topic: string) {
@@ -56,6 +57,7 @@ const DebateModel = types
       self.character = -1;
       self.topic = '';
       self.match = null;
+      self.finished = false;
     }
   }));
 

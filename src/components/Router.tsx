@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import Home from './home/home'
+import DebateFeedback from './debate/DebateFeedback' // TODO: remove this and wire it up in DebateRouter
 // import MenuHome from './menus/MenuHome'
 // import RTCHome from './debate/DebateScene'
 // import LoadingMatch from './debate/DebateTester'
@@ -47,6 +48,7 @@ const DTCRouter = ( {history}:{history:any} ) => (
     <Switch>
       <Route exact={true} path="/" component={Home} />
       <Route exact={true} path="/callback" component={Home} />
+      <Route exact={true} path="/feedback" component={DebateFeedback} />
 
      <Route path="/privacy" component={asyncPrivacy}/>
       <Route path="/play" component={asyncPlay}/>
