@@ -20,7 +20,10 @@ import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import green from '@material-ui/core/colors/green';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
+import { inject } from 'mobx-react';
+import AudioSettings from './AudioSettings';
 
 const styles = theme =>
   createStyles({
@@ -44,7 +47,9 @@ const styles = theme =>
     }
   });
 
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> {
+  store: AppModel.Type
+}
 
 class FloatMenu extends React.Component<Props, any> {
   constructor(props: Props) {
@@ -58,11 +63,32 @@ class FloatMenu extends React.Component<Props, any> {
   private handleClose = () => {
     this.setState({ anchorEl: null });
   };
+
+  private handleLeave = () => {
+    this.props.store.debate.resetQueue();
+    this.props.store.router.push('/play');
+    this.handleClose();
+  };
+
+  private handleLeaveRate = () => {
+    this.props.store.debate.endMatch();
+    this.handleClose();
+  }
+
+  private handleMic = () => {
+    this.setState( {showSettings: true} );
+  }
+
+  private closeSettings = () => {
+    this.setState( {showSettings: false, anchorEl: null} );
+  }
+
   public render() {
     const { classes } = this.props;
     const { anchorEl } = this.state;
     return (
       <React.Fragment>
+        { this.state.showSettings && <AudioSettings onClose={this.closeSettings}/> }
         <Button
           variant="fab"
           className={classes.fab}
@@ -79,12 +105,12 @@ class FloatMenu extends React.Component<Props, any> {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-          <MenuItem onClick={this.handleClose}>My account</MenuItem>
-          <MenuItem onClick={this.handleClose}>Logout</MenuItem>
+          <MenuItem onClick={this.handleMic}>Mic settings</MenuItem>
+          <MenuItem onClick={this.handleLeaveRate}>Quit and rate</MenuItem>
+          <MenuItem onClick={this.handleLeave}>Leave debate</MenuItem>
         </Menu>
       </React.Fragment>
     );
   }
 }
-export default HOC(FloatMenu, styles);
+export default inject('store')(HOC(FloatMenu, styles));
