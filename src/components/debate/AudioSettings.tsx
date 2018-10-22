@@ -1,5 +1,3 @@
-// stub
-
 import React from 'react';
 import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
@@ -12,17 +10,31 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import InputLabel, { InputLabelProps } from '@material-ui/core/InputLabel';
+
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
 
 const styles = theme =>
   createStyles({
     root: {
-      justifyContent: 'center'
-    }
+      justifyContent: 'center',
+      display: 'flex',
+    },
+    formControl: {
+      margin: theme.spacing.unit,
+      minWidth: 120,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing.unit * 2,
+    },
+    group: {
+      margin: `${theme.spacing.unit}px 0`,
+    },
   });
 
 interface Props extends WithStyles<typeof styles> {
@@ -35,25 +47,14 @@ interface Props extends WithStyles<typeof styles> {
 class AudioSettings extends React.Component<Props, any> {
   constructor(props: Props) {
     super(props);
-    this.state = {};
+    this.state = { selectedIndex: 0, options: ['loading..'], anchorEl: null };
   }
 
-  private handleClickListItem = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
-
-  private handleMenuItemClick = (event, index) => {
-    this.setState({ selectedIndex: index, anchorEl: null });
-  };
-
-  private handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
-
-  private attachSinkId = (element:HTMLMediaElement, sinkId:string) => {
-      const _el:any = element;
+  private attachSinkId = (element: HTMLMediaElement, sinkId: string) => {
+    const _el: any = element;
     if (typeof _el.sinkId !== 'undefined') {
-        _el.setSinkId(sinkId)
+      _el
+        .setSinkId(sinkId)
         .then(() => {
           console.log(`Success, audio output device attached: ${sinkId}`);
         })
@@ -69,12 +70,11 @@ class AudioSettings extends React.Component<Props, any> {
     } else {
       console.warn('Browser does not support output device selection.');
     }
-  }
+  };
 
   private gotDevices = (deviceInfos: MediaDeviceInfo[]) => {
-    
-    const speakers:any[] = [];
-    const mics:any[] = [];
+    const speakers: any[] = [];
+    const mics: any[] = [];
     for (let i = 0; i !== deviceInfos.length; ++i) {
       const deviceInfo = deviceInfos[i];
       // deviceInfo.label
@@ -91,18 +91,14 @@ class AudioSettings extends React.Component<Props, any> {
         console.log('Some other kind of source/device: ', deviceInfo);
       }
     }
-    selectors.forEach((select, selectorIndex) => {
-      if (
-        Array.prototype.slice
-          .call(select.childNodes)
-          .some(n => n.value === values[selectorIndex])
-      ) {
-        select.value = values[selectorIndex];
-      }
-    });
   };
 
   private handleError = () => {};
+
+  private handleChangeMic = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    e.preventDefault();
+    console.log(e.target.value)
+  };
 
   public componentDidMount() {
     navigator.mediaDevices
@@ -110,6 +106,8 @@ class AudioSettings extends React.Component<Props, any> {
       .then(this.gotDevices)
       .catch(this.handleError);
   }
+
+  private micRef = React.createRef<InputLabelProps>();
 
   public render() {
     const { classes, onClose } = this.props;
@@ -120,42 +118,53 @@ class AudioSettings extends React.Component<Props, any> {
         open={true}
         onClose={onClose}
         aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">{'Audio Settings'}</DialogTitle>
         <DialogContent>
           <div className={classes.root}>
-            <List component="nav">
-              <ListItem
-                button
-                aria-haspopup="true"
-                aria-controls="lock-menu"
-                aria-label="When device is locked"
-                onClick={this.handleClickListItem}
-              >
-                <ListItemText
-                  primary="When device is locked"
-                  secondary={options[this.state.selectedIndex]}
-                />
-              </ListItem>
-            </List>
-            <Menu
-              id="lock-menu"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={this.handleClose}
-            >
-              {options.map((option, index) => (
-                <MenuItem
-                  key={option}
-                  disabled={index === 0}
-                  selected={index === this.state.selectedIndex}
-                  onClick={event => this.handleMenuItemClick(event, index)}
-                >
-                  {option}
-                </MenuItem>
-              ))}
-            </Menu>
+          <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">Mic</FormLabel>
+          <RadioGroup
+            aria-label="Gender"
+            name="gender1"
+            className={classes.group}
+            value={this.state.value}
+            onChange={this.handleChangeMic}
+          >
+            <FormControlLabel value="female" control={<Radio />} label="Female" />
+            <FormControlLabel value="male" control={<Radio />} label="Male" />
+            <FormControlLabel value="other" control={<Radio />} label="Other" />
+          </RadioGroup>
+        </FormControl>
+        <FormControl component="fieldset" className={classes.formControl}>
+          <FormLabel component="legend">Playback</FormLabel>
+          <RadioGroup
+            aria-label="gender"
+            name="gender2"
+            className={classes.group}
+            value={this.state.value}
+            onChange={this.handleChangeMic}
+          >
+            <FormControlLabel
+              value="female"
+              control={<Radio color="primary" />}
+              label="Female"
+              labelPlacement="start"
+            />
+            <FormControlLabel
+              value="male"
+              control={<Radio color="primary" />}
+              label="Male"
+              labelPlacement="start"
+            />
+            <FormControlLabel
+              value="other"
+              control={<Radio color="primary" />}
+              label="Other"
+              labelPlacement="start"
+            />
+          </RadioGroup>
+        </FormControl>
           </div>
         </DialogContent>
         <DialogActions>
@@ -167,4 +176,4 @@ class AudioSettings extends React.Component<Props, any> {
     );
   }
 }
-export default HOC(AudioSettings, styles);
+export default HOC(AudioSettings, styles, true);
