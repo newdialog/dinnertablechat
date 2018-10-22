@@ -105,7 +105,7 @@ class FloatMenu extends React.Component<Props, any> {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleMic}>Mic settings</MenuItem>
+          <MenuItem onClick={this.handleMic}>Audio settings</MenuItem>
           <MenuItem onClick={this.handleLeaveRate}>Quit and rate</MenuItem>
           <MenuItem onClick={this.handleLeave}>Leave debate</MenuItem>
         </Menu>

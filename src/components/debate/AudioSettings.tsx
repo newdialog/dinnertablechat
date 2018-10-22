@@ -23,18 +23,21 @@ const styles = theme =>
   createStyles({
     root: {
       justifyContent: 'center',
-      display: 'flex',
+      display: 'flex'
     },
     formControl: {
       margin: theme.spacing.unit,
-      minWidth: 120,
+      minWidth: 120
     },
     selectEmpty: {
-      marginTop: theme.spacing.unit * 2,
+      marginTop: theme.spacing.unit * 2
     },
     group: {
-      margin: `${theme.spacing.unit}px 0`,
+      margin: `${theme.spacing.unit}px 0`
     },
+    label: {
+      fontSize: '0.8em'
+    }
   });
 
 interface Props extends WithStyles<typeof styles> {
@@ -47,7 +50,13 @@ interface Props extends WithStyles<typeof styles> {
 class AudioSettings extends React.Component<Props, any> {
   constructor(props: Props) {
     super(props);
-    this.state = { selectedIndex: 0, options: ['loading..'], anchorEl: null };
+    this.state = {
+      selectedIndex: 0,
+      options: ['loading..'],
+      anchorEl: null,
+      mics: [],
+      speakers: []
+    };
   }
 
   private attachSinkId = (element: HTMLMediaElement, sinkId: string) => {
@@ -73,31 +82,47 @@ class AudioSettings extends React.Component<Props, any> {
   };
 
   private gotDevices = (deviceInfos: MediaDeviceInfo[]) => {
+    console.log('deviceInfos', deviceInfos);
     const speakers: any[] = [];
     const mics: any[] = [];
+    const defaultVal:any = { mic:null, speaker: null};
     for (let i = 0; i !== deviceInfos.length; ++i) {
       const deviceInfo = deviceInfos[i];
       // deviceInfo.label
       const valueId = deviceInfo.deviceId;
+      const isDefault = deviceInfo.label.indexOf('Default') === 0;
+     
+
       if (deviceInfo.kind === 'audioinput') {
+        if(isDefault) defaultVal.mic = deviceInfo.deviceId;
         const label = deviceInfo.label || `microphone ${mics.length + 1}`;
-        mics.push(label);
+        
+        mics.push({ label, deviceId:  deviceInfo.deviceId} );
       } else if (deviceInfo.kind === 'audiooutput') {
+        if(isDefault) defaultVal.speaker = deviceInfo.deviceId;
         const label = deviceInfo.label || `speaker ${speakers.length + 1}`;
-        speakers.push(label);
+        speakers.push({ label, deviceId:  deviceInfo.deviceId} );
       } else if (deviceInfo.kind === 'videoinput') {
         // option.text = deviceInfo.label || `camera ${videoSelect.length + 1}`;
       } else {
         console.log('Some other kind of source/device: ', deviceInfo);
       }
     }
+    this.setState({ speakers, mics, mic: defaultVal.mic, speaker: defaultVal.speaker  });
   };
 
   private handleError = () => {};
 
-  private handleChangeMic = (e:React.ChangeEvent<HTMLSelectElement>) => {
+  private handleChangeMic = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
-    console.log(e.target.value)
+    console.log(e.target.value);
+    this.setState({ mic: e.target.value });
+  };
+
+  private handleChangePlayback = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    e.preventDefault();
+    console.log(e.target.value);
+    this.setState({ speaker: e.target.value });
   };
 
   public componentDidMount() {
@@ -122,49 +147,46 @@ class AudioSettings extends React.Component<Props, any> {
         <DialogTitle id="alert-dialog-title">{'Audio Settings'}</DialogTitle>
         <DialogContent>
           <div className={classes.root}>
-          <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Mic</FormLabel>
-          <RadioGroup
-            aria-label="Gender"
-            name="gender1"
-            className={classes.group}
-            value={this.state.value}
-            onChange={this.handleChangeMic}
-          >
-            <FormControlLabel value="female" control={<Radio />} label="Female" />
-            <FormControlLabel value="male" control={<Radio />} label="Male" />
-            <FormControlLabel value="other" control={<Radio />} label="Other" />
-          </RadioGroup>
-        </FormControl>
-        <FormControl component="fieldset" className={classes.formControl}>
-          <FormLabel component="legend">Playback</FormLabel>
-          <RadioGroup
-            aria-label="gender"
-            name="gender2"
-            className={classes.group}
-            value={this.state.value}
-            onChange={this.handleChangeMic}
-          >
-            <FormControlLabel
-              value="female"
-              control={<Radio color="primary" />}
-              label="Female"
-              labelPlacement="start"
-            />
-            <FormControlLabel
-              value="male"
-              control={<Radio color="primary" />}
-              label="Male"
-              labelPlacement="start"
-            />
-            <FormControlLabel
-              value="other"
-              control={<Radio color="primary" />}
-              label="Other"
-              labelPlacement="start"
-            />
-          </RadioGroup>
-        </FormControl>
+            <FormControl component="fieldset" className={classes.formControl}>
+              <FormLabel component="legend">Mic</FormLabel>
+              <RadioGroup
+                aria-label="Gender"
+                name="gender1"
+                className={classes.group}
+                value={this.state.mic}
+                onChange={this.handleChangeMic}
+              >
+                {this.state.mics.map((x: {label:string, deviceId:string}) => (
+                  <FormControlLabel
+                    key={x.deviceId}
+                    className={classes.label}
+                    value={x.deviceId}
+                    control={<Radio />}
+                    label={x.label}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+            <FormControl component="fieldset" className={classes.formControl}>
+              <FormLabel component="legend">Playback</FormLabel>
+              <RadioGroup
+                aria-label="gender"
+                name="gender2"
+                className={classes.group}
+                value={this.state.speaker}
+                onChange={this.handleChangePlayback}
+              >
+                {this.state.speakers.map((x: {label:string, deviceId:string}) => (
+                  <FormControlLabel
+                    key={x.deviceId}
+                    className={classes.label}
+                    value={x.deviceId}
+                    control={<Radio />}
+                    label={x.label}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
           </div>
         </DialogContent>
         <DialogActions>
