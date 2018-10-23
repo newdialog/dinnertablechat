@@ -142,6 +142,7 @@ class DebateScene extends React.Component<Props, State> {
             talkingBlue={talkingBlue}
             talkingRed={talkingRed}
             onClick={this.onStart}
+            videoEl={this.vidRef}
           />
         )}
       </React.Fragment>

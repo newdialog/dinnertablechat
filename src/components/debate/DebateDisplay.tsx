@@ -143,6 +143,7 @@ interface Props extends WithStyles<typeof styles> {
   talkingRed: boolean;
   blueChar:number;
   redChar:number;
+  videoEl:HTMLMediaElement;
 }
 
 interface State {
@@ -202,7 +203,7 @@ class DebateScene extends React.Component<Props, State> {
   */
 
   public render() {
-    const { classes, talkingBlue, talkingRed } = this.props;
+    const { classes, talkingBlue, talkingRed, videoEl } = this.props;
     const { blueTransition } = this.state;
 
     const animBlue = this.state.blueState === 'talking';
@@ -270,7 +271,7 @@ class DebateScene extends React.Component<Props, State> {
             </div>
           </div>
         </div>
-        <DebateFloatMenu />
+        <DebateFloatMenu videoEl={videoEl} />
       </React.Fragment>
     );
   }

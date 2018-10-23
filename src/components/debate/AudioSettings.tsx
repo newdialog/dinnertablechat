@@ -43,7 +43,7 @@ const styles = theme =>
 interface Props extends WithStyles<typeof styles> {
   // error: string;
   // store: AppModel.Type,
-  videoEl: HTMLMediaElement;
+  videoEl: React.RefObject<HTMLMediaElement>;
   onClose: () => void;
 }
 
@@ -60,7 +60,7 @@ class AudioSettings extends React.Component<Props, any> {
   }
 
   private attachSinkId = (element: HTMLMediaElement, sinkId: string) => {
-    const _el: any = element;
+    const _el: any = element; // setSinkId not offically on HTMLMediaElement
     if (typeof _el.sinkId !== 'undefined') {
       _el
         .setSinkId(sinkId)
@@ -115,13 +115,17 @@ class AudioSettings extends React.Component<Props, any> {
 
   private handleChangeMic = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
-    console.log(e.target.value);
+    const deviceId = e.target.value;
+    console.log(deviceId);
+    this.attachSinkId(this.props.videoEl.current!, deviceId);
     this.setState({ mic: e.target.value });
   };
 
   private handleChangePlayback = (e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault();
-    console.log(e.target.value);
+    const deviceId = e.target.value;
+    console.log(deviceId);
+    this.attachSinkId(this.props.videoEl.current!, deviceId);
     this.setState({ speaker: e.target.value });
   };
 
@@ -135,7 +139,7 @@ class AudioSettings extends React.Component<Props, any> {
   private micRef = React.createRef<InputLabelProps>();
 
   public render() {
-    const { classes, onClose } = this.props;
+    const { classes, onClose, videoEl } = this.props;
     const { anchorEl, options } = this.state;
 
     return (

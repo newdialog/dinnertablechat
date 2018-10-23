@@ -160,7 +160,7 @@ class DebateScene extends React.Component<Props, State> {
             {this.state.talkingBlue && <div>Other is Speaking</div>} --
             {this.state.talkingRed && <div>Red is Speaking</div>}
           </div>
-          <DebateDisplay blueChar={blueChar} redChar={redChar} talkingBlue={talkingBlue} talkingRed={talkingRed} />
+          <DebateDisplay videoEl={this.vidRef} blueChar={blueChar} redChar={redChar} talkingBlue={talkingBlue} talkingRed={talkingRed} />
         </div>
       </React.Fragment>
     );

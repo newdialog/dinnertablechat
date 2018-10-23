@@ -48,7 +48,8 @@ const styles = theme =>
   });
 
 interface Props extends WithStyles<typeof styles> {
-  store: AppModel.Type
+  store: AppModel.Type,
+  videoEl: React.RefObject<HTMLMediaElement>
 }
 
 class FloatMenu extends React.Component<Props, any> {
@@ -84,11 +85,11 @@ class FloatMenu extends React.Component<Props, any> {
   }
 
   public render() {
-    const { classes } = this.props;
+    const { classes, videoEl } = this.props;
     const { anchorEl } = this.state;
     return (
       <React.Fragment>
-        { this.state.showSettings && <AudioSettings onClose={this.closeSettings}/> }
+        { this.state.showSettings && <AudioSettings onClose={this.closeSettings} videoEl={videoEl}/> }
         <Button
           variant="fab"
           className={classes.fab}
