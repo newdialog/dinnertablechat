@@ -8,6 +8,8 @@ import hark, { SpeechEvent } from 'hark';
 import { Typography, Divider, Button } from '@material-ui/core';
 import getMedia from '../../utils/getMedia';
 import DebateDisplay from './DebateDisplay';
+import * as AppModel from '../../models/AppModel';
+import HOC from '../HOC';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -28,8 +30,6 @@ const styles = (theme: Theme) =>
     }
   });
 
-import * as AppModel from '../../models/AppModel';
-import HOC from '../HOC';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
 }
@@ -142,6 +142,7 @@ class DebateScene extends React.Component<Props, State> {
             talkingBlue={talkingBlue}
             talkingRed={talkingRed}
             onClick={this.onStart}
+            videoEl={this.vidRef}
           />
         )}
       </React.Fragment>

@@ -41,6 +41,9 @@ const DebateModel = types
       if (!self.match) throw new Error('match model not set yet');
       self.match!.otherState = state;
     },
+    endMatch() {
+      self.finished = true;
+    },
     syncMatch() {
       if (!self.match) throw new Error('match not init');
       self.match!.sync = true;
