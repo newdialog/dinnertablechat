@@ -71,10 +71,11 @@ class DebateScene extends React.Component<Props, State> {
     // this.props.store.debate.setContribution(0);
     // this.props.store.debate.setCharacter(0);
     // this.props.store.debate.syncMatch();
+    this.onStart(); // for testing
   }
 
-  public onStart = async (e: React.MouseEvent) => {
-    e.preventDefault();
+  public onStart = async (e?: React.MouseEvent) => {
+    if(e) e!.preventDefault();
     console.log('start');
     this.setState({ start: true });
 

@@ -1,18 +1,13 @@
 import * as React from 'react';
-import {
-  createStyles,
-  WithStyles,
-  Theme
-} from '@material-ui/core/styles';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import HOC from '../HOC';
 
 import Lottie from 'react-lottie';
-import { observer } from 'mobx-react';
 import { Typography, Divider } from '@material-ui/core';
 
 import hark, { SpeechEvent } from 'hark';
-import Peer from 'simple-peer';
 import DebateFloatMenu from './DebateFloatMenu';
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -35,17 +30,23 @@ const styles = (theme: Theme) =>
     },
     rightPos2: {
       width: 300,
-      float:'left'
+      float: 'left'
+    },
+    table: {
+      position: 'absolute',
+      bottom: 'calc(-10vh)',
+      left: 'calc(50vw - 70vh)',
+      width: '140vh'
     },
     leftPos: {
       position: 'absolute',
       // left: 'calc(50vw - 250px)',
       // top: 'calc(50vh - 300px)',
-      bottom: 'calc(10vh)',
+      bottom: 'calc(21vh)',
       // width: 300,
       // [theme.breakpoints.up('sm')]: {
-        left: 'calc(50vw - 70vh)',
-        width: '70vh',
+      left: 'calc(50vw - 70vh)',
+      width: '70vh'
       // }
       // transform: 'scale(1, 1)'
     },
@@ -53,11 +54,11 @@ const styles = (theme: Theme) =>
       position: 'absolute',
       // left: 'calc(50vw)',
       // top: 'calc(50vh - 298px)',
-      bottom: 'calc(10vh)',
+      bottom: 'calc(21vh)',
       // width: 355,
       // [theme.breakpoints.up('sm')]: {
-        left: 'calc(50vw - 11vh)',
-        width: 'calc(60vh * 1.4)',
+      left: 'calc(50vw - 11vh)',
+      width: 'calc(60vh * 1.4)'
       // }
       // transform: 'scale(-.5, .5)'
     },
@@ -71,9 +72,9 @@ const styles = (theme: Theme) =>
     },
     foreground: {
       margin: '0 auto 0 auto',
+      overflow: 'hidden'
       // bottom: 'calc(10vh)'
-    },
-    bannerRef: {}
+    }
   });
 
 const aliceListenOptions = {
@@ -116,6 +117,7 @@ const bgOptions = {
   loop: true,
   autoplay: true,
   path: 'assets/background.json',
+  subframeEnabled: false,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -125,15 +127,16 @@ const tableOptions = {
   loop: true,
   autoplay: true,
   path: 'assets/debate/Table.json',
+  subframeEnabled: false,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
 };
 
 const characters = [
-  {talk:aliceTalkOptions, listen:aliceListenOptions},
-  {talk:rabitTalkOptions, listen:rabitListenOptions},
-  {talk:aliceTalkOptions, listen:aliceListenOptions}
+  { talk: aliceTalkOptions, listen: aliceListenOptions },
+  { talk: rabitTalkOptions, listen: rabitListenOptions },
+  { talk: aliceTalkOptions, listen: aliceListenOptions }
 ];
 
 // import * as AppModel from '../../models/AppModel';
@@ -141,9 +144,9 @@ interface Props extends WithStyles<typeof styles> {
   // store: AppModel.Type;
   talkingBlue: boolean;
   talkingRed: boolean;
-  blueChar:number;
-  redChar:number;
-  videoEl:HTMLMediaElement;
+  blueChar: number;
+  redChar: number;
+  videoEl: HTMLMediaElement;
 }
 
 interface State {
@@ -170,6 +173,8 @@ class DebateScene extends React.Component<Props, State> {
 
   public speechEvents: SpeechEvent;
   private vidRef = React.createRef<HTMLVideoElement>();
+  private bgEl = React.createRef<Lottie | any>();
+  private tableEl = React.createRef<Lottie | any>();
 
   constructor(props: Props) {
     super(props);
@@ -184,11 +189,22 @@ class DebateScene extends React.Component<Props, State> {
   public componentDidMount() {
     // Lock orientation if possible
     const s = window.screen as any;
-    s.lockOrientationUniversal = s.lockOrientation || s.mozLockOrientation || s.msLockOrientation;
+    s.lockOrientationUniversal =
+      s.lockOrientation || s.mozLockOrientation || s.msLockOrientation;
     if (screen.orientation && typeof screen.orientation.lock === 'function') {
-      return window.screen.orientation.lock('landscape')
+      try {
+        window.screen.orientation.lock('landscape');
+      } catch(e) {
+        console.warn(e);
+      }
     }
-    if(s.lockOrientationUniversal) s.lockOrientationUniversal('landscape');
+    if (s.lockOrientationUniversal) s.lockOrientationUniversal('landscape');
+
+    // Table
+    console.log('playSegments', Boolean(this.tableEl.current))
+    const t = this.tableEl.current!;
+    // t.setSubframe(false);
+    t.playSegments({0:[0, 40]}, true);
   }
 
   private onLoopComplete = () => {
@@ -196,11 +212,6 @@ class DebateScene extends React.Component<Props, State> {
     // if(this.props.talkingBlue) this.setState({ blueTransition: true });
     this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
   };
-  /*
-  <div className={classes.bannerAnim}>
-              <Lottie options={tableOptions} ref={classes.bannerRef} isClickToPauseDisabled={true}/>
-            </div>
-  */
 
   public render() {
     const { classes, talkingBlue, talkingRed, videoEl } = this.props;
@@ -215,8 +226,8 @@ class DebateScene extends React.Component<Props, State> {
     const blueCss = talkingBlue ? 'talking' : 'idle';
     const redCss = talkingRed ? 'talking' : 'idle';
 
-    const redChar = characters[ this.props.redChar ];
-    const blueChar = characters[ this.props.blueChar ];
+    const redChar = characters[this.props.redChar];
+    const blueChar = characters[this.props.blueChar];
     return (
       <React.Fragment>
         <div className={classes.centered}>
@@ -224,7 +235,7 @@ class DebateScene extends React.Component<Props, State> {
             <div className={classes.bannerAnim}>
               <Lottie
                 options={bgOptions}
-                ref={classes.bannerRef}
+                ref={this.bgEl}
                 isClickToPauseDisabled={true}
               />
             </div>
@@ -267,6 +278,15 @@ class DebateScene extends React.Component<Props, State> {
                     isClickToPauseDisabled={true}
                   />
                 </div>
+              </div>
+
+              <div className={classes.table}>
+                <Lottie
+                  options={tableOptions}
+                  speed={1}
+                  ref={this.tableEl}
+                  isClickToPauseDisabled={true}
+                />
               </div>
             </div>
           </div>
