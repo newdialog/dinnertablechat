@@ -128,8 +128,8 @@ const bgOptions = {
 };
 
 const tableOptions = {
-  loop: true,
-  autoplay: true,
+  loop: false,
+  autoplay: false,
   path: 'assets/debate/Table.json',
   subframeEnabled: false,
   rendererSettings: {
@@ -208,7 +208,7 @@ class DebateScene extends React.Component<Props, State> {
     console.log('playSegments', Boolean(this.tableEl.current), this.tableEl.current!)
     const t = this.tableEl.current!;
     // t.setSubframe(false);
-    // t.playSegments({0:[0, 40]}, true);
+    t.playSegments([0, 20], true);
     // t.goToAndStop(30);
   }
 
@@ -217,6 +217,12 @@ class DebateScene extends React.Component<Props, State> {
     // if(this.props.talkingBlue) this.setState({ blueTransition: true });
     this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
   };
+
+  private onTableLoopComplete = () => {
+    const t = this.tableEl.current!;
+    t.stop();
+    console.log('table stop')
+  }
 
   public render() {
     const { classes, talkingBlue, talkingRed, videoEl } = this.props;
@@ -289,8 +295,15 @@ class DebateScene extends React.Component<Props, State> {
                 <Lottie
                   options={tableOptions}
                   speed={1}
+                  segments={[0,20]}
                   ref={this.tableEl}
                   isClickToPauseDisabled={true}
+                  eventListeners={[
+                    {
+                      eventName: 'complete',
+                      callback: this.onTableLoopComplete
+                    }
+                  ]}
                 />
               </div>
             </div>

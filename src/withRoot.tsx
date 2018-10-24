@@ -42,7 +42,7 @@ const theme = createMuiTheme({
       color: 'white',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 600,
-      letterSpacing: '-0.02em'
+      letterSpacing: '-0.02em',
     },
     h3: {
       fontSize: '1.5em',
@@ -62,9 +62,9 @@ const theme = createMuiTheme({
 });
 
 // Patch for smaller screens overflowing
-theme.typography.display4 = Object.assign(theme.typography.display4, {
+theme.typography.h1 = Object.assign(theme.typography.h1, {
   [theme.breakpoints.down('xs')]: {
-    fontSize: '2.4em'
+    fontSize: '2.3em'
   }
 })
 
