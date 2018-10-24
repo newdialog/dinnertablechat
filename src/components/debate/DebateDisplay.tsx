@@ -34,7 +34,7 @@ const styles = (theme: Theme) =>
     },
     table: {
       position: 'absolute',
-      bottom: 'calc(-10vh)',
+      bottom: 'calc(-4vh)',
       left: 'calc(50vw - 70vh)',
       width: '140vh'
     },
@@ -42,11 +42,11 @@ const styles = (theme: Theme) =>
       position: 'absolute',
       // left: 'calc(50vw - 250px)',
       // top: 'calc(50vh - 300px)',
-      bottom: 'calc(21vh)',
+      bottom: 'calc(23vh)',
       // width: 300,
       // [theme.breakpoints.up('sm')]: {
-      left: 'calc(50vw - 70vh)',
-      width: '70vh'
+      left: 'calc(50vw - 65vh)',
+      width: '75vh'
       // }
       // transform: 'scale(1, 1)'
     },
@@ -54,11 +54,11 @@ const styles = (theme: Theme) =>
       position: 'absolute',
       // left: 'calc(50vw)',
       // top: 'calc(50vh - 298px)',
-      bottom: 'calc(21vh)',
+      bottom: 'calc(23vh)',
       // width: 355,
       // [theme.breakpoints.up('sm')]: {
-      left: 'calc(50vw - 11vh)',
-      width: 'calc(60vh * 1.4)'
+      left: 'calc(41vw + 5vh)',
+      width: 'calc(75vh)'
       // }
       // transform: 'scale(-.5, .5)'
     },
@@ -80,6 +80,7 @@ const styles = (theme: Theme) =>
 const aliceListenOptions = {
   loop: true,
   autoplay: true,
+  subframeEnabled: false,
   path: 'assets/debate/00_ALCE_IDLE.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
@@ -89,6 +90,7 @@ const aliceListenOptions = {
 const aliceTalkOptions = {
   loop: true,
   autoplay: true,
+  subframeEnabled: false,
   path: 'assets/debate/00_ALCE_TALK.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
@@ -98,6 +100,7 @@ const aliceTalkOptions = {
 const rabitListenOptions = {
   loop: true,
   autoplay: true,
+  subframeEnabled: false,
   path: 'assets/debate/01_RABIT_IDLE.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
@@ -107,6 +110,7 @@ const rabitListenOptions = {
 const rabitTalkOptions = {
   loop: true,
   autoplay: true,
+  subframeEnabled: false,
   path: 'assets/debate/01_RABIT_TALK2.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
@@ -201,10 +205,11 @@ class DebateScene extends React.Component<Props, State> {
     if (s.lockOrientationUniversal) s.lockOrientationUniversal('landscape');
 
     // Table
-    console.log('playSegments', Boolean(this.tableEl.current))
+    console.log('playSegments', Boolean(this.tableEl.current), this.tableEl.current!)
     const t = this.tableEl.current!;
     // t.setSubframe(false);
-    t.playSegments({0:[0, 40]}, true);
+    // t.playSegments({0:[0, 40]}, true);
+    // t.goToAndStop(30);
   }
 
   private onLoopComplete = () => {

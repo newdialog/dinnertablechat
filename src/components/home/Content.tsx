@@ -116,6 +116,7 @@ const logoOptions = {
   loop: false,
   autoplay: false,
   path: 'assets/logo.json',
+  subframeEnabled: false,
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
@@ -124,6 +125,7 @@ const logoOptions = {
 const talkingOptions = {
   loop: true,
   autoplay: false,
+  subframeEnabled: true,
   path: 'assets/splash-talking.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
@@ -133,6 +135,7 @@ const talkingOptions = {
 const topicsOptions = {
   loop: true,
   autoplay: false,
+  subframeEnabled: false,
   path: 'assets/topics.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
@@ -142,6 +145,7 @@ const topicsOptions = {
 const diningOptions = {
   loop: true,
   autoplay: false,
+  subframeEnabled: false,
   path: 'assets/mesa.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'

@@ -103,9 +103,9 @@ class DebateScene extends React.Component<Props, State> {
     this.speechEvents.on('stopped_speaking', () => {
       // console.log('stopped_speaking');
       rawSpeaking = false;
-      setTimeout(() => {
-        if (!rawSpeaking) this.setState({ talkingBlue: false });
-      }, 140);
+      // setTimeout(() => {
+      if (!rawSpeaking) this.setState({ talkingBlue: false });
+      // }, 90);
       // document.querySelector('#speaking').textContent = 'NO';
     });
   };
@@ -117,12 +117,8 @@ class DebateScene extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <div className={classes.centered}>
-          <a href="#" onClick={this.onClick}>
-            Toggle blue talking
-          </a>{' '}
-          ----
           <a href="#" onClick={this.onClickRed}>
-            Toggle blue talking
+            devToggle
           </a>
           <div id="video">
             <video ref={this.vidRef} autoPlay={true} hidden={true} />
