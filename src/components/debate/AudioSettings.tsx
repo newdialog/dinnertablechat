@@ -195,7 +195,7 @@ class AudioSettings extends React.Component<Props, any> {
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose} color="primary" autoFocus>
-            OK
+            CLOSE MENU
           </Button>
         </DialogActions>
       </Dialog>
