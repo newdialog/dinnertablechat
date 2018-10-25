@@ -4,7 +4,11 @@
     "outDir": "build/dist",
     "module": "esnext",
     "target": "es5",
-    "lib": ["esnext", "dom", "dom.iterable"],
+    "lib": [
+      "esnext",
+      "dom",
+      "dom.iterable"
+    ],
     "isolatedModules": true,
     "noEmit": true,
     "sourceMap": true,
@@ -22,9 +26,15 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "experimentalDecorators": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "strict": true,
+    "resolveJsonModule": true
   },
-  "include": ["src", "typings", "images.d.ts"],
+  "include": [
+    "src",
+    "typings",
+    "images.d.ts"
+  ],
   "exclude": [
     "backend",
     "node_modules",

@@ -113,20 +113,20 @@ class AudioSettings extends React.Component<Props, any> {
 
   private handleError = () => {};
 
-  private handleChangeMic = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  private handleChangeMic = (e: React.ChangeEvent<{}>, val:string) => {
     e.preventDefault();
-    const deviceId = e.target.value;
+    const deviceId = val; // e.target.value;
     console.log(deviceId);
     this.attachSinkId(this.props.videoEl.current!, deviceId);
-    this.setState({ mic: e.target.value });
+    this.setState({ mic: deviceId });
   };
 
-  private handleChangePlayback = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  private handleChangePlayback = (e: React.ChangeEvent<{}>, val:string) => {
     e.preventDefault();
-    const deviceId = e.target.value;
+    const deviceId = val;
     console.log(deviceId);
     this.attachSinkId(this.props.videoEl.current!, deviceId);
-    this.setState({ speaker: e.target.value });
+    this.setState({ speaker: deviceId });
   };
 
   public componentDidMount() {
