@@ -8,7 +8,17 @@ const AppModel = types.model({
   auth: AuthModel,
   debate: DebateModel,
   router: RouterModel,
-});
+  showNav: true
+}).actions(self => ({
+  showNavbar() {
+    // self.text = newTitle
+    self.showNav = true;
+  },
+  hideNavbar() {
+    // self.text = newTitle
+    self.showNav = false;
+  },
+}));
 
 export type Type = Instance<typeof AppModel>;
 

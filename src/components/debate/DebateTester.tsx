@@ -1,15 +1,12 @@
 import * as React from 'react';
-import {
-  createStyles,
-  WithStyles,
-  Theme
-} from '@material-ui/core/styles';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import hark, { SpeechEvent } from 'hark';
 import { Typography, Divider, Button } from '@material-ui/core';
 import getMedia from '../../utils/getMedia';
 import DebateDisplay from './DebateDisplay';
 import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
+import { inject } from 'mobx-react';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -79,18 +76,17 @@ class DebateScene extends React.Component<Props, State> {
   }
 
   public onStart = async (e?: React.MouseEvent) => {
-    if(e) e!.preventDefault();
-    console.log('start');
-    this.setState({ start: true });
-
+    if (e) e!.preventDefault();
+    this.props.store.hideNavbar();
+    
     try {
-      const media = await getMedia(
-          { video: false, audio: true });
+      const media = await getMedia({ video: false, audio: true });
 
       this.gotMedia(media);
-    } catch(e) {
+    } catch (e) {
       console.error(e);
     }
+    this.setState({ start: true });
   };
 
   public gotMedia = (stream?: MediaStream) => {
@@ -121,20 +117,24 @@ class DebateScene extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <div className={classes.centered}>
-          <a href="#" onClick={this.onClickRed}>
-            devToggle
-          </a>
+          {this.state.start && (
+            <a href="#" onClick={this.onClickRed}>
+              devToggle
+            </a>
+          )}
           <div id="video">
             <video ref={this.vidRef} autoPlay={true} hidden={true} />
           </div>
-          {!this.state.start && <Button
-            variant="contained"
-            color="primary"
-            href="Start"
-            onClick={this.onStart}
-          >
-            Start
-          </Button>}
+          {!this.state.start && (
+            <Button
+              variant="contained"
+              color="primary"
+              href="Start"
+              onClick={this.onStart}
+            >
+              Begin Simulated Debate
+            </Button>
+          )}
         </div>
         {this.state.start && (
           <DebateDisplay
@@ -151,4 +151,4 @@ class DebateScene extends React.Component<Props, State> {
   }
 }
 
-export default HOC(DebateScene, styles);
+export default inject('store')(HOC(DebateScene, styles));

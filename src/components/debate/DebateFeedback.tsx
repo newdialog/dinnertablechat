@@ -77,6 +77,7 @@ class DebateFeedback extends React.Component<Props, State> {
         // TODO: call endpoint
         this.props.store.debate.resetQueue();
         this.props.store.router.push('/play');
+        this.props.store.showNavbar();
     }
 
     public render() {

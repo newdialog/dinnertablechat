@@ -53,6 +53,10 @@ function ButtonAppBar(props:Props) {
     return null; // <React.Fragment></React.Fragment>
   }
 
+  if(!store.showNav) {
+    return null;
+  }
+
   return (
     <div className={classes.root}>
       <AppBar position="fixed" color="default" style={{ backgroundColor:'rgb(255,255,255,0.9)' }}>
