@@ -2,7 +2,8 @@ import * as React from 'react';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import HOC from '../HOC';
 
-import Lottie from 'react-lottie';
+// import Lottie from 'react-lottie';
+import Lottie from 'lottie-react-web'
 import { Typography, Divider } from '@material-ui/core';
 
 import hark, { SpeechEvent } from 'hark';
@@ -128,6 +129,7 @@ const bgOptions = {
 };
 
 const tableOptions = {
+  // renderer: 'canvas',
   loop: false,
   autoplay: false,
   path: 'assets/debate/Table.json',
@@ -158,6 +160,8 @@ interface State {
   blueState: string;
   redTransition: boolean;
   redState: string;
+  tablePaused: boolean;
+  tableStart?: boolean; // hack for segments
 }
 // flip
 /*
@@ -186,7 +190,8 @@ class DebateScene extends React.Component<Props, State> {
       blueTransition: false,
       blueState: 'idle',
       redTransition: false,
-      redState: 'idle'
+      redState: 'idle',
+      tablePaused: false
     };
   }
 
@@ -207,8 +212,10 @@ class DebateScene extends React.Component<Props, State> {
     // Table
     console.log('playSegments', Boolean(this.tableEl.current), this.tableEl.current!)
     const t = this.tableEl.current!;
+    // t.playSegments();
+    // t.playSegments([0, 20], true);
     // t.setSubframe(false);
-    t.playSegments([0, 20], true);
+    // t.playSegments([0, 20], true);
     // t.goToAndStop(30);
   }
 
@@ -218,10 +225,19 @@ class DebateScene extends React.Component<Props, State> {
     this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
   };
 
-  private onTableLoopComplete = () => {
+  private onTableDOMLoaded = () => {
+    console.log('table onTableDOMLoaded')
     const t = this.tableEl.current!;
-    t.stop();
+    t.playSegments();
+    this.setState({tableStart:true});
+  }
+
+  private onTableLoopComplete = () => {
+    if(this.state.tablePaused) return;
+    const t = this.tableEl.current!;
+    t.pause();
     console.log('table stop')
+    this.setState({tablePaused:true});
   }
 
   public render() {
@@ -294,14 +310,19 @@ class DebateScene extends React.Component<Props, State> {
               <div className={classes.table}>
                 <Lottie
                   options={tableOptions}
+                  playSegments={true}
                   speed={1}
-                  segments={[0,20]}
+                  segments={this.state.tablePaused ? null : [0,100]}
+                  forceSegment={true}
                   ref={this.tableEl}
                   isClickToPauseDisabled={true}
                   eventListeners={[
                     {
                       eventName: 'complete',
                       callback: this.onTableLoopComplete
+                    }, {
+                      eventName: 'DOMLoaded',
+                      callback: this.onTableDOMLoaded
                     }
                   ]}
                 />

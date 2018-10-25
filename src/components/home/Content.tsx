@@ -12,6 +12,8 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 
 import Lottie from 'react-lottie';
+// import Lottie from 'lottie-react-web';
+
 import Reveal from 'react-reveal/Reveal';
 import Flip from 'react-reveal/Flip';
 import Waypoint from 'react-waypoint';
@@ -133,6 +135,7 @@ const talkingOptions = {
 };
 
 const topicsOptions = {
+  renderer: 'svg',
   loop: true,
   autoplay: false,
   subframeEnabled: false,

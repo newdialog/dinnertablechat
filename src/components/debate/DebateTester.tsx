@@ -66,12 +66,16 @@ class DebateScene extends React.Component<Props, State> {
     this.setState({ talkingRed: !this.state.talkingRed });
   };
 
+  public componentWillUnmount() {
+    // cleanup
+  }
+
   public componentDidMount() {
     // this.props.store.debate.setPosition(0, 'guns')
     // this.props.store.debate.setContribution(0);
     // this.props.store.debate.setCharacter(0);
     // this.props.store.debate.syncMatch();
-    this.onStart(); // for testing
+    // this.onStart(); // for testing
   }
 
   public onStart = async (e?: React.MouseEvent) => {
