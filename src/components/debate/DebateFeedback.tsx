@@ -96,7 +96,7 @@ class DebateFeedback extends React.Component<Props, State> {
                 <div className={classes.agreeContainer}>
                     <Typography
                         component="span"
-                        variant="title"
+                        variant="h6"
                         color="textPrimary"
                         className={classes.header}
                     >
@@ -114,7 +114,7 @@ class DebateFeedback extends React.Component<Props, State> {
                 <div className={classes.traitContainer}>
                     <Typography
                         component="span"
-                        variant="title"
+                        variant="h6"
                         color="textPrimary"
                         className={classes.header}
                     >
@@ -136,7 +136,7 @@ class DebateFeedback extends React.Component<Props, State> {
                 <div className={classes.traitContainer}>
                     <Typography
                         component="span"
-                        variant="title"
+                        variant="h6"
                         color="textPrimary"
                         className={classes.header}
                     >

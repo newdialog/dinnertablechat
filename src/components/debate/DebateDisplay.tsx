@@ -207,7 +207,12 @@ class DebateScene extends React.Component<Props, State> {
         console.warn(e);
       }
     }
-    if (s.lockOrientationUniversal) s.lockOrientationUniversal('landscape');
+    
+    try {
+      if (s.lockOrientationUniversal) s.lockOrientationUniversal('landscape');
+    } catch(e) {
+      console.warn(e);
+    }
 
     // Table
     console.log('playSegments', Boolean(this.tableEl.current), this.tableEl.current!)
