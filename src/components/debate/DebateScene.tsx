@@ -48,8 +48,8 @@ interface State {
 
 class DebateScene extends React.Component<Props, State> {
   public peer: PeerService;
-  public speechEvents: SpeechEvent;
-  public speechSelfEvents: SpeechEvent;
+  public speechEvents?: SpeechEvent;
+  public speechSelfEvents?: SpeechEvent;
   private vidRef = React.createRef<HTMLVideoElement>();
   constructor(props: Props) {
     super(props);

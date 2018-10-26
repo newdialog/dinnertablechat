@@ -41,7 +41,7 @@ interface State {
 let rawSpeaking = false;
 
 class DebateScene extends React.Component<Props, State> {
-  public speechEvents: SpeechEvent;
+  public speechEvents?: SpeechEvent;
   private vidRef = React.createRef<HTMLVideoElement>();
   constructor(props: Props) {
     super(props);
