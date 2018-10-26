@@ -8,7 +8,6 @@ import * as serviceWorker from './serviceWorker';
 import App from './App';
 import { Provider } from 'mobx-react';
 import * as AppModel from './models/AppModel';
-import AuthModel from './models/AuthModel';
 
 import { connectReduxDevtools } from 'mst-middlewares';
 import createBrowserHistory from 'history/createBrowserHistory';
@@ -20,7 +19,7 @@ const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
 // Configure MST Store
 const fetcher = url => window.fetch(url).then(response => response.json());
-const store = AppModel.create(routerModel, history);
+const store = AppModel.create(routerModel, fetcher);
 
 connectReduxDevtools(require('remotedev'), store);
 
