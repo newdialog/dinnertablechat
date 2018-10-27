@@ -8,6 +8,7 @@ import { Typography, Divider } from '@material-ui/core';
 
 import hark, { SpeechEvent } from 'hark';
 import DebateFloatMenu from './DebateFloatMenu';
+import DebateTimer from './DebateTimer';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -38,6 +39,12 @@ const styles = (theme: Theme) =>
       bottom: 'calc(-4vh)',
       left: 'calc(50vw - 70vh)',
       width: '140vh'
+    },
+    timer: {
+      position: 'absolute',
+      bottom: 'calc(1vh)',
+      left: 'calc(50vw - 55vh)',
+      width: '110vh'
     },
     leftPos: {
       position: 'absolute',
@@ -250,6 +257,10 @@ class DebateScene extends React.Component<Props, State> {
     this.setState({tablePaused:true});
   }
 
+  private onCompleted = () => {
+    console.log('on debate timer complete');
+  }
+
   public render() {
     const { classes, talkingBlue, talkingRed, videoEl } = this.props;
     const { blueTransition } = this.state;
@@ -341,6 +352,7 @@ class DebateScene extends React.Component<Props, State> {
           </div>
         </div>
         <DebateFloatMenu videoEl={videoEl} />
+        <div className={classes.timer}><DebateTimer onCompleted={this.onCompleted} /></div>
       </React.Fragment>
     );
   }
