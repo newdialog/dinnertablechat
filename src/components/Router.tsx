@@ -8,12 +8,33 @@ import DebateFeedback from './debate/DebateFeedback'; // TODO: remove this and w
 // import LoadingMatch from './debate/DebateTester'
 // import DebateRouter from './debate/DebateRouter'
 // import Privacy from './privacy/Privacy';
-
+import Loadable from 'react-loadable';
+const asyncPlay = Loadable({	
+  loader: () => import('./menus/MenuHome'),	
+  loading: Loading,	
+  delay: 200,	
+});	
+ const asyncPrivacy = Loadable({	
+  loader: () => import('./privacy/Privacy'),	
+  loading: Loading,	
+  delay: 200,	
+});	
+ const asyncDebate = Loadable({	
+  loader: () => import('./debate/DebateRouter'),	
+  loading: Loading,	
+  delay: 200,	
+});	
+ const asyncDisplay = Loadable({	
+  loader: () => import('./debate/DebateTester'),	
+  loading: Loading,	
+  delay: 200,	
+});
+/*
 const asyncPlay = lazy(() => import('./menus/MenuHome'));
-const asyncPrivacy = lazy(() => import('./privacy/Privacy'));
+const asyncPrivacy:any = lazy(() => import('./privacy/Privacy'));
 const asyncDebate = lazy(() => import('./debate/DebateRouter'));
 const asyncDisplay = lazy(() => import('./debate/DebateTester'));
-
+*/
 const NoMatch = ({ location }) => (
   <div>
     <h1>...</h1>
