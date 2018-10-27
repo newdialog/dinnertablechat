@@ -1,5 +1,6 @@
 import { types, Instance } from 'mobx-state-tree';
 import { string, number } from 'prop-types';
+import { boolean } from 'mobx-state-tree/dist/internal';
 
 const OtherPlayerModel = types.model({
   character: -1
@@ -23,6 +24,7 @@ const DebateModel = types
     position: -1,
     topic: '',
     character: -1,
+    isTest: false,
     match: types.maybeNull(MatchModel),
     finished: false, 
   })
@@ -54,11 +56,15 @@ const DebateModel = types
     setCharacter(character: number) {
       self.character = character;
     },
+    setTest(isTest: boolean) {
+      self.isTest = isTest;
+    },
     resetQueue() {
       self.contribution = -1;
       self.position = -1;
       self.character = -1;
       self.topic = '';
+      // self.isTest = false;
       self.match = null;
       self.finished = false;
     }

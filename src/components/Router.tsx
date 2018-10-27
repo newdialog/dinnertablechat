@@ -9,31 +9,31 @@ import DebateFeedback from './debate/DebateFeedback'; // TODO: remove this and w
 // import DebateRouter from './debate/DebateRouter'
 // import Privacy from './privacy/Privacy';
 import Loadable from 'react-loadable';
-const asyncPlay = Loadable({	
+const AsyncPlay = Loadable({	
   loader: () => import('./menus/MenuHome'),	
   loading: Loading,	
   delay: 200,	
 });	
- const asyncPrivacy = Loadable({	
+ const AsyncPrivacy = Loadable({	
   loader: () => import('./privacy/Privacy'),	
   loading: Loading,	
   delay: 200,	
 });	
- const asyncDebate = Loadable({	
+ const AsyncDebate = Loadable({	
   loader: () => import('./debate/DebateRouter'),	
   loading: Loading,	
   delay: 200,	
 });	
- const asyncDisplay = Loadable({	
+ const AsyncDisplay = Loadable({	
   loader: () => import('./debate/DebateTester'),	
   loading: Loading,	
   delay: 200,	
 });
 /*
-const asyncPlay = lazy(() => import('./menus/MenuHome'));
-const asyncPrivacy:any = lazy(() => import('./privacy/Privacy'));
-const asyncDebate = lazy(() => import('./debate/DebateRouter'));
-const asyncDisplay = lazy(() => import('./debate/DebateTester'));
+const AsyncPlay = lazy(() => import('./menus/MenuHome'));
+const AsyncPrivacy:any = lazy(() => import('./privacy/Privacy'));
+const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
+const AsyncDisplay = lazy(() => import('./debate/DebateTester'));
 */
 const NoMatch = ({ location }) => (
   <div>
@@ -67,10 +67,12 @@ const DTCRouter = ({ history }: { history: any }) => (
         <Route exact={true} path="/callback" component={Home} />
         <Route exact={true} path="/feedback" component={DebateFeedback} />
 
-        <Route path="/privacy" component={asyncPrivacy} />
-        <Route path="/play" component={asyncPlay} />
-        <Route path="/match" component={asyncDebate} />
-        <Route path="/test" component={asyncDisplay} />
+        <Route path="/privacy" component={AsyncPrivacy} />
+        <Route path="/play" component={AsyncPlay} />
+        <Route path="/match" component={AsyncDebate} />
+
+        <Route exact={true} path="/test2" component={AsyncDisplay} />
+        <Route exact={true} path="/test" render={()=><AsyncPlay isTest={true}/> } />
 
         <Redirect from="/signin" to="/" />
         <Redirect from="/signout" to="/" />

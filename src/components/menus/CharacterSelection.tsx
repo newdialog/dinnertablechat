@@ -104,7 +104,7 @@ class CharacterSelector extends React.Component<Props> {
     url: any;
   }> {
     return [
-      { key: 0, title: 'Tracy', value: 0, url: './imgs/04-select.png' },
+      // { key: 0, title: 'Tracy', value: 0, url: './imgs/04-select.png' },
       { key: 1, title: 'Riley', value: 1, url: './imgs/04-select2.png' },
       { key: 2, title: 'Finley', value: 2, url: './imgs/04-select3.png' }
     ];

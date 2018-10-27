@@ -10,6 +10,11 @@ const AppModel = types.model({
   router: RouterModel,
   showNav: true
 }).actions(self => ({
+  gotoHomeMenu() {
+    self.showNav = true;
+    if(!self.debate.isTest) self.router.push('/play');
+    else self.router.push('/test');
+  },
   showNavbar() {
     // self.text = newTitle
     self.showNav = true;

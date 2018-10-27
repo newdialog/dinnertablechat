@@ -45,6 +45,7 @@ const styles = theme =>
 
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
+  isTest?: boolean;
 }
 interface State {
   open: boolean;
@@ -75,19 +76,19 @@ class Index extends React.Component<Props, State> {
     this.state = { open: false, activeStep: 0 };
   }
 
-  private handleNext = () => {
-    const { store } = this.props;
-  };
+  public componentDidMount() {
+    this.props.store.debate.setTest(this.props.isTest===true);
+    this.handleReset();
+  }
 
   private handleBack = () => {
     const { store } = this.props;
-    // store.debate.setPosition(-1, '')
-    store.debate.resetQueue()
+    this.handleReset();
   };
 
   private handleReset = () => {
     const { store } = this.props;
-    store.debate.resetQueue()
+    store.debate.resetQueue();
   };
 
   private renderStepButtons = (activeStep, classes, steps) => {
@@ -127,6 +128,7 @@ class Index extends React.Component<Props, State> {
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
+            { this.props.isTest && (<h2>TEST MODE (/test)</h2>)}
             <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
               Debate Topics
             </Typography>

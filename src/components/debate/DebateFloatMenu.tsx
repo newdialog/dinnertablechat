@@ -67,8 +67,7 @@ class FloatMenu extends React.Component<Props, any> {
 
   private handleLeave = () => {
     this.props.store.debate.resetQueue();
-    this.props.store.router.push('/play');
-    this.props.store.showNavbar();
+    this.props.store.gotoHomeMenu();
     this.handleClose();
   };
 
