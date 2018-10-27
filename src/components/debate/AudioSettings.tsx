@@ -7,6 +7,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
 
@@ -40,15 +41,20 @@ const styles = theme =>
     }
   });
 
-interface Props extends WithStyles<typeof styles> {
-  // error: string;
-  // store: AppModel.Type,
+interface Props {
   videoEl: React.RefObject<HTMLMediaElement>;
+  fullScreen?: boolean;
   onClose: () => void;
 }
 
-class AudioSettings extends React.Component<Props, any> {
-  constructor(props: Props) {
+interface IProps extends WithStyles<typeof styles>, Props {
+  // error: string;
+  // store: AppModel.Type,
+  
+}
+
+class AudioSettings extends React.Component<IProps, any> {
+  constructor(props: IProps) {
     super(props);
     this.state = {
       selectedIndex: 0,
@@ -141,10 +147,12 @@ class AudioSettings extends React.Component<Props, any> {
   public render() {
     const { classes, onClose, videoEl } = this.props;
     const { anchorEl, options } = this.state;
+    const { fullScreen } = this.props;
 
     return (
       <Dialog
         open={true}
+        fullScreen={fullScreen}
         onClose={onClose}
         aria-labelledby="alert-dialog-title"
       >
@@ -202,4 +210,4 @@ class AudioSettings extends React.Component<Props, any> {
     );
   }
 }
-export default HOC(AudioSettings, styles, true);
+export default withMobileDialog<Props>()(HOC(AudioSettings, styles, true));

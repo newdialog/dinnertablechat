@@ -79,6 +79,7 @@ const styles = (theme: Theme) =>
   });
 
 const aliceListenOptions = {
+  // renderer: 'canvas',
   loop: true,
   autoplay: true,
   subframeEnabled: false,
@@ -89,6 +90,7 @@ const aliceListenOptions = {
 };
 
 const aliceTalkOptions = {
+  // renderer: 'canvas',
   loop: true,
   autoplay: true,
   subframeEnabled: false,
@@ -99,6 +101,7 @@ const aliceTalkOptions = {
 };
 
 const rabitListenOptions = {
+  // renderer: 'canvas',
   loop: true,
   autoplay: true,
   subframeEnabled: false,
@@ -109,6 +112,7 @@ const rabitListenOptions = {
 };
 
 const rabitTalkOptions = {
+  // renderer: 'canvas',
   loop: true,
   autoplay: true,
   subframeEnabled: false,
@@ -119,6 +123,7 @@ const rabitTalkOptions = {
 };
 
 const bgOptions = {
+  // renderer: 'canvas',
   loop: true,
   autoplay: true,
   path: 'assets/background.json',
@@ -129,7 +134,7 @@ const bgOptions = {
 };
 
 const tableOptions = {
-  // renderer: 'canvas',
+  renderer: 'canvas',
   loop: false,
   autoplay: false,
   path: 'assets/debate/Table.json',

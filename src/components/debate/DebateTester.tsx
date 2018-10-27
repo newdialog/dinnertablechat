@@ -7,6 +7,7 @@ import DebateDisplay from './DebateDisplay';
 import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
 import { inject } from 'mobx-react';
+import FPSStats from "react-fps-stats";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -146,6 +147,7 @@ class DebateScene extends React.Component<Props, State> {
             videoEl={this.vidRef}
           />
         )}
+        <FPSStats left={'auto'} right={30} top={100} />
       </React.Fragment>
     );
   }
