@@ -147,7 +147,7 @@ class DebateScene extends React.Component<Props, State> {
             videoEl={this.vidRef}
           />
         )}
-        <FPSStats left={'auto'} right={30} top={100} />
+        <FPSStats left={'auto'} right={30} top={60} />
       </React.Fragment>
     );
   }

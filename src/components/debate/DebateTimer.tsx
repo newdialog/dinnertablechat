@@ -58,11 +58,16 @@ const renderer = (classes, { hours, minutes, seconds, completed }) => {
     if (Number(minutes) < 5) {
       step = 2;
     }
+
+    let hoursDisplay = '';
+    if(Number(hours) > 0) {
+        hoursDisplay = '{hours}:';
+    }
     // Render a countdown
     return (
       <div style={{padding:0, margin:0}}>
         <Typography variant="h1" align="center" className={classes.timerText}>
-          {hours}:{minutes}:{seconds} <br />
+          {hoursDisplay}{minutes}:{seconds} <br />
           <span className={classes.stepWord}>{steps[step]}</span>
         </Typography>
 
