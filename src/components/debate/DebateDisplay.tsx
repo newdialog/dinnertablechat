@@ -191,8 +191,6 @@ class DebateScene extends React.Component<Props, State> {
   private blue = React.createRef<HTMLDivElement>();
   private red = React.createRef<HTMLDivElement>();
 
-  // public speechEvents?: SpeechEvent;
-  private vidRef = React.createRef<HTMLVideoElement>();
   private bgEl = React.createRef<Lottie | any>();
   private tableEl = React.createRef<Lottie | any>();
 

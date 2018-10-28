@@ -1,12 +1,14 @@
 import React from 'react';
 import Countdown from 'react-countdown-now';
-import { Typography, withStyles } from '@material-ui/core';
+import { Typography, withStyles, Button } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import HOC from '../HOC';
+import { inject } from 'mobx-react';
+import * as AppModel from '../../models/AppModel';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -20,8 +22,8 @@ const styles = (theme: Theme) =>
       }
     },
     timerText: {
-        padding: '0',
-        margin: 0
+      padding: '0',
+      margin: 0
     },
     stepWord: {
       margin: '-5px auto -10px auto',
@@ -34,20 +36,36 @@ const styles = (theme: Theme) =>
     }
   });
 
+function onMenuClick(store: AppModel.Type) {
+  store.debate.resetQueue();
+  store.gotoHomeMenu();
+}
+
 // Random component
-const Completionist = () => (
-  <div>
+const Completionist = ({ store }: { store: AppModel.Type }) => (
+  <div style={{ textAlign: 'center' }}>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => onMenuClick(store)}
+    >
+      Back to Menu
+    </Button>
     <Typography variant="h1" align="center">
-      Debate Completed
+      Debate Ended
     </Typography>
   </div>
 );
 
 // Renderer callback with condition
-const renderer = (classes, { hours, minutes, seconds, completed }) => {
+const renderer = (
+  classes,
+  store: AppModel.Type,
+  { hours, minutes, seconds, completed }
+) => {
   if (completed) {
     // Render a completed state
-    return <Completionist />;
+    return <Completionist store={store} />;
   } else {
     const steps = ['Introductions', 'Debate', 'Find an Agreement'];
 
@@ -60,14 +78,15 @@ const renderer = (classes, { hours, minutes, seconds, completed }) => {
     }
 
     let hoursDisplay = '';
-    if(Number(hours) > 0) {
-        hoursDisplay = '{hours}:';
+    if (Number(hours) > 0) {
+      hoursDisplay = '{hours}:';
     }
     // Render a countdown
     return (
-      <div style={{padding:0, margin:0}}>
+      <div style={{ padding: 0, margin: 0 }}>
         <Typography variant="h1" align="center" className={classes.timerText}>
-          {hoursDisplay}{minutes}:{seconds} <br />
+          {hoursDisplay}
+          {minutes}:{seconds} <br />
           <span className={classes.stepWord}>{steps[step]}</span>
         </Typography>
 
@@ -95,19 +114,19 @@ const renderer = (classes, { hours, minutes, seconds, completed }) => {
 };
 
 interface Props {
-    onCompleted:() => void;
+  onCompleted: () => void;
 }
 
 function DebateTimer(props) {
-  const { classes, t, onCompleted } = props;
+  const { classes, t, onCompleted, store } = props;
 
   return (
     <Countdown
       completed={onCompleted}
       date={Date.now() + 1000 * 60 * 15}
-      renderer={renderer.bind(null, classes)}
+      renderer={renderer.bind(null, classes, store)}
     />
   );
 }
 
-export default HOC(DebateTimer, styles);
+export default inject('store')(HOC(DebateTimer, styles));
