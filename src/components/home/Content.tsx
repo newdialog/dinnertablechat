@@ -1,12 +1,8 @@
 // tslint:disable-next-line:max-line-length
 import * as React from 'react';
 import Typography from '@material-ui/core/Typography';
-import HOC from '../HOC'
-import {
-  createStyles,
-  WithStyles,
-  Theme
-} from '@material-ui/core/styles';
+import HOC from '../HOC';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
@@ -101,7 +97,7 @@ const styles = (theme: Theme) =>
       minWidth: '300px'
     },
     divider: {
-      margin: `${theme.spacing.unit * 7}px 0`,
+      margin: `${theme.spacing.unit * 3}px 0`,
       [theme.breakpoints.down('sm')]: {
         margin: `${theme.spacing.unit * 1}px 0`
       }
@@ -163,7 +159,6 @@ interface State {
 }
 
 class Index extends React.Component<Props, State> {
-
   constructor(props: Props) {
     super(props);
     this.state = { open: false };
@@ -221,8 +216,8 @@ class Index extends React.Component<Props, State> {
 
   private trackRulesView = () => {
     window.gtag('event', 'scroll_rules', {
-      'event_category': 'splash',
-      'non_interaction': true
+      event_category: 'splash',
+      non_interaction: true
     });
   };
 
@@ -262,6 +257,38 @@ class Index extends React.Component<Props, State> {
             </Grid>
             <Grid item xs={12} md={12}>
               <Divider className={classes.divider} />
+              <div
+                id="lab_social_icon_footer"
+                className="text-center center-block"
+                style={{ textAlign: 'right' }}
+              >
+                <Typography variant="subtitle1" align="right" style={{color:'gray'}} >...news and updates</Typography>
+                <a
+                  style={{ color: 'black' }}
+                  href="https://medium.com/dinnertablechat"
+                  onClick={trackOutboundLinkClick(
+                    'https://medium.com/dinnertablechat'
+                  )}
+                >
+                  <i
+                    id="social-medium"
+                    className="fab fa-medium social fa-3x "
+                  />
+                </a>
+
+                <a
+                  style={{ color: 'black' }}
+                  href="https://twitter.com/dintablechat"
+                  onClick={trackOutboundLinkClick(
+                    'https://twitter.com/dintablechat'
+                  )}
+                >
+                  <i
+                    id="social-tw"
+                    className="fab fa-twitter-square social fa-3x "
+                  />
+                </a>
+              </div>
             </Grid>
           </Grid>
         </div>
@@ -280,11 +307,12 @@ class Index extends React.Component<Props, State> {
             </Grid>
             <Grid item xs={12} md={6}>
               <div className={classes.paper}>
-                <Flip bottom={true} fraction={0.7} onReveal={this.trackRulesView}>
-                    <img
-                      src="./imgs/05-troll.png"
-                      className={classes.paperimg}
-                    />
+                <Flip
+                  bottom={true}
+                  fraction={0.7}
+                  onReveal={this.trackRulesView}
+                >
+                  <img src="./imgs/05-troll.png" className={classes.paperimg} />
                 </Flip>
               </div>
             </Grid>
