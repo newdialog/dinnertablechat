@@ -3,8 +3,8 @@ import awsExportsJs from './aws-exports.js';
 import * as express from 'express';
 
 // var AWSXRay = require('aws-xray-sdk');
-const bodyParser = require('body-parser');
-const CognitoExpress = require('cognito-express');
+import bodyParser from 'body-parser';
+import cognitoExpress from 'cognito-express';
 const port = process.env.PORT || 8000;
 
 const cognitoUserPoolId = awsExportsJs.aws_user_pools_id;
@@ -18,7 +18,7 @@ const authenticatedRoute = express.Router();
 app.use('/api', authenticatedRoute);
 
 // Initializing CognitoExpress constructor
-const cognitoExpress = new CognitoExpress({
+const _cognitoExpress = new cognitoExpress({
   region: 'us-east-1',
   cognitoUserPoolId: cognitoUserPoolId, // "us-east-1_dXlFef73t",
   tokenUse: 'access', // Possible Values: access | id
@@ -34,7 +34,7 @@ authenticatedRoute.use((req: any, res: any, next: any) => {
   if (!accessTokenFromClient)
     return res.status(401).send('Access Token missing from header');
 
-  cognitoExpress.validate(accessTokenFromClient, (err: any, response: any) => {
+  _cognitoExpress.validate(accessTokenFromClient, (err: any, response: any) => {
     // If API is not authenticated, Return 401 with error message.
     if (err) return res.status(401).send(err);
 
