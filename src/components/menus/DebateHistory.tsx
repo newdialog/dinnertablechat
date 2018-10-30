@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
 import { CssBaseline, Grid, Typography, Paper, List, ListSubheader, ListItem, ListItemIcon, ListItemText, Collapse } from '@material-ui/core'
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import { AccountCircle, ExpandLess, ExpandMore, StarBorder } from '@material-ui/icons';
 
 import * as AppModel from '../../models/AppModel';
@@ -14,6 +13,18 @@ const styles = theme =>
       width: '100%',
       backgroundColor: theme.palette.background.paper,
       marginTop: theme.spacing.unit * 5,
+    },
+    centered: {
+      marginTop: theme.spacing.unit * 5,
+      paddingTop: '0',
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      paddingBottom: '4em',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '1000px',
+      minWidth: '300px'
     },
     headerContainer: {
       flexDirection: 'row',
@@ -56,7 +67,7 @@ class Index extends React.Component<Props, State> {
   public render() {
     const { classes, store } = this.props;
       return (
-        <div className={classes.root}>
+        <div className={classes.centered}>
           <div className={classes.headerContainer}>
           <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
               <Grid item xs={1}>
@@ -86,41 +97,51 @@ class Index extends React.Component<Props, State> {
               </Grid>
           </Grid>
           </div>
-            <div style={{ borderBottom: '0.1em solid #aaa' }} />
-              <List
-                component="nav"
-                subheader={<ListSubheader component="div">List Items</ListSubheader>}
-              >
-              <ListItem button>
-                <ListItemIcon>
-                  <StarBorder />
-                </ListItemIcon>
-                <ListItemText inset primary="Sent mail" />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <StarBorder />
-                </ListItemIcon>
-                <ListItemText inset primary="Drafts" />
-              </ListItem>
-              <ListItem button onClick={this.handleClick}>
-                <ListItemIcon>
-                  <StarBorder />
-                </ListItemIcon>
-                <ListItemText inset primary="Inbox" />
-                {this.state.open ? <ExpandLess /> : <ExpandMore />}
-              </ListItem>
-              <Collapse in={this.state.open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItem button className={classes.nested}>
-                    <ListItemIcon>
-                      <StarBorder />
-                    </ListItemIcon>
-                    <ListItemText inset primary="Starred" />
-                  </ListItem>
-                </List>
-              </Collapse>
-            </List>
+          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+            <Grid item xs={4}>
+              <img src={"http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG"} width={'100%'} height={'100%'} />
+            </Grid>
+            <Grid item xs={8}>
+              <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
+                WELL-READ
+              </Typography>
+            </Grid>
+          </Grid>
+          <div style={{ borderBottom: '0.1em solid #aaa' }} />
+            <List
+              component="nav"
+              subheader={<ListSubheader component="div">List Items</ListSubheader>}
+            >
+            <ListItem button>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText inset primary="Sent mail" />
+            </ListItem>
+            <ListItem button>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText inset primary="Drafts" />
+            </ListItem>
+            <ListItem button onClick={this.handleClick}>
+              <ListItemIcon>
+                <StarBorder />
+              </ListItemIcon>
+              <ListItemText inset primary="Inbox" />
+              {this.state.open ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button className={classes.nested}>
+                  <ListItemIcon>
+                    <StarBorder />
+                  </ListItemIcon>
+                  <ListItemText inset primary="Starred" />
+                </ListItem>
+              </List>
+            </Collapse>
+          </List>
         </div>   
       );
   }
