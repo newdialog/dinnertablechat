@@ -3,7 +3,7 @@ import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import HOC from '../HOC';
 
 // import Lottie from 'react-lottie';
-import Lottie from 'lottie-react-web'
+import Lottie from 'lottie-react-web';
 import { Typography, Divider } from '@material-ui/core';
 
 import hark, { SpeechEvent } from 'hark';
@@ -211,21 +211,23 @@ class DebateScene extends React.Component<Props, State> {
     s.lockOrientationUniversal =
       s.lockOrientation || s.mozLockOrientation || s.msLockOrientation;
     if (screen.orientation && typeof screen.orientation.lock === 'function') {
-      try {
-        window.screen.orientation.lock('landscape');
-      } catch(e) {
-        console.warn(e);
-      }
+      window.screen.orientation.lock('landscape').catch(e => {
+        console.warn('window.screen.orientation.lock not available', e);
+      });
     }
-    
+
     try {
       if (s.lockOrientationUniversal) s.lockOrientationUniversal('landscape');
-    } catch(e) {
+    } catch (e) {
       console.warn(e);
     }
 
     // Table
-    console.log('playSegments', Boolean(this.tableEl.current), this.tableEl.current!)
+    console.log(
+      'playSegments',
+      Boolean(this.tableEl.current),
+      this.tableEl.current!
+    );
     const t = this.tableEl.current!;
     // t.playSegments();
     // t.playSegments([0, 20], true);
@@ -241,23 +243,23 @@ class DebateScene extends React.Component<Props, State> {
   };
 
   private onTableDOMLoaded = () => {
-    console.log('table onTableDOMLoaded')
+    console.log('table onTableDOMLoaded');
     const t = this.tableEl.current!;
     t.playSegments();
-    this.setState({tableStart:true});
-  }
+    this.setState({ tableStart: true });
+  };
 
   private onTableLoopComplete = () => {
-    if(this.state.tablePaused) return;
+    if (this.state.tablePaused) return;
     const t = this.tableEl.current!;
     t.pause();
-    console.log('table stop')
-    this.setState({tablePaused:true});
-  }
+    console.log('table stop');
+    this.setState({ tablePaused: true });
+  };
 
   private onCompleted = () => {
     console.log('on debate timer complete');
-  }
+  };
 
   public render() {
     const { classes, talkingBlue, talkingRed, videoEl } = this.props;
@@ -331,7 +333,7 @@ class DebateScene extends React.Component<Props, State> {
                   options={tableOptions}
                   playSegments={true}
                   speed={1}
-                  segments={this.state.tablePaused ? null : [0,100]}
+                  segments={this.state.tablePaused ? null : [0, 100]}
                   forceSegment={true}
                   ref={this.tableEl}
                   isClickToPauseDisabled={true}
@@ -339,7 +341,8 @@ class DebateScene extends React.Component<Props, State> {
                     {
                       eventName: 'complete',
                       callback: this.onTableLoopComplete
-                    }, {
+                    },
+                    {
                       eventName: 'DOMLoaded',
                       callback: this.onTableDOMLoaded
                     }
@@ -350,7 +353,9 @@ class DebateScene extends React.Component<Props, State> {
           </div>
         </div>
         <DebateFloatMenu videoEl={videoEl} />
-        <div className={classes.timer}><DebateTimer onCompleted={this.onCompleted} /></div>
+        <div className={classes.timer}>
+          <DebateTimer onCompleted={this.onCompleted} />
+        </div>
       </React.Fragment>
     );
   }
