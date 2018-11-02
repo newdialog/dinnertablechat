@@ -4,9 +4,8 @@ import HOC from '../HOC';
 
 // import Lottie from 'react-lottie';
 import Lottie from 'lottie-react-web';
-import { Typography, Divider } from '@material-ui/core';
+// import { Typography, Divider } from '@material-ui/core';
 
-import hark, { SpeechEvent } from 'hark';
 import DebateFloatMenu from './DebateFloatMenu';
 import DebateTimer from './DebateTimer';
 
@@ -48,10 +47,7 @@ const styles = (theme: Theme) =>
     },
     leftPos: {
       position: 'absolute',
-      // left: 'calc(50vw - 250px)',
-      // top: 'calc(50vh - 300px)',
       bottom: 'calc(23vh)',
-      // width: 300,
       // [theme.breakpoints.up('sm')]: {
       left: 'calc(50vw - 65vh)',
       width: '75vh'
@@ -60,10 +56,7 @@ const styles = (theme: Theme) =>
     },
     rightPos: {
       position: 'absolute',
-      // left: 'calc(50vw)',
-      // top: 'calc(50vh - 298px)',
       bottom: 'calc(23vh)',
-      // width: 355,
       // [theme.breakpoints.up('sm')]: {
       left: 'calc(41vw + 5vh)',
       width: 'calc(75vh)'
@@ -207,20 +200,25 @@ class DebateScene extends React.Component<Props, State> {
 
   public componentDidMount() {
     // Lock orientation if possible
-    const s = window.screen as any;
-    s.lockOrientationUniversal =
-      s.lockOrientation || s.mozLockOrientation || s.msLockOrientation;
     if (screen.orientation && typeof screen.orientation.lock === 'function') {
       window.screen.orientation.lock('landscape').catch(e => {
-        console.warn('window.screen.orientation.lock not available', e);
+        console.warn('screen.orientation.lock failed', e);
       });
     }
 
-    try {
-      if (s.lockOrientationUniversal) s.lockOrientationUniversal('landscape');
-    } catch (e) {
-      console.warn(e);
-    }
+    const s = window.screen as any;
+    s.lockOrientationUniversal =
+      s.lockOrientation || s.mozLockOrientation || s.msLockOrientation;
+    
+      if (s.lockOrientationUniversal) {
+        if(s.lockOrientationUniversal('landscape-primary')) {
+          console.log('screen.lockOrientation set to landscape');
+        } else {
+          console.warn('screen.lockOrientation failed to lock');
+        }
+      } else {
+        console.warn('screen.lockOrientation not available')
+      }
 
     // Table
     console.log(

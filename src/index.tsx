@@ -35,7 +35,13 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
-// const onSuccess = (registration: ServiceWorkerRegistration) => null;
-// const onUpdate = (registration: ServiceWorkerRegistration) => null;
+const onSuccess = (registration: ServiceWorkerRegistration) => console.log('worker loaded');
+const onUpdate = (registration: ServiceWorkerRegistration) => console.log('worker updated');
 // serviceWorker.register({onSuccess, onUpdate});
 serviceWorker.unregister();
+
+const enabledOnSafari  = (window.navigator as any).standalone === true;
+if (enabledOnSafari || window.matchMedia('(display-mode: standalone)').matches) {
+  console.log('display-mode is standalone');
+  store.enableStandalone();
+}

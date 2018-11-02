@@ -236,7 +236,7 @@ class Index extends React.Component<Props, State> {
         <div className={classes.centered2}>
           <Grid container spacing={24} className={classes.container}>
             <Grid item xs={12} md={12}>
-              <div className="paperimg">
+              <div className="paperimg" id="intro">
                 <Waypoint
                   topOffset="-10%"
                   bottomOffset="0"

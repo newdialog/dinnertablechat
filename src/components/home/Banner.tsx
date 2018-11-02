@@ -11,7 +11,8 @@ import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
 import Waypoint from 'react-waypoint';
 import HOC from '../HOC';
-
+import * as AppModel from '../../models/AppModel';
+import QueueIcon from '@material-ui/icons/QueuePlayNext';
 // const bgData = require('../../assets/background.json');
 
 const styles = (theme: Theme) =>
@@ -44,7 +45,7 @@ const styles = (theme: Theme) =>
     centeredDown: {
       marginLeft: 'auto',
       marginRight: 'auto',
-      paddingBottom: '1em',
+      paddingBottom: '15vh',
       color: '#ffffff88',
       textAlign: 'center',
       display: 'inline-block'
@@ -93,22 +94,22 @@ const styles = (theme: Theme) =>
       display: 'flex'
     },
     bannerAnim: {
-      zIndex:-1, 
+      zIndex: -1,
       position: 'absolute',
-      top:0, 
-      bottom:0, 
-      width:'100%', 
-      objectFit: 'cover', 
-      pointerEvents:'none'
+      top: 0,
+      bottom: 0,
+      width: '100%',
+      objectFit: 'cover',
+      pointerEvents: 'none'
     },
     bannerAnimOverlay: {
-      zIndex:-1, 
+      zIndex: -1,
       transform: 'translateZ(0)',
       position: 'absolute',
-      top:0, 
-      bottom:0, 
-      width:'100%',
-      background:'rgba(0, 0, 0, 0.35)',
+      top: 0,
+      bottom: 0,
+      width: '100%',
+      background: 'rgba(0, 0, 0, 0.35)',
       backgroundBlendMode: 'multiply'
     },
     largeIcon: {
@@ -126,46 +127,57 @@ const bgOptions = {
   }
 };
 
-interface Props extends WithStyles<typeof styles> { t:any }
+interface Props extends WithStyles<typeof styles> {
+  store: AppModel.Type;
+  t: any;
+}
 
- 
 class Index extends React.Component<Props> {
   constructor(props: Props) {
     super(props);
   }
 
-  private bannerRef = React.createRef<Lottie | any>()
+  private bannerRef = React.createRef<Lottie | any>();
 
   private _handleWaypointEnter = () => {
-    if(!this.bannerRef.current) return
+    if (!this.bannerRef.current) return;
     this.bannerRef.current.play();
-  }
+  };
 
   private _handleWaypointLeave = () => {
-    if(!this.bannerRef.current) return
+    if (!this.bannerRef.current) return;
     this.bannerRef.current.stop();
-  }
+  };
   /*
             <img src="./DTC-scene3.png"/>
             <img src="./DTC-scene3-foreg.png" style={{width:'100%'}}/>
 */
   public render() {
-    const { classes, t } = this.props;
+    const { classes, t, store } = this.props;
+    const auth = store.auth.loggedIn;
+    const isLive = store.isLive();
+
     return (
       <React.Fragment>
-        <Waypoint topOffset="-60%" bottomOffset="0"
-              onEnter={this._handleWaypointEnter}
-              onLeave={this._handleWaypointLeave}
-            />
+        <Waypoint
+          topOffset="-60%"
+          bottomOffset="0"
+          onEnter={this._handleWaypointEnter}
+          onLeave={this._handleWaypointLeave}
+        />
         <div className={classes.banner}>
           <div className={classes.bannerAnim}>
-            <Lottie options={bgOptions} ref={this.bannerRef} isClickToPauseDisabled={true}/>
+            <Lottie
+              options={bgOptions}
+              ref={this.bannerRef}
+              isClickToPauseDisabled={true}
+            />
           </div>
-          <div className={classes.bannerAnimOverlay}></div>
+          <div className={classes.bannerAnimOverlay} />
           <div className={classes.centeredDown}>
             <Typography variant="h1" gutterBottom align="center">
               <Reveal effect="fadeIn" duration={3500}>
-               {t('home-banner-title1')}
+                {t('home-banner-title1')}
               </Reveal>
             </Typography>
             <Typography variant="h4" align="center">
@@ -174,16 +186,34 @@ class Index extends React.Component<Props> {
               </Reveal>
             </Typography>
             <div className={classes.bannerTextDivider} />
-            <a href="#intro">
-              <IconButton style={{ height: '11vh', width: '11vh' }}>
-                <ArrowDown style={{ fontSize: '11vh' }} />
-              </IconButton>
-              <div id="intro" style={{ height: 0 }} />
-            </a>
+
             <br />
-            <Button href="#intro" size="small" variant="contained" color="primary">
+            <Button
+              href="#intro"
+              variant="contained"
+              color="primary"
+              size="large"
+              style={{marginRight:'4em'}}
+            >
               Learn More
             </Button>
+            {!auth &&
+              !isLive && (
+                <Button onClick={() => store.auth.login()} variant="contained" color="secondary" size="large">Login</Button>
+              )}
+            {auth &&
+              !isLive && (
+                <React.Fragment>
+                  <Button
+                    variant="contained"
+                    color="secondary" size="large"
+                    onClick={() => store.router.push('/play')}
+                  >
+                    Start
+                    <QueueIcon style={{ marginLeft: '8px' }} />
+                  </Button>
+                </React.Fragment>
+              )}
           </div>
         </div>
       </React.Fragment>

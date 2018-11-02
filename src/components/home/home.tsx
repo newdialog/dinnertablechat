@@ -1,15 +1,12 @@
 import * as React from 'react';
-import {
-  createStyles,
-  WithStyles,
-  Theme
-} from '@material-ui/core/styles';
-import HOC from '../HOC'
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import HOC from '../HOC';
 import Banner from './Banner';
 import Content from './Content';
 import Subcribe from './Subscribe';
 import Footer from './Footer';
-import Announcement from '@material-ui/icons/RecordVoiceOver'
+import Announcement from '@material-ui/icons/RecordVoiceOver';
+import {inject} from 'mobx-react';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -26,7 +23,7 @@ const styles = (theme: Theme) =>
       // gridAutoFlow: 'column',
       // gridAutoColumns: '200px'
       [theme.breakpoints.down('sm')]: {
-        gridTemplateColumns: '1fr',
+        gridTemplateColumns: '1fr'
       }
     },
     paper: {
@@ -120,7 +117,7 @@ interface State {
   open: boolean;
 }
 import Grid from '@material-ui/core/Grid';
- 
+
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -128,38 +125,52 @@ class Index extends React.Component<Props, State> {
   }
 
   public render() {
-    const { classes } = this.props;
+    const { classes, store } = this.props;
     const { open } = this.state;
     return (
       <div>
-        <Banner />
+        <Banner store={store} />
 
         <Content />
         <div className="pagebody">
           <Grid container spacing={0} className={classes.container}>
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
-                <img
-                  src="./imgs/07-newsletter.png"
-                  className={classes.paperimg}
-                />
+              <img
+                src="./imgs/07-newsletter.png"
+                className={classes.paperimg}
+              />
             </Grid>
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
               <Subcribe />
             </Grid>
           </Grid>
-          <div style={{marginTop:'3em'}}>
-            <a href="https://goo.gl/forms/KaZBtAxKRs2M1dY62"
-              onClick={window.trackOutboundLinkClick('https://goo.gl/forms/KaZBtAxKRs2M1dY62')}
-              className="minorlink" style={{textDecoration:'none'}}>
-              <Announcement/>  help us out by taking a quick poll
-              
-              </a>
+          <div style={{ marginTop: '3em' }}>
+            <a
+              href="https://goo.gl/forms/KaZBtAxKRs2M1dY62"
+              onClick={window.trackOutboundLinkClick(
+                'https://goo.gl/forms/KaZBtAxKRs2M1dY62'
+              )}
+              className="minorlink"
+              style={{ textDecoration: 'none' }}
+            >
+              <Announcement /> help us out by taking a quick poll
+            </a>
           </div>
-          <div style={{marginTop:'1em'}}>
-          also follow us on Twitter <a href="https://twitter.com/dintablechat" onClick={window.trackOutboundLinkClick('https://twitter.com/dintablechat')} className="minorlink" style={{textDecoration:'none'}}>@dintablechat</a>
+          <div style={{ marginTop: '1em' }}>
+            also follow us on Twitter{' '}
+            <a
+              href="https://twitter.com/dintablechat"
+              onClick={window.trackOutboundLinkClick(
+                'https://twitter.com/dintablechat'
+              )}
+              className="minorlink"
+              style={{ textDecoration: 'none' }}
+            >
+              @dintablechat
+            </a>
+          </div>
         </div>
-        </div>
-        
+
         <Footer />
       </div>
     );
@@ -178,4 +189,4 @@ class Index extends React.Component<Props, State> {
   };
 }
 
-export default HOC(Index, styles);
+export default inject('store')(HOC(Index, styles));
