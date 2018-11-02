@@ -154,51 +154,77 @@ class Index extends React.Component<Props, State> {
               </Typography>
             </Grid>
         </Grid>
+        
         <div style={{ borderBottom: '0.1em solid #aaa' }} />
+
         <List>
             <ListItem button onClick={() => this.handleClick(0)}>
-              <Avatar>
-                <img src="./imgs/04-select3.png" className={classes.paperimg} />
-              </Avatar>
-              <ListItemText primary="Reinhardt" secondary="Jan 9, 2014" />
-              {this.state.open[0] ? <ExpandLess /> : <ExpandMore />}
-              <Collapse in={this.state.open[0]} timeout="auto" unmountOnExit>
-                <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-                  <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-                  <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-                  <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+              <div style={{flex: 1}}>
+                <Grid id="top-row" container spacing={32} justify="center" alignItems="center">
+                  <Grid item xs>
+                    <Avatar>
+                      <img src="./imgs/04-select3.png" className={classes.paperimg} />
+                    </Avatar>
+                    <ListItemText primary="Reinhardt" secondary="Oct 31, 2018" />
+                  </Grid>
+                  <Grid item xs={1} justify={'flex-end'} alignItems={'flex-end'}>
+                    {this.state.open[0] ? <ExpandLess /> : <ExpandMore />}
+                  </Grid>
                 </Grid>
-              </Collapse>
-          </ListItem>
+                <Collapse in={this.state.open[0]} timeout="auto" unmountOnExit>
+                  <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+                    <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+                    <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
+                    <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+                  </Grid>
+                </Collapse>
+              </div>
+           </ListItem>
 
             <ListItem button onClick={() => this.handleClick(1)} >
-              <Avatar>
-                <img src="./imgs/04-select2.png" className={classes.paperimg} />
-              </Avatar>
-              <ListItemText primary="Winston" secondary="Jan 9, 2014" />
-              {this.state.open[1] ? <ExpandLess /> : <ExpandMore />}
-              <Collapse in={this.state.open[1]} timeout="auto" unmountOnExit>
-                <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-                  <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-                  <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-                  <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+              <div style={{flex: 1}}>
+                <Grid id="top-row" container spacing={32} justify="center" alignItems="center">
+                  <Grid item xs>
+                    <Avatar>
+                      <img src="./imgs/04-select2.png" className={classes.paperimg} />
+                    </Avatar>
+                    <ListItemText primary="Winston" secondary="Oct 28, 2018" />
+                  </Grid>
+                  <Grid item xs={1} justify={'flex-end'} alignItems={'flex-end'}>
+                    {this.state.open[1] ? <ExpandLess /> : <ExpandMore />}
+                  </Grid>
                 </Grid>
-              </Collapse>
+                <Collapse in={this.state.open[1]} timeout="auto" unmountOnExit>
+                  <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+                    <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+                    <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
+                    <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+                  </Grid>
+                </Collapse>
+              </div>
             </ListItem>
 
             <ListItem button onClick={() => this.handleClick(2)} >
-              <Avatar>
-                <img src="./imgs/04-select.png" className={classes.paperimg} />
-              </Avatar>
-              <ListItemText primary="Brigette" secondary="Jan 9, 2014" />
-              {this.state.open[2] ? <ExpandLess /> : <ExpandMore />}
-              <Collapse in={this.state.open[2]} timeout="auto" unmountOnExit>
-                <Grid container direction="row" justify="center" alignItems="center">
-                <img src="./imgs/04-select.png" width={'10%'} height={'10%'} />
-                <img src="./imgs/04-select2.png" width={'10%'} height={'10%'} />
-                <img src="./imgs/04-select3.png" width={'10%'} height={'10%'} />
+              <div style={{flex: 1}}>
+                <Grid id="top-row" container spacing={32} justify="center" alignItems="center">
+                  <Grid item xs>
+                    <Avatar>
+                      <img src="./imgs/04-select.png" className={classes.paperimg} />
+                    </Avatar>
+                    <ListItemText primary="Brigette" secondary="Oct 19, 2018" />
+                  </Grid>
+                  <Grid item xs={1} justify={'flex-end'} alignItems={'flex-end'}>
+                    {this.state.open[2] ? <ExpandLess /> : <ExpandMore />}
+                  </Grid>
                 </Grid>
-              </Collapse>
+                <Collapse in={this.state.open[2]} timeout="auto" unmountOnExit>
+                  <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+                    <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+                    <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
+                    <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+                  </Grid>
+                </Collapse>
+              </div>
             </ListItem>
 
         </List>
