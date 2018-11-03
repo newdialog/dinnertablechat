@@ -195,18 +195,18 @@ class Index extends React.Component<Props> {
               variant="contained"
               color="primary"
               size="large"
-              style={{marginRight:'4em'}}
             >
               Learn More
             </Button>
             {!auth &&
               !isLive && (
-                <Button onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Login</Button>
+                <Button style={{marginLeft:'4em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Login</Button>
               )}
             {auth &&
               !isLive && (
                 <React.Fragment>
                   <Button
+                    style={{marginLeft:'4em'}}
                     variant="contained"
                     color="primary" size="large"
                     onClick={() => store.router.push('/play')}
