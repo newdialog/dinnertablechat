@@ -37,22 +37,18 @@ const styles = theme =>
     nameContainer: {
       flexDirection: 'column',
     },
+    paper: {
+      flexGrow: 1,
+      padding: theme.spacing.unit * 2,
+    },
     paperimg: {
-      height: '100%',
-      width: '100%',
-      // margin: 'auto',
-      // display: 'block',
-      //justifyContent: 'left',
-      //alignItems: 'center',
-      //objectFit: 'contain',
-      // pointerEvents: 'none',
-      // [theme.breakpoints.down('sm')]: {
-      //   paddingTop: `${theme.spacing.unit * 5}px`,
-      //   maxWidth: '80%'
-      // },
-      // [theme.breakpoints.down('xs')]: {
-      //   maxWidth: '100%'
-      // }
+      height: '30%',
+     //  width: '30%',
+      margin: 'auto',
+      display: 'block',
+      justifyContent: 'left',
+      alignItems: 'center',
+      objectFit: 'contain',
     },
     nested: {
       paddingLeft: theme.spacing.unit * 4,
@@ -144,90 +140,103 @@ class Index extends React.Component<Props, State> {
             </Grid>
           </Grid>
         </div>
-        <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={4}>
-              <img src={'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG'} width={'100%'} height={'100%'} />
+
+        <Paper className={classes.paper}>
+          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+              <Grid item xs={4}>
+                <img src={'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG'} width={'100%'} height={'100%'} />
+              </Grid>
+              <Grid item xs={8}>
+                <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
+                  {'WELL READ'}
+                </Typography>
+              </Grid>
+          </Grid>
+        </Paper>
+
+        <div style={{ paddingBottom: '4em' }} />
+
+        <Paper className={classes.paper}>
+          <Grid container spacing={16}>
+            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'50%'} /></Grid>
+            <Grid item xs={12} sm container>
+              <Grid item xs container direction="column" >
+                <Grid item xs>
+                  <Typography gutterBottom variant="display1" color="textPrimary">
+                      Honorable Reinhardt Goodsir
+                    </Typography>
+                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Typography variant="display1" color="textSecondary" align={'center'}>Agreed</Typography>
+              </Grid>
             </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
-                {'WELL READ'}
-              </Typography>
+          </Grid>
+          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+          </Grid>
+        </Paper>
+
+        <div style={{ paddingBottom: '4em' }} />
+
+        <Paper className={classes.paper}>
+          <Grid container spacing={16}>
+            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'50%'} /></Grid>
+            <Grid item xs={12} sm container>
+              <Grid item xs container direction="column" spacing={16}>
+                <Grid item xs>
+                  <Typography gutterBottom variant="display1" color="textPrimary">
+                      Mensen Goed Joe
+                    </Typography>
+                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Typography variant="display1" color="textSecondary" align={'center'}>Disagreed</Typography>
+              </Grid>
             </Grid>
-        </Grid>
+          </Grid>
+          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+          </Grid>
+        </Paper>
+
+        <div style={{ paddingBottom: '4em' }} />
+
+        <Paper className={classes.paper}>
+          <Grid container spacing={16}>
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'50%'} /></Grid>
+            <Grid item xs={12} sm container>
+              <Grid item xs container direction="column" spacing={16}>
+                <Grid item xs>
+                  <Typography gutterBottom variant="display1" color="textPrimary">
+                      Honorable Lady McBeth
+                    </Typography>
+                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Typography variant="display1" color="textSecondary" align={'center'}>Agreed</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+          </Grid>
+        </Paper>
+
+        <div style={{ paddingBottom: '4em' }} />
         
-        <div style={{ borderBottom: '0.1em solid #aaa' }} />
-
-        <List>
-            <ListItem button onClick={() => this.handleClick(0)}>
-              <div style={{flex: 1}}>
-                <Grid id="top-row" container spacing={32} justify="center" alignItems="center">
-                  <Grid item xs>
-                    <Avatar>
-                      <img src="./imgs/04-select3.png" className={classes.paperimg} />
-                    </Avatar>
-                    <ListItemText primary="Reinhardt" secondary="Oct 31, 2018" />
-                  </Grid>
-                  <Grid item xs={1} justify={'flex-end'} alignItems={'flex-end'}>
-                    {this.state.open[0] ? <ExpandLess /> : <ExpandMore />}
-                  </Grid>
-                </Grid>
-                <Collapse in={this.state.open[0]} timeout="auto" unmountOnExit>
-                  <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-                    <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-                    <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-                    <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-                  </Grid>
-                </Collapse>
-              </div>
-           </ListItem>
-
-            <ListItem button onClick={() => this.handleClick(1)} >
-              <div style={{flex: 1}}>
-                <Grid id="top-row" container spacing={32} justify="center" alignItems="center">
-                  <Grid item xs>
-                    <Avatar>
-                      <img src="./imgs/04-select2.png" className={classes.paperimg} />
-                    </Avatar>
-                    <ListItemText primary="Winston" secondary="Oct 28, 2018" />
-                  </Grid>
-                  <Grid item xs={1} justify={'flex-end'} alignItems={'flex-end'}>
-                    {this.state.open[1] ? <ExpandLess /> : <ExpandMore />}
-                  </Grid>
-                </Grid>
-                <Collapse in={this.state.open[1]} timeout="auto" unmountOnExit>
-                  <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-                    <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-                    <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-                    <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-                  </Grid>
-                </Collapse>
-              </div>
-            </ListItem>
-
-            <ListItem button onClick={() => this.handleClick(2)} >
-              <div style={{flex: 1}}>
-                <Grid id="top-row" container spacing={32} justify="center" alignItems="center">
-                  <Grid item xs>
-                    <Avatar>
-                      <img src="./imgs/04-select.png" className={classes.paperimg} />
-                    </Avatar>
-                    <ListItemText primary="Brigette" secondary="Oct 19, 2018" />
-                  </Grid>
-                  <Grid item xs={1} justify={'flex-end'} alignItems={'flex-end'}>
-                    {this.state.open[2] ? <ExpandLess /> : <ExpandMore />}
-                  </Grid>
-                </Grid>
-                <Collapse in={this.state.open[2]} timeout="auto" unmountOnExit>
-                  <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-                    <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-                    <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-                    <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-                  </Grid>
-                </Collapse>
-              </div>
-            </ListItem>
-
-        </List>
       </div>
     );
   }
