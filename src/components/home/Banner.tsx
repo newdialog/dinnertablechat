@@ -13,6 +13,7 @@ import Waypoint from 'react-waypoint';
 import HOC from '../HOC';
 import * as AppModel from '../../models/AppModel';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
+import BannerTimer from './BannerTimer';
 // const bgData = require('../../assets/background.json');
 
 const styles = (theme: Theme) =>
@@ -45,7 +46,7 @@ const styles = (theme: Theme) =>
     centeredDown: {
       marginLeft: 'auto',
       marginRight: 'auto',
-      paddingBottom: '15vh',
+      paddingBottom: '5vh',
       color: '#ffffff88',
       textAlign: 'center',
       display: 'inline-block'
@@ -185,9 +186,10 @@ class Index extends React.Component<Props> {
                 {t('home-banner-title2')}
               </Reveal>
             </Typography>
+            
             <div className={classes.bannerTextDivider} />
-
-            <br />
+            <BannerTimer/>
+            <div className={classes.divider} />
             <Button
               href="#intro"
               variant="contained"
@@ -199,14 +201,14 @@ class Index extends React.Component<Props> {
             </Button>
             {!auth &&
               !isLive && (
-                <Button onClick={() => store.auth.login()} variant="contained" color="secondary" size="large">Login</Button>
+                <Button onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Login</Button>
               )}
             {auth &&
               !isLive && (
                 <React.Fragment>
                   <Button
                     variant="contained"
-                    color="secondary" size="large"
+                    color="primary" size="large"
                     onClick={() => store.router.push('/play')}
                   >
                     Start

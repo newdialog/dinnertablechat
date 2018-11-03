@@ -35,7 +35,9 @@ const styles = (theme: Theme) =>
 
 
 const goodTraits = ['Articulate', 'Funny', 'Helpful', 'Insightful', 'Logical', 'Open-minded', 'Well-read'];
-const badTraits = ['Aggressive', 'Arrogant', 'Crude', 'Ignorant', 'Interrupts', 'Logical fallacies'];
+const badTraits = ['Aggressive', 'Arrogant', 'Crude', 'Interrupts'];
+// goodTraits[]
+// badTraits[]
 
 interface Props extends WithStyles<typeof styles> {
     store: AppModel.Type;
