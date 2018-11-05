@@ -111,6 +111,17 @@ const rabitListenOptions = {
   }
 };
 
+const gekkoListenOptions = {
+  // renderer: 'canvas',
+  loop: true,
+  autoplay: true,
+  subframeEnabled: false,
+  path: 'assets/debate/02_GEEKO_IDLE.json',
+  rendererSettings: {
+    preserveAspectRatio: 'xMidYMid slice'
+  }
+};
+
 const rabitTalkOptions = {
   // renderer: 'canvas',
   loop: true,
@@ -145,9 +156,9 @@ const tableOptions = {
 };
 
 const characters = [
-  { talk: aliceTalkOptions, listen: aliceListenOptions },
+  { talk: gekkoListenOptions, listen: gekkoListenOptions },
   { talk: rabitTalkOptions, listen: rabitListenOptions },
-  { talk: aliceTalkOptions, listen: aliceListenOptions }
+  { talk: aliceTalkOptions, listen: aliceListenOptions },
 ];
 
 // import * as AppModel from '../../models/AppModel';

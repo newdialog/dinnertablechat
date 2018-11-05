@@ -40,6 +40,13 @@ function Footer(props: Props) {
               <i id="social-tw" className="fab fa-twitter-square social fa-3x "></i>
             </a>
 
+            <a href="https://discord.gg/U6h8pE9">
+              <i
+                id="social-discord"
+                className="fab fa-discord fa-3x social"
+              />
+            </a>
+
             <a href="mailto:team@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:team@dinnertable.chat')}>
               <i
                 id="social-em"
@@ -65,11 +72,6 @@ function Footer(props: Props) {
                 className="fa fa-envelope-square fa-3x social"
               />
             </a>
-<a href="https://discord.gg/U6h8pE9">
-              <i
-                id="social-discord"
-                className="fab fa-discord fa-3x social"
-              />
-            </a>
+
 */
 export default HOC(Footer, styles);
