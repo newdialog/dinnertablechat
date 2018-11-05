@@ -40,7 +40,7 @@ function Footer(props: Props) {
               <i id="social-tw" className="fab fa-twitter-square social fa-3x "></i>
             </a>
 
-            <a href="https://discord.gg/U6h8pE9">
+            <a href="https://discord.gg/U6h8pE9" onClick={trackOutboundLinkClick('https://discord.gg/U6h8pE9')}>
               <i
                 id="social-discord"
                 className="fab fa-discord fa-3x social"
