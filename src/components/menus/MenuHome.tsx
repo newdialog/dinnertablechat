@@ -77,7 +77,9 @@ class Index extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
-    this.props.store.debate.setTest(this.props.isTest===true);
+    if(Boolean(this.props.isTest) !== this.props.store.debate.isTest) { 
+      this.props.store.debate.setTest(this.props.isTest===true);
+    }
     this.handleReset();
   }
 

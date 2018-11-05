@@ -14,7 +14,7 @@ const App = inject('store')(
         <React.Fragment>
           <AuthWrapper store={store} login={store.auth.doLogin} />
           <AppBar store={store} />
-          <AppRouter history={history}></AppRouter>
+          <AppRouter history={history} store={store}></AppRouter>
         </React.Fragment>
     )
   })
