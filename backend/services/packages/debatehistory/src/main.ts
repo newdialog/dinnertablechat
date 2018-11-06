@@ -12,7 +12,7 @@ const sqloptions = {
   host: process.env.SQL_HOST || 'localhost',
   user: process.env.SQL_USER || 'me',
   password: process.env.SQL_PW || 'secret',
-  database: 'dtc',
+  database: ',
 };
 
 const app = express();

@@ -23,7 +23,7 @@
     "postinstall": "",
     "aws-export": "cp -f ../../../src/aws-exports.js ./src/",
     "startb": "npm run build && npm run start",
-    "start": "PGHOST='localhost' PGUSER=dev PGDATABASE=dtc PGPASSWORD=dev PGPORT=5432 node build/src/main.js",
+    "start": "PGHOST='localhost' PGUSER=dev PGDATABASE=PGPASSWORD=dev PGPORT=5432 node build/src/main.js",
     "deploy": "npm run build && up && up url",
     "clean": "rimraf coverage build tmp",
     "build": "tsc -p tsconfig.release.json",
@@ -41,6 +41,7 @@
     "body-parser": "^1.18.3",
     "cognito-express": "^2.0.12",
     "express": "^4.16.4",
+    "pg": "^7.6.0",
     "promise-mysql": "^3.3.1",
     "tslib": "~1.9.3"
   }

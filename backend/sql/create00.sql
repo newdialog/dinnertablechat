@@ -10,18 +10,18 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 -- -----------------------------------------------------
 -- Schema dtc
 -- -----------------------------------------------------
-DROP SCHEMA IF EXISTS `dtc` ;
+DROP SCHEMA IF EXISTS ` ;
 
 -- -----------------------------------------------------
 -- Schema dtc
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `dtc` ;
-USE `dtc` ;
+CREATE SCHEMA IF NOT EXISTS ` ;
+USE ` ;
 
 -- -----------------------------------------------------
--- Table `dtc`.`debate_session`
+-- Table `.`debate_session`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dtc`.`debate_session` (
+CREATE TABLE IF NOT EXISTS `.`debate_session` (
   `id` INT NOT NULL,
   `matchid` CHAR(36) NULL,
   `timestamp` TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP(),
@@ -32,9 +32,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `dtc`.`users`
+-- Table `.`users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dtc`.`users` (
+CREATE TABLE IF NOT EXISTS `.`users` (
   `id` INT NOT NULL,
   `xp` INT NULL,
   `username` VARCHAR(45) NULL,
@@ -45,9 +45,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `dtc`.`debate_review`
+-- Table `.`debate_review`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dtc`.`debate_review` (
+CREATE TABLE IF NOT EXISTS `.`debate_review` (
   `id` INT NOT NULL,
   `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
   `review` TEXT NOT NULL,
@@ -59,21 +59,21 @@ CREATE TABLE IF NOT EXISTS `dtc`.`debate_review` (
   INDEX `fk_debate_review_debate_session1_idx` (`debate_session_id` ASC),
   CONSTRAINT `fk_debate_review_users1`
     FOREIGN KEY (`users_id`)
-    REFERENCES `dtc`.`users` (`id`)
+    REFERENCES `.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_debate_review_debate_session1`
     FOREIGN KEY (`debate_session_id`)
-    REFERENCES `dtc`.`debate_session` (`id`)
+    REFERENCES `.`debate_session` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `dtc`.`debate_session_users`
+-- Table `.`debate_session_users`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `dtc`.`debate_session_users` (
+CREATE TABLE IF NOT EXISTS `.`debate_session_users` (
   `users_id` INT NOT NULL,
   `debate_session_id` INT NOT NULL,
   `badges` TEXT NULL,
@@ -84,12 +84,12 @@ CREATE TABLE IF NOT EXISTS `dtc`.`debate_session_users` (
   INDEX `fk_users_has_debate_session_users1_idx` (`users_id` ASC),
   CONSTRAINT `fk_users_has_debate_session_users1`
     FOREIGN KEY (`users_id`)
-    REFERENCES `dtc`.`users` (`id`)
+    REFERENCES `.`users` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_users_has_debate_session_debate_session1`
     FOREIGN KEY (`debate_session_id`)
-    REFERENCES `dtc`.`debate_session` (`id`)
+    REFERENCES `.`debate_session` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
