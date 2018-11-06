@@ -1,7 +1,12 @@
 {
-  "name": "matchmaker-api",
+  "name": "history-api",
   "profile": "dinnertable",
   "regions": ["us-east-1"],
+  "environment": {
+    "SQL_HOST": "dtcprod.cluster-cy0j2uzr5txt.us-east-1.rds.amazonaws.com",
+    "SQL_USER": "dev",
+    "SQL_PW": ""
+  },
   "lambda": {
     "memory": 256,
     "policy": [
