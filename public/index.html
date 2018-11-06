@@ -128,6 +128,12 @@
       }
     }(window.location))
   </script>
+  <script type='text/javascript'>
+    (function () {
+      if (/www.dinner/.test(window.location.href))
+        window.location = 'https://dinnertable.chat/'
+    })();
+  </script>
   <!-- End Single Page Apps for GitHub Pages -->
 </head>
 
