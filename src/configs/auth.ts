@@ -31,6 +31,15 @@ const awsOauth = {
   }
 };
 
+export const API_CONF = {
+  endpoints: [
+    {
+      name: 'history',
+      endpoint: 'https://1234567890-abcdefgh.amazonaws.com'
+    }
+  ]
+};
+
 const pubSubCfg = (region: string) => ({
   aws_pubsub_region: region,
   aws_pubsub_endpoint:
@@ -42,7 +51,8 @@ export const oauth = awsOauth;
 let initLog = false;
 export const injectConfig = (cfg: any) => {
   cfg.Auth = {
-    oauth: awsOauth
+    oauth: awsOauth,
+    API: API_CONF
   };
 
   const region = cfg.aws_cognito_region;

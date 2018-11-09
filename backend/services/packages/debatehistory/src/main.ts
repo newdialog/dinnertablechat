@@ -4,15 +4,16 @@ import * as express from 'express';
 
 // var AWSXRay = require('aws-xray-sdk');
 import bodyParser from 'body-parser';
-import * as mysql from 'promise-mysql';
+// import * as mysql from 'promise-mysql';
+import { Client } from 'pg';
 
 const port = process.env.PORT || 8000;
 
 const sqloptions = {
-  host: process.env.SQL_HOST || 'localhost',
-  user: process.env.SQL_USER || 'me',
-  password: process.env.SQL_PW || 'secret',
-  database: ',
+  host: 'localhost',
+  user: 'me',
+  password: 'secret',
+  database: 'dtc',
 };
 
 const app = express();
@@ -23,14 +24,20 @@ app.get('/hello', async (req: any, res: any, next: any) => {
   if (!connection) throw new Error('db not init yet');
   const qres = await connection.query('select * from debate_session');
   console.log(qres.rows); // Hello world!
-  res.send(qres.rows);
+
+  const ctx = JSON.parse(req.headers['x-context'])
+  const ctxstr = JSON.stringify(ctx, null, 2);
+
+  res.send({rows: qres.rows, ctx: ctxstr});
 });
 
 // app.use(bodyParser.json());
 // app.use(AWSXRay.express.closeSegment());
 app.listen(port, async () => {
+  console.log('starting')
   try {
-    connection = await mysql.createConnection(sqloptions);
+    connection = new Client(); // sqloptions
+    await connection.connect();
   } catch (e) {
     throw new Error(e.toString());
   }
