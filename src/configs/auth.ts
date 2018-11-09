@@ -35,7 +35,7 @@ export const API_CONF = {
   endpoints: [
     {
       name: 'history',
-      endpoint: 'https://1234567890-abcdefgh.amazonaws.com'
+      endpoint: 'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/staging'
     }
   ]
 };
