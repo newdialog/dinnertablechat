@@ -1,5 +1,5 @@
 import awsExportsJs from './aws-exports.js';
-
+import cors from 'cors';
 import * as express from 'express';
 
 // var AWSXRay = require('aws-xray-sdk');
@@ -14,6 +14,7 @@ console.log('cognitoUserPoolId', cognitoUserPoolId);
 const app = express();
 const authenticatedRoute = express.Router();
 
+app.use(cors());
 // app.use(AWSXRay.express.openSegment('MyApp'));
 app.use('/api', authenticatedRoute);
 

@@ -2,6 +2,14 @@
   "name": "matchmaker-api",
   "profile": "dinnertable",
   "regions": ["us-east-1"],
+  "cors": {
+    "enable": true,
+    "debug": true,
+    "allowed_origins": ["https://dinnertable.chat", "https://test.dinnertable.chat", "*"],
+    "allowed_methods": ["HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    "allowed_headers": ["*"],
+    "allow_credentials": true
+  },
   "lambda": {
     "memory": 256,
     "policy": [

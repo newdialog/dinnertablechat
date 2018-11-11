@@ -3,9 +3,11 @@
   "profile": "dinnertable",
   "regions": ["us-east-1"],
   "environment": {
-    "SQL_HOST": "rod.cluster-cy0j2uzr5txt.us-east-1.rds.amazonaws.com",
-    "SQL_USER": "app",
-    "SQL_PW": ""
+    "PGHOST": "dtc-pg-dev.cy0j2uzr5txt.us-east-1.rds.amazonaws.com",
+    "PGUSER": "app",
+    "PGDATABASE":"dtc",
+    "PGPASSWORD": "",
+    "PGPORT": "5432"
   },
   "lambda": {
     "memory": 256,

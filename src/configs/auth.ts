@@ -1,4 +1,5 @@
 /* tslint:disable:no-bitwise */
+import Auth from '@aws-amplify/auth';
 
 // AWS Mobile Hub Project Constants
 const awsOauth = {
@@ -35,9 +36,18 @@ export const API_CONF = {
   endpoints: [
     {
       name: 'History',
-      endpoint: 'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/staging'
+      authenticationType: 'AMAZON_COGNITO_USER_POOLS',
+      endpoint:
+        'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/staging',
       // service: 'lambda',
-      // region: 'us-east-1'
+      // region: 'us-east-1',
+      custom_header: async () => {
+        // return { Authorization: 'token' };
+        // Alternatively, with Cognito User Pools use this:
+        return {
+          Authorization: ((await Auth.currentSession()) as any).idToken.jwtToken
+        };
+      }
     }
   ]
 };

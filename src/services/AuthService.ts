@@ -8,11 +8,11 @@ import AWS from 'aws-sdk/global';
 import Auth from '@aws-amplify/auth';
 import API from './APIService';
 
-/* Debug only
+/* Debug only */
 import Amplify from 'aws-amplify';
 Amplify.Logger.LOG_LEVEL = 'DEBUG';
 (window as any).LOG_LEVEL = 'DEBUG';
-*/
+
 // https://github.com/aws-amplify/amplify-js/issues/1487
 
 // import { Logger } from 'aws-amplify';

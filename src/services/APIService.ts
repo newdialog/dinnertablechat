@@ -5,12 +5,12 @@ async function getScores() {
   let path = '/hello';
   let myInit = {
     // OPTIONAL
-    // headers: {}, // OPTIONAL
+    headers: { Authorization: '' }, // OPTIONAL
     // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
     queryStringParameters: {
-      // OPTIONAL
-      name: 'param'
+      // name: 'param'
     }
+    // body: {}, // replace this with attributes you need
   };
   return API.get(apiName, path, myInit)
     .then(response => {
@@ -18,7 +18,7 @@ async function getScores() {
       return response;
     })
     .catch(error => {
-      console.log(error.response);
+      console.log(apiName, path, error.response);
     });
 }
 
