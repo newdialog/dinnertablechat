@@ -34,8 +34,10 @@ const awsOauth = {
 export const API_CONF = {
   endpoints: [
     {
-      name: 'history',
+      name: 'History',
       endpoint: 'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/staging'
+      // service: 'lambda',
+      // region: 'us-east-1'
     }
   ]
 };
@@ -50,9 +52,10 @@ const pubSubCfg = (region: string) => ({
 export const oauth = awsOauth;
 let initLog = false;
 export const injectConfig = (cfg: any) => {
+  cfg.API = API_CONF;
+
   cfg.Auth = {
-    oauth: awsOauth,
-    API: API_CONF
+    oauth: awsOauth
   };
 
   const region = cfg.aws_cognito_region;
@@ -74,6 +77,8 @@ export const injectConfig = (cfg: any) => {
   cfg.aws_user_pools_web_client_id =
     process.env.REACT_APP_aws_user_pools_web_client_id ||
     '1a66tr0jclinub7j3ls0j3mutt';
+
+  //  console.log(cfg);
 
   return cfg;
 };
