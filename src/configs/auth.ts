@@ -37,17 +37,16 @@ export const API_CONF = {
     {
       name: 'History',
       authenticationType: 'AMAZON_COGNITO_USER_POOLS',
-      endpoint:
-        'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/staging',
+      endpoint: 'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/staging'
       // service: 'lambda',
       // region: 'us-east-1',
-      custom_header: async () => {
-        // return { Authorization: 'token' };
-        // Alternatively, with Cognito User Pools use this:
-        return {
-          Authorization: ((await Auth.currentSession()) as any).idToken.jwtToken
-        };
-      }
+      // custom_header: async () => {
+      // return { Authorization: 'token' };
+      // Alternatively, with Cognito User Pools use this:
+      ///   return {
+      ///     Authorization: ((await Auth.currentSession()) as any).idToken.jwtToken
+      //  };
+      /// }
     }
   ]
 };
