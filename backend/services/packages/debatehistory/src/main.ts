@@ -45,11 +45,10 @@ app.get('/db', async (req: any, res: any, next: any) => {
 // app.options('/hello', cors());
 app.get('/hello', async (req: any, res: any, next: any) => {
   const ctx = JSON.parse(req.headers['x-context'] || '{}');
-  console.log(
-    'ctx',
-    ctx,
-    `req.headers.authorization: ${req.headers.authorization}`,
-  );
+  const claims =
+    ctx.authorizer && ctx.authorizer.claims ? ctx.authorizer.claims : null;
+  console.log('claims:', claims);
+  // `req.headers.authorization: ${req.headers.authorization}`,
   // console.log('req.headers', req.headers.authorization);
   res.send({ rows: ['ok'] });
 });
@@ -63,3 +62,8 @@ app.listen(port, async () => {
   sqloptions.password = 'removed';
   // console.log('sqloptions', sqloptions);
 });
+
+// 'cognito:username': '996b8af9-c5bd-1111-1111-4068792f28e0',
+// email:
+// email_verified:
+// name

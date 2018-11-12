@@ -27,6 +27,7 @@
     "dev": "PGHOST=localhost PGUSER=app PGDATABASE=dtc PGPASSWORD=null PGPORT=5432 node build/src/main.js",
     "start": "node build/src/main.js",
     "deploy": "npm run build && up && up url",
+    "deploylog": "npm run build && up && up url && up logs -f",
     "clean": "rimraf coverage build tmp",
     "build": "tsc -p tsconfig.release.json",
     "watch": "tsc-watch -p tsconfig.release.json --onSuccess 'npm run dev'",

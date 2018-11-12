@@ -2,13 +2,6 @@
   "name": "history-api",
   "profile": "dinnertable",
   "regions": ["us-east-1"],
-  "cors": {
-    "enable": true,
-    "allowed_origins": ["https://dinnertable.chat", "https://test.dinnertable.chat", "*"],
-    "allowed_methods": ["HEAD", "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    "allowed_headers": ["*"],
-    "allow_credentials": true
-  },
   "environment": {
     "PGHOST": "dtc-pg-dev.cy0j2uzr5txt.us-east-1.rds.amazonaws.com",
     "PGUSER": "app",

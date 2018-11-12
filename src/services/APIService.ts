@@ -1,6 +1,43 @@
 import { string } from 'prop-types';
 import API from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
+
+async function getScores() {
+  let apiName = 'History';
+  let path = '/hello'; // /hello
+  let myInit = {
+    // OPTIONAL
+    headers: await getTokenHeaders(), // OPTIONAL
+    // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+    queryStringParameters: {
+      // name: 'param'
+    }
+    // body: {}, // replace this with attributes you need
+  };
+  console.log('myInit', myInit);
+
+  return API.get(apiName, path, myInit)
+    .then(response => {
+      // Add your code here
+      return response;
+    })
+    .catch(error => {
+      console.log(apiName, path, error.response);
+    });
+}
+
+function configure(conf) {
+  return API.configure(conf);
+}
+
+async function getTokenHeaders() {
+  return {
+    Authorization: ((await Auth.currentSession()) as any).idToken.jwtToken
+  };
+}
+
+export default { getScores, configure };
+
 // import axios, { AxiosRequestConfig } from 'axios';
 /*
 var instance = axios.create({
@@ -21,21 +58,8 @@ axios.interceptors.request.use(
   }
 );
 */
-async function getScores() {
-  let apiName = 'History';
-  let path = '/hello';
-  let myInit = {
-    // OPTIONAL
-    headers: await getTokenHeaders(), // OPTIONAL
-    // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
-    queryStringParameters: {
-      // name: 'param'
-    }
-    // body: {}, // replace this with attributes you need
-  };
-  console.log('myInit', myInit);
 
-  /*
+/*
   const url =
     'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/staging/hello';
   const parsed_url = _parseUrl(url);
@@ -51,26 +75,7 @@ async function getScores() {
 
   return _request(params);
   */
-  return API.get(apiName, path, myInit)
-    .then(response => {
-      // Add your code here
-      return response;
-    })
-    .catch(error => {
-      console.log(apiName, path, error.response);
-    });
-}
 
-function configure(conf) {
-  return API.configure(conf);
-}
-
-async function getTokenHeaders() {
-  return {
-    aaa: 'a',
-    Authorization: ((await Auth.currentSession()) as any).idToken.jwtToken
-  };
-}
 /*
 function _request(params: AxiosRequestConfig, isAllResponse = false) {
   return instance
@@ -91,5 +96,3 @@ function _parseUrl(url: string) {
   };
 }
 */
-
-export default { getScores, configure };
