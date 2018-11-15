@@ -8,5 +8,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {}
+  "dependencies": {
+    "pg": "^7.6.1"
+  }
 }

@@ -1,12 +1,20 @@
 {
-  "name": "matchmaker-api",
+  "name": "history-api",
   "profile": "dinnertable",
   "regions": ["us-east-1"],
+  "environment": {
+    "PGHOST": "dtc-pg-dev.cy0j2uzr5txt.us-east-1.rds.amazonaws.com",
+    "PGUSER": "app",
+    "PGDATABASE":"dtc",
+    "PGPASSWORD": "",
+    "PGPORT": "5432",
+    "PGCONNECT_TIMEOUT": "5000"
+  },
   "lambda": {
     "memory": 256,
     "policy": [
       {
-        "Condition": {"ArnLike":{"AWS:SourceArn":"arn:aws:sns:us-east-1:681274315116:dtc-match-sns"}},
+        "Condition": {"ArnLike":{"AWS:SourceArn":"arn:aws:sns:us-east-1:681274315116:match-sns"}},
         "Resource": "*",
         "Action": "lambda:invokeFunction",
         "Sid":"snsinvoke",

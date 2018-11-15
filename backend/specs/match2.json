@@ -1,0 +1,74 @@
+{
+    "name": "dtc-match-nomod",
+    "ruleLanguageVersion": "1.0",
+
+    "playerAttributes": [{
+        "name": "topic",
+        "type": "string",
+        "default": "politics"
+    }, {
+        "name": "side",
+        "type": "number",
+        "default": 1
+    }, {
+        "name": "character",
+        "type": "number",
+        "default": 0 
+    }, {
+        "name": "donation",
+        "type": "number",
+        "default": 0
+    },{
+        "name": "lang",
+        "type": "string",
+        "default": "en"
+    }],
+    "teams": [{
+        "name": "red",
+        "minPlayers": 1,
+        "maxPlayers": 1
+    }, {
+        "name": "blue",
+        "minPlayers": 1,
+        "maxPlayers": 1
+    }],
+
+    "rules": [{
+        "name": "SameTopic",
+        "description": "Only match players when they choose the same topic type",
+        "type": "comparison",
+        "operation": "=",
+        "measurements": ["flatten(teams[*].players.attributes[topic])"]
+    }, {
+        "name": "SameLang",
+        "description": "Only match players when they choose the same language",
+        "type": "comparison",
+        "operation": "=",
+        "measurements": ["flatten(teams[*].players.attributes[lang])"]
+    },
+{
+        "name": "DonationMatch",
+        "description": "Only match players when they've donated same amount",
+        "type": "distance",
+        "measurements": ["avg(teams[*].players.attributes[donation])"],
+        "referenceValue": "avg(flatten(teams[*].players.attributes[donation]))",
+        "maxDistance": 0,
+        "minDistance": 0
+    }, {
+        "name": "DifferentSide",
+        "description": "Only match players when they're using different side",
+        "type": "comparison",
+        "operation": "!=",
+        "measurements": ["flatten(teams[*].players.attributes[side])"]
+    }],
+    "expansions": [{
+        "target": "rules[DonationMatch].maxDistance",
+        "steps": [{
+            "waitTimeSeconds": 25,
+            "value": 1
+        }, {
+            "waitTimeSeconds": 30,
+            "value": 1
+        }]
+    }]
+}

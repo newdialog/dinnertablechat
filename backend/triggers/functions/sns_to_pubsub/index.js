@@ -1,4 +1,5 @@
-var AWS = require('aws-sdk');
+const AWS = require('aws-sdk');
+const { Pool } = require('pg');
 
 console.log('Loading function');
 
@@ -8,6 +9,8 @@ const db = new AWS.DynamoDB.DocumentClient({
 });
 */
 const docClient = new AWS.DynamoDB.DocumentClient();
+connection = new Pool();
+connection.connect();
 
 async function query() {
   var params = {
@@ -38,11 +41,13 @@ exports.handle = async (event, context, callback) => {
 };
 
 function forEachSNS(record) {
-  var message = JSON.parse(record.Sns.Message);
-  var tickets = message.detail.tickets;
-  var type = message.detail.type;
-  var players = message.detail.gameSessionInfo.players;
-  var matchId = message.detail.matchId;
+  const message = JSON.parse(record.Sns.Message);
+  const tickets = message.detail.tickets;
+  const type = message.detail.type;
+  const players = message.detail.gameSessionInfo.players;
+  const matchId = message.detail.matchId;
+
+  // const topic = message.detail.topic;
   // console.log(type)
   var accepted = type === 'PotentialMatchCreated';
   if (!accepted) {
@@ -52,10 +57,17 @@ function forEachSNS(record) {
 
   const ticketIds = tickets.map(t => t.ticketId);
 
-  //console.log('Message received from SNS:', JSON.stringify(message));
+  // console.log('Message received from SNS:', JSON.stringify(message));
   console.log(matchId, 'tickets', ticketIds, 'players', JSON.stringify(players))
 
   saveDB(players, matchId);
+  // savePG(players, matchId, topic);
+}
+
+function savePG(players, matchId, topic) {
+  connection.query(`INSERT INTO public.debate_session(
+    id, topic)
+    VALUES ($1 $2);`, [matchId, topic]);
 }
 
 function saveDB(players, matchId) {

@@ -113,7 +113,12 @@ class DebateScene extends React.Component<Props, State> {
       // got remote video stream, now let's show it in a video tag
       /// var video = document.querySelector('video');
       const video = this.vidRef.current!;
-      video.src = window.URL.createObjectURL(stream2);
+      // video.src = window.URL.createObjectURL(stream2);
+      try {
+        video.srcObject = stream2;
+      } catch (error) {
+        video.src = URL.createObjectURL(stream2);
+      }
       video.play();
       // video.autoPlay
       /// video.src = window.URL.createObjectURL(stream2);
@@ -151,14 +156,13 @@ class DebateScene extends React.Component<Props, State> {
         { this.state.error && <DebateError error={this.state.error} store={store}/>}
         <div className={classes.centered2}>
           <div>
-            <h1>Debate Room System</h1>
             <div>Microphone is activating</div>
             <div id="video" hidden={true}>
               <video ref={this.vidRef} autoPlay={true} />
             </div>
             <br />
-            {this.state.talkingBlue && <div>Other is Speaking</div>} --
-            {this.state.talkingRed && <div>Red is Speaking</div>}
+            {talkingBlue && <div>Blue is Speaking, </div>}
+            {talkingRed && <div>Red is Speaking</div>}
           </div>
           <DebateDisplay videoEl={this.vidRef} blueChar={blueChar} redChar={redChar} talkingBlue={talkingBlue} talkingRed={talkingRed} />
         </div>

@@ -2,15 +2,17 @@
 import awsmobile from '../aws-exports.js';
 import 'aws-sdk/lib/node_loader'; // first time only
 
-import Core from 'aws-sdk/lib/core'
-import AWS from 'aws-sdk/global'
+import Core from 'aws-sdk/lib/core';
+import AWS from 'aws-sdk/global';
 
 import Auth from '@aws-amplify/auth';
-/* Debug only
+import API from './APIService';
+
+/* Debug only */
 import Amplify from 'aws-amplify';
 Amplify.Logger.LOG_LEVEL = 'DEBUG';
 (window as any).LOG_LEVEL = 'DEBUG';
-*/
+
 // https://github.com/aws-amplify/amplify-js/issues/1487
 
 // import { Logger } from 'aws-amplify';
@@ -77,6 +79,10 @@ export function auth(cb: AwsCB) {
     'AuthService'
   );
   checkUser(cb); // required by amplify, for existing login
+
+  console.log('awsmobileInjected', awsmobileInjected);
+  API.configure(awsmobileInjected);
+  setTimeout(() => API.getScores().then(s => console.log('s', s)), 2000);
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;

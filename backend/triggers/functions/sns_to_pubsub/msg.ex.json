@@ -1,0 +1,56 @@
+{
+    "version": "0",
+    "id": "8d814566-1a83-4fd1-ac1b-490d98de219e",
+    "detail-type": "GameLift Matchmaking Event",
+    "source": "aws.gamelift",
+    "account": "681274315116",
+    "time": "2018-11-15T05:46:11.360Z",
+    "region": "us-east-1",
+    "resources": ["arn:aws:gamelift:us-east-1:681274315116:matchmakingconfiguration/dtc-match-config"],
+    "detail": {
+        "tickets": [{
+            "ticketId": "5b1ebeca-090e-48de-ac4b-a5a557292567",
+            "startTime": "2018-11-15T05:46:05.002Z",
+            "players": [{
+                "playerId": "jadit2@gmail.com_1542260764",
+                "team": "red"
+            }]
+        }, {
+            "ticketId": "4cb56988-1092-44af-a8d1-1bf8e9d3dde1",
+            "startTime": "2018-11-15T05:46:11.132Z",
+            "players": [{
+                "playerId": "jadit2@gmail.com_1542260770",
+                "team": "blue"
+            }]
+        }],
+        "ruleEvaluationMetrics": [{
+            "ruleName": "SameTopic",
+            "passedCount": 3,
+            "failedCount": 0
+        }, {
+            "ruleName": "SameLang",
+            "passedCount": 3,
+            "failedCount": 0
+        }, {
+            "ruleName": "DonationMatch",
+            "passedCount": 3,
+            "failedCount": 0
+        }, {
+            "ruleName": "DifferentSide",
+            "passedCount": 3,
+            "failedCount": 0
+        }],
+        "acceptanceRequired": false,
+        "type": "PotentialMatchCreated",
+        "gameSessionInfo": {
+            "players": [{
+                "playerId": "jadit2@gmail.com_1542260764",
+                "team": "red"
+            }, {
+                "playerId": "jadit2@gmail.com_1542260770",
+                "team": "blue"
+            }]
+        },
+        "matchId": "f0b12428-4b59-4fb2-bf7a-19c9b0d768fa"
+    }
+}

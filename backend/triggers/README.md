@@ -6,7 +6,7 @@ Allows users to notify one another and sync webrtc signals
 
 * install apex
 curl https://raw.githubusercontent.com/apex/apex/master/install.sh | sh
-* deploy to lambda via apex
+* deploy to lambda via apex `apex deploy`
 
 NOTES:
 

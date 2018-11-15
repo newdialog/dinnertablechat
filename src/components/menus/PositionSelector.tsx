@@ -13,8 +13,8 @@ const styles = theme =>
       marginRight: theme.spacing.unit * 3,
       [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
         width: 1100,
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        // marginLeft: 'auto',
+        // marginRight: 'auto',
       },
     },
     cardGrid: {
@@ -23,6 +23,7 @@ const styles = theme =>
     card: {
       minWidth: '300px',
       width: '50vw',
+      maxWidth: '500px',
       height: '100%',
       display: 'flex',
       flexDirection: 'column',
