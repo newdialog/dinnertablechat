@@ -11,7 +11,7 @@ const styles = theme =>
   createStyles({
     root: {
       display: 'flex',
-      justifyContent: 'center',
+      // justifyContent: 'center',
       flexWrap: 'wrap',
       padding: theme.spacing.unit / 2
     },

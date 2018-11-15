@@ -25,7 +25,7 @@ const styles = theme =>
       padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
     },
     stepper: {
-      padding: '10%',
+      padding: theme.spacing.unit * 2,
     },
     button: {
       marginTop: theme.spacing.unit,
@@ -53,7 +53,7 @@ interface State {
 }
 
 function getSteps() {
-  return ['Select Postion', 'Pick your character', 'Set contribution'];
+  return ['Select Postion', 'Pick your character']; // , 'Set contribution']
 }
 
 function getStepContent(step: number, store: AppModel.Type) {
@@ -113,7 +113,7 @@ class Index extends React.Component<Props, State> {
     const { classes, store } = this.props;
     let step = 3;
     
-    if(store.debate.contribution===-1) step = 2;
+    if(store.debate.contribution===-1) step = 2; // skip contribution
     if(store.debate.character===-1) step = 1;
     if(!store.debate.topic || store.debate.position===-1) step = 0;
     

@@ -156,14 +156,13 @@ class DebateScene extends React.Component<Props, State> {
         { this.state.error && <DebateError error={this.state.error} store={store}/>}
         <div className={classes.centered2}>
           <div>
-            <h1>Debate Room System</h1>
             <div>Microphone is activating</div>
             <div id="video" hidden={true}>
               <video ref={this.vidRef} autoPlay={true} />
             </div>
             <br />
-            {this.state.talkingBlue && <div>Other is Speaking</div>} --
-            {this.state.talkingRed && <div>Red is Speaking</div>}
+            {talkingBlue && <div>Blue is Speaking, </div>}
+            {talkingRed && <div>Red is Speaking</div>}
           </div>
           <DebateDisplay videoEl={this.vidRef} blueChar={blueChar} redChar={redChar} talkingBlue={talkingBlue} talkingRed={talkingRed} />
         </div>

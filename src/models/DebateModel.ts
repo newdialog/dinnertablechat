@@ -20,13 +20,13 @@ export type MatchModelType = Instance<typeof MatchModel>;
 
 const DebateModel = types
   .model({
-    contribution: -1,
+    contribution: 0, // -1
     position: -1,
     topic: '',
     character: -1,
     isTest: false,
     match: types.maybeNull(MatchModel),
-    finished: false, 
+    finished: false
   })
   .actions(self => ({
     setPosition(position: number, topic: string) {
@@ -60,7 +60,7 @@ const DebateModel = types
       self.isTest = isTest;
     },
     resetQueue() {
-      self.contribution = -1;
+      self.contribution = 0; // -1;
       self.position = -1;
       self.character = -1;
       self.topic = '';
