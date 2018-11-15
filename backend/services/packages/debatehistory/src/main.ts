@@ -25,19 +25,28 @@ let connection: any;
 app.get('/db', async (req: any, res: any, next: any) => {
   if (!connection) {
     // throw new Error('db not init yet');
-    console.log('starting');
+    const e = process.env;
+    console.log('starting sql connection'); // , e.PGHOST, e.PGDATABASE, e.PGUSER, e.PGPASSWORD, e.PGPORT);
     try {
       connection = new Client(); // sqloptions
       await connection.connect();
     } catch (e) {
+      connection = null;
+      // console.warn('error', e);
+      // res.send({ err: e });
+      // return;
       throw new Error(e.toString());
     }
   }
+  console.log('query');
   const qres = await connection.query('select * from debate_session');
   console.log(qres.rows); // Hello world!
 
   const ctx = JSON.parse(req.headers['x-context'] || '{}');
-  const ctxstr = JSON.stringify(ctx, null, 2);
+  const claims =
+    ctx.authorizer && ctx.authorizer.claims ? ctx.authorizer.claims : null;
+
+  const ctxstr = JSON.stringify(claims, null, 2);
 
   res.send({ rows: qres.rows, ctx: ctxstr });
 });

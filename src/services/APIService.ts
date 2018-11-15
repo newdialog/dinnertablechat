@@ -4,7 +4,7 @@ import Auth from '@aws-amplify/auth';
 
 async function getScores() {
   let apiName = 'History';
-  let path = '/hello'; // /hello
+  let path = '/db'; // /hello
   let myInit = {
     // OPTIONAL
     headers: await getTokenHeaders(), // OPTIONAL

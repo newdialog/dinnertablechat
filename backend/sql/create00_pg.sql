@@ -10,12 +10,12 @@
 -- -----------------------------------------------------
 -- Schema dtc
 -- -----------------------------------------------------
--- DROP SCHEMA IF EXISTS ;
+-- DROP SCHEMA IF EXISTS "public";
 
 -- -----------------------------------------------------
 -- Schema dtc
 -- -----------------------------------------------------
--- CREATE SCHEMA IF NOT EXISTS ;
+-- CREATE SCHEMA "public";
 -- USE public ;
 
 -- -----------------------------------------------------
@@ -35,12 +35,13 @@ CREATE INDEX pk_matchid ON debate_session (matchid ASC);
 -- Table `.`users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS users (
-  created TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
-  id INT NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  id VARCHAR(36) NOT NULL,
   xp INT NULL,
   username VARCHAR(45) NULL,
   credits INT NULL,
   badges TEXT NULL,
+  misc TEXT NULL,
   PRIMARY KEY (id))
 ;
 
@@ -53,12 +54,12 @@ CREATE TABLE IF NOT EXISTS debate_review (
   created TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   review TEXT NOT NULL,
   aggrement SMALLINT NOT NULL,
-  users_id INT NOT NULL,
+  user_id VARCHAR(36) NOT NULL,
   debate_session_id INT NOT NULL,
   PRIMARY KEY (id)
  ,
   CONSTRAINT fk_debate_review_users1
-    FOREIGN KEY (users_id)
+    FOREIGN KEY (user_id)
     REFERENCES users (id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -69,7 +70,7 @@ CREATE TABLE IF NOT EXISTS debate_review (
     ON UPDATE NO ACTION)
 ;
 
-CREATE INDEX fk_debate_review_users1_idx ON debate_review (users_id ASC);
+CREATE INDEX fk_debate_review_users1_idx ON debate_review (user_id ASC);
 CREATE INDEX fk_debate_review_debate_session1_idx ON debate_review (debate_session_id ASC);
 
 
@@ -77,15 +78,15 @@ CREATE INDEX fk_debate_review_debate_session1_idx ON debate_review (debate_sessi
 -- Table `.`debate_session_users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS debate_session_users (
-  users_id INT NOT NULL,
+  user_id VARCHAR(36) NOT NULL,
   debate_session_id INT NOT NULL,
   badges TEXT NULL,
-  wasForIt SMALLINT NULL,
+  side SMALLINT NULL,
   character SMALLINT NULL,
-  PRIMARY KEY (users_id, debate_session_id)
+  PRIMARY KEY (user_id, debate_session_id)
  ,
   CONSTRAINT fk_users_has_debate_session_users1
-    FOREIGN KEY (users_id)
+    FOREIGN KEY (user_id)
     REFERENCES users (id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
@@ -97,7 +98,7 @@ CREATE TABLE IF NOT EXISTS debate_session_users (
 ;
 
 CREATE INDEX fk_users_has_debate_session_debate_session1_idx ON debate_session_users (debate_session_id ASC);
-CREATE INDEX fk_users_has_debate_session_users1_idx ON debate_session_users (users_id ASC);
+CREATE INDEX fk_users_has_debate_session_users1_idx ON debate_session_users (user_id ASC);
 
 
 /* SET SQL_MODE=@OLD_SQL_MODE; */

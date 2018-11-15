@@ -1,4 +1,5 @@
 var AWS = require('aws-sdk');
+import { Pool } from 'pg';
 
 console.log('Loading function');
 
@@ -8,6 +9,8 @@ const db = new AWS.DynamoDB.DocumentClient({
 });
 */
 const docClient = new AWS.DynamoDB.DocumentClient();
+connection = new Pool();
+connection.connect();
 
 async function query() {
   var params = {
@@ -56,6 +59,11 @@ function forEachSNS(record) {
   console.log(matchId, 'tickets', ticketIds, 'players', JSON.stringify(players))
 
   saveDB(players, matchId);
+  savePG(players, matchId);
+}
+
+function savePG(players, matchId) {
+  // connection.query('insert into ');
 }
 
 function saveDB(players, matchId) {

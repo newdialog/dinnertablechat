@@ -1,0 +1,12 @@
+{
+  "name": "triggers",
+  "version": "1.0.0",
+  "description": "Allows users to notify one another and sync webrtc signals",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy": "apex deploy --env-file ../.env.production.local"
+  },
+  "author": "",
+  "license": "ISC"
+}
