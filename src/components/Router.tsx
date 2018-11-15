@@ -2,6 +2,8 @@
 import React, { lazy, Suspense } from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import Home from './home/home';
+
+import DebateHistory from './menus/DebateHistory';
 import DebateFeedback from './debate/DebateFeedback'; // TODO: remove this and wire it up in DebateRouter
 import * as AppModel from '../models/AppModel';
 // import MenuHome from './menus/MenuHome'
@@ -73,6 +75,7 @@ const DTCRouter = ({
         <Route exact={true} path="/" component={Home} />
         <Route exact={true} path="/callback" component={Home} />
         <Route exact={true} path="/feedback" component={DebateFeedback} />
+        <Route exact={true} path="/history" component={DebateHistory} />
 
         <Route path="/privacy" component={AsyncPrivacy} />
         <Route path="/play" component={AsyncPlay} />
