@@ -22,13 +22,10 @@
 -- Table `.`debate_session`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS debate_session (
-  id INT NOT NULL,
-  matchid CHAR(36) NULL,
+  id CHAR(36) NOT NULL,
   created TIMESTAMP NULL DEFAULT CURRENT_TIMESTAMP,
   topic VARCHAR(45) NULL,
   PRIMARY KEY (id));
-
-CREATE INDEX pk_matchid ON debate_session (matchid ASC);
 
 
 -- -----------------------------------------------------
@@ -49,20 +46,14 @@ CREATE TABLE IF NOT EXISTS users (
 -- -----------------------------------------------------
 -- Table `.`debate_review`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS debate_review (
-  id INT NOT NULL,
+/* CREATE TABLE IF NOT EXISTS debate_review (
   created TIMESTAMP(0) NOT NULL DEFAULT CURRENT_TIMESTAMP,
   review TEXT NOT NULL,
-  aggrement SMALLINT NOT NULL,
+  aggrement boolean NOT NULL,
   user_id VARCHAR(36) NOT NULL,
-  debate_session_id INT NOT NULL,
-  PRIMARY KEY (id)
+  debate_session_id CHAR(36) NOT NULL,
+  PRIMARY KEY (user_id, debate_session_id)
  ,
-  CONSTRAINT fk_debate_review_users1
-    FOREIGN KEY (user_id)
-    REFERENCES users (id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT fk_debate_review_debate_session1
     FOREIGN KEY (debate_session_id)
     REFERENCES debate_session (id)
@@ -72,24 +63,31 @@ CREATE TABLE IF NOT EXISTS debate_review (
 
 CREATE INDEX fk_debate_review_users1_idx ON debate_review (user_id ASC);
 CREATE INDEX fk_debate_review_debate_session1_idx ON debate_review (debate_session_id ASC);
-
+*/
+/* CONSTRAINT fk_debate_review_users1
+    FOREIGN KEY (user_id)
+    REFERENCES users (id)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION, */
 
 -- -----------------------------------------------------
 -- Table `.`debate_session_users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS debate_session_users (
   user_id VARCHAR(36) NOT NULL,
-  debate_session_id INT NOT NULL,
+  debate_session_id CHAR(36) NOT NULL,
   badges TEXT NULL,
   side SMALLINT NULL,
   character SMALLINT NULL,
+  review TEXT NULL,
+  review_aggrement boolean NULL,
   PRIMARY KEY (user_id, debate_session_id)
  ,
-  CONSTRAINT fk_users_has_debate_session_users1
+ /*  CONSTRAINT fk_users_has_debate_session_users1
     FOREIGN KEY (user_id)
     REFERENCES users (id)
     ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+    ON UPDATE NO ACTION, */
   CONSTRAINT fk_users_has_debate_session_debate_session1
     FOREIGN KEY (debate_session_id)
     REFERENCES debate_session (id)

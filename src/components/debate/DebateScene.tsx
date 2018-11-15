@@ -113,7 +113,12 @@ class DebateScene extends React.Component<Props, State> {
       // got remote video stream, now let's show it in a video tag
       /// var video = document.querySelector('video');
       const video = this.vidRef.current!;
-      video.src = window.URL.createObjectURL(stream2);
+      // video.src = window.URL.createObjectURL(stream2);
+      try {
+        video.srcObject = stream2;
+      } catch (error) {
+        video.src = URL.createObjectURL(stream2);
+      }
       video.play();
       // video.autoPlay
       /// video.src = window.URL.createObjectURL(stream2);
