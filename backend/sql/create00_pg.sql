@@ -96,8 +96,8 @@ CREATE TABLE IF NOT EXISTS debate_session_users (
   CONSTRAINT fk_users_has_debate_session_debate_session1
     FOREIGN KEY (debate_session_id)
     REFERENCES debate_session (id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 ;
 
 CREATE INDEX fk_users_has_debate_session_debate_session1_idx ON debate_session_users (debate_session_id ASC);

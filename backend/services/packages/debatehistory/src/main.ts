@@ -32,36 +32,36 @@ app.get('/history', async (req: any, res: any, next: any) => {
   du.review_aggrement as aggrement
   from debate_session as ds
   INNER JOIN debate_session_users du ON du.debate_session_id=ds.id
-  where ds.id = (select id from debate_session as ds2
+  where ds.id IN (select id from debate_session as ds2
           INNER JOIN debate_session_users as du2 ON du2.debate_session_id=ds2.id
           where du2.user_id = $1
           )`,
     [id],
   );
-  console.log(qres.rows);
+  // console.log(qres.rows);
 
   // const ctxstr = JSON.stringify(user, null, 2);
   // console.log(ctxstr)
 
   client.release();
-  res.send({ rows: qres.rows });
+  res.send({ history: qres.rows });
 });
 
 app.post('/review', async (req: any, res: any, next: any) => {
   const { id, ...user } = getClaims(req);
   const body = req.body;
-  if(!body.matchId) throw new Error(`no match id on ${JSON.stringify(body)}`);
-  if(!body.review) throw new Error(`no review on ${JSON.stringify(body)}`);
-  const {matchId, review} = body;
+  if (!body.matchId) throw new Error(`no match id on ${JSON.stringify(body)}`);
+  if (!body.review) throw new Error(`no review on ${JSON.stringify(body)}`);
+  const { matchId, review } = body;
   const agreement = review.agreement;
 
   const client = await connection.connect();
   console.log('QUERY for user', id);
   const qres = await client.query(
-`UPDATE public.debate_session_users
+    `UPDATE public.debate_session_users
 SET review=$1, review_aggrement=$2, end_created=CURRENT_TIMESTAMP
 WHERE debate_session_id=$4 AND user_id=$5;`,
-  [review, agreement, matchId, id],
+    [review, agreement, matchId, id],
   );
   console.log(qres.rows);
 
@@ -69,20 +69,20 @@ WHERE debate_session_id=$4 AND user_id=$5;`,
   // console.log(ctxstr)
 
   client.release();
-  res.send({ rows: qres.rows });
+  res.send({ result: 'ok' });
 });
 
 app.post('/bail', async (req: any, res: any, next: any) => {
   const { id, ...user } = getClaims(req);
   const body = req.body;
-  if(!body.matchId) throw new Error(`no match id on ${JSON.stringify(body)}`);
-  if(!body.review) throw new Error(`no review on ${JSON.stringify(body)}`);
-  const {matchId, review} = body;
+  if (!body.matchId) throw new Error(`no match id on ${JSON.stringify(body)}`);
+  if (!body.review) throw new Error(`no review on ${JSON.stringify(body)}`);
+  const { matchId, review } = body;
 
   const client = await connection.connect();
   console.log('QUERY for user', id);
   const qres = await client.query(
-`UPDATE public.debate_session_users
+    `UPDATE public.debate_session_users
 end_created=CURRENT_TIMESTAMP, bailed=$1
 WHERE debate_session_id=$2 AND user_id=$3;`,
     [true, matchId, id],
@@ -93,7 +93,7 @@ WHERE debate_session_id=$2 AND user_id=$3;`,
   // console.log(ctxstr)
 
   client.release();
-  res.send({ rows: qres.rows });
+  res.send({ result: 'ok' });
 });
 
 // app.options('/hello', cors());
@@ -130,3 +130,8 @@ function getClaims(req: any) {
 // email:
 // email_verified:
 // name
+
+/*
+History endpoint example
+{"history":[{"topic":"Immigration","debate_created":"2018-11-16T22:11:00.927Z","user_id":"996b8af9-c5bd-41c8-bee7-4068792f28e0","debate_session_id":"f958dbfb-7ffb-4a8b-884e-d60fa5cbaece","side":0,"character":2,"review":null,"review_aggrement":null,"end_created":null,"bailed":null,"error":null,"aggrement":null},{"topic":"Immigration","debate_created":"2018-11-16T22:11:00.927Z","user_id":"Google_111841421166386376573","debate_session_id":"f958dbfb-7ffb-4a8b-884e-d60fa5cbaece","side":1,"character":1,"review":null,"review_aggrement":null,"end_created":null,"bailed":null,"error":null,"aggrement":null},{"topic":"Immigration","debate_created":"2018-11-16T22:09:32.528Z","user_id":"Google_111841421166386376573","debate_session_id":"c4dfd55b-41dd-4632-8d79-676116c566e9","side":1,"character":0,"review":null,"review_aggrement":null,"end_created":null,"bailed":null,"error":null,"aggrement":null},{"topic":"Immigration","debate_created":"2018-11-16T22:09:32.528Z","user_id":"996b8af9-c5bd-41c8-bee7-4068792f28e0","debate_session_id":"c4dfd55b-41dd-4632-8d79-676116c566e9","side":0,"character":1,"review":null,"review_aggrement":null,"end_created":null,"bailed":null,"error":null,"aggrement":null},{"topic":"Immigration","debate_created":"2018-11-16T22:16:32.106Z","user_id":"996b8af9-c5bd-41c8-bee7-4068792f28e0","debate_session_id":"73676ded-1a5f-42d5-ae89-3c4c7d65fb4d","side":0,"character":2,"review":null,"review_aggrement":null,"end_created":null,"bailed":null,"error":null,"aggrement":null},{"topic":"Immigration","debate_created":"2018-11-16T22:16:32.106Z","user_id":"Google_111841421166386376573","debate_session_id":"73676ded-1a5f-42d5-ae89-3c4c7d65fb4d","side":1,"character":1,"review":null,"review_aggrement":null,"end_created":null,"bailed":null,"error":null,"aggrement":null}]}
+*/

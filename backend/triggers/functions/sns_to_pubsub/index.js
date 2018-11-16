@@ -95,12 +95,12 @@ async function savePG(players, matchId, matchInfo) {
       VALUES ($1, $2);`, [matchId, topic]);
 
     const r2 = await client.query(`INSERT INTO public.debate_session_users(
-      user_id, debate_session_id, badges, side, "character")
-      VALUES ($1, $2, $3, $4, $5);`, [player0Id, matchId, null, side0, chracter0]);
+      user_id, debate_session_id, side, "character")
+      VALUES ($1, $2, $3, $4);`, [player0Id, matchId, side0, chracter0]);
 
     const r3 = await client.query(`INSERT INTO public.debate_session_users(
-        user_id, debate_session_id, badges, side, "character")
-        VALUES ($1, $2, $3, $4, $5);`, [player1Id, matchId, null, side1, chracter1]);
+        user_id, debate_session_id, side, "character")
+        VALUES ($1, $2, $3, $4);`, [player1Id, matchId, side1, chracter1]);
 
     await client.query('COMMIT');
     } catch (e) {
