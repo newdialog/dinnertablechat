@@ -114,6 +114,11 @@ class Index extends React.Component<Props, State> {
   //  VERT SEP: style={{ borderRight: '0.1em solid black', padding: '0.5em' }}
   public render() {
     const { classes, store } = this.props;
+    if(store.auth.isNotLoggedIn) {
+      store.router.push('/');
+      return;
+    }
+    
     if(store.auth.loggedIn) {
       API.getScores().then(s => console.log('s', s));
     }

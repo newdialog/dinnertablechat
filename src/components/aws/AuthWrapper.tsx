@@ -71,7 +71,10 @@ class AuthComp extends React.Component<Props, any> {
   }
 
   private handleAuth = (awsUser: AuthService.AwsAuth | null) => {
-    if (!awsUser) return;
+    if (!awsUser)  {
+      this.props.store.auth.notLoggedIn();
+      return;
+    }
     // console.log('handleAuth', awsUser)
     this.props.store.auth.authenticated(awsUser);
   }

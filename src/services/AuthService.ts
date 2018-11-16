@@ -100,7 +100,8 @@ async function checkUser(cb: AwsCB) {
   try {
     data = await Auth.currentAuthenticatedUser();
   } catch (e) {
-    console.log('---currentAuthenticatedUser err:', e);
+    console.log('---currentAuthenticatedUser not logged in:', e);
+    cb(null);
     return;
   }
   // .then(data => {
@@ -137,7 +138,7 @@ async function checkUser(cb: AwsCB) {
     return;
   }
   cb({
-    user: { name: user.name, email: user.email },
+    user: { name: user.name, email: user.email, id: data.username },
     ...authParams
   });
 }

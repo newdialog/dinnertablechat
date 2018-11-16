@@ -4,7 +4,7 @@ import Auth from '@aws-amplify/auth';
 
 async function getScores() {
   let apiName = 'History';
-  let path = '/db'; // /hello
+  let path = '/history'; // /hello
   let myInit = {
     // OPTIONAL
     headers: await getTokenHeaders(), // OPTIONAL
@@ -17,6 +17,33 @@ async function getScores() {
   console.log('myInit', myInit);
 
   return API.get(apiName, path, myInit)
+    .then(response => {
+      // Add your code here
+      return response;
+    })
+    .catch(error => {
+      console.log(apiName, path, error.response);
+    });
+}
+
+async function reviewSession(review:any, matchId:string) {
+  let apiName = 'History';
+  let path = '/review'; // /hello
+  let myInit = {
+    // OPTIONAL
+    headers: await getTokenHeaders(), // OPTIONAL
+    // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+    queryStringParameters: {
+      // name: 'param'
+    },
+    body: {
+      matchId,
+      review
+    }, // replace this with attributes you need
+  };
+  console.log('myInit', myInit);
+
+  return API.post(apiName, path, myInit)
     .then(response => {
       // Add your code here
       return response;

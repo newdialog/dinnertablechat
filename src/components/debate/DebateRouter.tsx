@@ -30,6 +30,11 @@ class DebateRouter extends React.Component<Props,State> {
   public render() {
     const props = this.props;
     const store = props.store;
+    if(store.auth.isNotLoggedIn) {
+      store.router.push('/');
+      return (<div/>);
+    }
+
     const ds = props.store.debate;
     const isTest = ds.isTest;
     let stage = 0;

@@ -111,6 +111,10 @@ class Index extends React.Component<Props, State> {
 
   public render() {
     const { classes, store } = this.props;
+    if(store.auth.isNotLoggedIn) {
+      store.router.push('/');
+      return (<div/>);
+    }
     let step = 3;
     
     if(store.debate.contribution===-1) step = 2; // skip contribution

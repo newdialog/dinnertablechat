@@ -111,7 +111,9 @@ class LoadingScene extends React.Component<Props, any> {
     const chararacter = this.props.store.debate.character;
 
     const sameUserSeed = Math.round(new Date().getTime() / 1000);
-    const userid = this.props.store.auth.user!.email + '_' + sameUserSeed;
+
+    if(!this.props.store.auth.user!.id) throw new Error('no valid user id');
+    const userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
     QS.queueUp(
       topic,
       position,

@@ -4,6 +4,7 @@ import * as Auth from '../services/AuthService';
 const UserModel = types.model({
   email: types.string,
   name: types.string,
+  id: types.string
   // credits: types.integer,
   // karma: types.maybe(types.integer),
   // token: types.string,
@@ -22,24 +23,30 @@ const AuthModel = types
     user: types.maybe(UserModel),
     aws: types.maybe(AWSModel),
     doLogin: false,
-    loggedIn: false
+    loggedIn: false,
+    isNotLoggedIn: false
   })
   .actions(self => ({
     login() {
       // self.text = newTitle
       self.doLogin = true;
 
-      console.log('login action');
+      // console.log('login action');
     },
     logout() {
       Auth.logout();
     },
+    notLoggedIn() {
+      self.isNotLoggedIn = true;
+    },
     authenticated(authServiceData: any) {
       const { user, accessKeyId, secretAccessKey, sessionToken, region } = authServiceData;
+      // console.log('user', user);
 
       const umodel: Instance<typeof UserModel> = { 
         name: user.name, 
-        email: user.email
+        email: user.email,
+        id: user.id,
       };
 
       const aws: Instance<typeof AWSModel> = { 
@@ -52,6 +59,7 @@ const AuthModel = types
       self.aws = aws;
       self.user = umodel;
       self.loggedIn = true;
+      self.isNotLoggedIn = false;
     }
   }));
 
