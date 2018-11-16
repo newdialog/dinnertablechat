@@ -1,43 +1,16 @@
 // @ts-ignore
 import React, { lazy, Suspense } from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
-import Home from './home/home';
-
-import DebateHistory from './menus/DebateHistory';
-import DebateFeedback from './debate/DebateFeedback'; // TODO: remove this and wire it up in DebateRouter
 import * as AppModel from '../models/AppModel';
-// import MenuHome from './menus/MenuHome'
-// import RTCHome from './debate/DebateScene'
-// import LoadingMatch from './debate/DebateTester'
-// import DebateRouter from './debate/DebateRouter'
-// import Privacy from './privacy/Privacy';
-import Loadable from 'react-loadable';
-const AsyncPlay = Loadable({
-  loader: () => import('./menus/MenuHome'),
-  loading: Loading,
-  delay: 200
-});
-const AsyncPrivacy = Loadable({
-  loader: () => import('./privacy/Privacy'),
-  loading: Loading,
-  delay: 200
-});
-const AsyncDebate = Loadable({
-  loader: () => import('./debate/DebateRouter'),
-  loading: Loading,
-  delay: 200
-});
-const AsyncTester = Loadable({
-  loader: () => import('./debate/DebateTester'),
-  loading: Loading,
-  delay: 200
-});
-/*
+
+const AsyncHome = lazy(() => import('./home/home'));
 const AsyncPlay = lazy(() => import('./menus/MenuHome'));
-const AsyncPrivacy:any = lazy(() => import('./privacy/Privacy'));
+const AsyncPrivacy = lazy(() => import('./privacy/Privacy'));
 const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
-const AsyncDisplay = lazy(() => import('./debate/DebateTester'));
-*/
+const AsyncTester = lazy(() => import('./debate/DebateTester'));
+const DebateHistory = lazy(() => import('./menus/DebateHistory'));
+const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
+
 const NoMatch = ({ location }) => (
   <div>
     <h1>...</h1>
@@ -69,11 +42,11 @@ const DTCRouter = ({
   history: any;
   store: AppModel.Type;
 }) => (
-  <Suspense fallback={loader()}>
-    <Router history={history}>
+  <Router history={history}>
+    <Suspense fallback={loader()}>
       <Switch>
-        <Route exact={true} path="/" component={Home} />
-        <Route exact={true} path="/callback" component={Home} />
+        <Route exact={true} path="/" component={AsyncHome} />
+        <Route exact={true} path="/callback" component={AsyncHome} />
         <Route exact={true} path="/feedback" component={DebateFeedback} />
         <Route exact={true} path="/history" component={DebateHistory} />
 
@@ -97,8 +70,8 @@ const DTCRouter = ({
 
         <Route render={() => <Redirect to="/" />} />
       </Switch>
-    </Router>
-  </Suspense>
+    </Suspense>
+  </Router>
 );
 
 function Loading(props: any) {

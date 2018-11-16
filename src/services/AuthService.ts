@@ -6,12 +6,13 @@ import Core from 'aws-sdk/lib/core';
 import AWS from 'aws-sdk/global';
 
 import Auth from '@aws-amplify/auth';
-import API from './APIService';
+import API from './APIService'; // TODO refactor
 
-/* Debug only */
+/* Debug only 
 import Amplify from 'aws-amplify';
 Amplify.Logger.LOG_LEVEL = 'DEBUG';
 (window as any).LOG_LEVEL = 'DEBUG';
+*/
 
 // https://github.com/aws-amplify/amplify-js/issues/1487
 
@@ -82,7 +83,9 @@ export function auth(cb: AwsCB) {
 
   console.log('awsmobileInjected', awsmobileInjected);
   API.configure(awsmobileInjected);
-  setTimeout(() => API.getScores().then(s => console.log('s', s)), 2000);
+
+  // TODO refactor
+  // setTimeout(() => API.getScores().then(s => console.log('s', s)), 2000);
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;
