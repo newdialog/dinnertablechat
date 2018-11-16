@@ -7,6 +7,11 @@ import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
 import HOC from '../HOC';
 
+import API from '../../services/APIService'; 
+
+  // TODO refactor
+  // 
+
 const styles = theme =>
   createStyles({
     root: {
@@ -109,6 +114,10 @@ class Index extends React.Component<Props, State> {
   //  VERT SEP: style={{ borderRight: '0.1em solid black', padding: '0.5em' }}
   public render() {
     const { classes, store } = this.props;
+    if(store.auth.loggedIn) {
+      API.getScores().then(s => console.log('s', s));
+    }
+
     return (
       <div className={classes.centered}>
         <div className={classes.headerContainer}>
@@ -117,7 +126,7 @@ class Index extends React.Component<Props, State> {
               <AccountCircle className={classes.icon} />
             </Grid>
             <Grid item xs={2}>
-              <Typography variant="display4" align="left" color="textPrimary" gutterBottom>
+              <Typography variant="h1" align="left" color="textPrimary" gutterBottom>
                 MYNAME
                 </Typography>
               <Typography variant="body2" align="left" color="textSecondary" gutterBottom>
@@ -162,14 +171,14 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" >
                 <Grid item xs>
-                  <Typography gutterBottom variant="display1" color="textPrimary">
+                  <Typography gutterBottom variant="h4" color="textPrimary">
                       Honorable Reinhardt Goodsir
                     </Typography>
                     <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant="display1" color="textSecondary" align={'center'}>Agreed</Typography>
+                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -189,14 +198,14 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={16}>
                 <Grid item xs>
-                  <Typography gutterBottom variant="display1" color="textPrimary">
+                  <Typography gutterBottom variant="h4" color="textPrimary">
                       Mensen Goed Joe
                     </Typography>
                     <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant="display1" color="textSecondary" align={'center'}>Disagreed</Typography>
+                <Typography variant="h4" color="textSecondary" align={'center'}>Disagreed</Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -216,14 +225,14 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={16}>
                 <Grid item xs>
-                  <Typography gutterBottom variant="display1" color="textPrimary">
+                  <Typography gutterBottom variant="h4" color="textPrimary">
                       Honorable Lady McBeth
                     </Typography>
                     <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant="display1" color="textSecondary" align={'center'}>Agreed</Typography>
+                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
               </Grid>
             </Grid>
           </Grid>

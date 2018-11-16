@@ -2,7 +2,7 @@
 import awsmobile from '../aws-exports.js';
 import 'aws-sdk/lib/node_loader'; // first time only
 
-import Core from 'aws-sdk/lib/core';
+// import Core from 'aws-sdk/lib/core';
 import AWS from 'aws-sdk/global';
 
 import Auth from '@aws-amplify/auth';
@@ -83,9 +83,6 @@ export function auth(cb: AwsCB) {
 
   console.log('awsmobileInjected', awsmobileInjected);
   API.configure(awsmobileInjected);
-
-  // TODO refactor
-  // setTimeout(() => API.getScores().then(s => console.log('s', s)), 2000);
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;

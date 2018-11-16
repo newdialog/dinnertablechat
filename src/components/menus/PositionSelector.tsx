@@ -69,7 +69,7 @@ class PositionSelector extends React.Component<Props, State> {
       positions: t('topic' + i + '-positions').split(', '),
       proposition: t('topic' + i + '-proposition'),
     })
-    console.log('data', data)
+    // console.log('data', data)
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
