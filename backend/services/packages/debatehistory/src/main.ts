@@ -5,7 +5,7 @@ import * as cors from 'cors';
 // var AWSXRay = require('aws-xray-sdk');
 // import bodyParser from 'body-parser';
 // import * as mysql from 'promise-mysql';
-import { Client } from 'pg';
+import { Client, Pool } from 'pg';
 
 const port = process.env.PORT || 8000;
 
@@ -20,16 +20,18 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 // const mysql = require('mysql');
-let connection: any;
+const connection: Pool = new Pool();
 
 app.get('/db', async (req: any, res: any, next: any) => {
-  if (!connection) {
+  const client = await connection.connect();
+
+  /*if (!connection) {
     // throw new Error('db not init yet');
     const e = process.env;
     console.log('starting sql connection'); // , e.PGHOST, e.PGDATABASE, e.PGUSER, e.PGPASSWORD, e.PGPORT);
     try {
-      connection = new Client(); // sqloptions
-      await connection.connect();
+       // sqloptions
+      
     } catch (e) {
       connection = null;
       // console.warn('error', e);
@@ -37,9 +39,9 @@ app.get('/db', async (req: any, res: any, next: any) => {
       // return;
       throw new Error(e.toString());
     }
-  }
+  }*/
   console.log('query');
-  const qres = await connection.query('select * from debate_session');
+  const qres = await client.query('select * from debate_session');
   console.log(qres.rows); // Hello world!
 
   const ctx = JSON.parse(req.headers['x-context'] || '{}');
@@ -48,6 +50,7 @@ app.get('/db', async (req: any, res: any, next: any) => {
 
   const ctxstr = JSON.stringify(claims, null, 2);
 
+  client.release();
   res.send({ rows: qres.rows, ctx: ctxstr });
 });
 

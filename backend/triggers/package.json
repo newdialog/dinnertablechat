@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "deploy": "apex deploy --env-file .env.production.local",
-    "logs": "apex logs"
+    "logs": "apex logs -f"
   },
   "author": "",
   "license": "ISC"

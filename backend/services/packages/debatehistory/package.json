@@ -40,7 +40,7 @@
     "switchin": "mv up.json up.json.tmp && cp up.local.json up.json",
     "switchback": "del up.json && mv up.json.tmp up.json"
   },
-  "author": "Jakub Synowiec <github@jakubsynowiec.info>",
+  "author": "Jonathan Dunlap",
   "license": "APLv2",
   "dependencies": {
     "aws-xray-sdk": "^2.1.0",

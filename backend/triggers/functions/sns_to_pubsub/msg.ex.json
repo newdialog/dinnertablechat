@@ -12,14 +12,14 @@
             "ticketId": "5b1ebeca-090e-48de-ac4b-a5a557292567",
             "startTime": "2018-11-15T05:46:05.002Z",
             "players": [{
-                "playerId": "jadit2@gmail.com_1542260764",
+                "playerId": "j@gmail.com_1542260764",
                 "team": "red"
             }]
         }, {
             "ticketId": "4cb56988-1092-44af-a8d1-1bf8e9d3dde1",
             "startTime": "2018-11-15T05:46:11.132Z",
             "players": [{
-                "playerId": "jadit2@gmail.com_1542260770",
+                "playerId": "j@gmail.com_1542260770",
                 "team": "blue"
             }]
         }],
@@ -44,10 +44,10 @@
         "type": "PotentialMatchCreated",
         "gameSessionInfo": {
             "players": [{
-                "playerId": "jadit2@gmail.com_1542260764",
+                "playerId": "j@gmail.com_1542260764",
                 "team": "red"
             }, {
-                "playerId": "jadit2@gmail.com_1542260770",
+                "playerId": "j@gmail.com_1542260770",
                 "team": "blue"
             }]
         },

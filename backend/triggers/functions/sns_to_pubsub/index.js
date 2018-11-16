@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const gamelift = new AWS.GameLift();
 const { Pool } = require('pg');
 
 console.log('Loading function');
@@ -9,8 +10,8 @@ const db = new AWS.DynamoDB.DocumentClient({
 });
 */
 const docClient = new AWS.DynamoDB.DocumentClient();
-connection = new Pool();
-connection.connect();
+const pool = new Pool();
+// connection.connect();
 
 async function query() {
   var params = {
@@ -40,7 +41,7 @@ exports.handle = async (event, context, callback) => {
   callback(null, "Success");
 };
 
-function forEachSNS(record) {
+async function forEachSNS(record) {
   const message = JSON.parse(record.Sns.Message);
   const tickets = message.detail.tickets;
   const type = message.detail.type;
@@ -56,18 +57,58 @@ function forEachSNS(record) {
   }
 
   const ticketIds = tickets.map(t => t.ticketId);
+  // ======
+  const matchInfo = await gamelift.describeMatchmaking( {TicketIds:ticketIds} ).promise();
 
   // console.log('Message received from SNS:', JSON.stringify(message));
-  console.log(matchId, 'tickets', ticketIds, 'players', JSON.stringify(players))
+  // JSON.stringify(tickets), 
+  // , 'players', JSON.stringify(players)
+  console.log('MATCH:', matchId, 'TICKETS:', ticketIds);
 
   saveDB(players, matchId);
-  // savePG(players, matchId, topic);
+  savePG(players, matchId, matchInfo);
 }
 
-function savePG(players, matchId, topic) {
-  connection.query(`INSERT INTO public.debate_session(
-    id, topic)
-    VALUES ($1 $2);`, [matchId, topic]);
+async function savePG(players, matchId, matchInfo) {
+  // console.log('matchInfo', matchInfo);
+  const player0 = matchInfo.TicketList[0].Players[0];
+  const player0Id = player0.PlayerId;
+  const side0 = player0.PlayerAttributes.side.N;
+  const chracter0 = player0.PlayerAttributes.character.N;
+  
+  const donation = player0.PlayerAttributes.donation.N;
+  const topic = player0.PlayerAttributes.topic.S;
+  // --
+  const player1 = matchInfo.TicketList[1].Players[0];
+  const player1Id = player1.PlayerId;
+  const side1 = player1.PlayerAttributes.side.N;
+  const chracter1 = player1.PlayerAttributes.character.N;
+
+  // console.log('player0', player0);
+
+  // return;
+  const client = await pool.connect()
+  try {
+    await client.query('BEGIN')
+    const r1 = await client.query(`INSERT INTO public.debate_session(
+      id, topic)
+      VALUES ($1, $2);`, [matchId, topic]);
+
+    const r2 = await client.query(`INSERT INTO public.debate_session_users(
+      user_id, debate_session_id, badges, side, "character")
+      VALUES ($1, $2, $3, $4, $5);`, [player0Id, matchId, null, side0, chracter0]);
+
+    const r3 = await client.query(`INSERT INTO public.debate_session_users(
+        user_id, debate_session_id, badges, side, "character")
+        VALUES ($1, $2, $3, $4, $5);`, [player1Id, matchId, null, side1, chracter1]);
+
+    await client.query('COMMIT');
+    } catch (e) {
+      await client.query('ROLLBACK');
+      throw e
+    } finally {
+      client.release();
+    }
 }
 
 function saveDB(players, matchId) {
@@ -126,6 +167,21 @@ function getQParam(players, matchId) {
     }
   };
 }
+
+/*
+r: { N: 1 },
+  donation: { N: 0 },
+  lang: { S: 'en' },
+  side: { N: 1 },
+  topic: { S: 'Immigration' } }
+/aws/lambda/dtc-matchshake_sns_to_pubsub 2018-11-16T03:12:05.103Z	6406c9db-e94d-11e8-b9e2-552ea46a9e3e	a20225ae-3963-4165-af19-7d7fb4570eaa tickets [ { ticketId: '650b4b67-ebab-4a11-ac47-c4e315d0e98b',
+    startTime: '2018-11-16T03:11:58.597Z',
+    players: [ [Object] ] },
+  { ticketId: '3780d568-072b-4d9c-b964-9b9541befecb',
+    startTime: '2018-11-16T03:12:03.190Z',
+    players: [ [Object] ] } ] [ '650b4b67-ebab-4a11-ac47-c4e315d0e98b',
+  '3780d568-072b-4d9c-b964-9b9541befecb' ] players [{"playerId":"j@gmail.com_1542337918","team":"red"},{"playerId":"j@gmail.com_1542337923","team":"blue"}]
+*/
 
 
 //======

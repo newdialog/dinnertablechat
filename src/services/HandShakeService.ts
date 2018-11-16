@@ -38,6 +38,8 @@ export async function sync(userid: string) {
   const ticket = await docClient.get(params).promise();
   console.log('t,', ticket.Item);
 
+  if (!ticket.Item) throw new Error('no entry in dynamo: sns_to_pubsub');
+
   // const matchid = ticket.Item!.match;
   // ===
   return ticket.Item! as SyncCallback;
@@ -69,19 +71,19 @@ export async function handshake(
     let otherPlayerState: PlayerTableData = { char: -1 };
 
     // try {
-      handshakeUntilConnected(
-        matchid,
-        otherColor,
-        ps,
-        (otherState: PlayerTableData) => {
-          otherPlayerState = otherState;
-        }
-      ).catch( (e) => {
-        const retryError = e.toString().indexOf('retry')!==-1;
-        // if(retryError) throw new Error('retry');
-        reject('retry');
-        console.log('handshakeUntilConnected ended with', e);
-      })
+    handshakeUntilConnected(
+      matchid,
+      otherColor,
+      ps,
+      (otherState: PlayerTableData) => {
+        otherPlayerState = otherState;
+      }
+    ).catch(e => {
+      const retryError = e.toString().indexOf('retry') !== -1;
+      // if(retryError) throw new Error('retry');
+      reject('retry');
+      console.log('handshakeUntilConnected ended with', e);
+    });
     /* .catch( (e) => {
       const retryError = e.toString().indexOf('retry')!==-1;
       if(retryError) throw new Error('retry');
@@ -89,13 +91,13 @@ export async function handshake(
     });*/
     try {
       setTimeout(() => {
-        if(stopSync) return;
-        console.log('webrtc onConnection timeout')
+        if (stopSync) return;
+        console.log('webrtc onConnection timeout');
         stopSyncing();
         reject('retry');
         // throw new Error('retry');
       }, 1000 * 13);
-    } catch(e) {
+    } catch (e) {
       throw new Error(e);
     }
     await ps.onConnection();
@@ -104,7 +106,7 @@ export async function handshake(
     console.log(mycolor + ' rtc elected');
 
     return resolve({ peer: ps, otherPlayerState });
-  })
+  });
 }
 
 async function readMatch(matchid: string): Promise<HandShakeCallback> {
@@ -197,13 +199,13 @@ async function handshakeUntilConnected(
       try {
         result = await readMatchWait(matchid, team);
       } catch (e) {
-        const retryError = e.toString().indexOf('retry')!==-1;
+        const retryError = e.toString().indexOf('retry') !== -1;
         // console.log(JSON.stringify(e), typeof e, );
-        if(retryError) {
+        if (retryError) {
           console.log('RETRY error');
           bail(new Error('retry'));
-          return // 'retry';
-        } else { 
+          return; // 'retry';
+        } else {
           console.log('readMatchWait aborted with:', e.Error);
           return bail(new Error('error'));
         }
