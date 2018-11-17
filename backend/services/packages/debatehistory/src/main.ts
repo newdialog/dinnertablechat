@@ -28,8 +28,7 @@ app.get('/history', async (req: any, res: any, next: any) => {
   const client = await connection.connect();
   console.log('QUERY for user', id);
   const qres = await client.query(
-    `select ds.topic, ds.created as debate_created, du.*, 
-  du.review_aggrement as aggrement
+    `select ds.topic, ds.created as debate_created, du.*
   from debate_session as ds
   INNER JOIN debate_session_users du ON du.debate_session_id=ds.id
   where ds.id IN (select id from debate_session as ds2
@@ -60,7 +59,7 @@ app.post('/review', async (req: any, res: any, next: any) => {
   const qres = await client.query(
     `UPDATE public.debate_session_users
 SET review=$1, review_aggrement=$2, end_created=CURRENT_TIMESTAMP
-WHERE debate_session_id=$4 AND user_id=$5;`,
+WHERE debate_session_id=$3 AND user_id=$4;`,
     [review, agreement, matchId, id],
   );
   console.log(qres.rows);
@@ -77,7 +76,7 @@ app.post('/bail', async (req: any, res: any, next: any) => {
   const body = req.body;
   if (!body.matchId) throw new Error(`no match id on ${JSON.stringify(body)}`);
   if (!body.review) throw new Error(`no review on ${JSON.stringify(body)}`);
-  const { matchId, review } = body;
+  const { matchId } = body;
 
   const client = await connection.connect();
   console.log('QUERY for user', id);
@@ -87,7 +86,7 @@ end_created=CURRENT_TIMESTAMP, bailed=$1
 WHERE debate_session_id=$2 AND user_id=$3;`,
     [true, matchId, id],
   );
-  console.log(qres.rows);
+  console.log('BAIL', qres.rows);
 
   // const ctxstr = JSON.stringify(user, null, 2);
   // console.log(ctxstr)

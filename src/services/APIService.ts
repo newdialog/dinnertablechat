@@ -26,7 +26,7 @@ async function getScores() {
     });
 }
 
-async function reviewSession(review:any, matchId:string) {
+async function reviewSession(review: any, matchId: string) {
   let apiName = 'History';
   let path = '/review'; // /hello
   let myInit = {
@@ -39,7 +39,33 @@ async function reviewSession(review:any, matchId:string) {
     body: {
       matchId,
       review
-    }, // replace this with attributes you need
+    } // replace this with attributes you need
+  };
+  console.log('myInit', myInit);
+
+  return API.post(apiName, path, myInit)
+    .then(response => {
+      // Add your code here
+      return response;
+    })
+    .catch(error => {
+      console.log(apiName, path, error.response);
+    });
+}
+
+async function bail(matchId: string) {
+  let apiName = 'History';
+  let path = '/bail'; // /hello
+  let myInit = {
+    // OPTIONAL
+    headers: await getTokenHeaders(), // OPTIONAL
+    // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+    queryStringParameters: {
+      // name: 'param'
+    },
+    body: {
+      matchId
+    } // replace this with attributes you need
   };
   console.log('myInit', myInit);
 
@@ -63,7 +89,7 @@ async function getTokenHeaders() {
   };
 }
 
-export default { getScores, configure };
+export default { getScores, configure, reviewSession, bail };
 
 // import axios, { AxiosRequestConfig } from 'axios';
 /*

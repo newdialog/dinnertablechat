@@ -10,6 +10,7 @@ import { Avatar, Button, Chip, Grid, Typography } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
 import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
+import APIService from '../../services/APIService';
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -68,15 +69,19 @@ class DebateFeedback extends React.Component<Props, State> {
         this.setState({ agreed: 'no' });
     }
 
-    private handleConfirm = () => { // TODO: update endpt w user selection, route back home
+    private handleConfirm = async () => { // TODO: update endpt w user selection, route back home
         const hash = this.state.traitHash;
         const selectedTraits:string[] = [];
         for (const key in hash) {
             if (hash[key]) selectedTraits.push(key);
         }
-        const response = { agreed: this.state.agreed, selectedTraits }
-        // console.log('responses', response);
+        const agreed = this.state.agreed === 'yes' ? true : false;
+        const response = { agreement: agreed, traits: selectedTraits }
+        console.log('responses', response);
         // TODO: call endpoint
+
+        const r = await APIService.reviewSession(response, this.props.store.debate.match!.matchId);
+        
         this.props.store.debate.resetQueue();
         this.props.store.gotoHomeMenu();
     }
