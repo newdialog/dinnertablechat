@@ -2,6 +2,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import * as AppModel from '../models/AppModel';
+import {observer, inject} from 'mobx-react';
 
 const AsyncHome = lazy(() => import('./home/home'));
 const AsyncPlay = lazy(() => import('./menus/MenuHome'));
@@ -74,6 +75,12 @@ const DTCRouter = ({
   </Router>
 );
 
+const authenticated = (store:AppModel.Type, Component:React.LazyExoticComponent<any>) => {
+  console.log('store.auth.loggedIn', store.auth.loggedIn);
+  if(store.auth.loggedIn) return <Component/>;
+  return <div>Loading...</div>;
+}
+
 function Loading(props: any) {
   if (props.error) {
     return (
@@ -92,4 +99,4 @@ function Loading(props: any) {
 <Route path="/rtc" component={RTCHome}/>
 <DefaultRoute component={Home} />
 */
-export default DTCRouter;
+export default inject('store')(observer(DTCRouter));

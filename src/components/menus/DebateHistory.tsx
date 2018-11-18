@@ -8,6 +8,7 @@ import { inject } from 'mobx-react';
 import HOC from '../HOC';
 
 import API from '../../services/APIService'; 
+import { boolean } from 'mobx-state-tree/dist/internal';
 
   // TODO refactor
   // 
@@ -69,6 +70,8 @@ interface State {
   open: Array<boolean>;
   activeStep: number,
   achievements: Array<{ photo: string, text: string }>,
+  data: any[],
+  loggedIn: boolean
 }
 
 const achievements = [
@@ -77,13 +80,22 @@ const achievements = [
 ];
 
 class Index extends React.Component<Props, State> {
+  
   constructor(props: Props) {
     super(props);
     this.state = {
-      open: [false, false, false],
+      open: [],
       activeStep: 0,
       achievements,
+      data: [],
+      loggedIn: false
     };
+  }
+
+  componentDidMount() {
+    console.log('store', this.props.store.auth);
+    console.log('predicate', this.props.store.auth.loggedIn, this.state.loggedIn);
+    
   }
 
   handleClick = (i:number) => {
@@ -111,17 +123,67 @@ class Index extends React.Component<Props, State> {
     return view;
   }
 
+  private createAccordianFlags(data) {
+    let flags : boolean[] = [];
+    flags = data.map((x, i) => flags.push(false))
+    return flags;
+  }
+
+  private transformPayload = (payload) => {
+    let data = payload.history.filter(x => x.review !== null);
+    const flags = this.createAccordianFlags(data);
+    this.setState({ data, open: flags });
+    console.log('len', data.length);
+  }
+
+  private renderList = (classes) => this.state.data.map((x, i) => 
+      (<div key={i}>
+        <Paper className={classes.paper}>
+          <Grid container spacing={16}>
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'50%'} /></Grid>
+            <Grid item xs={12} sm container>
+              <Grid item xs container direction="column" spacing={16}>
+                <Grid item xs>
+                  <Typography gutterBottom variant="h4" color="textPrimary">
+                      Honorable Lady McBeth
+                    </Typography>
+                    <Typography gutterBottom> Nov 15, 2018 11:14 AM</Typography>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+          </Grid>
+        </Paper>
+        <div style={{ paddingBottom: '4em' }} />
+      </div>
+      )
+    );
+  
+
   //  VERT SEP: style={{ borderRight: '0.1em solid black', padding: '0.5em' }}
   public render() {
     const { classes, store } = this.props;
-    if(store.auth.notLoggedIn) {
+    if(store.auth.isNotLoggedIn) {
       store.router.push('/');
       return;
     }
-    
-    if(store.auth.loggedIn) {
-      API.getScores().then(s => console.log('s', s));
+
+    if(store.auth.loggedIn!==this.state.loggedIn) {
+      if(store.auth.loggedIn) API.getScores().then(this.transformPayload);
+      setTimeout(()=> {
+        this.setState({loggedIn: store.auth.loggedIn});
+      }, 10);
     }
+
+    console.log('data', this.state.data);
 
     return (
       <div className={classes.centered}>
@@ -170,7 +232,38 @@ class Index extends React.Component<Props, State> {
 
         <div style={{ paddingBottom: '4em' }} />
 
-        <Paper className={classes.paper}>
+        {this.renderList(classes)} 
+
+
+<div style={{ borderBottom: '0.1em solid black', padding: '0.5em' }} />
+
+         <Paper className={classes.paper}>
+          <Grid container spacing={16}>
+            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'50%'} /></Grid>
+            <Grid item xs={12} sm container>
+              <Grid item xs container direction="column" >
+                <Grid item xs>
+                  <Typography gutterBottom variant="h4" color="textPrimary">
+                      Honorable Reinhardt Goodsir
+                    </Typography>
+                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
+            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+          </Grid>
+        </Paper>
+
+        <div style={{ paddingBottom: '4em' }} />
+      <Paper className={classes.paper}>
           <Grid container spacing={16}>
             <Grid item xs={2}><img src="./imgs/04-select3.png" width={'50%'} /></Grid>
             <Grid item xs={12} sm container>
@@ -250,7 +343,8 @@ class Index extends React.Component<Props, State> {
         </Paper>
 
         <div style={{ paddingBottom: '4em' }} />
-        
+
+    );       
       </div>
     );
   }
