@@ -6,6 +6,7 @@ import * as AppModel from '../models/AppModel';
 const AsyncHome = lazy(() => import('./home/home'));
 const AsyncPlay = lazy(() => import('./menus/MenuHome'));
 const AsyncPrivacy = lazy(() => import('./privacy/Privacy'));
+const AsyncMediaKit = lazy(() => import('./mediakit/MediaKit'));
 const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
 const AsyncTester = lazy(() => import('./debate/DebateTester'));
 const DebateHistory = lazy(() => import('./menus/DebateHistory'));
@@ -50,6 +51,7 @@ const DTCRouter = ({
         <Route exact={true} path="/feedback" component={DebateFeedback} />
         <Route exact={true} path="/history" component={DebateHistory} />
 
+        <Route path="/press" component={AsyncMediaKit} />
         <Route path="/privacy" component={AsyncPrivacy} />
         <Route path="/play" component={AsyncPlay} />
         <Route path="/match" component={AsyncDebate} />
