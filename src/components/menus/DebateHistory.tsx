@@ -2,6 +2,7 @@ import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
 import { CssBaseline, Grid, Typography, Paper, List, ListSubheader, ListItem, ListItemIcon, ListItemText, Collapse, Avatar } from '@material-ui/core'
 import { AccountCircle, ExpandLess, ExpandMore, StarBorder } from '@material-ui/icons';
+import moment from 'moment';
 
 import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
@@ -65,6 +66,7 @@ const styles = theme =>
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   isTest?: boolean;
+  t: any,
 }
 interface State {
   open: Array<boolean>;
@@ -78,6 +80,12 @@ const achievements = [
   { 'photo': 'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG', 'text': 'WELL READ' },
   { 'photo': 'https://images.all-free-download.com/images/graphiclarge/four_colours_teamwork_hands_311362.jpg', 'text': 'TEAM PLAYER' },
 ];
+
+const characters = [
+  { key: 0, title: 'Tracy', value: 0, url: './imgs/04-select.png' },
+  { key: 1, title: 'Riley', value: 1, url: './imgs/04-select2.png' },
+  { key: 2, title: 'Finley', value: 2, url: './imgs/04-select3.png' }
+]; // TODO: refactor into one resource file: also ref'd in CharacterSelection
 
 class Index extends React.Component<Props, State> {
   
@@ -129,29 +137,74 @@ class Index extends React.Component<Props, State> {
     return flags;
   }
 
+  private transformUser(x: any) {
+    return {
+      topic: x.topic,
+      date: this.transformDate(x.debate_created),
+      userSide: this.transformSide(x.side),
+      userCharacter: x.character,
+      userReview: x.review,
+      userAgree: x.aggrement,
+    };
+  }
+
+  private transformOpp(x: any) {
+    return {
+      oppAgree: x.aggrement,
+      oppSide: this.transformSide(x.side),
+      oppCharacter: x.character,
+      oppReview: x.review
+    };
+  }
+
+  private transformDate(timestamp: number) {
+    return moment(timestamp).format("MMM DD, YYYY h:mma");
+  }
+
+  private transformSide(side: number) {
+    return this.props.t('topic' + side + '-topic')
+  }
+
   private transformPayload = (payload) => {
-    let data = payload.history.filter(x => x.review !== null);
+    let data = payload.history.filter(x => x.review !== null); // only sessions with ratings
+    let dataHash = data.reduce((hash, x) => { // merge data per session from user and opponent
+      if(!hash[x.debate_session_id]) hash[x.debate_session_id] = {};
+      const val = hash[x.debate_session_id];
+      
+      hash[x.debate_session_id] = (x.user_id === this.props.store.auth.user!.id) ? 
+        {...val, ...this.transformUser(x)} : 
+        {...val, ...this.transformOpp(x)};
+      return hash;
+    }, {});
+    
+    const result = Object.keys(dataHash).map(key => { // transform to array to render, +agreed, session_id
+      const val = dataHash[key];
+      val.debate_sesssion_id = key;
+      val.agreed = (val.userAgree && val.oppAgree) ? 'Agreed' : 'Disagreed';
+      if (val.oppCharacter === undefined) delete dataHash[key]; // ensure reviews set for both
+      return val;
+    })
+
     const flags = this.createAccordianFlags(data);
-    this.setState({ data, open: flags });
-    console.log('len', data.length);
+    this.setState({ data: result, open: flags });
   }
 
   private renderList = (classes) => this.state.data.map((x, i) => 
       (<div key={i}>
         <Paper className={classes.paper}>
           <Grid container spacing={16}>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'50%'} /></Grid>
+            <Grid item xs={2}><img src={characters[x.oppCharacter].url} width={'50%'} /></Grid>
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={16}>
                 <Grid item xs>
                   <Typography gutterBottom variant="h4" color="textPrimary">
-                      Honorable Lady McBeth
+                      {characters[x.oppCharacter].title}
                     </Typography>
-                    <Typography gutterBottom> Nov 15, 2018 11:14 AM</Typography>
+                    <Typography gutterBottom>{x.date}</Typography>
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
+                <Typography variant="h4" color="textSecondary" align={'center'}>{x.agreed}</Typography>
               </Grid>
             </Grid>
           </Grid>
@@ -233,118 +286,6 @@ class Index extends React.Component<Props, State> {
         <div style={{ paddingBottom: '4em' }} />
 
         {this.renderList(classes)} 
-
-
-<div style={{ borderBottom: '0.1em solid black', padding: '0.5em' }} />
-
-         <Paper className={classes.paper}>
-          <Grid container spacing={16}>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'50%'} /></Grid>
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" >
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" color="textPrimary">
-                      Honorable Reinhardt Goodsir
-                    </Typography>
-                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-          </Grid>
-        </Paper>
-
-        <div style={{ paddingBottom: '4em' }} />
-      <Paper className={classes.paper}>
-          <Grid container spacing={16}>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'50%'} /></Grid>
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" >
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" color="textPrimary">
-                      Honorable Reinhardt Goodsir
-                    </Typography>
-                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-          </Grid>
-        </Paper>
-
-        <div style={{ paddingBottom: '4em' }} />
-
-        <Paper className={classes.paper}>
-          <Grid container spacing={16}>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'50%'} /></Grid>
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" spacing={16}>
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" color="textPrimary">
-                      Mensen Goed Joe
-                    </Typography>
-                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Typography variant="h4" color="textSecondary" align={'center'}>Disagreed</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-          </Grid>
-        </Paper>
-
-        <div style={{ paddingBottom: '4em' }} />
-
-        <Paper className={classes.paper}>
-          <Grid container spacing={16}>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'50%'} /></Grid>
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" spacing={16}>
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" color="textPrimary">
-                      Honorable Lady McBeth
-                    </Typography>
-                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-          </Grid>
-        </Paper>
-
-        <div style={{ paddingBottom: '4em' }} />
-
-    );       
       </div>
     );
   }
