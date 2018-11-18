@@ -63,7 +63,7 @@ async function forEachSNS(record) {
   // console.log('Message received from SNS:', JSON.stringify(message));
   // JSON.stringify(tickets), 
   // , 'players', JSON.stringify(players)
-  console.log('MATCH:', matchId, 'TICKETS:', ticketIds);
+  console.log('MATCHREQ:', matchId, 'TICKETS:', ticketIds);
 
   saveDB(players, matchId);
   savePG(players, matchId, matchInfo);
@@ -89,7 +89,7 @@ async function savePG(players, matchId, matchInfo) {
   // return;
   const client = await pool.connect()
   try {
-    await client.query('BEGIN')
+    await client.query('BEGIN');
     const r1 = await client.query(`INSERT INTO public.debate_session(
       id, topic)
       VALUES ($1, $2);`, [matchId, topic]);
@@ -103,8 +103,10 @@ async function savePG(players, matchId, matchInfo) {
         VALUES ($1, $2, $3, $4);`, [player1Id, matchId, side1, chracter1]);
 
     await client.query('COMMIT');
+    console.log('MATCHSAVED:', matchId);
     } catch (e) {
       await client.query('ROLLBACK');
+      console.error('MATCHSQLErr: id', id, 'topic', topic, e);
       throw e
     } finally {
       client.release();

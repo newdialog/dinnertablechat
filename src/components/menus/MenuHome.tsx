@@ -1,15 +1,24 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { Button, CssBaseline, Typography, Stepper, Step, StepLabel, StepContent, Paper } from '@material-ui/core'
+import { Button, Typography, Stepper, Step, StepLabel, StepContent, Paper } from '@material-ui/core'
 import * as AppModel from '../../models/AppModel';
 import PositionSelector from './PositionSelector';
 import ContributionSelector from './ContributionSelector';
 import { inject } from 'mobx-react';
 import CharacterSelection from './CharacterSelection';
 import HOC from '../HOC';
+import Footer from '../home/Footer';
 
 const styles = theme => 
   createStyles({
+    container: {
+      marginTop: '100px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '1000px',
+      minWidth: '300px'
+    },
     appBar: {
       position: 'relative',
     },
@@ -129,8 +138,7 @@ class Index extends React.Component<Props, State> {
 
   return (
     <React.Fragment>
-      <CssBaseline />
-      <main>
+      <main className={classes.container}>
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
@@ -169,12 +177,10 @@ class Index extends React.Component<Props, State> {
         </div>
       </main>
       {/* Footer */}
-      <footer className={classes.footer}>
-      </footer>
+      <Footer className={classes.footer}/>
       {/* End footer */}
     </React.Fragment>
   );
   }
 }
-
 export default inject('store')(HOC(Index, styles));

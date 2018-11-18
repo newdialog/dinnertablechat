@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-  createStyles,
-  WithStyles,
-  Theme
-} from '@material-ui/core/styles';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import HOC from '../HOC';
 import { Typography } from '@material-ui/core';
@@ -22,7 +18,7 @@ const styles = (theme: Theme) =>
       marginRight: 'auto',
       width: 'auto',
       maxWidth: '800px',
-      minWidth: '300px',
+      minWidth: '300px'
     },
     paper: {
       padding: theme.spacing.unit * 1.5,
@@ -35,22 +31,22 @@ const styles = (theme: Theme) =>
       marginBottom: theme.spacing.unit,
       height: '240px',
       width: '240px',
-      textAlign:'center',
-      backgroundColor:'#e2dfd0',
-      verticalAlign:'middle !important',
-      display: 'block',
+      textAlign: 'center',
+      backgroundColor: '#e2dfd0',
+      verticalAlign: 'middle !important',
+      display: 'block'
     },
     helper: {
       display: 'relative',
       height: '100%',
-      verticalAlign: 'middle',
+      verticalAlign: 'middle'
     },
     paperimg: {
       position: 'relative',
       top: '50%',
       transform: 'translateY(-50%)',
       margin: 'auto',
-      verticalAlign:'middle',
+      verticalAlign: 'middle',
       padding: theme.spacing.unit,
       color: theme.palette.text.secondary,
       whiteSpace: 'nowrap',
@@ -63,8 +59,8 @@ const styles = (theme: Theme) =>
       width: 'auto',
       maxWidth: '800px',
       minWidth: '300px',
-      alignContent:'centered',
-      textAlign:'center'
+      alignContent: 'centered',
+      textAlign: 'center'
     },
     divider: {
       margin: `${theme.spacing.unit * 4}px 0`
@@ -113,9 +109,7 @@ const styles = (theme: Theme) =>
       backgroundPosition: 'bottom 0px left'
       */
     },
-    demo: {
-
-    }
+    demo: {}
   });
 
 import * as AppModel from '../../models/AppModel';
@@ -126,7 +120,7 @@ interface Props extends WithStyles<typeof styles> {
 interface State {
   open: boolean;
 }
- 
+
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -135,72 +129,129 @@ class Index extends React.Component<Props, State> {
 
   public render() {
     const imgs = [
-      "./logos/dinnertable.gif",
-      "./logos/dtclogo.png",
-      "./logos/dtclogo3-1.png",
-      "./logos/dtclogo3.png",
-      
-    ]
+      './logos/dinnertable.gif',
+      './logos/dtclogo.png',
+      './logos/dtclogo3-1.png',
+      './logos/dtclogo3.png'
+    ];
     const { classes } = this.props;
     const { open } = this.state;
     return (
-      <div className={classes.container}>
-      <Typography gutterBottom={true} variant="h3" style={{color:'black', fontSize: '2.5em'}} align={'center'}>Press Kit</Typography>
-      <div className={classes.centered}><img src="imgs/press/01-scene1.png" width={600}/></div>
-      <div className={classes.divider}/>
-      <Typography gutterBottom={true} variant="h5" align={'left'}>Our Story</Typography>
-      <Typography variant="body1" gutterBottom={true}>
-        We all have our own way of looking at the world. Sharing our thoughts and discoveries is more fun when we respectfully challenge each other. Dinnertable.chat was created to start meaningful conversations and debate. This isn’t the comments section. It’s a real conversation between two people playfully cast as characters at a virtual dinner party. 
-        <br/><br/>
-        Thank you for sharing. Help us in our shared mission of empowing citizens to become more informed through exploring the contriversial topics that are most important to people today. If you have additional publication media kit needs, please <a href="mailto:press@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:press@dinnertable.chat')}>contact us</a>.
-      </Typography>
+      <React.Fragment>
+        <div className={classes.container}>
+          <Typography
+            gutterBottom={true}
+            variant="h3"
+            style={{ color: 'black', fontSize: '2.5em' }}
+            align={'center'}
+          >
+            Press Kit
+          </Typography>
+          <div className={classes.centered}>
+            <img src="imgs/press/01-scene1.png" width={600} />
+          </div>
+          <div className={classes.divider} />
+          <Typography gutterBottom={true} variant="h5" align={'left'}>
+            Our Story
+          </Typography>
+          <Typography variant="body1" gutterBottom={true}>
+            We all have our own way of looking at the world. Sharing our
+            thoughts and discoveries is more fun when we respectfully challenge
+            each other. Dinnertable.chat was created to start meaningful
+            conversations and debate. This isn’t the comments section. It’s a
+            real conversation between two people playfully cast as characters at
+            a virtual dinner party.
+            <br />
+            <br />
+            Thank you for sharing. Help us in our shared mission of empowing
+            citizens to become more informed through exploring the contriversial
+            topics that are most important to people today. If you have
+            additional publication media kit needs, please{' '}
+            <a
+              href="mailto:press@dinnertable.chat"
+              onClick={trackOutboundLinkClick('mailto:press@dinnertable.chat')}
+            >
+              contact us
+            </a>
+            .
+          </Typography>
 
-      <div className={classes.divider}/>
-      <Typography gutterBottom={true} variant="h5">Graphics and Designs</Typography>
-      <Typography variant="body1" gutterBottom={true}>Use of the below illustrations are recommended for publications:</Typography>
+          <div className={classes.divider} />
+          <Typography gutterBottom={true} variant="h5">
+            Graphics and Designs
+          </Typography>
+          <Typography variant="body1" gutterBottom={true}>
+            Use of the below illustrations are recommended for publications:
+          </Typography>
 
-      <br/><Grid container spacing={16}>
-        
-          <Grid container className={classes.demo} justify="center" spacing={16}>
-            {imgs.map(value => (
-              <Grid key={value} item>
-                
-                <Paper className={classes.paper2}>
-                
-                  <img src={value} className={classes.paperimg}/>
+          <br />
+          <Grid container spacing={16}>
+            <Grid
+              container
+              className={classes.demo}
+              justify="center"
+              spacing={16}
+            >
+              {imgs.map(value => (
+                <Grid key={value} item>
+                  <Paper className={classes.paper2}>
+                    <img src={value} className={classes.paperimg} />
                   </Paper>
-              </Grid>
-            ))}
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
-        </Grid>
-      
-      <div className={classes.divider}/>
-      <Typography gutterBottom={true} variant="h5">Publications</Typography>
-      <Paper className={classes.paper}>
-        <Typography variant="body1" gutterBottom={true}>
-        <i>October, 2018</i><br/>
-        [Overview] How Sparketing Debate Could Reignite Our Democracy (<a href="https://medium.com/dinnertablechat/how-sparking-debate-could-reignite-our-democracy-72b41a80f54">Medium</a>)
-        </Typography>
-      </Paper>
 
-      <Paper className={classes.paper}>
-        <Typography variant="body1" gutterBottom={true}>
-        <i>November, 2018</i><br/>
-        [Our Story] Who’s Cooking Dinner? (<a href="https://medium.com/dinnertablechat/whos-cooking-dinner-691217e9e714">Medium</a>)
-        </Typography>
-      </Paper>
+          <div className={classes.divider} />
+          <Typography gutterBottom={true} variant="h5">
+            Publications
+          </Typography>
+          <Paper className={classes.paper}>
+            <Typography variant="body1" gutterBottom={true}>
+              <i>October, 2018</i>
+              <br />
+              [Overview] How Sparketing Debate Could Reignite Our Democracy (
+              <a href="https://medium.com/dinnertablechat/how-sparking-debate-could-reignite-our-democracy-72b41a80f54">
+                Medium
+              </a>
+              )
+            </Typography>
+          </Paper>
 
-      <div className={classes.divider}/>
-      <Typography variant="body1" gutterBottom={true} align={'center'}>
-      General business inqueries <a href="mailto:team@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:team@dinnertable.chat')}>team@dinnertable.chat</a>
-      <br/>
-      Press inquiries <a href="mailto:press@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:press@dinnertable.chat')}>press@dinnertable.chat</a>
-      </Typography>
+          <Paper className={classes.paper}>
+            <Typography variant="body1" gutterBottom={true}>
+              <i>November, 2018</i>
+              <br />
+              [Our Story] Who’s Cooking Dinner? (
+              <a href="https://medium.com/dinnertablechat/whos-cooking-dinner-691217e9e714">
+                Medium
+              </a>
+              )
+            </Typography>
+          </Paper>
 
-      <Footer/>
-     </div>
+          <div className={classes.divider} />
+          <Typography variant="body1" gutterBottom={true} align={'center'}>
+            General business inqueries{' '}
+            <a
+              href="mailto:team@dinnertable.chat"
+              onClick={trackOutboundLinkClick('mailto:team@dinnertable.chat')}
+            >
+              team@dinnertable.chat
+            </a>
+            <br />
+            Press inquiries{' '}
+            <a
+              href="mailto:press@dinnertable.chat"
+              onClick={trackOutboundLinkClick('mailto:press@dinnertable.chat')}
+            >
+              press@dinnertable.chat
+            </a>
+          </Typography>
+        </div>
+        <Footer />
+      </React.Fragment>
     );
   }
-
 }
 export default HOC(Index, styles);
