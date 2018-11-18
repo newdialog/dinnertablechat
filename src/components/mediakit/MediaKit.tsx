@@ -27,7 +27,6 @@ const styles = (theme: Theme) =>
     paper: {
       padding: theme.spacing.unit * 1.5,
       color: theme.palette.text.secondary,
-      whiteSpace: 'nowrap',
       marginBottom: theme.spacing.unit
     },
     paper2: {
@@ -153,7 +152,7 @@ class Index extends React.Component<Props, State> {
       <Typography variant="body1" gutterBottom={true}>
         We all have our own way of looking at the world. Sharing our thoughts and discoveries is more fun when we respectfully challenge each other. Dinnertable.chat was created to start meaningful conversations and debate. This isn’t the comments section. It’s a real conversation between two people playfully cast as characters at a virtual dinner party. 
         <br/><br/>
-        Thank you for sharing. Help us in our shared mission of helping citizens become more informed through exploring the relevent topics that are important to people today. If you have additional publication media kit needs, please contact us <a href="mailto:press@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:press@dinnertable.chat')}>directly</a>.
+        Thank you for sharing. Help us in our shared mission of empowing citizens to become more informed through exploring the contriversial topics that are most important to people today. If you have additional publication media kit needs, please <a href="mailto:press@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:press@dinnertable.chat')}>contact us</a>.
       </Typography>
 
       <div className={classes.divider}/>
@@ -179,7 +178,7 @@ class Index extends React.Component<Props, State> {
       <Typography gutterBottom={true} variant="h5">Publications</Typography>
       <Paper className={classes.paper}>
         <Typography variant="body1" gutterBottom={true}>
-        <i>November, 2018</i><br/>
+        <i>October, 2018</i><br/>
         [Overview] How Sparketing Debate Could Reignite Our Democracy (<a href="https://medium.com/dinnertablechat/how-sparking-debate-could-reignite-our-democracy-72b41a80f54">Medium</a>)
         </Typography>
       </Paper>
