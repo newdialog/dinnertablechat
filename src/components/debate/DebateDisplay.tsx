@@ -361,10 +361,10 @@ class DebateScene extends React.Component<Props, State> {
             </div>
           </div>
         </div>
-        <DebateFloatMenu videoEl={videoEl} />
         <div className={classes.timer}>
           <DebateTimer onCompleted={this.onCompleted} />
         </div>
+        <DebateFloatMenu videoEl={videoEl} />
       </React.Fragment>
     );
   }

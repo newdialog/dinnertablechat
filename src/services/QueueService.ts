@@ -65,7 +65,7 @@ async function poll(onMatchedCB: OnMatchedCB, tid: string, playerId: string) {
       return;
     }
     if (ticket.Status === 'PLACING') {
-      console.log('entering placing, stopping poll');
+      console.log('entering placing, stopping poll', ticket);
       // return;
       await delay(2500);
       const player = await shake.sync(playerId); // allow time for lambda to save

@@ -24,6 +24,7 @@ import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
 import { inject } from 'mobx-react';
 import AudioSettings from './AudioSettings';
+import DebateExitDialog from './DebateExitDialog';
 
 const styles = theme =>
   createStyles({
@@ -52,10 +53,16 @@ interface Props extends WithStyles<typeof styles> {
   videoEl: React.RefObject<HTMLMediaElement>
 }
 
-class FloatMenu extends React.Component<Props, any> {
+interface State {
+  exitPrompt: boolean
+  anchorEl: any,
+  showSettings?: boolean
+}
+
+class FloatMenu extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { anchorEl: null };
+    this.state = { anchorEl: null, exitPrompt: false };
   }
   private handleClick = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -72,6 +79,8 @@ class FloatMenu extends React.Component<Props, any> {
   };
 
   private handleLeaveRate = () => {
+    console.log('handleLeaveRate');
+    // this.setState({'exitPrompt': false, 'anchorEl': null})
     this.props.store.debate.endMatch();
     this.handleClose();
   }
@@ -89,6 +98,10 @@ class FloatMenu extends React.Component<Props, any> {
     const { anchorEl } = this.state;
     return (
       <React.Fragment>
+        <DebateExitDialog 
+          open={this.state.exitPrompt} 
+            onCancel={ ()=>this.setState({'exitPrompt': false, 'anchorEl': null}) }
+            onExit={this.handleLeaveRate} />
         { this.state.showSettings && <AudioSettings onClose={this.closeSettings} videoEl={videoEl}/> }
         <Button
           variant="fab"
@@ -107,8 +120,7 @@ class FloatMenu extends React.Component<Props, any> {
           onClose={this.handleClose}
         >
           <MenuItem onClick={this.handleMic}>Audio settings</MenuItem>
-          <MenuItem onClick={this.handleLeaveRate}>Quit and rate</MenuItem>
-          <MenuItem onClick={this.handleLeave}>Leave debate</MenuItem>
+          <MenuItem onClick={() => this.setState({'exitPrompt': true})}>Leave debate now</MenuItem>
         </Menu>
       </React.Fragment>
     );

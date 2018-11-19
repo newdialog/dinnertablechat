@@ -1,15 +1,25 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { Button, CssBaseline, Typography, Stepper, Step, StepLabel, StepContent, Paper } from '@material-ui/core'
+import { Button, Typography, Stepper, Step, StepLabel, StepContent, Paper } from '@material-ui/core'
 import * as AppModel from '../../models/AppModel';
 import PositionSelector from './PositionSelector';
 import ContributionSelector from './ContributionSelector';
 import { inject } from 'mobx-react';
 import CharacterSelection from './CharacterSelection';
 import HOC from '../HOC';
+import Footer from '../home/Footer';
+import HistoryIcon from '@material-ui/icons/History'
 
 const styles = theme => 
   createStyles({
+    container: {
+      marginTop: '100px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '1000px',
+      minWidth: '300px'
+    },
     appBar: {
       position: 'relative',
     },
@@ -21,6 +31,7 @@ const styles = theme =>
     },
     heroContent: {
       maxWidth: 600,
+      textAlign:'center',
       margin: '0 auto',
       padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
     },
@@ -54,6 +65,10 @@ interface State {
 
 function getSteps() {
   return ['Select Postion', 'Pick your character']; // , 'Set contribution']
+}
+
+function onHistory(store: AppModel.Type) {
+  store.router.push('/history');
 }
 
 function getStepContent(step: number, store: AppModel.Type) {
@@ -129,18 +144,21 @@ class Index extends React.Component<Props, State> {
 
   return (
     <React.Fragment>
-      <CssBaseline />
-      <main>
+      <main className={classes.container}>
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             { this.props.isTest && (<h2>TEST MODE (/test)</h2>)}
             <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
-              Debate Topics
+              Debate Quickmatch
             </Typography>
             <Typography variant="h6" align="center" color="textSecondary" paragraph>
               Select your position on a topic proposition to get started. 
             </Typography>
+            <Button style={{margin:'0 auto'}} variant="contained" color="primary" onClick={ () => onHistory(store) }>
+                Show Debate History
+                <HistoryIcon style={{marginLeft: '8px'}}></HistoryIcon>
+              </Button>
           </div>
         </div>
         {/* End hero unit */}
@@ -169,12 +187,10 @@ class Index extends React.Component<Props, State> {
         </div>
       </main>
       {/* Footer */}
-      <footer className={classes.footer}>
-      </footer>
+      <Footer className={classes.footer}/>
       {/* End footer */}
     </React.Fragment>
   );
   }
 }
-
 export default inject('store')(HOC(Index, styles));

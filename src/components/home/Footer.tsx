@@ -58,6 +58,9 @@ function Footer(props: Props) {
         </div>
       </section>
       <Typography variant="body2" style={{fontSize:'0.8em', color:'white'}}>
+        <br/>
+        PAGES: <a href="/press" style={{marginLeft: '10px', textDecoration: 'none', color: 'white'}}><b>Press Kit</b></a>
+        <br/><br/>
         Copyright © 2018 Dinnertable.chat
         <span style={{marginLeft: '10px', color: '#999999'}}>|</span>
         <a href="/privacy" style={{marginLeft: '10px', textDecoration: 'none', color: '#999999'}}>Privacy Policy</a>

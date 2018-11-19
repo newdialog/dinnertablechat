@@ -25,6 +25,12 @@ const theme = createMuiTheme({
     useNextVariants: true,
     // suppressDeprecationWarnings: true,
     // Use the system font instead of the default Roboto font.
+    body1: {
+      fontSize: '1.0em',
+      fontFamily: 'Montserrat',
+      fontWeight: 'normal',
+      color: '#444444'
+    },
     body2: {
       fontSize: '1.1em',
       fontFamily: 'Montserrat',
@@ -56,6 +62,12 @@ const theme = createMuiTheme({
       color: 'white',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 300,
+      letterSpacing: '0.02em'
+    },
+    h5: {
+      fontSize: '1.4em',
+      fontFamily: ['Montserrat'].join(','),
+      fontWeight: 500,
       letterSpacing: '0.02em'
     }
   }
