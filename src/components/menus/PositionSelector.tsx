@@ -91,14 +91,14 @@ class PositionSelector extends React.Component<Props, State> {
                   <Button
                     size="small"
                     color="primary"
-                    onClick={() => this.onSelect(1, card)}
+                    onClick={() => this.onSelect(0, card)}
                   >
                     {card.positions[0]}
                   </Button>
                   <Button
                     size="small"
                     color="primary"
-                    onClick={() => this.onSelect(0, card)}
+                    onClick={() => this.onSelect(1, card)}
                   >
                     {card.positions[1]}
                   </Button>

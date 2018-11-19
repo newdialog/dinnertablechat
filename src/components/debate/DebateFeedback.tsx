@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core/styles';
 import HOC from '../HOC';
 
-import { Avatar, Button, Chip, Grid, Typography } from '@material-ui/core';
+import { Button, Chip, Divider, Grid, Paper, TextField, Typography } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
 import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
@@ -15,44 +15,56 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       textAlign: 'center',
-      paddingTop: theme.spacing.unit * 20,
+      paddingTop: theme.spacing.unit * 6,
+      height: '100vh'
     },
-    agreeContainer: {
-    },
-    traitContainer: {
-        margin: theme.spacing.unit * 10,
+    margin: {
+      margin: theme.spacing.unit * 2,
     },
     button: {
-        margin: theme.spacing.unit * 2,
+      marginBottom: theme.spacing.unit * 2,
     },
     header: {
-        position: 'relative',
-        margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 4}px ${theme.spacing.unit + 6}px`,
-      },
+      position: 'relative',
+      margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 4}px ${theme.spacing.unit + 6}px`,
+    },
     chip: {
         margin: theme.spacing.unit,
+        fontWeight: 'bold'
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 320,
     },
 });
 
 
-const goodTraits = ['Articulate', 'Funny', 'Helpful', 'Insightful', 'Logical', 'Open-minded', 'Well-read'];
-const badTraits = ['Aggressive', 'Arrogant', 'Crude', 'Interrupts'];
-// goodTraits[]
-// badTraits[]
+const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
+const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interruptive'];
+/*
+* Rhetorician (consistently rated with positive traits)
+* three different achievements for participating in 3, 5, 10 debates
+
+Debate badges (debate session level):
+* Good Citizen (good listener respectful, good host, kind)
+* Fact Checker (fact provider, professor-like)
+* Charismatic (convincing, rhetoric master)
+*/
 
 interface Props extends WithStyles<typeof styles> {
     store: AppModel.Type;
   }
 
 interface State {
-    traitHash: { [key:string]:boolean }
-    agreed: string,
+    traitHash: { [key:string]:boolean },
+    platformFeedback: '',
 }
 
 class DebateFeedback extends React.Component<Props, State> {
     constructor(props:Props) {
         super(props);
-        this.state = { traitHash: {}, agreed: 'na' };
+        this.state = { traitHash: {}, platformFeedback: '' };
     }
 
     private handleChipClick(label: string) { 
@@ -61,22 +73,20 @@ class DebateFeedback extends React.Component<Props, State> {
         this.setState({ traitHash })
     }
 
-    private handleAgreed = () => {
-        this.setState({ agreed: 'yes' });
-    }
-
-    private handleDidntAgree = () => {
-        this.setState({ agreed: 'no' });
+    private handleTextFieldChange(e: any) {
+        this.setState({ platformFeedback: e.target.value });
     }
 
     private handleConfirm = async () => { // TODO: update endpt w user selection, route back home
         const hash = this.state.traitHash;
         const selectedTraits:string[] = [];
-        for (const key in hash) {
-            if (hash[key]) selectedTraits.push(key);
-        }
-        const agreed = this.state.agreed === 'yes' ? true : false;
-        const response = { agreement: agreed, traits: selectedTraits }
+
+        const traitsObj = Object.keys(hash).filter(k => hash[k]).reduce( (acc, x) => {
+            (goodTraits.includes(x) ? acc.pos : acc.neg).push(x);
+            return acc;
+        }, { pos:[] as string[],neg:[] as string[] });
+
+        const response = { traits: traitsObj, platformFeedback: this.state.platformFeedback }
         console.log('responses', response);
         // TODO: call endpoint
 
@@ -88,43 +98,25 @@ class DebateFeedback extends React.Component<Props, State> {
 
     public render() {
         const { classes } = this.props; 
-        const { agreed } = this.state;
         const traits = this.state.traitHash;
         return (
-            <div className={classes.root}>
+            <div>
             <Grid
                 container
-                spacing={0}
                 direction="column"
                 alignItems="center"
                 justify="center"
+                className={classes.root}
                 >
-                <div className={classes.agreeContainer}>
+                <Paper>
+                <Grid item className={classes.margin}>
                     <Typography
                         component="span"
                         variant="h6"
                         color="textPrimary"
                         className={classes.header}
                     >
-                        Did you find common ground?
-                    </Typography>
-                    <Button variant="contained" className={classes.button} onClick={this.handleAgreed}
-                            color={ (agreed === 'yes') ? 'primary': 'default' }>
-                        Yes
-                    </Button>
-                    <Button variant="contained" className={classes.button} onClick={this.handleDidntAgree}
-                            color={ (agreed === 'no') ? 'primary': 'default' }>
-                        No
-                    </Button>
-                </div>
-                <div className={classes.traitContainer}>
-                    <Typography
-                        component="span"
-                        variant="h6"
-                        color="textPrimary"
-                        className={classes.header}
-                    >
-                        Positive Traits
+                        Your partner was ...
                     </Typography>
                     {goodTraits.map((label, i) => {
                         return (
@@ -138,16 +130,7 @@ class DebateFeedback extends React.Component<Props, State> {
                                 clickable
                             />)
                     })}
-                </div>
-                <div className={classes.traitContainer}>
-                    <Typography
-                        component="span"
-                        variant="h6"
-                        color="textPrimary"
-                        className={classes.header}
-                    >
-                        Negative Traits
-                    </Typography>
+                    <br/>
                     {badTraits.map((label, i) => {
                         return (
                             <Chip
@@ -160,12 +143,22 @@ class DebateFeedback extends React.Component<Props, State> {
                                 clickable
                             />)
                     })}
-                </div>
-                <Button color="secondary" variant="contained" className={classes.button} onClick={this.handleConfirm}>
+                    <Divider className={classes.margin} />
+                    <TextField
+                        variant="outlined"
+                        id="standard-dense"
+                        label="Platform Feedback"
+                        className={classes.textField}
+                        margin="dense"
+                        onChange={() => this.handleTextFieldChange}
+                    />
+                </Grid>
+                <Button color="primary" variant="contained" className={classes.button} onClick={this.handleConfirm}>
                     Confirm
                 </Button>
+                </Paper>
                 </Grid>
-            </div>
+                </div>
         );
     }
 

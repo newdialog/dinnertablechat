@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { CssBaseline, Grid, Typography, Paper, List, ListSubheader, ListItem, ListItemIcon, ListItemText, Collapse, Avatar } from '@material-ui/core'
+import { Chip, Grid, Typography, Paper, Divider } from '@material-ui/core'
 import { AccountCircle, ExpandLess, ExpandMore, StarBorder } from '@material-ui/icons';
+import FaceIcon from '@material-ui/icons/Face';
+import moment from 'moment';
 
 import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
 import HOC from '../HOC';
 
 import API from '../../services/APIService'; 
+import { boolean } from 'mobx-state-tree/dist/internal';
 
   // TODO refactor
   // 
@@ -58,32 +61,71 @@ const styles = theme =>
     nested: {
       paddingLeft: theme.spacing.unit * 4,
     },
+    chip: {
+      margin: theme.spacing.unit,
+      background: 'linear-gradient(to right bottom, #f2de1a, #ef9a9a)',
+      color: 'white',
+      fontWeight: 'bold'
+   },
+    margin: {
+      //margin: theme.spacing.unit * 2,
+    }
   });
 
 
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   isTest?: boolean;
+  t: any,
 }
 interface State {
   open: Array<boolean>;
   activeStep: number,
   achievements: Array<{ photo: string, text: string }>,
+  data: any[],
+  loggedIn: boolean
 }
+
+const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
+const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interruptive'];
+/*
+* Rhetorician (consistently rated with positive traits)
+* three different achievements for participating in 3, 5, 10 debates
+
+Debate badges (debate session level):
+* Good Citizen (good listener respectful, good host, kind)
+* Fact Checker (fact provider, professor-like)
+* Charismatic (convincing, rhetoric master)
+*/
 
 const achievements = [
   { 'photo': 'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG', 'text': 'WELL READ' },
   { 'photo': 'https://images.all-free-download.com/images/graphiclarge/four_colours_teamwork_hands_311362.jpg', 'text': 'TEAM PLAYER' },
 ];
 
+const characters = [
+  { key: 0, title: 'Tracy', value: 0, url: './imgs/04-select.png' },
+  { key: 1, title: 'Riley', value: 1, url: './imgs/04-select2.png' },
+  { key: 2, title: 'Finley', value: 2, url: './imgs/04-select3.png' }
+]; // TODO: refactor into one resource file: also ref'd in CharacterSelection
+
 class Index extends React.Component<Props, State> {
+  
   constructor(props: Props) {
     super(props);
     this.state = {
-      open: [false, false, false],
+      open: [],
       activeStep: 0,
       achievements,
+      data: [],
+      loggedIn: false
     };
+  }
+
+  componentDidMount() {
+    console.log('store', this.props.store.auth);
+    console.log('predicate', this.props.store.auth.loggedIn, this.state.loggedIn);
+    
   }
 
   handleClick = (i:number) => {
@@ -111,6 +153,109 @@ class Index extends React.Component<Props, State> {
     return view;
   }
 
+  private createAccordianFlags(data) {
+    let flags : boolean[] = [];
+    flags = data.map((x, i) => flags.push(false))
+    return flags;
+  }
+
+  private transformUser(x: any) {
+    return {
+      topic: x.topic,
+      date: this.transformDate(x.debate_created),
+      userSide: this.transformSide(x.side),
+      userCharacter: x.character,
+      userReview: x.review,
+      userAgree: x.aggrement,
+    };
+  }
+
+  private transformOpp(x: any) {
+    return {
+      oppAgree: x.aggrement,
+      oppSide: this.transformSide(x.side),
+      oppCharacter: x.character,
+      oppReview: x.review
+    };
+  }
+
+  private transformDate(timestamp: number) {
+    return moment(timestamp).format("MMM DD, YYYY h:mma");
+  }
+
+  private transformSide(side: number) {
+    return this.props.t('topic' + side + '-topic')
+  }
+
+  private transformPayload = (payload) => {
+    let data = payload.history.filter(x => x.review !== null); // only sessions with ratings
+    let dataHash = data.reduce((hash, x) => { // merge data per session from user and opponent
+      if(!hash[x.debate_session_id]) hash[x.debate_session_id] = {};
+      const val = hash[x.debate_session_id];
+      
+      hash[x.debate_session_id] = (x.user_id === this.props.store.auth.user!.id) ? 
+        {...val, ...this.transformUser(x)} : 
+        {...val, ...this.transformOpp(x)};
+      return hash;
+    }, {});
+    
+    const result = Object.keys(dataHash).map(key => { // transform to array to render, +agreed, session_id
+      const val = dataHash[key];
+      val.debate_sesssion_id = key;
+      val.agreed = (val.userAgree && val.oppAgree) ? 'Agreed' : 'Disagreed';
+      if (val.oppCharacter === undefined) delete dataHash[key]; // ensure reviews set for both
+      return val;
+    })
+
+    const flags = this.createAccordianFlags(data);
+    this.setState({ data: result, open: flags });
+  }
+
+  private renderList = (classes) => this.state.data.map((x, i) => 
+      (<div key={i}>
+        <Paper className={classes.paper}>
+          <Grid container spacing={16}>
+            <Grid item xs={2}><img src={characters[x.oppCharacter].url} width={'60%'} /></Grid>
+            <Grid item xs={12} sm container>
+              <Grid item xs container direction="column" spacing={16}>
+                <Grid item xs>
+                  <Typography gutterBottom variant="h4" color="textPrimary">
+                      {characters[x.oppCharacter].title}
+                    </Typography>
+                    <Typography gutterBottom>{x.date}</Typography>
+                </Grid>
+              </Grid>
+              <Grid item>
+                <Typography variant="h4" color="primary" align={'center'}>{x.agreed}</Typography>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Divider /><br/>
+          <Grid container spacing={16} justify="space-around" alignItems="center" className={classes.margin}>
+            {x.oppReview.traits.pos && x.oppReview.traits.pos.map((label, i) => {
+              return (
+                  <Chip
+                      key={i}
+                      label={label}
+                      className={classes.chip}
+                  />)
+            })}
+            {x.oppReview.traits.neg && x.oppReview.traits.neg.map((label, i) => {
+              return (
+                  <Chip
+                      key={i}
+                      label={label}
+                      className={classes.chip}
+                  />)
+            })}
+          </Grid>
+        </Paper>
+        <div style={{ paddingBottom: '4em' }} />
+      </div>
+      )
+    );
+  
+
   //  VERT SEP: style={{ borderRight: '0.1em solid black', padding: '0.5em' }}
   public render() {
     const { classes, store } = this.props;
@@ -118,10 +263,15 @@ class Index extends React.Component<Props, State> {
       store.router.push('/');
       return;
     }
-    
-    if(store.auth.loggedIn) {
-      API.getScores().then(s => console.log('s', s));
+
+    if(store.auth.loggedIn!==this.state.loggedIn) {
+      if(store.auth.loggedIn) API.getScores().then(this.transformPayload);
+      setTimeout(()=> {
+        this.setState({loggedIn: store.auth.loggedIn});
+      }, 10);
     }
+
+    console.log('data', this.state.data);
 
     return (
       <div className={classes.centered}>
@@ -170,87 +320,7 @@ class Index extends React.Component<Props, State> {
 
         <div style={{ paddingBottom: '4em' }} />
 
-        <Paper className={classes.paper}>
-          <Grid container spacing={16}>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'50%'} /></Grid>
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" >
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" color="textPrimary">
-                      Honorable Reinhardt Goodsir
-                    </Typography>
-                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-          </Grid>
-        </Paper>
-
-        <div style={{ paddingBottom: '4em' }} />
-
-        <Paper className={classes.paper}>
-          <Grid container spacing={16}>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'50%'} /></Grid>
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" spacing={16}>
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" color="textPrimary">
-                      Mensen Goed Joe
-                    </Typography>
-                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Typography variant="h4" color="textSecondary" align={'center'}>Disagreed</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-          </Grid>
-        </Paper>
-
-        <div style={{ paddingBottom: '4em' }} />
-
-        <Paper className={classes.paper}>
-          <Grid container spacing={16}>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'50%'} /></Grid>
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" spacing={16}>
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" color="textPrimary">
-                      Honorable Lady McBeth
-                    </Typography>
-                    <Typography gutterBottom> Oct 31, 2018 11:14 AM</Typography>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Typography variant="h4" color="textSecondary" align={'center'}>Agreed</Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-          </Grid>
-        </Paper>
-
-        <div style={{ paddingBottom: '4em' }} />
-        
+        {this.renderList(classes)} 
       </div>
     );
   }
