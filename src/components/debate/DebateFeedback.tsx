@@ -56,13 +56,14 @@ interface Props extends WithStyles<typeof styles> {
   }
 
 interface State {
-    traitHash: { [key:string]:boolean }
+    traitHash: { [key:string]:boolean },
+    platformFeedback: '',
 }
 
 class DebateFeedback extends React.Component<Props, State> {
     constructor(props:Props) {
         super(props);
-        this.state = { traitHash: {} };
+        this.state = { traitHash: {}, platformFeedback: '' };
     }
 
     private handleChipClick(label: string) { 
@@ -71,13 +72,17 @@ class DebateFeedback extends React.Component<Props, State> {
         this.setState({ traitHash })
     }
 
+    private handleTextFieldChange(e: any) {
+        this.setState({ platformFeedback: e.target.value });
+    }
+
     private handleConfirm = async () => { // TODO: update endpt w user selection, route back home
         const hash = this.state.traitHash;
         const selectedTraits:string[] = [];
         for (const key in hash) {
             if (hash[key]) selectedTraits.push(key);
         }
-        const response = { traits: selectedTraits }
+        const response = { traits: selectedTraits, platformFeedback: this.state.platformFeedback }
         console.log('responses', response);
         // TODO: call endpoint
 
@@ -136,11 +141,12 @@ class DebateFeedback extends React.Component<Props, State> {
                     })}
                     <Divider className={classes.margin} />
                     <TextField
-                    variant="outlined"
+                        variant="outlined"
                         id="standard-dense"
                         label="Platform Feedback"
                         className={classes.textField}
                         margin="dense"
+                        onChange={() => this.handleTextFieldChange}
                     />
                 </Grid>
                 <Button color="primary" variant="contained" className={classes.button} onClick={this.handleConfirm}>
