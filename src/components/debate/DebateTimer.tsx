@@ -23,13 +23,15 @@ const styles = (theme: Theme) =>
     },
     timerText: {
       padding: '0',
-      margin: 0
+      margin: '0 auto 0 auto',
+      backgroundColor:'#a65451cc',
     },
     stepWord: {
       margin: '-5px auto -10px auto',
       display: 'none',
       fontSize: '60%',
       padding: '0 0 0 0',
+      backgroundColor:'#a65451',
       [theme.breakpoints.down('sm')]: {
         display: 'inline'
       }

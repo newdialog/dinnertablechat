@@ -1,8 +1,11 @@
-const AWS = require('aws-sdk');
+// const AWSXRay = require('aws-xray-sdk');
+const AWS = require('aws-sdk'); // AWSXRay.captureAWS(require('aws-sdk'));
 const gamelift = new AWS.GameLift();
-const { Pool } = require('pg');
+const { Pool } = require('pg'); // AWSXRay.capturePostgres(require('pg'));
+
 
 console.log('Loading function');
+// AWSXRay.enableManualMode();
 
 /*
 const db = new AWS.DynamoDB.DocumentClient({
@@ -48,25 +51,42 @@ async function forEachSNS(record) {
   const players = message.detail.gameSessionInfo.players;
   const matchId = message.detail.matchId;
 
+  /* var segment = new AWSXRay.Segment('sns_to_pubsub', matchId);
+  AWSXRay.setSegment(segment); */
+
   // const topic = message.detail.topic;
-  // console.log(type)
   var accepted = type === 'PotentialMatchCreated';
   if (!accepted) {
+    // console.log('bad type', type);
     // ignore other event types
     return;
   }
+  // console.log('PotentialMatchCreated', matchId, JSON.stringify(message));
 
   const ticketIds = tickets.map(t => t.ticketId);
-  // ======
   const matchInfo = await gamelift.describeMatchmaking( {TicketIds:ticketIds} ).promise();
+
+  // clear queue
+  /*
+  ticketIds.forEach( ticket => {
+    gamelift.stopMatchmaking({ "TicketId": ticket} ).promise().then(r=> {
+      console.log('stopMatchmaking',matchId,ticket, r);
+    });
+  });
+  const a = await gamelift.acceptMatch({
+    "AcceptanceType": "ACCEPT",
+    "PlayerIds": [ "string" ],
+    "TicketId": ticketIds[0]
+ }).promise()
+ */
 
   // console.log('Message received from SNS:', JSON.stringify(message));
   // JSON.stringify(tickets), 
   // , 'players', JSON.stringify(players)
   console.log('MATCHREQ:', matchId, 'TICKETS:', ticketIds);
 
-  saveDB(players, matchId);
-  savePG(players, matchId, matchInfo);
+  const success = await savePG(players, matchId, matchInfo);
+  if(success) await saveDB(players, matchId);
 }
 
 async function savePG(players, matchId, matchInfo) {
@@ -87,7 +107,8 @@ async function savePG(players, matchId, matchInfo) {
   // console.log('player0', player0);
 
   // return;
-  const client = await pool.connect()
+  const client = await pool.connect();
+  let success = true;
   try {
     await client.query('BEGIN');
     const r1 = await client.query(`INSERT INTO public.debate_session(
@@ -104,22 +125,37 @@ async function savePG(players, matchId, matchInfo) {
 
     await client.query('COMMIT');
     console.log('MATCHSAVED:', matchId);
+
     } catch (e) {
+      success = false;
       await client.query('ROLLBACK');
-      console.error('MATCHSQLErr: id', id, 'topic', topic, e);
-      throw e
+       // normal for duisplicate sns
+      if(e.toString().indexOf('duplicate')!==-1) {
+        console.log('DUPLICATE', matchId);
+         // do not throw, abort error is normal
+        return;
+      }
+
+      console.error('MATCHSQLErr: id', matchId, 'topic', topic, e);
+      throw e;
     } finally {
       client.release();
     }
+    return success;
 }
 
-function saveDB(players, matchId) {
+async function saveDB(players, matchId) {
   const params = getQParam(players, matchId)
 
-  docClient.batchWrite(params, function (err, data) {
+  const data = await docClient.batchWrite(params).promise();
+
+  /*
+  , function (err, data) {
     if (err) console.warn('!!! ERROR', err);
     // else console.log('updated db')
-  });
+  }
+  */
+ return data;
 }
 
 function getQParam(players, matchId) {
