@@ -8,6 +8,7 @@ import { inject } from 'mobx-react';
 import CharacterSelection from './CharacterSelection';
 import HOC from '../HOC';
 import Footer from '../home/Footer';
+import HistoryIcon from '@material-ui/icons/History'
 
 const styles = theme => 
   createStyles({
@@ -30,6 +31,7 @@ const styles = theme =>
     },
     heroContent: {
       maxWidth: 600,
+      textAlign:'center',
       margin: '0 auto',
       padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
     },
@@ -63,6 +65,10 @@ interface State {
 
 function getSteps() {
   return ['Select Postion', 'Pick your character']; // , 'Set contribution']
+}
+
+function onHistory(store: AppModel.Type) {
+  store.router.push('/history');
 }
 
 function getStepContent(step: number, store: AppModel.Type) {
@@ -144,11 +150,15 @@ class Index extends React.Component<Props, State> {
           <div className={classes.heroContent}>
             { this.props.isTest && (<h2>TEST MODE (/test)</h2>)}
             <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
-              Debate Topics
+              Debate Quickmatch
             </Typography>
             <Typography variant="h6" align="center" color="textSecondary" paragraph>
               Select your position on a topic proposition to get started. 
             </Typography>
+            <Button style={{margin:'0 auto'}} variant="contained" color="primary" onClick={ () => onHistory(store) }>
+                Show Debate History
+                <HistoryIcon style={{marginLeft: '8px'}}></HistoryIcon>
+              </Button>
           </div>
         </div>
         {/* End hero unit */}
