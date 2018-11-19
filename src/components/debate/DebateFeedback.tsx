@@ -30,6 +30,7 @@ const styles = (theme: Theme) =>
     },
     chip: {
         margin: theme.spacing.unit,
+        fontWeight: 'bold'
     },
     textField: {
         marginLeft: theme.spacing.unit,
@@ -79,10 +80,13 @@ class DebateFeedback extends React.Component<Props, State> {
     private handleConfirm = async () => { // TODO: update endpt w user selection, route back home
         const hash = this.state.traitHash;
         const selectedTraits:string[] = [];
-        for (const key in hash) {
-            if (hash[key]) selectedTraits.push(key);
-        }
-        const response = { traits: selectedTraits, platformFeedback: this.state.platformFeedback }
+
+        const traitsObj = Object.keys(hash).filter(k => hash[k]).reduce( (acc, x) => {
+            (goodTraits.includes(x) ? acc.pos : acc.neg).push(x);
+            return acc;
+        }, { pos:[] as string[],neg:[] as string[] });
+
+        const response = { traits: traitsObj, platformFeedback: this.state.platformFeedback }
         console.log('responses', response);
         // TODO: call endpoint
 

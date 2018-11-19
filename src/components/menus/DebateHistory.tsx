@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { CssBaseline, Grid, Typography, Paper, List, ListSubheader, ListItem, ListItemIcon, ListItemText, Collapse, Avatar } from '@material-ui/core'
+import { Chip, Grid, Typography, Paper, Divider } from '@material-ui/core'
 import { AccountCircle, ExpandLess, ExpandMore, StarBorder } from '@material-ui/icons';
+import FaceIcon from '@material-ui/icons/Face';
 import moment from 'moment';
 
 import * as AppModel from '../../models/AppModel';
@@ -60,6 +61,15 @@ const styles = theme =>
     nested: {
       paddingLeft: theme.spacing.unit * 4,
     },
+    chip: {
+      margin: theme.spacing.unit,
+      background: 'linear-gradient(to right bottom, #f2de1a, #ef9a9a)',
+      color: 'white',
+      fontWeight: 'bold'
+   },
+    margin: {
+      //margin: theme.spacing.unit * 2,
+    }
   });
 
 
@@ -75,6 +85,18 @@ interface State {
   data: any[],
   loggedIn: boolean
 }
+
+const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
+const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interruptive'];
+/*
+* Rhetorician (consistently rated with positive traits)
+* three different achievements for participating in 3, 5, 10 debates
+
+Debate badges (debate session level):
+* Good Citizen (good listener respectful, good host, kind)
+* Fact Checker (fact provider, professor-like)
+* Charismatic (convincing, rhetoric master)
+*/
 
 const achievements = [
   { 'photo': 'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG', 'text': 'WELL READ' },
@@ -193,7 +215,7 @@ class Index extends React.Component<Props, State> {
       (<div key={i}>
         <Paper className={classes.paper}>
           <Grid container spacing={16}>
-            <Grid item xs={2}><img src={characters[x.oppCharacter].url} width={'50%'} /></Grid>
+            <Grid item xs={2}><img src={characters[x.oppCharacter].url} width={'60%'} /></Grid>
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={16}>
                 <Grid item xs>
@@ -204,15 +226,28 @@ class Index extends React.Component<Props, State> {
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant="h4" color="textSecondary" align={'center'}>{x.agreed}</Typography>
+                <Typography variant="h4" color="primary" align={'center'}>{x.agreed}</Typography>
               </Grid>
             </Grid>
           </Grid>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select2.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select3.png" width={'100%'} height={'100%'} /></Grid>
-            <Grid item xs={2}><img src="./imgs/04-select.png" width={'100%'} height={'100%'} /></Grid>
+          <Divider /><br/>
+          <Grid container spacing={16} justify="space-around" alignItems="center" className={classes.margin}>
+            {x.oppReview.traits.pos && x.oppReview.traits.pos.map((label, i) => {
+              return (
+                  <Chip
+                      key={i}
+                      label={label}
+                      className={classes.chip}
+                  />)
+            })}
+            {x.oppReview.traits.neg && x.oppReview.traits.neg.map((label, i) => {
+              return (
+                  <Chip
+                      key={i}
+                      label={label}
+                      className={classes.chip}
+                  />)
+            })}
           </Grid>
         </Paper>
         <div style={{ paddingBottom: '4em' }} />
