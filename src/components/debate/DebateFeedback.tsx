@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core/styles';
 import HOC from '../HOC';
 
-import { Avatar, Button, Chip, Grid, Typography } from '@material-ui/core';
+import { Button, Chip, Divider, Grid, Paper, TextField, Typography } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
 import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
@@ -15,26 +15,32 @@ const styles = (theme: Theme) =>
   createStyles({
     root: {
       textAlign: 'center',
-      paddingTop: theme.spacing.unit * 20,
+      paddingTop: theme.spacing.unit * 6,
+      height: '100vh'
     },
-    traitContainer: {
-        margin: theme.spacing.unit * 10,
+    margin: {
+      margin: theme.spacing.unit * 2,
     },
     button: {
-        margin: theme.spacing.unit * 2,
+      marginBottom: theme.spacing.unit * 2,
     },
     header: {
-        position: 'relative',
-        margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 4}px ${theme.spacing.unit + 6}px`,
-      },
+      position: 'relative',
+      margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 4}px ${theme.spacing.unit + 6}px`,
+    },
     chip: {
         margin: theme.spacing.unit,
+    },
+    textField: {
+        marginLeft: theme.spacing.unit,
+        marginRight: theme.spacing.unit,
+        width: 320,
     },
 });
 
 
 const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
-const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interrupts'];
+const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interruptive'];
 /*
 * Rhetorician (consistently rated with positive traits)
 * three different achievements for participating in 3, 5, 10 debates
@@ -85,15 +91,16 @@ class DebateFeedback extends React.Component<Props, State> {
         const { classes } = this.props; 
         const traits = this.state.traitHash;
         return (
-            <div className={classes.root}>
+            <div>
             <Grid
                 container
-                spacing={0}
                 direction="column"
                 alignItems="center"
                 justify="center"
+                className={classes.root}
                 >
-                <div className={classes.traitContainer}>
+                <Paper>
+                <Grid item className={classes.margin}>
                     <Typography
                         component="span"
                         variant="h6"
@@ -127,12 +134,21 @@ class DebateFeedback extends React.Component<Props, State> {
                                 clickable
                             />)
                     })}
-                </div>
+                    <Divider className={classes.margin} />
+                    <TextField
+                    variant="outlined"
+                        id="standard-dense"
+                        label="Platform Feedback"
+                        className={classes.textField}
+                        margin="dense"
+                    />
+                </Grid>
                 <Button color="primary" variant="contained" className={classes.button} onClick={this.handleConfirm}>
                     Confirm
                 </Button>
+                </Paper>
                 </Grid>
-            </div>
+                </div>
         );
     }
 
