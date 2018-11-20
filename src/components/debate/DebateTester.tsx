@@ -41,7 +41,7 @@ interface State {
 
 let rawSpeaking = false;
 
-class DebateScene extends React.Component<Props, State> {
+class DebateTester extends React.Component<Props, State> {
   public speechEvents?: SpeechEvent;
   private vidRef = React.createRef<HTMLVideoElement>();
   constructor(props: Props) {
@@ -160,4 +160,4 @@ class DebateScene extends React.Component<Props, State> {
   }
 }
 
-export default inject('store')(HOC(DebateScene, styles));
+export default inject('store')(HOC(DebateTester, styles));

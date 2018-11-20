@@ -3,7 +3,7 @@ import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import HOC from '../HOC';
 
 // import Lottie from 'react-lottie';
-import Lottie from 'lottie-react-web';
+import Lottie from 'lottie-web'; // lottie-react-web
 // import { Typography, Divider } from '@material-ui/core';
 
 import DebateFloatMenu from './DebateFloatMenu';
@@ -264,7 +264,7 @@ class DebateScene extends React.Component<Props, State> {
     t.pause();
     console.log('table stop');
     this.setState({ tablePaused: true });
-  };
+  }; // playSegments={true}
 
   private onCompleted = () => {
     console.log('on debate timer complete');
@@ -340,7 +340,6 @@ class DebateScene extends React.Component<Props, State> {
               <div className={classes.table}>
                 <Lottie
                   options={tableOptions}
-                  playSegments={true}
                   speed={1}
                   segments={this.state.tablePaused ? null : [0, 100]}
                   forceSegment={true}
