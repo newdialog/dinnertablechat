@@ -93,7 +93,7 @@ interface Props {
 function BannerTimer(props) {
   const { classes, t, onCompleted, store } = props;
 
-  const launch = (new Date('2018-11-26T12:00:00')).getTime();
+  const launch = (new Date(Date.UTC(2018, 10, 27, 0, 0, 0))).getTime();
 
   return (
     <Countdown
