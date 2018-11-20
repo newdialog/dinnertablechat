@@ -69,6 +69,9 @@ const theme = createMuiTheme({
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 500,
       letterSpacing: '0.02em'
+    },
+    caption: {
+      fontFamily: ['Montserrat'].join(','),
     }
   }
 });

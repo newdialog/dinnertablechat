@@ -211,7 +211,7 @@ class Index extends React.Component<Props> {
                     color="primary" size="large"
                     onClick={() => store.router.push('/play')}
                   >
-                    Start
+                    {store.auth.user!.name.split(' ')[0]}'s Home
                     <QueueIcon style={{ marginLeft: '8px' }} />
                   </Button>
                 </React.Fragment>

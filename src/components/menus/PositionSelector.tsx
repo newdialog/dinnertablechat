@@ -40,7 +40,7 @@ const styles = theme =>
       // width:'auto!important'
     },
     cardMedia: {
-      paddingTop: '56.25%' // 16:9
+      paddingTop: '44.25%' // 16:9
     },
     cardContent: {
       flexGrow: 1

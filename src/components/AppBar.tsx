@@ -68,8 +68,7 @@ function ButtonAppBar(props:Props) {
           {auth && !isLive &&
             <React.Fragment>
               <Button variant="contained" color="primary" onClick={ () => onStart(store) }>
-                Start
-                <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
+                My Home
               </Button>
               <Button onClick={ () => onLogOut(store) }>Log Out</Button>
             </React.Fragment>

@@ -13,7 +13,7 @@ import HistoryIcon from '@material-ui/icons/History'
 const styles = theme => 
   createStyles({
     container: {
-      marginTop: '100px',
+      marginTop: '0px',
       marginLeft: 'auto',
       marginRight: 'auto',
       width: 'auto',
@@ -33,10 +33,10 @@ const styles = theme =>
       maxWidth: 600,
       textAlign:'center',
       margin: '0 auto',
-      padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 6}px`,
+      padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 0}px`,
     },
     stepper: {
-      padding: theme.spacing.unit * 2,
+      padding: theme.spacing.unit * 0,
     },
     button: {
       marginTop: theme.spacing.unit,
@@ -68,7 +68,7 @@ function getSteps() {
 }
 
 function onHistory(store: AppModel.Type) {
-  store.router.push('/history');
+  store.router.push('/play');
 }
 
 function getStepContent(step: number, store: AppModel.Type) {
@@ -149,16 +149,9 @@ class Index extends React.Component<Props, State> {
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             { this.props.isTest && (<h2>TEST MODE (/test)</h2>)}
-            <Typography variant="h2" align="center" color="textPrimary" gutterBottom>
+            <Typography style={{fontSize: '3em', paddingBottom: '0', color: '#ef6c6c'}} variant="h3" align="center" color="textPrimary" gutterBottom>
               Debate Quickmatch
             </Typography>
-            <Typography variant="h6" align="center" color="textSecondary" paragraph>
-              Select your position on a topic proposition to get started. 
-            </Typography>
-            <Button style={{margin:'0 auto'}} variant="contained" color="primary" onClick={ () => onHistory(store) }>
-                Show Debate History
-                <HistoryIcon style={{marginLeft: '8px'}}></HistoryIcon>
-              </Button>
           </div>
         </div>
         {/* End hero unit */}
@@ -185,6 +178,11 @@ class Index extends React.Component<Props, State> {
             </Paper>
           )}
         </div>
+
+        <Button style={{margin:'0 auto'}} color="primary" onClick={ () => onHistory(store) }>
+                Back to Profile Home
+                <HistoryIcon style={{marginLeft: '8px'}}></HistoryIcon>
+        </Button>
       </main>
       {/* Footer */}
       <Footer className={classes.footer}/>

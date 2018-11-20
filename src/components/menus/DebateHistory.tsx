@@ -19,7 +19,9 @@ import { boolean } from 'mobx-state-tree/dist/internal';
 import MD5 from 'md5';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Footer from '../home/Footer';
-
+import Button from '@material-ui/core/Button';
+import QueueIcon from '@material-ui/icons/QueuePlayNext'
+import MenuDialog from './MenuDialog';
 // TODO refactor
 //
 
@@ -146,9 +148,7 @@ class Index extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    // console.log('store', this.props.store.auth);
-    // console.log('predicate', this.props.store.auth.loggedIn, this.state.loggedIn);
-    API.getScores().then(this.transformPayload);
+    // API.getScores().then(this.transformPayload);
   }
 
   handleClick = (i: number) => {
@@ -458,6 +458,14 @@ class Index extends React.Component<Props, State> {
           </Grid>
         </div>
 
+        <div style={{width:'100%', textAlign:'center', marginTop:'12px'}}>
+        <Button variant="contained" color="primary" 
+          onClick={ () => this.props.store.router.push('/quickmatch') }>
+          Begin Dinner Party QuickMatch
+          <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
+        </Button>
+        </div>
+
         {false && this.showAchievements(classes)}
 
         <div style={{ paddingBottom: '4em' }} />
@@ -469,9 +477,11 @@ class Index extends React.Component<Props, State> {
               variant="body2"
               align="center"
               color="textSecondary"
+              style={{fontWeight: 'normal'}}
               gutterBottom
             >
-              No debate sessions to list yet
+              No debate history to list yet. <br/>
+              Click QUICKMATCH button above to get started.
             </Typography>
           </Paper>
         )}
