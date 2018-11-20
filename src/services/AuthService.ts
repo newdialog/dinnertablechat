@@ -81,6 +81,7 @@ export function auth(cb: AwsCB) {
   );
   checkUser(cb); // required by amplify, for existing login
 
+  // Configure APIService
   console.log('awsmobileInjected', awsmobileInjected);
   API.configure(awsmobileInjected);
 }
@@ -98,7 +99,9 @@ export interface AwsAuth {
 async function checkUser(cb: AwsCB) {
   let data: any;
   try {
+    console.time('currentAuthenticatedUser');
     data = await Auth.currentAuthenticatedUser();
+    console.timeEnd('currentAuthenticatedUser');
   } catch (e) {
     console.log('---currentAuthenticatedUser not logged in:', e);
     cb(null);
@@ -112,7 +115,9 @@ async function checkUser(cb: AwsCB) {
 
   // console.log('AWS.config.credentials', AWS.config.credentials)
   // console.log('AWS.config', AWS.config)
+  console.time('currentCredentials');
   const currentCredentials = await Auth.currentCredentials();
+  console.timeEnd('currentCredentials');
   // console.log('currentCredentials', currentCredentials);
   const credentials = Auth.essentialCredentials(currentCredentials);
   // console.log('credentials', credentials);

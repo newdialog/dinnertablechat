@@ -128,6 +128,7 @@ class Index extends React.Component<Props, State> {
     const { classes, store } = this.props;
     const { open } = this.state;
     return (
+      <React.Fragment>
       <div>
         <Banner store={store} />
 
@@ -170,9 +171,10 @@ class Index extends React.Component<Props, State> {
             </a>
           </div>
         </div>
-
-        <Footer />
-      </div>
+        <div style={{marginBottom: '202px'}}/>
+        
+      </div><Footer />
+      </React.Fragment>
     );
   }
 

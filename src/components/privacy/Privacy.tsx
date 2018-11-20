@@ -4,6 +4,7 @@ import {
   WithStyles,
   Theme
 } from '@material-ui/core/styles';
+import Footer from '../home/Footer';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -133,6 +134,7 @@ class Index extends React.Component<Props, State> {
     const { classes } = this.props;
     const { open } = this.state;
     return (
+      <React.Fragment>
       <div className={classes.centered}>
       <p><strong>Dinnertable.chat Privacy Policy</strong></p>
 
@@ -197,6 +199,7 @@ class Index extends React.Component<Props, State> {
 
 <p>For more information about our privacy practices, if you have questions, or if you would like to make a complaint, please contact us by e-mail at admin@dinnertable.chat.</p>
       </div>
+      <Footer/></React.Fragment>
     );
   }
 

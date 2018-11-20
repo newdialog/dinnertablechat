@@ -1,26 +1,34 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { Chip, Grid, Typography, Paper, Divider } from '@material-ui/core'
-import { AccountCircle, ExpandLess, ExpandMore, StarBorder } from '@material-ui/icons';
+import { Chip, Grid, Typography, Paper, Divider } from '@material-ui/core';
+import {
+  AccountCircle,
+  ExpandLess,
+  ExpandMore,
+  StarBorder
+} from '@material-ui/icons';
 import FaceIcon from '@material-ui/icons/Face';
 import moment from 'moment';
 
 import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
-import HOC from '../HOC';
+import HOC, { Authed } from '../HOC';
 
-import API from '../../services/APIService'; 
+import API from '../../services/APIService';
 import { boolean } from 'mobx-state-tree/dist/internal';
+import MD5 from 'md5';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Footer from '../home/Footer';
 
-  // TODO refactor
-  // 
+// TODO refactor
+//
 
 const styles = theme =>
   createStyles({
     root: {
       width: '100%',
       backgroundColor: theme.palette.background.paper,
-      marginTop: theme.spacing.unit * 5,
+      marginTop: theme.spacing.unit * 5
     },
     centered: {
       marginTop: theme.spacing.unit * 5,
@@ -32,58 +40,67 @@ const styles = theme =>
       marginRight: 'auto',
       width: 'auto',
       maxWidth: '1000px',
-      minWidth: '300px'
+      minWidth: '300px',
+      minHeight: 'calc(100vh - 394px)'
     },
     headerContainer: {
       flexDirection: 'row',
       padding: '1em',
       backgroundColor: '#ddd'
     },
+    name: {
+      color: '#555555',
+      fontWeight: 'bold',
+      fontSize: '2.5em'
+    },
     icon: {
-      fontSize: 70,
+      fontSize: 70
     },
     nameContainer: {
-      flexDirection: 'column',
+      flexDirection: 'column'
     },
     paper: {
       flexGrow: 1,
-      padding: theme.spacing.unit * 2,
+      padding: theme.spacing.unit * 2
     },
     paperimg: {
       height: '30%',
-     //  width: '30%',
+      //  width: '30%',
       margin: 'auto',
       display: 'block',
       justifyContent: 'left',
       alignItems: 'center',
-      objectFit: 'contain',
+      objectFit: 'contain'
     },
     nested: {
-      paddingLeft: theme.spacing.unit * 4,
+      paddingLeft: theme.spacing.unit * 4
     },
     chip: {
       margin: theme.spacing.unit,
       background: 'linear-gradient(to right bottom, #f2de1a, #ef9a9a)',
       color: 'white',
       fontWeight: 'bold'
-   },
+    },
     margin: {
       //margin: theme.spacing.unit * 2,
+    },
+    imgLink: {
+      textDecoration: 'none',
+      color: '#b76464'
     }
   });
-
 
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   isTest?: boolean;
-  t: any,
+  t: any;
 }
 interface State {
   open: Array<boolean>;
-  activeStep: number,
-  achievements: Array<{ photo: string, text: string }>,
-  data: any[],
-  loggedIn: boolean
+  activeStep: number;
+  achievements: Array<{ photo: string; text: string }>;
+  data: any[];
+  loggedIn: boolean;
 }
 
 const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
@@ -99,8 +116,15 @@ Debate badges (debate session level):
 */
 
 const achievements = [
-  { 'photo': 'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG', 'text': 'WELL READ' },
-  { 'photo': 'https://images.all-free-download.com/images/graphiclarge/four_colours_teamwork_hands_311362.jpg', 'text': 'TEAM PLAYER' },
+  {
+    photo: 'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG',
+    text: 'WELL READ'
+  },
+  {
+    photo:
+      'https://images.all-free-download.com/images/graphiclarge/four_colours_teamwork_hands_311362.jpg',
+    text: 'TEAM PLAYER'
+  }
 ];
 
 const characters = [
@@ -110,7 +134,6 @@ const characters = [
 ]; // TODO: refactor into one resource file: also ref'd in CharacterSelection
 
 class Index extends React.Component<Props, State> {
-  
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -123,39 +146,50 @@ class Index extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log('store', this.props.store.auth);
-    console.log('predicate', this.props.store.auth.loggedIn, this.state.loggedIn);
-    
+    // console.log('store', this.props.store.auth);
+    // console.log('predicate', this.props.store.auth.loggedIn, this.state.loggedIn);
+    API.getScores().then(this.transformPayload);
   }
 
-  handleClick = (i:number) => {
+  handleClick = (i: number) => {
     let open = this.state.open;
     open[i] = !open[i];
     this.setState({ open });
   };
 
   renderAchievements = () => {
-    console.log('ach',this.state.achievements);
+    console.log('ach', this.state.achievements);
     var view = this.state.achievements.forEach(item => (
-        <React.Fragment>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={4}>
-              <img src={item.photo} width={'100%'} height={'100%'} />
-            </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
-                {item.text}
-              </Typography>
-            </Grid>
+      <React.Fragment>
+        <Grid
+          id="top-row"
+          container
+          spacing={16}
+          justify="space-around"
+          alignItems="center"
+        >
+          <Grid item xs={4}>
+            <img src={item.photo} width={'100%'} height={'100%'} />
           </Grid>
-        </React.Fragment>
+          <Grid item xs={8}>
+            <Typography
+              variant="h4"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              {item.text}
+            </Typography>
+          </Grid>
+        </Grid>
+      </React.Fragment>
     ));
     return view;
-  }
+  };
 
   private createAccordianFlags(data) {
-    let flags : boolean[] = [];
-    flags = data.map((x, i) => flags.push(false))
+    let flags: boolean[] = [];
+    flags = data.map((x, i) => flags.push(false));
     return flags;
   }
 
@@ -166,7 +200,7 @@ class Index extends React.Component<Props, State> {
       userSide: this.transformSide(x.side),
       userCharacter: x.character,
       userReview: x.review,
-      userAgree: x.aggrement,
+      userAgree: x.aggrement
     };
   }
 
@@ -180,150 +214,273 @@ class Index extends React.Component<Props, State> {
   }
 
   private transformDate(timestamp: number) {
-    return moment(timestamp).format("MMM DD, YYYY h:mma");
+    return moment(timestamp).format('MMM DD, YYYY h:mma');
   }
 
   private transformSide(side: number) {
-    return this.props.t('topic' + side + '-topic')
+    return this.props.t('topic' + side + '-topic');
   }
 
-  private transformPayload = (payload) => {
+  private transformPayload = payload => {
     let data = payload.history.filter(x => x.review !== null); // only sessions with ratings
-    let dataHash = data.reduce((hash, x) => { // merge data per session from user and opponent
-      if(!hash[x.debate_session_id]) hash[x.debate_session_id] = {};
+    let dataHash = data.reduce((hash, x) => {
+      // merge data per session from user and opponent
+      if (!hash[x.debate_session_id]) hash[x.debate_session_id] = {};
       const val = hash[x.debate_session_id];
-      
-      hash[x.debate_session_id] = (x.user_id === this.props.store.auth.user!.id) ? 
-        {...val, ...this.transformUser(x)} : 
-        {...val, ...this.transformOpp(x)};
+
+      hash[x.debate_session_id] =
+        x.user_id === this.props.store.auth.user!.id
+          ? { ...val, ...this.transformUser(x) }
+          : { ...val, ...this.transformOpp(x) };
       return hash;
     }, {});
-    
-    const result = Object.keys(dataHash).map(key => { // transform to array to render, +agreed, session_id
-      const val = dataHash[key];
-      val.debate_sesssion_id = key;
-      val.agreed = (val.userAgree && val.oppAgree) ? 'Agreed' : 'Disagreed';
-      if (val.oppCharacter === undefined) delete dataHash[key]; // ensure reviews set for both
-      return val;
-    })
+
+    const result = Object.keys(dataHash)
+      .map(key => {
+        // transform to array to render, +agreed, session_id
+        const val = dataHash[key];
+        val.debate_sesssion_id = key;
+        val.agreed = val.userAgree && val.oppAgree ? 'Agreed' : 'Disagreed';
+        // if (val.oppCharacter === undefined) delete dataHash[key]; // ensure reviews set for both
+        console.log('val', val)
+        return val;
+      })
+      .filter(x => x.oppReview && x.userReview); // ensure both rated
 
     const flags = this.createAccordianFlags(data);
     this.setState({ data: result, open: flags });
+  };
+
+  private showAchievements(classes) {
+    return (<Paper className={classes.paper}>
+          <Grid
+            id="top-row"
+            container
+            spacing={16}
+            justify="space-around"
+            alignItems="center"
+          >
+            <Grid item xs={4}>
+              <img
+                src={
+                  'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG'
+                }
+                width={'100%'}
+                height={'100%'}
+              />
+            </Grid>
+            <Grid item xs={8}>
+              <Typography
+                variant="h4"
+                align="center"
+                color="textPrimary"
+                gutterBottom
+              >
+                {'WELL READ'}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Paper>)
   }
 
-  private renderList = (classes) => this.state.data.map((x, i) => 
-      (<div key={i}>
+  private renderList = (classes, data) =>
+    data.map((x, i) => (
+      <div key={i}>
         <Paper className={classes.paper}>
           <Grid container spacing={16}>
-            <Grid item xs={2}><img src={characters[x.oppCharacter].url} width={'60%'} /></Grid>
+            <Grid item xs={2}>
+              <img src={characters[x.oppCharacter].url} width={'60%'} />
+            </Grid>
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={16}>
                 <Grid item xs>
                   <Typography gutterBottom variant="h4" color="textPrimary">
-                      {characters[x.oppCharacter].title}
-                    </Typography>
-                    <Typography gutterBottom>{x.date}</Typography>
+                    {characters[x.oppCharacter].title}
+                  </Typography>
+                  <Typography gutterBottom>{x.date}</Typography>
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant="h4" color="primary" align={'center'}>{x.agreed}</Typography>
+                <Typography variant="h4" color="primary" align={'center'}>
+                  {x.agreed}
+                </Typography>
               </Grid>
             </Grid>
           </Grid>
-          <Divider /><br/>
-          <Grid container spacing={16} justify="space-around" alignItems="center" className={classes.margin}>
-            {x.oppReview.traits.pos && x.oppReview.traits.pos.map((label, i) => {
-              return (
-                  <Chip
-                      key={i}
-                      label={label}
-                      className={classes.chip}
-                  />)
-            })}
-            {x.oppReview.traits.neg && x.oppReview.traits.neg.map((label, i) => {
-              return (
-                  <Chip
-                      key={i}
-                      label={label}
-                      className={classes.chip}
-                  />)
-            })}
+          <Divider />
+          <br />
+          <Grid
+            container
+            spacing={16}
+            justify="space-around"
+            alignItems="center"
+            className={classes.margin}
+          >
+            {x.oppReview.traits.pos &&
+              x.oppReview.traits.pos.map((label, i) => {
+                return <Chip key={i} label={label} className={classes.chip} />;
+              })}
+            {x.oppReview.traits.neg &&
+              x.oppReview.traits.neg.map((label, i) => {
+                return <Chip key={i} label={label} className={classes.chip} />;
+              })}
           </Grid>
         </Paper>
         <div style={{ paddingBottom: '4em' }} />
       </div>
-      )
-    );
-  
+    ));
 
   //  VERT SEP: style={{ borderRight: '0.1em solid black', padding: '0.5em' }}
   public render() {
+    console.timeEnd('AuthComp');
     const { classes, store } = this.props;
-    if(store.auth.isNotLoggedIn) {
+    if (store.auth.isNotLoggedIn) {
       store.router.push('/');
       return;
     }
 
+    const numDebates = this.state.data.length;
+    const m = 20;
+    const xpPerLevel = 3 * m; // 60
+    const startingXP = 10;
+    const xpTotal = numDebates * m + startingXP;
+    const xp = xpTotal % xpPerLevel;
+    const level = Math.floor(xpTotal / xpPerLevel) + 1;
+    const nextLevel = xpPerLevel;
+
+    const timePlayed = numDebates * 15;
+
+    const emailHash = MD5(store.auth.user!.email);
+
+    // Level bar
+    const normalise = value => ((value - 0) * 100) / (xpPerLevel - 0);
+
+    const achievements = {
+      participation: level
+    }
+    /*
     if(store.auth.loggedIn!==this.state.loggedIn) {
-      if(store.auth.loggedIn) API.getScores().then(this.transformPayload);
+      if(store.auth.loggedIn) 
       setTimeout(()=> {
         this.setState({loggedIn: store.auth.loggedIn});
       }, 10);
     }
-
-    console.log('data', this.state.data);
+*/
+    // console.log('data', this.state.data);
 
     return (
+      <React.Fragment>
       <div className={classes.centered}>
         <div className={classes.headerContainer}>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-            <Grid item xs={1}>
-              <AccountCircle className={classes.icon} />
-            </Grid>
+          <Grid
+            id="top-row"
+            container
+            spacing={16}
+            justify="space-around"
+            alignItems="center"
+          >
             <Grid item xs={2}>
-              <Typography variant="h1" align="left" color="textPrimary" gutterBottom>
-                MYNAME
-                </Typography>
-              <Typography variant="body2" align="left" color="textSecondary" gutterBottom>
-                10/150
-                </Typography>
+              <a href="https://gravatar.com" className={classes.imgLink}>
+                <img
+                  src={'https://www.gravatar.com/avatar/' + emailHash}
+                  width="100%"
+                />
+              </a>
+              <Typography
+                variant="caption"
+                align="center"
+                color="textSecondary"
+                gutterBottom
+              >
+                {store.auth.user!.email}
+                <br />
+                <a href="https://gravatar.com" className={classes.imgLink}>
+                  Use Gravatar to Add/Update image
+                </a>
+              </Typography>
             </Grid>
-            <Grid item xs={8}>
-              <Typography variant="h4" align="right" color="textPrimary" gutterBottom>
-                460 min
-                  </Typography>
-              <Typography variant="body2" align="right" color="textSecondary" gutterBottom>
+            <Grid item xs={7}>
+              <Typography
+                variant="h1"
+                align="left"
+                color="textPrimary"
+                className={classes.name}
+                gutterBottom
+              >
+                {this.props.store.auth.user!.name}
+              </Typography>
+              <Typography
+                variant="body2"
+                align="left"
+                color="textSecondary"
+                gutterBottom
+                style={{fontWeight:'normal'}}
+              >
+                LEVEL {level} <br />
+                XP {xp}/{nextLevel}
+              </Typography>
+              <LinearProgress variant="determinate" value={normalise(xp)} />
+            </Grid>
+            <Grid item xs={3}>
+              <Typography
+                variant="h4"
+                align="right"
+                color="textPrimary"
+                gutterBottom
+              >
+                {timePlayed} min
+              </Typography>
+              <Typography
+                variant="body2"
+                align="right"
+                color="textSecondary"
+                gutterBottom
+              >
                 TIME PLAYED
-                  </Typography>
-              <Typography variant="h4" align="right" color="textPrimary" gutterBottom>
-                15
-                  </Typography>
-              <Typography variant="body2" align="right" color="textSecondary" gutterBottom>
-                SESSIONS
-                  </Typography>
+              </Typography>
+              <Typography
+                variant="h4"
+                align="right"
+                color="textPrimary"
+                gutterBottom
+              >
+                {numDebates || 'zero'}
+              </Typography>
+              <Typography
+                variant="body2"
+                align="right"
+                color="textSecondary"
+                gutterBottom
+              >
+                DEBATE SESSIONS
+              </Typography>
             </Grid>
           </Grid>
         </div>
 
-        <Paper className={classes.paper}>
-          <Grid id="top-row" container spacing={16} justify="space-around" alignItems="center">
-              <Grid item xs={4}>
-                <img src={'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG'} width={'100%'} height={'100%'} />
-              </Grid>
-              <Grid item xs={8}>
-                <Typography variant="h4" align="center" color="textPrimary" gutterBottom>
-                  {'WELL READ'}
-                </Typography>
-              </Grid>
-          </Grid>
-        </Paper>
+        {false && this.showAchievements(classes)}
 
         <div style={{ paddingBottom: '4em' }} />
 
-        {this.renderList(classes)} 
+        {this.renderList(classes, this.state.data)}
+        {this.state.data.length === 0 && (
+          <Paper className={classes.paper}>
+            <Typography
+              variant="body2"
+              align="center"
+              color="textSecondary"
+              gutterBottom
+            >
+              No debate sessions to list yet
+            </Typography>
+          </Paper>
+        )}
       </div>
+      <div style={{marginBottom: '202px'}}/>
+      <Footer/>
+      </React.Fragment>
     );
   }
 }
 
-export default inject('store')(HOC(Index, styles));
+export default inject('store')(HOC(Authed(Index), styles));
