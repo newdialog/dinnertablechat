@@ -2,8 +2,8 @@ import * as React from 'react';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import HOC from '../HOC';
 
-// import Lottie from 'react-lottie';
-import Lottie from 'lottie-react-web';
+import rottie from 'lottie-web';
+import Lottie from 'lottie-react-web'
 // import { Typography, Divider } from '@material-ui/core';
 
 import DebateFloatMenu from './DebateFloatMenu';
@@ -232,17 +232,18 @@ class DebateScene extends React.Component<Props, State> {
       }
 
     // Table
-    console.log(
-      'playSegments',
-      Boolean(this.tableEl.current),
-      this.tableEl.current!
-    );
     const t = this.tableEl.current!;
-    // t.playSegments();
-    // t.playSegments([0, 20], true);
-    // t.setSubframe(false);
-    // t.playSegments([0, 20], true);
-    // t.goToAndStop(30);
+    const table = rottie.loadAnimation({
+      container: this.tableEl.current!, // the dom element that will contain the animation
+      renderer: 'svg',
+      loop: false,
+      autoplay: false,
+      path: tableOptions.path // the path to the animation json
+    });
+    table.setSpeed(1.5);
+    table.addEventListener('DOMLoaded', ()=>{
+      table.playSegments([0,110], true)
+    });
   }
 
   private onLoopComplete = () => {
@@ -264,7 +265,7 @@ class DebateScene extends React.Component<Props, State> {
     t.pause();
     console.log('table stop');
     this.setState({ tablePaused: true });
-  };
+  }; // playSegments={true}
 
   private onCompleted = () => {
     console.log('on debate timer complete');
@@ -338,24 +339,7 @@ class DebateScene extends React.Component<Props, State> {
               </div>
 
               <div className={classes.table}>
-                <Lottie
-                  options={tableOptions}
-                  playSegments={true}
-                  speed={1}
-                  segments={this.state.tablePaused ? null : [0, 100]}
-                  forceSegment={true}
-                  ref={this.tableEl}
-                  isClickToPauseDisabled={true}
-                  eventListeners={[
-                    {
-                      eventName: 'complete',
-                      callback: this.onTableLoopComplete
-                    },
-                    {
-                      eventName: 'DOMLoaded',
-                      callback: this.onTableDOMLoaded
-                    }
-                  ]}
+                <div id="tableanim" ref={this.tableEl}
                 />
               </div>
             </div>
@@ -390,4 +374,22 @@ export default HOC(DebateScene, styles);
       this.red.current!.querySelector('.mouthtalking')!.setAttribute('style', 'visibility: visible;');
       this.red.current!.querySelector('.mouthidle')!.setAttribute('style', 'visibility: none;');
     }
+
+    Lottie
+                  options={tableOptions}
+                  speed={1}
+                  segments={this.state.tablePaused ? null : [0, 100]}
+                  forceSegment={true}
+                  ref={this.tableEl}
+                  isClickToPauseDisabled={true}
+                  eventListeners={[
+                    {
+                      eventName: 'complete',
+                      callback: this.onTableLoopComplete
+                    },
+                    {
+                      eventName: 'DOMLoaded',
+                      callback: this.onTableDOMLoaded
+                    }
+                  ]}
     */
