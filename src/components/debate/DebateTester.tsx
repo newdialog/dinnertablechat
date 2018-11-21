@@ -152,6 +152,7 @@ class DebateTester extends React.Component<Props, State> {
             talkingRed={talkingRed}
             onClick={this.onStart}
             videoEl={this.vidRef}
+            store={this.props.store}
           />
         )}
         <FPSStats left={'auto'} right={30} top={60} />

@@ -9,6 +9,7 @@ import Lottie from 'lottie-react-web'
 
 import DebateFloatMenu from './DebateFloatMenu';
 import DebateTimer from './DebateTimer';
+import * as AppModel from '../../models/AppModel';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -183,6 +184,7 @@ interface Props extends WithStyles<typeof styles> {
   blueChar: number;
   redChar: number;
   videoEl: HTMLMediaElement;
+  store: AppModel.Type;
 }
 
 interface State {
@@ -287,7 +289,7 @@ class DebateScene extends React.Component<Props, State> {
   };
 
   public render() {
-    const { classes, talkingBlue, talkingRed, videoEl } = this.props;
+    const { classes, talkingBlue, talkingRed, videoEl, store } = this.props;
     const { blueTransition, agreed, bothAgreed, ended } = this.state;
 
     const animBlue = this.state.blueState === 'talking';
@@ -367,8 +369,11 @@ class DebateScene extends React.Component<Props, State> {
         <DebateFloatMenu videoEl={videoEl} />
 
         <div className={classes.agreeBtn}>
-          {this.state.agreed===false && <Button variant="contained" onClick={this.handleAgreed} color={ 'primary' }>
-            Found agreement
+          {!this.state.agreed && <Button variant="contained" onClick={this.handleAgreed} color={ 'primary' }>
+            Reached an agreement?
+          </Button>}
+          {this.state.agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} color={ 'secondary' }>
+            Leave and Give Review
           </Button>}
         </div>
 

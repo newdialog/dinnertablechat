@@ -10,7 +10,7 @@ import withRoot from '../../withRoot';
 import Lottie from 'react-lottie';
 import { observer } from 'mobx-react';
 import { Typography, Divider } from '@material-ui/core';
-
+import { inject } from 'mobx-react';
 import hark, { SpeechEvent } from 'hark';
 import Peer from 'simple-peer';
 import DebateDisplay from './DebateDisplay';
@@ -96,10 +96,10 @@ class DebateScene extends React.Component<Props, State> {
     const p = this.peer;
 
     p.on('error', err => {
-      if(err.toString().indexOf('connection failed')!==-1) {
-        this.setState({error:'other_disconnected'})
+      if (err.toString().indexOf('connection failed') !== -1) {
+        this.setState({ error: 'other_disconnected' });
       } else {
-        this.setState({error:'webrtc_error'})
+        this.setState({ error: 'webrtc_error' });
       }
       console.log('error', err);
     });
@@ -153,7 +153,9 @@ class DebateScene extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        { this.state.error && <DebateError error={this.state.error} store={store}/>}
+        {this.state.error && (
+          <DebateError error={this.state.error} store={store} />
+        )}
         <div className={classes.centered2}>
           <div>
             <div>Microphone is activating</div>
@@ -164,11 +166,18 @@ class DebateScene extends React.Component<Props, State> {
             {talkingBlue && <div>Blue is Speaking, </div>}
             {talkingRed && <div>Red is Speaking</div>}
           </div>
-          <DebateDisplay videoEl={this.vidRef} blueChar={blueChar} redChar={redChar} talkingBlue={talkingBlue} talkingRed={talkingRed} />
+          <DebateDisplay
+            videoEl={this.vidRef}
+            blueChar={blueChar}
+            redChar={redChar}
+            talkingBlue={talkingBlue}
+            talkingRed={talkingRed}
+            store={this.props.store}
+          />
         </div>
       </React.Fragment>
     );
   }
 }
 
-export default HOC(DebateScene, styles);
+export default inject('store')(HOC(DebateScene, styles));
