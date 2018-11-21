@@ -21,9 +21,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Footer from '../home/Footer';
 import Button from '@material-ui/core/Button';
 import QueueIcon from '@material-ui/icons/QueuePlayNext'
-import MenuDialog from './MenuDialog';
-// TODO refactor
-//
+import Subscribe from '../home/Subscribe';
 
 const styles = theme =>
   createStyles({
@@ -43,7 +41,7 @@ const styles = theme =>
       width: 'auto',
       maxWidth: '1000px',
       minWidth: '300px',
-      minHeight: 'calc(100vh - 394px)'
+      minHeight: 'calc(100vh - 504px)'
     },
     headerContainer: {
       flexDirection: 'row',
@@ -358,6 +356,10 @@ class Index extends React.Component<Props, State> {
     const achievements = {
       participation: level
     }
+    let title = "Beginner Apprentice";
+    if(level > 3) title = "Traveling Journeyman";
+    if(level > 6) title = "Experienced Rhetorician";
+    if(level > 12) title = "Most Honorable Host";
     /*
     if(store.auth.loggedIn!==this.state.loggedIn) {
       if(store.auth.loggedIn) 
@@ -416,7 +418,7 @@ class Index extends React.Component<Props, State> {
                 gutterBottom
                 style={{fontWeight:'normal'}}
               >
-                LEVEL {level} <br />
+                LEVEL {level}: {title}<br />
                 XP {xp}/{nextLevel}
               </Typography>
               <LinearProgress variant="determinate" value={normalise(xp)} />
@@ -485,8 +487,13 @@ class Index extends React.Component<Props, State> {
             </Typography>
           </Paper>
         )}
+
+        
       </div>
-      <div style={{marginBottom: '202px'}}/>
+      
+      <Paper style={{width: 300, margin:'30px auto 0 auto'}}>
+          <Subscribe offHome={true}/>
+      </Paper>
       <Footer/>
       </React.Fragment>
     );

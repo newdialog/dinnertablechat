@@ -11,6 +11,8 @@ const styles = createStyles({
     justifyContent: 'center'
   },
   centered: {
+    position: 'relative',
+    bottom: 0,
     marginTop: '3.2em',
     paddingBottom: '1em',
     paddingTop: '.8em',

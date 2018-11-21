@@ -4,37 +4,47 @@ import AuthModel from './AuthModel';
 import DebateModel from './DebateModel';
 import { Instance } from 'mobx-state-tree';
 
-const AppModel = types.model({
-  auth: AuthModel,
-  debate: DebateModel,
-  router: RouterModel,
-  showNav: true,
-  isStandalone: false
-}).actions(self => ({
-  gotoHomeMenu() {
-    self.showNav = true;
-    if(!self.debate.isTest) self.router.push('/play');
-    else self.router.push('/test');
-  },
-  enableStandalone() {
-    self.isStandalone = true;
-  },
-  showNavbar() {
-    // self.text = newTitle
-    self.showNav = true;
-  },
-  hideNavbar() {
-    // self.text = newTitle
-    self.showNav = false;
-  },
-})).views( self => ({
-  isLive() {
-    const h = window.location.hostname;
-    return h.indexOf('test') === -1 && 
-      h.indexOf('.dinnertable') === -1 &&
-      h.indexOf('dinnertable.chat') !== -1;
-  }
-}));
+const AppModel = types
+  .model({
+    auth: AuthModel,
+    debate: DebateModel,
+    router: RouterModel,
+    showNav: true,
+    isStandalone: false
+  })
+  .actions(self => ({
+    gotoHomeMenu() {
+      self.showNav = true;
+      if (!self.debate.isTest) self.router.push('/play');
+      else self.router.push('/test');
+    },
+    enableStandalone() {
+      self.isStandalone = true;
+    },
+    showNavbar() {
+      // self.text = newTitle
+      self.showNav = true;
+    },
+    hideNavbar() {
+      // self.text = newTitle
+      self.showNav = false;
+    }
+  }))
+  .views(self => ({
+    isLive() {
+      const h = window.location.hostname;
+      return (
+        h.indexOf('test') === -1 &&
+        h.indexOf('.dinnertable') === -1 &&
+        h.indexOf('dinnertable.chat') !== -1
+      );
+    },
+    isAdmin() {
+      return (
+        self.auth.user && self.auth.user!.id === 'Google_111841421166386376573'
+      );
+    }
+  }));
 
 export type Type = Instance<typeof AppModel>;
 
@@ -43,7 +53,7 @@ export const create = (routerModel: RouterModel, fetcher: any) =>
     {
       auth: AuthModel.create({}),
       debate: DebateModel.create({}),
-      router: routerModel,
+      router: routerModel
     },
     {
       fetch: fetcher,

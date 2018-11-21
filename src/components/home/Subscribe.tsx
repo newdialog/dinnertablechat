@@ -38,6 +38,7 @@ const styles = (theme: Theme) =>
   }
   interface Props extends WithStyles<typeof styles> {
     t: any;
+    offHome?: boolean
   }
 class Subscribe extends React.Component<Props,State> {
   public state: State = {
@@ -90,7 +91,7 @@ class Subscribe extends React.Component<Props,State> {
       <div className={classes.centered}>
         <br />
         <form onSubmit={this.onSubmit} style={{ marginLeft: 'auto', marginRight: 'auto', width:'100%', textAlign:'center' }}>
-          <Typography gutterBottom align="center" color="primary" variant="h5"  style={{color:'#61618e'}}>
+          <Typography gutterBottom align="center" color="primary" variant={!this.props.offHome ? 'h5' : 'h4'}  style={{color:'#61618e', fontSize: !this.props.offHome?'1.65em':'1em'}}>
           {t('home-signup')}
           </Typography>
           <TextField
