@@ -3,7 +3,7 @@ import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import HOC from '../HOC';
 import Banner from './Banner';
 import Content from './Content';
-import Subcribe from './Subscribe';
+import Subscribe from './Subscribe';
 import Footer from './Footer';
 import Announcement from '@material-ui/icons/RecordVoiceOver';
 import {inject} from 'mobx-react';
@@ -134,7 +134,7 @@ class Index extends React.Component<Props, State> {
 
         <Content />
         <div className="pagebody">
-          <Grid container spacing={0} className={classes.container}>
+          <Grid container spacing={0} className={classes.container} id="subscribeid">
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
               <img
                 src="./imgs/07-newsletter.png"
@@ -142,7 +142,7 @@ class Index extends React.Component<Props, State> {
               />
             </Grid>
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
-              <Subcribe />
+              <Subscribe/>
             </Grid>
           </Grid>
           <div style={{ marginTop: '3em' }}>

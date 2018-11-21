@@ -209,6 +209,13 @@ class DebateScene extends React.Component<Props, State> {
     };
   }
 
+  private trackDebateTimeEnd = () => {
+    window.gtag('event', 'debate_time_end', {
+      event_category: 'debate',
+      non_interaction: true
+    });
+  };
+
   public componentDidMount() {
     // Lock orientation if possible
     if (screen.orientation && typeof screen.orientation.lock === 'function') {
@@ -269,6 +276,7 @@ class DebateScene extends React.Component<Props, State> {
 
   private onCompleted = () => {
     console.log('on debate timer complete');
+    this.trackDebateTimeEnd();
   };
 
   public render() {

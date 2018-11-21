@@ -77,6 +77,8 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 class LoadingScene extends React.Component<Props, any> {
+  loggedError = false;
+
   constructor(props: any) {
     super(props);
     this.state = { error: null };
@@ -122,6 +124,15 @@ class LoadingScene extends React.Component<Props, any> {
       chararacter,
       this.onMatched
     );
+
+    window.gtag('event', 'debate_loading', {
+      event_category: 'debate',
+      non_interaction: true
+    });
+    window.gtag('event', `debate_queue_${topic}_${position}`, {
+      event_category: 'debate',
+      non_interaction: true
+    });
   }
 
   private gotMedia = async (stream: MediaStream) => {
@@ -174,6 +185,14 @@ class LoadingScene extends React.Component<Props, any> {
     if (!store.debate.match) text = 'looking for match';
     if (matchedUnsync) text = 'found match... handshaking';
     if (matchedsync) text = 'handshaking complete';
+
+    if(this.state.error && !this.loggedError) {
+      window.gtag('event', this.state.error, {
+        event_category: 'error',
+        non_interaction: true
+      });
+      this.loggedError = true;
+    }
 
     return (
       <div className={classes.centered}>

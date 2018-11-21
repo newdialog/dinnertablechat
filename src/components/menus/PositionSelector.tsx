@@ -44,6 +44,10 @@ const styles = theme =>
     },
     cardContent: {
       flexGrow: 1
+    },
+    imgLink: {
+      textDecoration: 'none',
+      color: '#b76464',
     }
   });
 
@@ -104,6 +108,9 @@ class PositionSelector extends React.Component<Props, State> {
                   </Button>
                 </CardActions>
               </Card>
+              <Typography variant="caption">
+                <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink}>Suggest a topic for next week ⬏</a>
+              </Typography>
             </Grid>
           ))}
         </Grid>

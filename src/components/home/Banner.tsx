@@ -198,6 +198,14 @@ class Index extends React.Component<Props> {
             >
               Learn More
             </Button>
+            <Button
+              href="#subscribeid"
+              variant="contained"
+              color="primary"
+              size="large"
+            >
+              Subscribe
+            </Button>
             {!auth &&
               !isLive && (
                 <Button style={{marginLeft:'4em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Login</Button>

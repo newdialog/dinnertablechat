@@ -77,6 +77,13 @@ class DebateFeedback extends React.Component<Props, State> {
         this.setState({ platformFeedback: e.target.value });
     }
 
+    public componentDidMount() {
+        window.gtag('event', 'debate_feedback_page', {
+            event_category: 'debate',
+            non_interaction: true
+        });
+    }
+
     private handleConfirm = async () => { // TODO: update endpt w user selection, route back home
         const hash = this.state.traitHash;
         const selectedTraits:string[] = [];
@@ -92,6 +99,11 @@ class DebateFeedback extends React.Component<Props, State> {
 
         const r = await APIService.reviewSession(response, this.props.store.debate.match!.matchId);
         
+        window.gtag('event', 'debate_feedback_page_submit', {
+            event_category: 'debate',
+            non_interaction: true
+        });
+
         this.props.store.debate.resetQueue();
         this.props.store.gotoHomeMenu();
     }
