@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
+import { createStyles, WithStyles, Theme} from '@material-ui/core/styles';
 import HOC from '../HOC';
 
 import rottie from 'lottie-web';
@@ -8,13 +9,10 @@ import Lottie from 'lottie-react-web'
 
 import DebateFloatMenu from './DebateFloatMenu';
 import DebateTimer from './DebateTimer';
+import * as AppModel from '../../models/AppModel';
 
 const styles = (theme: Theme) =>
   createStyles({
-    root: {
-      textAlign: 'center',
-      paddingTop: theme.spacing.unit * 20
-    },
     centered: {
       marginTop: '60px',
       paddingTop: '0',
@@ -75,7 +73,13 @@ const styles = (theme: Theme) =>
       margin: '0 auto 0 auto',
       overflow: 'hidden'
       // bottom: 'calc(10vh)'
-    }
+    },
+    agreeBtn: {
+      position: 'absolute',
+      top: 'calc(10vh)',
+      left: 'calc(50vw - 90px)',
+      // width: '80vh'
+    },
   });
 
 const aliceListenOptions = {
@@ -85,7 +89,7 @@ const aliceListenOptions = {
   subframeEnabled: false,
   path: 'assets/debate/00_ALCE_IDLE.json',
   rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice'
+    preserveAspectRatio: 'xMidYMid meet'
   }
 };
 
@@ -96,7 +100,7 @@ const aliceTalkOptions = {
   subframeEnabled: false,
   path: 'assets/debate/00_ALCE_TALK.json',
   rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice'
+    preserveAspectRatio: 'xMidYMid meet'
   }
 };
 
@@ -107,7 +111,7 @@ const rabitListenOptions = {
   subframeEnabled: false,
   path: 'assets/debate/01_RABIT_IDLE.json',
   rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice'
+    preserveAspectRatio: 'xMidYMid meet'
   }
 };
 
@@ -118,7 +122,7 @@ const gekkoListenOptions = {
   subframeEnabled: false,
   path: 'assets/debate/02_GEEKO_IDLE.json',
   rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice'
+    preserveAspectRatio: 'xMidYMid meet'
   }
 };
 
@@ -129,7 +133,7 @@ const rabitTalkOptions = {
   subframeEnabled: false,
   path: 'assets/debate/01_RABIT_TALK2.json',
   rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice'
+    preserveAspectRatio: 'xMidYMid meet'
   }
 };
 
@@ -155,6 +159,17 @@ const tableOptions = {
   }
 };
 
+const confettiOptions = {
+  renderer: 'svg',
+  loop: true,
+  autoplay: true,
+  subframeEnabled: false,
+  path: 'assets/confetti.json',
+  rendererSettings: {
+    preserveAspectRatio: 'xMaxYMax meet'
+  }
+};
+
 const characters = [
   { talk: gekkoListenOptions, listen: gekkoListenOptions },
   { talk: rabitTalkOptions, listen: rabitListenOptions },
@@ -169,6 +184,7 @@ interface Props extends WithStyles<typeof styles> {
   blueChar: number;
   redChar: number;
   videoEl: HTMLMediaElement;
+  store: AppModel.Type;
 }
 
 interface State {
@@ -176,8 +192,9 @@ interface State {
   blueState: string;
   redTransition: boolean;
   redState: string;
-  tablePaused: boolean;
-  tableStart?: boolean; // hack for segments
+  agreed: boolean;
+  bothAgreed: boolean;
+  ended?: boolean;
 }
 // flip
 /*
@@ -197,6 +214,7 @@ class DebateScene extends React.Component<Props, State> {
 
   private bgEl = React.createRef<Lottie | any>();
   private tableEl = React.createRef<Lottie | any>();
+  private confettiRef = React.createRef<Lottie | any>();
 
   constructor(props: Props) {
     super(props);
@@ -205,7 +223,8 @@ class DebateScene extends React.Component<Props, State> {
       blueState: 'idle',
       redTransition: false,
       redState: 'idle',
-      tablePaused: false
+      agreed: false,
+      bothAgreed: false,
     };
   }
 
@@ -259,29 +278,19 @@ class DebateScene extends React.Component<Props, State> {
     this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
   };
 
-  private onTableDOMLoaded = () => {
-    console.log('table onTableDOMLoaded');
-    const t = this.tableEl.current!;
-    t.playSegments();
-    this.setState({ tableStart: true });
-  };
-
-  private onTableLoopComplete = () => {
-    if (this.state.tablePaused) return;
-    const t = this.tableEl.current!;
-    t.pause();
-    console.log('table stop');
-    this.setState({ tablePaused: true });
-  }; // playSegments={true}
+  private handleAgreed = () => {
+    this.setState({ agreed: true });
+  }
 
   private onCompleted = () => {
     console.log('on debate timer complete');
+    this.setState({ended: true});
     this.trackDebateTimeEnd();
   };
 
   public render() {
-    const { classes, talkingBlue, talkingRed, videoEl } = this.props;
-    const { blueTransition } = this.state;
+    const { classes, talkingBlue, talkingRed, videoEl, store } = this.props;
+    const { blueTransition, agreed, bothAgreed, ended } = this.state;
 
     const animBlue = this.state.blueState === 'talking';
     const animRed = this.state.redState === 'talking';
@@ -296,6 +305,7 @@ class DebateScene extends React.Component<Props, State> {
     const blueChar = characters[this.props.blueChar];
     return (
       <React.Fragment>
+        {(agreed || ended) ? <Lottie options={confettiOptions} ref={this.confettiRef} /> : null}
         <div className={classes.centered}>
           <div style={{ margin: '0 auto 0 auto', width: '100%' }}>
             <div className={classes.bannerAnim}>
@@ -305,7 +315,6 @@ class DebateScene extends React.Component<Props, State> {
                 isClickToPauseDisabled={true}
               />
             </div>
-
             <div className={classes.foreground}>
               <div className={classes.leftPos + ' ' + blueCss}>
                 <div hidden={animBlue} ref={this.blue}>
@@ -356,7 +365,18 @@ class DebateScene extends React.Component<Props, State> {
         <div className={classes.timer}>
           <DebateTimer onCompleted={this.onCompleted} />
         </div>
+
         <DebateFloatMenu videoEl={videoEl} />
+
+        <div className={classes.agreeBtn}>
+          {!this.state.agreed && <Button variant="contained" onClick={this.handleAgreed} color={ 'primary' }>
+            Reached an agreement?
+          </Button>}
+          {this.state.agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} color={ 'secondary' }>
+            Leave and Give Review
+          </Button>}
+        </div>
+
       </React.Fragment>
     );
   }
@@ -365,24 +385,6 @@ class DebateScene extends React.Component<Props, State> {
 export default HOC(DebateScene, styles);
 
 /*
-    if(!talkingBlue && this.blue.current) {
-      this.blue.current!.querySelector('.mouthtalking')!.setAttribute('style', 'visibility: none;');
-      this.blue.current!.querySelector('.mouthidle')!.setAttribute('style', 'visibility: visible;');
-    }
-    if(talkingBlue && this.blue.current) {
-      this.blue.current!.querySelector('.mouthtalking')!.setAttribute('style', 'visibility: visible;');
-      this.blue.current!.querySelector('.mouthidle')!.setAttribute('style', 'visibility: none;');
-    }
-    
-    if(!talkingRed && this.red.current) {
-      this.red.current!.querySelector('.mouthtalking')!.setAttribute('style', 'visibility: none;');
-      this.red.current!.querySelector('.mouthidle')!.setAttribute('style', 'visibility: visible;');
-    }
-    if(talkingRed && this.red.current) {
-      this.red.current!.querySelector('.mouthtalking')!.setAttribute('style', 'visibility: visible;');
-      this.red.current!.querySelector('.mouthidle')!.setAttribute('style', 'visibility: none;');
-    }
-
     Lottie
                   options={tableOptions}
                   speed={1}
@@ -401,3 +403,4 @@ export default HOC(DebateScene, styles);
                     }
                   ]}
     */
+

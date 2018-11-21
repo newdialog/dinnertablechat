@@ -39,8 +39,9 @@ const styles = (theme: Theme) =>
   });
 
 function onMenuClick(store: AppModel.Type) {
-  store.debate.resetQueue();
-  store.gotoHomeMenu();
+  // store.debate.resetQueue();
+  // store.gotoHomeMenu();
+  store.debate.endMatch();
 }
 
 // Random component
