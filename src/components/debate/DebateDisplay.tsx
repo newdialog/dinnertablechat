@@ -268,7 +268,7 @@ class DebateScene extends React.Component<Props, State> {
     });
     table.setSpeed(1.5);
     table.addEventListener('DOMLoaded', ()=>{
-      table.playSegments([0,110], true)
+      table.playSegments([0,200], true)
     });
   }
 
