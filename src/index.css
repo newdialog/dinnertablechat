@@ -57,6 +57,16 @@ body {
   color: #f39c12;
 }
 
+a {
+  text-decoration: 'none';
+  color: #f19899
+}
+
+a:hover {
+  text-decoration: 'none';
+  color: #454579
+}
+
 .minorlink {
   text-decoration: 'none';
   color: #f19899

@@ -117,6 +117,7 @@ interface State {
   open: boolean;
 }
 import Grid from '@material-ui/core/Grid';
+import { Typography } from '@material-ui/core';
 
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -134,7 +135,7 @@ class Index extends React.Component<Props, State> {
 
         <Content />
         <div className="pagebody">
-          <Grid container spacing={0} className={classes.container} id="subscribeid">
+          <Grid container spacing={0} className={classes.container} id="subscribe">
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
               <img
                 src="./imgs/07-newsletter.png"
@@ -156,22 +157,15 @@ class Index extends React.Component<Props, State> {
             >
               <Announcement /> help us out by taking a quick poll
             </a>
-          </div>
-          <div style={{ marginTop: '1em' }}>
-            also follow us on Twitter{' '}
-            <a
-              href="https://twitter.com/dintablechat"
-              onClick={window.trackOutboundLinkClick(
-                'https://twitter.com/dintablechat'
-              )}
-              className="minorlink"
-              style={{ textDecoration: 'none' }}
-            >
-              @dintablechat
-            </a>
-          </div>
+          </div><br/>
+          <Typography variant="body1" style={{ marginTop: '1em' }}>
+            Also follow us on <a href="https://twitter.com/dintablechat" 
+              onClick={trackOutboundLinkClick('https://twitter.com/dintablechat')}>
+              Twitter</a>, <a href="https://medium.com/dinnertablechat" onClick={trackOutboundLinkClick('https://medium.com/dinnertablechat')}>Medium</a>, 
+              and other platforms using the links in the footer!
+          </Typography>
         </div>
-        <div style={{marginBottom: '202px'}}/>
+        <div style={{marginBottom: '100px'}}/>
         
       </div><Footer />
       </React.Fragment>

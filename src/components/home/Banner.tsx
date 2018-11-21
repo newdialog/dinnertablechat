@@ -199,22 +199,23 @@ class Index extends React.Component<Props> {
               Learn More
             </Button>
             <Button
-              href="#subscribeid"
+              style={{marginLeft:'2em'}}
+              href="#subscribe"
               variant="contained"
               color="primary"
               size="large"
             >
-              Subscribe
+              Updates
             </Button>
             {!auth &&
               !isLive && (
-                <Button style={{marginLeft:'4em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Login</Button>
+                <Button style={{marginLeft:'2em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Login</Button>
               )}
             {auth &&
               !isLive && (
                 <React.Fragment>
                   <Button
-                    style={{marginLeft:'4em'}}
+                    style={{marginLeft:'2em'}}
                     variant="contained"
                     color="primary" size="large"
                     onClick={() => store.router.push('/play')}
