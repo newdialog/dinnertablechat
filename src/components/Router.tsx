@@ -80,8 +80,9 @@ const DTCRouter = ({
 );
 
 const authenticated = (store:AppModel.Type, Component:React.LazyExoticComponent<any>) => {
-  console.log('store.auth.loggedIn', store.auth.loggedIn);
-  if(store.auth.loggedIn) return <Component/>;
+  const isAuth = store.auth.isAuthenticated();
+  // console.log('store.auth.loggedIn', isAuth);
+  if(isAuth) return <Component/>;
   return <div>Loading...</div>;
 }
 

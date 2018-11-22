@@ -330,7 +330,7 @@ class Index extends React.Component<Props, State> {
 
   //  VERT SEP: style={{ borderRight: '0.1em solid black', padding: '0.5em' }}
   public render() {
-    console.timeEnd('AuthComp');
+    /// console.timeEnd('AuthComp');
     const { classes, store } = this.props;
     if (store.auth.isNotLoggedIn) {
       store.router.push('/');
@@ -360,15 +360,6 @@ class Index extends React.Component<Props, State> {
     if(level > 3) title = "Traveling Journeyman";
     if(level > 6) title = "Experienced Rhetorician";
     if(level > 12) title = "Most Honorable Host";
-    /*
-    if(store.auth.loggedIn!==this.state.loggedIn) {
-      if(store.auth.loggedIn) 
-      setTimeout(()=> {
-        this.setState({loggedIn: store.auth.loggedIn});
-      }, 10);
-    }
-*/
-    // console.log('data', this.state.data);
 
     return (
       <React.Fragment>

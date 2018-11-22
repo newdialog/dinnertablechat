@@ -43,7 +43,7 @@ function onHome(store: Store.Type) {
 
 function ButtonAppBar(props:Props) {
   const { classes, store } = props;
-  const auth = store.auth.loggedIn;
+  const auth = store.auth.isAuthenticated();
   const isLive = props.store.isLive();
 
   if(store.debate.match && store.debate.match.sync) {

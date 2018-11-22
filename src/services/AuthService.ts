@@ -54,20 +54,23 @@ function getLoggger() {
   return logger;
 }
 
+export const LOGIN_EVENT = 'signIn';
+
 function onHubCapsule(cb: AwsCB, capsule: any) {
-  console.log('onHubCapsule', capsule);
   getLoggger().onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
 
-  if (channel === 'auth' && payload.event === 'signIn') {
-    checkUser(cb);
-  } else if (
+  if (channel === 'auth' && payload.event === LOGIN_EVENT) {
+    console.log('onHubCapsule signIn', capsule);
+    checkUser(cb, LOGIN_EVENT);
+  } 
+  /* else if (
     channel === 'auth' &&
-    (payload.event === 'configured' || payload.event === 'cognitoHostedUI')
+    (payload.event === 'configured' ) // || payload.event === 'cognitoHostedUI'
   ) {
     checkUser(cb);
-  }
+  } */
 }
 
 export function auth(cb: AwsCB) {
@@ -82,12 +85,13 @@ export function auth(cb: AwsCB) {
   checkUser(cb); // required by amplify, for existing login
 
   // Configure APIService
-  console.log('awsmobileInjected', awsmobileInjected);
+  // console.log('awsmobileInjected', awsmobileInjected);
   API.configure(awsmobileInjected);
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;
 export interface AwsAuth {
+  event: string;
   user: any;
   // username: string;
   region: string;
@@ -96,7 +100,7 @@ export interface AwsAuth {
   SessionToken: string;
 }
 
-async function checkUser(cb: AwsCB) {
+async function checkUser(cb: AwsCB, event:string='') {
   let data: any;
   try {
     console.time('currentAuthenticatedUser');
@@ -115,9 +119,9 @@ async function checkUser(cb: AwsCB) {
 
   // console.log('AWS.config.credentials', AWS.config.credentials)
   // console.log('AWS.config', AWS.config)
-  console.time('currentCredentials');
+  /// console.time('currentCredentials');
   const currentCredentials = await Auth.currentCredentials();
-  console.timeEnd('currentCredentials');
+  /// console.timeEnd('currentCredentials');
   // console.log('currentCredentials', currentCredentials);
   const credentials = Auth.essentialCredentials(currentCredentials);
   // console.log('credentials', credentials);
@@ -135,7 +139,8 @@ async function checkUser(cb: AwsCB) {
     accessKeyId: credentials.accessKeyId,
     secretAccessKey: credentials.secretAccessKey,
     sessionToken: credentials.sessionToken,
-    region: 'us-east-1'
+    region: 'us-east-1',
+    event: event || ''
   };
   if (!user.name || !user.email || !authParams.accessKeyId) {
     console.log('aws: no valid returned-');

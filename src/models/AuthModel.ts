@@ -23,7 +23,7 @@ const AuthModel = types
     user: types.maybe(UserModel),
     aws: types.maybe(AWSModel),
     doLogin: false,
-    loggedIn: false,
+    // loggedIn: false,
     isNotLoggedIn: false
   })
   .actions(self => ({
@@ -35,6 +35,9 @@ const AuthModel = types
     },
     logout() {
       Auth.logout();
+      self.aws = undefined;
+      self.user = undefined;
+      self.isNotLoggedIn = true;
     },
     notLoggedIn() {
       self.isNotLoggedIn = true;
@@ -58,8 +61,12 @@ const AuthModel = types
 
       self.aws = aws;
       self.user = umodel;
-      self.loggedIn = true;
+      // self.loggedIn = true;
       self.isNotLoggedIn = false;
+    }
+  })).views(self => ({
+    isAuthenticated() {
+      return self.user && self.aws && !self.isNotLoggedIn;
     }
   }));
 

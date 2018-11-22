@@ -155,7 +155,7 @@ class Index extends React.Component<Props> {
 */
   public render() {
     const { classes, t, store } = this.props;
-    const auth = store.auth.loggedIn;
+    const auth = store.auth.isAuthenticated();
     const isLive = store.isLive();
 
     return (

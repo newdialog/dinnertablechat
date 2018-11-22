@@ -78,6 +78,7 @@ class AuthComp extends React.Component<Props, any> {
     }
     // console.log('handleAuth', awsUser)
     this.props.store.auth.authenticated(awsUser);
+    if(awsUser.event === AuthService.LOGIN_EVENT) this.props.store.router.push('/play');
   }
 }
 
