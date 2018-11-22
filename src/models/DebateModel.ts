@@ -1,4 +1,4 @@
-import { types, Instance } from 'mobx-state-tree';
+import { types, Instance, SnapshotIn } from 'mobx-state-tree';
 import { string, number } from 'prop-types';
 import { boolean } from 'mobx-state-tree/dist/internal';
 
@@ -6,17 +6,19 @@ const OtherPlayerModel = types.model({
   character: -1
 });
 
-const MatchModel = types.model({
-  team: types.enumeration(['red', 'blue']),
-  leader: types.boolean,
-  userId: types.string,
-  matchId: types.string,
-  otherState: types.maybeNull(OtherPlayerModel), // serialized state of other person
-  timeStarted: types.maybe(types.number),
-  sync: false
-});
+const MatchModel = types
+  .model({
+    team: types.enumeration(['red', 'blue']),
+    leader: types.boolean,
+    userId: types.string,
+    matchId: types.string,
+    otherState: types.maybeNull(OtherPlayerModel), // serialized state of other person
+    timeStarted: types.maybe(types.number),
+    sync: false
+  })
+  .actions(self => ({}));
 
-export type MatchModelType = Instance<typeof MatchModel>;
+export type MatchModelType = SnapshotIn<typeof MatchModel>;
 
 const DebateModel = types
   .model({
@@ -26,7 +28,8 @@ const DebateModel = types
     character: -1,
     isTest: false,
     match: types.maybeNull(MatchModel),
-    finished: false
+    finished: false,
+    quarter: 0
   })
   .actions(self => ({
     setPosition(position: number, topic: string) {
@@ -64,9 +67,13 @@ const DebateModel = types
       self.position = -1;
       self.character = -1;
       self.topic = '';
+      self.quarter = 0;
       // self.isTest = false;
       self.match = null;
       self.finished = false;
+    },
+    setQuarter(q: number) {
+      self.quarter = q;
     }
   }));
 

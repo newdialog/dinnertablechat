@@ -369,7 +369,7 @@ class DebateScene extends React.Component<Props, State> {
         <DebateFloatMenu videoEl={videoEl} />
 
         <div className={classes.agreeBtn}>
-          {!this.state.agreed && <Button variant="contained" onClick={this.handleAgreed} color={ 'primary' }>
+          {store.debate.quarter > 1 && !this.state.agreed && <Button variant="contained" onClick={this.handleAgreed} color={ 'primary' }>
             Reached an agreement?
           </Button>}
           {this.state.agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} color={ 'secondary' }>

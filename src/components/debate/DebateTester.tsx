@@ -5,7 +5,7 @@ import { Typography, Divider, Button } from '@material-ui/core';
 import getMedia from '../../utils/getMedia';
 import DebateDisplay from './DebateDisplay';
 import * as AppModel from '../../models/AppModel';
-import HOC from '../HOC';
+import HOC, {Authed} from '../HOC';
 import { inject } from 'mobx-react';
 import FPSStats from "react-fps-stats";
 
@@ -161,4 +161,4 @@ class DebateTester extends React.Component<Props, State> {
   }
 }
 
-export default inject('store')(HOC(DebateTester, styles));
+export default inject('store')(HOC(Authed(DebateTester), styles));

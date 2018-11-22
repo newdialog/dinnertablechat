@@ -24,14 +24,14 @@ const styles = (theme: Theme) =>
     timerText: {
       padding: '0',
       margin: '0 auto 0 auto',
-      backgroundColor:'#a65451cc',
+      backgroundColor: '#a65451cc'
     },
     stepWord: {
       margin: '-5px auto -10px auto',
       display: 'none',
       fontSize: '60%',
       padding: '0 0 0 0',
-      backgroundColor:'#a65451',
+      backgroundColor: '#a65451',
       [theme.breakpoints.down('sm')]: {
         display: 'inline'
       }
@@ -66,19 +66,23 @@ const renderer = (
   store: AppModel.Type,
   { hours, minutes, seconds, completed }
 ) => {
+  let step = 0;
+  if (Number(minutes) < 14) {
+    step = 1;
+  }
+  if (Number(minutes) < 5) {
+    step = 2;
+  }
+  if (completed) step = 3;
+
+  if (step !== store.debate.quarter)
+    setTimeout(() => store.debate.setQuarter(step), 1);
+
   if (completed) {
     // Render a completed state
     return <Completionist store={store} />;
   } else {
     const steps = ['Introductions', 'Debate', 'Find an Agreement'];
-
-    let step = 0;
-    if (Number(minutes) < 14) {
-      step = 1;
-    }
-    if (Number(minutes) < 5) {
-      step = 2;
-    }
 
     let hoursDisplay = '';
     if (Number(hours) > 0) {
@@ -126,7 +130,7 @@ function DebateTimer(props) {
   return (
     <Countdown
       completed={onCompleted}
-      date={Date.now() + 1000 * 60 * 15}
+      date={Date.now() + 1000 * 60 * 16}
       renderer={renderer.bind(null, classes, store)}
     />
   );
