@@ -385,11 +385,10 @@ class Index extends React.Component<Props, State> {
                 color="textSecondary"
                 gutterBottom
               >
-                {store.auth.user!.email}
-                <br />
                 <a href="https://gravatar.com" className={classes.imgLink}>
                   Use Gravatar to Add/Update image
-                </a>
+                </a><br />
+                {store.auth.user!.email}
               </Typography>
             </Grid>
             <Grid item xs={7}>

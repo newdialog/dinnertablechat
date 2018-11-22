@@ -60,7 +60,7 @@ class AuthComp extends React.Component<Props, any> {
   }
 
   public render() {
-    console.time('AuthComp');
+    /// console.time('AuthComp');
     const props: any = this.props;
 
     if (props.login) {
