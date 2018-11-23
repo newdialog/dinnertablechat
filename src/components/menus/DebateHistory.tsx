@@ -146,7 +146,7 @@ class Index extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    // API.getScores().then(this.transformPayload);
+    API.getScores().then(this.transformPayload);
   }
 
   handleClick = (i: number) => {
