@@ -79,6 +79,8 @@ export default class PeerService {
   public destroy() {
     console.log('peer destroyed');
     this._peer.destroy();
+    if (this._stream.getTracks)
+      this._stream.getTracks().forEach(track => track.stop());
   }
 }
 

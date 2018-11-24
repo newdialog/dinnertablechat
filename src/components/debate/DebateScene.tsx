@@ -67,6 +67,12 @@ class DebateScene extends React.Component<Props, State> {
     // stream: MediaStream
   }
 
+  public componentWillUnmount() {
+    console.log('debatescene unmounting');
+    this.peer.destroy();
+    this.speechSelfEvents!.stop();
+  }
+
   private setupSelfVoice() {
     const options = {};
     this.speechSelfEvents = hark(this.peer.getLocalStream(), options);
@@ -158,13 +164,10 @@ class DebateScene extends React.Component<Props, State> {
         )}
         <div className={classes.centered2}>
           <div>
-            <div>Microphone is activating</div>
+            <div>Microphone is on</div>
             <div id="video" hidden={true}>
               <video ref={this.vidRef} autoPlay={true} />
             </div>
-            <br />
-            {talkingBlue && <div>Blue is Speaking, </div>}
-            {talkingRed && <div>Red is Speaking</div>}
           </div>
           <DebateDisplay
             videoEl={this.vidRef}
@@ -181,3 +184,10 @@ class DebateScene extends React.Component<Props, State> {
 }
 
 export default inject('store')(HOC(DebateScene, styles));
+
+/*
+
+            <br />
+            {talkingBlue && <div>Blue is Speaking, </div>}
+            {talkingRed && <div>Red is Speaking</div>}
+*/
