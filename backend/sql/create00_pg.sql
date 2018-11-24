@@ -34,8 +34,10 @@ CREATE TABLE IF NOT EXISTS debate_session (
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS users (
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   id VARCHAR(36) NOT NULL,
   xp INT NOT NULL default 0,
+  status SMALLINT NOT NULL default 0,
   username VARCHAR(45) NULL,
   email VARCHAR(64) NULL,
   credits INT NOT NULL default 0,
