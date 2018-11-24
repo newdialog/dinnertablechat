@@ -35,7 +35,7 @@ exports.handle = async (event, context, callback) => {
 
 async function savePG(user, status) {
   /*{ sub: 'c40fd3fc-f1fc-440e-aebd-f50497efe6b1',
-        'cognito:email_alias': 'jonathanadunlap@gmail.com',
+        'cognito:email_alias': 'j@gmail.com',
         'cognito:user_status': 'CONFIRMED',
         email_verified: 'true',
         name: 'JD',

@@ -43,6 +43,12 @@ const styles = theme =>
       minWidth: '300px',
       minHeight: 'calc(100vh - 504px)'
     },
+    stats: {
+      textAlign:'right',
+      [theme.breakpoints.down('sm')]: {
+        textAlign:'center'
+      }
+    },
     headerContainer: {
       flexDirection: 'row',
       padding: '1em',
@@ -372,7 +378,7 @@ class Index extends React.Component<Props, State> {
             justify="space-around"
             alignItems="center"
           >
-            <Grid item xs={2}>
+            <Grid item xs={6} sm={2}>
               <a href="https://gravatar.com" className={classes.imgLink}>
                 <img
                   src={'https://www.gravatar.com/avatar/' + emailHash}
@@ -391,7 +397,7 @@ class Index extends React.Component<Props, State> {
                 {store.auth.user!.email}
               </Typography>
             </Grid>
-            <Grid item xs={7}>
+            <Grid item xs={6} sm={7}>
               <Typography
                 variant="h1"
                 align="left"
@@ -413,10 +419,9 @@ class Index extends React.Component<Props, State> {
               </Typography>
               <LinearProgress variant="determinate" value={normalise(xp)} />
             </Grid>
-            <Grid item xs={3}>
+            <Grid item xs={12} sm={3} className={classes.stats}>
               <Typography
                 variant="h4"
-                align="right"
                 color="textPrimary"
                 gutterBottom
               >
@@ -424,7 +429,6 @@ class Index extends React.Component<Props, State> {
               </Typography>
               <Typography
                 variant="body2"
-                align="right"
                 color="textSecondary"
                 gutterBottom
               >
@@ -432,7 +436,6 @@ class Index extends React.Component<Props, State> {
               </Typography>
               <Typography
                 variant="h4"
-                align="right"
                 color="textPrimary"
                 gutterBottom
               >
@@ -440,7 +443,6 @@ class Index extends React.Component<Props, State> {
               </Typography>
               <Typography
                 variant="body2"
-                align="right"
                 color="textSecondary"
                 gutterBottom
               >
