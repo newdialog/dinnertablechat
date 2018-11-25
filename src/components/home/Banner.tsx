@@ -49,7 +49,10 @@ const styles = (theme: Theme) =>
       paddingBottom: '5vh',
       color: '#ffffff88',
       textAlign: 'center',
-      display: 'inline-block'
+      display: 'inline-block',
+      [theme.breakpoints.down('sm')]: {
+        paddingBottom: '80px'
+      }
     },
     divider: {
       margin: `${theme.spacing.unit * 2}px 0`
@@ -78,12 +81,9 @@ const styles = (theme: Theme) =>
       // backgroundColor: '#00000044',
       // fontWeight: 'bold'
       // left: ''
-      height: '14vh',
+      height: '13vh',
       [theme.breakpoints.down('sm')]: {
-        height: '8vh'
-      },
-      [theme.breakpoints.down('xs')]: {
-        height: '8vh'
+        height: '5vh'
       }
     },
     logoanim: {
@@ -186,6 +186,26 @@ class Index extends React.Component<Props> {
                 {t('home-banner-title2')}
               </Reveal>
             </Typography>
+            {!auth &&
+              !isLive && (
+                <Button style={{margin:'2em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Start Login
+                <QueueIcon style={{ marginLeft: '8px' }} />
+                </Button>
+              )}
+            {auth &&
+              !isLive && (
+                <React.Fragment>
+                  <Button
+                    style={{margin:'2em'}}
+                    variant="contained"
+                    color="primary" size="large"
+                    onClick={() => store.router.push('/play')}
+                  >
+                    {store.auth.user!.name.split(' ')[0]}'s Home
+                    <QueueIcon style={{ marginLeft: '8px' }} />
+                  </Button>
+                </React.Fragment>
+              )}
             
             <div className={classes.bannerTextDivider} />
             <BannerTimer/>
@@ -207,24 +227,6 @@ class Index extends React.Component<Props> {
             >
               Updates
             </Button>
-            {!auth &&
-              !isLive && (
-                <Button style={{marginLeft:'2em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Login</Button>
-              )}
-            {auth &&
-              !isLive && (
-                <React.Fragment>
-                  <Button
-                    style={{marginLeft:'2em'}}
-                    variant="contained"
-                    color="primary" size="large"
-                    onClick={() => store.router.push('/play')}
-                  >
-                    {store.auth.user!.name.split(' ')[0]}'s Home
-                    <QueueIcon style={{ marginLeft: '8px' }} />
-                  </Button>
-                </React.Fragment>
-              )}
           </div>
         </div>
       </React.Fragment>
