@@ -38,15 +38,17 @@ export const API_CONF = {
       name: 'History',
       authenticationType: 'AMAZON_COGNITO_USER_POOLS',
       endpoint: 'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/staging'
-      // service: 'lambda',
-      // region: 'us-east-1',
-      // custom_header: async () => {
-      // return { Authorization: 'token' };
-      // Alternatively, with Cognito User Pools use this:
-      ///   return {
-      ///     Authorization: ((await Auth.currentSession()) as any).idToken.jwtToken
-      //  };
-      /// }
+    }
+  ]
+};
+
+export const API_CONF_PROD = {
+  endpoints: [
+    {
+      name: 'History',
+      authenticationType: 'AMAZON_COGNITO_USER_POOLS',
+      endpoint:
+        'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/production'
     }
   ]
 };
@@ -61,7 +63,11 @@ const pubSubCfg = (region: string) => ({
 export const oauth = awsOauth;
 let initLog = false;
 export const injectConfig = (cfg: any) => {
-  cfg.API = API_CONF;
+  const localServer: string = String(process.env.REACT_APP_HOST_URL);
+  const prod = process.env.REACT_APP_ENV === 'production';
+  console.log('isprod', prod);
+
+  cfg.API = API_CONF_PROD; // prod ? API_CONF_PROD : API_CONF;
 
   cfg.Auth = {
     oauth: awsOauth
@@ -70,9 +76,6 @@ export const injectConfig = (cfg: any) => {
   const region = cfg.aws_cognito_region;
 
   // cfg.PubSub = pubSubCfg(region);
-
-  const localServer: string =
-    process.env.REACT_APP_HOST_URL || 'https://jadbox.asuscomm.com';
 
   cfg.Auth.oauth.redirectSignIn = localServer + '/callback';
   cfg.Auth.oauth.redirectSignOut = localServer + '/signout';

@@ -29,6 +29,7 @@ export default function HOC(Component:any, styles:any = null, noTranslate:boolea
 export function Authed(Component:any) {
     return (props:any) => {
         const store:AppModel.Type = props.store;
+        if(store.auth.isNotLoggedIn) store.router.push('/');
         if(store.auth.user) return <Component {...props}/>
         else return <div><br/><br/><br/><br/>LOADING</div>
     }

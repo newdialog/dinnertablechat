@@ -192,7 +192,6 @@ interface State {
   blueState: string;
   redTransition: boolean;
   redState: string;
-  agreed: boolean;
   bothAgreed: boolean;
   ended?: boolean;
 }
@@ -223,7 +222,6 @@ class DebateScene extends React.Component<Props, State> {
       blueState: 'idle',
       redTransition: false,
       redState: 'idle',
-      agreed: false,
       bothAgreed: false,
     };
   }
@@ -279,7 +277,8 @@ class DebateScene extends React.Component<Props, State> {
   };
 
   private handleAgreed = () => {
-    this.setState({ agreed: true });
+    this.props.store.debate.madeAgreement(true);
+    // this.setState({ agreed: true });
   }
 
   private onCompleted = () => {
@@ -290,7 +289,8 @@ class DebateScene extends React.Component<Props, State> {
 
   public render() {
     const { classes, talkingBlue, talkingRed, videoEl, store } = this.props;
-    const { blueTransition, agreed, bothAgreed, ended } = this.state;
+    const { blueTransition, bothAgreed, ended } = this.state;
+    const agreed = store.debate.agreed;
 
     const animBlue = this.state.blueState === 'talking';
     const animRed = this.state.redState === 'talking';
@@ -369,10 +369,10 @@ class DebateScene extends React.Component<Props, State> {
         <DebateFloatMenu videoEl={videoEl} />
 
         <div className={classes.agreeBtn}>
-          {store.debate.quarter > 1 && !this.state.agreed && <Button variant="contained" onClick={this.handleAgreed} color={ 'primary' }>
-            Reached an agreement?
+          {store.debate.quarter > 1 && !agreed && <Button variant="contained" onClick={this.handleAgreed} color={ 'primary' }>
+            Reached a final agreement?
           </Button>}
-          {this.state.agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} color={ 'secondary' }>
+          {agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} color={ 'secondary' }>
             Leave and Give Review
           </Button>}
         </div>

@@ -18,7 +18,7 @@ Amplify.Logger.LOG_LEVEL = 'DEBUG';
 
 // import { Logger } from 'aws-amplify';
 import { Hub, ConsoleLogger } from '@aws-amplify/core';
-import { injectConfig } from '../configs/auth';
+import { injectConfig } from '../configs/AWSconfig';
 
 const awsconfig = injectConfig(awsmobile);
 const IdentityPoolId = awsconfig.Auth.identityPoolId;
@@ -64,7 +64,7 @@ function onHubCapsule(cb: AwsCB, capsule: any) {
   if (channel === 'auth' && payload.event === LOGIN_EVENT) {
     console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
-  } 
+  }
   /* else if (
     channel === 'auth' &&
     (payload.event === 'configured' ) // || payload.event === 'cognitoHostedUI'
@@ -100,7 +100,7 @@ export interface AwsAuth {
   SessionToken: string;
 }
 
-async function checkUser(cb: AwsCB, event:string='') {
+async function checkUser(cb: AwsCB, event: string = '') {
   let data: any;
   try {
     console.time('currentAuthenticatedUser');

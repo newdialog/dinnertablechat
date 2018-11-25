@@ -29,7 +29,8 @@ const DebateModel = types
     isTest: false,
     match: types.maybeNull(MatchModel),
     finished: false,
-    quarter: 0
+    quarter: 0,
+    agreed: false
   })
   .actions(self => ({
     setPosition(position: number, topic: string) {
@@ -48,6 +49,9 @@ const DebateModel = types
     },
     endMatch() {
       self.finished = true;
+    },
+    madeAgreement(agreed: boolean) {
+      self.agreed = agreed;
     },
     syncMatch() {
       if (!self.match) throw new Error('match not init');
@@ -68,6 +72,7 @@ const DebateModel = types
       self.character = -1;
       self.topic = '';
       self.quarter = 0;
+      self.agreed = false;
       // self.isTest = false;
       self.match = null;
       self.finished = false;

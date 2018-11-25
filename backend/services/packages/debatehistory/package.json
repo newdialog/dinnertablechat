@@ -1,6 +1,6 @@
 {
   "name": "debatehistory",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "CRUD for debate history",
   "engineStrict": true,
   "engines": {
@@ -27,7 +27,9 @@
     "devlive": "PGHOST='dtc-pg-dev.cy0j2uzr5txt.us-east-1.rds.amazonaws.com' PGUSER=app PGDATABASE=dtc PGPORT=5432 node build/src/main.js",
     "start": "node build/src/main.js",
     "deploy": "npm run build && npm run up && up url",
+    "deploy:prod": "npm run build && npm run up:prod && up url",
     "up": "npm run switchin && up && npm run switchback",
+    "up:prod": "npm run switchin-prod && up deploy production && npm run switchback",
     "deploylog": "npm run deploy && up logs -f",
     "logs": "up logs -f",
     "clean": "rimraf coverage build tmp",
@@ -39,7 +41,8 @@
     "test-only": "jest --coverage",
     "test:watch": "jest --watch",
     "switchin": "mv up.json up.json.tmp && cp up.local.json up.json",
-    "switchback": "rm up.json && mv up.json.tmp up.json"
+    "switchback": "rm up.json && mv up.json.tmp up.json",
+    "switchin-prod": "mv up.json up.json.tmp && cp up.prod.local.json up.json"
   },
   "author": "Jonathan Dunlap",
   "license": "APLv2",
