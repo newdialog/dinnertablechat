@@ -10,6 +10,10 @@ import retry from 'async-retry';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
+interface StopFlag {
+  stop: boolean;
+}
+
 // If leader, send out WEBRTC connection string
 // If other, wait to recieve leader msg
 // Or, for now, all parties create connection string and elected leader is the one accepted, via otherData on Queue.
@@ -70,6 +74,8 @@ export async function handshake(
 
     let otherPlayerState: PlayerTableData = { char: -1 };
 
+    let stopFlag: StopFlag = { stop: false };
+
     // try {
     handshakeUntilConnected(
       matchid,
@@ -77,23 +83,20 @@ export async function handshake(
       ps,
       (otherState: PlayerTableData) => {
         otherPlayerState = otherState;
-      }
+      },
+      stopFlag
     ).catch(e => {
       const retryError = e.toString().indexOf('retry') !== -1;
       // if(retryError) throw new Error('retry');
       reject('retry');
       console.log('handshakeUntilConnected ended with', e);
     });
-    /* .catch( (e) => {
-      const retryError = e.toString().indexOf('retry')!==-1;
-      if(retryError) throw new Error('retry');
-      console.log('handshakeUntilConnected thrown error', retryError, e)
-    });*/
+
     try {
       setTimeout(() => {
-        if (stopSync) return;
+        if (stopFlag.stop) return;
         console.log('webrtc onConnection timeout');
-        stopSyncing();
+        stopFlag.stop = true;
         reject('retry');
         // throw new Error('retry');
       }, 1000 * 13);
@@ -101,7 +104,7 @@ export async function handshake(
       throw new Error(e);
     }
     await ps.onConnection();
-    stopSyncing();
+    stopFlag.stop = true;
 
     console.log(mycolor + ' rtc elected');
 
@@ -127,16 +130,17 @@ export interface DBState {
   state: any;
 }
 
+// TODO fix global state
 let lastValue: any = null;
-let stopSync: boolean = false;
 async function readMatchWait(
   matchid: string,
-  team: 'blue' | 'red'
+  team: 'blue' | 'red',
+  stopFlag: StopFlag
 ): Promise<DBState | null> {
   // if (stopSync) return null;
   return await retry(
     async bail => {
-      if (stopSync) {
+      if (stopFlag.stop) {
         bail(new Error('stopSync'));
         return;
       }
@@ -187,17 +191,18 @@ async function handshakeUntilConnected(
   matchid: string,
   team: 'blue' | 'red',
   ps: PeerService,
-  onState?: (state: PlayerTableData) => void
+  onState: (state: PlayerTableData) => void,
+  stopFlag: StopFlag
 ) {
   let stateFetched = false;
   return await retry(
     async bail => {
-      if (stopSync) return 'stopSync'; // bail(new Error('stopSync'));
+      if (stopFlag.stop) return 'stopSync'; // bail(new Error('stopSync'));
       console.log('handshakeUntilConnected');
 
       let result: any = null;
       try {
-        result = await readMatchWait(matchid, team);
+        result = await readMatchWait(matchid, team, stopFlag);
       } catch (e) {
         const retryError = e.toString().indexOf('retry') !== -1;
         // console.log(JSON.stringify(e), typeof e, );
@@ -209,6 +214,8 @@ async function handshakeUntilConnected(
           console.log('readMatchWait aborted with:', e.Error);
           return bail(new Error('error'));
         }
+      } finally {
+        lastValue = null;
       }
 
       /* if (!result) {
@@ -267,10 +274,10 @@ async function updateMatch(
 }
 
 // Ensure any last minute sync messages are processed
-async function stopSyncing() {
+/* function stopSyncing() {
   // await delay(3000);
   stopSync = true;
-}
+}*/
 
 let docClient: DynamoDB.DocumentClient;
 export function init(): void {

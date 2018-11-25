@@ -136,7 +136,7 @@ class LoadingScene extends React.Component<Props, any> {
   }
 
   private gotMedia = async (stream: MediaStream) => {
-    console.log('gotMedia');
+    console.log('gotMedia, now handshaking');
     const matchId = this.props.store.debate.match!.matchId;
     const isLeader = this.props.store.debate.match!.leader;
     const state = { char: this.props.store.debate.character }; // TODO pretect against premium chars
