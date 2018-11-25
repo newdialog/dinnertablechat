@@ -22,6 +22,7 @@ import Footer from '../home/Footer';
 import Button from '@material-ui/core/Button';
 import QueueIcon from '@material-ui/icons/QueuePlayNext'
 import Subscribe from '../home/Subscribe';
+import * as serviceWorker from '../../serviceWorker';
 
 const styles = theme =>
   createStyles({
@@ -153,6 +154,7 @@ class Index extends React.Component<Props, State> {
 
   componentDidMount() {
     API.getScores().then(this.transformPayload);
+    serviceWorker.register(); // register here so that users can create an icon
   }
 
   handleClick = (i: number) => {

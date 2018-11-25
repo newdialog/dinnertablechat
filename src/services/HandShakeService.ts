@@ -99,7 +99,7 @@ export async function handshake(
         stopFlag.stop = true;
         reject('retry');
         // throw new Error('retry');
-      }, 1000 * 13);
+      }, 1000 * 30);
     } catch (e) {
       throw new Error(e);
     }
@@ -176,9 +176,10 @@ async function readMatchWait(
       return { key: keyval, state: stateval };
     },
     {
-      retries: 8,
-      maxTimeout: 3200,
-      minTimeout: 3000
+      retries: 10,
+      factor: 1.25,
+      maxTimeout: 4000,
+      minTimeout: 2000
     }
   );
 }
@@ -230,10 +231,10 @@ async function handshakeUntilConnected(
       throw new Error('retry');
     },
     {
-      retries: 6 * 2,
-      factor: 1.5,
-      maxTimeout: 3000,
-      minTimeout: 1000
+      retries: 10,
+      factor: 1.25,
+      maxTimeout: 4000,
+      minTimeout: 2000
     }
   );
 }
