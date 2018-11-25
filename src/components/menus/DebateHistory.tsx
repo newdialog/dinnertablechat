@@ -45,7 +45,7 @@ const styles = theme =>
     },
     stats: {
       textAlign:'right',
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('xs')]: {
         textAlign:'center'
       }
     },
