@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { Button, Typography, Paper, Grid } from '@material-ui/core'
+import { Button, Typography, Paper, Grid } from '@material-ui/core';
+import SwipeableViews from 'react-swipeable-views';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
@@ -11,31 +12,25 @@ import HOC from '../HOC';
 
 const styles = theme => 
   createStyles({
-    root: {
-        // maxWidth: 400,
-        //flexGrow: 1,
-        width: '100%',
-        backgroundColor: theme.palette.background.paper,
-    },
+    container: {
+        marginTop: 30,
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        width: 'auto',
+        maxWidth: '800px',
+        minWidth: '300px',
+      },
     header: {
-        display: 'flex',
         alignItems: 'center',
         height: 50,
-        //marginTop: theme.spacing.unit * 4,
-        //backgroundColor: theme.palette.background.paper,
     },
     img: {
-        height: 255,
-        maxWidth: 270,
+        height: '35vh', // 40
+        maxWidth: 250,
         overflow: 'hidden',
-        display: 'block',
+        borderRadius: 40,
+        // display: 'block',
     },
-    // heroContent: {
-    //   maxWidth: 600,
-    //   textAlign:'center',
-    //   margin: '0 auto',
-    //   padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 0}px`,
-    // },
     button: {
       marginTop: theme.spacing.unit,
       marginRight: theme.spacing.unit,
@@ -54,28 +49,28 @@ interface State {
 const tutorialSteps = [
     {
       title: 'Select Topic',
-      subTitle: 'Get started by selecting a desired topic. \n Topics are selected via news trends, online discussions, and your vote in DTC polls.',
-      imgPath: './imgs/04-select.png',
+      subTitle: 'Get started by selecting your topic position. Topics are selected via news trends and your vote in DTC polls.',
+      imgPath: './imgs/02-topics.png',
     },
     {
       title: 'Select Character',
-      subTitle: 'You will control a virtual character that will talk as you talk, listen to your matched partner, and also represents your mood.',
-      imgPath: './imgs/04-select2.png',
+      subTitle: 'You control a virtual character that will talk as you do and listen to your matched partner.',
+      imgPath: './imgs/04-select.png',
     },
     {
       title: 'Join Debate',
-      subTitle: 'Our community embraces being super passionate and engaged… even if it makes us a little frightened or warm blooded. However, personal attacks, any form of discrimination, or just being a troll is not welcome. ',
-      imgPath: './imgs/04-select3.png',
+      subTitle: 'Get matched with the other side. Be passionate about your views, keep an open mind and remember the golden rule.',
+      imgPath: './imgs/press/01-scene1.png',
     },
     {
       title: 'Find Agreement',
-      subTitle: 'It is easy to disagree, so let us know if you and your partner came to an agreement, big or small!',
-      imgPath: './imgs/04-select2.png',
+      subTitle: 'It is easy to disagree. Celebrate when you and your partner come to an agreement - big or small!',
+      imgPath: './logos/dtclogo2.png',
     },
     {
       title: 'Give Feedback',
-      subTitle: 'Let the other side know what you thought!',
-      imgPath: './imgs/04-select.png',
+      subTitle: 'Was your partner respectful, knowledgeable or crude? Let them know what you thought!',
+      imgPath: './imgs/07-newsletter.png',
     },
     {
        title: 'Earn Achievements',
@@ -108,61 +103,83 @@ class GettingStarted extends React.Component<Props, State> {
     store.gotoHomeMenu();
   };
 
+  handleStepChange = activeStep => {
+    this.setState({ activeStep });
+  };
+
   public render() {
     const { classes, store } = this.props;
     const { activeStep } = this.state;
     const maxSteps = tutorialSteps.length;
 
   return (
-    <React.Fragment>
-      <Grid
-        container
-        spacing={0}
-        direction="column"
-        alignItems="center"
-        justify="center"
-        style={{ minHeight: '100vh', maxWidth: '70hw' }}
+    <div className={classes.container}>
+        <SwipeableViews
+            index={activeStep}
+            onChangeIndex={this.handleStepChange}
+            enableMouseEvents
         >
-        <Grid item >
-            <Typography variant="h4" color="primary" align="center">
-                {tutorialSteps[activeStep].title}
-            </Typography>
-        </Grid>    
-        <Grid item >
-            <img
-                className={classes.img}
-                src={tutorialSteps[activeStep].imgPath}
-                alt={tutorialSteps[activeStep].title}
-            />
-        </Grid>
-        <Grid item >
-            <Typography variant="body2" align="center">
-                {tutorialSteps[activeStep].subTitle}
-            </Typography>
-        </Grid>     
-        <Grid item >
-            <MobileStepper
-                steps={maxSteps}
-                position="static"
-                activeStep={activeStep}
-                nextButton={
-                    <Button size="small" onClick={this.handleNext} disabled={this.state.activeStep === 5}>
-                        Next
-                        <KeyboardArrowRight />
-                    </Button>
-                    }
-                    backButton={
-                    <Button size="small" onClick={this.handleBack} disabled={this.state.activeStep === 0}>
-                        <KeyboardArrowLeft />
-                        Back
-                    </Button>
-                }
-            />
-        </Grid>
-        {( activeStep === (maxSteps-1) ) ? 
-        <Button variant="contained" color="primary" onClick={this.routeToPlay}>Begin</Button> : null}   
-     </Grid>
-    </React.Fragment>
+            {tutorialSteps.map((step, index) => (
+
+        <div key={step.title}>
+          <Grid
+              container
+              spacing={0}
+              direction="row"
+              alignItems="center"
+              justify="center"
+              style={{ minHeight: 'calc(100vh - 60px - 45px)' }}
+              >
+              <Grid item xs={12}>
+                  <Typography variant="h4" color="primary" align="center">
+                      {step.title}
+                  </Typography>
+              </Grid>
+              <Grid item xs={12} sm={4} style={{textAlign:'center', width:'100%'}}>
+                  <img
+                      className={classes.img}
+                      src={step.imgPath}
+                      alt={step.title}
+                  />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" align="center">
+                      {step.subTitle}
+                  </Typography>
+              </Grid>
+          </Grid>
+        </div>
+        ))}
+        </SwipeableViews>  
+
+        
+     {( activeStep !== (maxSteps-1) ) ? null :
+        <div style={{ textAlign: "center" }}>
+            <Button 
+                variant="contained" color="primary" 
+                onClick={this.routeToPlay}>
+            Begin
+            </Button> 
+        </div>
+     }
+     <MobileStepper
+        steps={maxSteps}
+        position="static"
+        activeStep={activeStep}
+        nextButton={
+            <Button size="small" onClick={this.handleNext} disabled={this.state.activeStep === 5}>
+                Next
+                <KeyboardArrowRight />
+            </Button>
+            }
+            backButton={
+            <Button size="small" onClick={this.handleBack} disabled={this.state.activeStep === 0}>
+                <KeyboardArrowLeft />
+                Back
+            </Button>
+        }
+    />
+    </div>
   );
   }
 }
