@@ -223,6 +223,12 @@ class LoadingScene extends React.Component<Props, any> {
               {text}
             </Reveal>
           </Typography>
+          <br/><br/><br/>
+          <Typography variant="h1" align="center" style={{fontSize:'1.5em', lineHeight: '0.7'}}>
+            <Reveal effect="fadeIn" duration={1000}>
+              Click "Allow" when your browser asks to enable your microphone!
+            </Reveal>
+          </Typography>
         </div>
       </div>
     );
