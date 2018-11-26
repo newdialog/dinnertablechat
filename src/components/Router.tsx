@@ -12,7 +12,6 @@ const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
 const AsyncTester = lazy(() => import('./debate/DebateTester'));
 const DebateHistory = lazy(() => import('./menus/DebateHistory'));
 const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
-// const GettingStarted = lazy(() => import('./menus/Tutorial'));
 const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 
 const NoMatch = ({ location }) => (
