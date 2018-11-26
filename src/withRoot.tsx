@@ -72,6 +72,9 @@ const theme = createMuiTheme({
     },
     caption: {
       fontFamily: ['Montserrat'].join(','),
+    },
+    button: {
+      fontFamily: ['Montserrat'].join(','),
     }
   }
 });
