@@ -21,6 +21,7 @@ import LinearProgress from '@material-ui/core/LinearProgress';
 import Footer from '../home/Footer';
 import Button from '@material-ui/core/Button';
 import QueueIcon from '@material-ui/icons/QueuePlayNext'
+import RateReview from '@material-ui/icons/RateReview';
 import Subscribe from '../home/Subscribe';
 import * as serviceWorker from '../../serviceWorker';
 
@@ -108,6 +109,8 @@ interface State {
   achievements: Array<{ photo: string; text: string }>;
   data: any[];
   loggedIn: boolean;
+  loaded: boolean;
+  error: string | null;
 }
 
 const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
@@ -148,12 +151,14 @@ class Index extends React.Component<Props, State> {
       activeStep: 0,
       achievements,
       data: [],
-      loggedIn: false
+      loggedIn: false,
+      loaded: false,
+      error: null,
     };
   }
 
   componentDidMount() {
-    API.getScores().then(this.transformPayload);
+    API.getScores().then(this.transformPayload).catch( (e)=> this.setState({loaded: true, error: e}));
     serviceWorker.register(); // register here so that users can create an icon
   }
 
@@ -254,7 +259,7 @@ class Index extends React.Component<Props, State> {
       .filter(x => x.oppReview && x.userReview); // ensure both rated
 
     const flags = this.createAccordianFlags(data);
-    this.setState({ data: result, open: flags });
+    this.setState({ data: result, open: flags, loaded: true });
   };
 
   private showAchievements(classes) {
@@ -460,6 +465,10 @@ class Index extends React.Component<Props, State> {
           Begin Dinner Party QuickMatch
           <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
         </Button>
+
+        {this.state.data.length > 0 && <Typography variant="body1" style={{marginTop: 12}}>
+          <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink} target="_blank">Have feedback on your experience? <RateReview style={{marginBottom:'-6px'}}/></a>
+        </Typography>}
         </div>
 
         {false && this.showAchievements(classes)}
@@ -476,8 +485,9 @@ class Index extends React.Component<Props, State> {
               style={{fontWeight: 'normal'}}
               gutterBottom
             >
-              No debate history to list yet. <br/>
-              Click QUICKMATCH button above to get started.
+            {!this.state.loaded && <b>Loading debate history...</b>}
+            {this.state.loaded && <span>No debate history to list yet. <br/>
+              Click QUICKMATCH button above to get started.</span>}
             </Typography>
           </Paper>
         )}
