@@ -24,6 +24,7 @@ const styles = (theme: Theme) =>
     timerText: {
       padding: '0',
       margin: '0 auto 0 auto',
+      borderRadius: '20vh',
       backgroundColor: '#a65451cc'
     },
     stepWord: {
@@ -36,9 +37,6 @@ const styles = (theme: Theme) =>
         display: 'inline'
       }
     },
-    agreeBtn: {
-
-    }
   });
 
 function onMenuClick(store: AppModel.Type) {
@@ -67,9 +65,9 @@ const Completionist = ({ store }: { store: AppModel.Type }) => (
 const AgreementStep = ({ store }: { store: AppModel.Type }) => (
   <div style={{ textAlign: 'center' }}>
     {store.debate.quarter > 1 && !store.debate.agreed && <Button variant="contained" onClick={() => store.debate.madeAgreement(true)} color={ 'primary' }>
-      Agreement Found
+      Agreement Found?
     </Button>}
-    {store.debate.agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} color={ 'primary' }>
+    {store.debate.agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} >
       Leave & Give Review
     </Button>}
   </div>
@@ -114,10 +112,9 @@ const renderer = (
         <br />
       {step === 2 ? <AgreementStep store={store} /> : 
         <Stepper activeStep={step} className={classes.stepper}>
-          {steps.map((label, index) => {
+          {steps.map(label => {
             const props = {};
-            const labelProps = {};
-            
+            const labelProps = {};           
             return (
               <Step key={label} {...props}>
                 <StepLabel {...labelProps}>{label}</StepLabel>
@@ -142,7 +139,7 @@ function DebateTimer(props) {
   return (
     <Countdown
       completed={onCompleted}
-      date={Date.now() + 1000 * 60 * 5}
+      date={Date.now() + 1000 * 60 * 16}
       renderer={renderer.bind(null, classes, store)}
     />
   );
