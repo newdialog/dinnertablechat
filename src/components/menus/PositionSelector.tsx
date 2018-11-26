@@ -109,7 +109,7 @@ class PositionSelector extends React.Component<Props, State> {
                 </CardActions>
               </Card>
               <Typography variant="caption">
-                <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink}>Suggest a topic for next week ⬏</a>
+                <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink} target='_blank'>Suggest a topic for next week ⬏</a>
               </Typography>
             </Grid>
           ))}

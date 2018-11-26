@@ -16,9 +16,10 @@ import Button from '@material-ui/core/Button';
 import QueueIcon from '@material-ui/icons/QueuePlayNext'
 import RateReview from '@material-ui/icons/RateReview';
 import Subscribe from '../home/Subscribe';
-import * as serviceWorker from '../../serviceWorker';
+// import * as serviceWorker from '../../serviceWorker';
 import * as Times from '../../services/TimeService';
 import DailyTimer from './DailyTimer';
+import Info from '@material-ui/icons/Info';
 
 const styles = theme =>
   createStyles({
@@ -159,7 +160,7 @@ class Index extends React.Component<Props, State> {
 
   componentDidMount() {
     API.getScores().then(this.transformPayload).catch( (e)=> this.setState({loaded: true, error: e}));
-    serviceWorker.register(); // register here so that users can create an icon
+    // serviceWorker.register(); // register here so that users can create an icon
   }
 
   handleClick = (i: number) => {
@@ -514,8 +515,15 @@ class Index extends React.Component<Props, State> {
         
       </div>
       
-      <Paper style={{width: 300, margin:'30px auto 0 auto'}}>
-          <Subscribe offHome={true}/>
+      <Paper style={{width: '50vw', minWidth:'400px', margin:'30px auto 0 auto', padding: '6px 32px', backgroundColor:'#dcdcdc'}}>
+        <Typography
+                variant="body1"
+                align="center"
+                color="textSecondary"
+                gutterBottom
+              >
+          <Info style={{margin:'0px 3px -6px 0px',}}/><b>TIP</b><br/>It helps to prepare for debates using credible sources of information. <br/><a href='https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef' target='_blank'>Here's our recommendations</a>.
+          </Typography>
       </Paper>
       <Footer/>
       </React.Fragment>
@@ -524,3 +532,5 @@ class Index extends React.Component<Props, State> {
 }
 
 export default inject('store')(HOC(Authed(Index), styles));
+
+// <Subscribe offHome={true}/>
