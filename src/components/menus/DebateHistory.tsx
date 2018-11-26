@@ -23,11 +23,6 @@ import Info from '@material-ui/icons/Info';
 
 const styles = theme =>
   createStyles({
-    root: {
-      width: '100%',
-      backgroundColor: theme.palette.background.paper,
-      marginTop: theme.spacing.unit * 5
-    },
     centered: {
       marginTop: theme.spacing.unit * 5,
       paddingTop: '0',
@@ -50,7 +45,9 @@ const styles = theme =>
     headerContainer: {
       flexDirection: 'row',
       padding: '1em',
-      backgroundColor: '#ddd'
+      borderRadius: '5vh',
+      backgroundColor: theme.palette.secondary.light,
+      //backgroundColor: '#D2E5F5' // '#ddd'
     },
     name: {
       color: '#555555',
@@ -90,7 +87,14 @@ const styles = theme =>
     },
     imgLink: {
       textDecoration: 'none',
-      color: '#b76464'
+      color: '#ef5350', // '#b76464' // #ef5350
+    },
+    infoTip: {
+      width: '50vw', 
+      minWidth:'400px', 
+      margin:'30px auto 0 auto', 
+      padding: '6px 32px', 
+      backgroundColor: theme.palette.secondary.light,
     }
   });
 
@@ -313,7 +317,7 @@ class Index extends React.Component<Props, State> {
               </Grid>
               <Grid item>
                 <Typography variant="h4" color="primary" align={'center'}
-                style={x.agreed==='Agreed' ? { color:'#559955' } : {color:'#ef9a9a'}}>
+                style={x.agreed==='Agreed' ? { color:'#76AD76' } : {color:'#ef9a9a'}}>
                   {x.agreed}
                 </Typography>
               </Grid>
@@ -515,7 +519,7 @@ class Index extends React.Component<Props, State> {
         
       </div>
       
-      <Paper style={{width: '50vw', minWidth:'400px', margin:'30px auto 0 auto', padding: '6px 32px', backgroundColor:'#dcdcdc'}}>
+      <Paper className={classes.infoTip}> 
         <Typography
                 variant="body1"
                 align="center"
@@ -529,6 +533,7 @@ class Index extends React.Component<Props, State> {
       </React.Fragment>
     );
   }
+  // backgroundColor:'#dcdcdc'
 }
 
 export default inject('store')(HOC(Authed(Index), styles));

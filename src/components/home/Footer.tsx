@@ -6,7 +6,8 @@ import {
 } from '@material-ui/core/styles';
 import HOC from '../HOC'
 
-const styles = createStyles({
+const styles = theme =>
+createStyles({
   root: {
     justifyContent: 'center'
   },
@@ -19,7 +20,7 @@ const styles = createStyles({
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '100%',
-    backgroundColor: '#484965',
+    backgroundColor: theme.palette.secondary.dark,
     textAlign: 'center'
   }
 });
