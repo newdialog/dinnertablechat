@@ -12,6 +12,8 @@ const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
 const AsyncTester = lazy(() => import('./debate/DebateTester'));
 const DebateHistory = lazy(() => import('./menus/DebateHistory'));
 const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
+// const GettingStarted = lazy(() => import('./menus/Tutorial'));
+const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 
 const NoMatch = ({ location }) => (
   <div>
@@ -51,6 +53,7 @@ const DTCRouter = ({
         <Route exact={true} path="/callback" component={AsyncHome} />
         <Route exact={true} path="/feedback" component={DebateFeedback} />
         <Route exact={true} path="/history" component={DebateHistory} />
+        <Route exact={true} path="/tutorial" component={GettingStarted} />
 
         <Route path="/press" component={AsyncMediaKit} />
         <Route path="/privacy" component={AsyncPrivacy} />
