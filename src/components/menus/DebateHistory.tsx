@@ -1,13 +1,6 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
 import { Chip, Grid, Typography, Paper, Divider } from '@material-ui/core';
-import {
-  AccountCircle,
-  ExpandLess,
-  ExpandMore,
-  StarBorder
-} from '@material-ui/icons';
-import FaceIcon from '@material-ui/icons/Face';
 import moment from 'moment';
 
 import * as AppModel from '../../models/AppModel';
@@ -87,9 +80,9 @@ const styles = theme =>
     },
     chip: {
       margin: theme.spacing.unit,
-      background: 'linear-gradient(to right bottom, #f2de1a, #ef9a9a)',
-      color: 'white',
-      fontWeight: 'bold'
+      // background: 'linear-gradient(to right bottom, #ccc, #484965)',
+      // color: 'white',
+      // fontWeight: 'bold'
     },
     margin: {
       //margin: theme.spacing.unit * 2,
@@ -117,6 +110,11 @@ interface State {
 
 const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
 const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interruptive'];
+const badgeConfig = {
+  Respectful: './imgs/badges/copbadge.png',
+  Knowledgeable: './imgs/badges/openbook.png',
+  Charismatic: './imgs/badges/lightbulb.png'
+};
 /*
 * Rhetorician (consistently rated with positive traits)
 * three different achievements for participating in 3, 5, 10 debates
@@ -301,8 +299,8 @@ class Index extends React.Component<Props, State> {
       <div key={i}>
         <Paper className={classes.paper}>
           <Grid container spacing={16}>
-            <Grid item xs={2}>
-              <img src={characters[x.oppCharacter].url} width={'60%'} />
+            <Grid item sm={2} style={{textAlign: 'center'}}>
+              <img src={characters[x.oppCharacter].url} width={'70%'} />
             </Grid>
             <Grid item xs={12} sm container>
               <Grid item xs container direction="column" spacing={16}>
@@ -331,11 +329,15 @@ class Index extends React.Component<Props, State> {
           >
             {x.oppReview.traits.pos &&
               x.oppReview.traits.pos.map((label, i) => {
-                return <Chip key={i} label={label} className={classes.chip} />;
+                return <div style={{textAlign: 'center'}}>
+                    <img key={i} src={badgeConfig[label]} alt={label} width="20%" />
+                    <Typography>{label}</Typography>
+                  </div>
               })}
             {x.oppReview.traits.neg &&
               x.oppReview.traits.neg.map((label, i) => {
-                return <Chip key={i} label={label} className={classes.chip} />;
+                return <Typography style={{margin: 5}}>{label}</Typography>
+                //return <Chip key={i} label={label} className={classes.chip} />;
               })}
           </Grid>
         </Paper>
