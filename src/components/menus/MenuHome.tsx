@@ -8,7 +8,8 @@ import { inject } from 'mobx-react';
 import CharacterSelection from './CharacterSelection';
 import HOC from '../HOC';
 import Footer from '../home/Footer';
-import HistoryIcon from '@material-ui/icons/History'
+import HistoryIcon from '@material-ui/icons/History';
+import * as Times from '../../services/TimeService';
 
 const styles = theme => 
   createStyles({
@@ -92,6 +93,9 @@ class Index extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
+    if(this.props.store.isLive() && !Times.isDuringDebate()) {
+      this.props.store.router.push('/play');
+    }
     if(Boolean(this.props.isTest) !== this.props.store.debate.isTest) { 
       this.props.store.debate.setTest(this.props.isTest===true);
     }

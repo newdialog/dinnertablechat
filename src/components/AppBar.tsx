@@ -8,6 +8,7 @@ import * as Store from '../models/AppModel'
 
 import QueueIcon from '@material-ui/icons/QueuePlayNext'
 import HOC from './HOC';
+import * as Times from '../services/TimeService';
 
 const styles = createStyles({
   root: {
@@ -46,6 +47,8 @@ function ButtonAppBar(props:Props) {
   const auth = store.auth.isAuthenticated();
   const isLive = props.store.isLive();
 
+  const showAuth = !isLive || Times.isDuringDebate();
+
   if(store.debate.match && store.debate.match.sync) {
     return null; // <React.Fragment></React.Fragment>
   }
@@ -62,10 +65,10 @@ function ButtonAppBar(props:Props) {
           { /* TODO BUG: empty component needed for alignment */ }
           <Typography variant="h6" className={classes.flex}></Typography>
 
-          {!auth && !isLive &&
+          {!auth && showAuth &&
             <Button onClick={ () => onLogin(store) }>Login</Button>
           }
-          {auth && !isLive &&
+          {auth &&
             <React.Fragment>
               <Button variant="contained" color="primary" onClick={ () => onStart(store) }>
                 My Home

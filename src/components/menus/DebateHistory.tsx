@@ -24,6 +24,8 @@ import QueueIcon from '@material-ui/icons/QueuePlayNext'
 import RateReview from '@material-ui/icons/RateReview';
 import Subscribe from '../home/Subscribe';
 import * as serviceWorker from '../../serviceWorker';
+import * as Times from '../../services/TimeService';
+import DailyTimer from './DailyTimer';
 
 const styles = theme =>
   createStyles({
@@ -374,6 +376,8 @@ class Index extends React.Component<Props, State> {
     if(level > 6) title = "Experienced Rhetorician";
     if(level > 12) title = "Most Honorable Host";
 
+    const debateOpen = Times.isDuringDebate();
+
     return (
       <React.Fragment>
       <div className={classes.centered}>
@@ -460,11 +464,23 @@ class Index extends React.Component<Props, State> {
         </div>
 
         <div style={{width:'100%', textAlign:'center', marginTop:'12px'}}>
-        <Button variant="contained" color="primary" 
-          onClick={ () => this.props.store.router.push('/quickmatch') }>
-          Begin Dinner Party QuickMatch
-          <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
-        </Button>
+        { (debateOpen || !store.isLive()) &&
+          <Button variant="contained" color="primary" 
+            onClick={ () => this.props.store.router.push('/quickmatch') }>
+            Begin Dinner Party QuickMatch
+            <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
+          </Button>
+          
+        }
+
+        { (!debateOpen) &&
+          <Button variant="contained" color="primary"
+            onClick={ () => this.props.store.router.push('/') }>
+            Daily Debate are closed, return to home.
+          </Button>
+        }
+
+        <DailyTimer/>
 
         {this.state.data.length > 0 && <Typography variant="body1" style={{marginTop: 12}}>
           <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink} target="_blank">Have feedback on your experience? <RateReview style={{marginBottom:'-6px'}}/></a>

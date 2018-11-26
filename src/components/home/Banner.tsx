@@ -14,6 +14,7 @@ import HOC from '../HOC';
 import * as AppModel from '../../models/AppModel';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
 import BannerTimer from './BannerTimer';
+import * as Times from '../../services/TimeService';
 // const bgData = require('../../assets/background.json');
 
 const styles = (theme: Theme) =>
@@ -158,6 +159,8 @@ class Index extends React.Component<Props> {
     const auth = store.auth.isAuthenticated();
     const isLive = store.isLive();
 
+    const isOpen = store.dailyOpen; // !isLive ||  Times.isDuringDebate();
+
     return (
       <React.Fragment>
         <Waypoint
@@ -187,16 +190,16 @@ class Index extends React.Component<Props> {
               </Reveal>
             </Typography>
             {!auth &&
-              !isLive && (
-                <Button style={{margin:'2em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Start Login
+              isOpen && (
+                <Button style={{marginTop:'4em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Start Login
                 <QueueIcon style={{ marginLeft: '8px' }} />
                 </Button>
               )}
             {auth &&
-              !isLive && (
+              isOpen && (
                 <React.Fragment>
                   <Button
-                    style={{margin:'2em'}}
+                    style={{marginTop:'4em'}}
                     variant="contained"
                     color="primary" size="large"
                     onClick={() => store.router.push('/play')}
@@ -206,6 +209,9 @@ class Index extends React.Component<Props> {
                   </Button>
                 </React.Fragment>
               )}
+              {
+                isOpen && <Typography variant="h1" style={{fontSize: '2.5em', marginTop: '.4em', color:'#white'}}>It's now dinner time!</Typography>
+              }
             
             <div className={classes.bannerTextDivider} />
             <BannerTimer/>

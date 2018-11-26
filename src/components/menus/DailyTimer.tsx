@@ -20,10 +20,10 @@ const styles = (theme: Theme) =>
     timerText: {
       padding: '0',
       margin: 0,
-      color: '0xffffff'
+      color:'0xffffff'
     },
     time: {
-      color: '0xffffff'
+        color:'0xffffff'
     }
   });
 
@@ -35,7 +35,8 @@ function onMenuClick(store: AppModel.Type) {
 // Random component
 const Completionist = ({ store }: { store: AppModel.Type }) => (
   <div style={{ textAlign: 'center' }}>
-    <Typography variant="h1" align="center" />
+    <Typography variant="h1" align="center">
+    </Typography>
   </div>
 );
 
@@ -47,7 +48,7 @@ const renderer = (
   { days, hours, minutes, seconds, completed }
 ) => {
   if (completed) {
-    // store.setDailyOpen(true);
+    store.setDailyOpen(false);
     // Render a completed state
     return <Completionist store={store} />;
   } else {
@@ -61,74 +62,46 @@ const renderer = (
       step = 2;
     }
 
-    const label = isDuringDebate ? (
-      <>Daily event ending&nbsp;in</>
-    ) : (
-      <>Daily event starts&nbsp;in</>
-    );
+    const label = isDuringDebate ? 'Daily event ending in' : 'Daily event starts in';
     return (
       <div style={{ padding: 0, margin: 0 }}>
-        <Typography
-          variant="h6"
-          align="center"
-          className={classes.timerText}
-          style={{ fontSize: '110%', color: '#555555' }}
-        >
-          {label}
+        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '110%', color:'#555555'}}>
+          {label}:
+        </Typography>
+        
+        <Typography variant="h4" align="center" className={classes.timerText} style={{fontSize: '240%', color:'#555555'}}>
+          {hours}&nbsp;&nbsp;{minutes}&nbsp;&nbsp;{seconds}
         </Typography>
 
-        <Typography
-          variant="h4"
-          align="center"
-          className={classes.timerText}
-          style={{ fontSize: '240%', color: 'white' }}
-        >
-          {days}&nbsp;&nbsp;{hours}&nbsp;&nbsp;{minutes}&nbsp;&nbsp;{seconds}
-        </Typography>
-
-        <Typography
-          variant="h6"
-          align="center"
-          className={classes.timerText}
-          style={{ fontSize: '.75em', color: '#555555' }}
-        >
-          DAYS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HRS
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
+        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '.75em', color:'#555555'}}>
+         HRS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
         </Typography>
 
         <br />
+        
       </div>
     );
   }
 };
 
 interface Props {
-  onCompleted: (isDuringDebate: boolean) => void;
+  onCompleted: () => void;
 }
 
-function BannerTimer(props) {
+function DailyEndTimer(props) {
   const { classes, t, onCompleted } = props;
   const store = props.store as AppModel.Type;
 
-  // const launch = Times.getDebateStart().getTime();
-
-  let isDuringDebate = Times.isDuringDebate();
-  const endTime = isDuringDebate
-    ? Times.getDebateEnd().getTime()
-    : Times.getDebateStart().getTime();
+  const isDuringDebate = Times.isDuringDebate();
+  const endTime = isDuringDebate ? Times.getDebateEnd().getTime() : Times.getDebateStart().getTime();
 
   return (
     <Countdown
-      completed={() => {
-        isDuringDebate = Times.isDuringDebate();
-        store.setDailyOpen(isDuringDebate);
-        !!onCompleted && onCompleted(isDuringDebate);
-      }}
+      completed={onCompleted}
       date={endTime}
       renderer={renderer.bind(null, classes, store, isDuringDebate)}
     />
   );
 }
 
-export default inject('store')(HOC(BannerTimer, styles));
+export default inject('store')(HOC(DailyEndTimer, styles));

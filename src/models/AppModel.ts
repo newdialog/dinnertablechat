@@ -10,9 +10,13 @@ const AppModel = types
     debate: DebateModel,
     router: RouterModel,
     showNav: true,
-    isStandalone: false
+    isStandalone: false,
+    dailyOpen: false // only use for invalidation
   })
   .actions(self => ({
+    setDailyOpen(open: boolean) {
+      self.dailyOpen = open;
+    },
     gotoHomeMenu() {
       self.showNav = true;
       if (!self.debate.isTest) self.router.push('/play');
