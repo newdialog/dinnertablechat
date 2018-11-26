@@ -13,28 +13,45 @@ import HOC from '../HOC';
 const styles = theme => 
   createStyles({
     container: {
-        marginTop: 30,
+        marginTop: 48,
         marginLeft: 'auto',
         marginRight: 'auto',
         width: 'auto',
         maxWidth: '800px',
         minWidth: '300px',
+        [theme.breakpoints.down('xs')]: {
+          // marginTop: 35
+        }
       },
     header: {
         alignItems: 'center',
         height: 50,
     },
     img: {
-        height: '35vh', // 40
-        maxWidth: 250,
+        // height: '35vh', // 40
+        maxWidth: '30vw',
+        // width: 250,
         overflow: 'hidden',
         borderRadius: 40,
+        
+        [theme.breakpoints.down('xs')]: {
+          maxWidth: '100%',
+          maxHeight: 'calc(43vh)',
+        },
+        [theme.breakpoints.up('md')]: {
+          maxWidth: '260px',
+        }
         // display: 'block',
     },
     button: {
       marginTop: theme.spacing.unit,
       marginRight: theme.spacing.unit,
     },
+    title: {
+      [theme.breakpoints.up('md')]: {
+        fontSize:'3.5em'
+      }
+    }
   });
 
 interface Props extends WithStyles<typeof styles> {
@@ -128,10 +145,10 @@ class GettingStarted extends React.Component<Props, State> {
               direction="row"
               alignItems="center"
               justify="center"
-              style={{ minHeight: 'calc(100vh - 60px - 45px)' }}
+              style={{ minHeight: 'calc(100vh - 60px - 66px)' }}
               >
               <Grid item xs={12}>
-                  <Typography variant="h4" color="primary" align="center">
+                  <Typography variant="h4" color="primary" align="center" className={classes.title}>
                       {step.title}
                   </Typography>
               </Grid>
