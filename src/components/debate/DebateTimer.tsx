@@ -35,6 +35,9 @@ const styles = (theme: Theme) =>
       [theme.breakpoints.down('sm')]: {
         display: 'inline'
       }
+    },
+    agreeBtn: {
+
     }
   });
 
@@ -47,6 +50,9 @@ function onMenuClick(store: AppModel.Type) {
 // Random component
 const Completionist = ({ store }: { store: AppModel.Type }) => (
   <div style={{ textAlign: 'center' }}>
+    <Typography variant="h1" align="center">
+      Debate Ended
+    </Typography>
     <Button
       variant="contained"
       color="primary"
@@ -54,11 +60,22 @@ const Completionist = ({ store }: { store: AppModel.Type }) => (
     >
       Back to Menu
     </Button>
-    <Typography variant="h1" align="center">
-      Debate Ended
-    </Typography>
   </div>
 );
+
+// const agreed = store.debate.agreed;
+const AgreementStep = ({ store }: { store: AppModel.Type }) => (
+  <div style={{ textAlign: 'center' }}>
+    {store.debate.quarter > 1 && !store.debate.agreed && <Button variant="contained" onClick={() => store.debate.madeAgreement(true)} color={ 'primary' }>
+      Agreement Found
+    </Button>}
+    {store.debate.agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} color={ 'primary' }>
+      Leave & Give Review
+    </Button>}
+  </div>
+);
+
+
 
 // Renderer callback with condition
 const renderer = (
@@ -67,22 +84,19 @@ const renderer = (
   { hours, minutes, seconds, completed }
 ) => {
   let step = 0;
-  if (Number(minutes) < 14) {
-    step = 1;
-  }
-  if (Number(minutes) < 5) {
-    step = 2;
-  }
+  const steps = ['Introductions', 'Debate', 'Find an Agreement'];
+
+  if (Number(minutes) < 14) step = 1;
+  if (Number(minutes) < 5) step = 2;
   if (completed) step = 3;
 
   if (step !== store.debate.quarter)
     setTimeout(() => store.debate.setQuarter(step), 1);
 
   if (completed) {
-    // Render a completed state
     return <Completionist store={store} />;
   } else {
-    const steps = ['Introductions', 'Debate', 'Find an Agreement'];
+    
 
     let hoursDisplay = '';
     if (Number(hours) > 0) {
@@ -94,27 +108,24 @@ const renderer = (
         <Typography variant="h1" align="center" className={classes.timerText}>
           {hoursDisplay}
           {minutes}:{seconds} <br />
-          <span className={classes.stepWord}>{steps[step]}</span>
+          {step === 2 ? null : <span className={classes.stepWord}>{steps[step]}</span>}
         </Typography>
 
         <br />
+      {step === 2 ? <AgreementStep store={store} /> : 
         <Stepper activeStep={step} className={classes.stepper}>
           {steps.map((label, index) => {
             const props = {};
             const labelProps = {};
-            /* if (this.isStepOptional(index)) {
-              labelProps.optional = <Typography variant="caption">Optional</Typography>;
-            }
-            if (this.isStepSkipped(index)) {
-              props.completed = false;
-            }*/
+            
             return (
               <Step key={label} {...props}>
                 <StepLabel {...labelProps}>{label}</StepLabel>
               </Step>
             );
           })}
-        </Stepper>
+        </Stepper> 
+      }
       </div>
     );
   }
@@ -122,6 +133,7 @@ const renderer = (
 
 interface Props {
   onCompleted: () => void;
+  store: any;
 }
 
 function DebateTimer(props) {
@@ -130,7 +142,7 @@ function DebateTimer(props) {
   return (
     <Countdown
       completed={onCompleted}
-      date={Date.now() + 1000 * 60 * 16}
+      date={Date.now() + 1000 * 60 * 5}
       renderer={renderer.bind(null, classes, store)}
     />
   );

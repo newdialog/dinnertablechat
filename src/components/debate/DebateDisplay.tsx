@@ -74,12 +74,6 @@ const styles = (theme: Theme) =>
       overflow: 'hidden'
       // bottom: 'calc(10vh)'
     },
-    agreeBtn: {
-      position: 'absolute',
-      top: 'calc(10vh)',
-      left: 'calc(50vw - 90px)',
-      // width: '80vh'
-    },
   });
 
 const aliceListenOptions = {
@@ -276,11 +270,6 @@ class DebateScene extends React.Component<Props, State> {
     this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
   };
 
-  private handleAgreed = () => {
-    this.props.store.debate.madeAgreement(true);
-    // this.setState({ agreed: true });
-  }
-
   private onCompleted = () => {
     console.log('on debate timer complete');
     this.setState({ended: true});
@@ -367,15 +356,6 @@ class DebateScene extends React.Component<Props, State> {
         </div>
 
         <DebateFloatMenu videoEl={videoEl} />
-
-        <div className={classes.agreeBtn}>
-          {store.debate.quarter > 1 && !agreed && <Button variant="contained" onClick={this.handleAgreed} color={ 'primary' }>
-            Reached a final agreement?
-          </Button>}
-          {agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} color={ 'secondary' }>
-            Leave and Give Review
-          </Button>}
-        </div>
 
       </React.Fragment>
     );
