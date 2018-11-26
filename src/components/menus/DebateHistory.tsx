@@ -171,14 +171,14 @@ class Index extends React.Component<Props, State> {
 
   renderAchievements = () => {
     console.log('ach', this.state.achievements);
-    var view = this.state.achievements.forEach(item => (
-      <React.Fragment>
+    var view = this.state.achievements.map( (item, i) => (
         <Grid
           id="top-row"
           container
           spacing={16}
           justify="space-around"
           alignItems="center"
+          key={i}
         >
           <Grid item xs={4}>
             <img src={item.photo} width={'100%'} height={'100%'} />
@@ -194,7 +194,6 @@ class Index extends React.Component<Props, State> {
             </Typography>
           </Grid>
         </Grid>
-      </React.Fragment>
     ));
     return view;
   };
@@ -212,13 +211,13 @@ class Index extends React.Component<Props, State> {
       userSide: this.transformSide(x.side),
       userCharacter: x.character,
       userReview: x.review,
-      userAgree: x.aggrement
+      userAgree: x.review_aggrement
     };
   }
 
   private transformOpp(x: any) {
     return {
-      oppAgree: x.aggrement,
+      oppAgree: x.review_aggrement,
       oppSide: this.transformSide(x.side),
       oppCharacter: x.character,
       oppReview: x.review
@@ -313,7 +312,8 @@ class Index extends React.Component<Props, State> {
                 </Grid>
               </Grid>
               <Grid item>
-                <Typography variant="h4" color="primary" align={'center'}>
+                <Typography variant="h4" color="primary" align={'center'}
+                style={x.agreed==='Agreed' ? { color:'#559955' } : {color:'#ef9a9a'}}>
                   {x.agreed}
                 </Typography>
               </Grid>
@@ -329,15 +329,15 @@ class Index extends React.Component<Props, State> {
             className={classes.margin}
           >
             {x.oppReview.traits.pos &&
-              x.oppReview.traits.pos.map((label, i) => {
-                return <div style={{textAlign: 'center'}}>
-                    <img key={i} src={badgeConfig[label]} alt={label} width="20%" />
+              x.oppReview.traits.pos.map((label, i2) => {
+                return <div key={i2} style={{textAlign: 'center'}}>
+                    <img key={i2} src={badgeConfig[label]} alt={label} width="20%" />
                     <Typography>{label}</Typography>
                   </div>
               })}
             {x.oppReview.traits.neg &&
-              x.oppReview.traits.neg.map((label, i) => {
-                return <Typography style={{margin: 5}}>{label}</Typography>
+              x.oppReview.traits.neg.map((label, i2) => {
+                return <Typography key={i2} style={{margin: 5}}>{label}</Typography>
                 //return <Chip key={i} label={label} className={classes.chip} />;
               })}
           </Grid>

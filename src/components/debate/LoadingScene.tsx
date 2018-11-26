@@ -135,6 +135,10 @@ class LoadingScene extends React.Component<Props, any> {
     });
   }
 
+  public componentWillUnmount() {
+    // TODO: fix kill queue
+  }
+
   private gotMedia = async (stream: MediaStream) => {
     console.log('gotMedia, now handshaking');
     const matchId = this.props.store.debate.match!.matchId;
