@@ -1,7 +1,7 @@
 {
   "name": "dinnertable-homesite",
   "homepage": "https://dinnertable.chat",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "private": true,
   "engines": {
     "node": ">=6"
