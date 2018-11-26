@@ -469,7 +469,8 @@ class Index extends React.Component<Props, State> {
         { (debateOpen || !store.isLive()) &&
           <Button variant="contained" color="primary" 
             onClick={ () => this.props.store.router.push('/quickmatch') }>
-            Begin Dinner Party QuickMatch
+            Begin Dinner Party QuickMatch<br/>
+            BETA v1.03
             <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
           </Button>
           

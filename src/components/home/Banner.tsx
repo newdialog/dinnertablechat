@@ -186,7 +186,10 @@ class Index extends React.Component<Props> {
             </Typography>
             <Typography variant="h4" align="center">
               <Reveal effect="fadeIn" duration={5500}>
-                {t('home-banner-title2')}
+                {
+                  `We're launching today!`
+                  // t('home-banner-title2')
+                }
               </Reveal>
             </Typography>
             {!auth &&
