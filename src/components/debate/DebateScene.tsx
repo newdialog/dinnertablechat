@@ -59,6 +59,15 @@ class DebateScene extends React.Component<Props, State> {
 
   public componentDidMount() {
     this.gotMedia();
+
+    window.gtag('event', 'debate_start', {
+      event_category: 'debate',
+      non_interaction: true
+    });
+    window.gtag('event', `debate_start_${this.props.store.debate.topic}_${this.props.store.debate.position}`, {
+      event_category: 'debate',
+      non_interaction: true
+    });
     /* navigator.getUserMedia(
       { video: false, audio: true },
       this.gotMedia.bind(this),
