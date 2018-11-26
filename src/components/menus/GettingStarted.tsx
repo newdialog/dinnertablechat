@@ -53,28 +53,34 @@ interface State {
 
 const tutorialSteps = [
     {
-      label: 'Select Topic',
+      title: 'Select Topic',
+      subTitle: 'Get started by selecting a desired topic. \n Topics are selected via news trends, online discussions, and your vote in DTC polls.',
       imgPath: './imgs/04-select.png',
     },
     {
-      label: 'Select Character',
+      title: 'Select Character',
+      subTitle: 'You will control a virtual character that will talk as you talk, listen to your matched partner, and also represents your mood.',
       imgPath: './imgs/04-select2.png',
     },
     {
-      label: 'Join Debate',
+      title: 'Join Debate',
+      subTitle: 'Our community embraces being super passionate and engaged… even if it makes us a little frightened or warm blooded. However, personal attacks, any form of discrimination, or just being a troll is not welcome. ',
       imgPath: './imgs/04-select3.png',
     },
     {
-      label: 'Find Agreement',
+      title: 'Find Agreement',
+      subTitle: 'It is easy to disagree, so let us know if you and your partner came to an agreement, big or small!',
       imgPath: './imgs/04-select2.png',
     },
     {
-      label: 'Give Feedback',
+      title: 'Give Feedback',
+      subTitle: 'Let the other side know what you thought!',
       imgPath: './imgs/04-select.png',
     },
     {
-        label: 'Earn Achievements',
-        imgPath: './imgs/04-select2.png',
+       title: 'Earn Achievements',
+       subTitle: 'Unlock badges as you cultivate positive discussions and find common ground!',
+       imgPath: './imgs/04-select2.png',
     },
   ];
   
@@ -83,13 +89,6 @@ class GettingStarted extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { open: false, activeStep: 0 };
-  }
-
-  public componentDidMount() {
-    if(Boolean(this.props.isTest) !== this.props.store.debate.isTest) { 
-      this.props.store.debate.setTest(this.props.isTest===true);
-    }
-    this.handleReset();
   }
 
   handleNext = () => {
@@ -104,19 +103,15 @@ class GettingStarted extends React.Component<Props, State> {
     }));
   };
 
-  private handleReset = () => {
+  routeToPlay = () => {
     const { store } = this.props;
-    store.debate.resetQueue();
+    store.gotoHomeMenu();
   };
 
   public render() {
     const { classes, store } = this.props;
     const { activeStep } = this.state;
     const maxSteps = tutorialSteps.length;
-    if(store.auth.isNotLoggedIn) {
-      store.router.push('/');
-      return (<div/>);
-    }
 
   return (
     <React.Fragment>
@@ -126,20 +121,25 @@ class GettingStarted extends React.Component<Props, State> {
         direction="column"
         alignItems="center"
         justify="center"
-        style={{ minHeight: '100vh' }}
+        style={{ minHeight: '100vh', maxWidth: '70hw' }}
         >
         <Grid item >
-            <Typography variant="h4" color="primary" align="right">
-                {tutorialSteps[activeStep].label}
+            <Typography variant="h4" color="primary" align="center">
+                {tutorialSteps[activeStep].title}
             </Typography>
         </Grid>    
         <Grid item >
             <img
                 className={classes.img}
                 src={tutorialSteps[activeStep].imgPath}
-                alt={tutorialSteps[activeStep].label}
+                alt={tutorialSteps[activeStep].title}
             />
-        </Grid>    
+        </Grid>
+        <Grid item >
+            <Typography variant="body2" align="center">
+                {tutorialSteps[activeStep].subTitle}
+            </Typography>
+        </Grid>     
         <Grid item >
             <MobileStepper
                 steps={maxSteps}
@@ -158,7 +158,9 @@ class GettingStarted extends React.Component<Props, State> {
                     </Button>
                 }
             />
-        </Grid>   
+        </Grid>
+        {( activeStep === (maxSteps-1) ) ? 
+        <Button variant="contained" color="primary" onClick={this.routeToPlay}>Begin</Button> : null}   
      </Grid>
     </React.Fragment>
   );

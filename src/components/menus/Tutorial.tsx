@@ -55,33 +55,33 @@ interface State {
 const tutorialSteps = [
     {
       title: 'Select Topic',
-      subTitle: '',
+      subTitle: 'Get started by selecting a desired topic. \n Topics are selected via news trends, online discussions, and your vote in DTC polls.',
       imgPath: './imgs/04-select.png',
     },
     {
       title: 'Select Character',
-      subTitle: '',
+      subTitle: 'You will control a virtual character that will talk as you talk, listen to your matched partner, and also represents your mood.',
       imgPath: './imgs/04-select2.png',
     },
     {
       title: 'Join Debate',
-      subTitle: '',
+      subTitle: 'Our community embraces being super passionate and engaged… even if it makes us a little frightened or warm blooded. However, personal attacks, any form of discrimination, or just being a troll is not welcome. ',
       imgPath: './imgs/04-select3.png',
     },
     {
       title: 'Find Agreement',
-      subTitle: '',
+      subTitle: 'It is easy to disagree, so let us know if you and your partner came to an agreement, big or small!',
       imgPath: './imgs/04-select2.png',
     },
     {
       title: 'Give Feedback',
-      subTitle: '',
+      subTitle: 'Let the other side know what you thought!',
       imgPath: './imgs/04-select.png',
     },
     {
-        title: 'Earn Achievements',
-        subTitle: '',
-        imgPath: './imgs/04-select2.png',
+       title: 'Earn Achievements',
+       subTitle: '',
+       imgPath: './imgs/04-select2.png',
     },
   ];
   
@@ -113,14 +113,14 @@ class Tutorial extends React.Component<Props, State> {
     // alt={tutorialSteps[activeStep].label}
 
   return (
-    <div style={{ position: 'relative', width: '80%', height: '80%' }}>
+    <div style={{ width: '100%', height: '100%' }}>
         <AutoRotatingCarousel
             label=''
             style={{ position: 'absolute' }}
             onChange={(i) => this.setState({activeStep: i})}
-            interval={5000}
+            // interval={8000}
             open
-            autoplay
+            autoplay={false}
             mobile
         >
            <Slide
