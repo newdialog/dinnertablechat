@@ -52,7 +52,7 @@ app.post('/review', async (req: any, res: any, next: any) => {
   if (!body.matchId) throw new Error(`no match id on ${JSON.stringify(body)}`);
   if (!body.review) throw new Error(`no review on ${JSON.stringify(body)}`);
   const { matchId, review } = body;
-  const agreement = review.agreement;
+  const agreement = review.agreement || false;
 
   const client = await connection.connect();
   console.log('QUERY for user', id);

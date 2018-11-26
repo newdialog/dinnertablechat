@@ -11,6 +11,10 @@ import FaceIcon from '@material-ui/icons/Face';
 import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
 import APIService from '../../services/APIService';
+import Switch from '@material-ui/core/Switch';
+import purple from '@material-ui/core/colors/purple';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -37,6 +41,51 @@ const styles = (theme: Theme) =>
         marginRight: theme.spacing.unit,
         width: 320,
     },
+
+      iOSSwitchBase: {
+        '&$iOSChecked': {
+          color: theme.palette.common.white,
+          '& + $iOSBar': {
+            backgroundColor: '#52d869',
+          },
+        },
+        transition: theme.transitions.create('transform', {
+          duration: theme.transitions.duration.shortest,
+          easing: theme.transitions.easing.sharp,
+        }),
+      },
+      iOSChecked: {
+        transform: 'translateX(15px)',
+        '& + $iOSBar': {
+          opacity: 1,
+          border: 'none',
+        },
+      },
+      iOSBar: {
+        borderRadius: 13,
+        width: 45,
+        height: 28,
+        marginTop: -13,
+        marginLeft: -21,
+        border: 'solid 1px',
+        borderColor: theme.palette.grey[400],
+        backgroundColor: '#990000',
+        fontWeight:'bold',
+        opacity: 1,
+        transition: theme.transitions.create(['background-color', 'border']),
+      },
+      iOSIcon: {
+        width: 28,
+        height: 28,
+        boxShadow: theme.shadows[3]
+      },
+      iOSIconChecked: {
+        boxShadow: theme.shadows[3],
+      },
+      iOSRoot: {
+        fontWeight:'bold',
+        fontSize: '20px'
+      }
 });
 
 
@@ -59,12 +108,13 @@ interface Props extends WithStyles<typeof styles> {
 interface State {
     traitHash: { [key:string]:boolean },
     platformFeedback: '',
+    agreed: boolean,
 }
 
 class DebateFeedback extends React.Component<Props, State> {
     constructor(props:Props) {
         super(props);
-        this.state = { traitHash: {}, platformFeedback: '' };
+        this.state = { traitHash: {}, platformFeedback: '', agreed:false };
     }
 
     private handleChipClick(label: string) { 
@@ -82,6 +132,7 @@ class DebateFeedback extends React.Component<Props, State> {
             event_category: 'debate',
             non_interaction: true
         });
+        this.setState({agreed: this.props.store.debate.agreed})
     }
 
     private handleConfirm = async () => { // TODO: update endpt w user selection, route back home
@@ -93,7 +144,7 @@ class DebateFeedback extends React.Component<Props, State> {
             return acc;
         }, { pos:[] as string[],neg:[] as string[] });
 
-        const response = { traits: traitsObj, platformFeedback: this.state.platformFeedback }
+        const response = { traits: traitsObj, feedback: this.state.platformFeedback, agreement:this.state.agreed }
         console.log('responses', response);
         // TODO: call endpoint
 
@@ -122,10 +173,30 @@ class DebateFeedback extends React.Component<Props, State> {
                 >
                 <Paper>
                 <Grid item className={classes.margin}>
+                <FormControlLabel
+          control={
+            <Switch
+              classes={{
+                switchBase: classes.iOSSwitchBase,
+                bar: classes.iOSBar,
+                icon: classes.iOSIcon,
+                iconChecked: classes.iOSIconChecked,
+                checked: classes.iOSChecked,
+                root: classes.iOSRoot,
+              }}
+              disableRipple
+              checked={this.state.agreed}
+              onChange={(e)=>this.setState({'agreed': e.currentTarget.checked})}
+              value="agreed"
+            />
+          }
+          label="Found an agreement?"
+        />
                     <Typography
                         component="span"
-                        variant="h6"
+                        variant="h5"
                         color="textPrimary"
+                        style={{color:'#444444'}}
                         className={classes.header}
                     >
                         Your partner was ...
