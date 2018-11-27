@@ -139,7 +139,7 @@ function DebateTimer(props) {
   return (
     <Countdown
       completed={onCompleted}
-      date={Date.now() + 1000 * 60 * .1}
+      date={Date.now() + 1000 * 60 * 16}
       renderer={renderer.bind(null, classes, store)}
     />
   );
