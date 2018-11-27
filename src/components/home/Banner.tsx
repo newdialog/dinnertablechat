@@ -159,7 +159,7 @@ class Index extends React.Component<Props> {
     const auth = store.auth.isAuthenticated();
     const isLive = store.isLive();
 
-    const isOpen = store.dailyOpen; // !isLive ||  Times.isDuringDebate();
+    const isOpen = Times.isDuringDebate(); // store.dailyOpen; // !isLive ||  Times.isDuringDebate();
 
     return (
       <React.Fragment>

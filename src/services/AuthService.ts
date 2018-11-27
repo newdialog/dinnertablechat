@@ -22,7 +22,8 @@ import { injectConfig } from '../configs/AWSconfig';
 
 const awsconfig = injectConfig(awsmobile);
 const IdentityPoolId = awsconfig.Auth.identityPoolId;
-// console.log('IdentityPoolId', IdentityPoolId);
+
+console.log('IdentityPoolId', IdentityPoolId);
 
 if (!AWS.config || !AWS.config.region) {
   AWS.config = new AWS.Config({ region: 'us-east-1' });

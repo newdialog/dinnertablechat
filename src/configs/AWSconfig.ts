@@ -80,6 +80,12 @@ export const injectConfig = (cfg: any) => {
   cfg.Auth.oauth.redirectSignIn = localServer + '/callback';
   cfg.Auth.oauth.redirectSignOut = localServer + '/signout';
 
+  console.log(
+    'cfg.Auth',
+    cfg.Auth,
+    process.env.REACT_APP_aws_user_pools_web_client_id
+  );
+
   // For AWS -JD
   cfg.Auth.identityPoolId = 'us-east-1:5173fb21-e414-43bc-af6c-3a65de8caf22';
 
