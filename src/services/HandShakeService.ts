@@ -99,7 +99,7 @@ export async function handshake(
         stopFlag.stop = true;
         reject('retry');
         // throw new Error('retry');
-      }, 1000 * 30);
+      }, 1000 * 60 * 2);
     } catch (e) {
       throw new Error(e);
     }
