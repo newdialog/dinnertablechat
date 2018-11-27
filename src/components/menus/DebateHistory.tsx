@@ -484,7 +484,7 @@ class Index extends React.Component<Props, State> {
         { (!debateOpen) &&
           <Button variant="contained" color="primary"
             onClick={ () => this.props.store.router.push('/') }>
-            Dinner is finished.<br/> come back tomorrow!
+            Dinner is finished.<br/> come back next time!
           </Button>
         }
 
