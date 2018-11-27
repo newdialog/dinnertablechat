@@ -47,7 +47,7 @@ function ButtonAppBar(props:Props) {
   const auth = store.auth.isAuthenticated();
   const isLive = props.store.isLive();
 
-  const showAuth = !isLive || Times.isDuringDebate();
+  const showAuth = true; // !isLive || Times.isDuringDebate();
 
   if(store.debate.match && store.debate.match.sync) {
     return null; // <React.Fragment></React.Fragment>

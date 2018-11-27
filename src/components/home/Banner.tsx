@@ -193,13 +193,13 @@ class Index extends React.Component<Props> {
               </Reveal>
             </Typography>
             {!auth &&
-              isOpen && (
+              (
                 <Button style={{marginTop:'4em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Start Login
                 <QueueIcon style={{ marginLeft: '8px' }} />
                 </Button>
               )}
             {auth &&
-              isOpen && (
+              (
                 <React.Fragment>
                   <Button
                     style={{marginTop:'4em'}}
