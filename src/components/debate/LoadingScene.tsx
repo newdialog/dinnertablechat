@@ -76,12 +76,18 @@ interface Props extends WithStyles<typeof styles> {
   onPeer: (p: any) => void;
 }
 
-class LoadingScene extends React.Component<Props, any> {
+interface State {
+  stream?:MediaStream;
+  error?:string;
+}
+
+class LoadingScene extends React.Component<Props, State> {
   loggedError = false;
+  myStream:MediaStream | null = null;
 
   constructor(props: any) {
     super(props);
-    this.state = { error: null };
+    this.state = { };
   }
 
   private onMatched = (match: any) => {
@@ -93,7 +99,7 @@ class LoadingScene extends React.Component<Props, any> {
     this.props.store.debate.createMatch(match);
   };
 
-  public componentDidMount() {
+  public async componentDidMount() {
     // return; // TODO remove when back online
 
     if (!this.props.store.auth.user || !this.props.store.auth.aws)
@@ -133,6 +139,16 @@ class LoadingScene extends React.Component<Props, any> {
       event_category: 'debate',
       non_interaction: true
     });
+
+    // enable mic
+    try {
+      const media = await getMedia();
+      // this.myStream = media;
+      this.setState( {stream: media });
+    } catch (e) {
+      console.log('getMediaError', e);
+      this.setState({ error: 'mic_timeout' });
+    }
   }
 
   public componentWillUnmount() {
@@ -165,16 +181,9 @@ class LoadingScene extends React.Component<Props, any> {
   };
 
   public async componentWillUpdate() {
-    if (!this.props.store.debate.match) return; // no match data yet
-
-    console.log('ready for matching');
-
-    try {
-      const media = await getMedia();
-      this.gotMedia(media);
-    } catch (e) {
-      console.log('getMediaError', e);
-      this.setState({ error: 'mic_timeout' });
+    // Get Mic right away
+    if (this.props.store.debate.match && this.state.stream) {
+      this.gotMedia(this.state.stream!);
     }
   }
 

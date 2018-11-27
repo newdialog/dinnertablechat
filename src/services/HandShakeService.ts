@@ -9,6 +9,19 @@ import PeerService from './PeerService';
 import retry from 'async-retry';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+const delayFlag = async (obj: { flag: boolean }) =>
+  await retry(
+    async bail => {
+      if (obj.flag) return true;
+      else throw new Error('retry');
+    },
+    {
+      retries: 8,
+      factor: 1,
+      maxTimeout: 1000,
+      minTimeout: 1000
+    }
+  );
 
 interface StopFlag {
   stop: boolean;
@@ -64,10 +77,13 @@ export async function handshake(
     const otherColor = isLeader ? 'blue' : 'red';
     console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
 
+    const savedState = { flag: false };
     const cbs = {
       onSignal: async (sigdata: string) => {
         // console.log('onSignal gen:', mycolor, sigdata);
         await updateMatch(matchid, mycolor, sigdata, state);
+        console.log('wrote state, isLeader', isLeader);
+        savedState.flag = true;
       }
     };
     ps.init(isLeader, cbs);
@@ -76,6 +92,10 @@ export async function handshake(
 
     let stopFlag: StopFlag = { stop: false };
 
+    // wait 3s (for leader, wait until blue heard, for blue wait until red msg)
+    if (isLeader) await delayFlag(savedState);
+    else await delay(5000); // hope leader has written state
+    console.log('started listening, isLeader', isLeader);
     // try {
     handshakeUntilConnected(
       matchid,
@@ -176,10 +196,10 @@ async function readMatchWait(
       return { key: keyval, state: stateval };
     },
     {
-      retries: 10,
+      retries: 3,
       factor: 1.25,
       maxTimeout: 4000,
-      minTimeout: 2000
+      minTimeout: 4000
     }
   );
 }
@@ -231,10 +251,10 @@ async function handshakeUntilConnected(
       throw new Error('retry');
     },
     {
-      retries: 10,
+      retries: 2,
       factor: 1.25,
-      maxTimeout: 4000,
-      minTimeout: 2000
+      maxTimeout: 3000,
+      minTimeout: 3000
     }
   );
 }

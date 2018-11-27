@@ -52,7 +52,7 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       display: 'inline-block',
       [theme.breakpoints.down('sm')]: {
-        paddingBottom: '80px'
+       //  paddingBottom: '80px'
       }
     },
     divider: {
@@ -84,7 +84,7 @@ const styles = (theme: Theme) =>
       // left: ''
       height: '13vh',
       [theme.breakpoints.down('sm')]: {
-        height: '5vh'
+        height: '4vh'
       }
     },
     logoanim: {
@@ -186,15 +186,16 @@ class Index extends React.Component<Props> {
             </Typography>
             <Typography variant="h4" align="center">
               <Reveal effect="fadeIn" duration={5500}>
-                {
-                  `We're launching today!`
+                { !isOpen ?
+                  <>you're invited to our dinner party beta</>
+                  : <span style={{fontSize: '110%'}}>debate sessions are now <b>OPEN</b></span>
                   // t('home-banner-title2')
                 }
               </Reveal>
             </Typography>
             {!auth &&
               (
-                <Button style={{marginTop:'4em'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Start Login
+                <Button style={{marginTop:'1vh'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Start Login
                 <QueueIcon style={{ marginLeft: '8px' }} />
                 </Button>
               )}
@@ -202,7 +203,7 @@ class Index extends React.Component<Props> {
               (
                 <React.Fragment>
                   <Button
-                    style={{marginTop:'4em'}}
+                    style={{marginTop:'1vh'}}
                     variant="contained"
                     color="primary" size="large"
                     onClick={() => store.router.push('/play')}
@@ -212,9 +213,7 @@ class Index extends React.Component<Props> {
                   </Button>
                 </React.Fragment>
               )}
-              {
-                isOpen && <Typography variant="h1" style={{fontSize: '2.5em', marginTop: '.4em', color:'#white'}}>It's now dinner time!</Typography>
-              }
+              
             
             <div className={classes.bannerTextDivider} />
             <BannerTimer/>
