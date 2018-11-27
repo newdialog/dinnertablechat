@@ -36,13 +36,17 @@ const styles = (theme: Theme) =>
     },
     centeredDown: {
       width: '100%',
+      height: '100vh',
       marginLeft: 'auto',
       marginRight: 'auto',
       paddingBottom: '1em',
       paddingTop: '23vh',
       color: '#ffffff88',
       textAlign: 'center',
-      display: 'inline-block'
+      display: 'inline-block',
+      [theme.breakpoints.down('sm')]: {
+        paddingTop: '2vh',
+      }
     },
     bannerAnimOverlay: {
       zIndex: -1,
@@ -233,9 +237,11 @@ class LoadingScene extends React.Component<Props, State> {
             </Reveal>
           </Typography>
           <br/><br/><br/>
-          <Typography variant="h1" align="center" style={{fontSize:'1.5em', lineHeight: '0.7'}}>
+          <Typography variant="h1" align="center" style={{fontSize:'1.5em', lineHeight: '1'}}>
             <Reveal effect="fadeIn" duration={1000}>
-              Click "Allow" when your browser asks to enable your microphone!
+              1. Click "Allow" when the browser asks to enable the microphone<br/>
+              2. Please do not reload or navigate away until prompted.<br/>
+              3. If on mobile, rotate to horizonal landscape.
             </Reveal>
           </Typography>
         </div>
