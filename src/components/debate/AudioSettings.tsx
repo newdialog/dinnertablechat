@@ -88,7 +88,7 @@ class AudioSettings extends React.Component<IProps, any> {
   };
 
   private gotDevices = (deviceInfos: MediaDeviceInfo[]) => {
-    console.log('deviceInfos', deviceInfos);
+    // console.log('deviceInfos', deviceInfos);
     const speakers: any[] = [];
     const mics: any[] = [];
     const defaultVal:any = { mic:null, speaker: null};

@@ -25,6 +25,7 @@ import HOC from '../HOC';
 import { inject } from 'mobx-react';
 import AudioSettings from './AudioSettings';
 import DebateExitDialog from './DebateExitDialog';
+import Fab from '@material-ui/core/Fab';
 
 const styles = theme =>
   createStyles({
@@ -103,8 +104,7 @@ class FloatMenu extends React.Component<Props, State> {
             onCancel={ ()=>this.setState({'exitPrompt': false, 'anchorEl': null}) }
             onExit={this.handleLeaveRate} />
         { this.state.showSettings && <AudioSettings onClose={this.closeSettings} videoEl={videoEl}/> }
-        <Button
-          variant="fab"
+        <Fab
           className={classes.fab}
           color={'primary'}
           onClick={this.handleClick}
@@ -112,7 +112,7 @@ class FloatMenu extends React.Component<Props, State> {
           aria-owns={anchorEl ? 'simple-menu' : undefined}
         >
           <UpIcon />
-        </Button>
+        </Fab>
         <Menu
           id="simple-menu"
           anchorEl={anchorEl}

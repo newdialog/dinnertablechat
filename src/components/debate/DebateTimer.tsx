@@ -56,7 +56,7 @@ const Completionist = ({ store }: { store: AppModel.Type }) => (
       color="primary"
       onClick={() => onMenuClick(store)}
     >
-      Back to Menu
+      Leave & Give Review
     </Button>
   </div>
 );
@@ -139,7 +139,7 @@ function DebateTimer(props) {
   return (
     <Countdown
       completed={onCompleted}
-      date={Date.now() + 1000 * 60 * 16}
+      date={Date.now() + 1000 * 60 * .1}
       renderer={renderer.bind(null, classes, store)}
     />
   );
