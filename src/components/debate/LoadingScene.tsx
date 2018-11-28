@@ -83,11 +83,13 @@ interface Props extends WithStyles<typeof styles> {
 interface State {
   stream?: MediaStream;
   error?: string;
+  ticketId?: string;
 }
 
 class LoadingScene extends React.Component<Props, State> {
   loggedError = false;
   myStream: MediaStream | null = null;
+  ticketIdProp = null;
 
   constructor(props: any) {
     super(props);
@@ -97,6 +99,7 @@ class LoadingScene extends React.Component<Props, State> {
   private onMatched = (match: any) => {
     // TODO
     if (typeof match === 'string') {
+      if(match === 'CANCELLED') return; // just end
       this.setState({ error: match });
       return;
     }
@@ -149,7 +152,7 @@ class LoadingScene extends React.Component<Props, State> {
 
     if (!this.props.store.auth.user!.id) throw new Error('no valid user id');
     const userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
-    QS.queueUp(
+    const ticketId = await QS.queueUp(
       topic,
       position,
       userid,
@@ -157,18 +160,42 @@ class LoadingScene extends React.Component<Props, State> {
       chararacter,
       this.onMatched
     );
+    this.setState({ticketId});
+
+    // this.ticketIdProp = ticketId;
+    window.addEventListener("beforeunload", this.onWindowBeforeUnload);
+    window.addEventListener("unload", this.onWindowUnload);
+    // window.onunload = this.onWindowUnload;
+  }
+
+  private onWindowUnload = (e:any) => {
+    console.log('onWindowUnload');
+    if(this.state.ticketId) QS.stopMatchmakingSimple(this.state.ticketId!);
+    // return false;
+  }
+
+  private onWindowBeforeUnload = (e:any) => {
+    e.preventDefault();
+    return e.returnValue = 'Are you sure you want to close?';
   }
 
   public componentWillUnmount() {
+    window.removeEventListener("beforeunload", this.onWindowBeforeUnload);
+    window.removeEventListener("unload", this.onWindowUnload);
+    // unload streams if nav to different page outside of match
+    // console.log('this.props.store.router', JSON.stringify(this.props.store.router));
     const navAway =
       ((this.props.store.router.location as any).pathname as string).indexOf(
         'match'
       ) === -1;
-    if (this.state.stream && navAway) {
-      this.state.stream.getTracks().forEach(track => track.stop());
+    
+      console.log('componentWillUnmount 1', navAway);
+    if(true) {
+      console.log('componentWillUnmount');
+      if(this.state.ticketId) QS.stopMatchmaking(this.state.ticketId!);
       this.props.store.showNavbar();
+      /// if(this.state.stream) this.state.stream.getTracks().forEach(track => track.stop());
     }
-    // TODO: fix kill queue
   }
 
   private gotMedia = async (stream: MediaStream) => {
