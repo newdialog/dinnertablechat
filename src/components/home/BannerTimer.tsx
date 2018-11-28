@@ -122,9 +122,12 @@ function BannerTimer(props) {
   return (
     <Countdown
       completed={() => {
-        isDuringDebate = Times.isDuringDebate();
-        store.setDailyOpen(isDuringDebate);
-        !!onCompleted && onCompleted(isDuringDebate);
+        setTimeout( () => {
+          console.log('BannerTimer completed');
+          isDuringDebate = Times.isDuringDebate();
+          store.setDailyOpen(isDuringDebate);
+          !!onCompleted && onCompleted(isDuringDebate);
+        }, 1000);
       }}
       date={endTime}
       renderer={renderer.bind(null, classes, store, isDuringDebate)}
