@@ -45,7 +45,7 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       display: 'inline-block',
       [theme.breakpoints.down('sm')]: {
-        paddingTop: '2vh',
+        paddingTop: '2vh'
       }
     },
     bannerAnimOverlay: {
@@ -81,17 +81,17 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 interface State {
-  stream?:MediaStream;
-  error?:string;
+  stream?: MediaStream;
+  error?: string;
 }
 
 class LoadingScene extends React.Component<Props, State> {
   loggedError = false;
-  myStream:MediaStream | null = null;
+  myStream: MediaStream | null = null;
 
   constructor(props: any) {
     super(props);
-    this.state = { };
+    this.state = {};
   }
 
   private onMatched = (match: any) => {
@@ -105,8 +105,8 @@ class LoadingScene extends React.Component<Props, State> {
 
   public async componentDidMount() {
     this.props.store.hideNavbar();
-    // return; // TODO remove when back online
 
+    // Check if match params are set up
     if (!this.props.store.auth.user || !this.props.store.auth.aws)
       throw new Error('user not logged in');
     if (
@@ -115,27 +115,12 @@ class LoadingScene extends React.Component<Props, State> {
     )
       throw new Error('debate params not selected');
 
-    const options = this.props.store.auth.aws!;
-    QS.init(options);
-
     const topic = this.props.store.debate.topic;
     const position = this.props.store.debate.position;
     const contribution = this.props.store.debate.contribution;
     const chararacter = this.props.store.debate.character;
 
-    const sameUserSeed = Math.round(new Date().getTime() / 1000);
-
-    if(!this.props.store.auth.user!.id) throw new Error('no valid user id');
-    const userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
-    QS.queueUp(
-      topic,
-      position,
-      userid,
-      contribution,
-      chararacter,
-      this.onMatched
-    );
-
+    // analytics
     window.gtag('event', 'debate_loading', {
       event_category: 'debate',
       non_interaction: true
@@ -145,20 +130,41 @@ class LoadingScene extends React.Component<Props, State> {
       non_interaction: true
     });
 
-    // enable mic
+    // enable mic first
     try {
       const media = await getMedia();
       // this.myStream = media;
-      this.setState( {stream: media });
+      this.setState({ stream: media });
     } catch (e) {
       console.log('getMediaError', e);
       this.setState({ error: 'mic_timeout' });
+      return; // do not continue to queue on error;
     }
+
+    // start queue
+    const options = this.props.store.auth.aws!;
+    QS.init(options);
+
+    const sameUserSeed = Math.round(new Date().getTime() / 1000);
+
+    if (!this.props.store.auth.user!.id) throw new Error('no valid user id');
+    const userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
+    QS.queueUp(
+      topic,
+      position,
+      userid,
+      contribution,
+      chararacter,
+      this.onMatched
+    );
   }
 
   public componentWillUnmount() {
-    const navAway = ((this.props.store.router.location as any).pathname as string).indexOf('match') === -1;
-    if(this.state.stream && navAway) {
+    const navAway =
+      ((this.props.store.router.location as any).pathname as string).indexOf(
+        'match'
+      ) === -1;
+    if (this.state.stream && navAway) {
       this.state.stream.getTracks().forEach(track => track.stop());
       this.props.store.showNavbar();
     }
@@ -209,7 +215,7 @@ class LoadingScene extends React.Component<Props, State> {
     if (matchedUnsync) text = 'found match... handshaking';
     if (matchedsync) text = 'handshaking complete';
 
-    if(this.state.error && !this.loggedError) {
+    if (this.state.error && !this.loggedError) {
       window.gtag('event', this.state.error, {
         event_category: 'error',
         non_interaction: true
@@ -242,11 +248,19 @@ class LoadingScene extends React.Component<Props, State> {
               {text}
             </Reveal>
           </Typography>
-          <br/><br/><br/>
-          <Typography variant="h1" align="center" style={{fontSize:'1.5em', lineHeight: '1'}}>
+          <br />
+          <br />
+          <br />
+          <Typography
+            variant="h1"
+            align="center"
+            style={{ fontSize: '1.5em', lineHeight: '1' }}
+          >
             <Reveal effect="fadeIn" duration={1000}>
-              1. Click "Allow" when the browser asks to enable the microphone.<br/>
-              2. Please do not reload or navigate away until prompted.<br/>
+              1. Click "Allow" when the browser asks to enable the microphone.
+              <br />
+              2. Please do not reload or navigate away until prompted.
+              <br />
               3. If on mobile, rotate to horizonal landscape.
             </Reveal>
           </Typography>
