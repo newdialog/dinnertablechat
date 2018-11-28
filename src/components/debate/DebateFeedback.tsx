@@ -214,7 +214,7 @@ class DebateFeedback extends React.Component<Props, State> {
                 style={{color:'#995555', fontSize: '1em'}}
                 className={classes.header}
             >
-                    Found no agreement? Try again with more <a href='https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef' target='_blank'>debate preperation!</a>
+                    Found no agreement? Try again with more <a href='https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef' target='_blank'>debate preparation!</a>
                 </Typography></Reveal>
 
               }

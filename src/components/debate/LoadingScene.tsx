@@ -104,6 +104,7 @@ class LoadingScene extends React.Component<Props, State> {
   };
 
   public async componentDidMount() {
+    this.props.store.hideNavbar();
     // return; // TODO remove when back online
 
     if (!this.props.store.auth.user || !this.props.store.auth.aws)
@@ -156,6 +157,11 @@ class LoadingScene extends React.Component<Props, State> {
   }
 
   public componentWillUnmount() {
+    const navAway = ((this.props.store.router.location as any).pathname as string).indexOf('match') === -1;
+    if(this.state.stream && navAway) {
+      this.state.stream.getTracks().forEach(track => track.stop());
+      this.props.store.showNavbar();
+    }
     // TODO: fix kill queue
   }
 
@@ -239,7 +245,7 @@ class LoadingScene extends React.Component<Props, State> {
           <br/><br/><br/>
           <Typography variant="h1" align="center" style={{fontSize:'1.5em', lineHeight: '1'}}>
             <Reveal effect="fadeIn" duration={1000}>
-              1. Click "Allow" when the browser asks to enable the microphone<br/>
+              1. Click "Allow" when the browser asks to enable the microphone.<br/>
               2. Please do not reload or navigate away until prompted.<br/>
               3. If on mobile, rotate to horizonal landscape.
             </Reveal>
