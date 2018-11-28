@@ -47,7 +47,8 @@ class DebateError extends React.Component<Props, any> {
   private handleClose = () => {
     this.setState({ open: false });
     this.props.store.debate.resetQueue();
-    this.props.store.router.push('/play');
+    // this.props.store.router.push('/play');
+    window.location.reload(true);
   };
   
   public render() {
