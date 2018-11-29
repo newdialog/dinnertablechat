@@ -136,8 +136,7 @@ class DebateFeedback extends React.Component<Props, State> {
 
   public componentDidMount() {
     window.gtag('event', 'debate_feedback_page', {
-      event_category: 'debate',
-      non_interaction: true
+      event_category: 'debate'
     });
     this.setState({ agreed: this.props.store.debate.agreed });
   }
@@ -171,8 +170,7 @@ class DebateFeedback extends React.Component<Props, State> {
     );
 
     window.gtag('event', 'debate_feedback_page_submit', {
-      event_category: 'debate',
-      non_interaction: true
+      event_category: 'debate'
     });
 
     this.props.store.debate.resetQueue();

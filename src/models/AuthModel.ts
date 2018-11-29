@@ -15,8 +15,8 @@ const AWSModel = types.model({
   accessKeyId: types.string,
   secretAccessKey: types.string,
   sessionToken: types.string,
-  region: types.string,
-})
+  region: types.string
+});
 
 const AuthModel = types
   .model({
@@ -28,10 +28,11 @@ const AuthModel = types
   })
   .actions(self => ({
     login() {
-      // self.text = newTitle
+      if (!self.doLogin)
+        window.gtag('event', 'login_action', {
+          event_category: 'auth'
+        });
       self.doLogin = true;
-
-      // console.log('login action');
     },
     logout() {
       Auth.logout();
@@ -43,18 +44,28 @@ const AuthModel = types
       self.isNotLoggedIn = true;
     },
     authenticated(authServiceData: any) {
-      const { user, accessKeyId, secretAccessKey, sessionToken, region } = authServiceData;
-      // console.log('user', user);
+      const {
+        user,
+        accessKeyId,
+        secretAccessKey,
+        sessionToken,
+        region
+      } = authServiceData;
 
-      const umodel: Instance<typeof UserModel> = { 
-        name: user.name, 
+      /* if (!self.user)
+        window.gtag('event', 'authenticated', {
+          event_category: 'auth'
+        });*/
+
+      const umodel: Instance<typeof UserModel> = {
+        name: user.name,
         email: user.email,
-        id: user.id,
+        id: user.id
       };
 
-      const aws: Instance<typeof AWSModel> = { 
+      const aws: Instance<typeof AWSModel> = {
         accessKeyId,
-        secretAccessKey, 
+        secretAccessKey,
         sessionToken,
         region
       };
@@ -64,7 +75,8 @@ const AuthModel = types
       // self.loggedIn = true;
       self.isNotLoggedIn = false;
     }
-  })).views(self => ({
+  }))
+  .views(self => ({
     isAuthenticated() {
       return self.user && self.aws && !self.isNotLoggedIn;
     }

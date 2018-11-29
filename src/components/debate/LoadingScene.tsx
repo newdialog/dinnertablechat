@@ -125,12 +125,10 @@ class LoadingScene extends React.Component<Props, State> {
 
     // analytics
     window.gtag('event', 'debate_loading', {
-      event_category: 'debate',
-      non_interaction: true
+      event_category: 'debate'
     });
     window.gtag('event', `debate_queue_${topic}_${position}`, {
-      event_category: 'debate',
-      non_interaction: true
+      event_category: 'debate'
     });
 
     // enable mic first
