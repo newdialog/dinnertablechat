@@ -49,6 +49,18 @@ const renderer = (
   if (completed) {
     // store.setDailyOpen(true);
     // Render a completed state
+    
+      isDuringDebate = Times.isDuringDebate();
+      if(store.dailyOpen!=isDuringDebate) {
+        // setTimeout(() => {
+          console.log('BannerTimer completed');
+          store.setDailyOpen(isDuringDebate);
+          // window.location.reload(true);
+        // }, 3001);
+      }
+      // 
+    
+    // !!onCompleted && onCompleted(isDuringDebate);
     return <Completionist store={store} />;
   } else {
     const steps = ['Introductions', 'Debate', 'Find an Agreement'];
@@ -105,12 +117,15 @@ const renderer = (
 };
 
 interface Props {
-  onCompleted: (isDuringDebate: boolean) => void;
+  onCompleted?: (isDuringDebate: boolean) => void;
+  t:any,
+  classes:any,
+  store:AppModel.Type,
 }
 
-function BannerTimer(props) {
+function BannerTimer(props:Props) {
   const { classes, t, onCompleted } = props;
-  const store = props.store as AppModel.Type;
+  const store = props.store;
 
   // const launch = Times.getDebateStart().getTime();
 
@@ -122,12 +137,12 @@ function BannerTimer(props) {
   return (
     <Countdown
       completed={() => {
-        setTimeout( () => {
+        // setTimeout( () => {
           console.log('BannerTimer completed');
           isDuringDebate = Times.isDuringDebate();
           store.setDailyOpen(isDuringDebate);
           !!onCompleted && onCompleted(isDuringDebate);
-        }, 1000);
+        // }, 2000);
       }}
       date={endTime}
       renderer={renderer.bind(null, classes, store, isDuringDebate)}

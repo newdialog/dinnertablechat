@@ -134,7 +134,7 @@ interface Props extends WithStyles<typeof styles> {
   t: any;
 }
 
-class Index extends React.Component<Props> {
+class Index extends React.Component<Props, any> {
   constructor(props: Props) {
     super(props);
   }
@@ -160,6 +160,7 @@ class Index extends React.Component<Props> {
     const isLive = store.isLive();
 
     const isOpen = Times.isDuringDebate(); // store.dailyOpen; // !isLive ||  Times.isDuringDebate();
+    console.log('isOpen', isOpen);
 
     return (
       <React.Fragment>
@@ -216,7 +217,7 @@ class Index extends React.Component<Props> {
               
             
             <div className={classes.bannerTextDivider} />
-            <BannerTimer/>
+            <BannerTimer />
             <div className={classes.divider} />
             <Button
               href="#intro"
