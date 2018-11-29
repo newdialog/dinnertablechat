@@ -189,12 +189,14 @@ class LoadingScene extends React.Component<Props, State> {
         'match'
       ) === -1;
     
-      console.log('componentWillUnmount 1', navAway);
-    if(true) {
+      const hasMatch = this.props.store.debate.match && this.props.store.debate.match!.matchId;
+    
+      console.log('componentWillUnmount 1', navAway, !hasMatch);
+    if(!hasMatch) {
       console.log('componentWillUnmount');
       if(this.state.ticketId) QS.stopMatchmaking(this.state.ticketId!);
       this.props.store.showNavbar();
-      /// if(this.state.stream) this.state.stream.getTracks().forEach(track => track.stop());
+      if(this.state.stream) this.state.stream.getTracks().forEach(track => track.stop());
     }
   }
 

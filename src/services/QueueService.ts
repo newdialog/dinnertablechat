@@ -182,7 +182,7 @@ export async function stopMatchmaking(TicketId:string) {
     const r = await gameLift.stopMatchmaking({TicketId}).promise();
     console.log('stoppedMatchmaking TicketId', TicketId, r);
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
   return true;
 }
