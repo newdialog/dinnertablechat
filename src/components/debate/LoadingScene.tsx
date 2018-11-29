@@ -240,7 +240,7 @@ class LoadingScene extends React.Component<Props, State> {
     const matchedsync = store.debate.match && store.debate.match!.sync;
 
     let text = 'loading';
-    if (!store.debate.match) text = 'looking for match';
+    if (!store.debate.match) text = 'looking for a match';
     if (matchedUnsync) text = 'found match... handshaking';
     if (matchedsync) text = 'handshaking complete';
 

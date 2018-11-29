@@ -108,6 +108,7 @@ const renderer = (
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
           <br/><span style={{color:'#844d4d'}}>4pm PST / 5pm MST / 6pm CST / 7pm EST</span>
+          
         </Typography>
 
         <br />
@@ -115,7 +116,7 @@ const renderer = (
     );
   }
 };
-
+// <br/><span style={{color:'#844d4d'}}>For one hour daily!</span>
 interface Props {
   onCompleted?: (isDuringDebate: boolean) => void;
   t:any,
