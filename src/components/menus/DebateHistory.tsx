@@ -476,7 +476,7 @@ class Index extends React.Component<Props, State> {
           <Button variant="contained" color="primary" 
             onClick={ () => this.props.store.router.push('/quickmatch') }>
             Begin Dinner Party QuickMatch<br/>
-            BETA v1.09
+            BETA v1.10
             <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
           </Button>
           
