@@ -205,7 +205,7 @@ async function readMatchWait(
       return { key: keyval, state: stateval };
     },
     {
-      retries: 3,
+      retries: 4,
       factor: 1.1,
       maxTimeout: 5000,
       minTimeout: 5000

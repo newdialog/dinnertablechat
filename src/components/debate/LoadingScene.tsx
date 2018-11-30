@@ -90,6 +90,7 @@ class LoadingScene extends React.Component<Props, State> {
   loggedError = false;
   myStream: MediaStream | null = null;
   ticketIdProp = null;
+  startedHandshake = false;
 
   constructor(props: any) {
     super(props);
@@ -225,7 +226,8 @@ class LoadingScene extends React.Component<Props, State> {
 
   public async componentWillUpdate() {
     // Get Mic right away
-    if (this.props.store.debate.match && this.state.stream) {
+    if (this.props.store.debate.match && this.state.stream && !this.startedHandshake) {
+      this.startedHandshake = true;
       this.gotMedia(this.state.stream!);
     }
   }

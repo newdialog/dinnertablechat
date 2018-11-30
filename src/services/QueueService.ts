@@ -13,9 +13,9 @@ let gameLift: GameLift;
 
 import retry from 'async-retry';
 
-const stopFlags:{[ticket:string]:StopFlag} = {}; // ticketid: flag
+const stopFlags: { [ticket: string]: StopFlag } = {}; // ticketid: flag
 
-const delayProp = async (obj: { flag: boolean }, prop:string) =>
+const delayProp = async (obj: { flag: boolean }, prop: string) =>
   await retry(
     async bail => {
       if (obj[prop]) return true;
@@ -76,13 +76,18 @@ function onMatchEvent(
   }
 }
 
-async function poll(stopFlag:StopFlag, onMatchedCB: OnMatchedCB, tid: string, playerId: string) {
-  if(stopFlag.flag) return; // end;
+async function poll(
+  stopFlag: StopFlag,
+  onMatchedCB: OnMatchedCB,
+  tid: string,
+  playerId: string
+) {
+  if (stopFlag.flag) return; // end;
   // const info = await
   // gameLift.dec
   gameLift.describeMatchmaking({ TicketIds: [tid] }, async (e: any, d: any) => {
     if (e) return console.log('err', e);
-    if(stopFlag.flag) return; // end;
+    if (stopFlag.flag) return; // end;
 
     const ticket = d.TicketList[0];
     if (ticket.Players.length > 1) {
@@ -110,7 +115,7 @@ async function poll(stopFlag:StopFlag, onMatchedCB: OnMatchedCB, tid: string, pl
       console.log('timed out, stopping poll');
       return; // not polling
     }
-    if(ticket.Status === 'CANCELLED') {
+    if (ticket.Status === 'CANCELLED') {
       onMatchedCB('CANCELLED');
       console.log('CANCELLED, stopping poll');
       return; // not polling
@@ -163,23 +168,27 @@ export async function queueUp(
       }
     ]
   };
-  const stopFlag:StopFlag = { flag: false };
-  const r = await gameLift.startMatchmaking(options, onMatchEvent.bind(null, stopFlag, onMatchedCB)) as any; // const r = .promise();
+  const stopFlag: StopFlag = { flag: false };
+  const r = (await gameLift.startMatchmaking(
+    options,
+    onMatchEvent.bind(null, stopFlag, onMatchedCB)
+  )) as any; // const r = .promise();
   await delayProp(r.response, 'data');
   const TicketId = r.response.data.MatchmakingTicket.TicketId;
   console.log('r.MatchmakingTicket!.TicketId', TicketId);
-  stopFlags[TicketId] = stopFlag
+  stopFlags[TicketId] = stopFlag;
   return TicketId;
 }
 
-export async function stopMatchmaking(TicketId:string) {
+export async function stopMatchmaking(TicketId: string) {
+  console.log('stopMatchmaking');
   // stop our queue
-  if(stopFlags[TicketId]) {
+  if (stopFlags[TicketId]) {
     console.log('queue stopFlag set');
     stopFlags[TicketId].flag = true;
   }
   try {
-    const r = await gameLift.stopMatchmaking({TicketId}).promise();
+    const r = await gameLift.stopMatchmaking({ TicketId }).promise();
     console.log('stoppedMatchmaking TicketId', TicketId, r);
   } catch (e) {
     // console.log(e);
@@ -188,13 +197,16 @@ export async function stopMatchmaking(TicketId:string) {
 }
 
 // todo remove later
-export async function stopMatchmakingSimple(TicketId:string) {
+export async function stopMatchmakingSimple(TicketId: string) {
+  console.log('stopMatchmakingSimple');
   // stop our queue
-  if(stopFlags[TicketId]) {
+  if (stopFlags[TicketId]) {
     console.log('queue stopFlag set');
     stopFlags[TicketId].flag = true;
   }
-  const r = gameLift.stopMatchmaking({TicketId}, (e) => {console.log('STOPPED')});
+  const r = gameLift.stopMatchmaking({ TicketId }, e => {
+    console.log('STOPPED');
+  });
   console.log('stoppedMatchmakingSimple TicketId', TicketId);
   return true;
 }
