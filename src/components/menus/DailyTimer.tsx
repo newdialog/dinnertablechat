@@ -47,8 +47,17 @@ const renderer = (
   isDuringDebate: boolean,
   { days, hours, minutes, seconds, completed }
 ) => {
+  isDuringDebate = Times.isDuringDebate();
   if (completed) {
-    store.setDailyOpen(false);
+
+      
+      if(store.dailyOpen!=isDuringDebate) {
+        // setTimeout(() => {
+          console.log('BannerTimer completed');
+          store.setDailyOpen(isDuringDebate);
+          window.location.reload(true);
+        // }, 3001);
+      }
     // Render a completed state
     return <Completionist store={store} />;
   } else {

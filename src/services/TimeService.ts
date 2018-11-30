@@ -12,6 +12,7 @@ export function isBeforeEndingTime() {
         .utc()
         .hour(hourOpen + openForNumHours)
         .minute(minOpen)
+        .seconds(0)
     );
 }
 
@@ -23,6 +24,7 @@ export function isAfterEndTime() {
         .utc()
         .hour(hourOpen + openForNumHours)
         .minute(minOpen)
+        .seconds(0)
     );
 }
 
@@ -34,12 +36,13 @@ export function isDuringDebate() {
         .utc()
         .hour(hourOpen)
         .minute(minOpen)
-        .subtract('1', 'minute')
+        .seconds(0)
         .subtract('1', 'second'),
       moment()
         .utc()
         .hour(hourOpen + openForNumHours)
         .minute(minOpen)
+        .seconds(0)
     );
 }
 
@@ -49,11 +52,13 @@ export function getDebateStart() {
         .utc()
         .hour(hourOpen)
         .minute(minOpen)
+        .seconds(0)
         .toDate()
     : moment()
         .utc()
         .hour(hourOpen)
         .minute(minOpen)
+        .seconds(0)
         .add('1', 'day')
         .toDate();
 }
@@ -63,5 +68,6 @@ export function getDebateEnd() {
     .utc()
     .hour(hourOpen + openForNumHours)
     .minute(minOpen)
+    .seconds(0)
     .toDate();
 }
