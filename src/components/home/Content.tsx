@@ -111,6 +111,7 @@ const styles = (theme: Theme) =>
   });
 
 const logoOptions = {
+  renderer: 'svg',
   loop: false,
   autoplay: false,
   path: 'assets/logo.json',
@@ -121,6 +122,7 @@ const logoOptions = {
 };
 
 const talkingOptions = {
+  renderer: 'svg',
   loop: true,
   autoplay: false,
   subframeEnabled: true,
@@ -142,6 +144,7 @@ const topicsOptions = {
 };
 
 const diningOptions = {
+  renderer: 'svg',
   loop: true,
   autoplay: false,
   subframeEnabled: false,
@@ -312,7 +315,7 @@ class Index extends React.Component<Props, State> {
                   fraction={0.7}
                   onReveal={this.trackRulesView}
                 >
-                  <img src="./imgs/05-troll.png" className={classes.paperimg} />
+                  <img src="https://via.placeholder.com/150" data-src="./imgs/05-troll.png" className={classes.paperimg + ' lazyload'} />
                 </Flip>
               </div>
             </Grid>
@@ -368,20 +371,20 @@ class Index extends React.Component<Props, State> {
                     <ul className="glide__slides">
                       <li className="glide__slide">
                         <img
-                          src="./imgs/04-select.png"
-                          className={classes.paperimg}
+                          src="https://via.placeholder.com/150" data-src="./imgs/04-select.png"
+                          className={classes.paperimg+ ' lazyload'}
                         />
                       </li>
                       <li className="glide__slide">
                         <img
-                          src="./imgs/04-select2.png"
-                          className={classes.paperimg}
+                          src="https://via.placeholder.com/150" data-src="./imgs/04-select2.png"
+                          className={classes.paperimg+ ' lazyload'}
                         />
                       </li>
                       <li className="glide__slide">
                         <img
-                          src="./imgs/04-select3.png"
-                          className={classes.paperimg}
+                          src="https://via.placeholder.com/150" data-src="./imgs/04-select3.png"
+                          className={classes.paperimg + ' lazyload'}
                         />
                       </li>
                     </ul>

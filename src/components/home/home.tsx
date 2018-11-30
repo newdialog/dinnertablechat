@@ -138,8 +138,8 @@ class Index extends React.Component<Props, State> {
           <Grid container spacing={0} className={classes.container} id="subscribe">
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
               <img
-                src="./imgs/07-newsletter.png"
-                className={classes.paperimg}
+                src="https://via.placeholder.com/150" data-src="./imgs/07-newsletter.png"
+                className={classes.paperimg+' lazyload'}
               />
             </Grid>
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>

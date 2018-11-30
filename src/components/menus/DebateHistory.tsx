@@ -399,8 +399,9 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={6} sm={2}>
               <a href="https://gravatar.com" className={classes.imgLink}>
                 <img
-                  src={'https://www.gravatar.com/avatar/' + emailHash}
+                src="" data-src={'https://www.gravatar.com/avatar/' + emailHash}
                   width="100%"
+                  className='lazyload'
                 />
               </a>
               <Typography

@@ -53,6 +53,7 @@ const styles = (theme: Theme) =>
       display: 'inline-block',
       [theme.breakpoints.down('sm')]: {
        //  paddingBottom: '80px'
+       paddingBottom: '2px',
       }
     },
     divider: {
@@ -62,7 +63,7 @@ const styles = (theme: Theme) =>
       display: 'flex',
       objectFit: 'cover',
       width: '100%',
-      height: 'calc(100vh - 0px)',
+      height: 'calc(100vh - 14px)',
       // backgroundImage: 'url("./imgs/DTC-scene3-bg2.png")', // DTC-scene3.png
       backgroundSize: 'cover',
       // backgroundAttachment: 'fixed',
@@ -71,7 +72,10 @@ const styles = (theme: Theme) =>
       color: 'white',
       // justifyContent: 'center',
       justifyContent: 'flex-end',
-      flexFlow: 'column nowrap'
+      flexFlow: 'column nowrap',
+      [theme.breakpoints.down('sm')]: {
+        height: 'calc(100vh - 1px)',
+      }
     },
     bannerTextDivider: {
       // fontFamily: 'Open Sans',
@@ -123,6 +127,7 @@ const styles = (theme: Theme) =>
 const bgOptions = {
   loop: true,
   autoplay: false,
+  renderer: 'svg',
   path: 'assets/background.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
