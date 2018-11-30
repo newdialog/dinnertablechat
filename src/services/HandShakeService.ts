@@ -196,10 +196,10 @@ async function readMatchWait(
       return { key: keyval, state: stateval };
     },
     {
-      retries: 3,
+      retries: 2,
       factor: 1.25,
-      maxTimeout: 4000,
-      minTimeout: 4000
+      maxTimeout: 3500,
+      minTimeout: 3500
     }
   );
 }
