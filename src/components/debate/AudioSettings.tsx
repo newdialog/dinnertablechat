@@ -159,11 +159,12 @@ class AudioSettings extends React.Component<IProps, any> {
         <DialogTitle id="alert-dialog-title">{'Audio Settings'}</DialogTitle>
         <DialogContent>
           <div className={classes.root}>
-            <FormControl component="fieldset" className={classes.formControl}>
-              <FormLabel component="legend">Mic</FormLabel>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="mics">Mic</InputLabel><br/>
               <RadioGroup
-                aria-label="Gender"
-                name="gender1"
+                id="mics"
+                aria-label="Mics"
+                name="mics"
                 className={classes.group}
                 value={this.state.mic}
                 onChange={this.handleChangeMic}
@@ -179,11 +180,12 @@ class AudioSettings extends React.Component<IProps, any> {
                 ))}
               </RadioGroup>
             </FormControl>
-            <FormControl component="fieldset" className={classes.formControl}>
-              <FormLabel component="legend">Playback</FormLabel>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="playback">Playback</InputLabel><br/>
               <RadioGroup
-                aria-label="gender"
-                name="gender2"
+                id="playback"
+                aria-label="playback"
+                name="playback"
                 className={classes.group}
                 value={this.state.speaker}
                 onChange={this.handleChangePlayback}

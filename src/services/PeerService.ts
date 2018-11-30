@@ -8,10 +8,35 @@ interface CallBacks {
   onStream?: OnStream;
 }
 
+var constraints = {
+  mandatory: {
+    OfferToReceiveAudio: true,
+    OfferToReceiveVideo: false
+  }
+};
+
+const config = {
+  iceServers: [
+    { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
+    {
+      urls: 'stun:numb.viagenie.ca',
+      username: 'team@dinnertable.chat',
+      credential: 'happypeople'
+    },
+    {
+      urls: 'turn:numb.viagenie.ca',
+      username: 'team@dinnertable.chat',
+      credential: 'happypeople'
+    },
+    { urls: 'stun:stun.l.google.com:19302' }
+  ]
+};
+
 export default class PeerService {
   public _peer: Peer.Instance & any; // typing is incomplete
   private _stream: MediaStream;
   private clientStream: any;
+  private initiator: boolean = false;
   constructor(stream: MediaStream) {
     if (!stream) throw new Error('no stream given');
     this._stream = stream;
@@ -22,8 +47,16 @@ export default class PeerService {
   }
 
   public init(initiator: boolean, cbs: CallBacks) {
-    this._peer = new Peer({ initiator, trickle: false, stream: this._stream });
+    this.initiator = initiator;
+    this._peer = new Peer({
+      initiator,
+      trickle: false,
+      stream: this._stream,
+      constraints,
+      config
+    });
     this._peer.on('signal', (data: any) => {
+      if (!initiator) console.timeEnd('giveResponse');
       cbs.onSignal(JSON.stringify(data));
     });
     if (cbs.onConnected) this._peer.on('connect', cbs.onConnected);
@@ -56,6 +89,7 @@ export default class PeerService {
       console.warn('cant parse', data);
       return;
     }
+    if (!this.initiator) console.time('giveResponse');
     this._peer.signal(parse);
   }
 

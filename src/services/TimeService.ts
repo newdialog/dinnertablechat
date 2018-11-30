@@ -33,7 +33,9 @@ export function isDuringDebate() {
       moment()
         .utc()
         .hour(hourOpen)
-        .minute(minOpen),
+        .minute(minOpen)
+        .subtract('1', 'minute')
+        .subtract('1', 'second'),
       moment()
         .utc()
         .hour(hourOpen + openForNumHours)

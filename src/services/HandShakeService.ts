@@ -16,10 +16,10 @@ const delayFlag = async (obj: { flag: boolean }) =>
       else throw new Error('retry');
     },
     {
-      retries: 8,
+      retries: 10,
       factor: 1,
-      maxTimeout: 1000,
-      minTimeout: 1000
+      maxTimeout: 2000,
+      minTimeout: 2000
     }
   );
 
@@ -93,8 +93,15 @@ export async function handshake(
     let stopFlag: StopFlag = { stop: false };
 
     // wait 3s (for leader, wait until blue heard, for blue wait until red msg)
-    if (isLeader) await delayFlag(savedState);
-    else await delay(5000); // hope leader has written state
+    if (isLeader) {
+      try {
+        await delayFlag(savedState);
+      } catch (e) {
+        reject('retry');
+        return;
+      }
+      await delay(1000 * 8); // now wait for client
+    } else await delay(1000 * 8); // hope leader has written state
     console.log('started listening, isLeader', isLeader);
     // try {
     handshakeUntilConnected(
@@ -110,6 +117,7 @@ export async function handshake(
       // if(retryError) throw new Error('retry');
       reject('retry');
       console.log('handshakeUntilConnected ended with', e);
+      return;
     });
 
     try {
@@ -122,6 +130,7 @@ export async function handshake(
       }, 1000 * 60 * 2);
     } catch (e) {
       throw new Error(e);
+      return;
     }
     await ps.onConnection();
     stopFlag.stop = true;
@@ -196,10 +205,10 @@ async function readMatchWait(
       return { key: keyval, state: stateval };
     },
     {
-      retries: 2,
-      factor: 1.25,
-      maxTimeout: 3500,
-      minTimeout: 3500
+      retries: 3,
+      factor: 1.1,
+      maxTimeout: 5000,
+      minTimeout: 5000
     }
   );
 }
@@ -228,8 +237,8 @@ async function handshakeUntilConnected(
         const retryError = e.toString().indexOf('retry') !== -1;
         // console.log(JSON.stringify(e), typeof e, );
         if (retryError) {
-          console.log('RETRY error');
-          bail(new Error('retry'));
+          console.log('readMatchWait failed');
+          bail(new Error('readMatchWait failed'));
           return; // 'retry';
         } else {
           console.log('readMatchWait aborted with:', e.Error);
@@ -251,10 +260,10 @@ async function handshakeUntilConnected(
       throw new Error('retry');
     },
     {
-      retries: 2,
-      factor: 1.25,
-      maxTimeout: 3000,
-      minTimeout: 3000
+      retries: 3 * 1 * 4, // use same as above with multiplier per handshake re-negotitation, min 6
+      factor: 1.1,
+      maxTimeout: 5000,
+      minTimeout: 5000
     }
   );
 }
