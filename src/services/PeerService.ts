@@ -6,6 +6,7 @@ interface CallBacks {
   onSignal: (data: string) => void;
   onConnected?: () => void;
   onStream?: OnStream;
+  onError?: (e: any) => void;
 }
 
 var constraints = {
@@ -17,10 +18,10 @@ var constraints = {
 
 const config = {
   iceServers: [
-    {
+    /* {
       urls: 'stun:global.stun.twilio.com:3478?transport=udp'
-    }
-    // { urls: 'stun:stun.l.google.com:19302' },
+    }*/
+    { urls: 'stun:stun.l.google.com:19302' }
     /*
     { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
     
@@ -54,7 +55,7 @@ export default class PeerService {
 
   public async init(initiator: boolean, cbs: CallBacks) {
     Peer = window['SimplePeer'];
-    const ice = await API.getICE();
+    const ice = ((await API.getICE()) as any[]).concat(config.iceServers);
     console.log('ice', ice);
     this.initiator = initiator;
     this._peer = new Peer({
@@ -73,7 +74,11 @@ export default class PeerService {
 
     this._peer.on('stream', stream => {
       this.clientStream = stream;
-      if (cbs.onStream) cbs.onStream!(stream);
+      if (cbs.onStream) cbs.onStream(stream);
+    });
+
+    this._peer.on('error', e => {
+      if (cbs.onError) cbs.onError(e);
     });
   }
 
@@ -83,7 +88,8 @@ export default class PeerService {
 
   public async onConnection() {
     return new Promise(resolve => {
-      this._peer.on('connect', resolve);
+      // check if we haven't been destroyed already
+      if (this._peer) this._peer.on('connect', resolve);
     });
   }
 

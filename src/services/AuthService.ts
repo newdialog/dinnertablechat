@@ -113,7 +113,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
     return;
   }
   // .then(data => {
-  console.log('+++currentAuthenticatedUser', data);
+  /// console.log('+++currentAuthenticatedUser', data);
   // console.log('data.pool.userPoolId', data.pool.userPoolId, data.username);
   const user = data.attributes;
   // const user = { name, email }; // , username: data.username

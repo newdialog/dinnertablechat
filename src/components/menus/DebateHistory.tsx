@@ -21,6 +21,8 @@ import * as Times from '../../services/TimeService';
 import DailyTimer from './DailyTimer';
 import Info from '@material-ui/icons/Info';
 
+import * as TopicInfo from '../../utils/TopicInfo';
+
 const styles = theme =>
   createStyles({
     centered: {
@@ -212,7 +214,7 @@ class Index extends React.Component<Props, State> {
     return {
       topic: x.topic,
       date: this.transformDate(x.debate_created),
-      userSide: this.transformSide(x.side),
+      userSide: this.transformSide(x.topic, x.side),
       userCharacter: x.character,
       userReview: x.review,
       userAgree: x.review_aggrement
@@ -222,7 +224,7 @@ class Index extends React.Component<Props, State> {
   private transformOpp(x: any) {
     return {
       oppAgree: x.review_aggrement,
-      oppSide: this.transformSide(x.side),
+      oppSide: this.transformSide(x.topic, x.side),
       oppCharacter: x.character,
       oppReview: x.review
     };
@@ -232,8 +234,8 @@ class Index extends React.Component<Props, State> {
     return moment(timestamp).format('MMM DD, YYYY h:mma');
   }
 
-  private transformSide(side: number) {
-    return this.props.t('topic' + side + '-topic');
+  private transformSide(topic:string, side: number) {
+    return TopicInfo.getTopic(topic, this.props.t)!.positions[side];
   }
 
   private transformPayload = payload => {
@@ -298,7 +300,7 @@ class Index extends React.Component<Props, State> {
         </Paper>)
   }
 
-  private renderList = (classes, data) =>
+  private renderList = (classes, t, data) =>
     data.map((x, i) => (
       <div key={i}>
         <Paper className={classes.paper}>
@@ -310,9 +312,10 @@ class Index extends React.Component<Props, State> {
               <Grid item xs container direction="column" spacing={16}>
                 <Grid item xs>
                   <Typography gutterBottom variant="h4" color="textPrimary">
-                    {characters[x.oppCharacter].title}
+                    {x.date}
                   </Typography>
-                  <Typography gutterBottom>{x.date}</Typography>
+                  <Typography variant="caption">Topic: <blockquote>"{TopicInfo.getTopic(x.topic, t)!.proposition}"</blockquote></Typography>
+                  <Typography gutterBottom>My position: {x.userSide} <span style={{whiteSpace:'nowrap'}}>— {characters[x.oppCharacter].title}: {x.oppSide}</span></Typography>
                 </Grid>
               </Grid>
               <Grid item>
@@ -324,7 +327,7 @@ class Index extends React.Component<Props, State> {
             </Grid>
           </Grid>
           <Divider />
-          <br />
+          <Typography variant="caption">You were rated as:</Typography>
           <Grid
             container
             spacing={16}
@@ -353,7 +356,7 @@ class Index extends React.Component<Props, State> {
   //  VERT SEP: style={{ borderRight: '0.1em solid black', padding: '0.5em' }}
   public render() {
     /// console.timeEnd('AuthComp');
-    const { classes, store } = this.props;
+    const { classes, store, t } = this.props;
     if (store.auth.isNotLoggedIn) {
       store.router.push('/');
       return;
@@ -500,7 +503,7 @@ class Index extends React.Component<Props, State> {
 
         <div style={{ paddingBottom: '4em' }} />
 
-        {this.renderList(classes, this.state.data)}
+        {this.renderList(classes, t, this.state.data)}
         {this.state.data.length === 0 && (
           <Paper className={classes.paper}>
             <Typography

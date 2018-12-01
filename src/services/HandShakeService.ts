@@ -84,6 +84,10 @@ export async function handshake(
         await updateMatch(matchid, mycolor, sigdata, state);
         console.log('wrote state, isLeader', isLeader);
         savedState.flag = true;
+      },
+      onError(e) {
+        console.log('webrtc error', e);
+        reject('webrtc');
       }
     };
     ps.init(isLeader, cbs);
@@ -260,7 +264,7 @@ async function handshakeUntilConnected(
       throw new Error('retry');
     },
     {
-      retries: 3 * 2 * 4, // use same as above with multiplier per handshake re-negotitation, min 6
+      retries: 3 * 2 * 1, // use same as above with multiplier per handshake re-negotitation, min 6
       factor: 1.1,
       maxTimeout: 5000 / 2,
       minTimeout: 5000 / 2
