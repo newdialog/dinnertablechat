@@ -53,6 +53,32 @@ async function reviewSession(review: any, matchId: string) {
     });
 }
 
+async function getICE() {
+  let apiName = 'Ice';
+  let path = '/ice'; // /hello
+  let myInit = {
+    // OPTIONAL
+    headers: await getTokenHeaders(), // OPTIONAL
+    // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
+    queryStringParameters: {
+      cb: '' + Math.random() * 100000
+    }
+  };
+  // console.log('getICE', myInit);
+
+  return API.get(apiName, path, myInit)
+    .then(response => {
+      // Add your code here
+      return (response.iceServers as any[]).map(x => {
+        const { url, ...r } = x; // rename prop
+        return { ...r, urls: url };
+      });
+    })
+    .catch(error => {
+      console.log(apiName, path, error.response);
+    });
+}
+
 async function bail(matchId: string) {
   let apiName = 'History';
   let path = '/bail'; // /hello
@@ -67,7 +93,7 @@ async function bail(matchId: string) {
       matchId
     } // replace this with attributes you need
   };
-  console.log('myInit', myInit);
+  // console.log('myInit', myInit);
 
   return API.post(apiName, path, myInit)
     .then(response => {
@@ -89,7 +115,7 @@ async function getTokenHeaders() {
   };
 }
 
-export default { getScores, configure, reviewSession, bail };
+export default { getScores, configure, reviewSession, bail, getICE };
 
 // import axios, { AxiosRequestConfig } from 'axios';
 /*

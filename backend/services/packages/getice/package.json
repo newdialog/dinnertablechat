@@ -1,7 +1,7 @@
 {
-  "name": "debatehistory",
-  "version": "1.0.0",
-  "description": "CRUD for debate history",
+  "name": "ice-api",
+  "version": "1.0.1",
+  "description": "ice turn",
   "engineStrict": true,
   "engines": {
     "node": ">= 8.9.0"
@@ -21,15 +21,14 @@
   },
   "scripts": {
     "postinstall": "",
-    "aws-export": "cp -f ../../../src/aws-exports.js ./src/",
     "startb": "npm run build && npm run start",
-    "dev": "PGHOST=localhost PGUSER=app PGDATABASE=dtc PGPASSWORD=null PGPORT=5432 node build/src/main.js",
-    "devlive": "PGHOST='dtc-pg-dev.cy0j2uzr5txt.us-east-1.rds.amazonaws.com' PGUSER=app PGDATABASE=dtc PGPORT=5432 node build/src/main.js",
+    "dev": "node build/src/main.js",
+    "devlive": "node build/src/main.js",
     "start": "node build/src/main.js",
     "deploy": "npm run build && npm run up && up url",
     "deploy:prod": "npm run build && npm run up:prod && up url -s production",
     "up": "npm run switchin && up && npm run switchback",
-    "up:prod": "npm run switchin-prod && up deploy production && sleep 1 && npm run switchback",
+    "up:prod": "npm run switchin-prod && up deploy production && npm run switchback",
     "deploylog": "npm run deploy && up logs -f",
     "logs": "up logs -f",
     "clean": "rimraf coverage build tmp",
@@ -51,7 +50,6 @@
     "cognito-express": "^2.0.12",
     "cors": "^2.8.5",
     "express": "^4.16.4",
-    "pg": "^7.6.1",
-    "tslib": "~1.9.3"
+    "twilio": "^3.25.0"
   }
 }

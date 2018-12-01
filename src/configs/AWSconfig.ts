@@ -38,6 +38,12 @@ export const API_CONF = {
       name: 'History',
       authenticationType: 'AMAZON_COGNITO_USER_POOLS',
       endpoint: 'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/staging'
+    },
+    {
+      name: 'Ice',
+      authenticationType: 'AMAZON_COGNITO_USER_POOLS',
+      endpoint:
+        'https://lmtvbtw7dc.execute-api.us-east-1.amazonaws.com/production'
     }
   ]
 };
@@ -49,6 +55,12 @@ export const API_CONF_PROD = {
       authenticationType: 'AMAZON_COGNITO_USER_POOLS',
       endpoint:
         'https://lbbyqvw3x9.execute-api.us-east-1.amazonaws.com/production'
+    },
+    {
+      name: 'Ice',
+      authenticationType: 'AMAZON_COGNITO_USER_POOLS',
+      endpoint:
+        'https://lmtvbtw7dc.execute-api.us-east-1.amazonaws.com/production'
     }
   ]
 };

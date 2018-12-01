@@ -1,5 +1,5 @@
-import Peer from 'simple-peer';
-
+// import Peer from 'simple-peer'; // TODO: readd after simple-peer gets update
+import API from './APIService';
 type OnStream = (stream: MediaStream) => void;
 
 interface CallBacks {
@@ -18,15 +18,10 @@ var constraints = {
 const config = {
   iceServers: [
     {
-      urls: 'stun:global.stun:3478?transport=udp'
-    },
-    { urls: 'stun:stun.l.google.com:19302' },
-    {
-      urls: 'turn:global.turn:3478?transport=udp',
-      username:
-        'bcf870443b2b2191d3bd06ec9a7e0d9f05c653a9a60af0daf1353f73c33da142',
-      credential: 'OTdH1k033JRVrJsFt+SwOEqlIMUWSmd+aVcUt2o3+PM='
-    } /*
+      urls: 'stun:global.stun.twilio.com:3478?transport=udp'
+    }
+    // { urls: 'stun:stun.l.google.com:19302' },
+    /*
     { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
     
     {
@@ -42,8 +37,9 @@ const config = {
   ]
 };
 
+let Peer: any; // TODO: remove later
 export default class PeerService {
-  public _peer: Peer.Instance & any; // typing is incomplete
+  public _peer: any; // Peer.Instance & any
   private _stream: MediaStream;
   private clientStream: any;
   private initiator: boolean = false;
@@ -56,15 +52,19 @@ export default class PeerService {
     return this._stream;
   }
 
-  public init(initiator: boolean, cbs: CallBacks) {
+  public async init(initiator: boolean, cbs: CallBacks) {
+    Peer = window['SimplePeer'];
+    const ice = await API.getICE();
+    console.log('ice', ice);
     this.initiator = initiator;
     this._peer = new Peer({
       initiator,
       trickle: false,
+      allowHalfTrickle: false,
       stream: this._stream,
-      constraints,
-      config
-    });
+
+      config: { iceServers: ice }
+    } as any); // constraints,
     this._peer.on('signal', (data: any) => {
       if (!initiator) console.timeEnd('giveResponse');
       cbs.onSignal(JSON.stringify(data));

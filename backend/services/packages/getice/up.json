@@ -1,0 +1,20 @@
+{
+  "name": "ice-api",
+  "profile": "dinnertable",
+  "regions": ["us-east-1"],
+  "environment": {
+    "TWILIOAUTH": ""
+  },
+  "lambda": {
+    "memory": 256,
+    "policy": [
+      {
+        "Condition": {"ArnLike":{"AWS:SourceArn":"arn:aws:sns:us-east-1:681274315116:match-sns"}},
+        "Resource": "*",
+        "Action": "lambda:invokeFunction",
+        "Sid":"snsinvoke",
+        "Effect":"Allow"
+      }
+    ]
+  }
+}
