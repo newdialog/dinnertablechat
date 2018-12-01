@@ -17,7 +17,18 @@ var constraints = {
 
 const config = {
   iceServers: [
+    {
+      urls: 'stun:global.stun:3478?transport=udp'
+    },
+    { urls: 'stun:stun.l.google.com:19302' },
+    {
+      urls: 'turn:global.turn:3478?transport=udp',
+      username:
+        'bcf870443b2b2191d3bd06ec9a7e0d9f05c653a9a60af0daf1353f73c33da142',
+      credential: 'OTdH1k033JRVrJsFt+SwOEqlIMUWSmd+aVcUt2o3+PM='
+    } /*
     { urls: 'stun:global.stun.twilio.com:3478?transport=udp' },
+    
     {
       urls: 'stun:numb.viagenie.ca',
       username: 'team@dinnertable.chat',
@@ -27,8 +38,7 @@ const config = {
       urls: 'turn:numb.viagenie.ca',
       username: 'team@dinnertable.chat',
       credential: 'happypeople'
-    },
-    { urls: 'stun:stun.l.google.com:19302' }
+    }*/
   ]
 };
 
