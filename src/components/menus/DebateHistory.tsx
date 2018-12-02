@@ -214,6 +214,7 @@ class Index extends React.Component<Props, State> {
     return {
       topic: x.topic,
       date: this.transformDate(x.debate_created),
+      created: x.debate_created,
       userSide: this.transformSide(x.topic, x.side),
       userCharacter: x.character,
       userReview: x.review,
@@ -259,12 +260,15 @@ class Index extends React.Component<Props, State> {
         val.debate_sesssion_id = key;
         val.agreed = val.userAgree && val.oppAgree ? 'Agreed' : 'Disagreed';
         // if (val.oppCharacter === undefined) delete dataHash[key]; // ensure reviews set for both
-        console.log('val', val)
+        // console.log('val', val)
         return val;
       })
       .filter(x => x.oppReview && x.userReview); // ensure both rated
 
     const flags = this.createAccordianFlags(data);
+    result.sort((a, b) => {
+      return a.created < b.created ? 1 : -1;
+    });
     this.setState({ data: result, open: flags, loaded: true });
   };
 
