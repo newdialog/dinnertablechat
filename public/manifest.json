@@ -4,13 +4,13 @@
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "64x64 48x48 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
     {
       "src": "/logos/icons-192.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192 144x144 96x96 72x72"
     },
     {
       "src": "/logos/icons-512.png",
@@ -18,7 +18,7 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "https://dinnertable.chat",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff",
