@@ -1,11 +1,31 @@
 {
-  "short_name": "DTC",
-  "name": "Dinnertable.chat",
+  "short_name": "DinTableChat",
+  "name": "DinnerTable.Chat",
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 48x48 32x32 24x24 16x16",
+      "sizes": "32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "/logos/icons/android-36x36.png",
+      "sizes": "64x64 48x48 36x36",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/icons/android-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/icons/android-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "/logos/icons/android-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
     },
     {
       "src": "/logos/icons-192.png",
@@ -18,9 +38,9 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": "https://dinnertable.chat",
+  "start_url": ".",
   "display": "standalone",
-  "theme_color": "#000000",
+  "theme_color": "#555555",
   "background_color": "#ffffff",
   "orientation": "landscape"
 }
