@@ -1,0 +1,50 @@
+[
+    {
+        "typeName": "Event",
+        "fieldName": "comments",
+        "dataSourceName": "AppSyncCommentTable",
+        "requestMappingTemplate": "{managed-by-awsmobile-cli}:Event.comments.request",
+        "responseMappingTemplate": "{managed-by-awsmobile-cli}:Event.comments.response",
+        "kind": "UNIT"
+    },
+    {
+        "typeName": "Mutation",
+        "fieldName": "commentOnEvent",
+        "dataSourceName": "AppSyncCommentTable",
+        "requestMappingTemplate": "{managed-by-awsmobile-cli}:Mutation.commentOnEvent.request",
+        "responseMappingTemplate": "{managed-by-awsmobile-cli}:Mutation.commentOnEvent.response",
+        "kind": "UNIT"
+    },
+    {
+        "typeName": "Mutation",
+        "fieldName": "createEvent",
+        "dataSourceName": "AppSyncEventTable",
+        "requestMappingTemplate": "{managed-by-awsmobile-cli}:Mutation.createEvent.request",
+        "responseMappingTemplate": "{managed-by-awsmobile-cli}:Mutation.createEvent.response",
+        "kind": "UNIT"
+    },
+    {
+        "typeName": "Mutation",
+        "fieldName": "deleteEvent",
+        "dataSourceName": "AppSyncEventTable",
+        "requestMappingTemplate": "{managed-by-awsmobile-cli}:Mutation.deleteEvent.request",
+        "responseMappingTemplate": "{managed-by-awsmobile-cli}:Mutation.deleteEvent.response",
+        "kind": "UNIT"
+    },
+    {
+        "typeName": "Query",
+        "fieldName": "getEvent",
+        "dataSourceName": "AppSyncEventTable",
+        "requestMappingTemplate": "{managed-by-awsmobile-cli}:Query.getEvent.request",
+        "responseMappingTemplate": "{managed-by-awsmobile-cli}:Query.getEvent.response",
+        "kind": "UNIT"
+    },
+    {
+        "typeName": "Query",
+        "fieldName": "listEvents",
+        "dataSourceName": "AppSyncEventTable",
+        "requestMappingTemplate": "{managed-by-awsmobile-cli}:Query.listEvents.request",
+        "responseMappingTemplate": "{managed-by-awsmobile-cli}:Query.listEvents.response",
+        "kind": "UNIT"
+    }
+]
