@@ -20,7 +20,7 @@ const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 const fetcher = url => window.fetch(url).then(response => response.json());
 const store = AppModel.create(routerModel, fetcher);
 
-connectReduxDevtools(require('remotedev'), store);
+if(!store.isLive()) connectReduxDevtools(require('remotedev'), store);
 
 ReactDOM.render(
   <I18nextProvider i18n={i18n} initialLanguage="en">
