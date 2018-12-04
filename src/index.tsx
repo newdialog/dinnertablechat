@@ -37,8 +37,9 @@ ReactDOM.render(
 // Learn more about service workers: http://bit.ly/CRA-PWA
 const onSuccess = (registration: ServiceWorkerRegistration) => console.log('worker loaded');
 const onUpdate = (registration: ServiceWorkerRegistration) => console.log('worker updated');
-// serviceWorker.register({onSuccess, onUpdate});
-serviceWorker.unregister();
+
+serviceWorker.register({onSuccess, onUpdate});
+// serviceWorker.unregister();
 
 const enabledOnSafari  = (window.navigator as any).standalone === true;
 if (enabledOnSafari || window.matchMedia('(display-mode: standalone)').matches) {
