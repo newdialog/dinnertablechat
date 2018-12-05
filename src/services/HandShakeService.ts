@@ -81,9 +81,9 @@ export async function handshake(
     const cbs = {
       onSignal: async (sigdata: string) => {
         // console.log('onSignal gen:', mycolor, sigdata);
-        await updateMatch(matchid, mycolor, sigdata, state);
-        console.log('wrote state, isLeader', isLeader);
-        savedState.flag = true;
+        await updateMatchBatch(matchid, mycolor, sigdata, state, savedState);
+        // console.log('wrote state, isLeader', isLeader);
+        // savedState.flag = true;
       },
       onError(e) {
         console.log('webrtc error', e);
@@ -104,8 +104,8 @@ export async function handshake(
         reject('retry');
         return;
       }
-      await delay(1000 * 5); // now wait for client
-    } else await delay(1000 * 5); // hope leader has written state
+      await delay(1000 * 5 / 2); // now wait for client
+    } else await delay(1000 * 5 / 2); // hope leader has written state
     console.log('started listening, isLeader', isLeader);
     // try {
     handshakeUntilConnected(
@@ -178,15 +178,14 @@ async function readMatchWait(
         return;
       }
       const match: HandShakeCallback = await readMatch(matchid);
-      const teamkey = team + 'key';
+      const teamkey = team + 'key' + 'i'; // TODO refactor i
 
       const statekey = team + 'state';
       const keyval = match[teamkey];
 
       // console.log('recalling state from other:', statekey, match[statekey]);
 
-      if (!keyval || keyval === '-' || keyval === lastValue) {
-        lastValue = keyval;
+      if (!keyval || keyval === '-' || keyval.length === lastValue || keyval.length === 0) {
         // keyval !== '{"renegotiate":true}' ||
         // await delay(3000);
         console.log('key not set yet', teamkey);
@@ -196,9 +195,12 @@ async function readMatchWait(
         throw new Error('retry');
         /// return await readMatchWait(matchid, team);
       }
+      const keyvalNew = keyval.splice(0, lastValue);
+      lastValue = keyval.length;
 
       let stateval = null; // JSON.parse(match[statekey]);
       try {
+        console.log('match[statekey]',match[statekey]);
         stateval = JSON.parse(match[statekey]);
       } catch (err) {
         console.error('couldnt parse other player');
@@ -206,7 +208,7 @@ async function readMatchWait(
         return;
       }
 
-      return { key: keyval, state: stateval };
+      return { key: keyvalNew, state: stateval };
     },
     {
       retries: 4,
@@ -257,7 +259,9 @@ async function handshakeUntilConnected(
         return bail(new Error('ended')); // just end
       }*/
       const { key, state } = result;
-      ps.giveResponse(key);
+      let ks = key.filter((v, i, a) => a.indexOf(v) === i);
+      console.log('===key', ks);
+      ks.forEach( k => k!=='-' && ps.giveResponse(k) );
       if (onState && !stateFetched) onState(state);
       stateFetched = true;
 
@@ -272,28 +276,48 @@ async function handshakeUntilConnected(
   );
 }
 
+let lastBatch:any[] = [];
+async function updateMatchBatch(
+  matchid: string,
+  team: 'blue' | 'red',
+  key: string,
+  state: any,
+  savedFlag: {flag:boolean} // TODO refactor
+) {
+  if(lastBatch.length===0) setTimeout(async ()=>{
+    await updateMatch(lastBatch[0].matchid, lastBatch[0].team, JSON.stringify(lastBatch.map((x)=>x.key)), lastBatch[0].state);
+    lastBatch = [];
+    savedFlag.flag = true;
+  }, 3000);
+  lastBatch.push({matchid, team, key, state});
+}
+
 async function updateMatch(
   matchid: string,
   team: 'blue' | 'red',
   key: string,
-  state: any = {}
+  state: any
 ) {
   if (!matchid) throw new Error('no matchid provided');
+  if (!key) {
+    console.log('updateMatch cancel, no key');
+    return;
+  }
 
-  const teamkey = team + 'key';
+  const teamkey = team + 'key' + 'i'; // TODO: concat
 
   const statekey = team + 'state';
-  const stateStr = state ? JSON.stringify(state) : '{}';
+  const stateStr = JSON.stringify(state);
 
-  console.log('saving to key', teamkey, 'state: ', statekey, stateStr);
+  console.log(matchid, 'saving to key', teamkey +'=='+ key, 'state: ', statekey+'=='+stateStr);
   const params2: DynamoDB.DocumentClient.UpdateItemInput = {
     Key: {
       id: matchid
     },
     AttributeUpdates: {
       [teamkey]: {
-        Action: 'PUT', // ADD | PUT | DELETE,
-        Value: key /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
+        Action: 'ADD', // ADD | PUT | DELETE,
+        Value: [key] /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
       },
       [statekey]: {
         Action: 'PUT',
@@ -302,6 +326,7 @@ async function updateMatch(
     },
     TableName: 'match'
   };
+  console.log(JSON.stringify(params2));
   const ticket2 = await docClient.update(params2).promise();
   // console.log('ut2,', ticket2);
   return ticket2;

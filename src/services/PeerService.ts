@@ -60,12 +60,12 @@ export default class PeerService {
     this.initiator = initiator;
     this._peer = new Peer({
       initiator,
-      trickle: false,
-      allowHalfTrickle: false,
+      trickle: true,
+      // allowHalfTrickle: false,
       stream: this._stream,
 
       config: { iceServers: ice }
-    } as any); // constraints,
+    }); // constraints,
     this._peer.on('signal', (data: any) => {
       if (!initiator) console.timeEnd('giveResponse');
       cbs.onSignal(JSON.stringify(data));
