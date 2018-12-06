@@ -79,11 +79,19 @@ export async function handshake(
 
     const savedState = { flag: false };
     const stopFlag: StopFlag = { stop: false };
+    const batchCache: { cache: any[] } = { cache: [] };
     const cbs = {
       onSignal: async (sigdata: string) => {
-        if(stopFlag.stop) return;
+        // if (stopFlag.stop) return; // disable as later signal possible, better to destory peer
         // console.log('onSignal gen:', mycolor, sigdata);
-        await updateMatchBatch(matchid, mycolor, sigdata, state, savedState);
+        await updateMatchBatch(
+          matchid,
+          mycolor,
+          sigdata,
+          state,
+          savedState,
+          batchCache
+        );
         // console.log('wrote state, isLeader', isLeader);
         // savedState.flag = true;
       },
@@ -124,20 +132,18 @@ export async function handshake(
       return;
     });
 
-    try {
-      setTimeout(() => {
-        if (stopFlag.stop) return;
-        console.log('webrtc onConnection timeout');
-        stopFlag.stop = true;
-        reject('retry');
-        // throw new Error('retry');
-      }, 1000 * 60 * 2);
-    } catch (e) {
-      throw new Error(e);
-      return;
-    }
+    // set timeout for all of handshaking
+    let _to = setTimeout(() => {
+      if (stopFlag.stop) return;
+      console.log('webrtc onConnection timeout');
+      stopFlag.stop = true;
+      reject('retry');
+      // throw new Error('retry');
+    }, 1000 * 60 * 1.5);
+
     await ps.onConnection();
     stopFlag.stop = true;
+    if (_to) clearTimeout(_to);
 
     console.log(mycolor + ' rtc elected');
 
@@ -164,7 +170,7 @@ export interface DBState {
 }
 
 interface LastIndex {
-  val:number;
+  val: number;
 }
 // TODO fix global state
 // et lastValue: any = 0;
@@ -178,8 +184,9 @@ async function readMatchWait(
   return await retry(
     async bail => {
       if (stopFlag.stop) {
-        bail('stopSync');
-        return;
+        // bail('stopSync');
+        return null;
+        // return;
       }
       const match: HandShakeCallback = await readMatch(matchid);
       const teamkey = team + 'key' + 'i'; // TODO refactor i
@@ -203,8 +210,8 @@ async function readMatchWait(
       const spliceSize = lastIndex.val;
       lastIndex.val = keyval.length; // save total length before splice
       console.log('lastValue', lastIndex.val, spliceSize);
-      if(spliceSize > 0) keyval.splice(0, spliceSize); // mutates in-place
-      
+      if (spliceSize > 0) keyval.splice(0, spliceSize); // mutates in-place
+
       // const keyval2 = keyval.map(k=>JSON.parse(k));// .map(v => );
 
       let stateval = null; // JSON.parse(match[statekey]);
@@ -222,8 +229,8 @@ async function readMatchWait(
     {
       retries: 4,
       factor: 1.1,
-      maxTimeout: 6000,
-      minTimeout: 6000
+      maxTimeout: 4000,
+      minTimeout: 4000
     }
   );
 }
@@ -240,7 +247,7 @@ async function handshakeUntilConnected(
   stopFlag: StopFlag
 ) {
   let stateFetched = false;
-  const lastValue = {val:0};
+  const lastValue = { val: 0 };
   return await retry(
     async bail => {
       if (stopFlag.stop) {
@@ -260,49 +267,56 @@ async function handshakeUntilConnected(
           return; // 'retry';
         } else {
           console.log('readMatchWait aborted with:', e);
-          return bail(new Error('error'));
+          bail(new Error('error'));
+          return;
         }
       } finally {
-        
       }
 
-      /* if (!result) {
+      if (!result) {
         console.log('handshakeUntilConnected ended');
-        return bail(new Error('ended')); // just end
-      }*/
+        return bail('ended'); // just end
+      }
       const { key, state } = result;
       // let ks = key.reduce((acc, x) => acc.concat(x), []); // .filter((v, i, a) => a.indexOf(v) === i); // no longer using SETs
       // console.log('===key', JSON.stringify(key));
-      key.forEach( batch => batch.forEach( msg => ps.giveResponse(msg)) );
+      key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg)));
       if (onState && !stateFetched) onState(state);
       stateFetched = true;
 
       throw new Error('retry');
     },
     {
-      retries: 12, // use same as above with multiplier per handshake re-negotitation, min 6
+      retries: 13, // use same as above with multiplier per handshake re-negotitation, min 6
       factor: 1.1,
-      maxTimeout: 5000 / 5,
-      minTimeout: 5000 / 5
+      maxTimeout: 3000,
+      minTimeout: 3000
     }
   );
 }
 
-let lastBatch:any[] = [];
 async function updateMatchBatch(
   matchid: string,
   team: 'blue' | 'red',
   key: string,
   state: any,
-  savedFlag: {flag:boolean} // TODO refactor
+  savedFlag: { flag: boolean }, // TODO refactor
+  lastBatchRef: { cache: any[] }
 ) {
+  let lastBatch = lastBatchRef.cache;
   // console.log('RAW KEY', key)
-  if(lastBatch.length===0) setTimeout(async ()=>{
-    await updateMatch(lastBatch[0].matchid, lastBatch[0].team, lastBatch.map((x)=>x.key), lastBatch[0].state);
-    lastBatch = [];
-    savedFlag.flag = true;
-  }, 3000);
-  lastBatch.push({matchid, team, key, state});
+  if (lastBatch.length === 0)
+    setTimeout(async () => {
+      await updateMatch(
+        lastBatch[0].matchid,
+        lastBatch[0].team,
+        lastBatch.map(x => x.key),
+        lastBatch[0].state
+      );
+      lastBatch = lastBatchRef.cache = [];
+      savedFlag.flag = true;
+    }, 3000);
+  lastBatch.push({ matchid, team, key, state });
 }
 
 async function updateMatch(
@@ -322,7 +336,13 @@ async function updateMatch(
   const statekey = team + 'state';
   const stateStr = JSON.stringify(state);
 
-  console.log(matchid, 'saving to key', teamkey +'=='+ key, 'state: ', statekey+'=='+stateStr);
+  console.log(
+    matchid,
+    'saving to key',
+    teamkey + '==' + key,
+    'state: ',
+    statekey + '==' + stateStr
+  );
   const params2: DynamoDB.DocumentClient.UpdateItemInput = {
     Key: {
       id: matchid
@@ -330,7 +350,9 @@ async function updateMatch(
     AttributeUpdates: {
       [teamkey]: {
         Action: 'ADD', // ADD | PUT | DELETE,
-        Value: [key] /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
+        Value: [
+          key
+        ] /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
       },
       [statekey]: {
         Action: 'PUT',

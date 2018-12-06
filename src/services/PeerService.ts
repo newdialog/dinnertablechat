@@ -1,4 +1,4 @@
-// import Peer from 'simple-peer'; // TODO: readd after simple-peer gets update
+import Peer from 'simple-peer'; // TODO: readd after simple-peer gets update
 import API from './APIService';
 type OnStream = (stream: MediaStream) => void;
 
@@ -38,7 +38,7 @@ const config = {
   ]
 };
 
-let Peer: any; // TODO: remove later
+// let Peer: any; // TODO: remove later
 export default class PeerService {
   public _peer: any; // Peer.Instance & any
   private _stream: MediaStream;
@@ -54,7 +54,7 @@ export default class PeerService {
   }
 
   public async init(initiator: boolean, cbs: CallBacks) {
-    Peer = window['SimplePeer'];
+    // Peer = window['SimplePeer'];
     const ice = ((await API.getICE()) as any[]).concat(config.iceServers);
     console.log('ice', ice);
     this.initiator = initiator;
@@ -63,9 +63,9 @@ export default class PeerService {
       trickle: true,
       // allowHalfTrickle: false,
       stream: this._stream,
-
+      constraints,
       config: { iceServers: ice }
-    }); // constraints,
+    }); //
     this._peer.on('signal', (data: any) => {
       // if (!initiator) console.timeEnd('giveResponse');
       const datasSerialized = JSON.stringify(data);
@@ -80,7 +80,7 @@ export default class PeerService {
     });
 
     this._peer.on('error', e => {
-      if(e.toString().indexOf('kStable') !== -1) return; // ignore kStable
+      if (e.toString().indexOf('kStable') !== -1) return; // ignore kStable
       if (cbs.onError) cbs.onError(e);
     });
   }

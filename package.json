@@ -47,7 +47,7 @@
     "react-swipeable-views": "^0.13.0",
     "react-waypoint": "^8.1.0",
     "remotedev": "^0.2.8",
-    "simple-peer": "^9.1.2",
+    "simple-peer": "github:feross/simple-peer#master",
     "webfontloader": "^1.6.28"
   },
   "scripts": {

@@ -100,7 +100,7 @@ class LoadingScene extends React.Component<Props, State> {
   private onMatched = (match: any) => {
     // TODO
     if (typeof match === 'string') {
-      if(match === 'CANCELLED') return; // just end
+      /// if(match === 'CANCELLED') return; // just end (why?)
       this.setState({ error: match });
       return;
     }
