@@ -104,8 +104,8 @@ export async function handshake(
         reject('retry');
         return;
       }
-      await delay(1000 * 5); // now wait for client
-    } else await delay(1000 * 5); // hope leader has written state
+      await delay(1000 * 4); // now wait for client
+    } else await delay(1000 * 4); // hope leader has written state
     console.log('started listening, isLeader', isLeader);
     // try {
     handshakeUntilConnected(
@@ -280,10 +280,10 @@ async function handshakeUntilConnected(
       throw new Error('retry');
     },
     {
-      retries: 3 * 2 * 1, // use same as above with multiplier per handshake re-negotitation, min 6
+      retries: 12, // use same as above with multiplier per handshake re-negotitation, min 6
       factor: 1.1,
-      maxTimeout: 5000 / 2,
-      minTimeout: 5000 / 2
+      maxTimeout: 5000 / 5,
+      minTimeout: 5000 / 5
     }
   );
 }
