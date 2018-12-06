@@ -67,8 +67,10 @@ export default class PeerService {
       config: { iceServers: ice }
     }); // constraints,
     this._peer.on('signal', (data: any) => {
-      if (!initiator) console.timeEnd('giveResponse');
-      cbs.onSignal(JSON.stringify(data));
+      // if (!initiator) console.timeEnd('giveResponse');
+      const datasSerialized = JSON.stringify(data);
+      // console.log('raw sig', datasSerialized);
+      cbs.onSignal(datasSerialized);
     });
     if (cbs.onConnected) this._peer.on('connect', cbs.onConnected);
 
@@ -78,6 +80,7 @@ export default class PeerService {
     });
 
     this._peer.on('error', e => {
+      if(e.toString().indexOf('kStable') !== -1) return; // ignore kStable
       if (cbs.onError) cbs.onError(e);
     });
   }
@@ -98,6 +101,7 @@ export default class PeerService {
   }
 
   public giveResponse(data: string) {
+    console.log('response', data);
     let parse: any = null;
     try {
       parse = JSON.parse(data);
@@ -105,7 +109,7 @@ export default class PeerService {
       console.warn('cant parse', data);
       return;
     }
-    if (!this.initiator) console.time('giveResponse');
+    // if (!this.initiator) console.time('giveResponse');
     this._peer.signal(parse);
   }
 

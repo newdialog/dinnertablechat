@@ -78,8 +78,10 @@ export async function handshake(
     console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
 
     const savedState = { flag: false };
+    const stopFlag: StopFlag = { stop: false };
     const cbs = {
       onSignal: async (sigdata: string) => {
+        if(stopFlag.stop) return;
         // console.log('onSignal gen:', mycolor, sigdata);
         await updateMatchBatch(matchid, mycolor, sigdata, state, savedState);
         // console.log('wrote state, isLeader', isLeader);
@@ -94,8 +96,6 @@ export async function handshake(
 
     let otherPlayerState: PlayerTableData = { char: -1 };
 
-    let stopFlag: StopFlag = { stop: false };
-
     // wait 3s (for leader, wait until blue heard, for blue wait until red msg)
     if (isLeader) {
       try {
@@ -104,8 +104,8 @@ export async function handshake(
         reject('retry');
         return;
       }
-      await delay(1000 * 5 / 2); // now wait for client
-    } else await delay(1000 * 5 / 2); // hope leader has written state
+      await delay(1000 * 5); // now wait for client
+    } else await delay(1000 * 5); // hope leader has written state
     console.log('started listening, isLeader', isLeader);
     // try {
     handshakeUntilConnected(
@@ -160,21 +160,25 @@ async function readMatch(matchid: string): Promise<HandShakeCallback> {
 
 export interface DBState {
   key: string;
-  state: any;
+  state: string[][];
 }
 
+interface LastIndex {
+  val:number;
+}
 // TODO fix global state
-let lastValue: any = null;
+// et lastValue: any = 0;
 async function readMatchWait(
   matchid: string,
   team: 'blue' | 'red',
-  stopFlag: StopFlag
+  stopFlag: StopFlag,
+  lastIndex: LastIndex
 ): Promise<DBState | null> {
   // if (stopSync) return null;
   return await retry(
     async bail => {
       if (stopFlag.stop) {
-        bail(new Error('stopSync'));
+        bail('stopSync');
         return;
       }
       const match: HandShakeCallback = await readMatch(matchid);
@@ -185,7 +189,7 @@ async function readMatchWait(
 
       // console.log('recalling state from other:', statekey, match[statekey]);
 
-      if (!keyval || keyval === '-' || keyval.length === lastValue || keyval.length === 0) {
+      if (!keyval || keyval.length <= lastIndex.val) {
         // keyval !== '{"renegotiate":true}' ||
         // await delay(3000);
         console.log('key not set yet', teamkey);
@@ -195,12 +199,17 @@ async function readMatchWait(
         throw new Error('retry');
         /// return await readMatchWait(matchid, team);
       }
-      const keyvalNew = keyval.splice(0, lastValue);
-      lastValue = keyval.length;
+
+      const spliceSize = lastIndex.val;
+      lastIndex.val = keyval.length; // save total length before splice
+      console.log('lastValue', lastIndex.val, spliceSize);
+      if(spliceSize > 0) keyval.splice(0, spliceSize); // mutates in-place
+      
+      // const keyval2 = keyval.map(k=>JSON.parse(k));// .map(v => );
 
       let stateval = null; // JSON.parse(match[statekey]);
       try {
-        console.log('match[statekey]',match[statekey]);
+        // console.log('match[statekey]',match[statekey]);
         stateval = JSON.parse(match[statekey]);
       } catch (err) {
         console.error('couldnt parse other player');
@@ -208,7 +217,7 @@ async function readMatchWait(
         return;
       }
 
-      return { key: keyvalNew, state: stateval };
+      return { key: keyval, state: stateval };
     },
     {
       retries: 4,
@@ -231,14 +240,17 @@ async function handshakeUntilConnected(
   stopFlag: StopFlag
 ) {
   let stateFetched = false;
+  const lastValue = {val:0};
   return await retry(
     async bail => {
-      if (stopFlag.stop) return 'stopSync'; // bail(new Error('stopSync'));
+      if (stopFlag.stop) {
+        return 'stopSync'; // bail(new Error('stopSync'));
+      }
       console.log('handshakeUntilConnected');
 
       let result: any = null;
       try {
-        result = await readMatchWait(matchid, team, stopFlag);
+        result = await readMatchWait(matchid, team, stopFlag, lastValue);
       } catch (e) {
         const retryError = e.toString().indexOf('retry') !== -1;
         // console.log(JSON.stringify(e), typeof e, );
@@ -247,11 +259,11 @@ async function handshakeUntilConnected(
           bail(new Error('readMatchWait failed'));
           return; // 'retry';
         } else {
-          console.log('readMatchWait aborted with:', e.Error);
+          console.log('readMatchWait aborted with:', e);
           return bail(new Error('error'));
         }
       } finally {
-        lastValue = null;
+        
       }
 
       /* if (!result) {
@@ -259,9 +271,9 @@ async function handshakeUntilConnected(
         return bail(new Error('ended')); // just end
       }*/
       const { key, state } = result;
-      let ks = key.filter((v, i, a) => a.indexOf(v) === i);
-      console.log('===key', ks);
-      ks.forEach( k => k!=='-' && ps.giveResponse(k) );
+      // let ks = key.reduce((acc, x) => acc.concat(x), []); // .filter((v, i, a) => a.indexOf(v) === i); // no longer using SETs
+      // console.log('===key', JSON.stringify(key));
+      key.forEach( batch => batch.forEach( msg => ps.giveResponse(msg)) );
       if (onState && !stateFetched) onState(state);
       stateFetched = true;
 
@@ -284,8 +296,9 @@ async function updateMatchBatch(
   state: any,
   savedFlag: {flag:boolean} // TODO refactor
 ) {
+  // console.log('RAW KEY', key)
   if(lastBatch.length===0) setTimeout(async ()=>{
-    await updateMatch(lastBatch[0].matchid, lastBatch[0].team, JSON.stringify(lastBatch.map((x)=>x.key)), lastBatch[0].state);
+    await updateMatch(lastBatch[0].matchid, lastBatch[0].team, lastBatch.map((x)=>x.key), lastBatch[0].state);
     lastBatch = [];
     savedFlag.flag = true;
   }, 3000);
@@ -295,7 +308,7 @@ async function updateMatchBatch(
 async function updateMatch(
   matchid: string,
   team: 'blue' | 'red',
-  key: string,
+  key: string[],
   state: any
 ) {
   if (!matchid) throw new Error('no matchid provided');
