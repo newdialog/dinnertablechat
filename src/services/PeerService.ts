@@ -101,7 +101,7 @@ export default class PeerService {
   }
 
   public giveResponse(data: string) {
-    console.log('response', data);
+    // console.log('response', data);
     let parse: any = null;
     try {
       parse = JSON.parse(data);

@@ -172,8 +172,14 @@ export async function queueUp(
   const r = (await gameLift.startMatchmaking(
     options,
     onMatchEvent.bind(null, stopFlag, onMatchedCB)
-  )) as any; // const r = .promise();
-  await delayProp(r.response, 'data');
+  )) as any;
+  // const r = .promise();
+  if (!r || !r.response) throw new Error('no matchmake response');
+  try {
+    await delayProp(r.response, 'data');
+  } catch (e) {
+    console.warn('delayProp could resolve');
+  }
   const TicketId = r.response.data.MatchmakingTicket.TicketId;
   console.log('r.MatchmakingTicket!.TicketId', TicketId);
   stopFlags[TicketId] = stopFlag;
@@ -184,7 +190,7 @@ export async function stopMatchmaking(TicketId: string) {
   console.log('stopMatchmaking');
   // stop our queue
   if (stopFlags[TicketId]) {
-    console.log('queue stopFlag set');
+    console.log('queue stopFlag set to true');
     stopFlags[TicketId].flag = true;
   }
   try {

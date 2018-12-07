@@ -24,7 +24,7 @@ const delayFlag = async (obj: { flag: boolean }) =>
   );
 
 interface StopFlag {
-  stop: boolean;
+  flag: boolean;
 }
 
 // If leader, send out WEBRTC connection string
@@ -66,7 +66,8 @@ export async function handshake(
   matchid: string,
   isLeader: boolean,
   state: any,
-  stream: MediaStream
+  stream: MediaStream,
+  unloadFlag: { flag: boolean }
 ) {
   return new Promise(async (resolve, reject) => {
     // const matchid = ticket.Item!.match;
@@ -78,11 +79,11 @@ export async function handshake(
     console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
 
     const savedState = { flag: false };
-    const stopFlag: StopFlag = { stop: false };
+    const stopFlag: StopFlag = unloadFlag; // { stop: false };
     const batchCache: { cache: any[] } = { cache: [] };
     const cbs = {
       onSignal: async (sigdata: string) => {
-        // if (stopFlag.stop) return; // disable as later signal possible, better to destory peer
+        // if (stopFlag.flag) return; // disable as later signal possible, better to destory peer
         // console.log('onSignal gen:', mycolor, sigdata);
         await updateMatchBatch(
           matchid,
@@ -114,7 +115,12 @@ export async function handshake(
       }
       await delay(1000 * 4); // now wait for client
     } else await delay(1000 * 4); // hope leader has written state
-    console.log('started listening, isLeader', isLeader);
+
+    if (!stopFlag.flag) console.log('started listening, isLeader', isLeader);
+    else {
+      console.log('cancelled listening, isLeader', isLeader);
+      return;
+    }
     // try {
     handshakeUntilConnected(
       matchid,
@@ -127,6 +133,7 @@ export async function handshake(
     ).catch(e => {
       const retryError = e.toString().indexOf('retry') !== -1;
       // if(retryError) throw new Error('retry');
+      /// stopFlag.flag = true;
       reject('retry');
       console.log('handshakeUntilConnected ended with', e);
       return;
@@ -134,18 +141,19 @@ export async function handshake(
 
     // set timeout for all of handshaking
     let _to = setTimeout(() => {
-      if (stopFlag.stop) return;
+      if (stopFlag.flag) return;
       console.log('webrtc onConnection timeout');
-      stopFlag.stop = true;
+      /// stopFlag.flag = true;
       reject('retry');
       // throw new Error('retry');
     }, 1000 * 60 * 1.5);
 
     await ps.onConnection();
-    stopFlag.stop = true;
     if (_to) clearTimeout(_to);
 
-    console.log(mycolor + ' rtc elected');
+    console.log(mycolor + ' rtc elected', stopFlag.flag);
+    if (stopFlag.flag) return reject('stopFlag');
+    /// stopFlag.flag = true;
 
     return resolve({ peer: ps, otherPlayerState });
   });
@@ -183,12 +191,13 @@ async function readMatchWait(
   // if (stopSync) return null;
   return await retry(
     async bail => {
-      if (stopFlag.stop) {
+      if (stopFlag.flag) {
         // bail('stopSync');
         return null;
         // return;
       }
       const match: HandShakeCallback = await readMatch(matchid);
+      // if (stopFlag.flag) return null; // needed?
       const teamkey = team + 'key' + 'i'; // TODO refactor i
 
       const statekey = team + 'state';
@@ -221,7 +230,7 @@ async function readMatchWait(
       } catch (err) {
         console.error('couldnt parse other player');
         bail(new Error('couldnt parse other player'));
-        return;
+        return null;
       }
 
       return { key: keyval, state: stateval };
@@ -229,8 +238,8 @@ async function readMatchWait(
     {
       retries: 4,
       factor: 1.1,
-      maxTimeout: 4000,
-      minTimeout: 4000
+      maxTimeout: 5100,
+      minTimeout: 5100
     }
   );
 }
@@ -250,7 +259,7 @@ async function handshakeUntilConnected(
   const lastValue = { val: 0 };
   return await retry(
     async bail => {
-      if (stopFlag.stop) {
+      if (stopFlag.flag) {
         return 'stopSync'; // bail(new Error('stopSync'));
       }
       console.log('handshakeUntilConnected');
@@ -277,6 +286,8 @@ async function handshakeUntilConnected(
         console.log('handshakeUntilConnected ended');
         return bail('ended'); // just end
       }
+      if (stopFlag.flag) return 'stopSync';
+
       const { key, state } = result;
       // let ks = key.reduce((acc, x) => acc.concat(x), []); // .filter((v, i, a) => a.indexOf(v) === i); // no longer using SETs
       // console.log('===key', JSON.stringify(key));
@@ -287,10 +298,10 @@ async function handshakeUntilConnected(
       throw new Error('retry');
     },
     {
-      retries: 13, // use same as above with multiplier per handshake re-negotitation, min 6
+      retries: 10, // use same as above with multiplier per handshake re-negotitation, min 6
       factor: 1.1,
-      maxTimeout: 3000,
-      minTimeout: 3000
+      maxTimeout: 1000,
+      minTimeout: 1000
     }
   );
 }
@@ -315,7 +326,7 @@ async function updateMatchBatch(
       );
       lastBatch = lastBatchRef.cache = [];
       savedFlag.flag = true;
-    }, 3000);
+    }, 2500);
   lastBatch.push({ matchid, team, key, state });
 }
 
@@ -339,7 +350,7 @@ async function updateMatch(
   console.log(
     matchid,
     'saving to key',
-    teamkey + '==' + key,
+    teamkey + '==', //  + key,
     'state: ',
     statekey + '==' + stateStr
   );
@@ -361,7 +372,7 @@ async function updateMatch(
     },
     TableName: 'match'
   };
-  console.log(JSON.stringify(params2));
+  /// console.log(JSON.stringify(params2));
   const ticket2 = await docClient.update(params2).promise();
   // console.log('ut2,', ticket2);
   return ticket2;
