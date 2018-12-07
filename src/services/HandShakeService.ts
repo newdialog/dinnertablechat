@@ -24,7 +24,7 @@ const delayFlag = async (obj: { flag: boolean }) =>
   );
 
 interface StopFlag {
-  stop: boolean;
+  flag: boolean;
 }
 
 // If leader, send out WEBRTC connection string
@@ -66,7 +66,8 @@ export async function handshake(
   matchid: string,
   isLeader: boolean,
   state: any,
-  stream: MediaStream
+  stream: MediaStream,
+  unloadFlag: { flag: boolean }
 ) {
   return new Promise(async (resolve, reject) => {
     // const matchid = ticket.Item!.match;
@@ -78,12 +79,22 @@ export async function handshake(
     console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
 
     const savedState = { flag: false };
+    const stopFlag: StopFlag = unloadFlag; // { stop: false };
+    const batchCache: { cache: any[] } = { cache: [] };
     const cbs = {
       onSignal: async (sigdata: string) => {
+        // if (stopFlag.flag) return; // disable as later signal possible, better to destory peer
         // console.log('onSignal gen:', mycolor, sigdata);
-        await updateMatch(matchid, mycolor, sigdata, state);
-        console.log('wrote state, isLeader', isLeader);
-        savedState.flag = true;
+        await updateMatchBatch(
+          matchid,
+          mycolor,
+          sigdata,
+          state,
+          savedState,
+          batchCache
+        );
+        // console.log('wrote state, isLeader', isLeader);
+        // savedState.flag = true;
       },
       onError(e) {
         console.log('webrtc error', e);
@@ -94,8 +105,6 @@ export async function handshake(
 
     let otherPlayerState: PlayerTableData = { char: -1 };
 
-    let stopFlag: StopFlag = { stop: false };
-
     // wait 3s (for leader, wait until blue heard, for blue wait until red msg)
     if (isLeader) {
       try {
@@ -104,9 +113,14 @@ export async function handshake(
         reject('retry');
         return;
       }
-      await delay(1000 * 5); // now wait for client
-    } else await delay(1000 * 5); // hope leader has written state
-    console.log('started listening, isLeader', isLeader);
+      await delay(1000 * 4); // now wait for client
+    } else await delay(1000 * 4); // hope leader has written state
+
+    if (!stopFlag.flag) console.log('started listening, isLeader', isLeader);
+    else {
+      console.log('cancelled listening, isLeader', isLeader);
+      return;
+    }
     // try {
     handshakeUntilConnected(
       matchid,
@@ -119,27 +133,27 @@ export async function handshake(
     ).catch(e => {
       const retryError = e.toString().indexOf('retry') !== -1;
       // if(retryError) throw new Error('retry');
+      /// stopFlag.flag = true;
       reject('retry');
       console.log('handshakeUntilConnected ended with', e);
       return;
     });
 
-    try {
-      setTimeout(() => {
-        if (stopFlag.stop) return;
-        console.log('webrtc onConnection timeout');
-        stopFlag.stop = true;
-        reject('retry');
-        // throw new Error('retry');
-      }, 1000 * 60 * 2);
-    } catch (e) {
-      throw new Error(e);
-      return;
-    }
-    await ps.onConnection();
-    stopFlag.stop = true;
+    // set timeout for all of handshaking
+    let _to = setTimeout(() => {
+      if (stopFlag.flag) return;
+      console.log('webrtc onConnection timeout');
+      /// stopFlag.flag = true;
+      reject('retry');
+      // throw new Error('retry');
+    }, 1000 * 60 * 1.5);
 
-    console.log(mycolor + ' rtc elected');
+    await ps.onConnection();
+    if (_to) clearTimeout(_to);
+
+    console.log(mycolor + ' rtc elected', stopFlag.flag);
+    if (stopFlag.flag) return reject('stopFlag');
+    /// stopFlag.flag = true;
 
     return resolve({ peer: ps, otherPlayerState });
   });
@@ -160,33 +174,38 @@ async function readMatch(matchid: string): Promise<HandShakeCallback> {
 
 export interface DBState {
   key: string;
-  state: any;
+  state: string[][];
 }
 
+interface LastIndex {
+  val: number;
+}
 // TODO fix global state
-let lastValue: any = null;
+// et lastValue: any = 0;
 async function readMatchWait(
   matchid: string,
   team: 'blue' | 'red',
-  stopFlag: StopFlag
+  stopFlag: StopFlag,
+  lastIndex: LastIndex
 ): Promise<DBState | null> {
   // if (stopSync) return null;
   return await retry(
     async bail => {
-      if (stopFlag.stop) {
-        bail(new Error('stopSync'));
-        return;
+      if (stopFlag.flag) {
+        // bail('stopSync');
+        return null;
+        // return;
       }
       const match: HandShakeCallback = await readMatch(matchid);
-      const teamkey = team + 'key';
+      // if (stopFlag.flag) return null; // needed?
+      const teamkey = team + 'key' + 'i'; // TODO refactor i
 
       const statekey = team + 'state';
       const keyval = match[teamkey];
 
       // console.log('recalling state from other:', statekey, match[statekey]);
 
-      if (!keyval || keyval === '-' || keyval === lastValue) {
-        lastValue = keyval;
+      if (!keyval || keyval.length <= lastIndex.val) {
         // keyval !== '{"renegotiate":true}' ||
         // await delay(3000);
         console.log('key not set yet', teamkey);
@@ -197,13 +216,21 @@ async function readMatchWait(
         /// return await readMatchWait(matchid, team);
       }
 
+      const spliceSize = lastIndex.val;
+      lastIndex.val = keyval.length; // save total length before splice
+      console.log('lastValue', lastIndex.val, spliceSize);
+      if (spliceSize > 0) keyval.splice(0, spliceSize); // mutates in-place
+
+      // const keyval2 = keyval.map(k=>JSON.parse(k));// .map(v => );
+
       let stateval = null; // JSON.parse(match[statekey]);
       try {
+        // console.log('match[statekey]',match[statekey]);
         stateval = JSON.parse(match[statekey]);
       } catch (err) {
         console.error('couldnt parse other player');
         bail(new Error('couldnt parse other player'));
-        return;
+        return null;
       }
 
       return { key: keyval, state: stateval };
@@ -211,8 +238,8 @@ async function readMatchWait(
     {
       retries: 4,
       factor: 1.1,
-      maxTimeout: 6000,
-      minTimeout: 6000
+      maxTimeout: 5100,
+      minTimeout: 5100
     }
   );
 }
@@ -229,14 +256,17 @@ async function handshakeUntilConnected(
   stopFlag: StopFlag
 ) {
   let stateFetched = false;
+  const lastValue = { val: 0 };
   return await retry(
     async bail => {
-      if (stopFlag.stop) return 'stopSync'; // bail(new Error('stopSync'));
+      if (stopFlag.flag) {
+        return 'stopSync'; // bail(new Error('stopSync'));
+      }
       console.log('handshakeUntilConnected');
 
       let result: any = null;
       try {
-        result = await readMatchWait(matchid, team, stopFlag);
+        result = await readMatchWait(matchid, team, stopFlag, lastValue);
       } catch (e) {
         const retryError = e.toString().indexOf('retry') !== -1;
         // console.log(JSON.stringify(e), typeof e, );
@@ -245,55 +275,95 @@ async function handshakeUntilConnected(
           bail(new Error('readMatchWait failed'));
           return; // 'retry';
         } else {
-          console.log('readMatchWait aborted with:', e.Error);
-          return bail(new Error('error'));
+          console.log('readMatchWait aborted with:', e);
+          bail(new Error('error'));
+          return;
         }
       } finally {
-        lastValue = null;
       }
 
-      /* if (!result) {
+      if (!result) {
         console.log('handshakeUntilConnected ended');
-        return bail(new Error('ended')); // just end
-      }*/
+        return bail('ended'); // just end
+      }
+      if (stopFlag.flag) return 'stopSync';
+
       const { key, state } = result;
-      ps.giveResponse(key);
+      // let ks = key.reduce((acc, x) => acc.concat(x), []); // .filter((v, i, a) => a.indexOf(v) === i); // no longer using SETs
+      // console.log('===key', JSON.stringify(key));
+      key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg)));
       if (onState && !stateFetched) onState(state);
       stateFetched = true;
 
       throw new Error('retry');
     },
     {
-      retries: 3 * 2 * 1, // use same as above with multiplier per handshake re-negotitation, min 6
+      retries: 10, // use same as above with multiplier per handshake re-negotitation, min 6
       factor: 1.1,
-      maxTimeout: 5000 / 2,
-      minTimeout: 5000 / 2
+      maxTimeout: 1000,
+      minTimeout: 1000
     }
   );
+}
+
+async function updateMatchBatch(
+  matchid: string,
+  team: 'blue' | 'red',
+  key: string,
+  state: any,
+  savedFlag: { flag: boolean }, // TODO refactor
+  lastBatchRef: { cache: any[] }
+) {
+  let lastBatch = lastBatchRef.cache;
+  // console.log('RAW KEY', key)
+  if (lastBatch.length === 0)
+    setTimeout(async () => {
+      await updateMatch(
+        lastBatch[0].matchid,
+        lastBatch[0].team,
+        lastBatch.map(x => x.key),
+        lastBatch[0].state
+      );
+      lastBatch = lastBatchRef.cache = [];
+      savedFlag.flag = true;
+    }, 2500);
+  lastBatch.push({ matchid, team, key, state });
 }
 
 async function updateMatch(
   matchid: string,
   team: 'blue' | 'red',
-  key: string,
-  state: any = {}
+  key: string[],
+  state: any
 ) {
   if (!matchid) throw new Error('no matchid provided');
+  if (!key) {
+    console.log('updateMatch cancel, no key');
+    return;
+  }
 
-  const teamkey = team + 'key';
+  const teamkey = team + 'key' + 'i'; // TODO: concat
 
   const statekey = team + 'state';
-  const stateStr = state ? JSON.stringify(state) : '{}';
+  const stateStr = JSON.stringify(state);
 
-  console.log('saving to key', teamkey, 'state: ', statekey, stateStr);
+  console.log(
+    matchid,
+    'saving to key',
+    teamkey + '==', //  + key,
+    'state: ',
+    statekey + '==' + stateStr
+  );
   const params2: DynamoDB.DocumentClient.UpdateItemInput = {
     Key: {
       id: matchid
     },
     AttributeUpdates: {
       [teamkey]: {
-        Action: 'PUT', // ADD | PUT | DELETE,
-        Value: key /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
+        Action: 'ADD', // ADD | PUT | DELETE,
+        Value: [
+          key
+        ] /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
       },
       [statekey]: {
         Action: 'PUT',
@@ -302,6 +372,7 @@ async function updateMatch(
     },
     TableName: 'match'
   };
+  /// console.log(JSON.stringify(params2));
   const ticket2 = await docClient.update(params2).promise();
   // console.log('ut2,', ticket2);
   return ticket2;

@@ -91,6 +91,7 @@ class LoadingScene extends React.Component<Props, State> {
   myStream: MediaStream | null = null;
   ticketIdProp = null;
   startedHandshake = false;
+  unloadFlag = { flag: false };
 
   constructor(props: any) {
     super(props);
@@ -98,9 +99,10 @@ class LoadingScene extends React.Component<Props, State> {
   }
 
   private onMatched = (match: any) => {
+    if(this.unloadFlag.flag) return;
     // TODO
     if (typeof match === 'string') {
-      if(match === 'CANCELLED') return; // just end
+      /// if(match === 'CANCELLED') return; // just end (why?)
       this.setState({ error: match });
       return;
     }
@@ -151,14 +153,22 @@ class LoadingScene extends React.Component<Props, State> {
 
     if (!this.props.store.auth.user!.id) throw new Error('no valid user id');
     const userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
-    const ticketId = await QS.queueUp(
-      topic,
-      position,
-      userid,
-      contribution,
-      chararacter,
-      this.onMatched
-    );
+    let ticketId:any;
+    try {
+      ticketId = await QS.queueUp(
+        topic,
+        position,
+        userid,
+        contribution,
+        chararacter,
+        this.onMatched
+      );
+    } catch (e) {
+      console.error(e);
+      this.setState({ error: 'start queue' });
+      return;
+    }
+    if(this.unloadFlag.flag) return;
     this.setState({ticketId});
 
     // this.ticketIdProp = ticketId;
@@ -169,7 +179,7 @@ class LoadingScene extends React.Component<Props, State> {
 
   private onWindowUnload = (e:any) => {
     console.log('onWindowUnload');
-    if(this.state.ticketId) QS.stopMatchmakingSimple(this.state.ticketId!);
+    if(this.state.ticketId) QS.stopMatchmaking(this.state.ticketId!); // Simple
     // return false;
   }
 
@@ -183,19 +193,24 @@ class LoadingScene extends React.Component<Props, State> {
     window.removeEventListener("unload", this.onWindowUnload);
     // unload streams if nav to different page outside of match
     // console.log('this.props.store.router', JSON.stringify(this.props.store.router));
-    const navAway =
+    
+    /* const navAway =
       ((this.props.store.router.location as any).pathname as string).indexOf(
         'match'
-      ) === -1;
+      ) === -1; */
     
-      const hasMatch = this.props.store.debate.match && this.props.store.debate.match!.matchId;
+      const hasMatch = this.props.store.debate.match && this.props.store.debate.match!.sync;
     
-      console.log('componentWillUnmount 1', navAway, !hasMatch);
+      console.log('componentWillUnmount 1', !hasMatch);
     if(!hasMatch) {
-      console.log('componentWillUnmount');
+      this.unloadFlag.flag = true;
+      console.log('componentWillUnmount 2', this.state.ticketId);
       if(this.state.ticketId) QS.stopMatchmaking(this.state.ticketId!);
       this.props.store.showNavbar();
       if(this.state.stream) this.state.stream.getTracks().forEach(track => track.stop());
+    } else {
+      // give few seconds for last sync
+      setTimeout( ()=>this.unloadFlag.flag = true, 3003);
     }
   }
 
@@ -207,12 +222,18 @@ class LoadingScene extends React.Component<Props, State> {
 
     let result: any;
     try {
-      result = await shake.handshake(matchId, isLeader, state, stream);
+      result = await shake.handshake(matchId, isLeader, state, stream, this.unloadFlag);
     } catch (e) {
+      this.unloadFlag.flag = true;
       const retryError = e.toString().indexOf('retry') !== -1;
       console.warn('handshake error', retryError, e);
       if (retryError) return this.setState({ error: 'handshake_timeout' });
       else return this.setState({ error: 'handshake_error' });
+    } finally {
+      if(this.unloadFlag.flag) {
+        console.log('gotMedia stopping due to flag');
+        return;
+      }
     }
     const { peer, otherPlayerState } = result;
 
@@ -226,6 +247,7 @@ class LoadingScene extends React.Component<Props, State> {
 
   public async componentWillUpdate() {
     // Get Mic right away
+    if(this.unloadFlag.flag) return;
     if (this.props.store.debate.match && this.state.stream && !this.startedHandshake) {
       this.startedHandshake = true;
       this.gotMedia(this.state.stream!);

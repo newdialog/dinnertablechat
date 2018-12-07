@@ -1,4 +1,4 @@
-// import Peer from 'simple-peer'; // TODO: readd after simple-peer gets update
+import Peer from 'simple-peer'; // TODO: readd after simple-peer gets update
 import API from './APIService';
 type OnStream = (stream: MediaStream) => void;
 
@@ -38,7 +38,7 @@ const config = {
   ]
 };
 
-let Peer: any; // TODO: remove later
+// let Peer: any; // TODO: remove later
 export default class PeerService {
   public _peer: any; // Peer.Instance & any
   private _stream: MediaStream;
@@ -54,21 +54,23 @@ export default class PeerService {
   }
 
   public async init(initiator: boolean, cbs: CallBacks) {
-    Peer = window['SimplePeer'];
+    // Peer = window['SimplePeer'];
     const ice = ((await API.getICE()) as any[]).concat(config.iceServers);
     console.log('ice', ice);
     this.initiator = initiator;
     this._peer = new Peer({
       initiator,
-      trickle: false,
-      allowHalfTrickle: false,
+      trickle: true,
+      // allowHalfTrickle: false,
       stream: this._stream,
-
+      constraints,
       config: { iceServers: ice }
-    } as any); // constraints,
+    }); //
     this._peer.on('signal', (data: any) => {
-      if (!initiator) console.timeEnd('giveResponse');
-      cbs.onSignal(JSON.stringify(data));
+      // if (!initiator) console.timeEnd('giveResponse');
+      const datasSerialized = JSON.stringify(data);
+      // console.log('raw sig', datasSerialized);
+      cbs.onSignal(datasSerialized);
     });
     if (cbs.onConnected) this._peer.on('connect', cbs.onConnected);
 
@@ -78,6 +80,7 @@ export default class PeerService {
     });
 
     this._peer.on('error', e => {
+      if (e.toString().indexOf('kStable') !== -1) return; // ignore kStable
       if (cbs.onError) cbs.onError(e);
     });
   }
@@ -98,6 +101,7 @@ export default class PeerService {
   }
 
   public giveResponse(data: string) {
+    // console.log('response', data);
     let parse: any = null;
     try {
       parse = JSON.parse(data);
@@ -105,7 +109,7 @@ export default class PeerService {
       console.warn('cant parse', data);
       return;
     }
-    if (!this.initiator) console.time('giveResponse');
+    // if (!this.initiator) console.time('giveResponse');
     this._peer.signal(parse);
   }
 

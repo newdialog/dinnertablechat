@@ -175,6 +175,8 @@ function getQParam(players, matchId) {
             "id": matchId,
             "redkey": "-",
             "bluekey": "-",
+            "redkeyi": [],
+            "bluekeyi": [], // documentClient.createSet([]),
             "ttl": '' + ttl2
           }
         }
