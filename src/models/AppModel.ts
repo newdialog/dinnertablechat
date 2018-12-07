@@ -10,7 +10,7 @@ const AppModel = types
     debate: DebateModel,
     router: RouterModel,
     showNav: true,
-    isStandalone: false,
+    // isStandalone: false,
     dailyOpen: false // only use for invalidation
   })
   .actions(self => ({
@@ -22,15 +22,10 @@ const AppModel = types
       if (!self.debate.isTest) self.router.push('/play');
       else self.router.push('/test');
     },
-    enableStandalone() {
-      self.isStandalone = true;
-    },
     showNavbar() {
-      // self.text = newTitle
       self.showNav = true;
     },
     hideNavbar() {
-      // self.text = newTitle
       self.showNav = false;
     }
   }))
@@ -47,6 +42,10 @@ const AppModel = types
       return (
         self.auth.user && self.auth.user!.id === 'Google_111841421166386376573'
       );
+    },
+    isStandalone() {
+      // return true;
+      return (window.matchMedia('(display-mode: standalone)').matches) || !!window['cordova'] || document.URL.indexOf('file://') !== -1;
     }
   }));
 
