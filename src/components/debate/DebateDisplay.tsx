@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { createStyles, WithStyles, Theme} from '@material-ui/core/styles';
 import HOC from '../HOC';
 
@@ -227,28 +227,11 @@ class DebateScene extends React.Component<Props, State> {
     });
   };
 
+  public componentWillUnmount() {
+    if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
+  }
+
   public componentDidMount() {
-    // Lock orientation if possible
-    if (screen.orientation && typeof screen.orientation.lock === 'function') {
-      window.screen.orientation.lock('landscape').catch(e => {
-        console.warn('screen.orientation.lock failed', e);
-      });
-    }
-
-    const s = window.screen as any;
-    s.lockOrientationUniversal =
-      s.lockOrientation || s.mozLockOrientation || s.msLockOrientation;
-    
-      if (s.lockOrientationUniversal) {
-        if(s.lockOrientationUniversal('landscape-primary')) {
-          console.log('screen.lockOrientation set to landscape');
-        } else {
-          console.warn('screen.lockOrientation failed to lock');
-        }
-      } else {
-        console.warn('screen.lockOrientation not available')
-      }
-
     // Table
     const t = this.tableEl.current!;
     const table = rottie.loadAnimation({
@@ -293,9 +276,12 @@ class DebateScene extends React.Component<Props, State> {
     const redChar = characters[this.props.redChar];
     const blueChar = characters[this.props.blueChar];
     return (
-      <React.Fragment>
+      <div id="debatedisplay">
         {(agreed || ended) ? <Lottie options={confettiOptions} ref={this.confettiRef} /> : null}
         <div className={classes.centered}>
+          <Typography variant="h1" gutterBottom align="center" style={{color:'#555555'}} id="rotatemessage">
+            Please rotate phone to landscape.
+          </Typography>
           <div style={{ margin: '0 auto 0 auto', width: '100%' }}>
             <div className={classes.bannerAnim}>
               <Lottie
@@ -357,13 +343,12 @@ class DebateScene extends React.Component<Props, State> {
 
         <DebateFloatMenu videoEl={videoEl} />
 
-      </React.Fragment>
+      </div>
     );
   }
 }
 
 export default HOC(DebateScene, styles);
-
 /*
     Lottie
                   options={tableOptions}

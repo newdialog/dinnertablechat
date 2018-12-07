@@ -5,7 +5,29 @@ import * as AppModel from '../../models/AppModel';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import HOC from '../HOC';
 
-// const logoData = require('../../assets/logo.json');
+// requires user action
+function setLandscape() {
+  // Lock orientation if possible
+  if (screen.orientation && typeof screen.orientation.lock === 'function') {
+    screen.orientation.lock('landscape').catch(e => {
+      console.warn('screen.orientation.lock failed', e);
+    });
+  }
+
+  // const s = window.screen as any;
+  const lockOrientationUniversal =
+    window.screen['lockOrientation'] || window.screen['mozLockOrientation'] || window.screen['msLockOrientation'];
+  
+    if (lockOrientationUniversal) {
+      if(lockOrientationUniversal('landscape')) {
+        console.log('screen.lockOrientation set to landscape');
+      } else {
+        console.warn('screen.lockOrientation failed to lock');
+      }
+    } else {
+      console.warn('screen.lockOrientation not available')
+    }
+}
 
 const styles = theme =>
   createStyles({
@@ -110,7 +132,8 @@ class CharacterSelector extends React.Component<Props> {
     ];
   }
 
-  private onChipClick(item: any) {
+  private onChipClick(ev:any, item: any) {
+    setLandscape();
     this.props.store.debate.setCharacter(item.value);
   }
 
@@ -138,7 +161,7 @@ class CharacterSelector extends React.Component<Props> {
                 style={{
                   width: '30%'
                 }}
-                onClick={() => this.onChipClick(item)}
+                onClick={(e) => this.onChipClick(e, item)}
               >
                 <span
                   className={classes.imageSrc}
