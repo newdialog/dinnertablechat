@@ -14,7 +14,7 @@ import createBrowserHistory from 'history/createBrowserHistory';
 import { RouterModel, syncHistoryWithStore } from 'mst-react-router';
 
 // Setup History
-const routerModel = RouterModel.create();
+const routerModel = RouterModel.create( {location:null} );
 const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
 // Configure MST Store
