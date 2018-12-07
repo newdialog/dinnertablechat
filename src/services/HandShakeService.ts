@@ -55,7 +55,9 @@ export async function sync(userid: string) {
   const ticket = await docClient.get(params).promise();
   console.log('t,', ticket.Item);
 
-  if (!ticket.Item) throw new Error('no entry in dynamo: sns_to_pubsub');
+  if (!ticket.Item) return null;
+  //throw new Error('no entry in dynamo: sns_to_pubsub');
+  else if (!ticket.Item!.match) return null; //  throw new Error('no match record');
 
   // const matchid = ticket.Item!.match;
   // ===
@@ -114,7 +116,7 @@ export async function handshake(
         return;
       }
       await delay(1000 * 4); // now wait for client
-    } else await delay(1000 * 4); // hope leader has written state
+    } else await delay(1000 * 5); // hope leader has written state
 
     if (!stopFlag.flag) console.log('started listening, isLeader', isLeader);
     else {

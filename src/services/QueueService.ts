@@ -96,9 +96,15 @@ async function poll(
     }
     if (ticket.Status === 'PLACING') {
       console.log('entering placing, stopping poll', ticket);
-      // return;
-      await delay(2500);
-      const player = await shake.sync(playerId); // allow time for lambda to save
+      // wait for dyanmo match to be saved
+      await delay(1500);
+      let player = await shake.sync(playerId); // allow time for lambda to save
+      if (!player) {
+        await delay(3000);
+        player = await shake.sync(playerId);
+      }
+      if (!player) return onMatchedCB('timeout');
+
       onMatchedCB({
         team: player.team as any,
         leader: player.leader,
