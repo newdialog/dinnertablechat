@@ -40,9 +40,3 @@ const onUpdate = (registration: ServiceWorkerRegistration) => console.log('worke
 
 serviceWorker.register({onSuccess, onUpdate});
 // serviceWorker.unregister();
-
-const enabledOnSafari  = (window.navigator as any).standalone === true;
-if (enabledOnSafari || window.matchMedia('(display-mode: standalone)').matches) {
-  console.log('display-mode is standalone');
-  store.enableStandalone();
-}

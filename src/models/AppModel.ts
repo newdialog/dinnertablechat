@@ -45,7 +45,13 @@ const AppModel = types
     },
     isStandalone() {
       // return true;
-      return (window.matchMedia('(display-mode: standalone)').matches) || !!window['cordova'] || document.URL.indexOf('file://') !== -1;
+      const enabledOnSafari = (window.navigator as any).standalone === true;
+      return (
+        window.matchMedia('(display-mode: standalone)').matches ||
+        enabledOnSafari ||
+        !!window['cordova'] ||
+        document.URL.indexOf('file://') !== -1
+      );
     }
   }));
 
