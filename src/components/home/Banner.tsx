@@ -74,7 +74,7 @@ const styles = (theme: Theme) =>
       justifyContent: 'flex-end',
       flexFlow: 'column nowrap',
       [theme.breakpoints.down('sm')]: {
-        height: 'calc(100vh - 1px)',
+        height: 'calc(100vh - 32px)',
       }
     },
     bannerTextDivider: {
@@ -165,7 +165,7 @@ class Index extends React.Component<Props, any> {
     const isLive = store.isLive();
 
     const isOpen = Times.isDuringDebate(); // store.dailyOpen; // !isLive ||  Times.isDuringDebate();
-    console.log('isOpen', isOpen);
+    // console.log('isOpen', isOpen);
 
     return (
       <React.Fragment>

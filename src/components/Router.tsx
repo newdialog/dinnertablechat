@@ -3,6 +3,7 @@ import React, { lazy, Suspense } from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import * as AppModel from '../models/AppModel';
 import {observer, inject} from 'mobx-react';
+import { Typography } from '@material-ui/core';
 
 const AsyncHome = lazy(() => import('./home/home'));
 const AsyncPlay = lazy(() => import('./menus/MenuHome'));
@@ -13,6 +14,7 @@ const AsyncTester = lazy(() => import('./debate/DebateTester'));
 const DebateHistory = lazy(() => import('./menus/DebateHistory'));
 const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
 const GettingStarted = lazy(() => import('./menus/GettingStarted'));
+const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
 const NoMatch = ({ location }) => (
   <div>
@@ -32,7 +34,7 @@ const loader = () => {
       <br />
       <br />
       <br />
-      <h1 style={{ textAlign: 'center' }}>Loading...</h1>
+      <Typography variant="h3" align="center" style={{color:'#555555'}}>Loading...</Typography>
     </div>
   );
 };
@@ -49,7 +51,8 @@ const DTCRouter = ({
     <Suspense fallback={loader()}>
       <Switch>
         <Route exact={true} path="/" component={AsyncHome} />
-        <Route exact={true} path="/callback" component={AsyncHome} />
+        <Route exact={true} path="/callback" component={AuthSignin} />
+        <Route exact={true} path="/signin" component={AuthSignin} />
         <Route exact={true} path="/feedback" component={DebateFeedback} />
         <Route exact={true} path="/history" component={DebateHistory} />
         <Route exact={true} path="/tutorial" component={GettingStarted} />
@@ -72,7 +75,7 @@ const DTCRouter = ({
           />
         )}
 
-        <Redirect from="/signin" to="/" />
+        
         <Redirect from="/signout" to="/" />
 
         <Route render={() => <Redirect to="/" />} />

@@ -23,7 +23,7 @@ import { injectConfig } from '../configs/AWSconfig';
 const awsconfig = injectConfig(awsmobile);
 const IdentityPoolId = awsconfig.Auth.identityPoolId;
 
-console.log('IdentityPoolId', IdentityPoolId);
+// console.log('IdentityPoolId', IdentityPoolId);
 
 if (!AWS.config || !AWS.config.region) {
   AWS.config = new AWS.Config({ region: 'us-east-1' });
@@ -62,6 +62,7 @@ function onHubCapsule(cb: AwsCB, capsule: any) {
 
   const { channel, payload } = capsule; // source
 
+  console.log('payload.event', channel, payload.event);
   if (channel === 'auth' && payload.event === LOGIN_EVENT) {
     console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
@@ -101,16 +102,30 @@ export interface AwsAuth {
   SessionToken: string;
 }
 
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function checkUser(cb: AwsCB, event: string = '') {
   let data: any;
   try {
-    console.time('currentAuthenticatedUser');
+    // console.time('currentAuthenticatedUser');
     data = await Auth.currentAuthenticatedUser();
-    console.timeEnd('currentAuthenticatedUser');
+    // console.timeEnd('currentAuthenticatedUser');
   } catch (e) {
+    // console.timeEnd('currentAuthenticatedUser');
+    console.log(
+      '---currentAuthenticatedUser not logged in, double checking',
+      e
+    );
+    // await delay(1600);
+    // console.time('currentAuthenticatedUser2');
+    // data = await Auth.currentAuthenticatedUser().catch(e => {
     console.log('---currentAuthenticatedUser not logged in:', e);
     cb(null);
     return;
+    //   return null;
+    // });
+    // console.timeEnd('currentAuthenticatedUser2');
+    // if (!data) return;
+    // else console.log('+++ currentAuthenticatedUser found on retry');
   }
   // .then(data => {
   /// console.log('+++currentAuthenticatedUser', data);

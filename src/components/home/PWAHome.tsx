@@ -7,11 +7,6 @@ import Subscribe from './Subscribe';
 import Footer from './Footer';
 import Announcement from '@material-ui/icons/RecordVoiceOver';
 import {inject} from 'mobx-react';
-import * as AppModel from '../../models/AppModel';
-import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
-import pwahome from './PWAHome';
-import PWAHome from './PWAHome';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -114,14 +109,17 @@ const styles = (theme: Theme) =>
     }
   });
 
+import * as AppModel from '../../models/AppModel';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
 }
 interface State {
   open: boolean;
 }
+import Grid from '@material-ui/core/Grid';
+import { Typography } from '@material-ui/core';
 
-class Index extends React.Component<Props, State> {
+class PWAHome extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { open: false };
@@ -130,50 +128,11 @@ class Index extends React.Component<Props, State> {
   public render() {
     const { classes, store } = this.props;
     const { open } = this.state;
-    if(this.props.store.isStandalone() && store.auth.notLoggedIn) store.auth.login();
-
-    // if(!store.isStandalone()) return <PWAHome/>;
-
     return (
       <React.Fragment>
       <div>
         <Banner store={store} />
-
-        <Content />
-        <div className="pagebody">
-          <Grid container spacing={0} className={classes.container} id="subscribe">
-            <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
-              <img
-                src="https://via.placeholder.com/150" data-src="./imgs/07-newsletter.png"
-                className={classes.paperimg+' lazyload'}
-              />
-            </Grid>
-            <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
-              <Subscribe/>
-            </Grid>
-          </Grid>
-          <div style={{ marginTop: '3em' }}>
-            <a
-              href="https://goo.gl/forms/KaZBtAxKRs2M1dY62"
-              onClick={window.trackOutboundLinkClick(
-                'https://goo.gl/forms/KaZBtAxKRs2M1dY62'
-              )}
-              className="minorlink"
-              style={{ textDecoration: 'none' }}
-            >
-              <Announcement /> help us out by taking a quick poll
-            </a>
-          </div><br/>
-          <Typography variant="body1" style={{ marginTop: '1em' }}>
-            Also follow us on <a href="https://twitter.com/dintablechat" 
-              onClick={trackOutboundLinkClick('https://twitter.com/dintablechat')}>
-              Twitter</a>, <a href="https://medium.com/dinnertablechat" onClick={trackOutboundLinkClick('https://medium.com/dinnertablechat')}>Medium</a>, 
-              and other platforms using the links in the footer!
-          </Typography>
-        </div>
-        <div style={{marginBottom: '100px'}}/>
-        
-      </div><Footer />
+      </div>
       </React.Fragment>
     );
   }
@@ -191,4 +150,4 @@ class Index extends React.Component<Props, State> {
   };
 }
 
-export default inject('store')(HOC(Index, styles));
+export default inject('store')(HOC(PWAHome, styles));

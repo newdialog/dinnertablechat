@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 import * as AuthService from '../../services/AuthService';
 // import { withOAuth } from 'aws-amplify-react';
 import Auth from '@aws-amplify/auth';
+import MediaQuery from 'react-responsive';
 
 interface Props {
   store: Store.Type;
@@ -68,23 +69,39 @@ class AuthComp extends React.Component<Props, any> {
       this.signIn();
     }
 
-    return <React.Fragment>{props.children}</React.Fragment>;
+    return <React.Fragment><br/><br/><br/>{props.children}
+        <MediaQuery query="(display-mode: standalone)">
+        {(matches) => {
+          if (matches && !this.props.store.isStandalone()) this.props.store.setStandalone();
+          // if(matches) return <p>p1</p>
+          // else return <p>w1</p>
+          return null;
+        }}
+        </MediaQuery>
+      </React.Fragment>;
   }
 
   private handleAuth = (awsUser: AuthService.AwsAuth | null) => {
     if (!awsUser)  {
+      console.log('+not logged in');
+      // if(this.props.store.isStandalone()) this.signIn(); // MOBILE
+      
       this.props.store.auth.notLoggedIn();
-      if(this.props.store.isStandalone()) this.props.store.auth.login(); // MOBILE
       return;
-    }
+    } 
+    console.log('+logged in');
     // console.log('handleAuth', awsUser)
     this.props.store.auth.authenticated(awsUser);
-    if(awsUser.event === AuthService.LOGIN_EVENT) {
+
+    /* if(awsUser.event === AuthService.LOGIN_EVENT) {
       window.gtag('event', 'logged_in', {
         event_category: 'auth'
       });
       this.props.store.router.push('/tutorial');
+    } else if(this.props.store.isStandalone()) {
+      this.props.store.router.push('/play');
     }
+    */
   }
 }
 

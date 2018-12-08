@@ -10,7 +10,7 @@ const AppModel = types
     debate: DebateModel,
     router: RouterModel,
     showNav: true,
-    // isStandalone: false,
+    _isStandalone: false,
     dailyOpen: false // only use for invalidation
   })
   .actions(self => ({
@@ -43,14 +43,18 @@ const AppModel = types
         self.auth.user && self.auth.user!.id === 'Google_111841421166386376573'
       );
     },
+    setStandalone() {
+      self._isStandalone = true;
+    },
     isStandalone() {
+      if (self._isStandalone) return true;
       // return true;
       const enabledOnSafari = (window.navigator as any).standalone === true;
       return (
         window.matchMedia('(display-mode: standalone)').matches ||
         enabledOnSafari ||
         !!window['cordova'] ||
-        document.URL.indexOf('file://') !== -1
+        document.URL.indexOf('file://') > -1
       );
     }
   }));
