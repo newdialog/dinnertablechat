@@ -123,7 +123,7 @@ export async function handshake(
       console.log('cancelled listening, isLeader', isLeader);
       return;
     }
-    // try {
+
     handshakeUntilConnected(
       matchid,
       otherColor,
@@ -148,9 +148,13 @@ export async function handshake(
       /// stopFlag.flag = true;
       reject('retry');
       // throw new Error('retry');
-    }, 1000 * 60 * 1.5);
-
-    await ps.onConnection();
+    }, 1000 * 64);
+    try {
+      await ps.onConnection();
+    } catch (e) {
+      console.error(e);
+      reject('webrtc failed');
+    }
     if (_to) clearTimeout(_to);
 
     console.log(mycolor + ' rtc elected', stopFlag.flag);
@@ -294,7 +298,7 @@ async function handshakeUntilConnected(
       // let ks = key.reduce((acc, x) => acc.concat(x), []); // .filter((v, i, a) => a.indexOf(v) === i); // no longer using SETs
       // console.log('===key', JSON.stringify(key));
       key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg)));
-      if (onState && !stateFetched) onState(state);
+      if (onState && !stateFetched) onState(state); // relay other character state into store
       stateFetched = true;
 
       throw new Error('retry');

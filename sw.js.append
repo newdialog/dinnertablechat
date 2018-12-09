@@ -69,7 +69,7 @@ workbox.routing.registerRoute(
 
 // cache lambda calls
 workbox.routing.registerRoute(
-  /.*(?:execute).*(?:production|staging|dev)$/,
+  /.*(?:execute).*(?:production|staging|dev).*$/,
   workbox.strategies.networkFirst({
     cacheName: 'api',
     plugins: [

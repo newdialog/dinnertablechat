@@ -44,6 +44,7 @@ export default class PeerService {
   private _stream: MediaStream;
   private clientStream: any;
   private initiator: boolean = false;
+  public connected: boolean = false;
   constructor(stream: MediaStream) {
     if (!stream) throw new Error('no stream given');
     this._stream = stream;
@@ -72,7 +73,10 @@ export default class PeerService {
       // console.log('raw sig', datasSerialized);
       cbs.onSignal(datasSerialized);
     });
-    if (cbs.onConnected) this._peer.on('connect', cbs.onConnected);
+    this._peer.on('connect', e => {
+      this.connected = true;
+      if (cbs.onConnected) cbs.onConnected();
+    });
 
     this._peer.on('stream', stream => {
       this.clientStream = stream;
@@ -90,9 +94,17 @@ export default class PeerService {
   }
 
   public async onConnection() {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
+      if (this.connected) {
+        resolve();
+        return;
+      }
+
       // check if we haven't been destroyed already
-      if (this._peer) this._peer.on('connect', resolve);
+      if (this._peer) {
+        this._peer.on('connect', resolve);
+        this._peer.on('error', reject);
+      }
     });
   }
 
