@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="chat.dinnertable" version="0.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="chat.dinnertable" version="0.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>DinTableChat</name>
     <description>
         A live debate platform
@@ -9,6 +9,12 @@
     </author>
     <content src="https://dinnertable.chat/index.html?app=true" />
     <access origin="*" />
+    <access origin="https://auth.dinnertable.chat" />
+    <access origin="https://*.dinnertable.chat" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="data:*" />
+    <log level="DEBUG" />
+    <preference name="OverrideUserAgent" value="Mozilla/5.0 Google" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
@@ -34,7 +40,6 @@
         <icon height="72" src="/logos/icons-192.png" width="72" />
     </platform>
     <plugin name="cordova-plugin-hostedwebapp" spec="^0.3.1" />
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <preference name="Fullscreen" value="false" />
     <platform name="windows">
     </platform>
@@ -42,4 +47,6 @@
     </platform>
     <allow-navigation hap-rule="yes" href="https://dinnertable.chat/*" />
     <engine name="android" spec="^7.1.4" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
+    <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
 </widget>

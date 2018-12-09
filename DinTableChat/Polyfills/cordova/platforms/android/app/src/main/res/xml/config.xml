@@ -35,4 +35,7 @@
     <splash density="port-xhdpi" hap-default-image="yes" src="plugins/cordova-plugin-hostedwebapp/assets/defaultImages/android/port-xhdpi.png" />
     <preference name="loglevel" value="DEBUG" />
     <preference name="Fullscreen" value="false" />
+    <feature name="Permissions">
+        <param name="android-package" value="com.android.plugins.Permissions" />
+    </feature>
 </widget>

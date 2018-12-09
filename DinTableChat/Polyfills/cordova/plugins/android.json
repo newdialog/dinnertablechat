@@ -9,6 +9,9 @@
   "installed_plugins": {
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "chat.dinnertable"
+    },
+    "cordova-plugin-android-permissions": {
+      "PACKAGE_NAME": "chat.dinnertable"
     }
   },
   "dependent_plugins": {}
