@@ -10,15 +10,26 @@ import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
 import HOC from '../HOC';
 
+// style={{ minHeight: 'calc(100vh - 60px - 66px)' }}
 const styles = theme => 
   createStyles({
+    grid: {
+      height: 'calc(100vh - 155px)',
+    },
     container: {
         marginTop: 48,
         marginLeft: 'auto',
         marginRight: 'auto',
         width: 'auto',
-        maxWidth: '800px',
+        maxWidth: '100vw',
         minWidth: '300px',
+        height: 'calc(100vh)',
+        position:'absolute',
+        top:0,
+        bottom:0,
+        left: '50%',
+        WebkitTransform: 'translateX(-50%)',
+        transform: 'translateX(-50%)',
         [theme.breakpoints.down('xs')]: {
           // marginTop: 35
         }
@@ -145,7 +156,7 @@ class GettingStarted extends React.Component<Props, State> {
               direction="row"
               alignItems="center"
               justify="center"
-              style={{ minHeight: 'calc(100vh - 60px - 66px)' }}
+              className={classes.grid}
               >
               <Grid item xs={12}>
                   <Typography variant="h4" color="primary" align="center" className={classes.title}>
