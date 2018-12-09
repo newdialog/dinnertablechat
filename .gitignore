@@ -54,42 +54,42 @@ amplify/backend/function/*/src/node_modules/
 amplify/backend/function/*/dist/
 
 # iOS
-DTC/**/platforms/ios/build/
-DTC/**/platforms/ios/www/
-DTC/**/platforms/ios/cordova/console.log
-DTC/**/*.xcuserdatad
+DinTableChat/**/platforms/ios/build/
+DinTableChat/**/platforms/ios/www/
+DinTableChat/**/platforms/ios/cordova/console.log
+DinTableChat/**/*.xcuserdatad
 
 # android
-DTC/**/platforms/android/assets/www
-DTC/**/platforms/android/bin
-DTC/**/platforms/android/gen
-DTC/**/platforms/android/local.properties
-DTC/**/platforms/android/ant-build
-DTC/**/platforms/android/ant-gen
-DTC/**/platforms/android/CordovaLib/ant-build
-DTC/**/platforms/android/CordovaLib/ant-gen
-DTC/**/platforms/android/CordovaLib/bin
-DTC/**/platforms/android/CordovaLib/gen
-DTC/**/platforms/android/CordovaLib/local.properties
+DinTableChat/**/platforms/android/assets/www
+DinTableChat/**/platforms/android/bin
+DinTableChat/**/platforms/android/gen
+DinTableChat/**/platforms/android/local.properties
+DinTableChat/**/platforms/android/ant-build
+DinTableChat/**/platforms/android/ant-gen
+DinTableChat/**/platforms/android/CordovaLib/ant-build
+DinTableChat/**/platforms/android/CordovaLib/ant-gen
+DinTableChat/**/platforms/android/CordovaLib/bin
+DinTableChat/**/platforms/android/CordovaLib/gen
+DinTableChat/**/platforms/android/CordovaLib/local.properties
 
 # wp8
-DTC/**/platforms/wp8/bin
-DTC/**/platforms/wp8/obj
-DTC/**/platforms/wp8/www
-DTC/**/platforms/wp8/.staging
-DTC/**/platforms/wp8/*.suo
-DTC/**/platforms/wp8/*.csproj.user
-DTC/**/build/intermediates
-DTC/**/build/generated
+DinTableChat/**/platforms/wp8/bin
+DinTableChat/**/platforms/wp8/obj
+DinTableChat/**/platforms/wp8/www
+DinTableChat/**/platforms/wp8/.staging
+DinTableChat/**/platforms/wp8/*.suo
+DinTableChat/**/platforms/wp8/*.csproj.user
+DinTableChat/**/build/intermediates
+DinTableChat/**/build/generated
 
 # res
 DTC/**/resources/signing
 .idea
 *.apk
-
-DTC/**/.cordova
-DTC/**/hooks
-DTC/**/merges
-DTC/**/platforms
-DTC/**/plugins
 **/android.keystore
+
+__DTC/**/.cordova
+__DTC/**/hooks
+__DTC/**/merges
+__DTC/**/platforms
+__DTC/**/plugins

@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="chat.dinnertable" version="0.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>DinTableChat</name>
+    <description>
+        A live debate platform
+    </description>
+    <author email="team@dinnertable.chat" href="http://dinnertable.chat">
+        Dinnertable Team
+    </author>
+    <content src="https://dinnertable.chat/index.html?app=true" />
+    <access origin="*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <platform name="android">
+        <allow-intent href="market:*" />
+        <icon density="mdpi" src="/logos/icons/android-36x36.png" />
+        <icon density="ldpi" src="/logos/icons/android-36x36.png" />
+        <icon density="hdpi" src="/logos/icons-192.png" />
+        <icon density="xhdpi" src="/logos/icons-192.png" />
+        <icon density="xxhdpi" src="/logos/icons-192.png" />
+        <icon density="xxxhdpi" src="/logos/icons-192.png" />
+        <icon density="xxhdpi" src="/logos/icons-192.png" />
+        <icon density="xhdpi" src="/logos/icons-192.png" />
+        <icon density="hdpi" src="/logos/icons-192.png" />
+    </platform>
+    <platform name="ios">
+        <allow-intent href="itms:*" />
+        <allow-intent href="itms-apps:*" />
+        <icon height="72" src="/logos/icons-192.png" width="72" />
+        <icon height="144" src="/logos/icons-192.png" width="144" />
+        <icon height="144" src="/logos/icons-192.png" width="144" />
+        <icon height="72" src="/logos/icons-192.png" width="72" />
+    </platform>
+    <plugin name="cordova-plugin-hostedwebapp" spec="^0.3.1" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
+    <preference name="Fullscreen" value="false" />
+    <platform name="windows">
+    </platform>
+    <platform name="wp8">
+    </platform>
+    <allow-navigation hap-rule="yes" href="https://dinnertable.chat/*" />
+    <engine name="android" spec="^7.1.4" />
+</widget>
