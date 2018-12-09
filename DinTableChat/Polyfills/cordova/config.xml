@@ -45,8 +45,8 @@
     </platform>
     <platform name="wp8">
     </platform>
-    <allow-navigation hap-rule="yes" href="https://dinnertable.chat/*" />
-    <engine name="android" spec="^7.1.4" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
+    <allow-navigation hap-rule="yes" href="https://dinnertable.chat/*" />
+    <engine name="android" spec="^7.1.4" />
 </widget>

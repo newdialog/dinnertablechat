@@ -87,6 +87,7 @@ DTC/**/resources/signing
 .idea
 *.apk
 **/android.keystore
+**/_build/outputs/
 
 __DTC/**/.cordova
 __DTC/**/hooks

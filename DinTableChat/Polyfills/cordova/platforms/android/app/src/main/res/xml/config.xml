@@ -1,8 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="chat.dinnertable" version="0.2.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="chat.dinnertable" version="0.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
+    </feature>
+    <feature name="Permissions">
+        <param name="android-package" value="com.android.plugins.Permissions" />
     </feature>
     <name>DinTableChat</name>
     <description>
@@ -13,6 +16,11 @@
     </author>
     <content src="https://dinnertable.chat/index.html?app=true" />
     <access origin="*" />
+    <access origin="https://auth.dinnertable.chat" />
+    <access origin="https://*.dinnertable.chat" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="data:*" />
+    <log level="DEBUG" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
@@ -34,8 +42,6 @@
     <splash density="port-mdpi" hap-default-image="yes" src="plugins/cordova-plugin-hostedwebapp/assets/defaultImages/android/port-mdpi.png" />
     <splash density="port-xhdpi" hap-default-image="yes" src="plugins/cordova-plugin-hostedwebapp/assets/defaultImages/android/port-xhdpi.png" />
     <preference name="loglevel" value="DEBUG" />
+    <preference name="OverrideUserAgent" value="Mozilla/5.0 Google" />
     <preference name="Fullscreen" value="false" />
-    <feature name="Permissions">
-        <param name="android-package" value="com.android.plugins.Permissions" />
-    </feature>
 </widget>
