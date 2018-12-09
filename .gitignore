@@ -83,6 +83,9 @@ DinTableChat/**/build/intermediates
 DinTableChat/**/build/generated
 
 # res
+DinTableChat/Polyfills/cordova/platforms/android/.gradle/
+DinTableChat/Polyfills/cordova/platforms/android/CordovaLib/build/
+DinTableChat/Polyfills/cordova/platforms/android/app/build/
 DTC/**/resources/signing
 .idea
 *.apk
