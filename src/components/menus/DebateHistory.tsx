@@ -22,6 +22,7 @@ import DailyTimer from './DailyTimer';
 import Info from '@material-ui/icons/Info';
 
 import * as TopicInfo from '../../utils/TopicInfo';
+import {TwitterShareButton,FacebookShareButton,TwitterIcon,FacebookIcon} from 'react-share';
 
 const styles = theme =>
   createStyles({
@@ -352,8 +353,30 @@ class Index extends React.Component<Props, State> {
                 //return <Chip key={i} label={label} className={classes.chip} />;
               })}
           </Grid>
+          <br/><Divider />
+          { x.oppReview.traits.pos.length > 0 && (
+            <div style={{textAlign:'right', width:'100%'}}>
+            <TwitterShareButton
+              textAlign="right"
+              url={'https://dinnertable.chat'}
+              title={`I've debated with my political opposite and was rated: ${x.oppReview.traits.pos.join(', ')}`}
+              className="Demo__some-network__share-button">
+              <TwitterIcon
+                size={32}
+                round />
+            </TwitterShareButton>
+            <FacebookShareButton
+              url={'https://dinnertable.chat'}
+              quote={`I've debated with my political opposite and was rated: ${x.oppReview.traits.pos.join(', ')}`}
+              className="Demo__some-network__share-button">
+              <FacebookIcon
+                size={32}
+                round />
+            </FacebookShareButton>
+            </div>
+          )}
         </Paper>
-        <div style={{ paddingBottom: '4em' }} />
+        <div style={{ paddingBottom: '3em' }} />
       </div>
     ));
 
@@ -547,3 +570,4 @@ class Index extends React.Component<Props, State> {
 export default inject('store')(HOC(Authed(Index), styles));
 
 // <Subscribe offHome={true}/>
+// <Typography align="right" variant="caption">Share your experience:</Typography>
