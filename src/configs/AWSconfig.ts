@@ -77,7 +77,11 @@ let initLog = false;
 export const injectConfig = (cfg: any) => {
   const localServer: string = String(process.env.REACT_APP_HOST_URL);
   const prod = process.env.REACT_APP_ENV === 'production';
-  console.log('isprod', prod);
+
+  cfg.Analytics = cfg.Analytics || {};
+  cfg.Analytics.disabled = true;
+  cfg['aws_app_analytics'] = false;
+  // OPTIONAL - disable Analytics if true
 
   cfg.API = API_CONF_PROD; // prod ? API_CONF_PROD : API_CONF;
 
@@ -96,21 +100,21 @@ export const injectConfig = (cfg: any) => {
     console.log(
       'cfg.Auth',
       cfg.Auth,
-      process.env.REACT_APP_aws_user_pools_web_client_id
+      process.env.REACT_APP_aws_user_pools_web_client_id,
+      'isProd',
+      prod
     );
 
   // For AWS -JD
   cfg.Auth.identityPoolId = 'us-east-1:5173fb21-e414-43bc-af6c-3a65de8caf22';
 
-  // if (!initLog) console.log('REACT_APP_HOST_URL: ', localServer);
-  initLog = true;
-
   cfg.aws_user_pools_web_client_id =
     process.env.REACT_APP_aws_user_pools_web_client_id ||
     '1a66tr0jclinub7j3ls0j3mutt';
 
-  //  console.log(cfg);
+  // if (!initLog) console.log(cfg);
 
+  initLog = true;
   return cfg;
 };
 

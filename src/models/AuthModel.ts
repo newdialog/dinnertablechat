@@ -11,10 +11,8 @@ const UserModel = types.model({
   // data: types.frozen({})
 });
 
+// TODO: remove?
 const AWSModel = types.model({
-  accessKeyId: types.string,
-  secretAccessKey: types.string,
-  sessionToken: types.string,
   region: types.string
 });
 
@@ -44,13 +42,7 @@ const AuthModel = types
       self.isNotLoggedIn = true;
     },
     authenticated(authServiceData: any) {
-      const {
-        user,
-        accessKeyId,
-        secretAccessKey,
-        sessionToken,
-        region
-      } = authServiceData;
+      const { user, region } = authServiceData;
 
       /* if (!self.user)
         window.gtag('event', 'authenticated', {
@@ -64,9 +56,6 @@ const AuthModel = types
       };
 
       const aws: Instance<typeof AWSModel> = {
-        accessKeyId,
-        secretAccessKey,
-        sessionToken,
         region
       };
 

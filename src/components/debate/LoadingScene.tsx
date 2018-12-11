@@ -147,7 +147,7 @@ class LoadingScene extends React.Component<Props, State> {
 
     // start queue
     const options = this.props.store.auth.aws!;
-    QS.init(options);
+    await QS.init(options);
 
     const sameUserSeed = Math.round(new Date().getTime() / 1000);
 

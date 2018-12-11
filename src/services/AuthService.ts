@@ -8,6 +8,22 @@ import AWS from 'aws-sdk/global';
 import Auth from '@aws-amplify/auth';
 import API from './APIService'; // TODO refactor
 
+import retry from 'async-retry';
+
+const delayFlag = async (obj: { flag: boolean }) =>
+  await retry(
+    async bail => {
+      if (obj.flag) return true;
+      else throw new Error('retry');
+    },
+    {
+      retries: 10,
+      factor: 1,
+      maxTimeout: 2000,
+      minTimeout: 2000
+    }
+  );
+
 /* Debug only 
 import Amplify from 'aws-amplify';
 Amplify.Logger.LOG_LEVEL = 'DEBUG';
@@ -58,33 +74,30 @@ function getLoggger() {
 export const LOGIN_EVENT = 'signIn';
 
 function onHubCapsule(cb: AwsCB, capsule: any) {
-  getLoggger().onHubCapsule(capsule);
+  // getLoggger().onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
+  if (channel !== 'auth') return;
 
   console.log('payload.event', channel, payload.event);
-  if (channel === 'auth' && payload.event === LOGIN_EVENT) {
+  if (payload.event === LOGIN_EVENT || payload.event === 'cognitoHostedUI') {
     console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
-  }
-  /* else if (
-    channel === 'auth' &&
-    (payload.event === 'configured' ) // || payload.event === 'cognitoHostedUI'
-  ) {
-    checkUser(cb);
-  } */
+  } else if (payload.event === 'configured') checkUser(cb);
 }
 
 export function auth(cb: AwsCB) {
   // console.log('configuring aws');
   const awsmobileInjected = injectConfig(awsmobile);
-  Auth.configure(awsmobileInjected);
+
+  // Order is important
   Hub.listen(
     'auth',
-    { onHubCapsule: onHubCapsule.bind(null, cb) },
-    'AuthService'
+    { onHubCapsule: onHubCapsule.bind(null, cb) }
+    // ,'AuthService'
   );
-  checkUser(cb); // required by amplify, for existing login
+  Auth.configure(awsmobileInjected);
+  // checkUser(cb); // required by amplify, for existing login
 
   // Configure APIService
   // console.log('awsmobileInjected', awsmobileInjected);
@@ -102,12 +115,42 @@ export interface AwsAuth {
   SessionToken: string;
 }
 
+let cacheCred: any = null;
+export async function refreshCredentials() {
+  if (cacheCred) return cacheCred;
+  // wait while another call is configuring
+  if (cacheCred && !cacheCred.flag) {
+    await delayFlag(cacheCred);
+    return cacheCred;
+  }
+  cacheCred = { flag: false };
+
+  const currentCredentials = await Auth.currentCredentials();
+  const credentials = (cacheCred = Auth.essentialCredentials(
+    currentCredentials
+  ));
+
+  AWS.config.credentials = new AWS.Credentials(credentials);
+  AWS.config.update({
+    credentials: new AWS.Credentials(credentials)
+  });
+
+  return {
+    accessKeyId: credentials.accessKeyId,
+    secretAccessKey: credentials.secretAccessKey,
+    sessionToken: credentials.sessionToken,
+    region: 'us-east-1'
+  };
+}
+
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function checkUser(cb: AwsCB, event: string = '') {
   let data: any;
   try {
     // console.time('currentAuthenticatedUser');
-    data = await Auth.currentAuthenticatedUser();
+    data = await Auth.currentAuthenticatedUser({
+      bypassCache: false // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
+    });
     // console.timeEnd('currentAuthenticatedUser');
   } catch (e) {
     // console.timeEnd('currentAuthenticatedUser');
@@ -127,38 +170,23 @@ async function checkUser(cb: AwsCB, event: string = '') {
     // if (!data) return;
     // else console.log('+++ currentAuthenticatedUser found on retry');
   }
-  // .then(data => {
-  /// console.log('+++currentAuthenticatedUser', data);
-  // console.log('data.pool.userPoolId', data.pool.userPoolId, data.username);
   const user = data.attributes;
-  // const user = { name, email }; // , username: data.username
-
-  // console.log('AWS.config.credentials', AWS.config.credentials)
-  // console.log('AWS.config', AWS.config)
-  /// console.time('currentCredentials');
-  const currentCredentials = await Auth.currentCredentials();
-  /// console.timeEnd('currentCredentials');
-  // console.log('currentCredentials', currentCredentials);
-  const credentials = Auth.essentialCredentials(currentCredentials);
-  // console.log('credentials', credentials);
 
   // Update analytics
   window.gtag('set', 'userId', data.username);
 
-  AWS.config.credentials = new AWS.Credentials(credentials);
+  //// AWS.config.credentials = new AWS.Credentials(credentials);
   // FIX: https://github.com/aws-amplify/amplify-js/issues/581
   AWS.config.update({
     dynamoDbCrc32: false
   });
 
   const authParams: any = {
-    accessKeyId: credentials.accessKeyId,
-    secretAccessKey: credentials.secretAccessKey,
-    sessionToken: credentials.sessionToken,
     region: 'us-east-1',
     event: event || ''
   };
-  if (!user.name || !user.email || !authParams.accessKeyId) {
+  if (!user.name || !user.email) {
+    //  || !authParams.accessKeyId
     console.log('aws: no valid returned-');
     cb(null);
     return;

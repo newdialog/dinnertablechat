@@ -7,6 +7,7 @@ import AWS from 'aws-sdk/global';
 import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
 import * as DebateModel from '../models/DebateModel';
+import * as AuthService from './AuthService';
 type OnMatched = DebateModel.MatchModelType;
 
 let gameLift: GameLift;
@@ -30,7 +31,7 @@ const delayProp = async (obj: { flag: boolean }, prop: string) =>
   );
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-export function init(options: GameLift.ClientConfiguration) {
+export async function init(options: GameLift.ClientConfiguration) {
   console.log('gamelift init accessKeyId sessionToken', options.accessKeyId);
   if (!!gameLift) return;
   /* const options: AWS.GameLift.ClientConfiguration = { 
@@ -39,6 +40,8 @@ export function init(options: GameLift.ClientConfiguration) {
     secretAccessKey,
     sessionToken
   }; */
+  const cr = await AuthService.refreshCredentials();
+  console.log('refreshCredentials', cr);
   gameLift = new GameLift(options);
 }
 

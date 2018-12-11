@@ -54,7 +54,7 @@
   },
   "scripts": {
     "postinstall": "npm run i18n",
-    "start": "HTTPS=true react-scripts start",
+    "start": "HTTPS=false react-scripts start",
     "build": "env-cmd ./.env.staging react-scripts build && cp -f CNAME ./build/ && npm run i18n && npm run patchsw",
     "build:prod": "env-cmd ./.env.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && npm run i18n && rm build/robot.txt && npm run patchsw",
     "test": "react-scripts test --env=jsdom",

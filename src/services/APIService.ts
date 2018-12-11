@@ -14,11 +14,10 @@ async function getScores() {
     }
     // body: {}, // replace this with attributes you need
   };
-  console.log('myInit', myInit);
+  // console.log('/history', myInit);
 
   return API.get(apiName, path, myInit)
     .then(response => {
-      // Add your code here
       return response;
     })
     .catch(error => {
@@ -41,7 +40,7 @@ async function reviewSession(review: any, matchId: string) {
       review
     } // replace this with attributes you need
   };
-  console.log('myInit', myInit);
+  console.log('reviewSession', myInit);
 
   return API.post(apiName, path, myInit)
     .then(response => {
