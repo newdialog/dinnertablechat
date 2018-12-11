@@ -75,7 +75,7 @@
     "@types/react-responsive": "^3.0.2",
     "@types/simple-peer": "^6.1.5",
     "aws-amplify": "^1.1.13",
-    "fork-ts-checker-webpack-plugin": "^0.5.0",
+    "fork-ts-checker-webpack-plugin": "^0.5.1",
     "gh-pages": "^2.0.1",
     "google-spreadsheet-i18n": "^1.0.6",
     "http-proxy": "^1.17.0",
