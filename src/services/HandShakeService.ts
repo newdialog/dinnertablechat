@@ -115,8 +115,8 @@ export async function handshake(
         reject('retry');
         return;
       }
-      await delay(1000 * 4); // now wait for client
-    } else await delay(1000 * 5); // hope leader has written state
+      // await delay(1000 * 4); // now wait for client
+    } else await delay(1000 * 1); // hope leader has written state
 
     if (!stopFlag.flag) console.log('started listening, isLeader', isLeader);
     else {
@@ -160,6 +160,8 @@ export async function handshake(
     console.log(mycolor + ' rtc elected', stopFlag.flag);
     if (stopFlag.flag) return reject('stopFlag');
     /// stopFlag.flag = true;
+    // await delay(1000); // delay ensure relay? Maybe not needed
+    console.warn('-- finished --');
 
     return resolve({ peer: ps, otherPlayerState });
   });
@@ -195,6 +197,7 @@ async function readMatchWait(
   lastIndex: LastIndex
 ): Promise<DBState | null> {
   // if (stopSync) return null;
+  await delay(4000);
   return await retry(
     async bail => {
       if (stopFlag.flag) {
@@ -242,10 +245,10 @@ async function readMatchWait(
       return { key: keyval, state: stateval };
     },
     {
-      retries: 4,
-      factor: 1.1,
-      maxTimeout: 5100,
-      minTimeout: 5100
+      retries: 3, // 4
+      factor: 1.0,
+      maxTimeout: 5900,
+      minTimeout: 5900
     }
   );
 }
@@ -289,10 +292,9 @@ async function handshakeUntilConnected(
       }
 
       if (!result) {
-        console.log('handshakeUntilConnected ended');
         return bail('ended'); // just end
       }
-      if (stopFlag.flag) return 'stopSync';
+      /// if (stopFlag.flag) return 'stopSync'; // bug?
 
       const { key, state } = result;
       // let ks = key.reduce((acc, x) => acc.concat(x), []); // .filter((v, i, a) => a.indexOf(v) === i); // no longer using SETs
@@ -305,9 +307,9 @@ async function handshakeUntilConnected(
     },
     {
       retries: 10, // use same as above with multiplier per handshake re-negotitation, min 6
-      factor: 1.1,
-      maxTimeout: 1000,
-      minTimeout: 1000
+      factor: 1.0,
+      maxTimeout: 500,
+      minTimeout: 500
     }
   );
 }
@@ -324,15 +326,18 @@ async function updateMatchBatch(
   // console.log('RAW KEY', key)
   if (lastBatch.length === 0)
     setTimeout(async () => {
+      const lastBatchClone = lastBatch.concat([]);
+      const lbc0 = lastBatchClone[0];
+      lastBatchRef.cache = [];
+
       await updateMatch(
-        lastBatch[0].matchid,
-        lastBatch[0].team,
-        lastBatch.map(x => x.key),
-        lastBatch[0].state
+        lbc0.matchid,
+        lbc0.team,
+        lastBatchClone.map(x => x.key),
+        lbc0.state
       );
-      lastBatch = lastBatchRef.cache = [];
       savedFlag.flag = true;
-    }, 2500);
+    }, 2100);
   lastBatch.push({ matchid, team, key, state });
 }
 

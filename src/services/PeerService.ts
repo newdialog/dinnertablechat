@@ -84,7 +84,10 @@ export default class PeerService {
     });
 
     this._peer.on('error', e => {
-      if (e.toString().indexOf('kStable') !== -1) return; // ignore kStable
+      if (e.toString().indexOf('kStable') !== -1) {
+        console.warn('kStable error', e);
+        return; // ignore kStable
+      }
       if (cbs.onError) cbs.onError(e);
     });
   }
