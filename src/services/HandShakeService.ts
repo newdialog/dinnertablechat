@@ -197,7 +197,7 @@ async function readMatchWait(
   lastIndex: LastIndex
 ): Promise<DBState | null> {
   // if (stopSync) return null;
-  await delay(4000);
+  await delay(3000); // 1s to rtc proc, 2 for batch save
   return await retry(
     async bail => {
       if (stopFlag.flag) {
@@ -315,6 +315,7 @@ async function handshakeUntilConnected(
 }
 
 let calls = 0;
+let batchNum = 0;
 async function updateMatchBatch(
   matchid: string,
   team: 'blue' | 'red',
@@ -323,7 +324,7 @@ async function updateMatchBatch(
   savedFlag: { flag: boolean }, // TODO refactor
   lastBatchRef: { cache: any[] }
 ) {
-  console.log('calls', calls++);
+  console.log('batch ' + batchNum, 'calls', calls++);
   let lastBatch = lastBatchRef.cache;
   // console.log('RAW KEY', key)
   if (lastBatch.length === 0)
@@ -331,6 +332,7 @@ async function updateMatchBatch(
       const lastBatchClone = lastBatch.concat([]);
       const lbc0 = lastBatchClone[0];
       lastBatchRef.cache = [];
+      batchNum++;
 
       await updateMatch(
         lbc0.matchid,
@@ -339,7 +341,7 @@ async function updateMatchBatch(
         lbc0.state
       );
       savedFlag.flag = true;
-    }, 1100); // setting to 1s made no diff
+    }, 500);
   lastBatch.push({ matchid, team, key, state });
 }
 
