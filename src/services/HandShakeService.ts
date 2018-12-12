@@ -84,10 +84,10 @@ export async function handshake(
     const stopFlag: StopFlag = unloadFlag; // { stop: false };
     const batchCache: { cache: any[] } = { cache: [] };
     const cbs = {
-      onSignal: async (sigdata: string) => {
+      onSignal: (sigdata: string) => {
         // if (stopFlag.flag) return; // disable as later signal possible, better to destory peer
         // console.log('onSignal gen:', mycolor, sigdata);
-        await updateMatchBatch(
+        updateMatchBatch(
           matchid,
           mycolor,
           sigdata,
@@ -314,6 +314,7 @@ async function handshakeUntilConnected(
   );
 }
 
+let calls = 0;
 async function updateMatchBatch(
   matchid: string,
   team: 'blue' | 'red',
@@ -322,6 +323,7 @@ async function updateMatchBatch(
   savedFlag: { flag: boolean }, // TODO refactor
   lastBatchRef: { cache: any[] }
 ) {
+  console.log('calls', calls++);
   let lastBatch = lastBatchRef.cache;
   // console.log('RAW KEY', key)
   if (lastBatch.length === 0)
@@ -337,7 +339,7 @@ async function updateMatchBatch(
         lbc0.state
       );
       savedFlag.flag = true;
-    }, 2100);
+    }, 1100); // setting to 1s made no diff
   lastBatch.push({ matchid, team, key, state });
 }
 
