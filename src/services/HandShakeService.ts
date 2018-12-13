@@ -103,7 +103,9 @@ export async function handshake(
         reject('webrtc');
       }
     };
-    ps.init(isLeader, cbs);
+
+    await ps.init(isLeader, cbs); // await is important
+    if (!ps._peer) throw new Error('no _peer');
 
     let otherPlayerState: PlayerTableData = { char: -1 };
 
@@ -116,7 +118,7 @@ export async function handshake(
         return;
       }
       // await delay(1000 * 4); // now wait for client
-    } else await delay(1000 * 1); // hope leader has written state
+    } // else await delay(1000); // hope leader has written state
 
     if (!stopFlag.flag) console.log('started listening, isLeader', isLeader);
     else {
@@ -149,11 +151,15 @@ export async function handshake(
       reject('retry');
       // throw new Error('retry');
     }, 1000 * 64);
+
     try {
+      console.time('WAITING');
       await ps.onConnection();
     } catch (e) {
       console.error(e);
       reject('webrtc failed');
+    } finally {
+      console.timeEnd('WAITING');
     }
     if (_to) clearTimeout(_to);
 
@@ -197,7 +203,7 @@ async function readMatchWait(
   lastIndex: LastIndex
 ): Promise<DBState | null> {
   // if (stopSync) return null;
-  await delay(3000); // 1s to rtc proc, 2 for batch save
+  await delay(3100); // 1s to rtc proc, 2 for batch save
   return await retry(
     async bail => {
       if (stopFlag.flag) {
@@ -216,11 +222,9 @@ async function readMatchWait(
 
       if (!keyval || keyval.length <= lastIndex.val) {
         // keyval !== '{"renegotiate":true}' ||
-        // await delay(3000);
         console.log('key not set yet', teamkey);
         // return;
         // throw new Error('key not set yet ' + teamkey);
-        // await delay(2000);
         throw new Error('retry');
         /// return await readMatchWait(matchid, team);
       }
@@ -314,8 +318,8 @@ async function handshakeUntilConnected(
   );
 }
 
-let calls = 0;
-let batchNum = 0;
+// let calls = 0;
+// let batchNum = 0;
 async function updateMatchBatch(
   matchid: string,
   team: 'blue' | 'red',
@@ -324,7 +328,7 @@ async function updateMatchBatch(
   savedFlag: { flag: boolean }, // TODO refactor
   lastBatchRef: { cache: any[] }
 ) {
-  console.log('batch ' + batchNum, 'calls', calls++);
+  // console.log('batch ' + batchNum, 'calls', calls++);
   let lastBatch = lastBatchRef.cache;
   // console.log('RAW KEY', key)
   if (lastBatch.length === 0)
@@ -332,7 +336,7 @@ async function updateMatchBatch(
       const lastBatchClone = lastBatch.concat([]);
       const lbc0 = lastBatchClone[0];
       lastBatchRef.cache = [];
-      batchNum++;
+      // batchNum++;
 
       await updateMatch(
         lbc0.matchid,
@@ -341,7 +345,7 @@ async function updateMatchBatch(
         lbc0.state
       );
       savedFlag.flag = true;
-    }, 500);
+    }, 1000);
   lastBatch.push({ matchid, team, key, state });
 }
 
@@ -392,12 +396,6 @@ async function updateMatch(
   // console.log('ut2,', ticket2);
   return ticket2;
 }
-
-// Ensure any last minute sync messages are processed
-/* function stopSyncing() {
-  // await delay(3000);
-  stopSync = true;
-}*/
 
 let docClient: DynamoDB.DocumentClient;
 export function init(): void {

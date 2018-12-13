@@ -4,7 +4,7 @@ type OnStream = (stream: MediaStream) => void;
 
 interface CallBacks {
   onSignal: (data: string) => void;
-  onConnected?: () => void;
+  // onConnected?: () => void;
   onStream?: OnStream;
   onError?: (e: any) => void;
 }
@@ -73,15 +73,21 @@ export default class PeerService {
       // console.log('raw sig', datasSerialized);
       cbs.onSignal(datasSerialized);
     });
+
     this._peer.on('connect', e => {
-      this.connected = true;
-      if (cbs.onConnected) cbs.onConnected();
+      // this.connected = true;
+      // if (cbs.onConnected) cbs.onConnected();
+      this._peer.send('syn');
     });
 
     this._peer.on('stream', stream => {
       this.clientStream = stream;
       if (cbs.onStream) cbs.onStream(stream);
     });
+
+    // this._peer.on('data', data => {
+    ///  console.log('got a message from peer: ' + data);
+    // });
 
     this._peer.on('error', e => {
       if (e.toString().indexOf('kStable') !== -1) {
@@ -102,10 +108,24 @@ export default class PeerService {
         resolve();
         return;
       }
-
+      if (!this._peer) {
+        console.warn('!no peer');
+      }
       // check if we haven't been destroyed already
       if (this._peer) {
-        this._peer.on('connect', resolve);
+        this._peer.on('connect', () => {
+          console.log('#2connect: ', this.connected);
+          if (this.connected) return;
+          this.connected = true;
+          resolve();
+        });
+        this._peer.on('data', data => {
+          // todo: remove?
+          console.log('#2got a message from peer: ' + data, this.connected);
+          if (this.connected) return;
+          this.connected = true;
+          resolve();
+        });
         this._peer.on('error', reject);
       }
     });
