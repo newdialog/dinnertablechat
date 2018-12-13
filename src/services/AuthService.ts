@@ -143,9 +143,10 @@ export async function refreshCredentials() {
   };
 }
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+// const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function checkUser(cb: AwsCB, event: string = '') {
   let data: any;
+  cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
     // console.time('currentAuthenticatedUser');
     data = await Auth.currentAuthenticatedUser({

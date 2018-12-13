@@ -84,10 +84,10 @@ export async function handshake(
     const stopFlag: StopFlag = unloadFlag; // { stop: false };
     const batchCache: { cache: any[] } = { cache: [] };
     const cbs = {
-      onSignal: async (sigdata: string) => {
+      onSignal: (sigdata: string) => {
         // if (stopFlag.flag) return; // disable as later signal possible, better to destory peer
         // console.log('onSignal gen:', mycolor, sigdata);
-        await updateMatchBatch(
+        updateMatchBatch(
           matchid,
           mycolor,
           sigdata,
@@ -103,7 +103,9 @@ export async function handshake(
         reject('webrtc');
       }
     };
-    ps.init(isLeader, cbs);
+
+    await ps.init(isLeader, cbs); // await is important
+    if (!ps._peer) throw new Error('no _peer');
 
     let otherPlayerState: PlayerTableData = { char: -1 };
 
@@ -115,8 +117,8 @@ export async function handshake(
         reject('retry');
         return;
       }
-      await delay(1000 * 4); // now wait for client
-    } else await delay(1000 * 5); // hope leader has written state
+      // await delay(1000 * 4); // now wait for client
+    } // else await delay(1000); // hope leader has written state
 
     if (!stopFlag.flag) console.log('started listening, isLeader', isLeader);
     else {
@@ -149,17 +151,23 @@ export async function handshake(
       reject('retry');
       // throw new Error('retry');
     }, 1000 * 64);
+
     try {
+      console.time('WAITING');
       await ps.onConnection();
     } catch (e) {
       console.error(e);
       reject('webrtc failed');
+    } finally {
+      console.timeEnd('WAITING');
     }
     if (_to) clearTimeout(_to);
 
     console.log(mycolor + ' rtc elected', stopFlag.flag);
     if (stopFlag.flag) return reject('stopFlag');
     /// stopFlag.flag = true;
+    // await delay(1000); // delay ensure relay? Maybe not needed
+    console.warn('-- finished --');
 
     return resolve({ peer: ps, otherPlayerState });
   });
@@ -195,6 +203,7 @@ async function readMatchWait(
   lastIndex: LastIndex
 ): Promise<DBState | null> {
   // if (stopSync) return null;
+  await delay(3100); // 1s to rtc proc, 2 for batch save
   return await retry(
     async bail => {
       if (stopFlag.flag) {
@@ -213,11 +222,9 @@ async function readMatchWait(
 
       if (!keyval || keyval.length <= lastIndex.val) {
         // keyval !== '{"renegotiate":true}' ||
-        // await delay(3000);
         console.log('key not set yet', teamkey);
         // return;
         // throw new Error('key not set yet ' + teamkey);
-        // await delay(2000);
         throw new Error('retry');
         /// return await readMatchWait(matchid, team);
       }
@@ -242,10 +249,10 @@ async function readMatchWait(
       return { key: keyval, state: stateval };
     },
     {
-      retries: 4,
-      factor: 1.1,
-      maxTimeout: 5100,
-      minTimeout: 5100
+      retries: 3, // 4
+      factor: 1.0,
+      maxTimeout: 5900,
+      minTimeout: 5900
     }
   );
 }
@@ -289,10 +296,9 @@ async function handshakeUntilConnected(
       }
 
       if (!result) {
-        console.log('handshakeUntilConnected ended');
         return bail('ended'); // just end
       }
-      if (stopFlag.flag) return 'stopSync';
+      /// if (stopFlag.flag) return 'stopSync'; // bug?
 
       const { key, state } = result;
       // let ks = key.reduce((acc, x) => acc.concat(x), []); // .filter((v, i, a) => a.indexOf(v) === i); // no longer using SETs
@@ -305,13 +311,15 @@ async function handshakeUntilConnected(
     },
     {
       retries: 10, // use same as above with multiplier per handshake re-negotitation, min 6
-      factor: 1.1,
-      maxTimeout: 1000,
-      minTimeout: 1000
+      factor: 1.0,
+      maxTimeout: 500,
+      minTimeout: 500
     }
   );
 }
 
+// let calls = 0;
+// let batchNum = 0;
 async function updateMatchBatch(
   matchid: string,
   team: 'blue' | 'red',
@@ -320,19 +328,24 @@ async function updateMatchBatch(
   savedFlag: { flag: boolean }, // TODO refactor
   lastBatchRef: { cache: any[] }
 ) {
+  // console.log('batch ' + batchNum, 'calls', calls++);
   let lastBatch = lastBatchRef.cache;
   // console.log('RAW KEY', key)
   if (lastBatch.length === 0)
     setTimeout(async () => {
+      const lastBatchClone = lastBatch.concat([]);
+      const lbc0 = lastBatchClone[0];
+      lastBatchRef.cache = [];
+      // batchNum++;
+
       await updateMatch(
-        lastBatch[0].matchid,
-        lastBatch[0].team,
-        lastBatch.map(x => x.key),
-        lastBatch[0].state
+        lbc0.matchid,
+        lbc0.team,
+        lastBatchClone.map(x => x.key),
+        lbc0.state
       );
-      lastBatch = lastBatchRef.cache = [];
       savedFlag.flag = true;
-    }, 2500);
+    }, 1000);
   lastBatch.push({ matchid, team, key, state });
 }
 
@@ -383,12 +396,6 @@ async function updateMatch(
   // console.log('ut2,', ticket2);
   return ticket2;
 }
-
-// Ensure any last minute sync messages are processed
-/* function stopSyncing() {
-  // await delay(3000);
-  stopSync = true;
-}*/
 
 let docClient: DynamoDB.DocumentClient;
 export function init(): void {
