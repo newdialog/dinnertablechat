@@ -80,17 +80,3 @@ workbox.routing.registerRoute(
     ],
   })
 );
-
-// cache cognito calls (warning)
-workbox.routing.registerRoute(
-  /.*(?:cognito).*$/,
-  workbox.strategies.networkFirst({
-    cacheName: 'cognito',
-    plugins: [
-      new workbox.expiration.Plugin({
-        maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * .5, // .5 Days
-      }),
-    ],
-  })
-);

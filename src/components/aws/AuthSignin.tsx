@@ -33,12 +33,13 @@ class AuthSignin extends React.Component<Props, any> {
 
   public render() {
     const {store} = this.props;
-    if(!this.refresh && store.auth && store.auth.isAuthenticated()) {
+    if(!this.refresh && store.auth.isAuthenticated()) {
         window.gtag('event', 'logged_in', {
             event_category: 'auth'
           });
 
-        store.router.push('/tutorial');
+        if(store.isStandalone()) store.router.push('/play');
+        else store.router.push('/tutorial');
         this.refresh = true;
     }
 

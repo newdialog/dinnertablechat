@@ -93,15 +93,10 @@ class AuthComp extends React.Component<Props, any> {
     // console.log('handleAuth', awsUser)
     this.props.store.auth.authenticated(awsUser);
 
-    /* if(awsUser.event === AuthService.LOGIN_EVENT) {
-      window.gtag('event', 'logged_in', {
-        event_category: 'auth'
-      });
-      this.props.store.router.push('/tutorial');
-    } else if(this.props.store.isStandalone()) {
-      this.props.store.router.push('/play');
-    }
-    */
+    /* if(awsUser.event !== AuthService.LOGIN_EVENT) {
+      if(this.props.store.isStandalone()) this.props.store.router.push('/play');
+    } */
+    
   }
 }
 

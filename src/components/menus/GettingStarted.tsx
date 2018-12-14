@@ -128,7 +128,9 @@ class GettingStarted extends React.Component<Props, State> {
 
   routeToPlay = () => {
     const { store } = this.props;
-    store.gotoHomeMenu();
+
+    if(this.props.store.isStandalone() && store.auth.isNotLoggedIn && !store.auth.isAuthenticated()) store.auth.login();
+    else store.gotoHomeMenu();
   };
 
   handleStepChange = activeStep => {
@@ -139,6 +141,9 @@ class GettingStarted extends React.Component<Props, State> {
     const { classes, store } = this.props;
     const { activeStep } = this.state;
     const maxSteps = tutorialSteps.length;
+
+    // TODO: better patch
+    if(this.props.store.isStandalone() && store.auth.isAuthenticated()) store.router.push('/play');
 
   return (
     <div className={classes.container}>

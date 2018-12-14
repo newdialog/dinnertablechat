@@ -54,7 +54,8 @@ const AppModel = types
         window.matchMedia('(display-mode: standalone)').matches ||
         enabledOnSafari ||
         !!window['cordova'] ||
-        document.URL.indexOf('file://') > -1
+        document.URL.indexOf('file://') > -1 ||
+        document.URL.indexOf('FILE://') > -1
       );
     }
   }));

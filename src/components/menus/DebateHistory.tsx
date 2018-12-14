@@ -16,7 +16,6 @@ import Button from '@material-ui/core/Button';
 import QueueIcon from '@material-ui/icons/QueuePlayNext'
 import RateReview from '@material-ui/icons/RateReview';
 import Subscribe from '../home/Subscribe';
-// import * as serviceWorker from '../../serviceWorker';
 import * as Times from '../../services/TimeService';
 import DailyTimer from './DailyTimer';
 import Info from '@material-ui/icons/Info';
@@ -167,7 +166,6 @@ class Index extends React.Component<Props, State> {
 
   componentDidMount() {
     API.getScores().then(this.transformPayload).catch( (e)=> this.setState({loaded: true, error: e}));
-    // serviceWorker.register(); // register here so that users can create an icon
   }
 
   handleClick = (i: number) => {
