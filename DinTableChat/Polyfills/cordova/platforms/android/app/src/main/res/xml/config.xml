@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="chat.dinnertable" version="0.2.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="chat.dinnertable" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
@@ -20,7 +20,7 @@
     <access origin="https://*.dinnertable.chat" />
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
-    <log level="DEBUG" />
+    <log level="RELEASE" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
@@ -29,10 +29,10 @@
     <allow-intent href="market:*" />
     <icon density="mdpi" src="/logos/icons/android-36x36.png" />
     <icon density="ldpi" src="/logos/icons/android-36x36.png" />
-    <icon density="xxxhdpi" src="/logos/icons-192.png" />
-    <icon density="xxhdpi" src="/logos/icons-192.png" />
-    <icon density="xhdpi" src="/logos/icons-192.png" />
     <icon density="hdpi" src="/logos/icons-192.png" />
+    <icon density="xhdpi" src="/logos/icons-192.png" />
+    <icon density="xxhdpi" src="/logos/icons-192.png" />
+    <icon density="xxxhdpi" src="/logos/icons-192.png" />
     <splash density="land-hdpi" hap-default-image="yes" src="plugins/cordova-plugin-hostedwebapp/assets/defaultImages/android/land-hdpi.png" />
     <splash density="land-ldpi" hap-default-image="yes" src="plugins/cordova-plugin-hostedwebapp/assets/defaultImages/android/land-ldpi.png" />
     <splash density="land-mdpi" hap-default-image="yes" src="plugins/cordova-plugin-hostedwebapp/assets/defaultImages/android/land-mdpi.png" />
