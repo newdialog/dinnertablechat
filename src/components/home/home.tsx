@@ -170,8 +170,11 @@ class Index extends React.Component<Props, State> {
               Twitter</a>, <a href="https://medium.com/dinnertablechat" onClick={trackOutboundLinkClick('https://medium.com/dinnertablechat')}>Medium</a>, 
               and other platforms using the links in the footer!
           </Typography>
+          
         </div>
-        <div style={{marginBottom: '100px'}}/>
+        <div style={{width:'100%', textAlign:'center'}}>
+                <a href='https://play.google.com/store/apps/details?id=chat.dinnertable&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="166px"/></a>
+              </div>
         
       </div><Footer />
       </React.Fragment>

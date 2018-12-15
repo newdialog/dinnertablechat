@@ -257,6 +257,9 @@ class Index extends React.Component<Props, State> {
               <Typography variant="h3" gutterBottom align="center">
                 {t('home-intro')}
               </Typography>
+              <div style={{width:'100%', textAlign:'center'}}>
+                <a href='https://play.google.com/store/apps/details?id=chat.dinnertable&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="166px"/></a>
+              </div>
             </Grid>
             <Grid item xs={12} md={12}>
               <Divider className={classes.divider} />
