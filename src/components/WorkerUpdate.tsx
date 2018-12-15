@@ -152,8 +152,9 @@ class WorkerUpdate extends React.Component<Props, any> {
             isClickToPauseDisabled={true}
           />
         </div>
+        <div className={classes.bannerAnimOverlay} />
         <div className={classes.centeredDown}>
-          <Typography variant="h1" gutterBottom align="center" style={{color:'white', fontSize:'2em', textShadow: '2px 2px #888888'}}>Dinnertable.chat has new updates!</Typography>
+          <Typography variant="h1" gutterBottom align="center" style={{color:'white', fontSize:'2em', textShadow: '2px 2px #777755'}}>We have new features!</Typography>
           <br/><br/>
           <Button
             onClick={this.onRefreshClick}
