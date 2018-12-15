@@ -7,10 +7,20 @@
     "files": {}
   },
   "installed_plugins": {
-    "cordova-plugin-whitelist": {
+    "cordova-android-support-gradle-release": {
+      "ANDROID_SUPPORT_VERSION": "27.+",
       "PACKAGE_NAME": "chat.dinnertable"
     },
     "cordova-plugin-android-permissions": {
+      "PACKAGE_NAME": "chat.dinnertable"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "chat.dinnertable"
+    },
+    "cordova-plugin-k-webrtc-permission": {
+      "PACKAGE_NAME": "chat.dinnertable"
+    },
+    "cordova.plugins.diagnostic": {
       "PACKAGE_NAME": "chat.dinnertable"
     }
   },

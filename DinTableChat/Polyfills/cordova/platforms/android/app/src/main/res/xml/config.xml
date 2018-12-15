@@ -1,11 +1,46 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="chat.dinnertable" version="1.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="chat.dinnertable" version="1.0.7" xmlns="http://www.w3.org/ns/widgets" xmlns:android="http://schemas.android.com/apk/res/android" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="Permissions">
+        <param name="android-package" value="com.android.plugins.Permissions" />
+    </feature>
     <feature name="Whitelist">
         <param name="android-package" value="org.apache.cordova.whitelist.WhitelistPlugin" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="Permissions">
-        <param name="android-package" value="com.android.plugins.Permissions" />
+    <feature name="KwebRTCPermission">
+        <param name="android-package" value="in.co.indusnet.cordova.plugins.webrtc.permission.KwebRTCPermission" />
+    </feature>
+    <feature name="Diagnostic">
+        <param name="android-package" value="cordova.plugins.Diagnostic" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Diagnostic_Location">
+        <param name="android-package" value="cordova.plugins.Diagnostic_Location" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Diagnostic_Bluetooth">
+        <param name="android-package" value="cordova.plugins.Diagnostic_Bluetooth" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Diagnostic_Wifi">
+        <param name="android-package" value="cordova.plugins.Diagnostic_Wifi" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Diagnostic_Camera">
+        <param name="android-package" value="cordova.plugins.Diagnostic_Camera" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Diagnostic_Notifications">
+        <param name="android-package" value="cordova.plugins.Diagnostic_Notifications" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Diagnostic_NFC">
+        <param name="android-package" value="cordova.plugins.Diagnostic_NFC" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Diagnostic_External_Storage">
+        <param name="android-package" value="cordova.plugins.Diagnostic_External_Storage" />
+        <param name="onload" value="true" />
     </feature>
     <name>DinTableChat</name>
     <description>
@@ -27,6 +62,13 @@
     <allow-intent href="geo:*" />
     <allow-navigation hap-rule="yes" href="https://dinnertable.chat/*" />
     <allow-intent href="market:*" />
+    <framework src="com.android.support:support-v4:+" />
+    <config-file parent="/manifest" target="AndroidManifest.xml">
+        <uses-permission android:name="android.permission.INTERNET" />
+        <uses-permission android:name="android.permission.RECORD_AUDIO" />
+        <uses-permission android:name="android.permission.WAKE_LOCK" />
+        <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    </config-file>
     <icon density="mdpi" src="/logos/icons/android-36x36.png" />
     <icon density="ldpi" src="/logos/icons/android-36x36.png" />
     <icon density="hdpi" src="/logos/icons-192.png" />
@@ -42,6 +84,7 @@
     <splash density="port-mdpi" hap-default-image="yes" src="plugins/cordova-plugin-hostedwebapp/assets/defaultImages/android/port-mdpi.png" />
     <splash density="port-xhdpi" hap-default-image="yes" src="plugins/cordova-plugin-hostedwebapp/assets/defaultImages/android/port-xhdpi.png" />
     <preference name="loglevel" value="DEBUG" />
-    <preference name="OverrideUserAgent" value="Mozilla/5.0 Google" />
+    <preference name="cordova.plugins.diagnostic.modules" value="MICROPHONE" />
+    <preference name="OverrideUserAgent" value="Mozilla/5.0 Google PWA" />
     <preference name="Fullscreen" value="false" />
 </widget>
