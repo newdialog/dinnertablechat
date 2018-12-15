@@ -92,6 +92,10 @@ DTC/**/resources/signing
 **/android.keystore
 **/_build/outputs/
 
+DinTableChat/**/platforms/android/android.json
+DinTableChat/**/platforms/android/app/src/main/AndroidManifest.xml
+DinTableChat/**/platforms/android/app/src/main/res/*
+
 __DTC/**/.cordova
 __DTC/**/hooks
 __DTC/**/merges
