@@ -224,7 +224,18 @@ class Index extends React.Component<Props, any> {
             <div className={classes.bannerTextDivider} />
             <BannerTimer />
             <div className={classes.divider} />
-            <Button
+            
+          </div>
+        </div>
+      </React.Fragment>
+    );
+  }
+}
+
+export default HOC(Index, styles);
+
+/*
+<Button
               href="#intro"
               variant="contained"
               color="primary"
@@ -241,11 +252,4 @@ class Index extends React.Component<Props, any> {
             >
               Updates
             </Button>
-          </div>
-        </div>
-      </React.Fragment>
-    );
-  }
-}
-
-export default HOC(Index, styles);
+*/
