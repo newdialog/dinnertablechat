@@ -33,14 +33,6 @@
       "ANDROID_SUPPORT_VERSION": "27.+"
     }
   },
-  "cordova-plugin-k-webrtc-permission": {
-    "source": {
-      "type": "registry",
-      "id": "cordova-plugin-k-webrtc-permission"
-    },
-    "is_top_level": true,
-    "variables": {}
-  },
   "cordova.plugins.diagnostic": {
     "source": {
       "type": "registry",

@@ -17,9 +17,6 @@
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "chat.dinnertable"
     },
-    "cordova-plugin-k-webrtc-permission": {
-      "PACKAGE_NAME": "chat.dinnertable"
-    },
     "cordova.plugins.diagnostic": {
       "PACKAGE_NAME": "chat.dinnertable"
     }

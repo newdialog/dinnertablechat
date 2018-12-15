@@ -9,14 +9,6 @@ module.exports = [
     ]
   },
   {
-    "id": "cordova-plugin-k-webrtc-permission.permission",
-    "file": "plugins/cordova-plugin-k-webrtc-permission/www/permission.js",
-    "pluginId": "cordova-plugin-k-webrtc-permission",
-    "clobbers": [
-      "window.plugins.k.webrtc.permission"
-    ]
-  },
-  {
     "id": "cordova.plugins.diagnostic.Diagnostic",
     "file": "plugins/cordova.plugins.diagnostic/www/android/diagnostic.js",
     "pluginId": "cordova.plugins.diagnostic",
@@ -111,7 +103,6 @@ module.exports.metadata =
   "cordova-android-support-gradle-release": "2.0.1",
   "cordova-plugin-android-permissions": "1.0.0",
   "cordova-plugin-whitelist": "1.3.3",
-  "cordova-plugin-k-webrtc-permission": "1.0.0",
   "cordova.plugins.diagnostic": "4.0.10"
 };
 // BOTTOM OF METADATA
