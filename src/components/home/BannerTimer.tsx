@@ -74,9 +74,9 @@ const renderer = (
     }
 
     const label = isDuringDebate ? (
-      <>Daily event ending&nbsp;in</>
+      <>Daily event ending&nbsp;in:</>
     ) : (
-      <>Daily event starts&nbsp;in</>
+      <>Daily event starts&nbsp;in:</>
     );
     return (
       <div style={{ padding: 0, margin: 0 }}>
@@ -107,7 +107,7 @@ const renderer = (
           DAYS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HRS
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
-          <br/><span style={{color:'#844d4d'}}>4pm PST / 5pm MST / 6pm CST / 7pm EST</span>
+          <br/><span style={{color:'#844d4d'}}>1pm PST / 3pm CST / 4pm EST</span>
           
         </Typography>
 
