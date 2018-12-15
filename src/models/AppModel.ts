@@ -55,7 +55,9 @@ const AppModel = types
         enabledOnSafari ||
         !!window['cordova'] ||
         document.URL.indexOf('file://') > -1 ||
-        document.URL.indexOf('FILE://') > -1
+        document.URL.indexOf('FILE://') > -1 ||
+        navigator.userAgent === 'Mozilla/5.0 Google' ||
+        navigator.userAgent === 'Mozilla/5.0 Google PWA'
       );
     }
   }));
