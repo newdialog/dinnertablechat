@@ -14,7 +14,7 @@
     <allow-navigation href="https://*/*" />
     <allow-navigation href="data:*" />
     <log level="RELEASE" />
-    <preference name="OverrideUserAgent" value="Mozilla/5.0 Google" />
+    <preference name="OverrideUserAgent" value="Mozilla/5.0 Google PWA" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
