@@ -2,10 +2,15 @@ import * as i18n from 'i18next';
 import * as XHR from 'i18next-xhr-backend';
 import * as LanguageDetector from 'i18next-browser-languagedetector';
 // import config from '../src/config/config'
+// import config from '../src/config/config'
+import Backend from 'i18next-chained-backend';
+import { withI18n, reactI18nextModule } from 'react-i18next';
+import LocalStorageBackend from 'i18next-localstorage-backend';
 
 const instance = i18n
-  .use(XHR)
+  // .use(XHR)
   .use(LanguageDetector)
+  .use(Backend)
   .init({
     react: {
       wait: true
@@ -19,10 +24,21 @@ const instance = i18n
     // ns: ['special', 'common'],
     // defaultNS: 'special',
     backend: {
-      // load from i18next-gitbook repo https://raw.githubusercontent.com/i18next/i18next-gitbook/master/locales/
-      // loadPath: 'i18n/{{lng}}/{{ns}}.json',
-      loadPath: 'i18n/{{lng}}.json',
-      crossDomain: true
+      backends: [
+        LocalStorageBackend, // primary
+        XHR // fallback
+      ],
+      backendOptions: [
+        {
+          expirationTime: 60 * 60 * 1000
+        },
+        {
+          // load from i18next-gitbook repo https://raw.githubusercontent.com/i18next/i18next-gitbook/master/locales/
+          // loadPath: 'i18n/{{lng}}/{{ns}}.json',
+          loadPath: 'i18n/{{lng}}.json',
+          crossDomain: true
+        }
+      ]
     }
   });
 
