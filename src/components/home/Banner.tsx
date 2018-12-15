@@ -185,7 +185,7 @@ class Index extends React.Component<Props, any> {
           </div>
           <div className={classes.bannerAnimOverlay} />
           <div className={classes.centeredDown}>
-            <Typography variant="h1" gutterBottom align="center">
+            <Typography variant="h1" gutterBottom align="center" style={{textShadow: '2px 2px #888888'}}>
               <Reveal effect="fadeIn" duration={3500}>
                 {t('home-banner-title1')}
               </Reveal>

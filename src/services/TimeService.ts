@@ -1,7 +1,7 @@
 import moment from 'moment';
 
-const openForNumHours = 1;
-const hourOpen = 0;
+const openForNumHours = 6;
+const hourOpen = 21;
 const minOpen = 0;
 
 export function isBeforeEndingTime() {

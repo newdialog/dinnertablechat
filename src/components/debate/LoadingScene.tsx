@@ -7,6 +7,10 @@ import * as shake from '../../services/HandShakeService';
 import { Typography } from '@material-ui/core';
 import Reveal from 'react-reveal/Reveal';
 import getMedia from '../../utils/getMedia';
+import Lottie from 'react-lottie';
+import * as AppModel from '../../models/AppModel';
+import HOC from '../HOC';
+import DebateError from './DebateError';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -62,7 +66,6 @@ const styles = (theme: Theme) =>
     }
   });
 
-import Lottie from 'react-lottie';
 const bgOptions = {
   loop: true,
   autoplay: true,
@@ -72,9 +75,6 @@ const bgOptions = {
   }
 };
 
-import * as AppModel from '../../models/AppModel';
-import HOC from '../HOC';
-import DebateError from './DebateError';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
   onPeer: (p: any) => void;
@@ -289,12 +289,12 @@ class LoadingScene extends React.Component<Props, State> {
         <div className={classes.bannerAnimOverlay} />
 
         <div className={classes.centeredDown}>
-          <Typography variant="h1" gutterBottom align="center">
+          <Typography variant="h1" gutterBottom align="center" style={{textShadow: '2px 2px #888888'}}>
             <Reveal effect="fadeIn" duration={3000}>
               Loading...
             </Reveal>
           </Typography>
-          <Typography variant="h4" align="center">
+          <Typography variant="h4" align="center" style={{textShadow: '2px 2px #888888'}}>
             <Reveal effect="fadeIn" duration={3000}>
               {text}
             </Reveal>
@@ -305,7 +305,7 @@ class LoadingScene extends React.Component<Props, State> {
           <Typography
             variant="h1"
             align="center"
-            style={{ fontSize: '1.5em', lineHeight: '1' }}
+            style={{ fontSize: '1.5em', lineHeight: '1', textShadow: '2px 2px #888888' }}
           >
             <Reveal effect="fadeIn" duration={1000}>
               1. Click "Allow" when the browser asks to enable the microphone.
