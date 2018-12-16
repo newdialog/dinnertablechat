@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { Button, Typography, Paper, Grid } from '@material-ui/core';
+import { Button, Typography, Paper, Grid, Card } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -15,13 +15,14 @@ const styles = theme =>
   createStyles({
     grid: {
       height: 'calc(100vh - 155px)',
+      maxHeight: '680px',
     },
     container: {
         marginTop: 48,
         marginLeft: 'auto',
         marginRight: 'auto',
-        width: 'auto',
-        maxWidth: '100vw',
+        width: '100vw',
+        maxWidth: '1024px',
         minWidth: '300px',
         height: 'calc(100vh)',
         position:'absolute',
@@ -81,7 +82,7 @@ const tutorialSteps = [
       imgPath: './imgs/02-topics.png',
     },
     {
-      title: 'Select Character',
+      title: 'Choose Your Character',
       subTitle: 'You control a virtual character that will talk as you do and listen to your matched partner.',
       imgPath: './imgs/04-select.png',
     },
@@ -154,7 +155,7 @@ class GettingStarted extends React.Component<Props, State> {
         >
             {tutorialSteps.map((step, index) => (
 
-        <div key={step.title}>
+        <Paper key={step.title}>
           <Grid
               container
               spacing={0}
@@ -176,12 +177,12 @@ class GettingStarted extends React.Component<Props, State> {
                   />
               </Grid>
               <Grid item xs={12} sm={6}>
-                  <Typography variant="body2" align="center">
+                  <Typography variant="body2" align="center" style={{fontSize:'1.25em', padding:'0 8px 0 8px'}}>
                       {step.subTitle}
                   </Typography>
               </Grid>
           </Grid>
-        </div>
+          </Paper>
         ))}
         </SwipeableViews>  
 
@@ -191,7 +192,7 @@ class GettingStarted extends React.Component<Props, State> {
             <Button 
                 variant="contained" color="primary" 
                 onClick={this.routeToPlay}>
-            Begin
+            Let's Begin
             </Button> 
         </div>
      }

@@ -500,28 +500,36 @@ class Index extends React.Component<Props, State> {
         </div>
 
         <div style={{width:'100%', textAlign:'center', marginTop:'12px'}}>
+
+        <Grid
+          id="top-row"
+          container
+          spacing={0}
+          justify="space-around"
+          alignItems="center"
+        >
+        <Grid item xs={6}>
+          <DailyTimer/>
+        </Grid>
         { (debateOpen || !store.isLive()) &&
-          <Button variant="contained" color="primary" 
+          <Grid item xs={6}><Button variant="contained" color="primary" 
             onClick={ () => this.props.store.router.push('/quickmatch') }>
-            Begin Dinner Party QuickMatch<br/>
-            BETA v1.17
-            <QueueIcon style={{marginLeft: '8px'}}></QueueIcon>
-          </Button>
+            Begin QuickMatch
+          </Button></Grid>
           
         }
 
+      
+        
         { (!debateOpen) &&
-          <Button variant="contained" color="primary"
+          <Grid item xs={6}><Button variant="contained" color="primary"
             onClick={ () => this.props.store.router.push('/') }>
             Dinner is finished.<br/> come back next time!
-          </Button>
+          </Button></Grid>
         }
+        
+        </Grid>
 
-        <DailyTimer/>
-
-        {this.state.data.length > 0 && <Typography variant="body1" style={{marginTop: 12}}>
-          <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink} target="_blank">Have feedback on your experience? <RateReview style={{marginBottom:'-6px'}}/></a>
-        </Typography>}
         </div>
 
         {false && this.showAchievements(classes)}
@@ -558,6 +566,10 @@ class Index extends React.Component<Props, State> {
           <Info style={{margin:'0px 3px -6px 0px',}}/><b>TIP</b><br/>It helps to prepare for debates using credible sources of information. <br/><a href='https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef' target='_blank'>Here's our recommendations</a>.
           </Typography>
       </Paper>
+
+      {this.state.data.length > 0 && <Typography variant="body1" style={{marginTop: 12}}>
+          <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink} target="_blank">Have feedback on your experience? <RateReview style={{marginBottom:'-6px'}}/></a>
+        </Typography>}
       <Footer/>
       </React.Fragment>
     );
