@@ -74,16 +74,16 @@ const renderer = (
     const label = isDuringDebate ? 'Daily event ending in' : 'Daily event starts in';
     return (
       <div style={{ padding: 0, margin: 0 }}>
-        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '110%', color:'#555555'}}>
+        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '1em', color:'#555555'}}>
           {label}:
         </Typography>
         
-        <Typography variant="h4" align="center" className={classes.timerText} style={{fontSize: '240%', color:'#555555'}}>
+        <Typography variant="h4" align="center" className={classes.timerText} style={{fontSize: '1.6em', color:'#555555'}}>
           {hours}&nbsp;&nbsp;{minutes}&nbsp;&nbsp;{seconds}
         </Typography>
 
-        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '.75em', color:'#555555'}}>
-         HRS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
+        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '.6em', color:'#555555'}}>
+        &nbsp;&nbsp;HRS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS &nbsp;&nbsp;&nbsp; SECS
         </Typography>
 
         <br />

@@ -34,7 +34,7 @@ const styles = theme =>
       marginLeft: 'auto',
       marginRight: 'auto',
       width: 'auto',
-      maxWidth: '1000px',
+      maxWidth: '800px',
       minWidth: '300px',
       minHeight: 'calc(100vh - 504px)'
     },
@@ -44,10 +44,13 @@ const styles = theme =>
         textAlign:'center'
       }
     },
+    lstats: {
+      fontSize: '1.1em'
+    },
     headerContainer: {
       flexDirection: 'row',
       padding: '1em',
-      borderRadius: '5vh',
+      borderRadius: '2vh',
       backgroundColor: theme.palette.secondary.light,
       //backgroundColor: '#D2E5F5' // '#ddd'
     },
@@ -302,7 +305,7 @@ class Index extends React.Component<Props, State> {
           </Grid>
         </Paper>)
   }
-
+// <Typography variant="caption">Topic: <blockquote>"{TopicInfo.getTopic(x.topic, t)!.proposition}"</blockquote></Typography>
   private renderList = (classes, t, data) =>
     data.map((x, i) => (
       <div key={i}>
@@ -317,7 +320,7 @@ class Index extends React.Component<Props, State> {
                   <Typography gutterBottom variant="h4" color="textPrimary">
                     {x.date}
                   </Typography>
-                  <Typography variant="caption">Topic: <blockquote>"{TopicInfo.getTopic(x.topic, t)!.proposition}"</blockquote></Typography>
+                  
                   <Typography gutterBottom>My position: {x.userSide} <span style={{whiteSpace:'nowrap'}}>— {characters[x.oppCharacter].title}: {x.oppSide}</span></Typography>
                 </Grid>
               </Grid>
@@ -424,33 +427,14 @@ class Index extends React.Component<Props, State> {
             justify="space-around"
             alignItems="center"
           >
-            <Grid item xs={6} sm={2}>
-              <a href="https://gravatar.com" className={classes.imgLink}>
-                <img
-                src="" data-src={'https://www.gravatar.com/avatar/' + emailHash}
-                  width="100%"
-                  className='lazyload'
-                />
-              </a>
-              <Typography
-                variant="caption"
-                align="center"
-                color="textSecondary"
-                gutterBottom
-              >
-                <a href="https://gravatar.com" className={classes.imgLink}>
-                  Use Gravatar to Add/Update image
-                </a><br />
-                {store.auth.user!.email}
-              </Typography>
-            </Grid>
-            <Grid item xs={6} sm={7}>
+            <Grid item xs={6} sm={9}>
               <Typography
                 variant="h1"
                 align="left"
                 color="textPrimary"
                 className={classes.name}
                 gutterBottom
+                style={{fontSize:'1.25em'}}
               >
                 {this.props.store.auth.user!.name}
               </Typography>
@@ -459,7 +443,7 @@ class Index extends React.Component<Props, State> {
                 align="left"
                 color="textSecondary"
                 gutterBottom
-                style={{fontWeight:'normal'}}
+                style={{fontWeight:'normal', fontSize:'1em'}}
               >
                 LEVEL {level}: {title}<br />
                 XP {xp}/{nextLevel}
@@ -471,6 +455,7 @@ class Index extends React.Component<Props, State> {
                 variant="h4"
                 color="textPrimary"
                 gutterBottom
+                className={classes.lstats}
               >
                 {timePlayed} min
               </Typography>
@@ -478,6 +463,7 @@ class Index extends React.Component<Props, State> {
                 variant="body2"
                 color="textSecondary"
                 gutterBottom
+                className={classes.lstats}
               >
                 TIME PLAYED
               </Typography>
@@ -485,6 +471,7 @@ class Index extends React.Component<Props, State> {
                 variant="h4"
                 color="textPrimary"
                 gutterBottom
+                className={classes.lstats}
               >
                 {numDebates || 'zero'}
               </Typography>
@@ -492,6 +479,7 @@ class Index extends React.Component<Props, State> {
                 variant="body2"
                 color="textSecondary"
                 gutterBottom
+                className={classes.lstats}
               >
                 DEBATE SESSIONS
               </Typography>
@@ -508,21 +496,19 @@ class Index extends React.Component<Props, State> {
           justify="space-around"
           alignItems="center"
         >
-        <Grid item xs={6}>
+        <Grid item xs={12}>
           <DailyTimer/>
         </Grid>
         { (debateOpen || !store.isLive()) &&
-          <Grid item xs={6}><Button variant="contained" color="primary" 
+          <Grid item xs={12}><Button variant="contained" color="primary" style={{padding:'1em'}}
             onClick={ () => this.props.store.router.push('/quickmatch') }>
-            Begin QuickMatch
+            Begin Dinner Party QuickMatch!
           </Button></Grid>
           
         }
-
-      
-        
+   
         { (!debateOpen) &&
-          <Grid item xs={6}><Button variant="contained" color="primary"
+          <Grid item xs={12}><Button variant="contained" color="primary"
             onClick={ () => this.props.store.router.push('/') }>
             Dinner is finished.<br/> come back next time!
           </Button></Grid>
@@ -530,11 +516,15 @@ class Index extends React.Component<Props, State> {
         
         </Grid>
 
+        <br/><br/><Typography variant="body1" style={{marginTop: 12}}>
+          <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink} target="_blank">Have feedback on your experience? <RateReview style={{marginBottom:'-6px'}}/></a>
+        </Typography>
+
         </div>
 
         {false && this.showAchievements(classes)}
 
-        <div style={{ paddingBottom: '4em' }} />
+        <div style={{ paddingBottom: '1em' }} />
 
         {this.renderList(classes, t, this.state.data)}
         {this.state.data.length === 0 && (
@@ -567,9 +557,6 @@ class Index extends React.Component<Props, State> {
           </Typography>
       </Paper>
 
-      {this.state.data.length > 0 && <Typography variant="body1" style={{marginTop: 12}}>
-          <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink} target="_blank">Have feedback on your experience? <RateReview style={{marginBottom:'-6px'}}/></a>
-        </Typography>}
       <Footer/>
       </React.Fragment>
     );

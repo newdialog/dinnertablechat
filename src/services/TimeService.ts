@@ -1,7 +1,7 @@
 import moment from 'moment';
 
-const openForNumHours = 6;
-const hourOpen = 21;
+const openForNumHours = 3;
+const hourOpen = 0;
 const minOpen = 0;
 
 export function isBeforeEndingTime() {
@@ -10,7 +10,8 @@ export function isBeforeEndingTime() {
     .isBefore(
       moment()
         .utc()
-        .hour(hourOpen + openForNumHours)
+        .hour(hourOpen)
+        .add(openForNumHours, 'h')
         .minute(minOpen)
         .seconds(0)
     );
@@ -22,7 +23,8 @@ export function isAfterEndTime() {
     .isAfter(
       moment()
         .utc()
-        .hour(hourOpen + openForNumHours)
+        .hour(hourOpen)
+        .add(openForNumHours, 'h')
         .minute(minOpen)
         .seconds(0)
     );
@@ -36,11 +38,11 @@ export function isDuringDebate() {
         .utc()
         .hour(hourOpen)
         .minute(minOpen)
-        .seconds(0)
-        .subtract('1', 'second'),
+        .seconds(0),
       moment()
         .utc()
-        .hour(hourOpen + openForNumHours)
+        .hour(hourOpen)
+        .add(openForNumHours, 'h')
         .minute(minOpen)
         .seconds(0)
     );
@@ -66,7 +68,8 @@ export function getDebateStart() {
 export function getDebateEnd() {
   return moment()
     .utc()
-    .hour(hourOpen + openForNumHours)
+    .hour(hourOpen)
+    .add(openForNumHours, 'h')
     .minute(minOpen)
     .seconds(0)
     .toDate();
