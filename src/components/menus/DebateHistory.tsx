@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { Chip, Grid, Typography, Paper, Divider } from '@material-ui/core';
+import { Chip, Grid, Typography, Paper, 
+  Divider, CardContent, Card, CardActions, CardHeader, CardMedia } from '@material-ui/core';
+import Avatar from '@material-ui/core/Avatar';
 import moment from 'moment';
-
+import IconButton from '@material-ui/core/IconButton';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
 import HOC, { Authed } from '../HOC';
@@ -103,7 +106,27 @@ const styles = theme =>
       margin:'30px auto 0 auto', 
       padding: '6px 32px', 
       backgroundColor: theme.palette.secondary.light,
-    }
+    },
+    media: {
+      height: 0,
+      // paddingTop: '56.25%', // 16:9
+    },
+    actions: {
+      display: 'flex',
+    },
+    expand: {
+      transform: 'rotate(0deg)',
+      transition: theme.transitions.create('transform', {
+        duration: theme.transitions.duration.shortest,
+      }),
+      marginLeft: 'auto',
+      [theme.breakpoints.up('sm')]: {
+        marginRight: -8,
+      },
+    },
+    expandOpen: {
+      transform: 'rotate(180deg)',
+    },
   });
 
 interface Props extends WithStyles<typeof styles> {
@@ -277,7 +300,7 @@ class Index extends React.Component<Props, State> {
   };
 
   private showAchievements(classes) {
-    return (<Paper className={classes.paper}>
+    return (<div className={classes.paper}>
           <Grid
             container
             spacing={16}
@@ -304,13 +327,35 @@ class Index extends React.Component<Props, State> {
               </Typography>
             </Grid>
           </Grid>
-        </Paper>)
+        </div>)
   }
 // <Typography variant="caption">Topic: <blockquote>"{TopicInfo.getTopic(x.topic, t)!.proposition}"</blockquote></Typography>
   private renderList = (classes, t, data) =>
     data.map((x, i) => (
       <div key={i}>
-        <Paper className={classes.paper}>
+        <Card className={classes.paper}>
+        <CardHeader
+          color="secondaryText"
+          avatar={
+            <Avatar aria-label="Recipe" className={classes.avatar}>
+              <img src={characters[x.oppCharacter].url} width={'100%'} />
+            </Avatar>
+          }
+          action={
+            <IconButton>
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={x.date}
+          subheader="September 14, 2016"
+        />
+        <CardMedia
+          className={classes.media}
+          image={characters[x.oppCharacter].url}
+          title={"My position: " + x.userSide}
+        />
+        
+        <CardContent>
           <Grid container spacing={16}>
             <Grid item sm={2} style={{textAlign: 'center'}}>
               <img src={characters[x.oppCharacter].url} width={'70%'} />
@@ -377,7 +422,7 @@ class Index extends React.Component<Props, State> {
             </FacebookShareButton>
             </div>
           )}
-        </Paper>
+        </CardContent></Card>
         <div style={{ paddingBottom: '3em' }} />
       </div>
     ));

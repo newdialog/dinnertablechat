@@ -37,7 +37,7 @@ const theme = createMuiTheme({
       // contrastText: '#ffcc00',
     },
     text: {
-      primary: '#ffffff',
+      primary: '#000',
       secondary: '#ffffff',
       disabled: "rgba(0, 0, 0, 0.38)",
       hint: "rgba(0, 0, 0, 0.38)"
