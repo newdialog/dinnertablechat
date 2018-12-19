@@ -211,7 +211,7 @@ class Index extends React.Component<Props, any> {
                   <Button
                     style={{marginTop:'1vh'}}
                     variant="contained"
-                    color="primary" size="large"
+                    color="secondary" size="large"
                     onClick={() => store.router.push('/play')}
                   >
                     {store.auth.user!.name.split(' ')[0]}'s Home

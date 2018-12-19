@@ -70,10 +70,10 @@ function ButtonAppBar(props:Props) {
           }
           {auth &&
             <React.Fragment>
-              <Button variant="contained" color="primary" onClick={ () => onStart(store) }>
+              <Button variant="outlined" color="secondary" onClick={ () => onStart(store) }>
                 My Home
               </Button>
-              <Button onClick={ () => onLogOut(store) }>Log Out</Button>
+              <Button color="secondary" onClick={ () => onLogOut(store) }>Log Out</Button>
             </React.Fragment>
           }
 

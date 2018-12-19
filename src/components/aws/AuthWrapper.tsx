@@ -69,7 +69,7 @@ class AuthComp extends React.Component<Props, any> {
       this.signIn();
     }
 
-    return <React.Fragment><br/><br/><br/>{props.children}
+    return <React.Fragment>{props.children}
         <MediaQuery query="(display-mode: standalone)">
         {(matches) => {
           if (matches && !this.props.store.isStandalone()) this.props.store.setStandalone();

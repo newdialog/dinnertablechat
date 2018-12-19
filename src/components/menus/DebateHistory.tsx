@@ -25,9 +25,12 @@ import {TwitterShareButton,FacebookShareButton,TwitterIcon,FacebookIcon} from 'r
 
 const styles = theme =>
   createStyles({
+    pagebody: {
+      backgroundColor:theme.palette.primary.light,
+    },
     centered: {
-      marginTop: theme.spacing.unit * 5,
-      paddingTop: '0',
+      marginTop: '0',
+      paddingTop: theme.spacing.unit * 8,
       paddingLeft: '1em',
       paddingRight: '1em',
       paddingBottom: '4em',
@@ -36,7 +39,7 @@ const styles = theme =>
       width: 'auto',
       maxWidth: '800px',
       minWidth: '300px',
-      minHeight: 'calc(100vh - 504px)'
+      minHeight: 'calc(100vh - 504px)',
     },
     stats: {
       textAlign:'right',
@@ -51,11 +54,11 @@ const styles = theme =>
       flexDirection: 'row',
       padding: '1em',
       borderRadius: '2vh',
-      backgroundColor: theme.palette.secondary.light,
+      backgroundColor: theme.palette.primary.dark,
       //backgroundColor: '#D2E5F5' // '#ddd'
     },
     name: {
-      color: '#555555',
+      // color: '#555555',
       fontWeight: 'bold',
       fontSize: '2.5em'
     },
@@ -181,7 +184,6 @@ class Index extends React.Component<Props, State> {
     console.log('ach', this.state.achievements);
     var view = this.state.achievements.map( (item, i) => (
         <Grid
-          id="top-row"
           container
           spacing={16}
           justify="space-around"
@@ -277,7 +279,6 @@ class Index extends React.Component<Props, State> {
   private showAchievements(classes) {
     return (<Paper className={classes.paper}>
           <Grid
-            id="top-row"
             container
             spacing={16}
             justify="space-around"
@@ -344,7 +345,7 @@ class Index extends React.Component<Props, State> {
             {x.oppReview.traits.pos &&
               x.oppReview.traits.pos.map((label, i2) => {
                 return <div key={i2} style={{textAlign: 'center'}}>
-                    <img key={i2} src={badgeConfig[label]} alt={label} width="20%" />
+                    <img key={i2} src={badgeConfig[label]} alt={label} width="15%" />
                     <Typography>{label}</Typography>
                   </div>
               })}
@@ -417,11 +418,10 @@ class Index extends React.Component<Props, State> {
     const debateOpen = Times.isDuringDebate();
 
     return (
-      <React.Fragment>
+      <div className={classes.pagebody}>
       <div className={classes.centered}>
         <div className={classes.headerContainer}>
           <Grid
-            id="top-row"
             container
             spacing={16}
             justify="space-around"
@@ -431,7 +431,7 @@ class Index extends React.Component<Props, State> {
               <Typography
                 variant="h1"
                 align="left"
-                color="textPrimary"
+                color="textSecondary"
                 className={classes.name}
                 gutterBottom
                 style={{fontSize:'1.25em'}}
@@ -448,12 +448,12 @@ class Index extends React.Component<Props, State> {
                 LEVEL {level}: {title}<br />
                 XP {xp}/{nextLevel}
               </Typography>
-              <LinearProgress variant="determinate" value={normalise(xp)} />
+              <LinearProgress color="secondary" variant="determinate" value={normalise(xp)} />
             </Grid>
             <Grid item xs={12} sm={3} className={classes.stats}>
               <Typography
                 variant="h4"
-                color="textPrimary"
+                color="textSecondary"
                 gutterBottom
                 className={classes.lstats}
               >
@@ -469,7 +469,7 @@ class Index extends React.Component<Props, State> {
               </Typography>
               <Typography
                 variant="h4"
-                color="textPrimary"
+                color="textSecondary"
                 gutterBottom
                 className={classes.lstats}
               >
@@ -490,7 +490,6 @@ class Index extends React.Component<Props, State> {
         <div style={{width:'100%', textAlign:'center', marginTop:'12px'}}>
 
         <Grid
-          id="top-row"
           container
           spacing={0}
           justify="space-around"
@@ -500,7 +499,7 @@ class Index extends React.Component<Props, State> {
           <DailyTimer/>
         </Grid>
         { (debateOpen || !store.isLive()) &&
-          <Grid item xs={12}><Button variant="contained" color="primary" style={{padding:'1em'}}
+          <Grid item xs={12}><Button variant="contained" color="secondary" style={{padding:'1em'}}
             onClick={ () => this.props.store.router.push('/quickmatch') }>
             Begin Dinner Party QuickMatch!
           </Button></Grid>
@@ -508,7 +507,7 @@ class Index extends React.Component<Props, State> {
         }
    
         { (!debateOpen) &&
-          <Grid item xs={12}><Button variant="contained" color="primary"
+          <Grid item xs={12}><Button variant="contained" color="secondary"
             onClick={ () => this.props.store.router.push('/') }>
             Dinner is finished.<br/> come back next time!
           </Button></Grid>
@@ -558,7 +557,7 @@ class Index extends React.Component<Props, State> {
       </Paper>
 
       <Footer/>
-      </React.Fragment>
+      </div>
     );
   }
   // backgroundColor:'#dcdcdc'

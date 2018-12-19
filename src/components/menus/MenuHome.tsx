@@ -13,6 +13,9 @@ import * as Times from '../../services/TimeService';
 
 const styles = theme => 
   createStyles({
+    pagebody: {
+      backgroundColor:theme.palette.primary.light,
+    },
     container: {
       marginTop: '0px',
       marginLeft: 'auto',
@@ -28,7 +31,7 @@ const styles = theme =>
       marginRight: theme.spacing.unit * 2,
     },
     heroUnit: {
-      backgroundColor: theme.palette.background.paper,
+      // backgroundColor: theme.palette.background.paper,
     },
     heroContent: {
       maxWidth: 600,
@@ -147,20 +150,20 @@ class Index extends React.Component<Props, State> {
     const steps = getSteps();
 
   return (
-    <React.Fragment>
+    <div className={classes.pagebody}>
       <main className={classes.container}>
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             { this.props.isTest && (<h2>TEST MODE (/test)</h2>)}
-            <Typography style={{fontSize: '3em', paddingBottom: '0', color: '#ef6c6c'}} variant="h3" align="center" color="textPrimary" gutterBottom>
+            <Typography style={{fontSize: '3em', paddingBottom: '0'}} variant="h3" align="center" color="textSecondary" gutterBottom>
               Debate Quickmatch
             </Typography>
           </div>
         </div>
         {/* End hero unit */}
         <div className={classes.stepper}>
-          <Stepper activeStep={step} orientation="vertical">
+          <Stepper color='secondary' activeStep={step} orientation="vertical">
             {steps.map((label, index) => {
               return (
                 <Step key={label}>
@@ -191,7 +194,7 @@ class Index extends React.Component<Props, State> {
       {/* Footer */}
       <Footer className={classes.footer}/>
       {/* End footer */}
-    </React.Fragment>
+    </div>
   );
   }
 }
