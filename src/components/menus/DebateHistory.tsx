@@ -70,13 +70,19 @@ const styles = theme =>
       }
     },
     lstats: {
-      fontSize: '1.1em'
+      fontSize: '1.1em',
+      fontWeight: 500,
+    },
+    lstatsLabel: {
+      fontSize: '1.1em',
+      fontWeight: 300,
     },
     headerContainer: {
       flexDirection: 'row',
       padding: '1em',
       borderRadius: '2vh',
-      backgroundColor: theme.palette.primary.dark
+      backgroundColor: theme.palette.primary.dark,
+      boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.28), 0px 1px 1px 0px rgba(0,0,0,0.2), 0px 2px 1px -1px rgba(0,0,0,0.2)'
       //backgroundColor: '#D2E5F5' // '#ddd'
     },
     name: {
@@ -366,15 +372,22 @@ class Index extends React.Component<Props, State> {
             }
             title={
               <>
-                {x.date} -{' '}
+                <span style={{color: '#5d4444'}}>
+                  <span className="nowrap" style={{fontWeight:500}}>{x.userSide}</span><> vs </>
+                  <span className="nowrap"style={{fontWeight:500}}> {x.oppSide}:</span><> </>
+                </span>
                 <span
-                  style={{ color: x.agreed === 'Agreed' ? 'green' : 'red' }}
+                  style={{ fontWeight:500, color: x.agreed === 'Agreed' ? 'green' : 'red' }}
                 >
-                  {x.agreed === 'Agreed' ? 'Found Agreement' : 'No agreement'}
+                  <span className="nowrap"> {x.agreed === 'Agreed' ? 'Found Agreement' : 'No agreement'} </span>
                 </span>
               </>
             }
-            subheader="September 14, 2016"
+            subheader={
+              <>
+                {x.date}
+              </>
+            }
           />
           <CardMedia
             className={classes.media}
@@ -383,14 +396,7 @@ class Index extends React.Component<Props, State> {
           />
 
           <CardContent style={{ paddingBottom: '0px' }}>
-            <Typography gutterBottom>
-              My position: {x.userSide}{' '}
-              <span style={{ whiteSpace: 'nowrap' }}>
-                — {characters[x.oppCharacter].title}: {x.oppSide}
-              </span>
-            </Typography>
-            <Divider />
-            <Typography variant="caption">You were rated as:</Typography>
+            <Typography variant="caption" align="center">You were rated as:</Typography>
             <Grid
               container
               spacing={0}
@@ -524,7 +530,7 @@ class Index extends React.Component<Props, State> {
               justify="space-around"
               alignItems="center"
             >
-              <Grid item xs={6} sm={9}>
+              <Grid item xs={12} sm={9}>
                 <Typography
                   variant="h1"
                   align="left"
@@ -565,7 +571,7 @@ class Index extends React.Component<Props, State> {
                   variant="body2"
                   color="textPrimary"
                   gutterBottom
-                  className={classes.lstats}
+                  className={classes.lstatsLabel}
                 >
                   TIME PLAYED
                 </Typography>
@@ -581,7 +587,7 @@ class Index extends React.Component<Props, State> {
                   variant="body2"
                   color="textPrimary"
                   gutterBottom
-                  className={classes.lstats}
+                  className={classes.lstatsLabel}
                 >
                   DEBATE SESSIONS
                 </Typography>

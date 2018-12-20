@@ -124,3 +124,7 @@ a:hover {
 .share-button:hover:not(:active) {
   opacity: 0.75;
 }
+
+.nowrap {
+  white-space: nowrap;
+}

@@ -53,7 +53,7 @@ const theme = createMuiTheme({
   typography: {
     fontWeightLight: 300, // Work Sans
     fontWeightRegular: 400, // Work Sans
-    fontWeightMedium: 700, // Roboto Condensed
+    fontWeightMedium: 600, // Roboto Condensed
     // color: 'white',
     // useNextVariants: true,
     // suppressDeprecationWarnings: true,
