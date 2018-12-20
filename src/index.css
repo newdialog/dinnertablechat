@@ -121,17 +121,6 @@ a:hover {
   }
 }
 
-.Demo__some-network__share-button {
-  cursor: pointer;
-  vertical-align: top;
-  display: inline-block;
-  margin-right: 15px;
-  margin-top: 5px;
-  margin-bottom: 0px;
-  text-align: center;
-
-}
-
-.Demo__some-network__share-button:hover:not(:active) {
+.share-button:hover:not(:active) {
   opacity: 0.75;
 }

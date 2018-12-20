@@ -1,7 +1,18 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { Chip, Grid, Typography, Paper, 
-  Divider, CardContent, Card, CardActions, CardHeader, CardMedia } from '@material-ui/core';
+import {
+  Chip,
+  Grid,
+  Typography,
+  Paper,
+  Divider,
+  CardContent,
+  Card,
+  CardActions,
+  CardHeader,
+  CardMedia,
+  Collapse
+} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import moment from 'moment';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,20 +27,28 @@ import MD5 from 'md5';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Footer from '../home/Footer';
 import Button from '@material-ui/core/Button';
-import QueueIcon from '@material-ui/icons/QueuePlayNext'
+import QueueIcon from '@material-ui/icons/QueuePlayNext';
 import RateReview from '@material-ui/icons/RateReview';
 import Subscribe from '../home/Subscribe';
 import * as Times from '../../services/TimeService';
 import DailyTimer from './DailyTimer';
 import Info from '@material-ui/icons/Info';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import ShareIcon from '@material-ui/icons/Share';
 
 import * as TopicInfo from '../../utils/TopicInfo';
-import {TwitterShareButton,FacebookShareButton,TwitterIcon,FacebookIcon} from 'react-share';
+import {
+  TwitterShareButton,
+  FacebookShareButton,
+  TwitterIcon,
+  FacebookIcon
+} from 'react-share';
 
 const styles = theme =>
   createStyles({
     pagebody: {
-      backgroundColor:theme.palette.primary.light,
+      backgroundColor: theme.palette.primary.light
     },
     centered: {
       marginTop: '0',
@@ -42,12 +61,12 @@ const styles = theme =>
       width: 'auto',
       maxWidth: '800px',
       minWidth: '300px',
-      minHeight: 'calc(100vh - 504px)',
+      minHeight: 'calc(100vh - 504px)'
     },
     stats: {
-      textAlign:'right',
+      textAlign: 'right',
       [theme.breakpoints.down('xs')]: {
-        textAlign:'center'
+        textAlign: 'center'
       }
     },
     lstats: {
@@ -57,7 +76,7 @@ const styles = theme =>
       flexDirection: 'row',
       padding: '1em',
       borderRadius: '2vh',
-      backgroundColor: theme.palette.primary.dark,
+      backgroundColor: theme.palette.primary.dark
       //backgroundColor: '#D2E5F5' // '#ddd'
     },
     name: {
@@ -88,7 +107,7 @@ const styles = theme =>
       paddingLeft: theme.spacing.unit * 4
     },
     chip: {
-      margin: theme.spacing.unit,
+      margin: theme.spacing.unit
       // background: 'linear-gradient(to right bottom, #ccc, #484965)',
       // color: 'white',
       // fontWeight: 'bold'
@@ -98,35 +117,35 @@ const styles = theme =>
     },
     imgLink: {
       textDecoration: 'none',
-      color: '#ef5350', // '#b76464' // #ef5350
+      color: '#ef5350' // '#b76464' // #ef5350
     },
     infoTip: {
-      width: '50vw', 
-      minWidth:'400px', 
-      margin:'30px auto 0 auto', 
-      padding: '6px 32px', 
-      backgroundColor: theme.palette.secondary.light,
+      width: '50vw',
+      minWidth: '400px',
+      margin: '30px auto 0 auto',
+      padding: '6px 32px',
+      backgroundColor: theme.palette.secondary.light
     },
     media: {
-      height: 0,
+      height: 0
       // paddingTop: '56.25%', // 16:9
     },
     actions: {
-      display: 'flex',
+      display: 'flex'
     },
     expand: {
       transform: 'rotate(0deg)',
       transition: theme.transitions.create('transform', {
-        duration: theme.transitions.duration.shortest,
+        duration: theme.transitions.duration.shortest
       }),
       marginLeft: 'auto',
       [theme.breakpoints.up('sm')]: {
-        marginRight: -8,
-      },
+        marginRight: -8
+      }
     },
     expandOpen: {
-      transform: 'rotate(180deg)',
-    },
+      transform: 'rotate(180deg)'
+    }
   });
 
 interface Props extends WithStyles<typeof styles> {
@@ -142,6 +161,7 @@ interface State {
   loggedIn: boolean;
   loaded: boolean;
   error: string | null;
+  expanded?: number;
 }
 
 const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
@@ -189,12 +209,14 @@ class Index extends React.Component<Props, State> {
       data: [],
       loggedIn: false,
       loaded: false,
-      error: null,
+      error: null
     };
   }
 
   componentDidMount() {
-    API.getScores().then(this.transformPayload).catch( (e)=> this.setState({loaded: true, error: e}));
+    API.getScores()
+      .then(this.transformPayload)
+      .catch(e => this.setState({ loaded: true, error: e }));
   }
 
   handleClick = (i: number) => {
@@ -205,28 +227,28 @@ class Index extends React.Component<Props, State> {
 
   renderAchievements = () => {
     console.log('ach', this.state.achievements);
-    var view = this.state.achievements.map( (item, i) => (
-        <Grid
-          container
-          spacing={16}
-          justify="space-around"
-          alignItems="center"
-          key={i}
-        >
-          <Grid item xs={4}>
-            <img src={item.photo} width={'100%'} height={'100%'} />
-          </Grid>
-          <Grid item xs={8}>
-            <Typography
-              variant="h4"
-              align="center"
-              color="textPrimary"
-              gutterBottom
-            >
-              {item.text}
-            </Typography>
-          </Grid>
+    var view = this.state.achievements.map((item, i) => (
+      <Grid
+        container
+        spacing={16}
+        justify="space-around"
+        alignItems="center"
+        key={i}
+      >
+        <Grid item xs={4}>
+          <img src={item.photo} width={'100%'} height={'100%'} />
         </Grid>
+        <Grid item xs={8}>
+          <Typography
+            variant="h4"
+            align="center"
+            color="textPrimary"
+            gutterBottom
+          >
+            {item.text}
+          </Typography>
+        </Grid>
+      </Grid>
     ));
     return view;
   };
@@ -262,7 +284,7 @@ class Index extends React.Component<Props, State> {
     return moment(timestamp).format('MMM DD, YYYY h:mma');
   }
 
-  private transformSide(topic:string, side: number) {
+  private transformSide(topic: string, side: number) {
     return TopicInfo.getTopic(topic, this.props.t)!.positions[side];
   }
 
@@ -300,133 +322,163 @@ class Index extends React.Component<Props, State> {
   };
 
   private showAchievements(classes) {
-    return (<div className={classes.paper}>
-          <Grid
-            container
-            spacing={16}
-            justify="space-around"
-            alignItems="center"
-          >
-            <Grid item xs={4}>
-              <img
-                src={
-                  'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG'
-                }
-                width={'100%'}
-                height={'100%'}
-              />
-            </Grid>
-            <Grid item xs={8}>
-              <Typography
-                variant="h4"
-                align="center"
-                color="textPrimary"
-                gutterBottom
-              >
-                {'WELL READ'}
-              </Typography>
-            </Grid>
+    return (
+      <div className={classes.paper}>
+        <Grid container spacing={16} justify="space-around" alignItems="center">
+          <Grid item xs={4}>
+            <img
+              src={
+                'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG'
+              }
+              width={'100%'}
+              height={'100%'}
+            />
           </Grid>
-        </div>)
+          <Grid item xs={8}>
+            <Typography
+              variant="h4"
+              align="center"
+              color="textPrimary"
+              gutterBottom
+            >
+              {'WELL READ'}
+            </Typography>
+          </Grid>
+        </Grid>
+      </div>
+    );
   }
-// <Typography variant="caption">Topic: <blockquote>"{TopicInfo.getTopic(x.topic, t)!.proposition}"</blockquote></Typography>
+  // <Typography variant="caption">Topic: <blockquote>"{TopicInfo.getTopic(x.topic, t)!.proposition}"</blockquote></Typography>
   private renderList = (classes, t, data) =>
     data.map((x, i) => (
       <div key={i}>
         <Card className={classes.paper}>
-        <CardHeader
-          color="secondaryText"
-          avatar={
-            <Avatar aria-label="Recipe" className={classes.avatar}>
-              <img src={characters[x.oppCharacter].url} width={'100%'} />
-            </Avatar>
-          }
-          action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title={x.date}
-          subheader="September 14, 2016"
-        />
-        <CardMedia
-          className={classes.media}
-          image={characters[x.oppCharacter].url}
-          title={"My position: " + x.userSide}
-        />
-        
-        <CardContent>
-          <Grid container spacing={16}>
-            <Grid item sm={2} style={{textAlign: 'center'}}>
-              <img src={characters[x.oppCharacter].url} width={'70%'} />
+          <CardHeader
+            color="secondaryText"
+            avatar={
+              <Avatar
+                aria-label="Recipe"
+                className={classes.avatar}
+                style={{ width: '3em', height: '3em' }}
+              >
+                <img src={characters[x.oppCharacter].url} width={'150%'} />
+              </Avatar>
+            }
+            title={
+              <>
+                {x.date} -{' '}
+                <span
+                  style={{ color: x.agreed === 'Agreed' ? 'green' : 'red' }}
+                >
+                  {x.agreed === 'Agreed' ? 'Found Agreement' : 'No agreement'}
+                </span>
+              </>
+            }
+            subheader="September 14, 2016"
+          />
+          <CardMedia
+            className={classes.media}
+            image={characters[x.oppCharacter].url}
+            title={'My position: ' + x.userSide}
+          />
+
+          <CardContent style={{ paddingBottom: '0px' }}>
+            <Typography gutterBottom>
+              My position: {x.userSide}{' '}
+              <span style={{ whiteSpace: 'nowrap' }}>
+                — {characters[x.oppCharacter].title}: {x.oppSide}
+              </span>
+            </Typography>
+            <Divider />
+            <Typography variant="caption">You were rated as:</Typography>
+            <Grid
+              container
+              spacing={0}
+              justify="space-around"
+              alignItems="center"
+              className={classes.margin}
+            >
+              {x.oppReview.traits.pos &&
+                x.oppReview.traits.pos.map((label, i2) => {
+                  return (
+                    <Grid xs={6} sm={4} item key={i2} style={{ textAlign: 'center' }}>
+                      <img
+                        key={i2}
+                        src={badgeConfig[label]}
+                        alt={label}
+                        width="15%"
+                      />
+                      <Typography>{label}</Typography>
+                    </Grid>
+                  );
+                })}
+              {x.oppReview.traits.neg &&
+                x.oppReview.traits.neg.map((label, i2) => {
+                  return (
+                    <Grid item xs={6} sm={4} key={i2} style={{ textAlign: 'center' }}>
+                      <Typography key={i2} style={{ margin: 5 }}>
+                        {label}
+                      </Typography>
+                    </Grid>
+                  );
+                  // return <Chip key={i} label={label} className={classes.chip} />;
+                })}
             </Grid>
-            <Grid item xs={12} sm container>
-              <Grid item xs container direction="column" spacing={16}>
-                <Grid item xs>
-                  <Typography gutterBottom variant="h4" color="textPrimary">
-                    {x.date}
-                  </Typography>
-                  
-                  <Typography gutterBottom>My position: {x.userSide} <span style={{whiteSpace:'nowrap'}}>— {characters[x.oppCharacter].title}: {x.oppSide}</span></Typography>
-                </Grid>
-              </Grid>
-              <Grid item>
-                <Typography variant="h4" color="primary" align={'center'}
-                style={x.agreed==='Agreed' ? { color:'#76AD76' } : {color:'#ef9a9a'}}>
-                  {x.agreed}
-                </Typography>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Divider />
-          <Typography variant="caption">You were rated as:</Typography>
-          <Grid
-            container
-            spacing={16}
-            justify="space-around"
-            alignItems="center"
-            className={classes.margin}
-          >
-            {x.oppReview.traits.pos &&
-              x.oppReview.traits.pos.map((label, i2) => {
-                return <div key={i2} style={{textAlign: 'center'}}>
-                    <img key={i2} src={badgeConfig[label]} alt={label} width="15%" />
-                    <Typography>{label}</Typography>
-                  </div>
-              })}
-            {x.oppReview.traits.neg &&
-              x.oppReview.traits.neg.map((label, i2) => {
-                return <Typography key={i2} style={{margin: 5}}>{label}</Typography>
-                //return <Chip key={i} label={label} className={classes.chip} />;
-              })}
-          </Grid>
-          <br/><Divider />
-          { x.oppReview.traits.pos.length > 0 && (
-            <div style={{textAlign:'right', width:'100%'}}>
-            <TwitterShareButton
-              textAlign="right"
-              url={'https://dinnertable.chat'}
-              title={`I've debated with my political opposite and was rated: ${x.oppReview.traits.pos.join(', ')}`}
-              className="Demo__some-network__share-button">
-              <TwitterIcon
-                size={32}
-                round />
-            </TwitterShareButton>
-            <FacebookShareButton
-              url={'https://dinnertable.chat'}
-              quote={`I've debated with my political opposite and was rated: ${x.oppReview.traits.pos.join(', ')}`}
-              className="Demo__some-network__share-button">
-              <FacebookIcon
-                size={32}
-                round />
-            </FacebookShareButton>
-            </div>
-          )}
-        </CardContent></Card>
+            <br />
+            <Divider />
+            <CardActions className={classes.actions} disableActionSpacing>
+            {x.oppReview.traits.pos.length > 0 && (
+              <>
+                <IconButton aria-label="Share"><TwitterShareButton
+                  url={'https://dinnertable.chat'}
+                  title={`I've debated with my political opposite and was rated: ${x.oppReview.traits.pos.join(
+                    ', '
+                  )}`}
+                  className="share-button"
+                >
+                  <TwitterIcon size={32} round />
+                </TwitterShareButton></IconButton>
+                <IconButton aria-label="Share"><FacebookShareButton
+                  url={'https://dinnertable.chat'}
+                  quote={`I've debated with my political opposite and was rated: ${x.oppReview.traits.pos.join(
+                    ', '
+                  )}`}
+                  className="share-button"
+                >
+                  <FacebookIcon size={32} round />
+                </FacebookShareButton></IconButton>
+              </>
+            )}
+              
+              <IconButton
+                className={ this.state.expanded===i ? classes.expandOpen : null}
+                onClick={this.handleExpandClick.bind(this, i)}
+                aria-expanded={this.state.expanded===i}
+                aria-label="Show more"
+              >
+                <ExpandMoreIcon />
+              </IconButton>
+          </CardActions>
+            
+          </CardContent>
+
+          <Collapse in={this.state.expanded===i} timeout="auto" unmountOnExit>
+          <CardContent>
+            <Typography paragraph>Debate Question:</Typography>
+            <Typography paragraph>
+              {TopicInfo.getTopic(x.topic, t)!.proposition}
+            </Typography>
+          </CardContent>
+        </Collapse>
+        </Card>
         <div style={{ paddingBottom: '3em' }} />
       </div>
     ));
 
+    handleExpandClick = (i) => {
+      if(this.state.expanded===i) return this.setState({ expanded: undefined });
+      this.setState({ expanded: i });
+    };
   //  VERT SEP: style={{ borderRight: '0.1em solid black', padding: '0.5em' }}
   public render() {
     /// console.timeEnd('AuthComp');
@@ -454,154 +506,191 @@ class Index extends React.Component<Props, State> {
 
     const achievements = {
       participation: level
-    }
-    let title = "Beginner Apprentice";
-    if(level > 3) title = "Traveling Journeyman";
-    if(level > 6) title = "Experienced Rhetorician";
-    if(level > 12) title = "Most Honorable Host";
+    };
+    let title = 'Beginner Apprentice';
+    if (level > 3) title = 'Traveling Journeyman';
+    if (level > 6) title = 'Experienced Rhetorician';
+    if (level > 12) title = 'Most Honorable Host';
 
     const debateOpen = Times.isDuringDebate();
 
     return (
       <div className={classes.pagebody}>
-      <div className={classes.centered}>
-        <div className={classes.headerContainer}>
-          <Grid
-            container
-            spacing={16}
-            justify="space-around"
-            alignItems="center"
-          >
-            <Grid item xs={6} sm={9}>
-              <Typography
-                variant="h1"
-                align="left"
-                color="textSecondary"
-                className={classes.name}
-                gutterBottom
-                style={{fontSize:'1.25em'}}
-              >
-                {this.props.store.auth.user!.name}
-              </Typography>
-              <Typography
-                variant="body2"
-                align="left"
-                color="textSecondary"
-                gutterBottom
-                style={{fontWeight:'normal', fontSize:'1em'}}
-              >
-                LEVEL {level}: {title}<br />
-                XP {xp}/{nextLevel}
-              </Typography>
-              <LinearProgress color="secondary" variant="determinate" value={normalise(xp)} />
-            </Grid>
-            <Grid item xs={12} sm={3} className={classes.stats}>
-              <Typography
-                variant="h4"
-                color="textSecondary"
-                gutterBottom
-                className={classes.lstats}
-              >
-                {timePlayed} min
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                gutterBottom
-                className={classes.lstats}
-              >
-                TIME PLAYED
-              </Typography>
-              <Typography
-                variant="h4"
-                color="textSecondary"
-                gutterBottom
-                className={classes.lstats}
-              >
-                {numDebates || 'zero'}
-              </Typography>
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                gutterBottom
-                className={classes.lstats}
-              >
-                DEBATE SESSIONS
-              </Typography>
-            </Grid>
-          </Grid>
-        </div>
-
-        <div style={{width:'100%', textAlign:'center', marginTop:'12px'}}>
-
-        <Grid
-          container
-          spacing={0}
-          justify="space-around"
-          alignItems="center"
-        >
-        <Grid item xs={12}>
-          <DailyTimer/>
-        </Grid>
-        { (debateOpen || !store.isLive()) &&
-          <Grid item xs={12}><Button variant="contained" color="secondary" style={{padding:'1em'}}
-            onClick={ () => this.props.store.router.push('/quickmatch') }>
-            Begin Dinner Party QuickMatch!
-          </Button></Grid>
-          
-        }
-   
-        { (!debateOpen) &&
-          <Grid item xs={12}><Button variant="contained" color="secondary"
-            onClick={ () => this.props.store.router.push('/') }>
-            Dinner is finished.<br/> come back next time!
-          </Button></Grid>
-        }
-        
-        </Grid>
-
-        <br/><br/><Typography variant="body1" style={{marginTop: 12}}>
-          <a href="https://goo.gl/forms/TA1urn48JVhtpsO13" className={classes.imgLink} target="_blank">Have feedback on your experience? <RateReview style={{marginBottom:'-6px'}}/></a>
-        </Typography>
-
-        </div>
-
-        {false && this.showAchievements(classes)}
-
-        <div style={{ paddingBottom: '1em' }} />
-
-        {this.renderList(classes, t, this.state.data)}
-        {this.state.data.length === 0 && (
-          <Paper className={classes.paper}>
-            <Typography
-              variant="body2"
-              align="center"
-              color="textSecondary"
-              style={{fontWeight: 'normal'}}
-              gutterBottom
+        <div className={classes.centered}>
+          <div className={classes.headerContainer}>
+            <Grid
+              container
+              spacing={16}
+              justify="space-around"
+              alignItems="center"
             >
-            {!this.state.loaded && <b>Loading debate history...</b>}
-            {this.state.loaded && <span>No debate history to list yet. <br/>
-              Click QUICKMATCH button above to get started.</span>}
-            </Typography>
-          </Paper>
-        )}
+              <Grid item xs={6} sm={9}>
+                <Typography
+                  variant="h1"
+                  align="left"
+                  color="textPrimary"
+                  className={classes.name}
+                  gutterBottom
+                  style={{ fontSize: '1.25em' }}
+                >
+                  {this.props.store.auth.user!.name}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  align="left"
+                  color="textPrimary"
+                  gutterBottom
+                  style={{ fontWeight: 'normal', fontSize: '1em' }}
+                >
+                  LEVEL {level}: {title}
+                  <br />
+                  XP {xp}/{nextLevel}
+                </Typography>
+                <LinearProgress
+                  color="secondary"
+                  variant="determinate"
+                  value={normalise(xp)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={3} className={classes.stats}>
+                <Typography
+                  variant="h4"
+                  color="textPrimary"
+                  gutterBottom
+                  className={classes.lstats}
+                >
+                  {timePlayed} min
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textPrimary"
+                  gutterBottom
+                  className={classes.lstats}
+                >
+                  TIME PLAYED
+                </Typography>
+                <Typography
+                  variant="h4"
+                  color="textPrimary"
+                  gutterBottom
+                  className={classes.lstats}
+                >
+                  {numDebates || 'zero'}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="textPrimary"
+                  gutterBottom
+                  className={classes.lstats}
+                >
+                  DEBATE SESSIONS
+                </Typography>
+              </Grid>
+            </Grid>
+          </div>
 
-        
-      </div>
-      
-      <Paper className={classes.infoTip}> 
-        <Typography
-                variant="body1"
+          <div
+            style={{ width: '100%', textAlign: 'center', marginTop: '12px' }}
+          >
+            <Grid
+              container
+              spacing={0}
+              justify="space-around"
+              alignItems="center"
+            >
+              <Grid item xs={12}>
+                <DailyTimer />
+              </Grid>
+              {(debateOpen || !store.isLive()) && (
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    style={{ padding: '1em' }}
+                    onClick={() => this.props.store.router.push('/quickmatch')}
+                  >
+                    Begin Dinner Party QuickMatch!
+                  </Button>
+                </Grid>
+              )}
+
+              {!debateOpen && (
+                <Grid item xs={12}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => this.props.store.router.push('/')}
+                  >
+                    Dinner is finished.
+                    <br /> come back next time!
+                  </Button>
+                </Grid>
+              )}
+            </Grid>
+
+            <br />
+            <br />
+            <Typography variant="body1" style={{ marginTop: 12 }}>
+              <a
+                href="https://goo.gl/forms/TA1urn48JVhtpsO13"
+                className={classes.imgLink}
+                target="_blank"
+              >
+                Have feedback on your experience?{' '}
+                <RateReview style={{ marginBottom: '-6px' }} />
+              </a>
+            </Typography>
+          </div>
+
+          {false && this.showAchievements(classes)}
+
+          <div style={{ paddingBottom: '1em' }} />
+
+          {this.renderList(classes, t, this.state.data)}
+          {this.state.data.length === 0 && (
+            <Paper className={classes.paper}>
+              <Typography
+                variant="body2"
                 align="center"
                 color="textSecondary"
+                style={{ fontWeight: 'normal' }}
                 gutterBottom
               >
-          <Info style={{margin:'0px 3px -6px 0px',}}/><b>TIP</b><br/>It helps to prepare for debates using credible sources of information. <br/><a href='https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef' target='_blank'>Here's our recommendations</a>.
-          </Typography>
-      </Paper>
+                {!this.state.loaded && <b>Loading debate history...</b>}
+                {this.state.loaded && (
+                  <span>
+                    No debate history to list yet. <br />
+                    Click QUICKMATCH button above to get started.
+                  </span>
+                )}
+              </Typography>
+            </Paper>
+          )}
+        </div>
 
-      <Footer/>
+        <Paper className={classes.infoTip}>
+          <Typography
+            variant="body1"
+            align="center"
+            color="textSecondary"
+            gutterBottom
+          >
+            <Info style={{ margin: '0px 3px -6px 0px' }} />
+            <b>TIP</b>
+            <br />
+            It helps to prepare for debates using credible sources of
+            information. <br />
+            <a
+              href="https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef"
+              target="_blank"
+            >
+              Here's our recommendations
+            </a>
+            .
+          </Typography>
+        </Paper>
+
+        <Footer />
       </div>
     );
   }
