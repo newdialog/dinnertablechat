@@ -15,7 +15,7 @@
     "@material-ui/icons": "^3.0.1",
     "async-retry": "^1.2.3",
     "aws-amplify-react": "^2.2.4",
-    "aws-sdk": "^2.380.0",
+    "aws-sdk": "^2.381.0",
     "env-cmd": "^8.0.2",
     "formik": "^1.4.1",
     "hark": "^1.2.3",
