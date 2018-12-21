@@ -95,7 +95,7 @@
   
   <script type='text/javascript'>
     (function () {
-      if (/www.dinner/.test(window.location.href))
+      if (/www.dinner/.test(window.location.href) || /github/.test(window.location.href) || /netlify/.test(window.location.href))
         window.location = 'https://dinnertable.chat/'
     })();
   </script>

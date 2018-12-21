@@ -69,7 +69,7 @@ function ButtonAppBar(props:Props) {
           <Typography variant="h6" className={classes.flex}></Typography>
 
           {!auth && showAuth &&
-            <Button onClick={ () => onLogin(store) }>Login</Button>
+            <Button color="primary" className={classes.btn} onClick={ () => onLogin(store) }>Login</Button>
           }
           {auth &&
             <React.Fragment>

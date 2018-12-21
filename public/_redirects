@@ -1,5 +1,7 @@
 # Redirect default Netlify subdomain to primary domain
+https://dtc-prod.netlify.com https://dinnertable.chat:splat 301!
 http://dtc-prod.netlify.com/* https://dinnertable.chat/:splat 301!
 https://dtc-prod.netlify.com/* https://dinnertable.chat/:splat 301!
+https://dtc-staging.netlify.com https://test.dinnertable.chat/:splat 301!
 http://dtc-staging.netlify.com/* https://test.dinnertable.chat/:splat 301!
 https://dtc-staging.netlify.com/* https://test.dinnertable.chat/:splat 301!

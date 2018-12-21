@@ -1,4 +1,6 @@
-./service-worker.js
+/
+    Link: </i18n/en.json> rel=preload as=fetch
+/service-worker.js
     cache-control: max-age=0,no-cache,no-store,must-revalidate
-./sw.js
+/sw.js
     cache-control: max-age=0,no-cache,no-store,must-revalidate
