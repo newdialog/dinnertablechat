@@ -77,6 +77,7 @@ const DTCRouter = ({
 
         
         <Redirect from="/signout" to="/" />
+        <Redirect from="/play" to="/home" /> { /* legacy route */ }
 
         <Route render={() => <Redirect to="/" />} />
       </Switch>
