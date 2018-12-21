@@ -201,7 +201,7 @@ class Index extends React.Component<Props, any> {
             </Typography>
             {!auth &&
               (
-                <Button style={{marginTop:'1vh'}} onClick={() => store.auth.login()} variant="contained" color="primary" size="large">Start Login
+                <Button style={{marginTop:'1vh'}} onClick={() => store.auth.login()} variant="contained" color="secondary" size="large">Start Login
                 <QueueIcon style={{ marginLeft: '8px' }} />
                 </Button>
               )}

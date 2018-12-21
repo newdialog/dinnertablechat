@@ -10,7 +10,7 @@ import QueueIcon from '@material-ui/icons/QueuePlayNext'
 import HOC from './HOC';
 import * as Times from '../services/TimeService';
 
-const styles = createStyles({
+const styles = theme => createStyles({
   root: {
     flexGrow: 1,
   },
@@ -18,7 +18,10 @@ const styles = createStyles({
     flexGrow: 1,
     fontFamily: 'Montserrat!important',
     fontWeight: 'bolder'
-  }
+  },
+  btn: {
+    color: theme.palette.secondary.main
+  },
 });
 
 interface Props extends WithStyles<typeof styles> {
@@ -71,11 +74,11 @@ function ButtonAppBar(props:Props) {
           {auth &&
             <React.Fragment>
                {false && Times.isDuringDebate() && 
-               <Button color="primary" onClick={ () => store.router.push('/quickmatch') }>
+               <Button color="primary" className={classes.btn} onClick={ () => store.router.push('/quickmatch') }>
                 Play
               </Button>
              }
-              <Button color="primary" onClick={ () => onStart(store) }>
+              <Button variant="outlined" color="secondary" className={classes.btn} onClick={ () => onStart(store) }>
                 My Home
               </Button>
             </React.Fragment>

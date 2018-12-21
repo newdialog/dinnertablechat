@@ -15,7 +15,7 @@ const styles = theme =>
   createStyles({
     pagebody: {
       position: 'fixed',
-      backgroundColor: theme.palette.primary.light,
+      // backgroundColor: theme.palette.primary.light,
       top: 0,
       bottom: 0,
       left: 0,
@@ -68,7 +68,7 @@ const styles = theme =>
       marginRight: theme.spacing.unit
     },
     title: {
-      color: '#ffffffdd',
+      color: theme.palette.secondary.main,
       fontSize: '1.8em',
       [theme.breakpoints.up('md')]: {
         fontSize: '3.0em'
@@ -76,7 +76,7 @@ const styles = theme =>
     },
     bodyText: {
       fontSize: '1.25em',
-      color: '#ffffffcc',
+      color: '#5a5a5a',
       fontWeight: 500,
       padding: '0 8px 0 8px'
     }
@@ -243,7 +243,6 @@ class GettingStarted extends React.Component<Props, State> {
             position="static"
             activeStep={activeStep}
             color="secondary"
-            style={{ backgroundColor: 'initial' }}
             nextButton={
               <Button
                 size="small"
