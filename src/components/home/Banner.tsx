@@ -190,7 +190,7 @@ class Index extends React.Component<Props, any> {
                 {t('home-banner-title1')}
               </Reveal>
             </Typography>
-            <Typography variant="h4" align="center" style={{color: '#ffffffcc'}}>
+            <Typography variant="h4" align="center" style={{color: '#ffffffcc', padding: '0 12px 0 12px'}}>
               <Reveal effect="fadeIn" duration={5500}>
                 { !isOpen ?
                   <>you're invited to our dinner party beta</>
