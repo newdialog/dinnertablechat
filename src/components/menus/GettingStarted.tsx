@@ -61,7 +61,7 @@ const styles = theme =>
       [theme.breakpoints.up('md')]: {
         maxWidth: '260px'
       }
-      // display: 'block',
+      // display: 'block', 
     },
     button: {
       marginTop: theme.spacing.unit,
