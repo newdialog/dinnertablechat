@@ -37,7 +37,8 @@ const styles = (theme: Theme) =>
       marginRight: 'auto',
       width: 'auto',
       maxWidth: '800px',
-      minWidth: '300px'
+      minWidth: '300px',
+      padding: '0 12px 0 12px'
     },
     centeredDown: {
       marginLeft: 'auto',
