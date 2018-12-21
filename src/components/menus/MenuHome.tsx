@@ -46,6 +46,7 @@ const styles = theme =>
     button: {
       marginTop: theme.spacing.unit,
       marginRight: theme.spacing.unit,
+      color: theme.palette.primary.dark
     },
     actionsContainer: {
       marginBottom: theme.spacing.unit * 2,

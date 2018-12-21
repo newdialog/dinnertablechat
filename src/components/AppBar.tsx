@@ -20,7 +20,7 @@ const styles = theme => createStyles({
     fontWeight: 'bolder'
   },
   btn: {
-    color: theme.palette.secondary.main
+    // color: theme.palette.secondary.main
   },
 });
 

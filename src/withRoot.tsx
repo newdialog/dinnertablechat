@@ -23,7 +23,7 @@ const theme = createMuiTheme({
         color: '#52291d',
       },
       flatSecondary: {
-        color: '#6f3727',
+        color: '#ff896b', // primary // '#6f3727',
       },
       flatPrimary: {
         color: '#066873'

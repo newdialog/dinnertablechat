@@ -26,6 +26,9 @@ const styles = theme =>
         // marginRight: 'auto',
       }
     },
+    btn: {
+      // color: theme.palette.secondary.main
+    },
     cardGrid: {
       // padding: `${theme.spacing.unit * 4}px 0`,
     },
@@ -93,14 +96,16 @@ class PositionSelector extends React.Component<Props, State> {
                 <CardActions>
                   <Button
                     size="small"
-                    color="primary"
+                    color="secondary"
+                    className={classes.btn}
                     onClick={() => this.onSelect(0, card)}
                   >
                     {card.positions[0]}
                   </Button>
                   <Button
                     size="small"
-                    color="primary"
+                    color="secondary"
+                    className={classes.btn}
                     onClick={() => this.onSelect(1, card)}
                   >
                     {card.positions[1]}
