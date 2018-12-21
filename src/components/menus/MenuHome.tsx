@@ -15,6 +15,7 @@ const styles = theme =>
   createStyles({
     pagebody: {
       backgroundColor:theme.palette.primary.light,
+      minHeight: '100vh'
     },
     container: {
       marginTop: '0px',
@@ -194,11 +195,11 @@ class Index extends React.Component<Props, State> {
         <HistoryIcon style={{marginLeft: '8px'}}></HistoryIcon>
         </Button>
       </main>
-      {/* Footer */}
-      <Footer className={classes.footer}/>
-      {/* End footer */}
     </div>
   );
   }
 }
 export default inject('store')(HOC(Index, styles));
+
+// took this out as height is a little wierd on page
+// <Footer className={classes.footer}/>
