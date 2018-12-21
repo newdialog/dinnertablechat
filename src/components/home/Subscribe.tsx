@@ -91,7 +91,7 @@ class Subscribe extends React.Component<Props,State> {
       <div className={classes.centered}>
         <br />
         <form onSubmit={this.onSubmit} style={{ marginLeft: 'auto', marginRight: 'auto', width:'100%', textAlign:'center' }}>
-          <Typography gutterBottom align="center" color="primary" variant={!this.props.offHome ? 'h4' : 'h4'}  style={{color:'#61618e', fontSize: !this.props.offHome?'1.9em':'1em'}}>
+          <Typography gutterBottom align="center" color="secondary" variant={!this.props.offHome ? 'h4' : 'h4'}  style={{color:'#61618e', fontSize: !this.props.offHome?'1.9em':'1em'}}>
           {t('home-signup')}
           </Typography>
           <TextField
@@ -105,7 +105,7 @@ class Subscribe extends React.Component<Props,State> {
             required
           />
           <p />
-          <Button variant="contained" color="primary" type="submit" disabled={this.state.submitting}>
+          <Button variant="contained" color="secondary" type="submit" disabled={this.state.submitting}>
             Subscribe
           </Button>
           <br/>

@@ -35,7 +35,7 @@ function onLogOut(store: Store.Type) {
 }
 
 function onStart(store: Store.Type) {
-  store.router.push('/play')
+  store.router.push('/home')
 }
 
 function onHome(store: Store.Type) {
@@ -70,10 +70,14 @@ function ButtonAppBar(props:Props) {
           }
           {auth &&
             <React.Fragment>
-              <Button variant="contained" color="primary" onClick={ () => onStart(store) }>
+               {false && Times.isDuringDebate() && 
+               <Button color="primary" onClick={ () => store.router.push('/quickmatch') }>
+                Play
+              </Button>
+             }
+              <Button color="primary" onClick={ () => onStart(store) }>
                 My Home
               </Button>
-              <Button onClick={ () => onLogOut(store) }>Log Out</Button>
             </React.Fragment>
           }
 
@@ -84,3 +88,5 @@ function ButtonAppBar(props:Props) {
 }
 
 export default HOC(ButtonAppBar, styles);
+
+// <Button color="secondary" onClick={ () => onLogOut(store) }>Log Out</Button>

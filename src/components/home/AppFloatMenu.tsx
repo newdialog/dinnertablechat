@@ -23,8 +23,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
 import { inject } from 'mobx-react';
-import AudioSettings from './AudioSettings';
-import DebateExitDialog from './DebateExitDialog';
 import Fab from '@material-ui/core/Fab';
 
 const styles = theme =>
@@ -43,7 +41,7 @@ const styles = theme =>
       textAlign: 'center'
     },
     fab: {
-      position: 'absolute',
+      position: 'fixed',
       bottom: theme.spacing.unit * 5,
       right: theme.spacing.unit * 5
     }
@@ -60,7 +58,7 @@ interface State {
   showSettings?: boolean
 }
 
-class FloatMenu extends React.Component<Props, State> {
+class AppFloatMenu extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { anchorEl: null, exitPrompt: false };
@@ -73,25 +71,16 @@ class FloatMenu extends React.Component<Props, State> {
     this.setState({ anchorEl: null });
   };
 
-  private handleLeave = () => {
-    this.props.store.debate.resetQueue();
-    this.props.store.gotoHomeMenu();
-    this.handleClose();
-  };
-
-  private handleLeaveRate = () => {
-    console.log('handleLeaveRate');
-    // this.setState({'exitPrompt': false, 'anchorEl': null})
-    this.props.store.debate.endMatch();
-    this.handleClose();
-  }
-
-  private handleMic = () => {
-    this.setState( {showSettings: true} );
+  private logOut = () => {
+    this.props.store.auth.logout();
   }
 
   private closeSettings = () => {
     this.setState( {showSettings: false, anchorEl: null} );
+  }
+
+  private onFeedback = () => {
+    window.open("https://docs.google.com/forms/d/e/1FAIpQLScmmcorrmu2oO31_9-sU89S4BQXmjRlXvF7FasR_cw7NvxTCQ/viewform", "_blank")
   }
 
   public render() {
@@ -99,11 +88,6 @@ class FloatMenu extends React.Component<Props, State> {
     const { anchorEl } = this.state;
     return (
       <React.Fragment>
-        <DebateExitDialog 
-          open={this.state.exitPrompt} 
-            onCancel={ ()=>this.setState({'exitPrompt': false, 'anchorEl': null}) }
-            onExit={this.handleLeaveRate} />
-        { this.state.showSettings && <AudioSettings onClose={this.closeSettings} videoEl={videoEl}/> }
         <Fab
           className={classes.fab}
           color={'secondary'}
@@ -119,11 +103,13 @@ class FloatMenu extends React.Component<Props, State> {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleMic}>Audio settings</MenuItem>
-          <MenuItem onClick={() => this.setState({'exitPrompt': true})}>Leave debate now</MenuItem>
+          <MenuItem onClick={()=>this.props.store.router.push('/')}>About DTC</MenuItem>
+          <MenuItem onClick={this.onFeedback}>User Feedback</MenuItem>
+          <MenuItem onClick={this.logOut}>Log out</MenuItem>
+          
         </Menu>
       </React.Fragment>
     );
   }
 }
-export default inject('store')(HOC(FloatMenu, styles));
+export default inject('store')(HOC(AppFloatMenu, styles));

@@ -9,20 +9,73 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 // A theme with custom primary and secondary color.
 // It's optional.
 const theme = createMuiTheme({
+  overrides: {
+    MuiMobileStepper: {
+      dotActive: {
+        backgroundColor: '#ff896b' // primary
+      }
+    },
+    MuiButton: { // Name of the component ⚛️ / style sheet
+      text: { // Name of the rule
+        // color: 'white', // Some CSS
+      },
+      containedSecondary: {
+        color: '#52291d',
+      },
+      flatSecondary: {
+        color: '#6f3727',
+      },
+      flatPrimary: {
+        color: '#066873'
+      }
+      
+    },
+  },
   palette: {
+    // type: 'dark',
     primary: {
-      light: red[100],
-      main: red[200],
-      dark: red[500]
+      // light: will be calculated from palette.primary.main,
+      // light: '#ffba9a',
+      main: '#06a7bf',
+      // contrastText: getContrastText(palette.primary[500]),
+      contrastText: '#fff',
+      dark: '#066873'
+      // dark: will be calculated from palette.primary.main,
+      // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
-      light: blue[50],// '#D2E5F5', // blue[100], 
-      main: blue[200], // #8C95B7
-      dark: '#484965', // blue[500] // '#26269C'// '#454579'
-    }
+      // light: '#ff92c4',
+      main: '#ff896b',
+      // dark: '#632d20',
+      // dark: '#484866',
+      /// contrastText: 'white'
+      // dark: '#c82466'
+      // dark: will be calculated from palette.secondary.main,
+      // contrastText: '#ffcc00',
+    },
+    text: {
+      primary: "rgba(50, 50, 50, 0.8)",
+      secondary: "rgba(50, 50, 50, 0.8)",
+      disabled: "rgba(0, 0, 0, 0.38)",
+      hint: "rgba(0, 0, 0, 0.38)"
+    },
+    background: {
+      paper: "#fff",
+      default: "#fafafa"
+    },
+    action: {
+      active: '#555555'
+    },
+    contrastThreshold: 3,
+    tonalOffset: 0.2,
+    // error: will use the default color
   },
   typography: {
-    useNextVariants: true,
+    fontWeightLight: 300, // Work Sans
+    fontWeightRegular: 400, // Work Sans
+    fontWeightMedium: 600, // Roboto Condensed
+    // color: 'white',
+    // useNextVariants: true,
     // suppressDeprecationWarnings: true,
     // Use the system font instead of the default Roboto font.
     body1: {
@@ -36,6 +89,7 @@ const theme = createMuiTheme({
       fontFamily: 'Montserrat',
       fontWeight: 300,
       color: '#444444'
+      // color: '#444444'
     },
     h6: {
       fontSize: '2em',
@@ -45,21 +99,21 @@ const theme = createMuiTheme({
     },
     h1: {
       fontSize: '3em',
-      color: 'white',
+      // color: 'white',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 600,
       letterSpacing: '-0.02em',
     },
     h3: {
       fontSize: '1.5em',
-      color: '#777777',
+      // color: '#777777',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 300,
       letterSpacing: '-0.05em'
     },
     h4: {
       fontSize: '1.7em',
-      color: 'white',
+      // color: 'white',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 300,
       letterSpacing: '0.02em'

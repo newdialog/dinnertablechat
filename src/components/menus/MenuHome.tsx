@@ -13,6 +13,9 @@ import * as Times from '../../services/TimeService';
 
 const styles = theme => 
   createStyles({
+    pagebody: {
+      backgroundColor:theme.palette.primary.light,
+    },
     container: {
       marginTop: '0px',
       marginLeft: 'auto',
@@ -28,7 +31,7 @@ const styles = theme =>
       marginRight: theme.spacing.unit * 2,
     },
     heroUnit: {
-      backgroundColor: theme.palette.background.paper,
+      // backgroundColor: theme.palette.background.paper,
     },
     heroContent: {
       maxWidth: 600,
@@ -53,6 +56,9 @@ const styles = theme =>
       backgroundColor: theme.palette.background.paper,
       padding: theme.spacing.unit * 6,
     },
+    linkhome: {
+      color: theme.palette.primary.dark
+    }
   });
 
 interface Props extends WithStyles<typeof styles> {
@@ -69,7 +75,7 @@ function getSteps() {
 }
 
 function onHistory(store: AppModel.Type) {
-  store.router.push('/play');
+  store.router.push('/home');
 }
 
 function getStepContent(step: number, store: AppModel.Type) {
@@ -94,7 +100,7 @@ class Index extends React.Component<Props, State> {
 
   public componentDidMount() {
     if(this.props.store.isLive() && !Times.isDuringDebate()) {
-      this.props.store.router.push('/play');
+      this.props.store.router.push('/home');
     }
     if(Boolean(this.props.isTest) !== this.props.store.debate.isTest) { 
       this.props.store.debate.setTest(this.props.isTest===true);
@@ -147,20 +153,20 @@ class Index extends React.Component<Props, State> {
     const steps = getSteps();
 
   return (
-    <React.Fragment>
+    <div className={classes.pagebody}>
       <main className={classes.container}>
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             { this.props.isTest && (<h2>TEST MODE (/test)</h2>)}
-            <Typography style={{fontSize: '3em', paddingBottom: '0', color: '#ef6c6c'}} variant="h3" align="center" color="textPrimary" gutterBottom>
+            <Typography style={{fontSize: '3em', paddingBottom: '0', color: '#ffffffcc'}} variant="h3" align="center" color="textSecondary" gutterBottom>
               Debate Quickmatch
             </Typography>
           </div>
         </div>
         {/* End hero unit */}
         <div className={classes.stepper}>
-          <Stepper activeStep={step} orientation="vertical">
+          <Stepper color='primary' activeStep={step} orientation="vertical" style={{backgroundColor:'#2db8cc'}}>
             {steps.map((label, index) => {
               return (
                 <Step key={label}>
@@ -176,22 +182,22 @@ class Index extends React.Component<Props, State> {
           {step > steps.length && (
             <Paper square elevation={0} className={classes.resetContainer}>
               <Typography>All steps completed - you&quot;re about to enter the queue for {store.debate.topic}!</Typography>
-              <Button onClick={this.handleReset} className={classes.button}>
+              <Button color="secondary" onClick={this.handleReset} className={classes.button}>
                 Reset
               </Button>
             </Paper>
           )}
         </div>
 
-        <Button style={{margin:'0 auto'}} color="primary" onClick={ () => onHistory(store) }>
-                Back to Profile Home
-                <HistoryIcon style={{marginLeft: '8px'}}></HistoryIcon>
+        <Button className={classes.linkhome} color="secondary" onClick={ () => onHistory(store) }>
+          Back to Profile Home
+        <HistoryIcon style={{marginLeft: '8px'}}></HistoryIcon>
         </Button>
       </main>
       {/* Footer */}
       <Footer className={classes.footer}/>
       {/* End footer */}
-    </React.Fragment>
+    </div>
   );
   }
 }

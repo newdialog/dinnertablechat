@@ -18,7 +18,8 @@ const styles = (theme: Theme) =>
       marginRight: 'auto',
       width: 'auto',
       maxWidth: '800px',
-      minWidth: '300px'
+      minWidth: '300px',
+      padding: '0 14px 0 14px'
     },
     paper: {
       padding: theme.spacing.unit * 1.5,

@@ -59,7 +59,7 @@ body {
 
 a {
   text-decoration: 'none';
-  color: #f19899
+  color: #7d4e4f
 }
 
 a:hover {
@@ -121,17 +121,10 @@ a:hover {
   }
 }
 
-.Demo__some-network__share-button {
-  cursor: pointer;
-  vertical-align: top;
-  display: inline-block;
-  margin-right: 15px;
-  margin-top: 5px;
-  margin-bottom: 0px;
-  text-align: center;
-
+.share-button:hover:not(:active) {
+  opacity: 0.75;
 }
 
-.Demo__some-network__share-button:hover:not(:active) {
-  opacity: 0.75;
+.nowrap {
+  white-space: nowrap;
 }

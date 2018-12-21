@@ -29,6 +29,9 @@ const styles = (theme: Theme) =>
       paddingTop: theme.spacing.unit * 6,
       height: '100vh'
     },
+    pagebody: {
+      backgroundColor:theme.palette.primary.light,
+    },
     margin: {
       margin: theme.spacing.unit * 2
     },
@@ -181,7 +184,7 @@ class DebateFeedback extends React.Component<Props, State> {
     const { classes } = this.props;
     const traits = this.state.traitHash;
     return (
-      <div>
+      <div className={classes.pagebody}>
         <Grid
           container
           direction="column"
