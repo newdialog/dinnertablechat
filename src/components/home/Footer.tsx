@@ -5,6 +5,8 @@ import {
   WithStyles,
 } from '@material-ui/core/styles';
 import HOC from '../HOC'
+import { inject } from 'mobx-react';
+import * as AppModel from '../../models/AppModel';
 
 const styles = theme =>
 createStyles({
@@ -20,15 +22,21 @@ createStyles({
     marginLeft: 'auto',
     marginRight: 'auto',
     width: '100%',
-    backgroundColor: theme.palette.secondary.dark,
+    backgroundColor: '#484866', // theme.palette.secondary.dark,
     textAlign: 'center'
   }
 });
 
-interface Props extends WithStyles<typeof styles> {}
+interface Props extends WithStyles<typeof styles> {
+  store: AppModel.Type,
+  forceShow?: boolean
+}
 
 function Footer(props: Props) {
   const { classes } = props;
+
+  if(!props.forceShow && props.store.isStandalone()) return null;
+
   return (
     <footer className={classes.centered}>
       <section id="lab_social_icon_footer">
@@ -59,8 +67,8 @@ function Footer(props: Props) {
         PAGES: <a href="/press" style={{marginLeft: '10px', textDecoration: 'none', color: 'white'}}><b>Press Kit</b></a>
         <br/><br/>
         Copyright © 2018 Dinnertable.chat
-        <span style={{marginLeft: '10px', color: '#999999'}}>|</span>
-        <a href="/privacy" style={{marginLeft: '10px', textDecoration: 'none', color: '#999999'}}>Privacy Policy</a>
+        <span style={{marginLeft: '10px', color: '#ccc'}}>|</span>
+        <a href="/privacy" style={{marginLeft: '10px', textDecoration: 'none', color: '#ccc'}}>Privacy Policy</a>
       </Typography>
     </footer>
   );
@@ -81,4 +89,4 @@ function Footer(props: Props) {
             </a>
 
 */
-export default HOC(Footer, styles);
+export default inject('store')(HOC(Footer, styles));

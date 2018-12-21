@@ -36,7 +36,6 @@ import Info from '@material-ui/icons/Info';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-
 import * as TopicInfo from '../../utils/TopicInfo';
 import {
   TwitterShareButton,
@@ -44,6 +43,7 @@ import {
   TwitterIcon,
   FacebookIcon
 } from 'react-share';
+import AppFloatMenu from '../home/AppFloatMenu';
 
 const styles = theme =>
   createStyles({
@@ -72,10 +72,12 @@ const styles = theme =>
     lstats: {
       fontSize: '1.1em',
       fontWeight: 500,
+      color: '#ffffffcc',
     },
     lstatsLabel: {
       fontSize: '1.1em',
       fontWeight: 300,
+      color: '#ffffffaa',
     },
     headerContainer: {
       flexDirection: 'row',
@@ -86,9 +88,12 @@ const styles = theme =>
       //backgroundColor: '#D2E5F5' // '#ddd'
     },
     name: {
-      // color: '#555555',
+      color: '#ffffffcc',
       fontWeight: 'bold',
       fontSize: '2.5em'
+    },
+    nameSubstat: {
+      color: '#ffffffaa',
     },
     icon: {
       fontSize: 70
@@ -123,7 +128,7 @@ const styles = theme =>
     },
     imgLink: {
       textDecoration: 'none',
-      color: '#ef5350' // '#b76464' // #ef5350
+      color: theme.palette.secondary.dark // '#b76464' // #ef5350
     },
     infoTip: {
       width: '50vw',
@@ -546,6 +551,7 @@ class Index extends React.Component<Props, State> {
                   align="left"
                   color="textPrimary"
                   gutterBottom
+                  className={classes.nameSubstat}
                   style={{ fontWeight: 'normal', fontSize: '1em' }}
                 >
                   LEVEL {level}: {title}
@@ -615,7 +621,7 @@ class Index extends React.Component<Props, State> {
                     style={{ padding: '1em' }}
                     onClick={() => this.props.store.router.push('/quickmatch')}
                   >
-                    Begin Dinner Party QuickMatch!
+                    Begin Dinner Party QuickMatch! <QueueIcon style={{marginLeft:'5px'}}/>
                   </Button>
                 </Grid>
               )}
@@ -636,16 +642,7 @@ class Index extends React.Component<Props, State> {
 
             <br />
             <br />
-            <Typography variant="body1" style={{ marginTop: 12 }}>
-              <a
-                href="https://goo.gl/forms/TA1urn48JVhtpsO13"
-                className={classes.imgLink}
-                target="_blank"
-              >
-                Have feedback on your experience?{' '}
-                <RateReview style={{ marginBottom: '-6px' }} />
-              </a>
-            </Typography>
+            
           </div>
 
           {false && this.showAchievements(classes)}
@@ -695,8 +692,8 @@ class Index extends React.Component<Props, State> {
             .
           </Typography>
         </Paper>
-
-        <Footer />
+        <AppFloatMenu />
+        <Footer forceShow={true} />
       </div>
     );
   }
@@ -707,3 +704,15 @@ export default inject('store')(HOC(Authed(Index), styles));
 
 // <Subscribe offHome={true}/>
 // <Typography align="right" variant="caption">Share your experience:</Typography>
+/*
+<Typography variant="body1" style={{ marginTop: 12 }}>
+              <a
+                href="https://goo.gl/forms/TA1urn48JVhtpsO13"
+                className={classes.imgLink}
+                target="_blank"
+              >
+                Have feedback on your experience?{' '}
+                <RateReview style={{ marginBottom: '-6px' }} />
+              </a>
+            </Typography>
+*/

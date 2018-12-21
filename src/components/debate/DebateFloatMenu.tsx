@@ -106,7 +106,7 @@ class FloatMenu extends React.Component<Props, State> {
         { this.state.showSettings && <AudioSettings onClose={this.closeSettings} videoEl={videoEl}/> }
         <Fab
           className={classes.fab}
-          color={'primary'}
+          color={'secondary'}
           onClick={this.handleClick}
           aria-haspopup="true"
           aria-owns={anchorEl ? 'simple-menu' : undefined}

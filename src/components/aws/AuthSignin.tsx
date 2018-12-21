@@ -38,7 +38,7 @@ class AuthSignin extends React.Component<Props, any> {
             event_category: 'auth'
           });
 
-        if(store.isStandalone()) store.router.push('/play');
+        if(store.isStandalone()) store.router.push('/home');
         else store.router.push('/tutorial');
         this.refresh = true;
     }

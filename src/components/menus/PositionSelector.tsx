@@ -47,7 +47,6 @@ const styles = theme =>
     },
     imgLink: {
       textDecoration: 'none',
-      color: '#b76464',
     }
   });
 

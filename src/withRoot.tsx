@@ -10,10 +10,25 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 // It's optional.
 const theme = createMuiTheme({
   overrides: {
+    MuiMobileStepper: {
+      dotActive: {
+        backgroundColor: '#ff896b' // primary
+      }
+    },
     MuiButton: { // Name of the component ⚛️ / style sheet
       text: { // Name of the rule
         // color: 'white', // Some CSS
       },
+      containedSecondary: {
+        color: '#52291d',
+      },
+      flatSecondary: {
+        color: '#6f3727',
+      },
+      flatPrimary: {
+        color: '#066873'
+      }
+      
     },
   },
   palette: {
@@ -24,27 +39,32 @@ const theme = createMuiTheme({
       main: '#06a7bf',
       // contrastText: getContrastText(palette.primary[500]),
       contrastText: '#fff',
-      // dark: '#006d9b'
+      dark: '#066873'
       // dark: will be calculated from palette.primary.main,
       // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
       // light: '#ff92c4',
       main: '#ff896b',
+      // dark: '#632d20',
+      // dark: '#484866',
       /// contrastText: 'white'
       // dark: '#c82466'
       // dark: will be calculated from palette.secondary.main,
       // contrastText: '#ffcc00',
     },
     text: {
-      primary: '#fff',
-      secondary: '#444444',
+      primary: "rgba(50, 50, 50, 0.8)",
+      secondary: "rgba(50, 50, 50, 0.8)",
       disabled: "rgba(0, 0, 0, 0.38)",
       hint: "rgba(0, 0, 0, 0.38)"
     },
     background: {
       paper: "#fff",
       default: "#fafafa"
+    },
+    action: {
+      active: '#555555'
     },
     contrastThreshold: 3,
     tonalOffset: 0.2,

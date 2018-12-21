@@ -60,7 +60,7 @@ const DTCRouter = ({
         <Route path="/press" component={AsyncMediaKit} />
         <Route path="/privacy" component={AsyncPrivacy} />
 
-        <Route path="/play" component={DebateHistory} />
+        <Route path="/home" component={DebateHistory} />
         <Route path="/quickmatch" component={AsyncPlay} />
         <Route path="/match" component={AsyncDebate} />
 

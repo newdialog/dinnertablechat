@@ -20,10 +20,10 @@ const styles = (theme: Theme) =>
     timerText: {
       padding: '0',
       margin: 0,
-      color:'0xffffff'
+      color: '#06616b'
     },
     time: {
-        color:'0xffffff'
+        color: '#06616b'
     }
   });
 
@@ -74,15 +74,15 @@ const renderer = (
     const label = isDuringDebate ? 'Daily event ending in' : 'Daily event starts in';
     return (
       <div style={{ padding: 0, margin: 0 }}>
-        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '1em', color:'#555555'}}>
+        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '1em'}}>
           {label}:
         </Typography>
         
-        <Typography variant="h4" align="center" className={classes.timerText} style={{fontSize: '1.6em', color:'#555555'}}>
+        <Typography variant="h4" align="center" className={classes.time} style={{fontSize: '1.6em' }}>
           {hours}&nbsp;&nbsp;{minutes}&nbsp;&nbsp;{seconds}
         </Typography>
 
-        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '.6em', color:'#555555'}}>
+        <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '.6em' }}>
         &nbsp;&nbsp;HRS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS &nbsp;&nbsp;&nbsp; SECS
         </Typography>
 

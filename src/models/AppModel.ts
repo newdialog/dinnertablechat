@@ -19,7 +19,7 @@ const AppModel = types
     },
     gotoHomeMenu() {
       self.showNav = true;
-      if (!self.debate.isTest) self.router.push('/play');
+      if (!self.debate.isTest) self.router.push('/home');
       else self.router.push('/test');
     },
     showNavbar() {
@@ -30,6 +30,9 @@ const AppModel = types
     }
   }))
   .views(self => ({
+    /* isDailyOpen() {
+      return self.dailyOpen || TimeService.
+    },*/
     isLive() {
       const h = window.location.hostname;
       return (

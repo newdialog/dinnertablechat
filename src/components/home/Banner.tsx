@@ -185,16 +185,16 @@ class Index extends React.Component<Props, any> {
           </div>
           <div className={classes.bannerAnimOverlay} />
           <div className={classes.centeredDown}>
-            <Typography variant="h1" gutterBottom align="center" style={{textShadow: '2px 2px #777755'}}>
+            <Typography variant="h1" align="center" style={{textShadow: '2px 2px #777755', color: '#ffffffcc'}}>
               <Reveal effect="fadeIn" duration={3500}>
                 {t('home-banner-title1')}
               </Reveal>
             </Typography>
-            <Typography variant="h4" align="center">
+            <Typography variant="h4" align="center" style={{color: '#ffffffcc'}}>
               <Reveal effect="fadeIn" duration={5500}>
                 { !isOpen ?
                   <>you're invited to our dinner party beta</>
-                  : <span style={{fontSize: '110%'}}>debate sessions are now <b>OPEN</b></span>
+                  : <span style={{fontSize: '110%'}}>debate sessions are now <b>open</b></span>
                   // t('home-banner-title2')
                 }
               </Reveal>
@@ -212,7 +212,7 @@ class Index extends React.Component<Props, any> {
                     style={{marginTop:'1vh'}}
                     variant="contained"
                     color="secondary" size="large"
-                    onClick={() => store.router.push('/play')}
+                    onClick={() => store.router.push('/home')}
                   >
                     {store.auth.user!.name.split(' ')[0]}'s Home
                     <QueueIcon style={{ marginLeft: '8px' }} />

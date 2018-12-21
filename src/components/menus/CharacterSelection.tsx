@@ -149,8 +149,7 @@ class CharacterSelector extends React.Component<Props> {
     }*/
 
     return (
-      <div>
-        <Paper className={classes.root}>
+      <div className={classes.root}>
           {contrib.map(item => {
             return (
               <ButtonBase
@@ -184,8 +183,7 @@ class CharacterSelector extends React.Component<Props> {
               </ButtonBase>
             );
           })}
-        </Paper>
-      </div>
+        </div>
     );
   }
 }
