@@ -89,6 +89,30 @@ class WorkerUpdate extends React.Component<Props, any> {
   constructor(props: Props) {
     super(props);
     this.state = { disableRefresh: false };
+
+    serviceWorker.register({ onSuccess:this.onSuccess, onUpdate: this.onUpdate });
+    // serviceWorker.unregister();
+  }
+
+  public onSuccess = (registration: ServiceWorkerRegistration) => {
+    this.registration = registration;
+    console.log('worker loaded');
+  }
+
+  public onUpdate = (registration: ServiceWorkerRegistration) => {
+    if(registration) this.registration = registration;
+
+      // #2
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        refreshing = true; // preventDevToolsReloadLoop
+        window.location.reload(); // true
+      });
+
+      // TODO: this might be a problem with initialization
+      setTimeout( () => {
+        this.setState({ showReload: true }); // , registration: registration
+      }, 1200);
   }
 
   public componentWillMount() {
@@ -96,25 +120,9 @@ class WorkerUpdate extends React.Component<Props, any> {
   }
 
   public componentDidMount() {
-    const onSuccess = (registration: ServiceWorkerRegistration) => {
-      this.registration = registration;
-      console.log('worker loaded');
-    };
-    const onUpdate = (registration: ServiceWorkerRegistration) => {
-      if(registration) this.registration = registration;
 
-      // #2
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (refreshing) return;
-        refreshing = true; // preventDevToolsReloadLoop
-        window.location.reload(); // true
-      });
-
-      this.setState({ showReload: true }); // , registration: registration
-    };
-
-    // serviceWorker.unregister();
-    serviceWorker.register({ onSuccess, onUpdate });
+    
+    
 
     // Cachebust SW
     // setInterval(() => bust(), 1000 * 60);
@@ -159,7 +167,7 @@ class WorkerUpdate extends React.Component<Props, any> {
           <Button
             onClick={this.onRefreshClick}
             variant="contained"
-            color="primary"
+            color="secondary"
             size="large"
             disabled={this.state.disableRefresh}
           >

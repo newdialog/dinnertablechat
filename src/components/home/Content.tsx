@@ -258,7 +258,9 @@ class Index extends React.Component<Props, State> {
                 {t('home-intro')}
               </Typography>
               <div style={{width:'100%', textAlign:'center'}}>
-                <a href='https://play.google.com/store/apps/details?id=chat.dinnertable&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="170px"/></a>
+                <a href='https://play.google.com/store/apps/details?id=chat.dinnertable&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
+                <img alt='Get it on Google Play'className="lazyload" data-src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="170px"/>
+                </a>
               </div>
             </Grid>
             <Grid item xs={12} md={12}>

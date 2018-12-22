@@ -1,5 +1,15 @@
-/
-    Link: </i18n/en.json> rel=preload as=fetch
+/ignore
+    Link: </i18n/en.json>; rel=prefetch; as=fetch; crossorigin=anonymous
+    Link: </manifest.json>; rel=preload; as=manifest
+    Link: </favicon.ico>; rel=prefetch; as=image
+    Link: <https://cdn.jsdelivr.net/npm/pwacompat@2.0.7/pwacompat.min.js>; rel=prefetch; as=script
+    Link: <https://www.googletagmanager.com/gtag/js?id=UA-119131630-1>; rel=prefetch; as=script
+    Link: </logos/appbar-logo-color.png>; rel=prefetch; as=image; crossorigin=anonymous
+    Link: </assets/background.json>; rel=prefetch; as=fetch; crossorigin=anonymous
+    Link: <https://via.placeholder.com>; rel=preconnect
+/*
+    Content-Security-Policy: frame-ancestors 'none';
+    X-Frame-Options: DENY
 /service-worker.js
     cache-control: max-age=0,no-cache,no-store,must-revalidate
 /sw.js

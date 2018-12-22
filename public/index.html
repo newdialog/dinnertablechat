@@ -47,7 +47,7 @@
     <script src="js/hark.bundle.js"></script>
     -->
 
-  <!-- Start Single Page Apps for GitHub Pages -->
+  <!-- Start Single Page Apps for GitHub Pages 
   <script type="text/javascript">
     // Single Page Apps for GitHub Pages
     // https://github.com/rafrex/spa-github-pages
@@ -77,6 +77,7 @@
       }
     }(window.location))
   </script>
+  -->
   <!-- End Single Page Apps for GitHub Pages -->
 </head>
 
@@ -87,11 +88,9 @@
   <div id="root"></div>
 
   <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.7/pwacompat.min.js"
-    integrity="sha384-ptgwb3/v69WGur7IwSnWOowVxE7hcRB3DG/EiHdejrw2sFNwUHynFbiRMPxc4hdS"
     crossorigin="anonymous"></script>
-  <link onload="this.rel='stylesheet'" rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Montserrat:bold,italic,light,ligher,bolder,regular,medium,black">
-  <link onload="this.rel='stylesheet'" rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
-  <link onload="this.rel='stylesheet'" rel="stylesheet" as="style" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
+  <link onload="this.onload=null;this.rel='stylesheet'" rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Montserrat:bold,italic,light,ligher,bolder,regular,medium,black">
+  <link onload="this.onload=null;this.rel='stylesheet'" rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css">
   
   <script type='text/javascript'>
     (function () {
@@ -99,7 +98,7 @@
         window.location = 'https://dinnertable.chat/'
     })();
   </script>
-  <script async="" src="js/lazysizes.min.js"></script>
+  <script async src="js/lazysizes.min.js"></script>
   <script async src="https://cdnjs.cloudflare.com/ajax/libs/zenscroll/4.0.2/zenscroll-min.js"></script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119131630-1"></script>
@@ -150,6 +149,16 @@
     window.trackOutboundLinkClick = trackOutboundLinkClick;
 
     window.gtag = gtag;
+  </script>
+  <script type="text/javascript">
+    (function() {
+      var css = document.createElement('link');
+      css.href = 'https://use.fontawesome.com/releases/v5.5.0/css/all.css';
+      css.rel = 'stylesheet';
+      css.type = 'text/css';
+      css.crossOrigin = "anonymous";
+      document.getElementsByTagName('head')[0].appendChild(css);
+    })();
   </script>
 </body>
 

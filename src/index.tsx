@@ -23,6 +23,7 @@ const store = AppModel.create(routerModel, fetcher);
 // if(!store.isLive()) 
 connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting, prob bundled anyway
 
+console.log('v1.08');
 ReactDOM.render(
   <I18nextProvider i18n={i18n} initialLanguage="en">
     <Provider store={store}>

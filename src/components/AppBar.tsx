@@ -64,17 +64,17 @@ function ButtonAppBar(props:Props) {
     <div className={classes.root}>
       <AppBar position="fixed" color="default" style={{ backgroundColor:'rgb(255,255,255,0.9)' }}>
         <Toolbar variant="dense">
-          <img src="./logos/appbar-logo-color.png" style={{height:'3em', cursor: 'pointer'}} onClick={ onHome.bind(0,store) }/>
+          <img crossOrigin="anonymous" src="./logos/appbar-logo-color.png" style={{height:'3em', cursor: 'pointer'}} onClick={ onHome.bind(0,store) }/>
           { /* TODO BUG: empty component needed for alignment */ }
           <Typography variant="h6" className={classes.flex}></Typography>
 
           {!auth && showAuth &&
-            <Button color="primary" className={classes.btn} onClick={ () => onLogin(store) }>Login</Button>
+            <Button variant="outlined" color="secondary" className={classes.btn} onClick={ () => onLogin(store) }>Login</Button>
           }
           {auth &&
             <React.Fragment>
                {false && Times.isDuringDebate() && 
-               <Button color="primary" className={classes.btn} onClick={ () => store.router.push('/quickmatch') }>
+               <Button variant="outlined" color="secondary" className={classes.btn} onClick={ () => store.router.push('/quickmatch') }>
                 Play
               </Button>
              }
