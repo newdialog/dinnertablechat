@@ -79,7 +79,7 @@
     "gh-pages": "^2.0.1",
     "google-spreadsheet-i18n": "^1.0.6",
     "http-proxy": "^1.17.0",
-    "react-scripts": "^2.1.1",
+    "react-scripts": "^2.1.2",
     "typescript": "^3.2.2"
   },
   "optionalDependencies": {
