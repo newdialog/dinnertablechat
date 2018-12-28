@@ -1,5 +1,5 @@
-import * as i18n from 'i18next';
-import * as XHR from 'i18next-xhr-backend';
+import i18n from 'i18next';
+import XHR from 'i18next-xhr-backend';
 import * as LanguageDetector from 'i18next-browser-languagedetector';
 // import config from '../src/config/config'
 // import config from '../src/config/config'
@@ -42,4 +42,4 @@ const instance = i18n
     }
   });
 
-export default instance;
+export default i18n;
