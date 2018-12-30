@@ -106,7 +106,7 @@ function DailyEndTimer(props) {
 
   return (
     <Countdown
-      completed={onCompleted}
+      onComplete={()=> onCompleted && onCompleted() }
       date={endTime}
       renderer={renderer.bind(null, classes, store, isDuringDebate)}
     />

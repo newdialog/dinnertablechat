@@ -137,7 +137,7 @@ function BannerTimer(props:Props) {
 
   return (
     <Countdown
-      completed={() => {
+      onComplete={() => {
         // setTimeout( () => {
           console.log('BannerTimer completed');
           isDuringDebate = Times.isDuringDebate();
