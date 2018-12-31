@@ -50,7 +50,12 @@ function Footer(props: Props) {
               <i id="social-medium" className="fab fa-medium social fa-3x "></i>
             </a>
 
-            
+            <a href="https://discord.gg/U6h8pE9" onClick={trackOutboundLinkClick('https://discord.gg/U6h8pE9')}>
+              <i
+                id="social-discord"
+                className="fab fa-discord fa-3x social"
+              />
+            </a>
 
             <a href="mailto:team@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:team@dinnertable.chat')}>
               <i
@@ -73,20 +78,5 @@ function Footer(props: Props) {
     </footer>
   );
 }
-/*
-<a href="https://discord.gg/U6h8pE9" onClick={trackOutboundLinkClick('https://discord.gg/U6h8pE9')}>
-              <i
-                id="social-discord"
-                className="fab fa-discord fa-3x social"
-              />
-            </a>
-            
-<a href="mailto:team@dinnertable.chat" onClick={trackOutboundLinkClick('mailto:admin@dinnertable.chat')}>
-              <i
-                id="social-em"
-                className="fa fa-envelope-square fa-3x social"
-              />
-            </a>
 
-*/
 export default inject('store')(HOC(Footer, styles));
