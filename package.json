@@ -39,7 +39,7 @@
     "react-countdown-now": "^2.0.1",
     "react-dom": "^16.7.0",
     "react-fps-stats": "^0.1.1",
-    "react-i18next": "^8.4.0",
+    "react-i18next": "^9.0.0",
     "react-lottie": "^1.2.3",
     "react-mailchimp-subscribe": "^2.0.2",
     "react-responsive": "^6.0.1",
