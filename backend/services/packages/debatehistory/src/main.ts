@@ -19,7 +19,6 @@ const sqloptions = {
 const app = express();
 app.use(express.json());
 app.use(cors());
-// const mysql = require('mysql');
 const connection: Pool = new Pool();
 
 app.get('/history', async (req: any, res: any, next: any) => {
@@ -27,6 +26,9 @@ app.get('/history', async (req: any, res: any, next: any) => {
 
   const client = await connection.connect();
   console.log('QUERY for user', id);
+
+  // Zip debate_session to the user info related to the session (debate_session_users)
+  // then collect all users info (both parties) in debates that THIS $1 user has been "involved" in.
   const qres = await client.query(
     `select ds.topic, ds.created as debate_created, du.*
   from debate_session as ds
@@ -37,10 +39,6 @@ app.get('/history', async (req: any, res: any, next: any) => {
           )`,
     [id],
   );
-  // console.log(qres.rows);
-
-  // const ctxstr = JSON.stringify(user, null, 2);
-  // console.log(ctxstr)
 
   client.release();
   res.send({ history: qres.rows });
