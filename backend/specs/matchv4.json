@@ -1,0 +1,88 @@
+{
+    "name": "dtc-match-nomod",
+    "ruleLanguageVersion": "1.0",
+
+    "playerAttributes": [{
+        "name": "topic",
+        "type": "string",
+        "default": "politics"
+    }, {
+        "name": "side",
+        "type": "number",
+        "default": 1
+    }, {
+        "name": "character",
+        "type": "number",
+        "default": 0
+    }, {
+        "name": "donation",
+        "type": "number",
+        "default": 0
+    }, {
+        "name": "lang",
+        "type": "string",
+        "default": "en"
+    }, {
+        "name": "env",
+        "type": "string",
+        "default": "dev"
+    }],
+    "teams": [{
+        "name": "red",
+        "minPlayers": 1,
+        "maxPlayers": 1
+    }, {
+        "name": "blue",
+        "minPlayers": 1,
+        "maxPlayers": 1
+    }],
+
+    "rules": [{
+            "name": "SameTopic",
+            "description": "Only match players when they choose the same topic type",
+            "type": "comparison",
+            "operation": "=",
+            "measurements": ["flatten(teams[*].players.attributes[topic])"]
+        }, {
+            "name": "SameLang",
+            "description": "Only match players when they choose the same language",
+            "type": "comparison",
+            "operation": "=",
+            "measurements": ["flatten(teams[*].players.attributes[lang])"]
+        }, {
+            "name": "SameEnv",
+            "description": "Only match players when they choose the same env",
+            "type": "comparison",
+            "operation": "=",
+            "measurements": ["flatten(teams[*].players.attributes[env])"]
+        },
+        {
+            "name": "DonationMatch",
+            "description": "Only match players when they've donated same amount",
+            "type": "distance",
+            "measurements": ["avg(teams[*].players.attributes[donation])"],
+            "referenceValue": "avg(flatten(teams[*].players.attributes[donation]))",
+            "maxDistance": 30
+        }, {
+            "name": "DifferentSide",
+            "description": "Only match players when they're using different side",
+            "type": "distance",
+            "measurements": ["avg(flatten(teams[*].players.attributes[side]))"],
+            "referenceValue": 0.5,
+            "maxDistance": 0.1
+        }
+    ],
+    "expansions": [{
+        "target": "rules[DonationMatch].maxDistance",
+        "steps": [{
+            "waitTimeSeconds": 30,
+            "value": 1
+        }]
+    }, {
+        "target": "rules[DifferentSide].maxDistance",
+        "steps": [{
+            "waitTimeSeconds": 20,
+            "value": 2
+        }]
+    }]
+}

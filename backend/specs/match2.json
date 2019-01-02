@@ -22,6 +22,10 @@
         "name": "lang",
         "type": "string",
         "default": "en"
+    },{
+        "name": "env",
+        "type": "string",
+        "default": "dev"
     }],
     "teams": [{
         "name": "red",

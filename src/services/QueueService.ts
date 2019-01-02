@@ -3,7 +3,7 @@
 import GameLift from 'aws-sdk/clients/gamelift';
 // import DynamoDB from 'aws-sdk/clients/dynamodb'
 import AWS from 'aws-sdk/global';
-
+import { isLive } from '../utils/AppMeta';
 import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
 import * as DebateModel from '../models/DebateModel';
@@ -146,17 +146,17 @@ export async function queueUp(
   chararacter: integer,
   onMatchedCB: OnMatchedCB
 ) {
-  const teamName = side === 0 ? 'red' : 'blue';
-  const rel = 0; // TODO
+  const env = isLive() ? 'prod' : 'dev';
 
   console.log(
-    'queueUp',
-    topic,
+    'queueUp:',
+    'env ' + env,
+    'topic ' + topic,
     'side ' + side,
-    playerId,
-    donation,
-    'chararacter: ' + chararacter,
-    'teamName: ' + teamName
+    'pid ' + playerId,
+    'don ' + donation,
+    'char ' + chararacter
+    // 'team: ' + teamName
   );
 
   const options: GameLift.StartMatchmakingInput = {
@@ -173,10 +173,9 @@ export async function queueUp(
           donation: { N: donation },
           character: { N: chararacter },
           topic: { S: topic },
-          // relevency: { N: rel }
+          env: { S: env }
         },
-        PlayerId: playerId,
-        Team: teamName
+        PlayerId: playerId
       }
     ]
   };
