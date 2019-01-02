@@ -57,6 +57,9 @@ const DebateModel = types
       if (!self.match) throw new Error('match not init');
       self.match!.sync = true;
     },
+    unMatch() {
+      self.match = null;
+    },
     setContribution(amount: number) {
       self.contribution = amount;
     },

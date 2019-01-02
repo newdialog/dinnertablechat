@@ -123,8 +123,6 @@ class LoadingScene extends React.Component<Props, State> {
 
     const topic = this.props.store.debate.topic;
     const position = this.props.store.debate.position;
-    const contribution = this.props.store.debate.contribution;
-    const chararacter = this.props.store.debate.character;
 
     // analytics
     window.gtag('event', 'debate_loading', {
@@ -145,11 +143,22 @@ class LoadingScene extends React.Component<Props, State> {
       return; // do not continue to queue on error;
     }
 
+    window.addEventListener("beforeunload", this.onWindowBeforeUnload);
+    window.addEventListener("unload", this.onWindowUnload);
+    await this.getMatch();
+  }
+
+  public async getMatch() {
+    const topic = this.props.store.debate.topic;
+    const position = this.props.store.debate.position;
+    const contribution = this.props.store.debate.contribution;
+    const chararacter = this.props.store.debate.character;
+
     // start queue
     const options = this.props.store.auth.aws!;
     await QS.init(options);
 
-    const sameUserSeed = Math.round(new Date().getTime() / 1000);
+    // const sameUserSeed = Math.round(new Date().getTime() / 1000);
 
     if (!this.props.store.auth.user!.id) throw new Error('no valid user id');
     const userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
@@ -164,16 +173,14 @@ class LoadingScene extends React.Component<Props, State> {
         this.onMatched
       );
     } catch (e) {
-      console.error(e);
-      this.setState({ error: 'start queue' });
+      console.error('queueUp error', e);
+      this.setState({ error: 'matchtimeout' });
       return;
     }
     if(this.unloadFlag.flag) return;
     this.setState({ticketId});
 
     // this.ticketIdProp = ticketId;
-    window.addEventListener("beforeunload", this.onWindowBeforeUnload);
-    window.addEventListener("unload", this.onWindowUnload);
     // window.onunload = this.onWindowUnload;
   }
 
@@ -227,7 +234,16 @@ class LoadingScene extends React.Component<Props, State> {
       this.unloadFlag.flag = true;
       const retryError = e.toString().indexOf('retry') !== -1;
       console.warn('handshake error', retryError, e);
-      if (retryError) return this.setState({ error: 'handshake_timeout' });
+      if (retryError) {
+        // retrying
+        console.warn('retrying!');
+        this.unloadFlag.flag = false; // allow retry
+        this.startedHandshake = false;
+        this.props.store.debate.unMatch();
+        await this.getMatch();
+        return;
+        // return this.setState({ error: 'handshake_timeout' });
+      }
       else return this.setState({ error: 'handshake_error' });
     } finally {
       if(this.unloadFlag.flag) {

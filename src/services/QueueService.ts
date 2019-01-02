@@ -106,7 +106,7 @@ async function poll(
         await delay(3000);
         player = await shake.sync(playerId);
       }
-      if (!player) return onMatchedCB('timeout');
+      if (!player) return onMatchedCB('matchtimeout');
 
       onMatchedCB({
         team: player.team as any,
@@ -120,7 +120,7 @@ async function poll(
       return;
     }
     if (ticket.Status === 'TIMED_OUT') {
-      onMatchedCB('timeout');
+      onMatchedCB('matchtimeout');
       console.log('timed out, stopping poll');
       return; // not polling
     }

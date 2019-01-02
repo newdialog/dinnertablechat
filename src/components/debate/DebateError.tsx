@@ -28,9 +28,10 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const errors = {
+  'matchtimeout': 'Sorry, no matches were found... try again in a few minutes!',
   'timeout': 'Our service timed out. Please try again.',
   'expired_login': 'Our service timed out. Please try again.',
-  'qerror': 'Something went wrong with the Queue!',
+  'qerror': 'Something went wrong with the Queue :/',
   'other_disconnected': 'Player disconnected.',
   'webrtc_error': 'Misc error: Webrtc connection failed',
   'handshake_timeout': 'Handshake with match timed out',
