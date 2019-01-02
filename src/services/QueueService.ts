@@ -147,6 +147,8 @@ export async function queueUp(
   onMatchedCB: OnMatchedCB
 ) {
   const teamName = side === 0 ? 'red' : 'blue';
+  const rel = 0; // TODO
+
   console.log(
     'queueUp',
     topic,
@@ -170,7 +172,8 @@ export async function queueUp(
           side: { N: side },
           donation: { N: donation },
           character: { N: chararacter },
-          topic: { S: topic }
+          topic: { S: topic },
+          // relevency: { N: rel }
         },
         PlayerId: playerId,
         Team: teamName

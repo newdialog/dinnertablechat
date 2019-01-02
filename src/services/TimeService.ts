@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const openForNumHours = 3;
+const openForNumHours = 1;
 const hourOpen = 0;
 const minOpen = 0;
 
