@@ -174,8 +174,7 @@ function getQParam(players, matchId) {
         PutRequest: {
           Item: {
             "id": matchId,
-            "redkey": "-",
-            "bluekey": "-",
+            "qid": 0, // TODO: determine matched questions
             "redkeyi": [],
             "bluekeyi": [], // documentClient.createSet([]),
             "ttl": '' + ttl2

@@ -27,7 +27,7 @@
     "i18next-xhr-backend": "^1.5.1",
     "lottie-react-web": "^2.1.4",
     "lottie-web": "github:jadbox/lottie-web#perftweaks",
-    "material-auto-rotating-carousel": "^3.0.0",
+    "material-auto-rotating-carousel": "^3.0.1",
     "md5": "^2.2.1",
     "mobx": "^5.8.0",
     "mobx-react": "^5.4.3",

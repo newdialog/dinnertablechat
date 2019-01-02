@@ -225,7 +225,7 @@ class LoadingScene extends React.Component<Props, State> {
     console.log('gotMedia, now handshaking');
     const matchId = this.props.store.debate.match!.matchId;
     const isLeader = this.props.store.debate.match!.leader;
-    const state = { char: this.props.store.debate.character }; // TODO pretect against premium chars
+    const state = { char: this.props.store.debate.character, side: this.props.store.debate.position }; // TODO pretect against premium chars
 
     let result: any;
     try {
@@ -256,7 +256,8 @@ class LoadingScene extends React.Component<Props, State> {
     this.props.onPeer(peer);
     if (otherPlayerState)
       this.props.store.debate.setOtherState({
-        character: otherPlayerState.char
+        character: otherPlayerState.char,
+        side: otherPlayerState.side
       });
     this.props.store.debate.syncMatch();
   };

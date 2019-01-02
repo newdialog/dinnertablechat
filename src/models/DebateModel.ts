@@ -3,7 +3,8 @@ import { string, number } from 'prop-types';
 import { boolean } from 'mobx-state-tree/dist/internal';
 
 const OtherPlayerModel = types.model({
-  character: -1
+  character: -1,
+  side: -1
 });
 
 const MatchModel = types

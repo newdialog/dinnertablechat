@@ -213,7 +213,7 @@ async function readMatchWait(
       }
       const match: HandShakeCallback = await readMatch(matchid);
       // if (stopFlag.flag) return null; // needed?
-      const teamkey = team + 'key' + 'i'; // TODO refactor i
+      const teamkey = team + 'keyi';
 
       const statekey = team + 'state';
       const keyval = match[teamkey];
@@ -361,7 +361,7 @@ async function updateMatch(
     return;
   }
 
-  const teamkey = team + 'key' + 'i'; // TODO: concat
+  const teamkey = team + 'keyi';
 
   const statekey = team + 'state';
   const stateStr = JSON.stringify(state);

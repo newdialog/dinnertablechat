@@ -16,7 +16,6 @@ import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
 import APIService from '../../services/APIService';
 import Switch from '@material-ui/core/Switch';
-import purple from '@material-ui/core/colors/purple';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import Reveal from 'react-reveal/Reveal';
@@ -147,7 +146,7 @@ class DebateFeedback extends React.Component<Props, State> {
   private handleConfirm = async () => {
     // TODO: update endpt w user selection, route back home
     const hash = this.state.traitHash;
-    const selectedTraits: string[] = [];
+    // const selectedTraits: string[] = [];
 
     const traitsObj = Object.keys(hash)
       .filter(k => hash[k])
