@@ -150,7 +150,8 @@ class WorkerUpdate extends React.Component<Props, any> {
 
   public render() {
     const { store, classes } = this.props;
-    if (this.state.showReload) {
+    // Ensure not in a match
+    if (this.state.showReload && !this.props.store.debate.match) {
       return (
         <div style={{textAlign:'center', paddingTop:'60px', height:'100vh', width:'100vw'}}>
           <div className={classes.bannerAnim}>
