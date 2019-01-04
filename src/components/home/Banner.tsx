@@ -190,10 +190,10 @@ class Index extends React.Component<Props, any> {
                 {t('home-banner-title1')}
               </Reveal>
             </Typography>
-            <Typography variant="h4" align="center" style={{color: '#ffffffcc', padding: '0 12px 0 12px'}}>
+            <Typography variant="h4" align="center" style={{fontSize:'1.7em', color: '#ffffffcc', padding: '0 12px 0 12px'}}>
               <Reveal effect="fadeIn" duration={5500}>
                 { !isOpen ?
-                  <>you're invited to our dinner party beta</>
+                  <>get matched with your opposite to find common ground</>
                   : <span style={{fontSize: '110%'}}>debate sessions are now <b>open</b></span>
                   // t('home-banner-title2')
                 }
@@ -223,8 +223,8 @@ class Index extends React.Component<Props, any> {
             
             <div className={classes.bannerTextDivider} />
             <BannerTimer />
-            <div className={classes.divider} />
             
+            <a href="#intro"><ArrowDown style={{color:'#ffffffcc'}} width="1em"/></a>
           </div>
         </div>
       </React.Fragment>
@@ -234,7 +234,7 @@ class Index extends React.Component<Props, any> {
 
 export default HOC(Index, styles);
 
-/*
+/* <div className={classes.divider} />
 <Button
               href="#intro"
               variant="contained"

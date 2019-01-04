@@ -238,7 +238,7 @@ class Index extends React.Component<Props, State> {
       <React.Fragment>
         <div className={classes.centered2}>
           <Grid container spacing={24} className={classes.container}>
-            <Grid item xs={12} md={12}>
+            <Grid item xs={12} md={12} style={{paddingBottom:'0'}}>
               <div className="paperimg" id="intro">
                 <Waypoint
                   topOffset="-10%"
@@ -253,7 +253,7 @@ class Index extends React.Component<Props, State> {
                 />
               </div>
             </Grid>
-            <Grid item xs={12} md={12}>
+            <Grid item xs={12} md={12} style={{paddingTop:'0'}}>
               <Typography variant="h3" gutterBottom align="center">
                 {t('home-intro')}
               </Typography>
