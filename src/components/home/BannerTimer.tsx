@@ -17,13 +17,16 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
     },
+    timerText2: {
+      fontFamily: 'Courier New',
+      padding: '0',
+      margin: 0,
+    },
     timerText: {
       padding: '0',
       margin: 0,
-      color: '0xffffff'
     },
     time: {
-      color: '0xffffff'
     }
   });
 
@@ -92,10 +95,10 @@ const renderer = (
         <Typography
           variant="h4"
           align="center"
-          className={classes.timerText}
+          className={classes.timerText2}
           style={{ fontSize: '240%', color: 'white' }}
         >
-          {days}&nbsp;&nbsp;{hours}&nbsp;&nbsp;{minutes}&nbsp;&nbsp;{seconds}
+          {hours < 10 ? '0' + hours : hours}&nbsp;{minutes < 10 ? '0' + minutes : minutes}&nbsp;{seconds < 10 ? '0' + seconds : seconds}
         </Typography>
 
         <Typography
@@ -104,9 +107,9 @@ const renderer = (
           className={classes.timerText}
           style={{ fontSize: '.75em', color: '#555555' }}
         >
-          DAYS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HRS
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
+          HRS&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
           <br/><span style={{color:'#844d4d'}}>4pm PST / 6pm CST / 7pm EST</span>
           
         </Typography>

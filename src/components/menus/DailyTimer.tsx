@@ -23,7 +23,8 @@ const styles = (theme: Theme) =>
       color: '#06616b'
     },
     time: {
-        color: '#06616b'
+        color: '#06616b',
+        fontFamily: 'Courier New',
     }
   });
 
@@ -78,12 +79,14 @@ const renderer = (
           {label}:
         </Typography>
         
-        <Typography variant="h4" align="center" className={classes.time} style={{fontSize: '1.6em' }}>
-          {hours}&nbsp;&nbsp;{minutes}&nbsp;&nbsp;{seconds}
+        <Typography variant="h4" align="center" className={classes.time} style={{fontSize: '2em' }}>
+        {hours < 10 ? '0' + hours : hours}&nbsp;{minutes < 10 ? '0' + minutes : minutes}&nbsp;{seconds < 10 ? '0' + seconds : seconds}
         </Typography>
 
         <Typography variant="h6" align="center" className={classes.timerText} style={{fontSize: '.6em' }}>
-        &nbsp;&nbsp;HRS &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS &nbsp;&nbsp;&nbsp; SECS
+          HRS&nbsp;
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
         </Typography>
 
         <br />
