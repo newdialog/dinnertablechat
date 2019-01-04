@@ -204,10 +204,12 @@ class DebateScene extends React.Component<Props, State> {
   }
   private blue = React.createRef<HTMLDivElement>();
   private red = React.createRef<HTMLDivElement>();
+  private blueLottieRef = React.createRef<Lottie>();
 
   private bgEl = React.createRef<Lottie | any>();
   private tableEl = React.createRef<Lottie | any>();
   private confettiRef = React.createRef<Lottie | any>();
+  
 
   constructor(props: Props) {
     super(props);
@@ -259,6 +261,12 @@ class DebateScene extends React.Component<Props, State> {
     this.trackDebateTimeEnd();
   };
 
+  private onCharLoaded = (x) => {
+    console.log('aa', x, this.blueLottieRef.current!);
+    const o = this.blueLottieRef.current!.anim;
+    o.goToAndPlay(24*4, true);
+  }
+
   public render() {
     const { classes, talkingBlue, talkingRed, videoEl, store } = this.props;
     const { blueTransition, bothAgreed, ended } = this.state;
@@ -295,12 +303,17 @@ class DebateScene extends React.Component<Props, State> {
                 <div hidden={animBlue} ref={this.blue}>
                   <Lottie
                     speed={1.2}
+                    ref={this.blueLottieRef}
                     options={blueChar.listen}
                     isClickToPauseDisabled={true}
                     eventListeners={[
                       {
                         eventName: 'loopComplete',
                         callback: this.onLoopComplete
+                      },
+                      {
+                        eventName: 'DOMLoaded',
+                        callback: this.onCharLoaded
                       }
                     ]}
                   />
