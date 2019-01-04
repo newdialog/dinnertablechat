@@ -121,7 +121,7 @@ const renderer = (
   if (step !== store.debate.quarter)
     setTimeout(() => store.debate.setQuarter(step), 1);
 
-  if (!completed) return <Completionist store={store} classes={classes} />;
+  if (completed) return <Completionist store={store} classes={classes} />;
 
   let hoursDisplay = '';
   if (Number(hours) > 0) {
