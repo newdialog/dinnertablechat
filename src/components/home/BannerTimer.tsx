@@ -18,7 +18,7 @@ const styles = (theme: Theme) =>
       paddingTop: theme.spacing.unit * 20
     },
     timerText2: {
-      fontFamily: 'Courier New',
+      fontFamily: "'Roboto Mono', 'Courier New'",
       padding: '0',
       margin: 0,
     },

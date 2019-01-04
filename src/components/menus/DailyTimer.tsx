@@ -24,7 +24,7 @@ const styles = (theme: Theme) =>
     },
     time: {
         color: '#06616b',
-        fontFamily: 'Courier New',
+        fontFamily: "'Roboto Mono', 'Courier New'",
     }
   });
 

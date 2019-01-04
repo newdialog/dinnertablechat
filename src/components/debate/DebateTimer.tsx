@@ -25,18 +25,35 @@ const styles = (theme: Theme) =>
       padding: '0',
       margin: '0 auto 0 auto',
       borderRadius: '20vh',
-      backgroundColor: '#a65451cc'
+      backgroundColor: '#a65451cc',
+      fontFamily: "'Roboto Mono', 'Courier New'",
+      color: '#ffffffdd',
+      fontSize: '2.5em',
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '2.5em'
+      }
+    },
+    finishedText: {
+      padding: '0',
+      margin: '0 auto 0 auto',
+      borderRadius: '20vh',
+      backgroundColor: '#a65451cc',
+      color: '#ffffffdd',
+      fontSize: '2.6em',
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '2.6em'
+      }
     },
     stepWord: {
       margin: '-5px auto -10px auto',
       display: 'none',
-      fontSize: '60%',
+      fontSize: '.75em',
       padding: '0 0 0 0',
       backgroundColor: '#a65451',
       [theme.breakpoints.down('sm')]: {
         display: 'inline'
       }
-    },
+    }
   });
 
 function onMenuClick(store: AppModel.Type) {
@@ -46,34 +63,47 @@ function onMenuClick(store: AppModel.Type) {
 }
 
 // Random component
-const Completionist = ({ store }: { store: AppModel.Type }) => (
+const Completionist = ({
+  store,
+  classes
+}: {
+  store: AppModel.Type;
+  classes: any;
+}) => (
   <div style={{ textAlign: 'center' }}>
-    <Typography variant="h1" align="center">
-      Debate Ended
-    </Typography>
     <Button
-      variant="contained"
-      color="primary"
-      onClick={() => onMenuClick(store)}
-    >
+        variant="contained"
+        color="primary"
+        onClick={() => onMenuClick(store)}
+      >
       Leave & Give Review
-    </Button>
+    </Button><br/><br/>
+    <Typography variant="h1" align="center" className={classes.finishedText}>
+      Debate Finished
+    </Typography>
+    
   </div>
 );
 
 // const agreed = store.debate.agreed;
 const AgreementStep = ({ store }: { store: AppModel.Type }) => (
   <div style={{ textAlign: 'center' }}>
-    {store.debate.quarter > 1 && !store.debate.agreed && <Button variant="contained" onClick={() => store.debate.madeAgreement(true)} color={ 'primary' }>
-      Agreement Found?
-    </Button>}
-    {store.debate.agreed && <Button variant="contained" onClick={()=>store.debate.endMatch()} >
-      Leave & Give Review
-    </Button>}
+    {store.debate.quarter > 1 && !store.debate.agreed && (
+      <Button
+        variant="contained"
+        onClick={() => store.debate.madeAgreement(true)}
+        color={'primary'}
+      >
+        Agreement Found?
+      </Button>
+    )}
+    {store.debate.agreed && (
+      <Button variant="contained" onClick={() => store.debate.endMatch()}>
+        Leave & Give Review
+      </Button>
+    )}
   </div>
 );
-
-
 
 // Renderer callback with condition
 const renderer = (
@@ -91,41 +121,42 @@ const renderer = (
   if (step !== store.debate.quarter)
     setTimeout(() => store.debate.setQuarter(step), 1);
 
-  if (completed) {
-    return <Completionist store={store} />;
-  } else {
-    
+  if (!completed) return <Completionist store={store} classes={classes} />;
 
-    let hoursDisplay = '';
-    if (Number(hours) > 0) {
-      hoursDisplay = '{hours}:';
-    }
-    // Render a countdown
-    return (
-      <div style={{ padding: 0, margin: 0 }}>
-        <Typography variant="h1" align="center" className={classes.timerText}>
-          {hoursDisplay}
-          {minutes}:{seconds} <br />
-          {step === 2 ? null : <span className={classes.stepWord}>{steps[step]}</span>}
-        </Typography>
+  let hoursDisplay = '';
+  if (Number(hours) > 0) {
+    hoursDisplay = '{hours}:';
+  }
+  // Render a countdown
+  return (
+    <div style={{ padding: 0, margin: 0 }}>
+      <Typography variant="h1" align="center" className={classes.timerText}>
+        {hoursDisplay}
+        {minutes < 10 ? '0' + minutes : minutes}:
+        {seconds < 10 ? '0' + seconds : seconds} <br />
+        {step === 2 ? null : (
+          <span className={classes.stepWord}>{steps[step]}</span>
+        )}
+      </Typography>
 
-        <br />
-      {step === 2 ? <AgreementStep store={store} /> : 
+      <br />
+      {step === 2 ? (
+        <AgreementStep store={store} />
+      ) : (
         <Stepper activeStep={step} className={classes.stepper}>
           {steps.map(label => {
             const props = {};
-            const labelProps = {};           
+            const labelProps = {};
             return (
               <Step key={label} {...props}>
                 <StepLabel {...labelProps}>{label}</StepLabel>
               </Step>
             );
           })}
-        </Stepper> 
-      }
-      </div>
-    );
-  }
+        </Stepper>
+      )}
+    </div>
+  );
 };
 
 interface Props {
