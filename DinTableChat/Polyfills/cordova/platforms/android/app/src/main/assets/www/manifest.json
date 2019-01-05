@@ -8,27 +8,27 @@
             "type": "image/x-icon"
         },
         {
-            "src": "/logos/icons/android-36x36.png",
+            "src": "/logos/icons-512.png",
             "sizes": "64x64 48x48 36x36",
             "type": "image/png"
         },
         {
-            "src": "/logos/icons/android-72x72.png",
+            "src": "/logos/icons-512.png",
             "sizes": "72x72",
             "type": "image/png"
         },
         {
-            "src": "/logos/icons/android-96x96.png",
+            "src": "/logos/icons-512.png",
             "sizes": "96x96",
             "type": "image/png"
         },
         {
-            "src": "/logos/icons/android-144x144.png",
+            "src": "/logos/icons-512.png",
             "sizes": "144x144",
             "type": "image/png"
         },
         {
-            "src": "/logos/icons-192.png",
+            "src": "/logos/icons-512.png",
             "type": "image/png",
             "sizes": "192x192 144x144 96x96 72x72"
         },
@@ -38,7 +38,7 @@
             "sizes": "512x512"
         }
     ],
-    "start_url": "https://dinnertable.chat",
+    "start_url": "https://dinnertable.chat/",
     "display": "standalone",
     "background_color": "#ffffff"
 }

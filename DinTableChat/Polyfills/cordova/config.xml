@@ -8,7 +8,7 @@
         Dinnertable Team
     </author>
     <preference name="cordova.plugins.diagnostic.modules" value="MICROPHONE" />
-    <content src="https://dinnertable.chat" />
+    <content src="https://dinnertable.chat/" />
     <access origin="*" />
     <access origin="https://auth.dinnertable.chat" />
     <access origin="https://*.dinnertable.chat" />
@@ -29,18 +29,18 @@
             <uses-permission android:name="android.permission.WAKE_LOCK" />
             <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
         </config-file>
-        <icon density="mdpi" src="/logos/icons/android-36x36.png" />
-        <icon density="ldpi" src="/logos/icons/android-36x36.png" />
-        <icon density="hdpi" src="/logos/icons-192.png" />
-        <icon density="xhdpi" src="/logos/icons-192.png" />
-        <icon density="xxhdpi" src="/logos/icons-192.png" />
-        <icon density="xxxhdpi" src="/logos/icons-192.png" />
+        <icon density="mdpi" src="/logos/icons-512.png" />
+        <icon density="ldpi" src="/logos/icons-512.png" />
+        <icon density="hdpi" src="/logos/icons-512.png" />
+        <icon density="xhdpi" src="/logos/icons-512.png" />
+        <icon density="xxhdpi" src="/logos/icons-512.png" />
+        <icon density="xxxhdpi" src="/logos/icons-512.png" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
-        <icon height="72" src="/logos/icons-192.png" width="72" />
-        <icon height="144" src="/logos/icons-192.png" width="144" />
+        <icon height="72" src="/logos/icons-512.png" width="72" />
+        <icon height="144" src="/logos/icons-512.png" width="144" />
         <icon height="144" src="/logos/icons-192.png" width="144" />
         <icon height="72" src="/logos/icons-192.png" width="72" />
     </platform>

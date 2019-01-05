@@ -77,6 +77,7 @@ const DTCRouter = ({
 
         
         <Redirect from="/signout" to="/" />
+        <Redirect from="/CALLBACK" to="/callback" />
 
         <Route render={() => <Redirect to="/" />} />
       </Switch>
