@@ -193,8 +193,8 @@ class Index extends React.Component<Props, any> {
             <Typography variant="h4" align="center" style={{fontSize:'1.7em', color: '#ffffffcc', padding: '0 12px 0 12px'}}>
               <Reveal effect="fadeIn" duration={5500}>
                 { !isOpen ?
-                  <>get matched with your opposite to find common ground</>
-                  : <span style={{fontSize: '110%'}}>debate sessions are now <b>open</b></span>
+                  <>get matched with your opposite to find common ground and earn achievements</>
+                  : <span style={{fontSize: '110%'}}>matchmaking event is <b>online</b> and ready to join</span>
                   // t('home-banner-title2')
                 }
               </Reveal>
