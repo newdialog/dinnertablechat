@@ -4,7 +4,7 @@ import { boolean } from 'mobx-state-tree/dist/internal';
 
 const OtherPlayerModel = types.model({
   character: -1,
-  side: -1
+  position: -1
 });
 
 const MatchModel = types
@@ -66,6 +66,19 @@ const DebateModel = types
     },
     setCharacter(character: number) {
       self.character = character;
+
+      if (self.isTest) {
+        self.match = self.match || {
+          leader: true,
+          team: 'red',
+          userId: '-1',
+          matchId: '-1',
+          timeStarted: 0,
+          otherState: null,
+          sync: true
+        };
+        self.match!.otherState = { character: 1, position: 1 };
+      }
     },
     setTest(isTest: boolean) {
       self.isTest = isTest;

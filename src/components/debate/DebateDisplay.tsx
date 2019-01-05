@@ -10,6 +10,7 @@ import Lottie from 'lottie-react-web'
 import DebateFloatMenu from './DebateFloatMenu';
 import DebateTimer from './DebateTimer';
 import * as AppModel from '../../models/AppModel';
+import StartDebateDialog from './StartDebateDialog';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -285,6 +286,7 @@ class DebateScene extends React.Component<Props, State> {
     const blueChar = characters[this.props.blueChar];
     return (
       <div id="debatedisplay">
+        <StartDebateDialog store={store}/>
         {(agreed || ended) ? <Lottie options={confettiOptions} ref={this.confettiRef} /> : null}
         <div className={classes.centered}>
           <Typography variant="h1" gutterBottom align="center" style={{color:'#555555'}} id="rotatemessage">

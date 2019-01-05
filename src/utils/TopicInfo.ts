@@ -31,6 +31,7 @@ export function getTopicByIndex(index: number, t: any): Card {
 export function getTopic(id: string, t: any): Card | null {
   const topics = Number.parseInt(t('topics-num'), 10);
 
+  if (id === '' || !id) return getTopics(t)[0];
   const data: Card[] = getTopics(t).filter(card => card.id === id);
 
   return data.length === 0 ? null : data[0];

@@ -52,6 +52,12 @@ class DebateTester extends React.Component<Props, State> {
       speaking: false,
       start: false
     };
+
+    if(!this.props.store.debate.isTest) {
+      this.props.store.debate.setTest(true);
+      this.props.store.debate.setPosition(0, "");
+      this.props.store.debate.setCharacter(1);
+    }
   }
 
   private onClick = (e: React.MouseEvent) => {

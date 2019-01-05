@@ -257,7 +257,7 @@ class LoadingScene extends React.Component<Props, State> {
     if (otherPlayerState)
       this.props.store.debate.setOtherState({
         character: otherPlayerState.char,
-        side: otherPlayerState.side
+        position: otherPlayerState.side
       });
     this.props.store.debate.syncMatch();
   };
