@@ -52,6 +52,7 @@ const DTCRouter = ({
       <Switch>
         <Route exact={true} path="/" component={AsyncHome} />
         <Route exact={true} path="/callback" component={AuthSignin} />
+        <Route exact={true} path="/CALLBACK" component={AuthSignin} />
         <Route exact={true} path="/signin" component={AuthSignin} />
         <Route exact={true} path="/feedback" component={DebateFeedback} />
         <Route exact={true} path="/history" component={DebateHistory} />
