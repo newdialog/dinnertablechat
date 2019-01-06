@@ -161,7 +161,7 @@ class Index extends React.Component<Props, State> {
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             { this.props.isTest && (<h2>TEST MODE (/test)</h2>)}
-            <Typography style={{fontSize: '3em', paddingBottom: '0', color: '#ffffffcc'}} variant="h3" align="center" color="textSecondary" gutterBottom>
+            <Typography style={{fontSize: '3em', paddingBottom: '0', color: '#ffffff'}} variant="h3" align="center" color="textSecondary" gutterBottom>
               Debate Quickmatch
             </Typography>
           </div>

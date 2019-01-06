@@ -306,12 +306,12 @@ class LoadingScene extends React.Component<Props, State> {
         <div className={classes.bannerAnimOverlay} />
 
         <div className={classes.centeredDown}>
-          <Typography variant="h1" gutterBottom align="center" style={{textShadow: '2px 2px #777755', color: '#ffffffcc'}}>
+          <Typography variant="h1" gutterBottom align="center" style={{textShadow: '2px 2px #777755', color: '#ffffff'}}>
             <Reveal effect="fadeIn" duration={3000}>
               Loading...
             </Reveal>
           </Typography>
-          <Typography variant="h4" align="center" style={{textShadow: '2px 2px #777755', color: '#ffffffcc'}}>
+          <Typography variant="h4" align="center" style={{textShadow: '2px 2px #777755', color: '#ffffff'}}>
             <Reveal effect="fadeIn" duration={3000}>
               {text}
             </Reveal>
@@ -322,7 +322,7 @@ class LoadingScene extends React.Component<Props, State> {
           <Typography
             variant="h1"
             align="center"
-            style={{ color: '#ffffffcc', fontSize: '1.5em', lineHeight: '1', textShadow: '2px 2px #777755' }}
+            style={{ color: '#ffffff', fontSize: '1.5em', lineHeight: '1', textShadow: '2px 2px #777755' }}
           >
             <Reveal effect="fadeIn" duration={1000}>
               1. Click "Allow" when the browser asks to enable the microphone.

@@ -27,7 +27,7 @@ const styles = (theme: Theme) =>
       borderRadius: '20vh',
       backgroundColor: '#a65451cc',
       fontFamily: "'Roboto Mono', 'Courier New'",
-      color: '#ffffffdd',
+      color: '#ffffff',
       fontSize: '2.5em',
       [theme.breakpoints.down('sm')]: {
         fontSize: '2.5em'
@@ -38,7 +38,7 @@ const styles = (theme: Theme) =>
       margin: '0 auto 0 auto',
       borderRadius: '20vh',
       backgroundColor: '#a65451cc',
-      color: '#ffffffdd',
+      color: '#ffffff',
       fontSize: '2.6em',
       [theme.breakpoints.down('sm')]: {
         fontSize: '2.6em'

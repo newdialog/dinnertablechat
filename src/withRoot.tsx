@@ -54,8 +54,8 @@ const theme = createMuiTheme({
       // contrastText: '#ffcc00',
     },
     text: {
-      primary: "rgba(50, 50, 50, 0.8)",
-      secondary: "rgba(50, 50, 50, 0.8)",
+      primary: "#616161",
+      // secondary: "rgba(50, 50, 50, 0.8)",
       disabled: "rgba(0, 0, 0, 0.38)",
       hint: "rgba(0, 0, 0, 0.38)"
     },
@@ -109,7 +109,7 @@ const theme = createMuiTheme({
       // color: '#777777',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 300,
-      letterSpacing: '-0.05em'
+      // letterSpacing: '-0.05em'
     },
     h4: {
       fontSize: '1.7em',

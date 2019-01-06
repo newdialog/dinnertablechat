@@ -72,12 +72,12 @@ const styles = theme =>
     lstats: {
       fontSize: '1.1em',
       fontWeight: 500,
-      color: '#ffffffcc',
+      color: '#ffffff',
     },
     lstatsLabel: {
       fontSize: '1.1em',
       fontWeight: 300,
-      color: '#ffffffaa',
+      color: '#ffffff',
     },
     headerContainer: {
       flexDirection: 'row',
@@ -88,12 +88,12 @@ const styles = theme =>
       //backgroundColor: '#D2E5F5' // '#ddd'
     },
     name: {
-      color: '#ffffffcc',
+      color: '#ffffff',
       fontWeight: 'bold',
       fontSize: '2.5em'
     },
     nameSubstat: {
-      color: '#ffffffaa',
+      color: '#ffffff',
     },
     icon: {
       fontSize: 70

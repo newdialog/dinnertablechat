@@ -185,12 +185,12 @@ class Index extends React.Component<Props, any> {
           </div>
           <div className={classes.bannerAnimOverlay} />
           <div className={classes.centeredDown}>
-            <Typography variant="h1" align="center" style={{textShadow: '2px 2px #777755', color: '#ffffffcc'}}>
+            <Typography variant="h1" align="center" style={{textShadow: '2px 2px #777755', color: '#ffffff'}}>
               <Reveal effect="fadeIn" duration={3500}>
                 {t('home-banner-title1')}
               </Reveal>
             </Typography>
-            <Typography variant="h4" align="center" style={{fontSize:'1.7em', color: '#ffffffcc', padding: '0 12px 0 12px'}}>
+            <Typography variant="h4" align="center" style={{fontSize:'1.7em', color: '#ffffff', padding: '0 12px 0 12px'}}>
               <Reveal effect="fadeIn" duration={5500}>
                 { !isOpen ?
                   <>get matched with your opposite to find common ground and earn achievements</>
@@ -224,7 +224,7 @@ class Index extends React.Component<Props, any> {
             <div className={classes.bannerTextDivider} />
             <BannerTimer />
             
-            <a href="#intro"><ArrowDown style={{color:'#ffffffcc'}} width="1em"/></a>
+            <a href="#intro"><ArrowDown style={{color:'#ffffff'}} width="1em"/></a>
           </div>
         </div>
       </React.Fragment>
