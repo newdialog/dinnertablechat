@@ -490,7 +490,7 @@ class Index extends React.Component<Props, State> {
 
     signOut = (e:any) => {
       e.preventDefault();
-      // this.props.store.router.push('/home');
+      this.props.store.router.push('/home');
       this.props.store.auth.logout();
       
       this.props.store.auth.login();

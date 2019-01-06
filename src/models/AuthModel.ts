@@ -40,7 +40,7 @@ const AuthModel = types
       Auth.logout();
       self.aws = undefined;
       self.user = undefined;
-      self.isNotLoggedIn = true;
+      // self.isNotLoggedIn = true;
     },
     notLoggedIn() {
       self.isNotLoggedIn = true;
