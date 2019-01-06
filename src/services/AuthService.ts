@@ -216,3 +216,23 @@ function uuidv4(): string {
     }
   );
 }
+
+export async function guestLogin() {
+  console.log('guestLogin');
+  try {
+    const user = await Auth.signIn('guest@dinnertable.chat', 'weallneed2talk'); // Guest
+    console.log(user);
+  } catch (err) {
+    if (err.code === 'UserNotConfirmedException') {
+      // The error happens if the user didn't finish the confirmation step when signing up
+      // In this case you need to resend the code and confirm the user
+      // About how to resend the code and confirm the user, please check the signUp part
+    } else if (err.code === 'PasswordResetRequiredException') {
+      // The error happens when the password is reset in the Cognito console
+      // In this case you need to call forgotPassword to reset the password
+      // Please check the Forgot Password part.
+    } else {
+      console.log(err);
+    }
+  }
+}

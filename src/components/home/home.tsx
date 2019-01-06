@@ -10,8 +10,8 @@ import {inject} from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
-import pwahome from './PWAHome';
-import PWAHome from './PWAHome';
+// import pwahome from './PWAHome';
+// import PWAHome from './PWAHome';
 
 const styles = (theme: Theme) =>
   createStyles({

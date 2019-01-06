@@ -1,5 +1,6 @@
 import { types, Instance } from 'mobx-state-tree';
 import * as Auth from '../services/AuthService';
+import * as AuthService from '../services/AuthService';
 
 const UserModel = types.model({
   email: types.string,
@@ -25,6 +26,9 @@ const AuthModel = types
     isNotLoggedIn: false
   })
   .actions(self => ({
+    doGuestLogin() {
+      AuthService.guestLogin();
+    },
     login() {
       if (!self.doLogin)
         window.gtag('event', 'login_action', {

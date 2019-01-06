@@ -206,9 +206,14 @@ class Index extends React.Component<Props, any> {
             </Typography>
             {!auth &&
               (
-                <Button style={{marginTop:'1vh'}} onClick={() => store.auth.login()} variant="contained" color="secondary" size="large">Start Login
-                <QueueIcon style={{ marginLeft: '8px' }} />
-                </Button>
+                <>
+                  <Button style={{marginTop:'1vh'}} onClick={() => store.auth.doGuestLogin()} variant="contained" color="default" size="large">Guest Pass
+                  </Button>
+                  <Button style={{marginTop:'1vh', marginLeft: '12px'}} onClick={() => store.auth.login()} variant="contained" color="secondary" size="large">Signup/Login
+                    <QueueIcon style={{ marginLeft: '8px' }} />
+                  </Button>
+                  
+                </>
               )}
             {auth &&
               (

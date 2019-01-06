@@ -33,6 +33,10 @@ const AppModel = types
     /* isDailyOpen() {
       return self.dailyOpen || TimeService.
     },*/
+    isGuest() {
+      if (!self.auth.user) return false;
+      return self.auth.user!.email === 'guest@dinnertable.chat';
+    },
     isLive() {
       const h = window.location.hostname;
       return (
