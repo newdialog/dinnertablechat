@@ -72,6 +72,7 @@ function getLoggger() {
 }
 
 export const LOGIN_EVENT = 'signIn';
+export const LOGOUT_EVENT = 'signOut';
 
 function onHubCapsule(cb: AwsCB, capsule: any) {
   // getLoggger().onHubCapsule(capsule);
@@ -80,6 +81,12 @@ function onHubCapsule(cb: AwsCB, capsule: any) {
   if (channel !== 'auth') return;
 
   console.log('payload.event', channel, payload.event);
+  if (payload.event == LOGOUT_EVENT) {
+    console.log('logout');
+    console.log(payload.data);
+    /// checkUser(cb);
+    // return;
+  }
   if (payload.event === LOGIN_EVENT || payload.event === 'cognitoHostedUI') {
     console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
@@ -201,6 +208,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
 type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
 
 export function logout() {
+  // {global: true}
   Auth.signOut()
     .then()
     .catch((err: any) => console.log(err));

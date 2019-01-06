@@ -30,6 +30,7 @@ const AuthModel = types
       AuthService.guestLogin();
     },
     login() {
+      console.log('login action');
       if (!self.doLogin)
         window.gtag('event', 'login_action', {
           event_category: 'auth'

@@ -254,12 +254,12 @@ class Index extends React.Component<Props, any> {
             {(!auth || store.isGuest()) && (
               <Button
                 style={{ marginTop: '1vh', marginLeft: '12px' }}
-                onClick={() => store.auth.login()}
+                onClick={() => store.login()}
                 variant="contained"
                 color="secondary"
                 size="large"
               >
-                Signup/Login
+                {store.isGuest() ? 'Signout Guest' : 'Signup/Login'}
                 <QueueIcon style={{ marginLeft: '8px' }} />
               </Button>
             )}

@@ -490,10 +490,10 @@ class Index extends React.Component<Props, State> {
 
     signOut = (e:any) => {
       e.preventDefault();
-      this.props.store.router.push('/home');
+      // this.props.store.router.push('/home');
       this.props.store.auth.logout();
-      
-      setTimeout( this.props.store.auth.login, 5000);
+      this.props.store.auth.login()
+      //setTimeout( this.props.store.auth.login, 5000);
       return true;
     }
 
@@ -562,7 +562,7 @@ class Index extends React.Component<Props, State> {
                   className={classes.nameSubstat}
                   style={{ fontWeight: 'normal', fontSize: '1em' }}
                 >
-                  Guest users have no saved history, scores, or ratings. <br/>Please signup to start building your page!
+                  Guest users allows for testing out DTC but will have no saved history, xp/levels, or any of the member perks. Registered users also gain an extra hour of debate time!<br/><br/>Please signup to start building your page!
           </Typography>
           
           </>
