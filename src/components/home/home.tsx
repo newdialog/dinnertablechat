@@ -130,6 +130,7 @@ class Index extends React.Component<Props, State> {
   public render() {
     const { classes, store } = this.props;
     const { open } = this.state;
+    // TODO, only redirect at login action ( && store.auth.user!.)
     if(this.props.store.isStandalone() && store.auth.isNotLoggedIn) store.router.push('/tutorial');
 
     // if(!store.isStandalone()) return <PWAHome/>;

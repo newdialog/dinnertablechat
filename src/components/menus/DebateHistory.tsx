@@ -493,7 +493,7 @@ class Index extends React.Component<Props, State> {
       this.props.store.router.push('/home');
       this.props.store.auth.logout();
       
-      this.props.store.auth.login();
+      setTimeout( this.props.store.auth.login, 5000);
       return true;
     }
 
