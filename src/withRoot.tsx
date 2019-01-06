@@ -105,11 +105,12 @@ const theme = createMuiTheme({
       letterSpacing: '-0.02em',
     },
     h3: {
-      fontSize: '1.5em',
+      fontSize: '1.3em',
       // color: '#777777',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 300,
-      // letterSpacing: '-0.05em'
+      lineHeight: '1.1',
+      letterSpacing: '-0.03em'
     },
     h4: {
       fontSize: '1.7em',

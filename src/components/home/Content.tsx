@@ -34,6 +34,12 @@ const styles = (theme: Theme) =>
         paddingRight: '1.6em'
       }
     },
+    logoText: {
+      marginTop:'-1.25em !important',
+      [theme.breakpoints.down('xs')]: {
+        marginTop:'-0.6em !important',
+      }
+    },
     containerRev: {
       marginTop: '0px',
       paddingLeft: '3em',
@@ -254,7 +260,7 @@ class Index extends React.Component<Props, State> {
               </div>
             </Grid>
             <Grid item xs={12} md={12} style={{paddingTop:'0'}}>
-              <Typography variant="h3" gutterBottom align="center">
+              <Typography className={classes.logoText} variant="h3" gutterBottom align="center">
                 {t('home-intro')}
               </Typography>
               <div style={{width:'100%', textAlign:'center'}}>

@@ -44,6 +44,11 @@ const styles = (theme: Theme) =>
       maxWidth: '800px',
       minWidth: '300px'
     },
+    xsHide: {
+      [theme.breakpoints.down('xs')]: {
+        // visibility:'hidden' // breaks portrait
+      }
+    },
     centeredDown: {
       marginLeft: 'auto',
       marginRight: 'auto',
@@ -190,10 +195,10 @@ class Index extends React.Component<Props, any> {
                 {t('home-banner-title1')}
               </Reveal>
             </Typography>
-            <Typography variant="h4" align="center" style={{fontSize:'1.7em', color: '#ffffff', padding: '0 12px 0 12px'}}>
+            <Typography className={classes.xsHide} variant="h4" align="center" style={{fontSize:'1.7em', color: '#ffffff', padding: '0 12px 0 12px'}}>
               <Reveal effect="fadeIn" duration={5500}>
                 { !isOpen ?
-                  <>get matched with your opposite to find common ground and earn achievements</>
+                  <>find common ground with your matched opposite and earn achievements</>
                   : <span style={{fontSize: '110%'}}>matchmaking event is <b>online</b> and ready to join</span>
                   // t('home-banner-title2')
                 }
@@ -224,7 +229,7 @@ class Index extends React.Component<Props, any> {
             <div className={classes.bannerTextDivider} />
             <BannerTimer />
             
-            <a href="#intro"><ArrowDown style={{color:'#ffffff'}} width="1em"/></a>
+            <a href="#intro" className={classes.xsHide}><ArrowDown style={{color:'#ffffff'}} width="1em"/></a>
           </div>
         </div>
       </React.Fragment>
