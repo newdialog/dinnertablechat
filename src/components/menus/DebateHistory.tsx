@@ -320,12 +320,13 @@ class Index extends React.Component<Props, State> {
         // transform to array to render, +agreed, session_id
         const val = dataHash[key];
         val.debate_sesssion_id = key;
-        val.agreed = val.userAgree && val.oppAgree ? 'Agreed' : 'Disagreed';
+        const iAgreed = val.userAgree !== undefined ? val.userAgree : true; // if you left no review, assume agreed
+        val.agreed = iAgreed && val.oppAgree ? 'Agreed' : 'Disagreed';
         // if (val.oppCharacter === undefined) delete dataHash[key]; // ensure reviews set for both
         // console.log('val', val)
         return val;
       })
-      .filter(x => x.oppReview && x.userReview); // ensure both rated
+      .filter(x => x.oppReview); // ensure at least opposite rated  && x.userReview
 
     const flags = this.createAccordianFlags(data);
     result.sort((a, b) => {

@@ -150,12 +150,14 @@ class DebateFeedback extends React.Component<Props, State> {
     
     // If guest, just log them out now
     if(this.props.store.isGuest()) {
+      console.log('no review');
       this.props.store.auth.logout();
       return;
     }
     // If guest, just log them out now
     if(this.props.store.debate.match!.otherState!.guest) {
-      this.props.store.auth.logout();
+      // this.props.store.auth.logout();
+      console.log('no review as other account was guest');
       return;
     }
 
