@@ -86,8 +86,6 @@ async function poll(
   playerId: string
 ) {
   if (stopFlag.flag) return; // end;
-
-  playerId = playerId.split('_')[0]; // remove guest postfix
   // const info = await
   // gameLift.dec
   gameLift.describeMatchmaking({ TicketIds: [tid] }, async (e: any, d: any) => {

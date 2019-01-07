@@ -13,14 +13,26 @@ const AppModel = types
     _isStandalone: false,
     dailyOpen: false // only use for invalidation
   })
+  .actions(self => ({
+    setDailyOpen(open: boolean) {
+      self.dailyOpen = open;
+    },
+    gotoHomeMenu() {
+      self.showNav = true;
+      if (!self.debate.isTest) self.router.push('/home');
+      else self.router.push('/test');
+    },
+    showNavbar() {
+      self.showNav = true;
+    },
+    hideNavbar() {
+      self.showNav = false;
+    }
+  }))
   .views(self => ({
     /* isDailyOpen() {
       return self.dailyOpen || TimeService.
     },*/
-    isGuest() {
-      if (!self.auth.user) return false;
-      return self.auth.user!.email === 'guest@dinnertable.chat';
-    },
     isLive() {
       const h = window.location.hostname;
       return (
@@ -50,26 +62,6 @@ const AppModel = types
         navigator.userAgent === 'Mozilla/5.0 Google' ||
         navigator.userAgent === 'Mozilla/5.0 Google PWA'
       );
-    }
-  }))
-  .actions(self => ({
-    setDailyOpen(open: boolean) {
-      self.dailyOpen = open;
-    },
-    gotoHomeMenu() {
-      self.showNav = true;
-      if (!self.debate.isTest) self.router.push('/home');
-      else self.router.push('/test');
-    },
-    showNavbar() {
-      self.showNav = true;
-    },
-    hideNavbar() {
-      self.showNav = false;
-    },
-    login() {
-      if (self.isGuest()) self.auth.logout();
-      self.auth.login();
     }
   }));
 
