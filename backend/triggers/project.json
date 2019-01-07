@@ -2,7 +2,7 @@
   "name": "triggers",
   "description": "",
   "memory": 128,
-  "timeout": 5,
+  "timeout": 15,
   "role": "arn:aws:iam::681274315116:role/dtc-matchshake_lambda_function",
   "runtime": "nodejs8.10",
   "environment": {

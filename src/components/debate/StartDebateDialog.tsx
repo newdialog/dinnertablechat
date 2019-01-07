@@ -65,6 +65,7 @@ class StartDebateDialog extends React.Component<IProps, any> {
 
     const isOpposite = debate.position !== debate.match!.otherState!.position;
     const info = TopicInfo.getTopic(debate.topic, t)!;
+    const otherIsGuest = !!debate.match!.otherState!.guest;
 
     return (
       <Dialog
@@ -82,6 +83,8 @@ class StartDebateDialog extends React.Component<IProps, any> {
                 side. No XP will be earned for this round.
               </b>
             )}
+            {otherIsGuest && !isOpposite && <br/>}
+            {otherIsGuest && <b>note: your partner is using a guest account.</b>}
           </Typography>
           <Typography align="center">
             <b>You're now talking LIVE to your match about:</b>

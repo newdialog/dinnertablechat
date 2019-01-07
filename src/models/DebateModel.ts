@@ -4,7 +4,8 @@ import { boolean } from 'mobx-state-tree/dist/internal';
 
 const OtherPlayerModel = types.model({
   character: -1,
-  position: -1
+  position: -1,
+  guest: false
 });
 
 const MatchModel = types
@@ -77,7 +78,7 @@ const DebateModel = types
           otherState: null,
           sync: true
         };
-        self.match!.otherState = { character: 1, position: 1 };
+        self.match!.otherState = { character: 1, position: 1, guest: true };
       }
     },
     setTest(isTest: boolean) {

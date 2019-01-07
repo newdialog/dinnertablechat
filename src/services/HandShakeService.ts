@@ -236,10 +236,12 @@ async function readMatchWait(
 
       // const keyval2 = keyval.map(k=>JSON.parse(k));// .map(v => );
 
-      let stateval = null; // JSON.parse(match[statekey]);
+      let stateval: any = null; // JSON.parse(match[statekey]);
       try {
         // console.log('match[statekey]',match[statekey]);
-        stateval = JSON.parse(match[statekey]);
+        stateval = match[statekey]; // JSON.parse(
+        stateval!.guest = match[team + 'guest'];
+        console.log('stateval', stateval);
       } catch (err) {
         console.error('couldnt parse other player');
         bail(new Error('couldnt parse other player'));
@@ -364,14 +366,14 @@ async function updateMatch(
   const teamkey = team + 'keyi';
 
   const statekey = team + 'state';
-  const stateStr = JSON.stringify(state);
+  // const stateStr = JSON.stringify(state);
 
   console.log(
     matchid,
     'saving to key',
     teamkey + '==', //  + key,
     'state: ',
-    statekey + '==' + stateStr
+    statekey + '==' + state
   );
   const params2: DynamoDB.DocumentClient.UpdateItemInput = {
     Key: {
@@ -386,7 +388,7 @@ async function updateMatch(
       },
       [statekey]: {
         Action: 'PUT',
-        Value: stateStr
+        Value: state
       }
     },
     TableName: 'match'

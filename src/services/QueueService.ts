@@ -8,6 +8,7 @@ import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
 import * as DebateModel from '../models/DebateModel';
 import * as AuthService from './AuthService';
+import uuid from 'short-uuid';
 type OnMatched = DebateModel.MatchModelType;
 
 let gameLift: GameLift;
@@ -87,7 +88,7 @@ async function poll(
 ) {
   if (stopFlag.flag) return; // end;
 
-  playerId = playerId.split('_')[0]; // remove guest postfix
+  // playerId = playerId.split('_')[0]; // remove guest postfix
   // const info = await
   // gameLift.dec
   gameLift.describeMatchmaking({ TicketIds: [tid] }, async (e: any, d: any) => {
@@ -149,6 +150,8 @@ export async function queueUp(
   onMatchedCB: OnMatchedCB
 ) {
   const env = isLive() ? 'prod' : 'dev';
+
+  playerId += '_' + uuid.generate(); // ensure session uniqueness in dtc_sync pool
 
   console.log(
     'queueUp:',

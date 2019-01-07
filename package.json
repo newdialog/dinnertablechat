@@ -50,6 +50,7 @@
     "react-swipeable-views": "^0.13.0",
     "react-waypoint": "^8.1.0",
     "remotedev": "^0.2.9",
+    "short-uuid": "^3.1.0",
     "simple-peer": "^9.2.0",
     "webfontloader": "^1.6.28"
   },

@@ -131,6 +131,12 @@ class LoadingScene extends React.Component<Props, State> {
     window.gtag('event', `debate_queue_${topic}_${position}`, {
       event_category: 'debate'
     });
+    // Also add a metric for guests in queue
+    if(this.props.store.isGuest()) {
+      window.gtag('event', 'debate_loading_guest', {
+        event_category: 'debate'
+      });
+    }
 
     // enable mic first
     try {
@@ -164,7 +170,8 @@ class LoadingScene extends React.Component<Props, State> {
     
     let userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
     // Give guests a unique queue id
-    if(this.props.store.isGuest()) userid += '_' + Math.round(Math.random() * 1000);
+    // if(this.props.store.isGuest()) 
+    // userid += '_' + Math.round(Math.random() * 1000);
 
     let ticketId:any;
     try {
@@ -262,7 +269,8 @@ class LoadingScene extends React.Component<Props, State> {
     if (otherPlayerState)
       this.props.store.debate.setOtherState({
         character: otherPlayerState.char,
-        position: otherPlayerState.side
+        position: otherPlayerState.side,
+        guest: otherPlayerState.guest
       });
     this.props.store.debate.syncMatch();
   };
