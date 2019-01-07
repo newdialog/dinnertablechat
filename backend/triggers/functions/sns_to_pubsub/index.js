@@ -101,8 +101,8 @@ async function forEachSNS(record) {
   // JSON.stringify(tickets), 
   // , 'players', JSON.stringify(players)
   console.log(' MATCHREQ:', matchId, 'TICKETS:', ticketIds);
-  players[0].realId = players[0].playerId.split('_')[0];
-  players[1].realId = players[1].playerId.split('_')[0];
+  players[0].realId = players[0].playerId.split('__')[0];
+  players[1].realId = players[1].playerId.split('__')[0];
 
   players[0].guest = players[0].realId === '78439c31-beef-4f4d-afbb-e948e3d3c932'; 
   players[1].guest = players[1].realId === '78439c31-beef-4f4d-afbb-e948e3d3c932'; 
@@ -114,7 +114,7 @@ async function forEachSNS(record) {
 async function savePG(players, matchId, matchInfo) {
   // Note ticket list might be out of order to players attribute
   const player0 = matchInfo.TicketList[0].Players[0];
-  let player0Id = player0.PlayerId.split('_')[0]; // split for guest ids // players[0].realId;
+  let player0Id = player0.PlayerId.split('__')[0]; // split for guest ids // players[0].realId;
   const side0 = player0.PlayerAttributes.side.N;
   const chracter0 = player0.PlayerAttributes.character.N;
 
@@ -122,15 +122,15 @@ async function savePG(players, matchId, matchInfo) {
   const topic = player0.PlayerAttributes.topic.S;
   // --
   const player1 = matchInfo.TicketList[1].Players[0];
-  let player1Id = player1.PlayerId.split('_')[0]; // split for guest ids // players[1].realId; 
+  let player1Id = player1.PlayerId.split('__')[0]; // split for guest ids // players[1].realId; 
   const side1 = player1.PlayerAttributes.side.N;
   const chracter1 = player1.PlayerAttributes.character.N;
 
-  const player0_isGuest = player0Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; //.split('_').length > 1; // guest id attached // players[0].guest; //
-  const player1_isGuest = player1Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; // .split('_').length > 1; // guest id attached // players[1].guest; //
+  const player0_isGuest = player0Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; // guest id attached // players[0].guest;
+  const player1_isGuest = player1Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; // guest id attached // players[1].guest;
 
-  // if (player0_isGuest) player0Id = player0.PlayerId.split('_')[1]; // take uuid
-  // if (player1_isGuest) player1Id = player1.PlayerId.split('_')[1]; // take uuid
+  // if (player0_isGuest) player0Id = player0.PlayerId.split('__')[1]; // take uuid
+  // if (player1_isGuest) player1Id = player1.PlayerId.split('__')[1]; // take uuid
 
   console.log('player0', player0Id, player0_isGuest, ' player1', player1Id, player1_isGuest);
 

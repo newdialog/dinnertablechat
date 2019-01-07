@@ -88,7 +88,6 @@ async function poll(
 ) {
   if (stopFlag.flag) return; // end;
 
-  // playerId = playerId.split('_')[0]; // remove guest postfix
   // const info = await
   // gameLift.dec
   gameLift.describeMatchmaking({ TicketIds: [tid] }, async (e: any, d: any) => {
@@ -151,7 +150,7 @@ export async function queueUp(
 ) {
   const env = isLive() ? 'prod' : 'dev';
 
-  playerId += '_' + uuid.generate(); // ensure session uniqueness in dtc_sync pool
+  playerId += '__' + uuid.generate(); // ensure session uniqueness in dtc_sync pool
 
   console.log(
     'queueUp:',

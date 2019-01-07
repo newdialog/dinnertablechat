@@ -286,6 +286,7 @@ class Index extends React.Component<Props, State> {
 
   private transformOpp(x: any) {
     return {
+      date: this.transformDate(x.debate_created),
       oppAgree: x.review_aggrement,
       oppSide: this.transformSide(x.topic, x.side),
       oppCharacter: x.character,
