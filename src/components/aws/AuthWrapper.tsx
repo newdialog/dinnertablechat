@@ -38,7 +38,7 @@ class AuthComp extends React.Component<Props, any> {
 
     const { domain, redirectSignIn, redirectSignOut, responseType } = config;
 
-    const options = config.options || {};
+    // const options = config.options || {};
     const url =
       'https://' +
       domain +
@@ -87,11 +87,17 @@ class AuthComp extends React.Component<Props, any> {
       // if(this.props.store.isStandalone()) this.signIn(); // MOBILE
       
       this.props.store.auth.notLoggedIn();
+      // AuthService.guestLogin();
       return;
     } 
     console.log('+logged in');
     // console.log('handleAuth', awsUser)
     this.props.store.auth.authenticated(awsUser);
+    
+    // TODO: cleanup guest login flow
+    if(awsUser.user.email==='guest@dinnertable.chat' && this.props.store.isGuest() && awsUser.event === AuthService.LOGIN_EVENT) 
+      this.props.store.isStandalone() ? this.props.store.router.push('/home') : this.props.store.router.push('/tutorial');
+    
 
     /* if(awsUser.event !== AuthService.LOGIN_EVENT) {
       if(this.props.store.isStandalone()) this.props.store.router.push('/home');

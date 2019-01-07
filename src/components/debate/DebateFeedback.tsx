@@ -144,6 +144,21 @@ class DebateFeedback extends React.Component<Props, State> {
   }
 
   private handleConfirm = async () => {
+    window.gtag('event', 'debate_feedback_page_submit', {
+      event_category: 'debate'
+    });
+    
+    // If guest, just log them out now
+    if(this.props.store.isGuest()) {
+      this.props.store.auth.logout();
+      return;
+    }
+    // If guest, just log them out now
+    if(this.props.store.debate.match!.otherState!.guest) {
+      this.props.store.auth.logout();
+      return;
+    }
+
     // TODO: update endpt w user selection, route back home
     const hash = this.state.traitHash;
     // const selectedTraits: string[] = [];
@@ -170,10 +185,6 @@ class DebateFeedback extends React.Component<Props, State> {
       response,
       this.props.store.debate.match!.matchId
     );
-
-    window.gtag('event', 'debate_feedback_page_submit', {
-      event_category: 'debate'
-    });
 
     this.props.store.debate.resetQueue();
     this.props.store.gotoHomeMenu();

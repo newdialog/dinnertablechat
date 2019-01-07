@@ -1,7 +1,9 @@
 // const AWSXRay = require('aws-xray-sdk');
 const AWS = require('aws-sdk'); // AWSXRay.captureAWS(require('aws-sdk'));
 const gamelift = new AWS.GameLift();
-const { Pool } = require('pg'); // AWSXRay.capturePostgres(require('pg'));
+const {
+  Pool
+} = require('pg'); // AWSXRay.capturePostgres(require('pg'));
 
 
 console.log('Loading function');
@@ -30,6 +32,12 @@ async function query() {
   return t;
 }
 
+/*
+[ { EventSource: 'aws:sns',
+       EventVersion: '1.0',
+       EventSubscriptionArn: 'arn:aws:sns:us-east-1:681274315116:dtc-match-sns:033d5d11-05e2-4ec1-9dec-39a7864c746b',
+       Sns: [Object] } ] }
+*/
 exports.handle = async (event, context, callback) => {
   // await query();
   // console.log('Received event:', JSON.stringify(event, null, 4));
@@ -38,13 +46,17 @@ exports.handle = async (event, context, callback) => {
     callback(null, "Success, not sns");
     return;
   }
-  event.Records.forEach(forEachSNS);
-  if (event.Records.length > 1) console.log("event.Records.length", event.Records.length)
+  for (var i = 0; i < event.Records.length; i++)
+    await forEachSNS(event.Records[i])
+  // event.Records.forEach(forEachSNS);
+  // if (event.Records.length > 1) console.log("event.Records.length", event.Records.length)
 
   callback(null, "Success");
 };
 
+let lastIdCache = null;
 async function forEachSNS(record) {
+  // console.log('record.Sns', record.Sns);
   const message = JSON.parse(record.Sns.Message);
   const tickets = message.detail.tickets;
   const type = message.detail.type;
@@ -61,10 +73,15 @@ async function forEachSNS(record) {
     // ignore other event types
     return;
   }
+  if (lastIdCache === matchId) return; // prevent lots of dups
+  lastIdCache = matchId;
+
   // console.log('PotentialMatchCreated', matchId, JSON.stringify(message));
 
   const ticketIds = tickets.map(t => t.ticketId);
-  const matchInfo = await gamelift.describeMatchmaking( {TicketIds:ticketIds} ).promise();
+  const matchInfo = await gamelift.describeMatchmaking({
+    TicketIds: ticketIds
+  }).promise();
 
   // clear queue
   /*
@@ -83,65 +100,76 @@ async function forEachSNS(record) {
   // console.log('Message received from SNS:', JSON.stringify(message));
   // JSON.stringify(tickets), 
   // , 'players', JSON.stringify(players)
-  console.log('MATCHREQ:', matchId, 'TICKETS:', ticketIds);
+  console.log(' MATCHREQ:', matchId, 'TICKETS:', ticketIds);
+  players[0].realId = players[0].playerId.split('_')[0];
+  players[1].realId = players[1].playerId.split('_')[0];
+
+  players[0].guest = players[0].realId === '78439c31-beef-4f4d-afbb-e948e3d3c932'; 
+  players[1].guest = players[1].realId === '78439c31-beef-4f4d-afbb-e948e3d3c932'; 
 
   const success = await savePG(players, matchId, matchInfo);
-  if(success) await saveDB(players, matchId);
+  if (success) await saveDB(players, matchId);
 }
 
 async function savePG(players, matchId, matchInfo) {
-  // console.log('matchInfo', matchInfo);
+  // Note ticket list might be out of order to players attribute
   const player0 = matchInfo.TicketList[0].Players[0];
-  const player0Id = player0.PlayerId;
+  let player0Id = player0.PlayerId.split('_')[0]; // split for guest ids // players[0].realId;
   const side0 = player0.PlayerAttributes.side.N;
   const chracter0 = player0.PlayerAttributes.character.N;
-  
+
   const donation = player0.PlayerAttributes.donation.N;
   const topic = player0.PlayerAttributes.topic.S;
   // --
   const player1 = matchInfo.TicketList[1].Players[0];
-  const player1Id = player1.PlayerId;
+  let player1Id = player1.PlayerId.split('_')[0]; // split for guest ids // players[1].realId; 
   const side1 = player1.PlayerAttributes.side.N;
   const chracter1 = player1.PlayerAttributes.character.N;
 
-  // console.log('player0', player0);
+  const player0_isGuest = player0Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; //.split('_').length > 1; // guest id attached // players[0].guest; //
+  const player1_isGuest = player1Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; // .split('_').length > 1; // guest id attached // players[1].guest; //
+
+  // if (player0_isGuest) player0Id = player0.PlayerId.split('_')[1]; // take uuid
+  // if (player1_isGuest) player1Id = player1.PlayerId.split('_')[1]; // take uuid
+
+  console.log('player0', player0Id, player0_isGuest, ' player1', player1Id, player1_isGuest);
 
   // return;
   const client = await pool.connect();
   let success = true;
   try {
     await client.query('BEGIN');
-    const r1 = await client.query(`INSERT INTO public.debate_session(
+    await client.query(`INSERT INTO public.debate_session(
       id, topic)
       VALUES ($1, $2);`, [matchId, topic]);
 
-    const r2 = await client.query(`INSERT INTO public.debate_session_users(
+    if (!player0_isGuest) await client.query(`INSERT INTO public.debate_session_users(
       user_id, debate_session_id, side, "character")
       VALUES ($1, $2, $3, $4);`, [player0Id, matchId, side0, chracter0]);
 
-    const r3 = await client.query(`INSERT INTO public.debate_session_users(
+    if (!player1_isGuest) await client.query(`INSERT INTO public.debate_session_users(
         user_id, debate_session_id, side, "character")
         VALUES ($1, $2, $3, $4);`, [player1Id, matchId, side1, chracter1]);
 
     await client.query('COMMIT');
     console.log('MATCHSAVED:', matchId);
 
-    } catch (e) {
-      success = false;
-      await client.query('ROLLBACK');
-       // normal for duisplicate sns
-      if(e.toString().indexOf('duplicate')!==-1) {
-        console.log('DUPLICATE', matchId);
-         // do not throw, abort error is normal
-        return;
-      }
-
-      console.error('MATCHSQLErr: id', matchId, 'topic', topic, e);
-      throw e;
-    } finally {
-      client.release();
+  } catch (e) {
+    success = false;
+    await client.query('ROLLBACK');
+    // normal for duisplicate sns
+    if (e.toString().indexOf('duplicate') !== -1) {
+      console.log('DUPLICATE', matchId);
+      // do not throw, abort error is normal
+      return;
     }
-    return success;
+
+    console.error('MATCHSQLErr: id', matchId, 'topic', topic, e);
+    throw e;
+  } finally {
+    client.release();
+  }
+  return success;
 }
 
 async function saveDB(players, matchId) {
@@ -155,7 +183,7 @@ async function saveDB(players, matchId) {
     // else console.log('updated db')
   }
   */
- return data;
+  return data;
 }
 
 function getQParam(players, matchId) {
@@ -163,7 +191,7 @@ function getQParam(players, matchId) {
   // leader
   var red = players[ranPick]; // players.filter(p => p.team === 'red')[0];
   // flip
-  var blue = players[ranPick===0 ? 1 : 0]; // players.filter(p => p.team === 'blue')[0];
+  var blue = players[ranPick === 0 ? 1 : 0]; // players.filter(p => p.team === 'blue')[0];
 
   const ttl = Math.round((new Date).getTime() / 1000) + 60 * 3; // +3min
   const ttl2 = Math.round((new Date).getTime() / 1000) + 60 * 60; // +60min
@@ -177,7 +205,9 @@ function getQParam(players, matchId) {
             "qid": 0, // TODO: determine matched questions
             "redkeyi": [],
             "bluekeyi": [], // documentClient.createSet([]),
-            "ttl": '' + ttl2
+            "ttl": '' + ttl2,
+            "redguest": red.guest,
+            "blueguest": blue.guest,
           }
         }
       }],
