@@ -57,8 +57,8 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       display: 'inline-block',
       [theme.breakpoints.down('sm')]: {
-        //  paddingBottom: '80px'
-        paddingBottom: '2px'
+       //  paddingBottom: '80px'
+       paddingBottom: '2px',
       }
     },
     divider: {
@@ -79,7 +79,7 @@ const styles = (theme: Theme) =>
       justifyContent: 'flex-end',
       flexFlow: 'column nowrap',
       [theme.breakpoints.down('sm')]: {
-        height: 'calc(100vh - 32px)'
+        height: 'calc(100vh - 32px)',
       }
     },
     bannerTextDivider: {
@@ -190,86 +190,46 @@ class Index extends React.Component<Props, any> {
           </div>
           <div className={classes.bannerAnimOverlay} />
           <div className={classes.centeredDown}>
-            <Typography
-              variant="h1"
-              align="center"
-              style={{ textShadow: '2px 2px #777755', color: '#ffffff' }}
-            >
+            <Typography variant="h1" align="center" style={{textShadow: '2px 2px #777755', color: '#ffffff'}}>
               <Reveal effect="fadeIn" duration={3500}>
                 {t('home-banner-title1')}
               </Reveal>
             </Typography>
-            <Typography
-              className={classes.xsHide}
-              variant="h4"
-              align="center"
-              style={{
-                fontSize: '1.7em',
-                color: '#ffffff',
-                padding: '0 12px 0 12px'
-              }}
-            >
+            <Typography className={classes.xsHide} variant="h4" align="center" style={{fontSize:'1.7em', color: '#ffffff', padding: '0 12px 0 12px'}}>
               <Reveal effect="fadeIn" duration={5500}>
-                {!isOpen ? (
-                  <>
-                    find common ground with your matched opposite and earn
-                    achievements
-                  </>
-                ) : (
-                  <span style={{ fontSize: '110%' }}>
-                    matchmaking event is <b>online</b> and ready to join
-                  </span>
-                )
-                // t('home-banner-title2')
+                { !isOpen ?
+                  <>find common ground with your matched opposite and earn achievements</>
+                  : <span style={{fontSize: '110%'}}>matchmaking event is <b>online</b> and ready to join</span>
+                  // t('home-banner-title2')
                 }
               </Reveal>
             </Typography>
-            {auth && (
-              <React.Fragment>
-                <Button
-                  style={{ marginTop: '1vh' }}
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                  onClick={() => store.router.push('/home')}
-                >
-                  {store.auth.user!.name.split(' ')[0]}'s Home
-                  <QueueIcon style={{ marginLeft: '8px' }} />
-                </Button>
-              </React.Fragment>
-            )}
-            {!auth && (
-              <>
-                <Button
-                  style={{ marginTop: '1vh' }}
-                  onClick={() => store.auth.doGuestLogin()}
-                  variant="contained"
-                  color="default"
-                  size="large"
-                >
-                  Guest Pass
-                </Button>
-              </>
-            )}
-            {(!auth || store.isGuest()) && (
-              <Button
-                style={{ marginTop: '1vh', marginLeft: '12px' }}
-                onClick={() => store.login()}
-                variant="contained"
-                color="secondary"
-                size="large"
-              >
-                {store.isGuest() ? 'Signout Guest' : 'Signup/Login'}
+            {!auth &&
+              (
+                <Button style={{marginTop:'1vh'}} onClick={() => store.auth.login()} variant="contained" color="secondary" size="large">Start Login
                 <QueueIcon style={{ marginLeft: '8px' }} />
-              </Button>
-            )}
-
+                </Button>
+              )}
+            {auth &&
+              (
+                <React.Fragment>
+                  <Button
+                    style={{marginTop:'1vh'}}
+                    variant="contained"
+                    color="secondary" size="large"
+                    onClick={() => store.router.push('/home')}
+                  >
+                    {store.auth.user!.name.split(' ')[0]}'s Home
+                    <QueueIcon style={{ marginLeft: '8px' }} />
+                  </Button>
+                </React.Fragment>
+              )}
+              
+            
             <div className={classes.bannerTextDivider} />
             <BannerTimer />
-
-            <a href="#intro" className={classes.xsHide}>
-              <ArrowDown style={{ color: '#ffffff' }} width="1em" />
-            </a>
+            
+            <a href="#intro" className={classes.xsHide}><ArrowDown style={{color:'#ffffff'}} width="1em"/></a>
           </div>
         </div>
       </React.Fragment>

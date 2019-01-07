@@ -28,7 +28,7 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 const errors = {
-  'matchtimeout': 'Sorry, no matches were found...',
+  'matchtimeout': 'Sorry, no matches were found... try again in a few minutes!',
   'timeout': 'Our service timed out. Please try again.',
   'expired_login': 'Our service timed out. Please try again.',
   'qerror': 'Something went wrong with the Queue :/',
@@ -36,8 +36,7 @@ const errors = {
   'webrtc_error': 'Misc error: Webrtc connection failed',
   'handshake_timeout': 'Handshake with match timed out',
   'handshake_error': 'Misc error with match handshake',
-  'mic_timeout': 'Failed to activate browser mic. Check browser settings.',
-  'CANCELLED': 'There seems to be a duplicate of the same user in the match.'
+  'mic_timeout': 'Failed to activate browser mic. Check browser settings.'
 }
 
 class DebateError extends React.Component<Props, any> {
@@ -71,13 +70,11 @@ class DebateError extends React.Component<Props, any> {
           <DialogTitle id="alert-dialog-title">{'Oh no!'}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              <i>{errorMsg}</i>
-              <br/><br/>
-              Please try again in a few minutes :)
+              {errorMsg}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="secondary" autoFocus>
+            <Button onClick={this.handleClose} color="primary" autoFocus>
               RESTART
             </Button>
           </DialogActions>

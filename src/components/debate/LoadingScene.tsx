@@ -161,11 +161,7 @@ class LoadingScene extends React.Component<Props, State> {
     // const sameUserSeed = Math.round(new Date().getTime() / 1000);
 
     if (!this.props.store.auth.user!.id) throw new Error('no valid user id');
-    
-    let userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
-    // Give guests a unique queue id
-    if(this.props.store.isGuest()) userid += '_' + Math.round(Math.random() * 1000);
-
+    const userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
     let ticketId:any;
     try {
       ticketId = await QS.queueUp(
@@ -174,7 +170,6 @@ class LoadingScene extends React.Component<Props, State> {
         userid,
         contribution,
         chararacter,
-        // this.props.store.isGuest(),
         this.onMatched
       );
     } catch (e) {

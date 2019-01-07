@@ -225,8 +225,6 @@ class Index extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    if(this.props.store.isGuest()) return this.setState({ loaded: true });
-
     API.getScores()
       .then(this.transformPayload)
       .catch(e => this.setState({ loaded: true, error: e }));
@@ -488,15 +486,6 @@ class Index extends React.Component<Props, State> {
       </div>
     ));
 
-    signOut = (e:any) => {
-      e.preventDefault();
-      // this.props.store.router.push('/home');
-      this.props.store.auth.logout();
-      this.props.store.auth.login()
-      //setTimeout( this.props.store.auth.login, 5000);
-      return true;
-    }
-
     handleExpandClick = (i) => {
       if(this.state.expanded===i) return this.setState({ expanded: undefined });
       this.setState({ expanded: i });
@@ -540,34 +529,6 @@ class Index extends React.Component<Props, State> {
       <div className={classes.pagebody}>
         <div className={classes.centered}>
           <div className={classes.headerContainer}>
-          { store.isGuest() && 
-            <>
-            <Button style={{marginTop:'1vh', marginLeft: '12px', float:'right'}} onClick={this.signOut} variant="contained" color="secondary" size="large">Signup now
-             </Button>
-            <Typography
-            variant="h1"
-            align="left"
-            color="textPrimary"
-            className={classes.name}
-            gutterBottom
-            style={{ fontSize: '1.25em' }}
-          >
-            Guest Account
-          </Typography>
-          <Typography
-                  variant="body2"
-                  align="left"
-                  color="textPrimary"
-                  gutterBottom
-                  className={classes.nameSubstat}
-                  style={{ fontWeight: 'normal', fontSize: '1em' }}
-                >
-                  Guest users allows for testing out DTC but will have no saved history, xp/levels, or any of the member perks. Registered users also gain an extra hour of debate time!<br/><br/>Please signup to start building your page!
-          </Typography>
-          
-          </>
-          }
-          { !store.isGuest() && 
             <Grid
               container
               spacing={16}
@@ -638,7 +599,6 @@ class Index extends React.Component<Props, State> {
                 </Typography>
               </Grid>
             </Grid>
-          }
           </div>
 
           <div
