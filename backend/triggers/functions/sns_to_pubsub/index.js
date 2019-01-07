@@ -83,7 +83,7 @@ async function forEachSNS(record) {
   // console.log('Message received from SNS:', JSON.stringify(message));
   // JSON.stringify(tickets), 
   // , 'players', JSON.stringify(players)
-  console.log('MATCHREQ:', matchId, 'TICKETS:', ticketIds);
+  console.log(' MATCHREQ:', matchId, 'TICKETS:', ticketIds);
 
   const success = await savePG(players, matchId, matchInfo);
   if(success) await saveDB(players, matchId);
@@ -92,7 +92,7 @@ async function forEachSNS(record) {
 async function savePG(players, matchId, matchInfo) {
   // console.log('matchInfo', matchInfo);
   const player0 = matchInfo.TicketList[0].Players[0];
-  const player0Id = player0.PlayerId;
+  const player0Id = player0.PlayerId.split('_')[0]; // split for guest ids
   const side0 = player0.PlayerAttributes.side.N;
   const chracter0 = player0.PlayerAttributes.character.N;
   
@@ -100,11 +100,14 @@ async function savePG(players, matchId, matchInfo) {
   const topic = player0.PlayerAttributes.topic.S;
   // --
   const player1 = matchInfo.TicketList[1].Players[0];
-  const player1Id = player1.PlayerId;
+  const player1Id = player1.PlayerId.split('_')[0]; // split for guest ids
   const side1 = player1.PlayerAttributes.side.N;
   const chracter1 = player1.PlayerAttributes.character.N;
 
-  // console.log('player0', player0);
+  const player0_isGuest = player0.PlayerId.split('_').length > 1; // guest id attached
+  const player1_isGuest = player1.PlayerId.split('_').length > 1; // guest id attached
+
+  console.log('player0', player0Id, player0_isGuest, ' player1', player1Id, player1_isGuest);
 
   // return;
   const client = await pool.connect();

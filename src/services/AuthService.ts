@@ -72,6 +72,7 @@ function getLoggger() {
 }
 
 export const LOGIN_EVENT = 'signIn';
+export const LOGOUT_EVENT = 'signOut';
 
 function onHubCapsule(cb: AwsCB, capsule: any) {
   // getLoggger().onHubCapsule(capsule);
@@ -80,6 +81,12 @@ function onHubCapsule(cb: AwsCB, capsule: any) {
   if (channel !== 'auth') return;
 
   console.log('payload.event', channel, payload.event);
+  if (payload.event == LOGOUT_EVENT) {
+    console.log('logout');
+    console.log(payload.data);
+    /// checkUser(cb);
+    // return;
+  }
   if (payload.event === LOGIN_EVENT || payload.event === 'cognitoHostedUI') {
     console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
@@ -201,6 +208,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
 type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
 
 export function logout() {
+  // {global: true}
   Auth.signOut()
     .then()
     .catch((err: any) => console.log(err));
@@ -215,4 +223,24 @@ function uuidv4(): string {
       return v.toString(16);
     }
   );
+}
+
+export async function guestLogin() {
+  console.log('guestLogin');
+  try {
+    const user = await Auth.signIn('guest@dinnertable.chat', 'weallneed2talk'); // Guest
+    console.log(user);
+  } catch (err) {
+    if (err.code === 'UserNotConfirmedException') {
+      // The error happens if the user didn't finish the confirmation step when signing up
+      // In this case you need to resend the code and confirm the user
+      // About how to resend the code and confirm the user, please check the signUp part
+    } else if (err.code === 'PasswordResetRequiredException') {
+      // The error happens when the password is reset in the Cognito console
+      // In this case you need to call forgotPassword to reset the password
+      // Please check the Forgot Password part.
+    } else {
+      console.log(err);
+    }
+  }
 }
