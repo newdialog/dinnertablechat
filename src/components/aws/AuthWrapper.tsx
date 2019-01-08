@@ -42,7 +42,7 @@ class AuthComp extends React.Component<Props, any> {
     const url =
       'https://' +
       domain +
-      '/login?redirect_uri=' +
+      '/signup?redirect_uri=' +
       redirectSignIn +
       '&response_type=' +
       responseType +
