@@ -155,7 +155,7 @@ class Index extends React.Component<Props, State> {
           <Typography gutterBottom={true} variant="h5" align={'left'}>
             Our Story
           </Typography>
-          <Typography variant="body1" gutterBottom={true}>
+          <Typography gutterBottom={true}>
             We all have our own way of looking at the world. Sharing our
             thoughts and discoveries is more fun when we respectfully challenge
             each other. Dinnertable.chat was created to start meaningful
@@ -181,7 +181,7 @@ class Index extends React.Component<Props, State> {
           <Typography gutterBottom={true} variant="h5">
             Graphics and Designs
           </Typography>
-          <Typography variant="body1" gutterBottom={true}>
+          <Typography gutterBottom={true}>
             Use of the below illustrations are recommended for publications:
           </Typography>
 
@@ -208,7 +208,7 @@ class Index extends React.Component<Props, State> {
             Publications
           </Typography>
           <Paper className={classes.paper}>
-            <Typography variant="body1" gutterBottom={true}>
+            <Typography gutterBottom={true}>
               <i>October, 2018</i>
               <br />
               [Overview] How Sparketing Debate Could Reignite Our Democracy (
@@ -220,7 +220,7 @@ class Index extends React.Component<Props, State> {
           </Paper>
 
           <Paper className={classes.paper}>
-            <Typography variant="body1" gutterBottom={true}>
+            <Typography gutterBottom={true}>
               <i>November, 2018</i>
               <br />
               [Our Story] Who’s Cooking Dinner? (
@@ -232,7 +232,7 @@ class Index extends React.Component<Props, State> {
           </Paper>
 
           <div className={classes.divider} />
-          <Typography variant="body1" gutterBottom={true} align={'center'}>
+          <Typography gutterBottom={true} align={'center'}>
             General business inqueries{' '}
             <a
               href="mailto:team@dinnertable.chat"

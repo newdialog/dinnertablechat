@@ -59,22 +59,26 @@ body {
 }
 
 a {
-  text-decoration: 'none';
+  text-decoration: none;
   color: #7d4e4f
 }
 
 a:hover {
-  text-decoration: 'none';
+  text-decoration: none;
   color: #444444 /* #454579 */
 }
 
+.footerlink:hover {
+  color: #84849f
+}
+
 .minorlink {
-  text-decoration: 'none';
+  text-decoration: none;
   color: #f19899
 }
 
 .minorlink:hover {
-  text-decoration: 'none';
+  text-decoration: none;
   color: #444444 /* #454579 */
 }
 

@@ -728,6 +728,7 @@ class Index extends React.Component<Props, State> {
             <a
               href="https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef"
               target="_blank"
+              rel="noopener"
             >
               Here's our recommendations
             </a>
