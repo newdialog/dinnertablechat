@@ -26,9 +26,9 @@ const styles = theme =>
       // textDecoration: 'none',
       color: 'white',
       fontWeight: 600,
-    },
-    '.links:hover': {
-      color: 'white',
+      '&:hover': {
+        color: '#84849f',
+      }
     }
   });
 
@@ -44,7 +44,7 @@ function Footer(props: Props) {
 
   return (
     <footer className={classes.centered}>
-      <section id="lab_social_icon_footer">
+      <section id="social_icon_footer">
         <div className="container">
           <div className="text-center center-block">
             <a
@@ -92,7 +92,7 @@ function Footer(props: Props) {
         PAGES:{' '}
         <a
           href="/press"
-          className={classes.links + ' footerlink'}
+          className={classes.links}
           style={{ margin: '0 10px 0 10px' }}
         >
           Press Kit
@@ -100,18 +100,19 @@ function Footer(props: Props) {
         <a
           href="https://ko-fi.com/E1E0OB0M"
           target="_blank"
-          className={classes.links + ' footerlink'}
+          className={classes.links}
           style={{ marginLeft: '10px' }}
         >
           Donations
         </a>
         <br />
         <br />
-        Copyright © 2018 Dinnertable.chat
+        Copyright © 2018-2019 Dinnertable.chat
         <span style={{ marginLeft: '10px', color: '#ccc' }}>|</span>
         <a
           href="/privacy"
-          style={{ marginLeft: '10px', textDecoration: 'none', color: '#ccc' }}
+          className={classes.links}
+          style={{ marginLeft: '10px', fontWeight: 500 }}
         >
           Privacy Policy
         </a>
