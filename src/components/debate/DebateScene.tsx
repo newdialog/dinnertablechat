@@ -61,7 +61,10 @@ class DebateScene extends React.Component<Props, State> {
     this.gotMedia();
 
     window.gtag('event', 'debate_start', {
-      event_category: 'debate'
+      event_category: 'debate',
+      topic: this.props.store.debate.topic,
+      position: this.props.store.debate.position,
+      sameSide: this.props.store.debate.position === this.props.store.debate.match!.otherState!.position
     });
     window.gtag('event', `debate_start_${this.props.store.debate.topic}_${this.props.store.debate.position}`, {
       event_category: 'debate'
