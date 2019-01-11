@@ -116,26 +116,25 @@ function track(step:number, store: AppModel.Type) {
 }
 
 // Renderer callback with condition
+let step = 0; // state hack
 const renderer = (
   classes,
   store: AppModel.Type,
   { hours, minutes, seconds, completed }
 ) => {
-  let step = 0;
+  
   const steps = ['Introductions', 'Debate', 'Find an Agreement'];
-
-  if (Number(minutes) < 14 && step != 1) {
+  const lastStep = step;
+  if (Number(minutes) < 14) {
     step = 1;
-    track(step, store);
   }
-  if (Number(minutes) < 5 && step != 2) {
+  if (Number(minutes) < 5) {
     step = 2;
-    track(step, store);
   }
-  if (completed && step != 3) {
+  if (completed) {
     step = 3;
-    track(step, store);
   }
+  if(lastStep !== step) track(step, store);
 
   if (step !== store.debate.quarter)
     setTimeout(() => store.debate.setQuarter(step), 1);
@@ -185,7 +184,7 @@ interface Props {
 
 function DebateTimer(props) {
   const { classes, t, onCompleted, store } = props;
-  let trackCache = { stage: 1 };
+  step = 0;
 
   return (
     <Countdown
