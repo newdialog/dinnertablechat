@@ -64,10 +64,12 @@ class DebateScene extends React.Component<Props, State> {
       event_category: 'debate',
       topic: this.props.store.debate.topic,
       position: this.props.store.debate.position,
-      sameSide: this.props.store.debate.position === this.props.store.debate.match!.otherState!.position
+      sameSide: this.props.store.debate.position === this.props.store.debate.match!.otherState!.position,
+      guest: this.props.store.isGuest()
     });
     window.gtag('event', `debate_start_${this.props.store.debate.topic}_${this.props.store.debate.position}`, {
-      event_category: 'debate'
+      event_category: 'debate',
+      guest: this.props.store.isGuest()
     });
     /* navigator.getUserMedia(
       { video: false, audio: true },

@@ -232,7 +232,7 @@ class Index extends React.Component<Props, State> {
       guest: this.props.store.isGuest()
     });
     this.trackHistoryTrigger = true;
-    
+
     if(this.props.store.isGuest()) return this.setState({ loaded: true });
 
     API.getScores()
@@ -746,8 +746,8 @@ class Index extends React.Component<Props, State> {
             .
           </Typography>
         </Paper>
-        <AppFloatMenu />
-        <Footer forceShow={true} />
+        
+        <Footer forceShow={true} /><AppFloatMenu />
       </div>
     );
   }

@@ -151,6 +151,11 @@ class GettingStarted extends React.Component<Props, State> {
   routeToPlay = () => {
     const { store } = this.props;
 
+    window.gtag('event', 'completed_tutorial', {
+      event_category: 'splash',
+      guest: this.props.store.isGuest()
+    });
+
     if (
       this.props.store.isStandalone() &&
       store.auth.isNotLoggedIn &&

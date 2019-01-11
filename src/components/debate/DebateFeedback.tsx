@@ -138,14 +138,16 @@ class DebateFeedback extends React.Component<Props, State> {
 
   public componentDidMount() {
     window.gtag('event', 'debate_feedback_page', {
-      event_category: 'debate'
+      event_category: 'debate',
+      guest: this.props.store.isGuest()
     });
     this.setState({ agreed: this.props.store.debate.agreed });
   }
 
   private handleConfirm = async () => {
     window.gtag('event', 'debate_feedback_page_submit', {
-      event_category: 'debate'
+      event_category: 'debate',
+      guest: this.props.store.isGuest()
     });
     
     // If guest, just log them out now

@@ -103,8 +103,9 @@ class AppFloatMenu extends React.Component<Props, State> {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={()=>this.props.store.router.push('/')}>About DTC</MenuItem>
+          <MenuItem onClick={()=>this.props.store.router.push('/')}>DTC Homepage</MenuItem>
           <MenuItem onClick={this.onFeedback}>User Feedback</MenuItem>
+          <MenuItem onClick={()=>this.props.store.router.push('/tutorial')}>Tutorial</MenuItem>
           <MenuItem onClick={this.logOut}>Log out</MenuItem>
           
         </Menu>

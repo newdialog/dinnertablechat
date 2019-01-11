@@ -126,15 +126,22 @@ class LoadingScene extends React.Component<Props, State> {
 
     // analytics
     window.gtag('event', 'debate_loading', {
-      event_category: 'debate'
+      event_category: 'debate',
+      guest: this.props.store.isGuest(),
+      topic,
+      position
     });
     window.gtag('event', `debate_queue_${topic}_${position}`, {
-      event_category: 'debate'
+      event_category: 'debate',
+      guest: this.props.store.isGuest()
     });
     // Also add a metric for guests in queue
     if(this.props.store.isGuest()) {
       window.gtag('event', 'debate_loading_guest', {
-        event_category: 'debate'
+        event_category: 'debate',
+        topic,
+        position,
+        guest: this.props.store.isGuest()
       });
     }
 
