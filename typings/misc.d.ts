@@ -5,6 +5,10 @@ declare module 'json!*' {
   export = json;
 }
 
+declare interface mixpanel {
+  track(name:string);
+};
+
 declare function gtag(
   action: string,
   event: string,
@@ -23,6 +27,7 @@ declare function trackOutboundLinkClick(
 declare global {
   interface Window {
     gtag: typeof gtag;
+    mixpanel: mixpanel;
     trackOutboundLink: typeof trackOutboundLink;
     trackOutboundLinkClick: typeof trackOutboundLinkClick;
   }
@@ -30,6 +35,7 @@ declare global {
 
 interface Window {
   gtag: typeof gtag;
+  mixpanel: mixpanel;
   trackOutboundLink: typeof trackOutboundLink;
   trackOutboundLinkClick: typeof trackOutboundLinkClick;
 }

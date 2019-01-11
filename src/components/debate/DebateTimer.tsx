@@ -105,6 +105,16 @@ const AgreementStep = ({ store }: { store: AppModel.Type }) => (
   </div>
 );
 
+function track(step:number, store: AppModel.Type) {
+  window.gtag('event', 'debate_step_'+step, {
+    event_category: 'debate',
+    step,
+    topic: store.debate.topic,
+    position: store.debate.position,
+    sameSide: store.debate.position === store.debate.match!.otherState!.position
+  });
+}
+
 // Renderer callback with condition
 const renderer = (
   classes,
@@ -114,9 +124,18 @@ const renderer = (
   let step = 0;
   const steps = ['Introductions', 'Debate', 'Find an Agreement'];
 
-  if (Number(minutes) < 14) step = 1;
-  if (Number(minutes) < 5) step = 2;
-  if (completed) step = 3;
+  if (Number(minutes) < 14 && step != 1) {
+    step = 1;
+    track(step, store);
+  }
+  if (Number(minutes) < 5 && step != 2) {
+    step = 2;
+    track(step, store);
+  }
+  if (completed && step != 3) {
+    step = 3;
+    track(step, store);
+  }
 
   if (step !== store.debate.quarter)
     setTimeout(() => store.debate.setQuarter(step), 1);
@@ -166,6 +185,7 @@ interface Props {
 
 function DebateTimer(props) {
   const { classes, t, onCompleted, store } = props;
+  let trackCache = { stage: 1 };
 
   return (
     <Countdown
