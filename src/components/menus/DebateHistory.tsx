@@ -226,13 +226,14 @@ class Index extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    if(this.props.store.isGuest()) return this.setState({ loaded: true });
-
     window.gtag('event', 'history', {
       event_category: 'splash',
-      first: !this.trackHistoryTrigger
+      first: !this.trackHistoryTrigger,
+      guest: this.props.store.isGuest()
     });
     this.trackHistoryTrigger = true;
+    
+    if(this.props.store.isGuest()) return this.setState({ loaded: true });
 
     API.getScores()
       .then(this.transformPayload)
