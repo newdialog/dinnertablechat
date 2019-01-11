@@ -497,8 +497,11 @@ class Index extends React.Component<Props, State> {
       </div>
     ));
 
-    signOut = (e:any) => {
+    signOutGuest = (e:any) => {
       e.preventDefault();
+      window.gtag('event', 'guest_signup_click', {
+        event_category: 'splash'
+      });
       // this.props.store.router.push('/home');
       this.props.store.auth.logout();
       this.props.store.auth.login()
@@ -551,7 +554,7 @@ class Index extends React.Component<Props, State> {
           <div className={classes.headerContainer}>
           { store.isGuest() && 
             <>
-            <Button style={{marginTop:'1vh', marginLeft: '12px', float:'right'}} onClick={this.signOut} variant="contained" color="secondary" size="large">Signup now
+            <Button style={{marginTop:'1vh', marginLeft: '12px', float:'right'}} onClick={this.signOutGuest} variant="contained" color="secondary" size="large">Signup now
              </Button>
             <Typography
             variant="h1"
