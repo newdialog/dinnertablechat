@@ -74,7 +74,7 @@ mixpanel.init("9faf8f07f48cf113e52cefb66f005408", {debug:true});</script><!-- en
       );
 
     function gtag() {
-      if(window.isLive) return; // do not track
+      if(!window.isLive) return; // do not track
       if(arguments[0] && arguments[0] === 'event') {
         if(arguments.length > 2 && arguments[2].event_category) {
           mixpanel.track(arguments[1], {category: arguments[2].event_category});
