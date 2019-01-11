@@ -182,8 +182,13 @@ async function checkUser(cb: AwsCB, event: string = '') {
 
   // Update analytics
   window.gtag('set', 'userId', data.username);
-  if(window.mixpanel) {
+  if (window.mixpanel) {
     (window.mixpanel as any).identify(data.username);
+    user.email &&
+      (window.mixpanel as any).people.set({
+        $email: user.email,
+        $last_login: new Date()
+      });
   }
 
   //// AWS.config.credentials = new AWS.Credentials(credentials);
