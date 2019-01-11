@@ -182,6 +182,9 @@ async function checkUser(cb: AwsCB, event: string = '') {
 
   // Update analytics
   window.gtag('set', 'userId', data.username);
+  if(window.mixpanel) {
+    (window.mixpanel as any).identify(data.username);
+  }
 
   //// AWS.config.credentials = new AWS.Credentials(credentials);
   // FIX: https://github.com/aws-amplify/amplify-js/issues/581
