@@ -237,7 +237,10 @@ class Index extends React.Component<Props, State> {
 
     API.getScores()
       .then(this.transformPayload)
-      .catch(e => this.setState({ loaded: true, error: e }));
+      .catch(e => {
+        console.error(e);
+        this.setState({ loaded: true, error: e })
+      });
   }
 
   handleClick = (i: number) => {
@@ -312,6 +315,7 @@ class Index extends React.Component<Props, State> {
 
   private transformPayload = payload => {
     let data = payload.history.filter(x => x.review !== null); // only sessions with ratings
+
     let dataHash = data.reduce((hash, x) => {
       // merge data per session from user and opponent
       if (!hash[x.debate_session_id]) hash[x.debate_session_id] = {};
@@ -323,6 +327,7 @@ class Index extends React.Component<Props, State> {
           : { ...val, ...this.transformOpp(x) };
       return hash;
     }, {});
+    // console.log('data', dataHash);
 
     const result = Object.keys(dataHash)
       .map(key => {
@@ -335,7 +340,7 @@ class Index extends React.Component<Props, State> {
         // console.log('val', val)
         return val;
       })
-      .filter(x => x.oppReview); // ensure at least opposite rated  && x.userReview
+      .filter(x => !!x.oppReview); // ensure at least opposite rated  && x.userReview
 
     const flags = this.createAccordianFlags(data);
     result.sort((a, b) => {
