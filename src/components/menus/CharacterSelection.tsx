@@ -19,7 +19,7 @@ function setLandscape() {
     window.screen['lockOrientation'] || window.screen['mozLockOrientation'] || window.screen['msLockOrientation'];
   
     if (lockOrientationUniversal) {
-      if(lockOrientationUniversal('landscape')) {
+      if(lockOrientationUniversal.call(window.screen, 'landscape')) {
         console.log('screen.lockOrientation set to landscape');
       } else {
         console.warn('screen.lockOrientation failed to lock');
