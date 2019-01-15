@@ -76,24 +76,27 @@ class StartDebateDialog extends React.Component<IProps, any> {
       >
         <DialogTitle id="alert-dialog-title">Dinner is ready!</DialogTitle>
         <DialogContent>
-          <Typography align="center" color="secondary">
+          <Typography align="left">
+            You're now talking LIVE to your match about:
+          </Typography>
+          <blockquote>"{info.proposition}"
+          <br/><br/>
+          <Typography align="left">
+            Your side: {info.positions[debate.position]} — Theirs: {info.positions[debate.match!.otherState!.position]}
+          </Typography>
+          <Typography align="left" variant="caption">
             {!isOpposite && (
-              <b>
-                No opposite found, so we've matched you with someone on the same
+              <><i>
+                ^ No opposite found, so we've matched you with someone on the same
                 side. No XP will be earned for this round.
-              </b>
+              </i></>
             )}
-            {otherIsGuest && !isOpposite && <br/>}
-            {otherIsGuest && <b>note: your partner is using a guest account.</b>}
           </Typography>
-          <Typography align="center">
-            <b>You're now talking LIVE to your match about:</b>
+          </blockquote>
+          <Typography align="left" variant="caption">
+            {otherIsGuest && <>Note: your partner is using a guest account.</>}
           </Typography>
-          <blockquote>"{info.proposition}"</blockquote>
-          <Typography align="center">
-            {info.positions[debate.position]} — {info.positions[debate.match!.otherState!.position]}
-          </Typography>
-          <br />
+   
         </DialogContent>
         <DialogActions>
           <Button
@@ -110,3 +113,4 @@ class StartDebateDialog extends React.Component<IProps, any> {
   }
 }
 export default withMobileDialog<Props>()(HOC(StartDebateDialog, styles));
+// {otherIsGuest && !isOpposite && <br/>}

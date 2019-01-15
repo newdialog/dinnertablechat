@@ -131,9 +131,7 @@ const styles = theme =>
       color: theme.palette.secondary.dark // '#b76464' // #ef5350
     },
     infoTip: {
-      width: '50vw',
-      minWidth: '400px',
-      margin: '30px auto 0 auto',
+      margin: '60px auto 0 auto',
       padding: '6px 32px',
       backgroundColor: theme.palette.secondary.light
     },
@@ -727,9 +725,8 @@ class Index extends React.Component<Props, State> {
               </Typography>
             </Paper>
           )}
-        </div>
 
-        <Paper className={classes.infoTip}>
+<Paper className={classes.infoTip}>
           <Typography
             variant="body1"
             align="center"
@@ -751,6 +748,9 @@ class Index extends React.Component<Props, State> {
             .
           </Typography>
         </Paper>
+        </div>
+
+        
         
         <Footer forceShow={true} /><AppFloatMenu />
       </div>
