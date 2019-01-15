@@ -1,6 +1,6 @@
 import React from 'react';
 import Countdown from 'react-countdown-now';
-import { Typography, withStyles, Button } from '@material-ui/core';
+import { Typography, withStyles, Button, StepIcon } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
 import Stepper from '@material-ui/core/Stepper';
