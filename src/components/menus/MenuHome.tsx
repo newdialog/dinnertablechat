@@ -108,10 +108,14 @@ class Index extends React.Component<Props, State> {
       this.props.store.debate.setTest(this.props.isTest===true);
     }
     this.handleReset();
+
+    window.gtag('event', 'debate_match_menu', {
+      event_category: 'splash',
+      guest: this.props.store.isGuest()
+    });
   }
 
   private handleBack = () => {
-    const { store } = this.props;
     this.handleReset();
   };
 
