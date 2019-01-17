@@ -149,6 +149,12 @@ class DebateFeedback extends React.Component<Props, State> {
       event_category: 'debate',
       guest: this.props.store.isGuest()
     });
+
+    const hash = this.state.traitHash;
+
+    // if they gave any review
+    // if(Object.keys(hash).length > 0) 
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScmmcorrmu2oO31_9-sU89S4BQXmjRlXvF7FasR_cw7NvxTCQ/viewform', '_blank');
     
     // If guest, just log them out now
     if(this.props.store.isGuest()) {
@@ -164,9 +170,6 @@ class DebateFeedback extends React.Component<Props, State> {
     }
 
     // TODO: update endpt w user selection, route back home
-    const hash = this.state.traitHash;
-    // const selectedTraits: string[] = [];
-
     const traitsObj = Object.keys(hash)
       .filter(k => hash[k])
       .reduce(
@@ -183,8 +186,8 @@ class DebateFeedback extends React.Component<Props, State> {
       agreement: this.state.agreed
     };
     console.log('responses', response);
-    // TODO: call endpoint
 
+    // TODO: call endpoint
     const r = await APIService.reviewSession(
       response,
       this.props.store.debate.match!.matchId
@@ -292,15 +295,6 @@ class DebateFeedback extends React.Component<Props, State> {
                   />
                 );
               })}
-              <Divider className={classes.margin} />
-              <TextField
-                variant="outlined"
-                id="standard-dense"
-                label="Platform Feedback"
-                className={classes.textField}
-                margin="dense"
-                onChange={() => this.handleTextFieldChange}
-              />
             </Grid>
             <Button
               color="primary"
@@ -318,3 +312,15 @@ class DebateFeedback extends React.Component<Props, State> {
 }
 
 export default inject('store')(HOC(DebateFeedback, styles));
+
+/*
+<Divider className={classes.margin} />
+              <TextField
+                variant="outlined"
+                id="standard-dense"
+                label="Platform Feedback"
+                className={classes.textField}
+                margin="dense"
+                onChange={() => this.handleTextFieldChange}
+              />
+*/
