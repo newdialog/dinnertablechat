@@ -63,7 +63,7 @@ class EducationHome extends React.Component<Props, State> {
             College Professors and Students Welcome
           </Typography>
           <Typography gutterBottom={true}>
-            Dinnertable.chat is a platform that aims to help colleges provide an evironment that empowers students to productively practice in sharing of political viewpoints. We provide a platform that allows students to better understand their own perspectices by hearing and being challenges by views that are outside their own. We're still growing and would love your feedback. 
+            Dinnertable.chat is a social platform helps colleges provide an evironment that empowers students to productively practice in sharing of political perspectices using live conversations. DTC allows students to better understand their own thoughts by listening to and being challenged by views that are outside their own. We're growing quickly and plan to be rolling out several new classroom and club-friendly features soon! 
             <br/><br/>
             For inquires or help using DTC in the classroom, please{' '}
             <a
