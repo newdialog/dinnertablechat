@@ -61,7 +61,8 @@ const DTCRouter = ({
 
         <Route path="/press" component={AsyncMediaKit} />
         <Route path="/privacy" component={AsyncPrivacy} />
-        <Route path="/education" component={AsyncEducation} />
+
+        <Route path="/campus" component={AsyncEducation} />
 
         <Route path="/home" component={DebateHistory} />
         <Route path="/quickmatch" component={AsyncPlay} />
@@ -78,7 +79,7 @@ const DTCRouter = ({
           />
         )}
 
-        
+        <Redirect from="/education" to="/campus" />
         <Redirect from="/signout" to="/" />
         <Redirect from="/play" to="/home" /> { /* legacy route */ }
 

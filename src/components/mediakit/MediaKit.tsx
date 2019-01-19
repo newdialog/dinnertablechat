@@ -5,6 +5,7 @@ import HOC from '../HOC';
 import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
+import {Helmet} from "react-helmet";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -139,6 +140,10 @@ class Index extends React.Component<Props, State> {
     const { open } = this.state;
     return (
       <React.Fragment>
+        <Helmet title="Dinnertable.chat Press">
+          <meta name="og:url" content="https://dinnertable.chat/press" />
+          <meta name="og:title" content="Dinnertable.chat Press" />
+        </Helmet>
         <div className={classes.container}>
           <Typography
             gutterBottom={true}

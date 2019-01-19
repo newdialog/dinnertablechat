@@ -5,6 +5,7 @@ import HOC from '../HOC';
 import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
+import {Helmet} from "react-helmet";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -55,6 +56,11 @@ class EducationHome extends React.Component<Props, State> {
     const { open } = this.state;
     return (
       <React.Fragment>
+        <Helmet title="Dinnertable.chat Campus">
+          <meta itemProp="name" content="Dinnertable.chat Campus" />
+          <meta name="og:url" content="https://dinnertable.chat/campus" />
+          <meta name="og:title" content="Dinnertable.chat Campus" />
+        </Helmet>
         <div className={classes.container}>
           
           <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQS5EJR-y1PUvqyVc9ZGZj3thmQ_few0oLxJoGHnZ1fdVNc9wCfLkCzk3WSejSU-u8sgU_0RxxF1BgF/embed?start=false&loop=false&delayms=8000" width="100%" height="520" allowFullScreen={true} className={classes.presentationFrame}></iframe>

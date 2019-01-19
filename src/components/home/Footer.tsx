@@ -107,12 +107,12 @@ function Footer(props: Props) {
           Donations
         </a>{' | '}
         <a
-          href="/education"
+          href="/campus"
           target="_self"
           className={classes.links}
           style={{ marginLeft: '10px' }}
         >
-          Education
+          Campus
         </a>
         <br />
         <br />
