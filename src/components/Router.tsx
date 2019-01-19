@@ -7,7 +7,8 @@ import { Typography } from '@material-ui/core';
 
 const AsyncHome = lazy(() => import('./home/home'));
 const AsyncPlay = lazy(() => import('./menus/MenuHome'));
-const AsyncPrivacy = lazy(() => import('./privacy/Privacy'));
+const AsyncPrivacy = lazy(() => import('./pages/Privacy'));
+const AsyncEducation = lazy(() => import('./pages/EducationHome'));
 const AsyncMediaKit = lazy(() => import('./mediakit/MediaKit'));
 const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
 const AsyncTester = lazy(() => import('./debate/DebateTester'));
@@ -60,6 +61,7 @@ const DTCRouter = ({
 
         <Route path="/press" component={AsyncMediaKit} />
         <Route path="/privacy" component={AsyncPrivacy} />
+        <Route path="/education" component={AsyncEducation} />
 
         <Route path="/home" component={DebateHistory} />
         <Route path="/quickmatch" component={AsyncPlay} />

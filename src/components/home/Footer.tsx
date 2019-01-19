@@ -28,6 +28,7 @@ const styles = theme =>
       fontWeight: 600,
       '&:hover': {
         color: '#84849f',
+        textDecoration: 'underline'
       }
     }
   });
@@ -104,6 +105,14 @@ function Footer(props: Props) {
           style={{ marginLeft: '10px' }}
         >
           Donations
+        </a>{' | '}
+        <a
+          href="/education"
+          target="_self"
+          className={classes.links}
+          style={{ marginLeft: '10px' }}
+        >
+          Education
         </a>
         <br />
         <br />

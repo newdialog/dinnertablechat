@@ -1,0 +1,95 @@
+import * as React from 'react';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import HOC from '../HOC';
+import { Typography } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      textAlign: 'center',
+      paddingTop: theme.spacing.unit * 20
+    },
+    container: {
+      marginTop: '52px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '800px',
+      minWidth: '300px',
+      padding: '0 14px 0 14px'
+    },
+    divider: {
+      margin: `${theme.spacing.unit * 4}px 0`
+    },
+    presentationFrame: {
+      border: '0'
+    }
+  });
+
+import * as AppModel from '../../models/AppModel';
+import Footer from '../home/Footer';
+interface Props extends WithStyles<typeof styles> {
+  store: AppModel.Type;
+}
+interface State {
+  open: boolean;
+}
+
+class EducationHome extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = { open: false };
+  }
+
+  public render() {
+    const imgs = [
+      './logos/dinnertable.gif',
+      './logos/dtclogo.png',
+      './logos/dtclogo3-1.png',
+      './logos/dtclogo3.png'
+    ];
+    const { classes } = this.props;
+    const { open } = this.state;
+    return (
+      <React.Fragment>
+        <div className={classes.container}>
+          
+          <iframe src="https://docs.google.com/presentation/d/e/2PACX-1vQS5EJR-y1PUvqyVc9ZGZj3thmQ_few0oLxJoGHnZ1fdVNc9wCfLkCzk3WSejSU-u8sgU_0RxxF1BgF/embed?start=false&loop=false&delayms=8000" width="100%" height="520" allowFullScreen={true} className={classes.presentationFrame}></iframe>
+          <div className={classes.divider} />
+          <Typography gutterBottom={true} variant="h5" align={'left'}>
+            College Professors and Students Welcome
+          </Typography>
+          <Typography gutterBottom={true}>
+            Dinnertable.chat is a platform that aims to help colleges provide an evironment that empowers students to productively practice in sharing of political viewpoints. We provide a platform that allows students to better understand their own perspectices by hearing and being challenges by views that are outside their own. We're still growing and would love your feedback. 
+            <br/><br/>
+            For inquires or help using DTC in the classroom, please{' '}
+            <a
+              href="mailto:edu@dinnertable.chat"
+              onClick={trackOutboundLinkClick('mailto:edu@dinnertable.chat')}
+            >
+              contact us at edu@dinnertable.chat
+            </a>
+            .
+          </Typography>
+          
+        </div>
+        <Footer />
+      </React.Fragment>
+    );
+  }
+}
+export default HOC(EducationHome, styles);
+
+/*
+<Typography
+            gutterBottom={true}
+            variant="h3"
+            style={{ color: 'black', fontSize: '2.5em' }}
+            align={'center'}
+          >
+            Colleges Welcome
+          </Typography>
+          */
