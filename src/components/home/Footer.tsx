@@ -102,7 +102,7 @@ function Footer(props: Props) {
           href="https://ko-fi.com/E1E0OB0M"
           target="_blank"
           className={classes.links}
-          style={{ marginLeft: '10px' }}
+          style={{ margin: '0 10px 0 10px' }}
         >
           Donations
         </a>{' | '}
