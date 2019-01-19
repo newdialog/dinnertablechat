@@ -5,6 +5,7 @@ import {
   Theme
 } from '@material-ui/core/styles';
 import Footer from '../home/Footer';
+import {Helmet} from "react-helmet";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -136,6 +137,11 @@ class Index extends React.Component<Props, State> {
     const { open } = this.state;
     return (
       <React.Fragment>
+      <Helmet title="Dinnertable.chat Privacy">
+        <meta itemProp="name" content="Dinnertable.chat Privacy" />
+        <meta name="og:url" content="https://dinnertable.chat/privacy" />
+        <meta name="og:title" content="Dinnertable.chat Privacy" />
+      </Helmet>
       <div className={classes.centered}>
       <p><strong>Dinnertable.chat Privacy Policy</strong></p>
 

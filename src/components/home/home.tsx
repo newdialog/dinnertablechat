@@ -10,8 +10,7 @@ import {inject} from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
-// import pwahome from './PWAHome';
-// import PWAHome from './PWAHome';
+import {Helmet} from "react-helmet";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -137,6 +136,11 @@ class Index extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
+      <Helmet title="Dinnertable.chat">
+        <meta itemProp="name" content="Dinnertable.chat" />
+        <meta name="og:url" content="https://dinnertable.chat" />
+        <meta name="og:title" content="Dinnertable.chat" />
+      </Helmet>
       <div>
         <Banner store={store} />
 

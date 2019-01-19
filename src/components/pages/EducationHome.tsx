@@ -60,6 +60,7 @@ class EducationHome extends React.Component<Props, State> {
           <meta itemProp="name" content="Dinnertable.chat Campus" />
           <meta name="og:url" content="https://dinnertable.chat/campus" />
           <meta name="og:title" content="Dinnertable.chat Campus" />
+          <meta name="title" property="og:title" content="Dinnertable.chat Campus" />
         </Helmet>
         <div className={classes.container}>
           
