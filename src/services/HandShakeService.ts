@@ -1,12 +1,9 @@
 import { bool } from 'aws-sdk/clients/signer';
-
 import DynamoDB from 'aws-sdk/clients/dynamodb';
-import AWS from 'aws-sdk/global';
-
-import Peer from 'simple-peer';
 import PeerService from './PeerService';
-
 import retry from 'async-retry';
+import { from, defer, pipe } from 'rxjs';
+import { map, filter, retryWhen, retry as retryRx } from 'rxjs/operators';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const delayFlag = async (obj: { flag: boolean }) =>
@@ -194,9 +191,19 @@ export interface DBState {
 interface LastIndex {
   val: number;
 }
+
+async function readMatchWait(
+  matchid: string,
+  team: 'blue' | 'red',
+  stopFlag: StopFlag,
+  lastIndex: LastIndex
+): Promise<DBState | null> {
+  defer(() => readMatch(matchid));
+}
+
 // TODO fix global state
 // et lastValue: any = 0;
-async function readMatchWait(
+async function readMatchWait_old(
   matchid: string,
   team: 'blue' | 'red',
   stopFlag: StopFlag,
