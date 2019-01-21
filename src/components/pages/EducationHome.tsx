@@ -81,7 +81,15 @@ class EducationHome extends React.Component<Props, State> {
             </a>
             .
           </Typography>
-          
+          <Typography gutterBottom={true}>
+            Return to{' '}
+            <a
+              href="/"
+              onClick={trackOutboundLinkClick('/')}
+            >
+              homepage
+            </a>
+          </Typography>
         </div>
         <Footer />
       </React.Fragment>
