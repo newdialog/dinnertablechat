@@ -16,6 +16,7 @@
     "async-retry": "^1.2.3",
     "aws-amplify-react": "^2.3.0",
     "aws-sdk": "^2.391.0",
+    "backoff-rxjs": "^6.1.2",
     "env-cmd": "^8.0.2",
     "formik": "^1.4.2",
     "hark": "^1.2.3",

@@ -2,8 +2,9 @@ import { bool } from 'aws-sdk/clients/signer';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 import PeerService from './PeerService';
 import retry from 'async-retry';
-import { from, defer, pipe } from 'rxjs';
-import { map, filter, retryWhen, retry as retryRx } from 'rxjs/operators';
+import { iif, from, defer, pipe, throwError, of } from 'rxjs';
+import { delay as delayRx, map, filter, retryWhen, retry as retryRx, tap, distinctUntilChanged, catchError, defaultIfEmpty, concatMap } from 'rxjs/operators';
+import {retryBackoff} from 'backoff-rxjs';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const delayFlag = async (obj: { flag: boolean }) =>
@@ -19,6 +20,24 @@ const delayFlag = async (obj: { flag: boolean }) =>
       minTimeout: 2000
     }
   );
+
+function delayAttempts(delay:number = 3000, max:number=3) {
+  return retryWhen(errors => errors.pipe(
+    // Use concat map to keep the errors in order and make sure they
+    // aren't executed in parallel
+    concatMap((e, i) => 
+      // Executes a conditional Observable depending on the result
+      // of the first argument
+      iif(
+        () => i > max,
+        // If the condition is true we throw the error (the last error)
+        throwError(e),
+        // Otherwise we pipe this back into our stream and delay the retry
+        of(e).pipe(delayRx(delay)) 
+      )
+    )
+  )); 
+}
 
 interface StopFlag {
   flag: boolean;
@@ -198,7 +217,28 @@ async function readMatchWait(
   stopFlag: StopFlag,
   lastIndex: LastIndex
 ): Promise<DBState | null> {
-  defer(() => readMatch(matchid));
+  const teamkey = team + 'keyi';
+  const statekey = team + 'state';
+  
+
+  return defer(() => readMatch(matchid))
+    .pipe(
+      map(match=>{
+        const keyval = match[teamkey];
+        const stateval = match[statekey]; // JSON.parse(
+        stateval!.guest = match[team + 'guest'];
+        return { key: keyval, state: stateval }
+      }),
+      concatMap( x => {
+        if(x.key.length <= lastIndex.val) return throwError('retry');
+        return of(x);
+      }),
+      tap(x=>console.log('retryBackoff')),
+      retryBackoff({maxInterval:4, initialInterval: 2000}),
+      // retryWhen( x => x.pipe(delayRx(3000)))
+      // distinctUntilChanged((x,y)=>x.state != y.state || x.key.length != y.key.length),
+      tap(x=>console.log('tap', x))
+    ).toPromise<DBState>();
 }
 
 // TODO fix global state
