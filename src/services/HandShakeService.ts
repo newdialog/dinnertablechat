@@ -2,9 +2,29 @@ import { bool } from 'aws-sdk/clients/signer';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 import PeerService from './PeerService';
 import retry from 'async-retry';
-import { iif, from, defer, pipe, throwError, of } from 'rxjs';
-import { delay as delayRx, map, filter, retryWhen, retry as retryRx, tap, distinctUntilChanged, catchError, defaultIfEmpty, concatMap } from 'rxjs/operators';
-import {retryBackoff} from 'backoff-rxjs';
+import { iif, from, defer, pipe, throwError, of, interval } from 'rxjs';
+import {
+  delay as delayRx,
+  map,
+  filter,
+  retryWhen,
+  retry as retryRx,
+  tap,
+  distinctUntilChanged,
+  catchError,
+  defaultIfEmpty,
+  concatMap,
+  timeout,
+  takeUntil,
+  takeWhile,
+  mapTo,
+  take,
+  switchMap,
+  debounce,
+  throttle,
+  throttleTime
+} from 'rxjs/operators';
+import { retryBackoff } from 'backoff-rxjs';
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const delayFlag = async (obj: { flag: boolean }) =>
@@ -21,22 +41,24 @@ const delayFlag = async (obj: { flag: boolean }) =>
     }
   );
 
-function delayAttempts(delay:number = 3000, max:number=3) {
-  return retryWhen(errors => errors.pipe(
-    // Use concat map to keep the errors in order and make sure they
-    // aren't executed in parallel
-    concatMap((e, i) => 
-      // Executes a conditional Observable depending on the result
-      // of the first argument
-      iif(
-        () => i > max,
-        // If the condition is true we throw the error (the last error)
-        throwError(e),
-        // Otherwise we pipe this back into our stream and delay the retry
-        of(e).pipe(delayRx(delay)) 
+function delayAttempts(delay: number = 3000, max: number = 3) {
+  return retryWhen(errors =>
+    errors.pipe(
+      // Use concat map to keep the errors in order and make sure they
+      // aren't executed in parallel
+      concatMap((e, i) =>
+        // Executes a conditional Observable depending on the result
+        // of the first argument
+        iif(
+          () => i > max,
+          // If the condition is true we throw the error (the last error)
+          throwError(e),
+          // Otherwise we pipe this back into our stream and delay the retry
+          of(e).pipe(delayRx(delay))
+        )
       )
     )
-  )); 
+  );
 }
 
 interface StopFlag {
@@ -123,7 +145,7 @@ export async function handshake(
     await ps.init(isLeader, cbs); // await is important
     if (!ps._peer) throw new Error('no _peer');
 
-    let otherPlayerState: PlayerTableData = { char: -1 };
+    // let otherPlayerState: PlayerTableData = { char: -1 };
 
     // wait 3s (for leader, wait until blue heard, for blue wait until red msg)
     if (isLeader) {
@@ -142,50 +164,26 @@ export async function handshake(
       return;
     }
 
-    handshakeUntilConnected(
-      matchid,
-      otherColor,
-      ps,
-      (otherState: PlayerTableData) => {
-        otherPlayerState = otherState;
-      },
-      stopFlag
-    ).catch(e => {
-      const retryError = e.toString().indexOf('retry') !== -1;
-      // if(retryError) throw new Error('retry');
-      /// stopFlag.flag = true;
-      reject('retry');
-      console.log('handshakeUntilConnected ended with', e);
-      return;
-    });
-
-    // set timeout for all of handshaking
-    let _to = setTimeout(() => {
-      if (stopFlag.flag) return;
-      console.log('webrtc onConnection timeout');
-      /// stopFlag.flag = true;
-      reject('retry');
-      // throw new Error('retry');
-    }, 1000 * 64);
-
-    try {
-      console.time('WAITING');
-      await ps.onConnection();
-    } catch (e) {
-      console.error(e);
-      reject('webrtc failed');
-    } finally {
-      console.timeEnd('WAITING');
-    }
-    if (_to) clearTimeout(_to);
-
-    console.log(mycolor + ' rtc elected', stopFlag.flag);
-    if (stopFlag.flag) return reject('stopFlag');
-    /// stopFlag.flag = true;
-    // await delay(1000); // delay ensure relay? Maybe not needed
-    console.warn('-- finished --');
-
-    return resolve({ peer: ps, otherPlayerState });
+    let otherState = null;
+    handshakeUntilConnected(matchid, otherColor, ps)
+      .pipe(
+        throttleTime(3000),
+        takeUntil(defer(() => ps.onConnection())),
+        takeUntil(
+          defer(() =>
+            interval(1000).pipe(
+              mapTo(stopFlag.flag),
+              filter(x => x === true)
+            )
+          )
+        ),
+        timeout(64000)
+      )
+      .subscribe({
+        error: e => reject(e),
+        next: d => (otherState = d.state),
+        complete: () => resolve({ peer: ps, otherPlayerState: otherState })
+      });
   });
 }
 
@@ -211,160 +209,45 @@ interface LastIndex {
   val: number;
 }
 
-async function readMatchWait(
-  matchid: string,
-  team: 'blue' | 'red',
-  stopFlag: StopFlag,
-  lastIndex: LastIndex
-): Promise<DBState | null> {
-  const teamkey = team + 'keyi';
-  const statekey = team + 'state';
-  
-
-  return defer(() => readMatch(matchid))
-    .pipe(
-      map(match=>{
-        const keyval = match[teamkey];
-        const stateval = match[statekey]; // JSON.parse(
-        stateval!.guest = match[team + 'guest'];
-        return { key: keyval, state: stateval }
-      }),
-      concatMap( x => {
-        if(x.key.length <= lastIndex.val) return throwError('retry');
-        return of(x);
-      }),
-      tap(x=>console.log('retryBackoff')),
-      retryBackoff({maxInterval:4, initialInterval: 2000}),
-      // retryWhen( x => x.pipe(delayRx(3000)))
-      // distinctUntilChanged((x,y)=>x.state != y.state || x.key.length != y.key.length),
-      tap(x=>console.log('tap', x))
-    ).toPromise<DBState>();
-}
-
-// TODO fix global state
-// et lastValue: any = 0;
-async function readMatchWait_old(
-  matchid: string,
-  team: 'blue' | 'red',
-  stopFlag: StopFlag,
-  lastIndex: LastIndex
-): Promise<DBState | null> {
-  // if (stopSync) return null;
-  await delay(3100); // 1s to rtc proc, 2 for batch save
-  return await retry(
-    async bail => {
-      if (stopFlag.flag) {
-        // bail('stopSync');
-        return null;
-        // return;
-      }
-      const match: HandShakeCallback = await readMatch(matchid);
-      // if (stopFlag.flag) return null; // needed?
-      const teamkey = team + 'keyi';
-
-      const statekey = team + 'state';
-      const keyval = match[teamkey];
-
-      // console.log('recalling state from other:', statekey, match[statekey]);
-
-      if (!keyval || keyval.length <= lastIndex.val) {
-        // keyval !== '{"renegotiate":true}' ||
-        console.log('key not set yet', teamkey);
-        // return;
-        // throw new Error('key not set yet ' + teamkey);
-        throw new Error('retry');
-        /// return await readMatchWait(matchid, team);
-      }
-
-      const spliceSize = lastIndex.val;
-      lastIndex.val = keyval.length; // save total length before splice
-      console.log('lastValue', lastIndex.val, spliceSize);
-      if (spliceSize > 0) keyval.splice(0, spliceSize); // mutates in-place
-
-      // const keyval2 = keyval.map(k=>JSON.parse(k));// .map(v => );
-
-      let stateval: any = null; // JSON.parse(match[statekey]);
-      try {
-        // console.log('match[statekey]',match[statekey]);
-        stateval = match[statekey]; // JSON.parse(
-        stateval!.guest = match[team + 'guest'];
-        console.log('stateval', stateval);
-      } catch (err) {
-        console.error('couldnt parse other player');
-        bail(new Error('couldnt parse other player'));
-        return null;
-      }
-
-      return { key: keyval, state: stateval };
-    },
-    {
-      retries: 3, // 4
-      factor: 1.0,
-      maxTimeout: 5900,
-      minTimeout: 5900
-    }
-  );
-}
-
 interface PlayerTableData {
   char: number;
 }
 
-async function handshakeUntilConnected(
+function handshakeUntilConnected(
   matchid: string,
   team: 'blue' | 'red',
-  ps: PeerService,
-  onState: (state: PlayerTableData) => void,
-  stopFlag: StopFlag
+  ps: PeerService
 ) {
-  let stateFetched = false;
-  const lastValue = { val: 0 };
-  return await retry(
-    async bail => {
-      if (stopFlag.flag) {
-        return 'stopSync'; // bail(new Error('stopSync'));
-      }
-      console.log('handshakeUntilConnected');
+  let lastIndex = 0;
+  const teamkey = team + 'keyi';
+  const statekey = team + 'state';
+  console.log('rx handshakeUntilConnected');
 
-      let result: any = null;
-      try {
-        result = await readMatchWait(matchid, team, stopFlag, lastValue);
-      } catch (e) {
-        const retryError = e.toString().indexOf('retry') !== -1;
-        // console.log(JSON.stringify(e), typeof e, );
-        if (retryError) {
-          console.log('readMatchWait failed');
-          bail(new Error('readMatchWait failed'));
-          return; // 'retry';
-        } else {
-          console.log('readMatchWait aborted with:', e);
-          bail(new Error('error'));
-          return;
-        }
-      } finally {
-      }
+  return defer(() => readMatch(matchid))
+    .pipe(
+      tap(x => console.log('rx readMatchWait (re)start')),
+      map(match => {
+        const keyval = match[teamkey] as Array<any>;
+        const stateval = match[statekey];
+        stateval!.guest = match[team + 'guest'];
+        return { key: keyval, state: stateval };
+      }),
+      concatMap(x => {
+        if (x.key.length <= lastIndex) return throwError('retry'); // throw if no new data from DB
 
-      if (!result) {
-        return bail('ended'); // just end
-      }
-      /// if (stopFlag.flag) return 'stopSync'; // bug?
-
-      const { key, state } = result;
-      // let ks = key.reduce((acc, x) => acc.concat(x), []); // .filter((v, i, a) => a.indexOf(v) === i); // no longer using SETs
-      // console.log('===key', JSON.stringify(key));
-      key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg)));
-      if (onState && !stateFetched) onState(state); // relay other character state into store
-      stateFetched = true;
-
-      throw new Error('retry');
-    },
-    {
-      retries: 10, // use same as above with multiplier per handshake re-negotitation, min 6
-      factor: 1.0,
-      maxTimeout: 500,
-      minTimeout: 500
-    }
-  );
+        if (lastIndex > 0) x.key.splice(0, lastIndex);
+        lastIndex = x.key.length; // update the lastIndex to what was read
+        return of(x); // just return
+      }),
+      retryBackoff({ maxRetries: 5, maxInterval: 5000, initialInterval: 4000 }),
+      // catchError(x => throwError('ended')),
+      tap(x => console.log('rx tap', x.key.length))
+    )
+    .pipe(
+      tap(x =>
+        x.key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg)))
+      )
+    );
 }
 
 // let calls = 0;
