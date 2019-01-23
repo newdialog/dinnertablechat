@@ -22,10 +22,18 @@ import {
   switchMap,
   debounce,
   throttle,
-  throttleTime
+  throttleTime,
+  last
 } from 'rxjs/operators';
 import { retryBackoff } from 'backoff-rxjs';
 
+const whenFlag = (obj: any) =>
+  defer(() =>
+    interval(1000).pipe(
+      mapTo(obj.flag),
+      filter(x => x === true)
+    )
+  );
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const delayFlag = async (obj: { flag: boolean }) =>
   await retry(
@@ -164,29 +172,20 @@ export async function handshake(
       return;
     }
 
-    let otherState = null;
     handshakeUntilConnected(matchid, otherColor, ps)
       .pipe(
         throttleTime(3000),
         takeUntil(defer(() => ps.onConnection())),
-        takeUntil(
-          defer(() =>
-            interval(1000).pipe(
-              mapTo(stopFlag.flag),
-              filter(x => x === true)
-            )
-          )
-        ),
-        timeout(64000)
+        takeUntil(whenFlag(stopFlag)),
+        timeout(64000),
+        last()
       )
       .subscribe({
         error: e => {
           console.log('rx e', e);
-          // throw new Error('' + e);
           reject('' + e);
         },
-        next: d => (otherState = d.state),
-        complete: () => resolve({ peer: ps, otherPlayerState: otherState })
+        next: d => resolve({ peer: ps, otherPlayerState: d.state })
       });
   });
 }
@@ -244,7 +243,6 @@ function handshakeUntilConnected(
         return of(x); // just return
       }),
       retryBackoff({ maxRetries: 3, maxInterval: 4800, initialInterval: 4800 }),
-      // catchError(x => throwError('ended')),
       tap(x => console.log('rx tap', x.key.length))
     )
     .pipe(
