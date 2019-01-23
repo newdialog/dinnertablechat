@@ -180,7 +180,11 @@ export async function handshake(
         timeout(64000)
       )
       .subscribe({
-        error: e => reject(e),
+        error: e => {
+          console.log('rx e', e);
+          // throw new Error('' + e);
+          reject('' + e);
+        },
         next: d => (otherState = d.state),
         complete: () => resolve({ peer: ps, otherPlayerState: otherState })
       });
@@ -229,7 +233,7 @@ function handshakeUntilConnected(
       map(match => {
         const keyval = match[teamkey] as Array<any>;
         const stateval = match[statekey];
-        stateval!.guest = match[team + 'guest'];
+        if (stateval) stateval!.guest = match[team + 'guest'];
         return { key: keyval, state: stateval };
       }),
       concatMap(x => {
@@ -239,7 +243,7 @@ function handshakeUntilConnected(
         lastIndex = x.key.length; // update the lastIndex to what was read
         return of(x); // just return
       }),
-      retryBackoff({ maxRetries: 5, maxInterval: 5000, initialInterval: 4000 }),
+      retryBackoff({ maxRetries: 3, maxInterval: 4800, initialInterval: 4800 }),
       // catchError(x => throwError('ended')),
       tap(x => console.log('rx tap', x.key.length))
     )
