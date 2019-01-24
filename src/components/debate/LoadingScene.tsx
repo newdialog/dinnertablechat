@@ -225,18 +225,15 @@ class LoadingScene extends React.Component<Props, State> {
         'match'
       ) === -1; */
     
-      const hasMatch = this.props.store.debate.match && this.props.store.debate.match!.sync;
+    const hasMatch = this.props.store.debate.match && this.props.store.debate.match!.sync;
     
-      console.log('componentWillUnmount 1', !hasMatch);
+    console.log('componentWillUnmount 1', !hasMatch);
+    this.unloadFlag.flag = true;
     if(!hasMatch) {
-      this.unloadFlag.flag = true;
       console.log('componentWillUnmount 2', this.state.ticketId);
       if(this.state.ticketId) QS.stopMatchmaking(this.state.ticketId!);
       this.props.store.showNavbar();
       if(this.state.stream) this.state.stream.getTracks().forEach(track => track.stop());
-    } else {
-      // give few seconds for last sync
-      setTimeout( ()=>this.unloadFlag.flag = true, 3003);
     }
   }
 
@@ -250,6 +247,7 @@ class LoadingScene extends React.Component<Props, State> {
     try {
       result = await shake.handshake(matchId, isLeader, state, stream, this.unloadFlag);
     } catch (e) {
+      if(this.unloadFlag.flag) return; // just exit if we already ending
       this.unloadFlag.flag = true;
       const retryError = e.toString().indexOf('retry') !== -1;
       console.warn('handshake error', retryError, e);
