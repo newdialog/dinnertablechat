@@ -1,9 +1,10 @@
 import Peer from 'simple-peer'; // TODO: readd after simple-peer gets update
 import API from './APIService';
+import { EventEmitter } from 'events';
 type OnStream = (stream: MediaStream) => void;
 
 interface CallBacks {
-  onSignal: (data: string) => void;
+  onSignal?: (data: string) => void;
   // onConnected?: () => void;
   onStream?: OnStream;
   onError?: (e: any) => void;
@@ -39,13 +40,14 @@ const config = {
 };
 
 // let Peer: any; // TODO: remove later
-export default class PeerService {
+export default class PeerService extends EventEmitter {
   public _peer: any; // Peer.Instance & any
   private _stream: MediaStream;
   private clientStream: any;
   private initiator: boolean = false;
   public connected: boolean = false;
   constructor(stream: MediaStream) {
+    super();
     if (!stream) throw new Error('no stream given');
     this._stream = stream;
   }
@@ -69,20 +71,23 @@ export default class PeerService {
     }); //
     this._peer.on('signal', (data: any) => {
       // if (!initiator) console.timeEnd('giveResponse');
-      const datasSerialized = JSON.stringify(data);
+      const datasSerialized = data; // JSON.stringify(data);
       // console.log('raw sig', datasSerialized);
-      cbs.onSignal(datasSerialized);
+      if (cbs.onSignal) cbs.onSignal(datasSerialized);
+      this.emit('signal', { data: datasSerialized });
     });
 
     this._peer.on('connect', e => {
       // this.connected = true;
       // if (cbs.onConnected) cbs.onConnected();
       this._peer.send('syn');
+      this.emit('connect', { data: null });
     });
 
     this._peer.on('stream', stream => {
       this.clientStream = stream;
       if (cbs.onStream) cbs.onStream(stream);
+      // this.emit('stream', {data: stream});
     });
 
     // this._peer.on('data', data => {
@@ -95,6 +100,7 @@ export default class PeerService {
         return; // ignore kStable
       }
       if (cbs.onError) cbs.onError(e);
+      this.emit('error', { data: e });
     });
   }
 
@@ -139,7 +145,7 @@ export default class PeerService {
     // console.log('response', data);
     let parse: any = null;
     try {
-      parse = JSON.parse(data);
+      parse = data; // JSON.parse(data);
     } catch (error) {
       console.warn('cant parse', data);
       return;
@@ -161,7 +167,7 @@ export default class PeerService {
     this._peer.addStream(stream);
   }
 
-  public on(event: string, cb: any) {
+  public onPeerEvent(event: string, cb: any) {
     this._peer.on(event, cb);
   }
 
