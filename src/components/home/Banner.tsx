@@ -210,10 +210,9 @@ class Index extends React.Component<Props, any> {
               }}
             >
               <Reveal effect="fadeIn" duration={5500}>
-                {!isOpen ? (
+                {true || !isOpen ? (
                   <>
-                    find common ground with your matched opposite and earn
-                    achievements
+                    get matched for a live chat to find common ground
                   </>
                 ) : (
                   <span style={{ fontSize: '110%' }}>
