@@ -112,7 +112,7 @@ function Footer(props: Props) {
           className={classes.links}
           style={{ marginLeft: '10px' }}
         >
-          Campus
+          College Program
         </a>
         <br />
         <br />
