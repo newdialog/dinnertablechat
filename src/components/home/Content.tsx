@@ -267,6 +267,13 @@ class Index extends React.Component<Props, State> {
                 <a href='https://play.google.com/store/apps/details?id=chat.dinnertable&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
                 <img alt='Get it on Google Play'className="lazyload" data-src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' width="170px"/>
                 </a>
+                <br/>Are you a student or a teacher? Read about our <a
+                  href="/campus"
+                  target="_self"
+                  style={{color:'#bd4c4c'}}
+                >
+                  Campus Program.
+                </a>
               </div>
             </Grid>
             <Grid item xs={12} md={12}>
