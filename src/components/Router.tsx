@@ -4,6 +4,7 @@ import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import * as AppModel from '../models/AppModel';
 import {observer, inject} from 'mobx-react';
 import { Typography } from '@material-ui/core';
+import LoadingMsg from './Loading';
 
 const AsyncHome = lazy(() => import('./home/home'));
 const AsyncPlay = lazy(() => import('./menus/MenuHome'));
@@ -29,18 +30,7 @@ const NoMatch = ({ location }) => (
   </div>
 );
 
-const loader = () => {
-  return (
-    <div>
-      <br />
-      <br />
-      <br />
-      <Typography variant="h3" align="center" style={{color:'#555555'}}>Loading...</Typography>
-    </div>
-  );
-};
 // <Route component={NoMatch} />
-
 const DTCRouter = ({
   history,
   store
@@ -49,7 +39,7 @@ const DTCRouter = ({
   store: AppModel.Type;
 }) => (
   <Router history={history}>
-    <Suspense fallback={loader()}>
+    <Suspense fallback={LoadingMsg()}>
       <Switch>
         <Route exact={true} path="/" component={AsyncHome} />
         <Route exact={true} path="/callback" component={AuthSignin} />

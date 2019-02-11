@@ -279,7 +279,7 @@ class Index extends React.Component<Props, State> {
             <Grid item xs={12} md={12}>
               <Divider className={classes.divider} />
               <div
-                id="lab_social_icon_footer"
+                id="social_icon_footer"
                 className="text-center center-block"
                 style={{ textAlign: 'right' }}
               >

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {Suspense} from 'react';
 import * as ReactDOM from 'react-dom';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './services/i18n';
@@ -12,6 +12,8 @@ import { connectReduxDevtools } from 'mst-middlewares';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { RouterModel, syncHistoryWithStore } from 'mst-react-router';
 
+import LoadingMsg from './components/Loading';
+
 // Setup History
 const routerModel = RouterModel.create({ location: null });
 const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
@@ -23,12 +25,15 @@ const store = AppModel.create(routerModel, fetcher);
 // if(!store.isLive()) 
 connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting, prob bundled anyway
 
-console.log('v1.08');
+console.log('v1.1');
+
 ReactDOM.render(
-  <I18nextProvider i18n={i18n} initialLanguage="en">
-    <Provider store={store}>
-      <App history={history} />
-    </Provider>
-  </I18nextProvider>,
+  <Suspense fallback={LoadingMsg()}>
+    <I18nextProvider i18n={i18n}>
+      <Provider store={store}>
+        <App history={history} />
+      </Provider>
+    </I18nextProvider>
+  </Suspense>,
   document.getElementById('root') as HTMLElement
 );

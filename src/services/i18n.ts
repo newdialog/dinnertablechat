@@ -4,7 +4,7 @@ import * as LanguageDetector from 'i18next-browser-languagedetector';
 // import config from '../src/config/config'
 // import config from '../src/config/config'
 import Backend from 'i18next-chained-backend';
-import { withI18n, reactI18nextModule } from 'react-i18next';
+// import { withI18n, reactI18nextModule } from 'react-i18next';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 
 const instance = i18n
