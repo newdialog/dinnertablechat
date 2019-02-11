@@ -163,6 +163,9 @@ export async function queueUp(
     // 'team: ' + teamName
   );
 
+  const sideStr = '' + side;
+  const others = ['0', '1', '2'].filter(x => x != sideStr);
+
   const options: GameLift.StartMatchmakingInput = {
     ConfigurationName: 'dtc-match-config',
     // TicketId: 'STRING_VALUE', allow autogeneration
@@ -173,7 +176,9 @@ export async function queueUp(
           '<NonEmptyString>': 0
         },*/
         PlayerAttributes: {
-          side: { N: side },
+          side: { S: sideStr },
+          sideList: { SL: [sideStr] },
+          preferredOpponents: { SL: others },
           donation: { N: donation },
           character: { N: chararacter },
           topic: { S: topic },
@@ -183,6 +188,7 @@ export async function queueUp(
       }
     ]
   };
+  console.log('options', options);
   const stopFlag: StopFlag = { flag: false };
   const r = (await gameLift.startMatchmaking(
     options,

@@ -115,7 +115,7 @@ async function savePG(players, matchId, matchInfo) {
   // Note ticket list might be out of order to players attribute
   const player0 = matchInfo.TicketList[0].Players[0];
   let player0Id = player0.PlayerId.split('__')[0]; // split for guest ids // players[0].realId;
-  const side0 = player0.PlayerAttributes.side.N;
+  const side0 = parseInt(player0.PlayerAttributes.side.S);
   const chracter0 = player0.PlayerAttributes.character.N;
 
   const donation = player0.PlayerAttributes.donation.N;
@@ -123,7 +123,7 @@ async function savePG(players, matchId, matchInfo) {
   // --
   const player1 = matchInfo.TicketList[1].Players[0];
   let player1Id = player1.PlayerId.split('__')[0]; // split for guest ids // players[1].realId; 
-  const side1 = player1.PlayerAttributes.side.N;
+  const side1 = parseInt(player1.PlayerAttributes.side.S);
   const chracter1 = player1.PlayerAttributes.character.N;
 
   const player0_isGuest = player0Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; // guest id attached // players[0].guest;

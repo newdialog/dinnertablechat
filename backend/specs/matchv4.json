@@ -8,8 +8,16 @@
         "default": "politics"
     }, {
         "name": "side",
-        "type": "number",
-        "default": 1
+        "type": "string",
+        "default": "1"
+    }, {
+        "name": "sideList",
+        "type": "string_list",
+        "default": ["1"]
+    }, {
+        "name": "preferredOpponents",
+        "type": "string_list",
+        "default": ["0"]
     }, {
         "name": "character",
         "type": "number",
@@ -63,13 +71,23 @@
             "measurements": ["avg(teams[*].players.attributes[donation])"],
             "referenceValue": "avg(flatten(teams[*].players.attributes[donation]))",
             "maxDistance": 30
-        }, {
-            "name": "DifferentSide",
-            "description": "Only match players when they're using different side",
-            "type": "distance",
-            "measurements": ["avg(flatten(teams[*].players.attributes[side]))"],
-            "referenceValue": 0.5,
-            "maxDistance": 0.1
+        },
+        {
+            "name": "OpponentMatch",
+            "description": "Make sure that all players in the match are using a character that is on all other players' preferred opponents list.",
+            "type": "collection",
+            "operation": "reference_intersection_count",
+            "measurements": ["flatten(teams[*].players.attributes[sideList])"],
+            "referenceValue": "flatten(teams[*].players.attributes[preferredOpponents])",
+            "minCount":0
+        },
+        {
+            "name": "EqualTeamSizes",
+            "description": "equel teams",
+            "type": "comparison",
+            "measurements": [ "count(teams[red].players)" ],
+            "referenceValue": "count(teams[blue].players)",
+            "operation": "="
         }
     ],
     "expansions": [{
@@ -79,10 +97,10 @@
             "value": 1
         }]
     }, {
-        "target": "rules[DifferentSide].maxDistance",
+        "target": "rules[OpponentMatch].minCount",
         "steps": [{
-            "waitTimeSeconds": 20,
-            "value": 2
+            "waitTimeSeconds": 25,
+            "value": 0
         }]
     }]
 }

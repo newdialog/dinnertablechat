@@ -94,22 +94,15 @@ class PositionSelector extends React.Component<Props, State> {
                   <Typography>{card.proposition}</Typography>
                 </CardContent>
                 <CardActions>
-                  <Button
+                  {card.positions.map((p,i)=> <Button
                     size="small"
+                    key={i}
                     color="secondary"
                     className={classes.btn}
-                    onClick={() => this.onSelect(0, card)}
+                    onClick={() => this.onSelect(i, card)}
                   >
-                    {card.positions[0]}
-                  </Button>
-                  <Button
-                    size="small"
-                    color="secondary"
-                    className={classes.btn}
-                    onClick={() => this.onSelect(1, card)}
-                  >
-                    {card.positions[1]}
-                  </Button>
+                    {p}
+                  </Button>)}
                 </CardActions>
               </Card>
               <Typography variant="caption">

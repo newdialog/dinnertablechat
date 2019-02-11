@@ -73,7 +73,7 @@ interface State {
 }
 
 function getSteps() {
-  return ['Select Postion', 'Pick your character']; // , 'Set contribution']
+  return ['Pick your character', 'Select Postion']; // , 'Set contribution']
 }
 
 function onHistory(store: AppModel.Type) {
@@ -83,9 +83,9 @@ function onHistory(store: AppModel.Type) {
 function getStepContent(step: number, store: AppModel.Type) {
   switch (step) {
     case 0:
-      return <PositionSelector store={store} />
-    case 1:
       return <CharacterSelection store={store} />
+    case 1:
+      return <PositionSelector store={store} />
     case 2:
       return <ContributionSelector store={store} />
     default:
@@ -149,8 +149,9 @@ class Index extends React.Component<Props, State> {
     let step = 3;
     
     if(store.debate.contribution===-1) step = 2; // skip contribution
-    if(store.debate.character===-1) step = 1;
-    if(!store.debate.topic || store.debate.position===-1) step = 0;
+    
+    if(!store.debate.topic || store.debate.position===-1) step = 1;
+    if(store.debate.character===-1) step = 0;
     
     // if(store.debate.position !== -1 && store.debate.contribution !== -1) step = 2;
     // if(store.debate.character !== -1) step = 3;

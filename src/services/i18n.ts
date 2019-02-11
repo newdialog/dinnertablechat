@@ -30,7 +30,7 @@ const instance = i18n
       ],
       backendOptions: [
         {
-          expirationTime: 60 * 60 * 1000
+          expirationTime: 5 * 60 * 1000
         },
         {
           // load from i18next-gitbook repo https://raw.githubusercontent.com/i18next/i18next-gitbook/master/locales/
