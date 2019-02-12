@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import * as QS from '../../services/QueueService';
 import * as shake from '../../services/HandShakeService';
-import { Typography } from '@material-ui/core';
+import { Typography, Card } from '@material-ui/core';
 import Reveal from 'react-reveal/Reveal';
 import getMedia from '../../utils/getMedia';
 import Lottie from 'react-lottie';
@@ -63,7 +63,16 @@ const styles = (theme: Theme) =>
       width: '100%',
       background: 'rgba(0, 0, 0, 0.35)',
       backgroundBlendMode: 'multiply'
-    }
+    },
+    textField: {
+      marginLeft: theme.spacing.unit,
+      marginRight: theme.spacing.unit,
+      textAlign: 'center',
+      width: 300,
+      backgroundColor: theme.palette.common.white,
+      '&:focus': {
+      },
+    },
   });
 
 const bgOptions = {
@@ -336,18 +345,22 @@ class LoadingScene extends React.Component<Props, State> {
           </Typography>
           <br />
           <br />
-          <br />
           <Typography
             variant="h1"
             align="center"
             style={{ color: '#ffffff', fontSize: '1.5em', lineHeight: '1', textShadow: '2px 2px #777755' }}
           >
             <Reveal effect="fadeIn" duration={1000}>
-              1. Click "Allow" when the browser asks to enable the microphone.
-              <br />
-              2. Please do not reload or navigate away until prompted.
-              <br />
-              3. If on mobile, rotate to horizonal landscape.
+              Click "Allow" when the browser asks to enable the microphone.
+              <br/>
+              Share a match invite using the link below!
+              <TextField
+              id="standard-name"
+              className={classes.textField}
+              value={'https://dinnertable.chat/?debate=rlo'}
+              margin="normal"
+              color="white"
+              />
             </Reveal>
           </Typography>
         </div>
