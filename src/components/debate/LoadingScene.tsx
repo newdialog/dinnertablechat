@@ -185,6 +185,7 @@ class LoadingScene extends React.Component<Props, State> {
     if (!this.props.store.auth.user!.id) throw new Error('no valid user id');
     
     let userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
+    const guestSeed = this.props.store.auth.user!.guestSeed;
     // Give guests a unique queue id
     // if(this.props.store.isGuest()) 
     // userid += '_' + Math.round(Math.random() * 1000);
@@ -195,6 +196,7 @@ class LoadingScene extends React.Component<Props, State> {
         topic,
         position,
         userid,
+        guestSeed,
         contribution,
         chararacter,
         // this.props.store.isGuest(),
@@ -212,15 +214,18 @@ class LoadingScene extends React.Component<Props, State> {
     // window.onunload = this.onWindowUnload;
   }
 
-  private onWindowUnload = (e:any) => {
+  private onWindowUnload = async (e:any) => {
     console.log('onWindowUnload');
-    if(this.state.ticketId) QS.stopMatchmaking(this.state.ticketId!); // Simple
+    if(this.state.ticketId) await QS.stopMatchmaking(this.state.ticketId!); // Simple
     // return false;
   }
 
-  private onWindowBeforeUnload = (e:any) => {
+  private onWindowBeforeUnload = async (e:any) => {
+    console.log('onWindowBeforeUnload');
+    // if(this.state.ticketId) await QS.stopMatchmaking(this.state.ticketId!);
     e.preventDefault();
-    return e.returnValue = 'Are you sure you want to close?';
+    e.returnValue = "Are you sure you want to leave matchmaking?";
+    return e.returnValue;
   }
 
   public componentWillUnmount() {
@@ -305,8 +310,8 @@ class LoadingScene extends React.Component<Props, State> {
     const matchedUnsync = store.debate.match && !store.debate.match!.sync;
     const matchedsync = store.debate.match && store.debate.match!.sync;
 
-    let text = 'loading';
-    if (!store.debate.match) text = 'looking for a match';
+    let text = 'IN QUEUE';
+    if (!store.debate.match) text = 'this may take a few minutes!';
     if (matchedUnsync) text = 'found match... handshaking';
     if (matchedsync) text = 'handshaking complete';
 
@@ -335,7 +340,7 @@ class LoadingScene extends React.Component<Props, State> {
         <div className={classes.centeredDown}>
           <Typography variant="h1" gutterBottom align="center" style={{textShadow: '2px 2px #777755', color: '#ffffff'}}>
             <Reveal effect="fadeIn" duration={3000}>
-              Loading...
+              Searching for a match...
             </Reveal>
           </Typography>
           <Typography variant="h4" align="center" style={{textShadow: '2px 2px #777755', color: '#ffffff'}}>

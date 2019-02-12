@@ -8,7 +8,6 @@ import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
 import * as DebateModel from '../models/DebateModel';
 import * as AuthService from './AuthService';
-import uuid from 'short-uuid';
 type OnMatched = DebateModel.MatchModelType;
 
 let gameLift: GameLift;
@@ -144,13 +143,16 @@ export async function queueUp(
   topic: string,
   side: integer,
   playerId: string,
+  guestSeed: string,
   donation: float,
   chararacter: integer,
   onMatchedCB: OnMatchedCB
 ) {
   const env = isLive() ? 'prod' : 'dev';
 
-  playerId += '__' + uuid.generate(); // ensure session uniqueness in dtc_sync pool
+  // add uuid to guest
+  if (playerId === '78439c31-beef-4f4d-afbb-e948e3d3c932')
+    playerId += '__' + guestSeed; // ensure session uniqueness in dtc_sync pool
 
   console.log(
     'queueUp:',

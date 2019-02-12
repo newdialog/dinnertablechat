@@ -1,11 +1,13 @@
 import { types, Instance } from 'mobx-state-tree';
 import * as Auth from '../services/AuthService';
 import * as AuthService from '../services/AuthService';
+import uuid from 'short-uuid';
 
 const UserModel = types.model({
   email: types.string,
   name: types.string,
-  id: types.string
+  id: types.string,
+  guestSeed: types.string
   // credits: types.integer,
   // karma: types.maybe(types.integer),
   // token: types.string,
@@ -49,17 +51,45 @@ const AuthModel = types
       self.isNotLoggedIn = true;
     },
     authenticated(authServiceData: any) {
-      const { user, region } = authServiceData;
+      const {
+        user,
+        region
+      }: {
+        user: { name: string; email: string; id: string };
+        region: any;
+      } = authServiceData;
 
       /* if (!self.user)
         window.gtag('event', 'authenticated', {
           event_category: 'auth'
         });*/
+      let seed = localStorage.getItem('guestSeed');
+      if (!seed) {
+        seed = uuid.generate();
+        console.log('generate seed', seed);
+        localStorage.setItem('guestSeed', seed);
+      }
+
+      // Update analytics
+      const isGuest = user.id === '78439c31-beef-4f4d-afbb-e948e3d3c932';
+      let idWithSeed = !isGuest ? user.id : user.id + '__' + seed;
+      console.log('idWithSeed', idWithSeed);
+      window.gtag('set', 'userId', idWithSeed);
+      if (window.mixpanel) {
+        (window.mixpanel as any).identify(idWithSeed);
+        user.email &&
+          (window.mixpanel as any).people.set({
+            $email: user.email,
+            $last_login: new Date()
+          });
+      }
+      // ======
 
       const umodel: Instance<typeof UserModel> = {
         name: user.name,
         email: user.email,
-        id: user.id
+        id: user.id,
+        guestSeed: seed
       };
 
       const aws: Instance<typeof AWSModel> = {

@@ -80,7 +80,7 @@ function onHubCapsule(cb: AwsCB, capsule: any) {
   const { channel, payload } = capsule; // source
   if (channel !== 'auth') return;
 
-  console.log('payload.event', channel, payload.event);
+  /// console.log('payload.event', channel, payload.event);
   if (payload.event == LOGOUT_EVENT) {
     console.log('logout');
     console.log(payload.data);
@@ -179,17 +179,6 @@ async function checkUser(cb: AwsCB, event: string = '') {
     // else console.log('+++ currentAuthenticatedUser found on retry');
   }
   const user = data.attributes;
-
-  // Update analytics
-  window.gtag('set', 'userId', data.username);
-  if (window.mixpanel) {
-    (window.mixpanel as any).identify(data.username);
-    user.email &&
-      (window.mixpanel as any).people.set({
-        $email: user.email,
-        $last_login: new Date()
-      });
-  }
 
   //// AWS.config.credentials = new AWS.Credentials(credentials);
   // FIX: https://github.com/aws-amplify/amplify-js/issues/581
