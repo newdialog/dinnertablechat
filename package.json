@@ -21,10 +21,10 @@
     "formik": "^1.5.0",
     "hark": "^1.2.3",
     "history": "^4.7.2",
-    "i18next": "^15.0.2",
+    "i18next": "^15.0.3",
     "i18next-browser-languagedetector": "^3.0.0",
     "i18next-chained-backend": "^1.0.0",
-    "i18next-localstorage-backend": "^2.0.0",
+    "i18next-localstorage-backend": "^2.1.0",
     "i18next-xhr-backend": "^2.0.0",
     "lottie-react-web": "^2.1.4",
     "lottie-web": "^5.4.3",
@@ -72,8 +72,8 @@
     "old_patchsq": "sed -i.bak '/workbox.clientsClaim();/i workbox.skipWaiting();' ./build/service-worker.js && rm ./build/service-worker.js.bak"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.0",
-    "@types/node": "^10.12.24",
+    "@types/jest": "^24.0.3",
+    "@types/node": "^10.12.26",
     "@types/react": "^16.8.2",
     "@types/react-dom": "^16.8.0",
     "@types/react-responsive": "^3.0.2",
