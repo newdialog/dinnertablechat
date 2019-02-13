@@ -82,23 +82,26 @@ class AuthComp extends React.Component<Props, any> {
   }
 
   private handleAuth = (awsUser: AuthService.AwsAuth | null) => {
+    const s = this.props.store;
     if (!awsUser)  {
       console.log('+not logged in');
       // if(this.props.store.isStandalone()) this.signIn(); // MOBILE
       
-      this.props.store.auth.notLoggedIn();
+      s.auth.notLoggedIn();
       // AuthService.guestLogin();
       return;
     } 
     console.log('+logged in');
     // console.log('handleAuth', awsUser)
-    this.props.store.auth.authenticated(awsUser);
+    s.auth.authenticated(awsUser);
     
     // TODO: cleanup guest login flow
-    if(awsUser.user.email==='guest@dinnertable.chat' && this.props.store.isGuest() && awsUser.event === AuthService.LOGIN_EVENT) 
-      this.props.store.isStandalone() ? this.props.store.router.push('/home') : this.props.store.router.push('/tutorial');
-    
-
+    if(awsUser.user.email==='guest@dinnertable.chat' && s.isGuest() && awsUser.event === AuthService.LOGIN_EVENT) 
+      if(this.props.store.isStandalone()) s.router.push('/home');
+      else {
+        // if(localStorage.getItem('quickmatch')) s.router.push('/quickmatch');
+        s.router.push('/tutorial');
+      }
     /* if(awsUser.event !== AuthService.LOGIN_EVENT) {
       if(this.props.store.isStandalone()) this.props.store.router.push('/home');
     } */

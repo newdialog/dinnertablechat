@@ -50,6 +50,10 @@ const AppModel = types
         navigator.userAgent === 'Mozilla/5.0 Google' ||
         navigator.userAgent === 'Mozilla/5.0 Google PWA'
       );
+    },
+    isQuickmatch() {
+      const param = new URLSearchParams(window.location.search);
+      return param.has('quickmatch');
     }
   }))
   .actions(self => ({

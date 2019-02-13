@@ -73,7 +73,7 @@ const AuthModel = types
       // Update analytics
       const isGuest = user.id === '78439c31-beef-4f4d-afbb-e948e3d3c932';
       let idWithSeed = !isGuest ? user.id : user.id + '__' + seed;
-      console.log('idWithSeed', idWithSeed);
+      // console.log('idWithSeed', idWithSeed);
       window.gtag('set', 'userId', idWithSeed);
       if (window.mixpanel) {
         (window.mixpanel as any).identify(idWithSeed);

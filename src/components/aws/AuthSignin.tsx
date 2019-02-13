@@ -38,7 +38,8 @@ class AuthSignin extends React.Component<Props, any> {
             event_category: 'auth'
           });
 
-        if(store.isStandalone()) store.router.push('/home');
+        if(localStorage.getItem('quickmatch')) store.router.push('/quickmatch');
+        else if(store.isStandalone()) store.router.push('/home');
         else store.router.push('/tutorial');
         this.refresh = true;
     }

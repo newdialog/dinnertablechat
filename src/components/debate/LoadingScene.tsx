@@ -68,7 +68,7 @@ const styles = (theme: Theme) =>
       marginLeft: theme.spacing.unit,
       marginRight: theme.spacing.unit,
       textAlign: 'center',
-      width: 300,
+      width: 350,
       backgroundColor: theme.palette.common.white,
       '&:focus': {
       },
@@ -362,7 +362,7 @@ class LoadingScene extends React.Component<Props, State> {
               <TextField
               id="standard-name"
               className={classes.textField}
-              value={'https://dinnertable.chat/?debate=rlo'}
+              value={'https://dinnertable.chat/?quickmatch=rlo'}
               margin="normal"
               color="white"
               />

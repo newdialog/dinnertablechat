@@ -162,7 +162,10 @@ class GettingStarted extends React.Component<Props, State> {
       !store.auth.isAuthenticated()
     )
       store.auth.login();
-    else store.gotoHomeMenu();
+    else {
+      if(localStorage.getItem('quickmatch')) store.router.push('/quickmatch');
+      else store.gotoHomeMenu();
+    }
   };
 
   handleStepChange = activeStep => {

@@ -98,6 +98,8 @@ class Index extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { open: false, activeStep: 0 };
+
+    localStorage.removeItem('quickmatch');
   }
 
   public componentDidMount() {

@@ -221,6 +221,7 @@ class Index extends React.Component<Props, State> {
       loaded: false,
       error: null
     };
+    localStorage.removeItem('quickmatch'); // cancel quickmatch if nav here
   }
 
   componentDidMount() {
@@ -529,7 +530,7 @@ class Index extends React.Component<Props, State> {
     const numDebates = this.state.data.length;
     const m = 20;
     const xpPerLevel = 3 * m; // 60
-    const startingXP = 10;
+    const startingXP = 0;
     const xpTotal = numDebates * m + startingXP;
     const xp = xpTotal % xpPerLevel;
     const level = Math.floor(xpTotal / xpPerLevel) + 1;
@@ -568,7 +569,7 @@ class Index extends React.Component<Props, State> {
             gutterBottom
             style={{ fontSize: '1.25em' }}
           >
-            Guest Account
+            <Info style={{ margin: '0px 3px -6px 0px' }} /> Temporary guest account
           </Typography>
           <Typography
                   variant="body2"
@@ -578,12 +579,13 @@ class Index extends React.Component<Props, State> {
                   className={classes.nameSubstat}
                   style={{ fontWeight: 'normal', fontSize: '1em' }}
                 >
-                  Guest users allows for testing out DTC but will have no saved history, xp/levels, or any of the member perks. Registered users also gain an extra hour of debate time!<br/><br/>Please signup to start building your page!
+                  Guests can join others in matchmaking but will <b> not gain</b> xp/levels or any of the member perks. Registered users also have priority in matchmaking. Please signup to start building your character!
           </Typography>
-          
           </>
           }
-          { !store.isGuest() && 
+          </div><br/>
+          <div className={classes.headerContainer}>
+          {  
             <Grid
               container
               spacing={16}
@@ -666,9 +668,7 @@ class Index extends React.Component<Props, State> {
               justify="space-around"
               alignItems="center"
             >
-              <Grid item xs={12}>
-                <DailyTimer />
-              </Grid>
+              
               {(debateOpen || !store.isLive()) && (
                 <Grid item xs={12}>
                   <Button
@@ -694,9 +694,12 @@ class Index extends React.Component<Props, State> {
                   </Button>
                 </Grid>
               )}
+
+              <Grid item xs={12}>
+              <br /><DailyTimer />
+              </Grid>
             </Grid>
 
-            <br />
             <br />
             
           </div>
