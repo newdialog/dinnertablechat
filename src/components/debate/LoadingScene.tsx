@@ -402,29 +402,22 @@ class LoadingScene extends React.Component<Props, State> {
                 options={{ message: 'Whoa!' }}
                 text={refURL}
               >
-                <button>
-                  <i
-                    id="social-medium"
-                    className="far fa-clipboard"
-                    style={{ fontSize: '2em' }}
-                  />
-                </button>
+                <Button variant="contained"
+                  color="secondary"
+                  size="large">
+                    
+                    <i
+                      className="far fa-clipboard"
+                      style={{ marginRight: '8px', fontSize: '2em', color: '#ffffff', cursor: 'pointer' }}
+                    />click to copy link
+                  </Button>
               </CopyToClipboard>
               <section className="section">
                 {this.state.copied ? (
                   <span style={{ color: '#fdcb92', fontSize: '.7em' }}>
                     copied link to clipboard
                   </span>
-                ) : (
-                  <CopyToClipboard
-                    onCopy={() => this.setState({ copied: true })}
-                    text={refURL}
-                  >
-                    <span style={{ color: '#fdcb92', fontSize: '.7em' }}>
-                      click to copy link
-                    </span>
-                  </CopyToClipboard>
-                )}
+                ) : null}
               </section>
             </Reveal>
           </Typography>
