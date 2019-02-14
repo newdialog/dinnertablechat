@@ -37,6 +37,7 @@
     "mst-middlewares": "^3.10.2",
     "mst-react-router": "^2.3.1",
     "react": "^16.8.1",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-countdown-now": "^2.1.0",
     "react-dom": "^16.8.1",
     "react-fps-stats": "^0.1.1",

@@ -99,8 +99,8 @@ class AuthComp extends React.Component<Props, any> {
     if(awsUser.user.email==='guest@dinnertable.chat' && s.isGuest() && awsUser.event === AuthService.LOGIN_EVENT) 
       if(this.props.store.isStandalone()) s.router.push('/home');
       else {
-        // if(localStorage.getItem('quickmatch')) s.router.push('/quickmatch');
-        s.router.push('/tutorial');
+        if(localStorage.getItem('quickmatch')) s.router.push('/quickmatch');
+        else s.router.push('/tutorial');
       }
     /* if(awsUser.event !== AuthService.LOGIN_EVENT) {
       if(this.props.store.isStandalone()) this.props.store.router.push('/home');

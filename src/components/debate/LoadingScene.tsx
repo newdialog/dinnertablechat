@@ -11,6 +11,7 @@ import Lottie from 'react-lottie';
 import * as AppModel from '../../models/AppModel';
 import HOC from '../HOC';
 import DebateError from './DebateError';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -70,9 +71,8 @@ const styles = (theme: Theme) =>
       textAlign: 'center',
       width: 350,
       backgroundColor: theme.palette.common.white,
-      '&:focus': {
-      },
-    },
+      '&:focus': {}
+    }
   });
 
 const bgOptions = {
@@ -93,6 +93,7 @@ interface State {
   stream?: MediaStream;
   error?: string;
   ticketId?: string;
+  copied?: boolean;
 }
 
 class LoadingScene extends React.Component<Props, State> {
@@ -108,7 +109,7 @@ class LoadingScene extends React.Component<Props, State> {
   }
 
   private onMatched = (match: any) => {
-    if(this.unloadFlag.flag) return;
+    if (this.unloadFlag.flag) return;
     // TODO
     if (typeof match === 'string') {
       /// if(match === 'CANCELLED') return; // just end (why?)
@@ -145,7 +146,7 @@ class LoadingScene extends React.Component<Props, State> {
       guest: this.props.store.isGuest()
     });
     // Also add a metric for guests in queue
-    if(this.props.store.isGuest()) {
+    if (this.props.store.isGuest()) {
       window.gtag('event', 'debate_loading_guest', {
         event_category: 'debate',
         topic,
@@ -165,8 +166,8 @@ class LoadingScene extends React.Component<Props, State> {
       return; // do not continue to queue on error;
     }
 
-    window.addEventListener("beforeunload", this.onWindowBeforeUnload);
-    window.addEventListener("unload", this.onWindowUnload);
+    window.addEventListener('beforeunload', this.onWindowBeforeUnload);
+    window.addEventListener('unload', this.onWindowUnload);
     await this.getMatch();
   }
 
@@ -183,14 +184,14 @@ class LoadingScene extends React.Component<Props, State> {
     // const sameUserSeed = Math.round(new Date().getTime() / 1000);
 
     if (!this.props.store.auth.user!.id) throw new Error('no valid user id');
-    
+
     let userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
     const guestSeed = this.props.store.auth.user!.guestSeed;
     // Give guests a unique queue id
-    // if(this.props.store.isGuest()) 
+    // if(this.props.store.isGuest())
     // userid += '_' + Math.round(Math.random() * 1000);
 
-    let ticketId:any;
+    let ticketId: any;
     try {
       ticketId = await QS.queueUp(
         topic,
@@ -207,47 +208,49 @@ class LoadingScene extends React.Component<Props, State> {
       this.setState({ error: 'matchtimeout' });
       return;
     }
-    if(this.unloadFlag.flag) return;
-    this.setState({ticketId});
+    if (this.unloadFlag.flag) return;
+    this.setState({ ticketId });
 
     // this.ticketIdProp = ticketId;
     // window.onunload = this.onWindowUnload;
   }
 
-  private onWindowUnload = async (e:any) => {
+  private onWindowUnload = async (e: any) => {
     console.log('onWindowUnload');
-    if(this.state.ticketId) await QS.stopMatchmaking(this.state.ticketId!); // Simple
+    if (this.state.ticketId) await QS.stopMatchmaking(this.state.ticketId!); // Simple
     // return false;
-  }
+  };
 
-  private onWindowBeforeUnload = async (e:any) => {
+  private onWindowBeforeUnload = async (e: any) => {
     console.log('onWindowBeforeUnload');
     // if(this.state.ticketId) await QS.stopMatchmaking(this.state.ticketId!);
     e.preventDefault();
-    e.returnValue = "Are you sure you want to leave matchmaking?";
+    e.returnValue = 'Are you sure you want to leave matchmaking?';
     return e.returnValue;
-  }
+  };
 
   public componentWillUnmount() {
-    window.removeEventListener("beforeunload", this.onWindowBeforeUnload);
-    window.removeEventListener("unload", this.onWindowUnload);
+    window.removeEventListener('beforeunload', this.onWindowBeforeUnload);
+    window.removeEventListener('unload', this.onWindowUnload);
     // unload streams if nav to different page outside of match
     // console.log('this.props.store.router', JSON.stringify(this.props.store.router));
-    
+
     /* const navAway =
       ((this.props.store.router.location as any).pathname as string).indexOf(
         'match'
       ) === -1; */
-    
-    const hasMatch = this.props.store.debate.match && this.props.store.debate.match!.sync;
-    
+
+    const hasMatch =
+      this.props.store.debate.match && this.props.store.debate.match!.sync;
+
     console.log('componentWillUnmount 1', !hasMatch);
     this.unloadFlag.flag = true;
-    if(!hasMatch) {
+    if (!hasMatch) {
       console.log('componentWillUnmount 2', this.state.ticketId);
-      if(this.state.ticketId) QS.stopMatchmaking(this.state.ticketId!);
+      if (this.state.ticketId) QS.stopMatchmaking(this.state.ticketId!);
       this.props.store.showNavbar();
-      if(this.state.stream) this.state.stream.getTracks().forEach(track => track.stop());
+      if (this.state.stream)
+        this.state.stream.getTracks().forEach(track => track.stop());
     }
   }
 
@@ -255,13 +258,22 @@ class LoadingScene extends React.Component<Props, State> {
     console.log('gotMedia, now handshaking');
     const matchId = this.props.store.debate.match!.matchId;
     const isLeader = this.props.store.debate.match!.leader;
-    const state = { char: this.props.store.debate.character, side: this.props.store.debate.position }; // TODO pretect against premium chars
+    const state = {
+      char: this.props.store.debate.character,
+      side: this.props.store.debate.position
+    }; // TODO pretect against premium chars
 
     let result: any;
     try {
-      result = await shake.handshake(matchId, isLeader, state, stream, this.unloadFlag);
+      result = await shake.handshake(
+        matchId,
+        isLeader,
+        state,
+        stream,
+        this.unloadFlag
+      );
     } catch (e) {
-      if(this.unloadFlag.flag) return; // just exit if we already ending
+      if (this.unloadFlag.flag) return; // just exit if we already ending
       this.unloadFlag.flag = true;
       const retryError = e.toString().indexOf('retry') !== -1;
       console.warn('handshake error', retryError, e);
@@ -274,10 +286,9 @@ class LoadingScene extends React.Component<Props, State> {
         await this.getMatch();
         return;
         // return this.setState({ error: 'handshake_timeout' });
-      }
-      else return this.setState({ error: 'handshake_error' });
+      } else return this.setState({ error: 'handshake_error' });
     } finally {
-      if(this.unloadFlag.flag) {
+      if (this.unloadFlag.flag) {
         console.log('gotMedia stopping due to flag');
         return;
       }
@@ -296,8 +307,12 @@ class LoadingScene extends React.Component<Props, State> {
 
   public async componentWillUpdate() {
     // Get Mic right away
-    if(this.unloadFlag.flag) return;
-    if (this.props.store.debate.match && this.state.stream && !this.startedHandshake) {
+    if (this.unloadFlag.flag) return;
+    if (
+      this.props.store.debate.match &&
+      this.state.stream &&
+      !this.startedHandshake
+    ) {
       this.startedHandshake = true;
       this.gotMedia(this.state.stream!);
     }
@@ -323,6 +338,8 @@ class LoadingScene extends React.Component<Props, State> {
       this.loggedError = true;
     }
 
+    const refURL = 'https://dinnertable.chat/?quickmatch=join';
+
     return (
       <div className={classes.centered}>
         {this.state.error && (
@@ -338,12 +355,21 @@ class LoadingScene extends React.Component<Props, State> {
         <div className={classes.bannerAnimOverlay} />
 
         <div className={classes.centeredDown}>
-          <Typography variant="h1" gutterBottom align="center" style={{textShadow: '2px 2px #777755', color: '#ffffff'}}>
+          <Typography
+            variant="h1"
+            gutterBottom
+            align="center"
+            style={{ textShadow: '2px 2px #777755', color: '#ffffff' }}
+          >
             <Reveal effect="fadeIn" duration={3000}>
               Searching for a match...
             </Reveal>
           </Typography>
-          <Typography variant="h4" align="center" style={{textShadow: '2px 2px #777755', color: '#ffffff'}}>
+          <Typography
+            variant="h4"
+            align="center"
+            style={{ textShadow: '2px 2px #777755', color: '#ffffff' }}
+          >
             <Reveal effect="fadeIn" duration={3000}>
               {text}
             </Reveal>
@@ -353,19 +379,53 @@ class LoadingScene extends React.Component<Props, State> {
           <Typography
             variant="h1"
             align="center"
-            style={{ color: '#ffffff', fontSize: '1.5em', lineHeight: '1', textShadow: '2px 2px #777755' }}
+            style={{
+              color: '#ffffff',
+              fontSize: '1.5em',
+              lineHeight: '1',
+              textShadow: '2px 2px #777755'
+            }}
           >
             <Reveal effect="fadeIn" duration={1000}>
               Click "Allow" when the browser asks to enable the microphone.
-              <br/>
+              <br />
               Share a match invite using the link below!
               <TextField
-              id="standard-name"
-              className={classes.textField}
-              value={'https://dinnertable.chat/?quickmatch=rlo'}
-              margin="normal"
-              color="white"
+                id="standard-name"
+                className={classes.textField}
+                value={refURL}
+                margin="normal"
+                color="white"
               />
+              <CopyToClipboard
+                onCopy={() => this.setState({ copied: true })}
+                options={{ message: 'Whoa!' }}
+                text={refURL}
+              >
+                <button>
+                  <i
+                    id="social-medium"
+                    className="far fa-clipboard"
+                    style={{ fontSize: '2em' }}
+                  />
+                </button>
+              </CopyToClipboard>
+              <section className="section">
+                {this.state.copied ? (
+                  <span style={{ color: '#fdcb92', fontSize: '.7em' }}>
+                    copied link to clipboard
+                  </span>
+                ) : (
+                  <CopyToClipboard
+                    onCopy={() => this.setState({ copied: true })}
+                    text={refURL}
+                  >
+                    <span style={{ color: '#fdcb92', fontSize: '.7em' }}>
+                      click to copy link
+                    </span>
+                  </CopyToClipboard>
+                )}
+              </section>
             </Reveal>
           </Typography>
         </div>
