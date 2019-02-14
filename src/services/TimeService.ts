@@ -1,9 +1,9 @@
 import moment from 'moment';
 
-const hourOpen = 22;
+const hourOpen = 21;
 const minOpen = 0;
 
-const dur = moment.duration(8, 'hours').add(0, 'minutes');
+const dur = moment.duration(9, 'hours').add(0, 'minutes');
 
 export function isBeforeEndingTime() {
   return moment()
