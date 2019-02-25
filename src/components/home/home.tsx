@@ -126,6 +126,13 @@ class Index extends React.Component<Props, State> {
     this.state = { open: false };
   }
 
+  public componentWillMount() {
+    const fp = (window as any).FloatingPrompt;
+    if(fp) fp({width: '300px', 
+      text: "Do you like DTC? Don't forget to show your love on Product Hunt 🚀",
+      saveInCookies: true, name:'DTC', url:'https://www.producthunt.com/posts/dinnertable-chat-3'});
+  }
+
   public render() {
     const { classes, store } = this.props;
     const { open } = this.state;

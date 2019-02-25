@@ -15,7 +15,7 @@
     "@material-ui/icons": "^3.0.2",
     "async-retry": "^1.2.3",
     "aws-amplify-react": "^2.3.0",
-    "aws-sdk": "^2.406.0",
+    "aws-sdk": "^2.410.0",
     "backoff-rxjs": "^6.3.2",
     "env-cmd": "^8.0.2",
     "formik": "^1.5.1",
@@ -36,13 +36,13 @@
     "moment": "^2.24.0",
     "mst-middlewares": "^3.10.2",
     "mst-react-router": "^2.3.1",
-    "react": "^16.8.2",
+    "react": "^16.8.3",
     "react-copy-to-clipboard": "^5.0.1",
     "react-countdown-now": "^2.1.0",
-    "react-dom": "^16.8.2",
+    "react-dom": "^16.8.3",
     "react-fps-stats": "^0.1.1",
     "react-helmet": "^5.2.0",
-    "react-i18next": "^10.1.2",
+    "react-i18next": "^10.2.0",
     "react-lottie": "^1.2.3",
     "react-mailchimp-subscribe": "^2.1.0",
     "react-responsive": "^6.1.1",
@@ -74,8 +74,8 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.6",
-    "@types/node": "^11.9.4",
-    "@types/react": "^16.8.3",
+    "@types/node": "^11.9.5",
+    "@types/react": "^16.8.4",
     "@types/react-dom": "^16.8.2",
     "@types/react-responsive": "^3.0.3",
     "@types/simple-peer": "^6.1.5",
@@ -85,7 +85,7 @@
     "google-spreadsheet-i18n": "^1.0.6",
     "http-proxy": "^1.17.0",
     "react-scripts": "^2.1.5",
-    "typescript": "^3.3.3"
+    "typescript": "^3.3.3333"
   },
   "optionalDependencies": {
     "fsevents": "1.2.4"
