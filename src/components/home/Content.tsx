@@ -12,7 +12,7 @@ import Lottie from 'react-lottie';
 
 import Reveal from 'react-reveal/Reveal';
 import Flip from 'react-reveal/Flip';
-import Waypoint from 'react-waypoint';
+import { Waypoint } from 'react-waypoint';
 
 import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';

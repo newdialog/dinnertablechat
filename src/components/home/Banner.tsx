@@ -9,7 +9,7 @@ import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
-import Waypoint from 'react-waypoint';
+import { Waypoint } from 'react-waypoint';
 import HOC from '../HOC';
 import * as AppModel from '../../models/AppModel';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
