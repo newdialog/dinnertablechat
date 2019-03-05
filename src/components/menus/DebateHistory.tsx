@@ -556,8 +556,9 @@ class Index extends React.Component<Props, State> {
     return (
       <div className={classes.pagebody}>
         <div className={classes.centered}>
+        { store.isGuest() && <>
           <div className={classes.headerContainer}>
-          { store.isGuest() && 
+           
             <>
             <Button style={{marginTop:'1vh', marginLeft: '12px', float:'right'}} onClick={this.signOutGuest} variant="contained" color="secondary" size="large">Signup now
              </Button>
@@ -582,8 +583,8 @@ class Index extends React.Component<Props, State> {
                   Guests can join others in matchmaking but will <b> not gain</b> xp/levels or any of the member perks. Registered users also have priority in matchmaking. Please signup to start building your character!
           </Typography>
           </>
-          }
-          </div><br/>
+          
+          </div><br/> </>}
           <div className={classes.headerContainer}>
           {  
             <Grid
