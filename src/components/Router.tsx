@@ -12,7 +12,7 @@ const AsyncEducation = lazy(() => import('./pages/EducationHome'));
 const AsyncMediaKit = lazy(() => import('./mediakit/MediaKit'));
 const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
 const AsyncTester = lazy(() => import('./debate/DebateTester'));
-const DebateHistory = lazy(() => import('./menus/DebateHistory'));
+const UserHome = lazy(() => import('./menus/UserHome'));
 const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
 const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
@@ -45,7 +45,6 @@ const DTCRouter = ({
         <Route exact={true} path="/CALLBACK" component={AuthSignin} />
         <Route exact={true} path="/signin" component={AuthSignin} />
         <Route exact={true} path="/feedback" component={DebateFeedback} />
-        <Route exact={true} path="/history" component={DebateHistory} />
         <Route exact={true} path="/tutorial" component={GettingStarted} />
 
         <Route path="/press" component={AsyncMediaKit} />
@@ -53,7 +52,7 @@ const DTCRouter = ({
 
         <Route path="/campus" component={AsyncEducation} />
 
-        <Route path="/home" component={DebateHistory} />
+        <Route path="/home" component={UserHome} />
         <Route path="/quickmatch" component={AsyncPlay} />
         <Route path="/match" component={AsyncDebate} />
 
