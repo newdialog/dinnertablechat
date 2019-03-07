@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
 import {
-  Chip,
   Grid,
   Typography,
   Paper,
@@ -14,36 +13,27 @@ import {
   Collapse
 } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import moment from 'moment';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import * as AppModel from '../../models/AppModel';
-import { inject } from 'mobx-react';
-import HOC, { Authed } from '../HOC';
-
-import API from '../../services/APIService';
-import { boolean } from 'mobx-state-tree/dist/internal';
-import MD5 from 'md5';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Footer from '../home/Footer';
 import Button from '@material-ui/core/Button';
-import QueueIcon from '@material-ui/icons/QueuePlayNext';
-import RateReview from '@material-ui/icons/RateReview';
-import Subscribe from '../home/Subscribe';
-import * as Times from '../../services/TimeService';
-import DailyTimer from './DailyTimer';
 import Info from '@material-ui/icons/Info';
+import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
+import LinearProgress from '@material-ui/core/LinearProgress';
+
+import * as AppModel from '../../models/AppModel';
+import HOC, { Authed } from '../HOC';
 import * as TopicInfo from '../../utils/TopicInfo';
+import API from '../../services/APIService';
+
+import moment from 'moment';
+import { inject } from 'mobx-react';
+import MD5 from 'md5';
+
 import {
   TwitterShareButton,
   FacebookShareButton,
   TwitterIcon,
   FacebookIcon
 } from 'react-share';
-import AppFloatMenu from '../home/AppFloatMenu';
 
 const styles = theme =>
   createStyles({
@@ -63,29 +53,12 @@ const styles = theme =>
       minWidth: '300px',
       minHeight: 'calc(100vh - 504px)'
     },
-    stats: {
-      textAlign: 'right',
-      [theme.breakpoints.down('xs')]: {
-        textAlign: 'center'
-      }
-    },
-    lstats: {
-      fontSize: '1.1em',
-      fontWeight: 500,
-      color: '#ffffff',
-    },
-    lstatsLabel: {
-      fontSize: '1.1em',
-      fontWeight: 300,
-      color: '#ffffff',
-    },
     headerContainer: {
       flexDirection: 'row',
       padding: '1em',
       borderRadius: '2vh',
       backgroundColor: theme.palette.primary.dark,
       boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.28), 0px 1px 1px 0px rgba(0,0,0,0.2), 0px 2px 1px -1px rgba(0,0,0,0.2)'
-      //backgroundColor: '#D2E5F5' // '#ddd'
     },
     name: {
       color: '#ffffff',
@@ -114,26 +87,9 @@ const styles = theme =>
       alignItems: 'center',
       objectFit: 'contain'
     },
-    nested: {
-      paddingLeft: theme.spacing.unit * 4
-    },
-    chip: {
-      margin: theme.spacing.unit
-      // background: 'linear-gradient(to right bottom, #ccc, #484965)',
-      // color: 'white',
-      // fontWeight: 'bold'
-    },
-    margin: {
-      //margin: theme.spacing.unit * 2,
-    },
     imgLink: {
       textDecoration: 'none',
       color: theme.palette.secondary.dark // '#b76464' // #ef5350
-    },
-    infoTip: {
-      margin: '60px auto 0 auto',
-      padding: '6px 32px',
-      backgroundColor: theme.palette.secondary.light
     },
     media: {
       height: 0
@@ -398,17 +354,13 @@ class Index extends React.Component<Props, State> {
                   <span className="nowrap"style={{fontWeight:500}}> {x.oppSide}:</span><> </>
                 </span>
                 <span
-                  style={{ fontWeight:500, color: x.agreed === 'Agreed' ? 'green' : 'red' }}
+                  style={{ fontWeight:500, color: x.agreed === 'Agreed' ? '#1f9b83' : '#d10000' }}
                 >
                   <span className="nowrap"> {x.agreed === 'Agreed' ? 'Found Agreement' : 'No agreement'} </span>
                 </span>
               </>
             }
-            subheader={
-              <>
-                {x.date}
-              </>
-            }
+            subheader={<>{x.date}</>}
           />
           <CardMedia
             className={classes.media}
@@ -423,7 +375,6 @@ class Index extends React.Component<Props, State> {
               spacing={0}
               justify="space-around"
               alignItems="center"
-              className={classes.margin}
             >
               {x.oppReview.traits.pos &&
                 x.oppReview.traits.pos.map((label, i2) => {
@@ -448,7 +399,6 @@ class Index extends React.Component<Props, State> {
                       </Typography>
                     </Grid>
                   );
-                  // return <Chip key={i} label={label} className={classes.chip} />;
                 })}
             </Grid>
             <br />
@@ -543,15 +493,10 @@ class Index extends React.Component<Props, State> {
     // Level bar
     const normalise = value => ((value - 0) * 100) / (xpPerLevel - 0);
 
-    const achievements = {
-      participation: level
-    };
     let title = 'Beginner Apprentice';
     if (level > 3) title = 'Traveling Journeyman';
     if (level > 6) title = 'Experienced Rhetorician';
     if (level > 12) title = 'Most Honorable Host';
-
-    const debateOpen = Times.isDuringDebate();
 
     return (
       <div className={classes.pagebody}>
@@ -585,131 +530,13 @@ class Index extends React.Component<Props, State> {
           </>
           
           </div><br/> </>}
-          <div className={classes.headerContainer}>
-          {  
-            <Grid
-              container
-              spacing={16}
-              justify="space-around"
-              alignItems="center"
-            >
-              <Grid item xs={12} sm={9}>
-                <Typography
-                  variant="h1"
-                  align="left"
-                  color="textPrimary"
-                  className={classes.name}
-                  gutterBottom
-                  style={{ fontSize: '1.25em' }}
-                >
-                  {this.props.store.auth.user!.name}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  align="left"
-                  color="textPrimary"
-                  gutterBottom
-                  className={classes.nameSubstat}
-                  style={{ fontWeight: 'normal', fontSize: '1em' }}
-                >
-                  LEVEL {level}: {title}
-                  <br />
-                  XP {xp}/{nextLevel}
-                </Typography>
-                <LinearProgress
-                  color="secondary"
-                  variant="determinate"
-                  value={normalise(xp)}
-                />
-              </Grid>
-              <Grid item xs={12} sm={3} className={classes.stats}>
-                <Typography
-                  variant="h4"
-                  color="textPrimary"
-                  gutterBottom
-                  className={classes.lstats}
-                >
-                  {timePlayed} min
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textPrimary"
-                  gutterBottom
-                  className={classes.lstatsLabel}
-                >
-                  TIME PLAYED
-                </Typography>
-                <Typography
-                  variant="h4"
-                  color="textPrimary"
-                  gutterBottom
-                  className={classes.lstats}
-                >
-                  {numDebates || 'zero'}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="textPrimary"
-                  gutterBottom
-                  className={classes.lstatsLabel}
-                >
-                  DEBATE SESSIONS
-                </Typography>
-              </Grid>
-            </Grid>
-          }
-          </div>
-
-          <div
-            style={{ width: '100%', textAlign: 'center', marginTop: '12px' }}
-          >
-            <Grid
-              container
-              spacing={0}
-              justify="space-around"
-              alignItems="center"
-            >
-              
-              {(debateOpen || !store.isLive()) && (
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    style={{ padding: '1em' }}
-                    onClick={() => this.props.store.router.push('/quickmatch')}
-                  >
-                    Begin Dinner Party QuickMatch! <QueueIcon style={{marginLeft:'5px'}}/>
-                  </Button>
-                </Grid>
-              )}
-
-              {!debateOpen && (
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => this.props.store.router.push('/')}
-                  >
-                    Dinner is finished.
-                    <br /> come back next time!
-                  </Button>
-                </Grid>
-              )}
-
-              <Grid item xs={12}>
-              <br /><DailyTimer />
-              </Grid>
-            </Grid>
-
-            <br />
-            
-          </div>
-
+        
           {false && this.showAchievements(classes)}
 
           <div style={{ paddingBottom: '1em' }} />
 
           {this.renderList(classes, t, this.state.data)}
+
           {this.state.data.length === 0 && (
             <Paper className={classes.paper}>
               <Typography
@@ -729,53 +556,10 @@ class Index extends React.Component<Props, State> {
               </Typography>
             </Paper>
           )}
-
-<Paper className={classes.infoTip}>
-          <Typography
-            variant="body1"
-            align="center"
-            color="textSecondary"
-            gutterBottom
-          >
-            <Info style={{ margin: '0px 3px -6px 0px' }} />
-            <b>TIP</b>
-            <br />
-            It helps to prepare for debates using credible sources of
-            information. <br />
-            <a
-              href="https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef"
-              target="_blank"
-              rel="noopener"
-            >
-              Here's our recommendations
-            </a>
-            .
-          </Typography>
-        </Paper>
         </div>
-
-        
-        
-        <Footer forceShow={true} /><AppFloatMenu />
       </div>
     );
   }
-  // backgroundColor:'#dcdcdc'
 }
 
 export default inject('store')(HOC(Authed(Index), styles));
-
-// <Subscribe offHome={true}/>
-// <Typography align="right" variant="caption">Share your experience:</Typography>
-/*
-<Typography variant="body1" style={{ marginTop: 12 }}>
-              <a
-                href="https://goo.gl/forms/TA1urn48JVhtpsO13"
-                className={classes.imgLink}
-                target="_blank"
-              >
-                Have feedback on your experience?{' '}
-                <RateReview style={{ marginBottom: '-6px' }} />
-              </a>
-            </Typography>
-*/

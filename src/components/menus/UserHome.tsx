@@ -8,8 +8,9 @@ import {Helmet} from "react-helmet";
 import DailyTimer from './DailyTimer';
 import * as Times from '../../services/TimeService';
 import * as AppModel from '../../models/AppModel';
-import Footer from '../home/Footer';
 import Tooltip from './Tooltip';
+import DebateHistory from './DebateHistory';
+import Footer from '../home/Footer';
 import {inject} from 'mobx-react';
 
 const styles = (theme: Theme) =>
@@ -97,20 +98,14 @@ class Index extends React.Component<Props, State> {
                   </Button>
                 </Grid>
               )}
-
-              <Grid item xs={12}>
-              <br /><DailyTimer />
-              </Grid>
             </Grid>
-
-            <br />
-            
+            <div className={classes.divider} />
+            <DailyTimer />
+            <Tooltip />
           </div>
-        
-
           <div className={classes.divider} />
+          <DebateHistory />
         </div>
-        <Tooltip />
         <Footer />
       </React.Fragment>
     );

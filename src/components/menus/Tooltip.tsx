@@ -8,17 +8,14 @@ const styles = theme =>
   createStyles({
     infoTip: {
         maxWidth: '600px',
-        margin: '60px auto 0 auto',
+        margin: '30px auto 0 auto',
         padding: '6px 32px',
         backgroundColor: theme.palette.secondary.light
       },
   });
 
-interface Props extends WithStyles<typeof styles> {
-  
+interface Props extends WithStyles<typeof styles> {  
 }
-
-
 
 function Tooltip(props: Props) {
   const { classes } = props;  
@@ -46,7 +43,6 @@ function Tooltip(props: Props) {
     </Typography>
   </Paper>
   );
-    
 }
 
 export default HOC(Tooltip, styles);
