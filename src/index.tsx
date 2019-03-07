@@ -37,7 +37,7 @@ ReactDOM.render(
       <Provider store={store}><AppModel.Context.Provider value={store}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <App history={history} />
+          <App history={history} store={store} />
         </ThemeProvider>
         </AppModel.Context.Provider></Provider>
     </I18nextProvider>
