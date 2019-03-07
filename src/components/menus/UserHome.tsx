@@ -11,6 +11,7 @@ import * as AppModel from '../../models/AppModel';
 import Tooltip from './Tooltip';
 import DebateHistory from './DebateHistory';
 import Footer from '../home/Footer';
+import UserStats from './UserStats';
 import {inject} from 'mobx-react';
 
 const styles = (theme: Theme) =>
@@ -52,6 +53,7 @@ class Index extends React.Component<Props, State> {
           <meta name="og:title" content="Dinnertable.chat Home" />
         </Helmet>
         <div className={classes.container}>
+          <UserStats />
           <div className={classes.backgroundImg}>
             <img src="imgs/press/01-scene1.png" width="100%" />
           </div>

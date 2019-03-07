@@ -17,7 +17,6 @@ import Button from '@material-ui/core/Button';
 import Info from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import LinearProgress from '@material-ui/core/LinearProgress';
 
 import * as AppModel from '../../models/AppModel';
 import HOC, { Authed } from '../HOC';
@@ -468,35 +467,13 @@ class Index extends React.Component<Props, State> {
       if(this.state.expanded===i) return this.setState({ expanded: undefined });
       this.setState({ expanded: i });
     };
-  //  VERT SEP: style={{ borderRight: '0.1em solid black', padding: '0.5em' }}
+    
   public render() {
-    /// console.timeEnd('AuthComp');
     const { classes, store, t } = this.props;
     if (store.auth.isNotLoggedIn) {
       store.router.push('/');
       return;
     }
-
-    const numDebates = this.state.data.length;
-    const m = 20;
-    const xpPerLevel = 3 * m; // 60
-    const startingXP = 0;
-    const xpTotal = numDebates * m + startingXP;
-    const xp = xpTotal % xpPerLevel;
-    const level = Math.floor(xpTotal / xpPerLevel) + 1;
-    const nextLevel = xpPerLevel;
-
-    const timePlayed = numDebates * 15;
-
-    const emailHash = MD5(store.auth.user!.email);
-
-    // Level bar
-    const normalise = value => ((value - 0) * 100) / (xpPerLevel - 0);
-
-    let title = 'Beginner Apprentice';
-    if (level > 3) title = 'Traveling Journeyman';
-    if (level > 6) title = 'Experienced Rhetorician';
-    if (level > 12) title = 'Most Honorable Host';
 
     return (
       <div className={classes.pagebody}>
