@@ -7,10 +7,10 @@ import Button from '@material-ui/core/Button';
 import * as Store from '../models/AppModel'
 
 import QueueIcon from '@material-ui/icons/QueuePlayNext'
-import HOC from './HOC';
 import * as Times from '../services/TimeService';
 
-const styles = theme => createStyles({
+import { useTheme, makeStyles } from '@material-ui/styles';
+const useStyles = makeStyles((theme: any) => ({
   root: {
     flexGrow: 1,
   },
@@ -22,9 +22,9 @@ const styles = theme => createStyles({
   btn: {
     // color: theme.palette.secondary.main
   },
-});
+}));
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   store: Store.Type
 }
 
@@ -45,8 +45,9 @@ function onHome(store: Store.Type) {
   store.router.push('/')
 }
 
-function ButtonAppBar(props:Props) {
-  const { classes, store } = props;
+export default function ButtonAppBar(props:Props) {
+  const classes = useStyles({});
+  const { store } = props;
   const auth = store.auth.isAuthenticated();
   const isLive = props.store.isLive();
 
@@ -89,7 +90,5 @@ function ButtonAppBar(props:Props) {
     </div>
   );
 }
-
-export default HOC(ButtonAppBar, styles);
 
 // <Button color="secondary" onClick={ () => onLogOut(store) }>Log Out</Button>
