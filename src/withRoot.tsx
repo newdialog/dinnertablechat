@@ -40,21 +40,24 @@ export const theme = createMuiTheme({
       // contrastText: getContrastText(palette.primary[500]),
       contrastText: '#fff',
       dark: '#066873'
+      
       // dark: will be calculated from palette.primary.main,
       // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
-      // light: '#ff92c4',
+      light: '#ffba9a', //'#ff92c4',
       main: '#ff896b',
       // dark: '#632d20',
-      // dark: '#484866',
+      //dark: '#06616b',
+      dark: '#484866',
       /// contrastText: 'white'
       // dark: '#c82466'
       // dark: will be calculated from palette.secondary.main,
       // contrastText: '#ffcc00',
     },
     text: {
-      primary: "#616161",
+      primary: "#484866", //"#616161",
+      secondary: "#fff",
       // secondary: "rgba(50, 50, 50, 0.8)",
       disabled: "rgba(0, 0, 0, 0.38)",
       hint: "rgba(0, 0, 0, 0.38)"

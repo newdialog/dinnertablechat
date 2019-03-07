@@ -7,6 +7,10 @@ import Button from '@material-ui/core/Button';
 import {Helmet} from "react-helmet";
 import DailyTimer from './DailyTimer';
 import * as Times from '../../services/TimeService';
+import * as AppModel from '../../models/AppModel';
+import Footer from '../home/Footer';
+import Tooltip from './Tooltip';
+import {inject} from 'mobx-react';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -26,14 +30,10 @@ const styles = (theme: Theme) =>
     },
   });
 const debateOpen = Times.isDuringDebate();
-import * as AppModel from '../../models/AppModel';
-import Footer from '../home/Footer';
 interface Props extends WithStyles<typeof styles> {
   store: AppModel.Type;
 }
-interface State {
-  
-}
+interface State {}
 
 class Index extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -43,6 +43,7 @@ class Index extends React.Component<Props, State> {
 
   public render() {
     const { classes, store } = this.props;
+
     return (
       <React.Fragment>
         <Helmet title="Dinnertable.chat Press">
@@ -76,7 +77,7 @@ class Index extends React.Component<Props, State> {
                     <Typography
                         variant="h4"
                         align="center"
-                        color="textPrimary"
+                        color="textSecondary"
                     >
                         QuickMatch
                     </Typography>
@@ -109,9 +110,10 @@ class Index extends React.Component<Props, State> {
 
           <div className={classes.divider} />
         </div>
+        <Tooltip />
         <Footer />
       </React.Fragment>
     );
   }
 }
-export default HOC(Index, styles);
+export default inject('store')(HOC(Index, styles));

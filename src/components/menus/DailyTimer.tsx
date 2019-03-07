@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     timerText: {
       padding: '0',
       margin: 0,
-      color: '#06616b'
+      color: theme.palette.secondary.dark,
     },
     time: {
-        color: '#06616b',
+        color: theme.palette.secondary.dark,
         fontFamily: "'Roboto Mono', 'Courier New'",
     }
   }));

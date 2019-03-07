@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: any) => ({
       marginLeft: 'auto',
       marginRight: 'auto',
       width: '100%',
-      backgroundColor: '#484866', // theme.palette.secondary.dark,
+      backgroundColor: theme.palette.secondary.dark,
       textAlign: 'center'
     },
     links: {
