@@ -6,9 +6,9 @@ import {
 } from '@material-ui/core/styles';
 import Footer from '../home/Footer';
 import {Helmet} from "react-helmet";
+import { useTheme, makeStyles } from '@material-ui/styles';
 
-const styles = (theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
@@ -114,27 +114,18 @@ const styles = (theme: Theme) =>
         maxWidth: '100px'
       }
     }
-  });
+  }));
 
 import * as AppModel from '../../models/AppModel';
-interface Props extends WithStyles<typeof styles> {
+interface Props extends WithStyles {
   store: AppModel.Type;
 }
-interface State {
-  open: boolean;
-}
+
 import Grid from '@material-ui/core/Grid';
 import HOC from '../HOC';
  
-class Index extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { open: false };
-  }
-
-  public render() {
-    const { classes } = this.props;
-    const { open } = this.state;
+export default function Privacy({props:Props}) {
+     const classes = useStyles({});
     return (
       <React.Fragment>
       <Helmet title="Dinnertable.chat Privacy">
@@ -210,6 +201,4 @@ class Index extends React.Component<Props, State> {
     );
   }
 
-}
-
-export default HOC(Index, styles);
+// export default HOC(Index, styles);

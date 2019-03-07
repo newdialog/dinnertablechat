@@ -6,9 +6,9 @@ import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import {Helmet} from "react-helmet";
+import { useTheme, makeStyles } from '@material-ui/styles';
 
-const styles = (theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
@@ -28,32 +28,23 @@ const styles = (theme: Theme) =>
     presentationFrame: {
       border: '0'
     }
-  });
+  }));
 
 import * as AppModel from '../../models/AppModel';
 import Footer from '../home/Footer';
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   store: AppModel.Type;
 }
-interface State {
-  open: boolean;
-}
 
-class EducationHome extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { open: false };
-  }
+export default function EducationHome({props:Props}) {
+  const classes = useStyles({});
 
-  public render() {
     const imgs = [
       './logos/dinnertable.gif',
       './logos/dtclogo.png',
       './logos/dtclogo3-1.png',
       './logos/dtclogo3.png'
     ];
-    const { classes } = this.props;
-    const { open } = this.state;
     return (
       <React.Fragment>
         <Helmet title="Dinnertable.chat Campus">
@@ -95,8 +86,6 @@ class EducationHome extends React.Component<Props, State> {
       </React.Fragment>
     );
   }
-}
-export default HOC(EducationHome, styles);
 
 /*
 <Typography

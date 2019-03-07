@@ -6,9 +6,9 @@ import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import {Helmet} from "react-helmet";
+import { useTheme, makeStyles } from '@material-ui/styles';
 
-const styles = (theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
@@ -67,77 +67,29 @@ const styles = (theme: Theme) =>
     divider: {
       margin: `${theme.spacing.unit * 4}px 0`
     },
-    banner: {
-      display: 'flex',
-      objectFit: 'cover',
-      width: '100%',
-      height: 'calc(100vh - 0px)',
-      backgroundImage: 'url("./banner.jpg")',
-      backgroundSize: 'cover',
-      backgroundAttachment: 'fixed',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'center 0',
-      color: 'white',
-      // justifyContent: 'center',
-      justifyContent: 'flex-end',
-      flexFlow: 'column nowrap'
-    },
-    bannerText: {
-      fontFamily: 'Open Sans',
-      color: 'white',
-      bottom: '20%',
-      marginBottom: '15vh',
-      backgroundColor: '#00000044',
-      fontWeight: 'bold'
-    },
-    logoanim: {
-      width: '100vw',
-      maxWidth: '600px',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      display: 'flex'
-    },
     largeIcon: {
       width: 80,
       height: 60
     },
-    body: {
-      /*
-      width: '100%',
-      backgroundImage: 'url("./imgs/07-newsletter.png")', // DTC-scene3.png
-      backgroundSize: 'cover',
-      // backgroundAttachment: 'fixed',
-      backgroundRepeat: 'no-repeat',
-      backgroundPosition: 'bottom 0px left'
-      */
-    },
-    demo: {}
-  });
+  }));
 
 import * as AppModel from '../../models/AppModel';
 import Footer from '../home/Footer';
-interface Props extends WithStyles<typeof styles> {
+interface Props { // extends WithStyles<typeof styles> {
   store: AppModel.Type;
 }
-interface State {
-  open: boolean;
-}
 
-class Index extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { open: false };
-  }
+export default function MediaKit({props:Props}) {
+  const classes = useStyles({});
 
-  public render() {
     const imgs = [
       './logos/dinnertable.gif',
       './logos/dtclogo.png',
       './logos/dtclogo3-1.png',
       './logos/dtclogo3.png'
     ];
-    const { classes } = this.props;
-    const { open } = this.state;
+    // const { classes } = props;
+    // const { open } = this.state;
     return (
       <React.Fragment>
         <Helmet title="Dinnertable.chat Press">
@@ -194,7 +146,6 @@ class Index extends React.Component<Props, State> {
           <Grid container spacing={16}>
             <Grid
               container
-              className={classes.demo}
               justify="center"
               spacing={16}
             >
@@ -258,6 +209,5 @@ class Index extends React.Component<Props, State> {
         <Footer />
       </React.Fragment>
     );
-  }
 }
-export default HOC(Index, styles);
+// export default HOC(Index, styles);

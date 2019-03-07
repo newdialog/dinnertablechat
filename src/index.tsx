@@ -12,6 +12,10 @@ import { connectReduxDevtools } from 'mst-middlewares';
 import createBrowserHistory from 'history/createBrowserHistory';
 import { RouterModel, syncHistoryWithStore } from 'mst-react-router';
 
+import { StylesProvider, ThemeProvider } from '@material-ui/styles';
+import {theme} from './withRoot';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
 import LoadingMsg from './components/Loading';
 
 // Setup History
@@ -31,7 +35,10 @@ ReactDOM.render(
   <Suspense fallback={LoadingMsg()}>
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
-        <App history={history} />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App history={history} />
+        </ThemeProvider>
       </Provider>
     </I18nextProvider>
   </Suspense>,
