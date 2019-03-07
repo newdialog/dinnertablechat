@@ -2,8 +2,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import * as AppModel from '../models/AppModel';
-import {observer, inject} from 'mobx-react';
-import { Typography } from '@material-ui/core';
+import {observer} from 'mobx-react';
 import LoadingMsg from './Loading';
 
 const AsyncHome = lazy(() => import('./home/home'));
@@ -104,4 +103,4 @@ function Loading(props: any) {
 <Route path="/rtc" component={RTCHome}/>
 <DefaultRoute component={Home} />
 */
-export default inject('store')(observer(DTCRouter));
+export default observer(DTCRouter);

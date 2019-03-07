@@ -136,8 +136,6 @@ export default function Home() {
   )
     store.router.push('/tutorial');
 
-  // if(!store.isStandalone()) return <PWAHome/>;
-
   return (
     <React.Fragment>
       <Helmet title="Dinnertable.chat">

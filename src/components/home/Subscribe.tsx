@@ -1,152 +1,167 @@
-import React from 'react';
+import React, { useState, createRef, useMemo } from 'react';
 
 import { Typography, TextField, Button } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Reveal from 'react-reveal/Reveal';
-import HOC from '../HOC'
-
-const styles = (theme: Theme) =>
-  createStyles({
-    root: {
-      textAlign: 'center',
-      paddingTop: theme.spacing.unit * 20
-    },
-    centered: {
-      paddingTop: '2%',
-      paddingLeft: '1em',
-      paddingRight: '1em',
-      paddingBottom: '8%',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      width: 'auto',
-      maxWidth: '1000px',
-      minWidth: '300px',
-    },
-    textField: {
-      // width: '90%', 
-    }
-  })
-
-  // const subscribeState = {
-  //   'form': {'label': ''}, 
-  //   'success': {'label': 'Thanks!'}, 
-  //   'error': {'label': 'Hmm, something went wrong. '}, 
-  // }
-  interface State {
-    subscribe: string;
-    submitting:boolean;
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
+const useStyles = makeStyles((theme: any) => ({
+  root: {
+    textAlign: 'center',
+    paddingTop: theme.spacing.unit * 20
+  },
+  centered: {
+    paddingTop: '2%',
+    paddingLeft: '1em',
+    paddingRight: '1em',
+    paddingBottom: '8%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: 'auto',
+    maxWidth: '1000px',
+    minWidth: '300px'
+  },
+  textField: {
+    // width: '90%',
   }
-  interface Props extends WithStyles<typeof styles> {
-    t: any;
-    offHome?: boolean
-  }
-class Subscribe extends React.Component<Props,State> {
-  public state: State = {
+}));
+
+interface Props {
+  offHome?: boolean;
+}
+
+function validEmail(email: string) {
+  if (!email) return false;
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
+export default function ButtonAppBar(props: Props) {
+  const classes = useStyles({});
+  const { t } = useTranslation();
+
+  const [state, setState] = useState({
     subscribe: 'form',
     submitting: false
-  }
+  });
+  const [istate, setIstate] = useState('');
 
-  public emailInput:any
-
-  private validEmail(email: string) {
-    if (!email) return false;
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  }
-
-  public onSubmit = async e => {
+  const onSubmit = useMemo(() => async (e) => {
     e.preventDefault();
     gtag('event', 'subscribe_action', {
-      'event_category': 'splash',
-      'non_interaction': false
+      event_category: 'splash',
+      non_interaction: false
     });
-
-    const email = (this.emailInput && this.emailInput.value) || null;
-    if (!this.validEmail(email)) {
-      this.setState({subscribe: 'Please enter a valid email first'})
-      return
+  
+    const email = istate;
+    console.log('email ' + email);
+    if (!validEmail(email)) {
+      console.log('!validEmail');
+      setState({ ...state, subscribe: 'Please enter a valid email first' });
+      return;
     }
-    let subscribe = 'form'
-    this.setState({submitting:true})
+    let subscribe = 'form';
+    setState({ ...state, submitting: true });
     fetch('https://subscribe.api.dinnertable.chat/', {
       method: 'post',
-      body : JSON.stringify({ email }),
+      body: JSON.stringify({ email }),
       headers: {
-        'Accept': 'application/json',
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-         'X-Content-Type-Options': 'nosniff'
+        'X-Content-Type-Options': 'nosniff'
       }
     })
-    .then((res: any) => {
-      subscribe = (res && res.status && res.status < 299) ? 'success' : res.err
-      this.setState({subscribe})
-    }) 
-    .catch((err: any) => {
-      subscribe = err
-      this.setState({subscribe})
-    });
-  };
-  private renderForm(classes:any, t:any) {
+      .then((res: any) => {
+        subscribe = res && res.status && res.status < 299 ? 'success' : res.err;
+        setState({ ...state, subscribe });
+      })
+      .catch((err: any) => {
+        subscribe = err;
+        setState({ ...state, subscribe });
+      });
+  }, [state, istate]);
+
+  const renderForm = (classes: any, t: any) => {
     return (
       <div className={classes.centered}>
         <br />
-        <form onSubmit={this.onSubmit} style={{ marginLeft: 'auto', marginRight: 'auto', width:'100%', textAlign:'center' }}>
-          <Typography gutterBottom align="center" color="secondary" variant={!this.props.offHome ? 'h4' : 'h4'}  style={{color:'#61618e', fontSize: !this.props.offHome?'1.9em':'1em'}}>
-          {t('home-signup')}
+        <form
+          onSubmit={onSubmit}
+          style={{
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            width: '100%',
+            textAlign: 'center'
+          }}
+        >
+          <Typography
+            gutterBottom
+            align="center"
+            color="secondary"
+            variant={!props.offHome ? 'h4' : 'h4'}
+            style={{
+              color: '#61618e',
+              fontSize: !props.offHome ? '1.9em' : '1em'
+            }}
+          >
+            {t('home-signup')}
           </Typography>
           <TextField
-            inputRef={ (elm) => this.emailInput = elm }
+            value={istate}
+            onChange={(event: any)=>setIstate(event.target.value)}
             type="email"
             label="Your email"
             fullWidth
-            style={{paddingTop:'2%', paddingBottom:'2%'}}
-            disabled={this.state.submitting}
+            style={{ paddingTop: '2%', paddingBottom: '2%' }}
+            disabled={state.submitting}
             // style={classes.textField}
             required
           />
           <p />
-          <Button variant="contained" color="secondary" type="submit" disabled={this.state.submitting}>
+          <Button
+            variant="contained"
+            color="secondary"
+            type="submit"
+            disabled={state.submitting}
+          >
             Subscribe
           </Button>
-          <br/>
+          <br />
         </form>
       </div>
     );
+  };
+
+  const { subscribe } = state;
+  if (subscribe === 'success') {
+    window.gtag('event', 'subscribed', {
+      event_category: 'splash',
+      non_interaction: false
+    });
+    return (
+      <div className={classes.centered}>
+        <Typography gutterBottom align="center" color="primary" variant="h4">
+          <Reveal effect="fadeIn" duration={1500}>
+            Thanks for subscribing to DTC!
+          </Reveal>
+        </Typography>
+      </div>
+    );
+  } else if (subscribe === 'error') {
+    window.gtag('event', 'subscribe_error', {
+      event_category: 'splash',
+      non_interaction: false
+    });
+    return (
+      <div className={classes.centered}>
+        <Typography gutterBottom align="center" color="primary" variant="h4">
+          <Reveal effect="fadeIn" duration={1500}>
+            Hmm, something went wrong. {subscribe}
+          </Reveal>
+        </Typography>
+        {renderForm(classes, t)}
+      </div>
+    );
   }
-  public render() {
-    const { classes, t } = this.props;
-    const { subscribe } = this.state;
-    if (subscribe === 'success') {
-      window.gtag('event', 'subscribed', {
-        'event_category': 'splash',
-        'non_interaction': false
-      });
-      return (
-        <div className={classes.centered}>
-          <Typography gutterBottom align="center" color="primary" variant="h4">
-            <Reveal effect="fadeIn" duration={1500}>
-              Thanks for subscribing to DTC!
-            </Reveal>
-          </Typography>
-        </div>
-      );
-    } else if (subscribe === 'error') {
-      window.gtag('event', 'subscribe_error', {
-        'event_category': 'splash',
-        'non_interaction': false
-      });
-      return (
-        <div className={classes.centered}>
-          <Typography gutterBottom align="center" color="primary" variant="h4">
-            <Reveal effect="fadeIn" duration={1500}>
-              Hmm, something went wrong. {subscribe}
-            </Reveal>
-          </Typography>
-          { this.renderForm(classes, t) }
-        </div>
-      );
-    }
-    return this.renderForm(classes, t)
-  }
+  return renderForm(classes, t);
 }
-export default HOC(Subscribe, styles);
