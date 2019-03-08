@@ -19,7 +19,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import LoadingMsg from './components/Loading';
 
 // Setup History
-const routerModel = RouterModel.create({ location: null });
+const routerModel = (RouterModel as any).create(); // TS Hack
 const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
 // Configure MST Store
