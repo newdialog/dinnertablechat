@@ -68,9 +68,10 @@ export default observer(function DebateRouter() {
         <DebateScene store={store} peer={state.peer!} />
       )}
       {stage === 2 && isTest && (
-        <DebateTester store={store} peer={state.peer!} />
+        <DebateTester store={store} />
       )}
       {stage === 3 && <DebateFeedback store={store} />}
     </>
   );
 })
+// peer={state.peer!} 

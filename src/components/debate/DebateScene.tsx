@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import {
   withStyles,
   createStyles,
@@ -14,9 +14,15 @@ import { inject } from 'mobx-react';
 import hark, { SpeechEvent } from 'hark';
 import Peer from 'simple-peer';
 import DebateDisplay from './DebateDisplay';
+import * as AppModel from '../../models/AppModel';
+import PeerService from '../../services/PeerService';
+import HOC from '../HOC';
+import DebateError from './DebateError';
 
-const styles = (theme: Theme) =>
-  createStyles({
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
@@ -29,12 +35,9 @@ const styles = (theme: Theme) =>
       maxWidth: '1000px',
       minWidth: '300px'
     }
-  });
-import * as AppModel from '../../models/AppModel';
-import PeerService from '../../services/PeerService';
-import HOC from '../HOC';
-import DebateError from './DebateError';
-interface Props extends WithStyles<typeof styles> {
+  }));
+
+interface Props {
   store: AppModel.Type;
   peer: PeerService;
 }
@@ -46,64 +49,64 @@ interface State {
   // speaking:boolean
 }
 
-class DebateScene extends React.Component<Props, State> {
-  public peer: PeerService;
-  public speechEvents?: SpeechEvent;
-  public speechSelfEvents?: SpeechEvent;
-  private vidRef = React.createRef<HTMLVideoElement>();
-  constructor(props: Props) {
-    super(props);
-    this.state = { talkingBlue: false, talkingRed: false };
-    this.peer = props.peer;
-  }
+export default function DebateScene(props:Props) {
+  const store = useContext(AppModel.Context)!;
+  const classes = useStyles({});
+  const { t } = useTranslation();
+  
+  let peer: PeerService;
+  let speechEvents: SpeechEvent;
+  let speechSelfEvents: SpeechEvent;
+  const vidRef = useRef<HTMLVideoElement>(null);
 
-  public componentDidMount() {
-    this.gotMedia();
+  const [state, setState] = useState<State>({ talkingBlue: false, talkingRed: false });
+
+  useEffect(() => {
+    gotMedia();
 
     window.gtag('event', 'debate_start', {
       event_category: 'debate',
-      topic: this.props.store.debate.topic,
-      position: this.props.store.debate.position,
-      sameSide: this.props.store.debate.position === this.props.store.debate.match!.otherState!.position,
-      guest: this.props.store.isGuest()
+      topic: props.store.debate.topic,
+      position: props.store.debate.position,
+      sameSide: props.store.debate.position === props.store.debate.match!.otherState!.position,
+      guest: props.store.isGuest()
     });
-    window.gtag('event', `debate_start_${this.props.store.debate.topic}_${this.props.store.debate.position}`, {
+    window.gtag('event', `debate_start_${props.store.debate.topic}_${props.store.debate.position}`, {
       event_category: 'debate',
-      guest: this.props.store.isGuest()
+      guest: props.store.isGuest()
     });
     /* navigator.getUserMedia(
-      { video: false, audio: true },
-      this.gotMedia.bind(this),
-      () => {}
+    { video: false, audio: true },
+    gotMedia.bind(this),
+    () => {}
     );*/
     // stream: MediaStream
-  }
+    return () => {
+      console.log('debatescene unmounting');
+      peer.destroy();
+      speechSelfEvents!.stop();
+    }
+  }, []);
 
-  public componentWillUnmount() {
-    console.log('debatescene unmounting');
-    this.peer.destroy();
-    this.speechSelfEvents!.stop();
-  }
-
-  private setupSelfVoice() {
+  const setupSelfVoice= () => {
     const options = {};
-    this.speechSelfEvents = hark(this.peer.getLocalStream(), options);
+    speechSelfEvents = hark(peer.getLocalStream(), options);
 
-    this.speechSelfEvents.on('speaking', () => {
+    speechSelfEvents.on('speaking', () => {
       // console.log('speaking');
-      this.setState({ talkingBlue: true });
+      setState({ ...state, talkingBlue: true });
       // document.querySelector('#speaking').textContent = 'YES';
     });
 
-    this.speechSelfEvents.on('stopped_speaking', () => {
+    speechSelfEvents.on('stopped_speaking', () => {
       // console.log('stopped_speaking');
-      this.setState({ talkingBlue: false });
+      setState({ ...state, talkingBlue: false });
       // document.querySelector('#speaking').textContent = 'NO';
     });
   }
 
-  public gotMedia = (stream?: MediaStream) => {
-    this.setupSelfVoice();
+  const gotMedia = (stream?: MediaStream) => {
+    setupSelfVoice();
 
     const isInit = false; // todo
     /* const p = new Peer({
@@ -111,13 +114,13 @@ class DebateScene extends React.Component<Props, State> {
       trickle: false,
       stream
     });*/
-    const p = this.peer;
+    const p = peer;
 
     p.on('error', err => {
       if (err.toString().indexOf('connection failed') !== -1) {
-        this.setState({ error: 'other_disconnected' });
+        setState({ ...state, error: 'other_disconnected' });
       } else {
-        this.setState({ error: 'webrtc_error' });
+        setState({ ...state, error: 'webrtc_error' });
       }
       console.log('error', err);
     });
@@ -130,7 +133,7 @@ class DebateScene extends React.Component<Props, State> {
       console.log('stream found');
       // got remote video stream, now let's show it in a video tag
       /// var video = document.querySelector('video');
-      const video = this.vidRef.current!;
+      const video = vidRef.current!;
       // video.src = window.URL.createObjectURL(stream2);
       try {
         video.srcObject = stream2;
@@ -143,17 +146,17 @@ class DebateScene extends React.Component<Props, State> {
       /// video.play();
 
       const options = {};
-      this.speechEvents = hark(stream2, options);
+      speechEvents = hark(stream2, options);
 
-      this.speechEvents.on('speaking', () => {
+      speechEvents.on('speaking', () => {
         // console.log('speaking');
-        this.setState({ talkingRed: true });
+        setState({ ...state, talkingRed: true });
         // document.querySelector('#speaking').textContent = 'YES';
       });
 
-      this.speechEvents.on('stopped_speaking', () => {
+      speechEvents.on('stopped_speaking', () => {
         // console.log('stopped_speaking');
-        this.setState({ talkingRed: false });
+        setState({ ...state, talkingRed: false });
         // document.querySelector('#speaking').textContent = 'NO';
       });
     });
@@ -162,40 +165,36 @@ class DebateScene extends React.Component<Props, State> {
     console.log('addStream');
   };
 
-  public render() {
-    const { classes, store } = this.props;
-    const { talkingBlue, talkingRed } = this.state;
 
-    const blueChar = this.props.store.debate!.character;
-    const redChar = this.props.store.debate!.match!.otherState!.character;
+    const { talkingBlue, talkingRed } = state;
+
+    const blueChar = props.store.debate!.character;
+    const redChar = props.store.debate!.match!.otherState!.character;
 
     return (
       <React.Fragment>
-        {this.state.error && (
-          <DebateError error={this.state.error} store={store} />
+        {state.error && (
+          <DebateError error={state.error} store={store} />
         )}
         <div className={classes.centered2}>
           <div>
             <div>Microphone is on</div>
             <div id="video" hidden={true}>
-              <video ref={this.vidRef} autoPlay={true} />
+              <video ref={vidRef} autoPlay={true} />
             </div>
           </div>
           <DebateDisplay
-            videoEl={this.vidRef}
+            videoEl={vidRef}
             blueChar={blueChar}
             redChar={redChar}
             talkingBlue={talkingBlue}
             talkingRed={talkingRed}
-            store={this.props.store}
+            store={props.store}
           />
         </div>
       </React.Fragment>
     );
   }
-}
-
-export default inject('store')(HOC(DebateScene, styles));
 
 /*
 

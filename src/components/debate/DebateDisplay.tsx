@@ -1,10 +1,9 @@
-import * as React from 'react';
+import React, { useRef, useState, useContext, useEffect } from 'react';
 import { Button, Typography } from '@material-ui/core';
-import { createStyles, WithStyles, Theme} from '@material-ui/core/styles';
-import HOC from '../HOC';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
 import rottie from 'lottie-web';
-import Lottie from 'lottie-react-web'
+import Lottie from 'lottie-react-web';
 // import { Typography, Divider } from '@material-ui/core';
 
 import DebateFloatMenu from './DebateFloatMenu';
@@ -12,70 +11,72 @@ import DebateTimer from './DebateTimer';
 import * as AppModel from '../../models/AppModel';
 import StartDebateDialog from './StartDebateDialog';
 
-const styles = (theme: Theme) =>
-  createStyles({
-    centered: {
-      marginTop: '60px',
-      paddingTop: '0',
-      paddingLeft: '1em',
-      paddingRight: '1em',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      width: 'auto',
-      maxWidth: '1000px',
-      minWidth: '300px'
-    },
-    leftPos2: {
-      width: 300
-    },
-    rightPos2: {
-      width: 300,
-      float: 'left'
-    },
-    table: {
-      position: 'absolute',
-      bottom: 'calc(-4vh)',
-      left: 'calc(50vw - 70vh)',
-      width: '140vh'
-    },
-    timer: {
-      position: 'absolute',
-      bottom: 'calc(1vh)',
-      left: 'calc(50vw - 55vh)',
-      width: '110vh'
-    },
-    leftPos: {
-      position: 'absolute',
-      bottom: 'calc(23vh)',
-      // [theme.breakpoints.up('sm')]: {
-      left: 'calc(50vw - 65vh)',
-      width: '75vh'
-      // }
-      // transform: 'scale(1, 1)'
-    },
-    rightPos: {
-      position: 'absolute',
-      bottom: 'calc(23vh)',
-      // [theme.breakpoints.up('sm')]: {
-      left: 'calc(41vw + 5vh)',
-      width: 'calc(75vh)'
-      // }
-      // transform: 'scale(-.5, .5)'
-    },
-    bannerAnim: {
-      position: 'absolute',
-      left: 0,
-      top: 0,
-      bottom: 0,
-      right: 0,
-      zIndex: -1
-    },
-    foreground: {
-      margin: '0 auto 0 auto',
-      overflow: 'hidden'
-      // bottom: 'calc(10vh)'
-    },
-  });
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  centered: {
+    marginTop: '60px',
+    paddingTop: '0',
+    paddingLeft: '1em',
+    paddingRight: '1em',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: 'auto',
+    maxWidth: '1000px',
+    minWidth: '300px'
+  },
+  leftPos2: {
+    width: 300
+  },
+  rightPos2: {
+    width: 300,
+    float: 'left'
+  },
+  table: {
+    position: 'absolute',
+    bottom: 'calc(-4vh)',
+    left: 'calc(50vw - 70vh)',
+    width: '140vh'
+  },
+  timer: {
+    position: 'absolute',
+    bottom: 'calc(1vh)',
+    left: 'calc(50vw - 55vh)',
+    width: '110vh'
+  },
+  leftPos: {
+    position: 'absolute',
+    bottom: 'calc(23vh)',
+    // [theme.breakpoints.up('sm')]: {
+    left: 'calc(50vw - 65vh)',
+    width: '75vh'
+    // }
+    // transform: 'scale(1, 1)'
+  },
+  rightPos: {
+    position: 'absolute',
+    bottom: 'calc(23vh)',
+    // [theme.breakpoints.up('sm')]: {
+    left: 'calc(41vw + 5vh)',
+    width: 'calc(75vh)'
+    // }
+    // transform: 'scale(-.5, .5)'
+  },
+  bannerAnim: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    right: 0,
+    zIndex: -1
+  },
+  foreground: {
+    margin: '0 auto 0 auto',
+    overflow: 'hidden'
+    // bottom: 'calc(10vh)'
+  }
+}));
 
 const aliceListenOptions = {
   // renderer: 'canvas',
@@ -168,17 +169,17 @@ const confettiOptions = {
 const characters = [
   { talk: gekkoListenOptions, listen: gekkoListenOptions },
   { talk: rabitTalkOptions, listen: rabitListenOptions },
-  { talk: aliceTalkOptions, listen: aliceListenOptions },
+  { talk: aliceTalkOptions, listen: aliceListenOptions }
 ];
 
 // import * as AppModel from '../../models/AppModel';
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   // store: AppModel.Type;
   talkingBlue: boolean;
   talkingRed: boolean;
   blueChar: number;
   redChar: number;
-  videoEl: HTMLMediaElement;
+  videoEl: React.MutableRefObject<HTMLVideoElement | null>;
   store: AppModel.Type;
 }
 
@@ -196,191 +197,192 @@ interface State {
   .mouthtalking
 */
 
-class DebateScene extends React.Component<Props, State> {
+export default function DebateScene(props: Props) {
+  // const store = useContext(AppModel.Context)!;
+  const classes = useStyles({});
+  const { t } = useTranslation();
+  const { talkingBlue, talkingRed, videoEl, store } = props;
+  /*
   public static getDerivedStateFromProps(nextProps: Props, prevState: Props) {
     if (nextProps.talkingBlue !== prevState.talkingBlue) {
       return { blueTransition: false };
     }
     return {};
   }
-  private blue = React.createRef<HTMLDivElement>();
-  private red = React.createRef<HTMLDivElement>();
-  private blueLottieRef = React.createRef<Lottie>();
+*/
+  const blue = useRef<HTMLDivElement>(null);
+  const red = useRef<HTMLDivElement>(null);
+  const blueLottieRef = useRef<Lottie>(null);
 
-  private bgEl = React.createRef<Lottie | any>();
-  private tableEl = React.createRef<Lottie | any>();
-  private confettiRef = React.createRef<Lottie | any>();
-  
+  const bgEl = useRef<Lottie | any>();
+  const tableEl = useRef<Lottie | any>();
+  const confettiRef = useRef<Lottie | any>();
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      blueTransition: false,
-      blueState: 'idle',
-      redTransition: false,
-      redState: 'idle',
-      bothAgreed: false,
-    };
-  }
+  const [state, setState] = useState({
+    blueTransition: false,
+    blueState: 'idle',
+    redTransition: false,
+    redState: 'idle',
+    bothAgreed: false,
+    ended: false
+  });
 
-  private trackDebateTimeEnd = () => {
+  const trackDebateTimeEnd = () => {
     window.gtag('event', 'debate_time_end', {
       event_category: 'debate',
       non_interaction: true
     });
   };
 
-  public componentWillUnmount() {
-    if(screen.orientation && screen.orientation.unlock) screen.orientation.unlock();
-  }
-
-  public componentDidMount() {
-    // Table
-    const t = this.tableEl.current!;
+  useEffect(() => {
+    const t = tableEl.current!;
     const table = rottie.loadAnimation({
-      container: this.tableEl.current!, // the dom element that will contain the animation
+      container: tableEl.current!, // the dom element that will contain the animation
       renderer: 'svg',
       loop: false,
       autoplay: false,
       path: tableOptions.path // the path to the animation json
     });
     table.setSpeed(1.5);
-    table.addEventListener('DOMLoaded', ()=>{
-      table.playSegments([0,200], true)
+    table.addEventListener('DOMLoaded', () => {
+      table.playSegments([0, 200], true);
     });
-  }
 
-  private onLoopComplete = () => {
-    // console.log('onLoopComplete', this.props.talkingBlue)
-    // if(this.props.talkingBlue) this.setState({ blueTransition: true });
-    this.setState({ blueState: this.props.talkingBlue ? 'talking' : 'idle' });
+    return () => {
+      if (screen.orientation && screen.orientation.unlock)
+        screen.orientation.unlock();
+    };
+  }, []);
+
+  const onLoopComplete = () => {
+    // console.log('onLoopComplete', props.talkingBlue)
+    // if(props.talkingBlue) setState({ blueTransition: true });
+    setState({ ...state, blueState: props.talkingBlue ? 'talking' : 'idle' });
   };
 
-  private onCompleted = () => {
+  const onCompleted = () => {
     console.log('on debate timer complete');
-    this.setState({ended: true});
-    this.trackDebateTimeEnd();
+    setState({ ...state, ended: true });
+    trackDebateTimeEnd();
   };
 
-  private onCharLoaded = (x) => {
-    console.log('aa', x, this.blueLottieRef.current!);
-    const o = this.blueLottieRef.current!.anim;
-    o.goToAndPlay(24*4, true);
-  }
+  const onCharLoaded = x => {
+    console.log('aa', x, blueLottieRef.current!);
+    const o = blueLottieRef.current!.anim;
+    o.goToAndPlay(24 * 4, true);
+  };
 
-  public render() {
-    const { classes, talkingBlue, talkingRed, videoEl, store } = this.props;
-    const { blueTransition, bothAgreed, ended } = this.state;
-    const agreed = store.debate.agreed;
+  const { blueTransition, bothAgreed, ended } = state;
+  const agreed = store.debate.agreed;
 
-    const animBlue = this.state.blueState === 'talking';
-    const animRed = this.state.redState === 'talking';
-    // if(this.state.talkingBlueBlend > 0 )
+  const animBlue = state.blueState === 'talking';
+  const animRed = state.redState === 'talking';
 
-    // console.log('talkingBlue', talkingBlue, blueTransition);
-    // const { } = this.state;
-    const blueCss = talkingBlue ? 'talking' : 'idle';
-    const redCss = talkingRed ? 'talking' : 'idle';
+  const blueCss = talkingBlue ? 'talking' : 'idle';
+  const redCss = talkingRed ? 'talking' : 'idle';
 
-    const redChar = characters[this.props.redChar];
-    const blueChar = characters[this.props.blueChar];
-    return (
-      <div id="debatedisplay">
-        <StartDebateDialog store={store}/>
-        {(agreed || ended) ? <Lottie options={confettiOptions} ref={this.confettiRef} /> : null}
-        <div className={classes.centered}>
-          <Typography variant="h1" gutterBottom align="center" style={{color:'#555555'}} id="rotatemessage">
-            Please rotate phone to landscape.
-          </Typography>
-          <div style={{ margin: '0 auto 0 auto', width: '100%' }}>
-            <div className={classes.bannerAnim}>
-              <Lottie
-                options={bgOptions}
-                ref={this.bgEl}
-                isClickToPauseDisabled={true}
-              />
-            </div>
-            <div className={classes.foreground}>
-              <div className={classes.leftPos + ' ' + blueCss}>
-                <div hidden={animBlue} ref={this.blue}>
-                  <Lottie
-                    speed={1.2}
-                    ref={this.blueLottieRef}
-                    options={blueChar.listen}
-                    isClickToPauseDisabled={true}
-                    eventListeners={[
-                      {
-                        eventName: 'loopComplete',
-                        callback: this.onLoopComplete
-                      },
-                      {
-                        eventName: 'DOMLoaded',
-                        callback: this.onCharLoaded
-                      }
-                    ]}
-                  />
-                </div>
-                <div hidden={!animBlue}>
-                  <Lottie
-                    speed={1.2}
-                    options={blueChar.talk}
-                    isClickToPauseDisabled={true}
-                  />
-                </div>
+  const redChar = characters[props.redChar];
+  const blueChar = characters[props.blueChar];
+  return (
+    <div id="debatedisplay">
+      <StartDebateDialog store={store} />
+      {agreed || ended ? (
+        <Lottie options={confettiOptions} ref={confettiRef} />
+      ) : null}
+      <div className={classes.centered}>
+        <Typography
+          variant="h1"
+          gutterBottom
+          align="center"
+          style={{ color: '#555555' }}
+          id="rotatemessage"
+        >
+          Please rotate phone to landscape.
+        </Typography>
+        <div style={{ margin: '0 auto 0 auto', width: '100%' }}>
+          <div className={classes.bannerAnim}>
+            <Lottie
+              options={bgOptions}
+              ref={bgEl}
+              isClickToPauseDisabled={true}
+            />
+          </div>
+          <div className={classes.foreground}>
+            <div className={classes.leftPos + ' ' + blueCss}>
+              <div hidden={animBlue} ref={blue}>
+                <Lottie
+                  speed={1.2}
+                  ref={blueLottieRef}
+                  options={blueChar.listen}
+                  isClickToPauseDisabled={true}
+                  eventListeners={[
+                    {
+                      eventName: 'loopComplete',
+                      callback: onLoopComplete
+                    },
+                    {
+                      eventName: 'DOMLoaded',
+                      callback: onCharLoaded
+                    }
+                  ]}
+                />
               </div>
-              <div className={'flip ' + classes.rightPos + ' ' + redCss}>
-                <div hidden={animRed} ref={this.red}>
-                  <Lottie
-                    speed={1.2}
-                    options={redChar.listen}
-                    isClickToPauseDisabled={true}
-                  />
-                </div>
-                <div hidden={!animRed}>
-                  <Lottie
-                    speed={1.2}
-                    options={redChar.talk}
-                    isClickToPauseDisabled={true}
-                  />
-                </div>
-              </div>
-
-              <div className={classes.table}>
-                <div id="tableanim" ref={this.tableEl}
+              <div hidden={!animBlue}>
+                <Lottie
+                  speed={1.2}
+                  options={blueChar.talk}
+                  isClickToPauseDisabled={true}
                 />
               </div>
             </div>
+            <div className={'flip ' + classes.rightPos + ' ' + redCss}>
+              <div hidden={animRed} ref={red}>
+                <Lottie
+                  speed={1.2}
+                  options={redChar.listen}
+                  isClickToPauseDisabled={true}
+                />
+              </div>
+              <div hidden={!animRed}>
+                <Lottie
+                  speed={1.2}
+                  options={redChar.talk}
+                  isClickToPauseDisabled={true}
+                />
+              </div>
+            </div>
+
+            <div className={classes.table}>
+              <div id="tableanim" ref={tableEl} />
+            </div>
           </div>
         </div>
-        <div className={classes.timer}>
-          <DebateTimer onCompleted={this.onCompleted} />
-        </div>
-
-        <DebateFloatMenu videoEl={videoEl} />
-
       </div>
-    );
-  }
+      <div className={classes.timer}>
+        <DebateTimer store={store} onCompleted={onCompleted} />
+      </div>
+
+      <DebateFloatMenu videoEl={videoEl} />
+    </div>
+  );
 }
 
-export default HOC(DebateScene, styles);
 /*
     Lottie
                   options={tableOptions}
                   speed={1}
-                  segments={this.state.tablePaused ? null : [0, 100]}
+                  segments={state.tablePaused ? null : [0, 100]}
                   forceSegment={true}
-                  ref={this.tableEl}
+                  ref={tableEl}
                   isClickToPauseDisabled={true}
                   eventListeners={[
                     {
                       eventName: 'complete',
-                      callback: this.onTableLoopComplete
+                      callback: onTableLoopComplete
                     },
                     {
                       eventName: 'DOMLoaded',
-                      callback: this.onTableDOMLoaded
+                      callback: onTableDOMLoaded
                     }
                   ]}
     */
-
