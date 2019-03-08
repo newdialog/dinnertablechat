@@ -253,7 +253,7 @@ export default function HomeBanner({ store }: {store:AppModel.Type}) {
           )}
 
           <div className={classes.bannerTextDivider} />
-          <BannerTimer />
+          <BannerTimer store={store} />
 
           <a href="#intro" className={classes.xsHide}>
             <ArrowDown style={{ color: '#ffffff' }} width="1em" />

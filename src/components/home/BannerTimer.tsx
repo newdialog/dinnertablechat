@@ -3,16 +3,15 @@ import Countdown from 'react-countdown-now';
 import { Typography, withStyles, Button } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
 import HOC from '../HOC';
 import { inject } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 import * as Times from '../../services/TimeService';
 
-const styles = (theme: Theme) =>
-  createStyles({
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
@@ -28,12 +27,7 @@ const styles = (theme: Theme) =>
     },
     time: {
     }
-  });
-
-function onMenuClick(store: AppModel.Type) {
-  // store.debate.resetQueue();
-  // store.gotoHomeMenu();
-}
+  }));
 
 // Random component
 const Completionist = ({ store }: { store: AppModel.Type }) => (
@@ -122,13 +116,12 @@ const renderer = (
 // <br/><span style={{color:'#844d4d'}}>For one hour daily!</span>
 interface Props {
   onCompleted?: (isDuringDebate: boolean) => void;
-  t:any,
-  classes:any,
   store:AppModel.Type,
 }
 
 function BannerTimer(props:Props) {
-  const { classes, t, onCompleted } = props;
+  const classes = useStyles({});
+  const { onCompleted } = props;
   const store = props.store;
 
   // const launch = Times.getDebateStart().getTime();
@@ -156,4 +149,4 @@ function BannerTimer(props:Props) {
   );
 }
 
-export default inject('store')(HOC(BannerTimer, styles));
+export default BannerTimer;
