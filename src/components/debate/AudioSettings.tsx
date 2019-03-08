@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
-import { createStyles, WithStyles } from '@material-ui/core/styles';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -9,7 +9,6 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import * as AppModel from '../../models/AppModel';
-import HOC from '../HOC';
 
 import InputLabel, { InputLabelProps } from '@material-ui/core/InputLabel';
 
@@ -20,26 +19,28 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
 
-const styles = theme =>
-  createStyles({
-    root: {
-      justifyContent: 'center',
-      display: 'flex'
-    },
-    formControl: {
-      margin: theme.spacing.unit,
-      minWidth: 120
-    },
-    selectEmpty: {
-      marginTop: theme.spacing.unit * 2
-    },
-    group: {
-      margin: `${theme.spacing.unit}px 0`
-    },
-    label: {
-      fontSize: '0.8em'
-    }
-  });
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  root: {
+    justifyContent: 'center',
+    display: 'flex'
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120
+  },
+  selectEmpty: {
+    marginTop: theme.spacing.unit * 2
+  },
+  group: {
+    margin: `${theme.spacing.unit}px 0`
+  },
+  label: {
+    fontSize: '0.8em'
+  }
+}));
 
 interface Props {
   videoEl: React.RefObject<HTMLMediaElement>;
@@ -47,25 +48,21 @@ interface Props {
   onClose: () => void;
 }
 
-interface IProps extends WithStyles<typeof styles>, Props {
-  // error: string;
-  // store: AppModel.Type,
-  
-}
+function AudioSettings(props: Props) {
+  const store = useContext(AppModel.Context)!;
+  const classes = useStyles({});
+  const { t } = useTranslation();
+  const [state, setState] = useState<any>({
+    selectedIndex: 0,
+    options: ['loading..'],
+    anchorEl: null,
+    mics: [],
+    speakers: [],
+    mic: '',
+    speaker: ''
+  });
 
-class AudioSettings extends React.Component<IProps, any> {
-  constructor(props: IProps) {
-    super(props);
-    this.state = {
-      selectedIndex: 0,
-      options: ['loading..'],
-      anchorEl: null,
-      mics: [],
-      speakers: []
-    };
-  }
-
-  private attachSinkId = (element: HTMLMediaElement, sinkId: string) => {
+  const attachSinkId = (element: HTMLMediaElement, sinkId: string) => {
     const _el: any = element; // setSinkId not offically on HTMLMediaElement
     if (typeof _el.sinkId !== 'undefined') {
       _el
@@ -87,129 +84,134 @@ class AudioSettings extends React.Component<IProps, any> {
     }
   };
 
-  private gotDevices = (deviceInfos: MediaDeviceInfo[]) => {
+  const gotDevices = (deviceInfos: MediaDeviceInfo[]) => {
     // console.log('deviceInfos', deviceInfos);
     const speakers: any[] = [];
     const mics: any[] = [];
-    const defaultVal:any = { mic:null, speaker: null};
+    const defaultVal: any = { mic: null, speaker: null };
     for (let i = 0; i !== deviceInfos.length; ++i) {
       const deviceInfo = deviceInfos[i];
       // deviceInfo.label
       const valueId = deviceInfo.deviceId;
       const isDefault = deviceInfo.label.indexOf('Default') === 0;
-     
 
       if (deviceInfo.kind === 'audioinput') {
-        if(isDefault) defaultVal.mic = deviceInfo.deviceId;
+        if (isDefault) defaultVal.mic = deviceInfo.deviceId;
         const label = deviceInfo.label || `microphone ${mics.length + 1}`;
-        
-        mics.push({ label, deviceId:  deviceInfo.deviceId} );
+
+        mics.push({ label, deviceId: deviceInfo.deviceId });
       } else if (deviceInfo.kind === 'audiooutput') {
-        if(isDefault) defaultVal.speaker = deviceInfo.deviceId;
+        if (isDefault) defaultVal.speaker = deviceInfo.deviceId;
         const label = deviceInfo.label || `speaker ${speakers.length + 1}`;
-        speakers.push({ label, deviceId:  deviceInfo.deviceId} );
+        speakers.push({ label, deviceId: deviceInfo.deviceId });
       } else if (deviceInfo.kind === 'videoinput') {
         // option.text = deviceInfo.label || `camera ${videoSelect.length + 1}`;
       } else {
         console.log('Some other kind of source/device: ', deviceInfo);
       }
     }
-    this.setState({ speakers, mics, mic: defaultVal.mic, speaker: defaultVal.speaker  });
+    setState({
+      ...state,
+      speakers,
+      mics,
+      mic: defaultVal.mic,
+      speaker: defaultVal.speaker
+    });
   };
 
-  private handleError = () => {};
+  const handleError = () => {};
 
-  private handleChangeMic = (e: React.ChangeEvent<{}>, val:string) => {
+  const handleChangeMic = (e: React.ChangeEvent<{}>, val: string) => {
     e.preventDefault();
     const deviceId = val; // e.target.value;
     console.log(deviceId);
-    this.attachSinkId(this.props.videoEl.current!, deviceId);
-    this.setState({ mic: deviceId });
+    attachSinkId(props.videoEl.current!, deviceId);
+    setState({ ...state, mic: deviceId });
   };
 
-  private handleChangePlayback = (e: React.ChangeEvent<{}>, val:string) => {
+  const handleChangePlayback = (e: React.ChangeEvent<{}>, val: string) => {
     e.preventDefault();
     const deviceId = val;
     console.log(deviceId);
-    this.attachSinkId(this.props.videoEl.current!, deviceId);
-    this.setState({ speaker: deviceId });
+    attachSinkId(props.videoEl.current!, deviceId);
+    setState({ ...state, speaker: deviceId });
   };
 
-  public componentDidMount() {
+  useEffect(() => {
     navigator.mediaDevices
       .enumerateDevices()
-      .then(this.gotDevices)
-      .catch(this.handleError);
-  }
+      .then(gotDevices)
+      .catch(handleError);
+  }, []);
 
-  private micRef = React.createRef<InputLabelProps>();
+  const micRef = useRef<InputLabelProps>(null);
 
-  public render() {
-    const { classes, onClose, videoEl } = this.props;
-    const { anchorEl, options } = this.state;
-    const { fullScreen } = this.props;
+  const { onClose } = props; // , videoEl
+  const { anchorEl, options } = state;
+  const { fullScreen } = props;
 
-    return (
-      <Dialog
-        open={true}
-        fullScreen={fullScreen}
-        onClose={onClose}
-        aria-labelledby="alert-dialog-title"
-      >
-        <DialogTitle id="alert-dialog-title">{'Audio Settings'}</DialogTitle>
-        <DialogContent>
-          <div className={classes.root}>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="mics">Mic</InputLabel><br/>
-              <RadioGroup
-                id="mics"
-                aria-label="Mics"
-                name="mics"
-                className={classes.group}
-                value={this.state.mic}
-                onChange={this.handleChangeMic}
-              >
-                {this.state.mics.map((x: {label:string, deviceId:string}) => (
-                  <FormControlLabel
-                    key={x.deviceId}
-                    className={classes.label}
-                    value={x.deviceId}
-                    control={<Radio />}
-                    label={x.label}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="playback">Playback</InputLabel><br/>
-              <RadioGroup
-                id="playback"
-                aria-label="playback"
-                name="playback"
-                className={classes.group}
-                value={this.state.speaker}
-                onChange={this.handleChangePlayback}
-              >
-                {this.state.speakers.map((x: {label:string, deviceId:string}) => (
-                  <FormControlLabel
-                    key={x.deviceId}
-                    className={classes.label}
-                    value={x.deviceId}
-                    control={<Radio />}
-                    label={x.label}
-                  />
-                ))}
-              </RadioGroup>
-            </FormControl>
-          </div>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={onClose} color="primary" autoFocus>
-            CLOSE MENU
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
+  return (
+    <Dialog
+      open={true}
+      fullScreen={fullScreen}
+      onClose={onClose}
+      aria-labelledby="alert-dialog-title"
+    >
+      <DialogTitle id="alert-dialog-title">{'Audio Settings'}</DialogTitle>
+      <DialogContent>
+        <div className={classes.root}>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="mics">Mic</InputLabel>
+            <br />
+            <RadioGroup
+              id="mics"
+              aria-label="Mics"
+              name="mics"
+              className={classes.group}
+              value={state.mic}
+              onChange={handleChangeMic}
+            >
+              {state.mics.map((x: { label: string; deviceId: string }) => (
+                <FormControlLabel
+                  key={x.deviceId}
+                  className={classes.label}
+                  value={x.deviceId}
+                  control={<Radio />}
+                  label={x.label}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+          <FormControl className={classes.formControl}>
+            <InputLabel htmlFor="playback">Playback</InputLabel>
+            <br />
+            <RadioGroup
+              id="playback"
+              aria-label="playback"
+              name="playback"
+              className={classes.group}
+              value={state.speaker}
+              onChange={handleChangePlayback}
+            >
+              {state.speakers.map((x: { label: string; deviceId: string }) => (
+                <FormControlLabel
+                  key={x.deviceId}
+                  className={classes.label}
+                  value={x.deviceId}
+                  control={<Radio />}
+                  label={x.label}
+                />
+              ))}
+            </RadioGroup>
+          </FormControl>
+        </div>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="primary" autoFocus>
+          CLOSE MENU
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 }
-export default withMobileDialog<Props>()(HOC(AudioSettings, styles, true));
+export default withMobileDialog<Props>()(AudioSettings);

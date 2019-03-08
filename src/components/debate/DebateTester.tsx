@@ -5,7 +5,6 @@ import { Typography, Divider, Button } from '@material-ui/core';
 import getMedia from '../../utils/getMedia';
 import DebateDisplay from './DebateDisplay';
 import * as AppModel from '../../models/AppModel';
-import HOC, {Authed} from '../HOC';
 import { inject } from 'mobx-react';
 import FPSStats from "react-fps-stats";
 import { useTranslation } from 'react-i18next';

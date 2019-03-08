@@ -282,5 +282,3 @@ export default function Privacy({ props: Props }) {
     </React.Fragment>
   );
 }
-
-// export default HOC(Index, styles);

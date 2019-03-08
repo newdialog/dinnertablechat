@@ -67,7 +67,4 @@ class ContributionSelector extends React.Component<Props> {
     </div>
   );
   }
-}
-
-export default HOC(ContributionSelector, styles);
 */

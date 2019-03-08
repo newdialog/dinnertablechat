@@ -205,4 +205,3 @@ export default function MediaKit({ props: Props }) {
     </React.Fragment>
   );
 }
-// export default HOC(Index, styles);

@@ -108,5 +108,4 @@ export default withMobileDialog<Props>()(function StartDebateDialog(props) {
     </Dialog>
   );
 });
-// export default withMobileDialog<Props>()(HOC(StartDebateDialog, styles));
 // {otherIsGuest && !isOpposite && <br/>}
