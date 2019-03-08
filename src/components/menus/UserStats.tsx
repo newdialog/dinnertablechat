@@ -32,15 +32,14 @@ interface Props extends WithStyles<typeof styles> {
 function UserStats(props: Props) {
   const { classes, store } = props;
 
-    // TODO: update store and read this value
-  const numDebates = 10; //this.state.data.length;
-    const m = 20;
-    const xpPerLevel = 3 * m; // 60
-    const startingXP = 0;
-    const xpTotal = numDebates * m + startingXP;
-    const xp = xpTotal % xpPerLevel;
-    const level = Math.floor(xpTotal / xpPerLevel) + 1;
-    const nextLevel = xpPerLevel;
+  const numDebates = (store.auth.user) ? store.auth.user.numDebates : 0; 
+  const m = 20;
+  const xpPerLevel = 3 * m; // 60
+  const startingXP = 0;
+  const xpTotal = numDebates * m + startingXP;
+  const xp = xpTotal % xpPerLevel;
+  const level = Math.floor(xpTotal / xpPerLevel) + 1;
+  const nextLevel = xpPerLevel;
 
   const normalise = value => ((value - 0) * 100) / (xpPerLevel - 0);
 

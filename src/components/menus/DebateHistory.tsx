@@ -306,6 +306,8 @@ class Index extends React.Component<Props, State> {
     result.sort((a, b) => {
       return a.created < b.created ? 1 : -1;
     });
+    // update store and state
+    if (this.props.store.auth.user) this.props.store.auth.user.updateNumDebates(result.length);
     this.setState({ data: result, open: flags, loaded: true });
   };
 
