@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import HOC from '../HOC';
 
 import {
   Button,

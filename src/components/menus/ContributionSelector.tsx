@@ -1,4 +1,5 @@
 import * as React from 'react';
+/* 
 import { createStyles, WithStyles } from '@material-ui/core/styles';
 import { Chip, Paper } from '@material-ui/core'
 import * as AppModel from '../../models/AppModel';
@@ -47,11 +48,6 @@ class ContributionSelector extends React.Component<Props> {
     // const selected = store.debate.contribution;
 
     const contrib = this.defaultContributions()
-    /* if(selected!==-1) {
-        contrib.forEach( (e) => {
-            if(e.label=== selected) e.color = 'primary';
-        })
-    }*/
 
   return (
     <div>
@@ -73,9 +69,6 @@ class ContributionSelector extends React.Component<Props> {
   );
   }
 }
-{/* <Button key={item.key} variant="outlined" size="small" color="primary" 
-className={classes.button} onClick={() => this.onChipClick(item)}>
-{item.label.valueOf()}
-</Button> */}
 
 export default HOC(ContributionSelector, styles);
+*/

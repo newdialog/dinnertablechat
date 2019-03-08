@@ -16,7 +16,6 @@ import Peer from 'simple-peer';
 import DebateDisplay from './DebateDisplay';
 import * as AppModel from '../../models/AppModel';
 import PeerService from '../../services/PeerService';
-import HOC from '../HOC';
 import DebateError from './DebateError';
 
 import { useTranslation } from 'react-i18next';

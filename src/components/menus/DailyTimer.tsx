@@ -3,11 +3,6 @@ import Countdown from 'react-countdown-now';
 import { Typography, withStyles, Button } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import HOC from '../HOC';
-import { inject } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 import * as Times from '../../services/TimeService';
 

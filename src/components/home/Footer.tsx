@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import { Typography } from '@material-ui/core';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import HOC from '../HOC';
 import { inject } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 

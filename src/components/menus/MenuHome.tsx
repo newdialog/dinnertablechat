@@ -11,10 +11,9 @@ import {
 } from '@material-ui/core';
 import * as AppModel from '../../models/AppModel';
 import PositionSelector from './PositionSelector';
-import ContributionSelector from './ContributionSelector';
+// import ContributionSelector from './ContributionSelector';
 import { inject } from 'mobx-react';
 import CharacterSelection from './CharacterSelection';
-import HOC from '../HOC';
 import Footer from '../home/Footer';
 import HistoryIcon from '@material-ui/icons/History';
 import * as Times from '../../services/TimeService';
@@ -92,7 +91,7 @@ function getStepContent(step: number, store: AppModel.Type) {
     case 1:
       return <PositionSelector store={store} />;
     case 2:
-      return <ContributionSelector store={store} />;
+      return null // <ContributionSelector store={store} />; 
     default:
       return (
         <Typography>

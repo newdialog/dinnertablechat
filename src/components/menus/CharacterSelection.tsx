@@ -3,7 +3,6 @@ import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import { Button, Chip, Paper, Typography } from '@material-ui/core';
 import * as AppModel from '../../models/AppModel';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import HOC from '../HOC';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 

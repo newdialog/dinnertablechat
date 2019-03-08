@@ -3,7 +3,6 @@ import React from 'react';
 import * as Store from '../../models/AppModel';
 import { observer } from 'mobx-react';
 import * as AuthService from '../../services/AuthService';
-import HOC from '../HOC';
 import { inject } from 'mobx-react';
 import { Typography } from '@material-ui/core';
 

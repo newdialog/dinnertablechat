@@ -11,7 +11,6 @@ import {
   Typography
 } from '@material-ui/core';
 import * as AppModel from '../../models/AppModel';
-import HOC from '../HOC';
 import * as TopicInfo from '../../utils/TopicInfo';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';

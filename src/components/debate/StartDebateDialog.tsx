@@ -8,7 +8,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
-import HOC from '../HOC';
 import MenuHome from '../menus/MenuHome';
 import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';

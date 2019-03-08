@@ -8,7 +8,6 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 
 import * as AppModel from '../../models/AppModel';
 import { inject } from 'mobx-react';
-import HOC from '../HOC';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 
