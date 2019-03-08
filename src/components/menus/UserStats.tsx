@@ -9,16 +9,20 @@ import { inject } from 'mobx-react';
 const styles = theme =>
   createStyles({
     root: {
-      justifyContent: 'center',
-      marginTop: '60px',
+      marginTop: '55px',
+      //background: '#a69c92', 
+      backgroundImage: `url(${'./imgs/woodgrain.jpg'})`,
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
+      backgroundRepeat: 'no-repeat'
+    },
+    groupItem: {
     },
     item: {
-
+      textAlign: 'center',
+      minWidth: '60px',
+      maxWidth: '250px'
     },
-    xp: {
-
-    },
-
   });
 
 interface Props extends WithStyles<typeof styles> {
@@ -41,57 +45,61 @@ function UserStats(props: Props) {
   const normalise = value => ((value - 0) * 100) / (xpPerLevel - 0);
 
   let title = 'Beginner Apprentice';
-  if (level > 3) title = 'Traveling Journeyman';
+  if (level > 3) title = 'Traveling Journeyperson';
   if (level > 6) title = 'Experienced Rhetorician';
   if (level > 12) title = 'Most Honorable Host';
 
 
   return (
     <div className={classes.root}>
-    <Grid id="top-row" container spacing={24}>
-        <Grid item xs={4}>
-        <i className="fas fa-star"></i>
+    <Grid id="row" container justify="space-around" alignItems="center" spacing={16}>
+        <Grid item xs={3} className={classes.item} justify="center" alignItems="center">
+          <div className={classes.groupItem}>
+            <i className="fas fa-trophy" style={{color:'#aee2ea', fontSize: '1.7em'}}></i>
             <Typography
-                variant="body2"
-                align="left"
-                color="textPrimary"
+                variant="h5"
+                align="center"
+                color="textSecondary"
                 gutterBottom
                 className={classes.item}
-                style={{ fontWeight: 'normal', fontSize: '1em' }}
             >
-                {xp}/{nextLevel}
+                {level}
             </Typography>
-            <LinearProgress
-                color="secondary"
-                variant="determinate"
-                value={normalise(xp)}
-            />
-            </Grid>
-        <Grid item xs={4}>
-        <i className="fas fa-trophy"></i>
-            <Typography
-                variant="body2"
-                align="left"
-                color="textPrimary"
-                gutterBottom
-                className={classes.item}
-                style={{ fontWeight: 'normal', fontSize: '1em' }}
-            >
-                {level}: {title}
-            </Typography>
+          </div>
         </Grid>
-        <Grid item xs={4}>
-        <i className="fas fa-comments"></i>
+        <Grid item xs={3} className={classes.item} justify="center" alignItems="center">
+          <div className={classes.groupItem}>
+            <i className="fas fa-star" style={{color:'#aee2ea', fontSize: '1.2em'}}></i>
             <Typography
-                variant="body2"
-                align="left"
-                color="textPrimary"
+                variant="h5"
+                align="center"
+                color="textSecondary"
                 gutterBottom
                 className={classes.item}
-                style={{ fontWeight: 'normal', fontSize: '1em' }}
+              >
+                {xp}/{nextLevel}
+              </Typography>
+              <LinearProgress
+                  color="primary"
+                  variant="determinate"
+                  value={normalise(xp)}
+                  style={{height: '6px'}}
+              />
+          </div>
+        </Grid>
+        <Grid item xs={3} className={classes.item} justify="center" alignItems="center">
+          <div className={classes.groupItem}>
+            <i className="fas fa-comments" style={{color:'#aee2ea', fontSize: '1.7em'}}></i>
+            <Typography
+                variant="h5"
+                align="center"
+                color="textSecondary"
+                gutterBottom
+                className={classes.item}
             >
                 {numDebates || 'zero'}
             </Typography>
+          </div>
         </Grid>
     </Grid>
     </div>

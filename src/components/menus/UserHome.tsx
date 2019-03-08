@@ -17,18 +17,17 @@ import {inject} from 'mobx-react';
 const styles = (theme: Theme) =>
   createStyles({
     container: {
+      background: '#ddd1bb', 
     },
     backgroundImg: {
       display: 'block',
-      margin: 'auto',
-      //maxWidth: '900px',
+      margin: '0.5em auto 0em',
+      width: '100%',
+      maxWidth: '1000px',
+      height: 'auto',
     },
     divider: {
       margin: `${theme.spacing.unit * 4}px 0`
-    },
-    largeIcon: {
-      width: 80,
-      height: 60
     },
   });
 const debateOpen = Times.isDuringDebate();

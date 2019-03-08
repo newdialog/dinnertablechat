@@ -123,10 +123,10 @@ export const theme = createMuiTheme({
       letterSpacing: '0.02em'
     },
     h5: {
-      fontSize: '1.4em',
+      fontSize: '1em',
       fontFamily: ['Montserrat'].join(','),
-      fontWeight: 500,
-      letterSpacing: '0.02em'
+      fontWeight: 900,
+      letterSpacing: '0.03em'
     },
     caption: {
       fontFamily: ['Montserrat'].join(','),

@@ -33,11 +33,17 @@ import {
   TwitterIcon,
   FacebookIcon
 } from 'react-share';
+import { url } from 'inspector';
 
 const styles = theme =>
   createStyles({
     pagebody: {
-      backgroundColor: theme.palette.primary.light
+      // backgroundImage: `url(${'./imgs/woodgrain.jpg'})`,
+      // backgroundPosition: 'center',
+      // backgroundSize: 'cover',
+      // backgroundRepeat: 'no-repeat'
+      background: '#ddd1bb', 
+      //backgroundColor: theme.palette.primary.light
     },
     centered: {
       marginTop: '0',
@@ -56,7 +62,7 @@ const styles = theme =>
       flexDirection: 'row',
       padding: '1em',
       borderRadius: '2vh',
-      backgroundColor: theme.palette.primary.dark,
+      backgroundColor: theme.palette.primary.light,
       boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.28), 0px 1px 1px 0px rgba(0,0,0,0.2), 0px 2px 1px -1px rgba(0,0,0,0.2)'
     },
     name: {
@@ -456,10 +462,8 @@ class Index extends React.Component<Props, State> {
       window.gtag('event', 'guest_signup_click', {
         event_category: 'splash'
       });
-      // this.props.store.router.push('/home');
       this.props.store.auth.logout();
       this.props.store.auth.login()
-      //setTimeout( this.props.store.auth.login, 5000);
       return true;
     }
 
