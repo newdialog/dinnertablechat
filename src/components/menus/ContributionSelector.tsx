@@ -3,7 +3,6 @@ import * as React from 'react';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
 import { Chip, Paper } from '@material-ui/core'
 import * as AppModel from '../../models/AppModel';
-import HOC from '../HOC';
 
 // const logoData = require('../../assets/logo.json');
 
