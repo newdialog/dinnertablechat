@@ -16,7 +16,7 @@
     "@material-ui/styles": "^3.0.0-alpha.10",
     "async-retry": "^1.2.3",
     "aws-amplify-react": "^2.3.2",
-    "aws-sdk": "^2.417.0",
+    "aws-sdk": "^2.418.0",
     "backoff-rxjs": "^6.3.2",
     "env-cmd": "^8.0.2",
     "formik": "^1.5.1",
@@ -75,8 +75,8 @@
     "old_patchsq": "sed -i.bak '/workbox.clientsClaim();/i workbox.skipWaiting();' ./build/service-worker.js && rm ./build/service-worker.js.bak"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.9",
-    "@types/node": "^11.10.5",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.11.0",
     "@types/react": "^16.8.7",
     "@types/react-dom": "^16.8.2",
     "@types/react-responsive": "^3.0.3",

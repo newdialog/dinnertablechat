@@ -127,7 +127,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: 80,
     height: 60
   }
-}));
+}), {withTheme: true, name:'Banner'});
 
 const bgOptions = {
   loop: true,
@@ -139,7 +139,11 @@ const bgOptions = {
   }
 };
 
-export default function HomeBanner({ store }: {store:AppModel.Type}) {
+interface Props {
+  store: AppModel.Type
+}
+export default function HomeBanner(props:Props) {
+  const {store} = props;
   const classes = useStyles({});
   const { t } = useTranslation();
   const bannerRef = useRef<Lottie | any>();
