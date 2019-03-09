@@ -202,21 +202,7 @@ export default function DebateScene(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
   const { talkingBlue, talkingRed, videoEl, store } = props;
-  /*
-  public static getDerivedStateFromProps(nextProps: Props, prevState: Props) {
-    if (nextProps.talkingBlue !== prevState.talkingBlue) {
-      return { blueTransition: false };
-    }
-    return {};
-  }
-*/
-  const blue = useRef<HTMLDivElement>(null);
-  const red = useRef<HTMLDivElement>(null);
-  const blueLottieRef = useRef<Lottie>(null);
-
-  const bgEl = useRef<Lottie | any>();
-  const tableEl = useRef<Lottie | any>();
-  const confettiRef = useRef<Lottie | any>();
+  let [prevBlue, setPrevBlue] = useState<boolean | null>(null);
 
   const [state, setState] = useState({
     blueTransition: false,
@@ -226,6 +212,21 @@ export default function DebateScene(props: Props) {
     bothAgreed: false,
     ended: false
   });
+
+  useEffect(()=>{
+    if(talkingBlue !== prevBlue) {
+      setState({...state, blueTransition: false});
+      setPrevBlue(talkingBlue);
+    }
+  }, [talkingBlue]);
+
+  const blue = useRef<HTMLDivElement>(null);
+  const red = useRef<HTMLDivElement>(null);
+  const blueLottieRef = useRef<Lottie>(null);
+
+  const bgEl = useRef<Lottie | any>();
+  const tableEl = useRef<Lottie | any>();
+  const confettiRef = useRef<Lottie | any>();
 
   const trackDebateTimeEnd = () => {
     window.gtag('event', 'debate_time_end', {

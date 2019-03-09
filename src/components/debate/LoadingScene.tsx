@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) => ({
       maxWidth: '1000px',
       minWidth: '300px'
     },
-    bannerRef: {},
     bannerAnim: {
       position: 'absolute',
       left: 0,
@@ -107,14 +106,14 @@ export default function LoadingScene(props:Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = useState<any>({});
+  const [state, setState] = useState<State>({});
 
   const onMatched = (match: any) => {
     if (unloadFlag.flag) return;
     // TODO
     if (typeof match === 'string') {
       /// if(match === 'CANCELLED') return; // just end (why?)
-      setState({ error: match });
+      setState({ ...state, error: match });
       return;
     }
     store.debate.createMatch(match);
@@ -160,10 +159,10 @@ export default function LoadingScene(props:Props) {
     try {
       const media = await getMedia();
       // myStream = media;
-      setState({ stream: media });
+      setState({ ...state, stream: media });
     } catch (e) {
       console.log('getMediaError', e);
-      setState({ error: 'mic_timeout' });
+      setState({ ...state, error: 'mic_timeout' });
       return; // do not continue to queue on error;
     }
 
@@ -235,11 +234,11 @@ export default function LoadingScene(props:Props) {
       );
     } catch (e) {
       console.error('queueUp error', e);
-      setState({ error: 'matchtimeout' });
+      setState({ ...state, error: 'matchtimeout' });
       return;
     }
     if (unloadFlag.flag) return;
-    setState({ ticketId });
+    setState({ ...state, ticketId });
 
     // ticketIdProp = ticketId;
     // window.onunload = onWindowUnload;
@@ -291,7 +290,7 @@ export default function LoadingScene(props:Props) {
         await getMatch();
         return;
         // return setState({ error: 'handshake_timeout' });
-      } else return setState({ error: 'handshake_error' });
+      } else return setState({ ...state, error: 'handshake_error' });
     } finally {
       if (unloadFlag.flag) {
         console.log('gotMedia stopping due to flag');
@@ -350,7 +349,7 @@ export default function LoadingScene(props:Props) {
         <div className={classes.bannerAnim}>
           <Lottie
             options={bgOptions}
-            ref={classes.bannerRef}
+            // ref={bannerRef}
             isClickToPauseDisabled={true}
           />
         </div>
@@ -400,7 +399,7 @@ export default function LoadingScene(props:Props) {
                 color="white"
               />
               <CopyToClipboard
-                onCopy={() => setState({ copied: true })}
+                onCopy={() => setState({ ...state, copied: true })}
                 options={{ message: 'Whoa!' }}
                 text={refURL}
               >
