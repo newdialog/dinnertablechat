@@ -1,8 +1,8 @@
 // TODO HOOKS
-import React from 'react';
+import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 
 import * as Store from '../../models/AppModel';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as AuthService from '../../services/AuthService';
 // import { withOAuth } from 'aws-amplify-react';
 import Auth from '@aws-amplify/auth';
@@ -11,6 +11,7 @@ import MediaQuery from 'react-responsive';
 interface Props {
   store: Store.Type;
   login: boolean;
+  children?: any;
 }
 
 let init = false;
@@ -20,14 +21,9 @@ interface State {
 }
 
 //
-class AuthComp extends React.Component<Props, any> {
-  constructor(props: Props) {
-    super(props);
-    // this.state = { init: false };
-  }
-
+function AuthComp(props: Props) {
   // Auth/Provider/withOAuth.jsx
-  public signIn() {
+  const signIn = () => {
     if (!Auth || typeof Auth.configure !== 'function') {
       throw new Error(
         'No Auth module found, please ensure @aws-amplify/auth is imported'
@@ -50,64 +46,68 @@ class AuthComp extends React.Component<Props, any> {
       '&client_id=' +
       (Auth.configure(null) as any).userPoolWebClientId;
     window.location.assign(url);
-  }
+  };
 
-  public componentWillMount() {
-    const props: any = this.props; // required for OAuthSignIn
-    // const { init } = this.state;
+  useEffect(() => {
+    // const props: any = props; // required for OAuthSignIn
+    // const { init } = state;
     if (!init) {
       init = true;
-      AuthService.auth(this.handleAuth);
+      AuthService.auth(handleAuth);
     }
+  }, []);
+
+  const handleAuth = (awsUser: AuthService.AwsAuth | null) => {
+    const s = props.store;
+    if (!awsUser) {
+      console.log('+not logged in');
+      // if(props.store.isStandalone()) signIn(); // MOBILE
+
+      s.auth.notLoggedIn();
+      // AuthService.guestLogin();
+      return;
+    }
+    console.log('+logged in');
+    // console.log('handleAuth', awsUser)
+    s.auth.authenticated(awsUser);
+
+    // TODO: cleanup guest login flow
+    if (
+      awsUser.user.email === 'guest@dinnertable.chat' &&
+      s.isGuest() &&
+      awsUser.event === AuthService.LOGIN_EVENT
+    )
+      if (props.store.isStandalone()) s.router.push('/home');
+      else {
+        if (localStorage.getItem('quickmatch')) s.router.push('/quickmatch');
+        else s.router.push('/tutorial');
+      }
+    /* if(awsUser.event !== AuthService.LOGIN_EVENT) {
+      if(props.store.isStandalone()) props.store.router.push('/home');
+    } */
+  };
+
+  /// console.time('AuthComp');
+
+  if (props.login) {
+    // props.OAuthSignIn()
+    signIn();
   }
 
-  public render() {
-    /// console.time('AuthComp');
-    const props: any = this.props;
-
-    if (props.login) {
-      // props.OAuthSignIn()
-      this.signIn();
-    }
-
-    return <React.Fragment>{props.children}
-        <MediaQuery query="(display-mode: standalone)">
-        {(matches) => {
-          if (matches && !this.props.store.isStandalone()) this.props.store.setStandalone();
+  return (
+    <React.Fragment>
+      {props.children}
+      <MediaQuery query="(display-mode: standalone)">
+        {matches => {
+          if (matches && !props.store.isStandalone())
+            props.store.setStandalone();
           // if(matches) return <p>p1</p>
           // else return <p>w1</p>
           return null;
         }}
-        </MediaQuery>
-      </React.Fragment>;
-  }
-
-  private handleAuth = (awsUser: AuthService.AwsAuth | null) => {
-    const s = this.props.store;
-    if (!awsUser)  {
-      console.log('+not logged in');
-      // if(this.props.store.isStandalone()) this.signIn(); // MOBILE
-      
-      s.auth.notLoggedIn();
-      // AuthService.guestLogin();
-      return;
-    } 
-    console.log('+logged in');
-    // console.log('handleAuth', awsUser)
-    s.auth.authenticated(awsUser);
-    
-    // TODO: cleanup guest login flow
-    if(awsUser.user.email==='guest@dinnertable.chat' && s.isGuest() && awsUser.event === AuthService.LOGIN_EVENT) 
-      if(this.props.store.isStandalone()) s.router.push('/home');
-      else {
-        if(localStorage.getItem('quickmatch')) s.router.push('/quickmatch');
-        else s.router.push('/tutorial');
-      }
-    /* if(awsUser.event !== AuthService.LOGIN_EVENT) {
-      if(this.props.store.isStandalone()) this.props.store.router.push('/home');
-    } */
-    
-  }
+      </MediaQuery>
+    </React.Fragment>
+  );
 }
 
 export default observer(AuthComp);
