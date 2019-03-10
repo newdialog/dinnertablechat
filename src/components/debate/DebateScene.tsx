@@ -52,8 +52,8 @@ export default function DebateScene(props:Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
-  
-  let peer: PeerService;
+  const peer = props.peer;
+  // let [peer, setPeer] = useState<PeerService|null>(null);
   let speechEvents: SpeechEvent;
   let speechSelfEvents: SpeechEvent;
   const vidRef = useRef<HTMLVideoElement>(null);
@@ -82,14 +82,14 @@ export default function DebateScene(props:Props) {
     // stream: MediaStream
     return () => {
       console.log('debatescene unmounting');
-      peer.destroy();
+      if(peer) peer!.destroy();
       speechSelfEvents!.stop();
     }
   }, []);
 
   const setupSelfVoice= () => {
     const options = {};
-    speechSelfEvents = hark(peer.getLocalStream(), options);
+    speechSelfEvents = hark(peer!.getLocalStream(), options);
 
     speechSelfEvents.on('speaking', () => {
       // console.log('speaking');
@@ -104,7 +104,7 @@ export default function DebateScene(props:Props) {
     });
   }
 
-  const gotMedia = (stream?: MediaStream) => {
+  const gotMedia = () => {
     setupSelfVoice();
 
     const isInit = false; // todo
@@ -113,7 +113,7 @@ export default function DebateScene(props:Props) {
       trickle: false,
       stream
     });*/
-    const p = peer;
+    const p = peer!;
 
     p.on('error', err => {
       if (err.toString().indexOf('connection failed') !== -1) {

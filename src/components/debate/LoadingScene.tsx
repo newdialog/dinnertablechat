@@ -11,7 +11,7 @@ import Lottie from 'react-lottie';
 import * as AppModel from '../../models/AppModel';
 import DebateError from './DebateError';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-
+import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 
@@ -90,23 +90,31 @@ interface Props {
 }
 
 interface State {
-  stream?: MediaStream;
+  // stream?: MediaStream | null;
   error?: string;
   ticketId?: string;
   copied?: boolean;
+  startedHandshake: boolean;
+  // loggedError: boolean;
+  // stream?: MediaStream;
+  // unloadFlag: {flag:boolean}
 }
 
-export default function LoadingScene(props:Props) {
-  let loggedError = false;
-  let myStream: MediaStream | null = null;
-  let ticketIdProp = null;
-  let startedHandshake = false;
-  let unloadFlag = { flag: false };
+let unloadFlag = { flag: false };
+let loggedError = false;
+export default observer(function LoadingScene(props:Props) {
+  // let startedHandshake = false;
 
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = useState<State>({});
+  const [state, setState] = useState<State>({
+    startedHandshake: false,
+    // stream: null
+    // loggedError: false,
+    // unloadFlag: { flag: false }
+  });
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
   const onMatched = (match: any) => {
     if (unloadFlag.flag) return;
@@ -158,8 +166,9 @@ export default function LoadingScene(props:Props) {
     // enable mic first
     try {
       const media = await getMedia();
-      // myStream = media;
-      setState({ ...state, stream: media });
+      if(!media) throw new Error('no media pulled'); //maybe not needed
+      console.log('startedHandshake-1');
+      setStream(media);
     } catch (e) {
       console.log('getMediaError', e);
       setState({ ...state, error: 'mic_timeout' });
@@ -172,6 +181,7 @@ export default function LoadingScene(props:Props) {
   }
 
   useEffect(()=> {
+    unloadFlag.flag = false;
     startup();
 
     return () => {
@@ -190,12 +200,13 @@ export default function LoadingScene(props:Props) {
   
       console.log('componentWillUnmount 1', !hasMatch);
       unloadFlag.flag = true;
+      /// setState({...state, unloadFlag: {...state.unloadFlag} });
       if (!hasMatch) {
         console.log('componentWillUnmount 2', state.ticketId);
         if (state.ticketId) QS.stopMatchmaking(state.ticketId!);
         store.showNavbar();
-        if (state.stream)
-          state.stream.getTracks().forEach(track => track.stop());
+        if (stream)
+          stream.getTracks().forEach(track => track.stop());
       }
     }
   }, [])
@@ -238,6 +249,7 @@ export default function LoadingScene(props:Props) {
       return;
     }
     if (unloadFlag.flag) return;
+    // console.log('{ ...state, ticketId }', { ...state, ticketId });
     setState({ ...state, ticketId });
 
     // ticketIdProp = ticketId;
@@ -258,22 +270,22 @@ export default function LoadingScene(props:Props) {
     return e.returnValue;
   };
 
-  const gotMedia = async (stream: MediaStream) => {
+  const gotMedia = async (_stream: MediaStream) => {
     console.log('gotMedia, now handshaking');
     const matchId = store.debate.match!.matchId;
     const isLeader = store.debate.match!.leader;
-    const state = {
+    const statePlayer= {
       char: store.debate.character,
       side: store.debate.position
     }; // TODO pretect against premium chars
 
-    let result: any;
+    let result;
     try {
       result = await shake.handshake(
         matchId,
         isLeader,
-        state,
-        stream,
+        statePlayer,
+        _stream,
         unloadFlag
       );
     } catch (e) {
@@ -285,7 +297,8 @@ export default function LoadingScene(props:Props) {
         // retrying
         console.warn('retrying!');
         unloadFlag.flag = false; // allow retry
-        startedHandshake = false;
+        // startedHandshake = false;
+        setState({...state, startedHandshake: false}); // maybe not neede?
         store.debate.unMatch();
         await getMatch();
         return;
@@ -297,6 +310,7 @@ export default function LoadingScene(props:Props) {
         return;
       }
     }
+    console.log('result', result);
     const { peer, otherPlayerState } = result;
 
     props.onPeer(peer);
@@ -309,18 +323,22 @@ export default function LoadingScene(props:Props) {
     store.debate.syncMatch();
   };
 
+  
   useEffect(() => {
     // Get Mic right away
     if (unloadFlag.flag) return;
+    console.log('0startedHandshake', 'store.debate.match:',!!store.debate.match, 'hasstream:', !!stream, 'startedHandshake:'+state.startedHandshake)
     if (
       store.debate.match &&
-      state.stream &&
-      !startedHandshake
+      stream &&
+      !state.startedHandshake
     ) {
-      startedHandshake = true;
-      gotMedia(state.stream!);
+      // startedHandshake = true;
+      console.log('1startedHandshake')
+      setState({...state, startedHandshake: true});
+      gotMedia(stream);
     }
-  }, [store]);
+  }, [store, store.debate.match, state]); // , [store]
 
 
     const matchedUnsync = store.debate.match && !store.debate.match!.sync;
@@ -425,4 +443,4 @@ export default function LoadingScene(props:Props) {
         </div>
       </div>
     );
-  }
+  });
