@@ -63,7 +63,7 @@ export default function FloatMenu(props:Props) {
   };
 
   const handleClose = () => {
-    setState({...state, anchorEl: null });
+    setState({...state, anchorEl: null, exitPrompt: false });
   };
 
   const handleLeave = () => {
