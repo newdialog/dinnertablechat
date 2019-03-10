@@ -5,14 +5,10 @@ import {
   WithStyles,
   Theme
 } from '@material-ui/core/styles';
-import withRoot from '../../withRoot';
 
 import Lottie from 'react-lottie';
-import { observer } from 'mobx-react';
 import { Typography, Divider } from '@material-ui/core';
-import { inject } from 'mobx-react';
 import hark, { SpeechEvent } from 'hark';
-import Peer from 'simple-peer';
 import DebateDisplay from './DebateDisplay';
 import * as AppModel from '../../models/AppModel';
 import PeerService from '../../services/PeerService';

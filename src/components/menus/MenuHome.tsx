@@ -11,8 +11,7 @@ import {
 } from '@material-ui/core';
 import * as AppModel from '../../models/AppModel';
 import PositionSelector from './PositionSelector';
-// import ContributionSelector from './ContributionSelector';
-import { inject } from 'mobx-react';
+
 import CharacterSelection from './CharacterSelection';
 import Footer from '../home/Footer';
 import HistoryIcon from '@material-ui/icons/History';

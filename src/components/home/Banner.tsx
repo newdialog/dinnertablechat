@@ -3,7 +3,6 @@ import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
 import Lottie from 'react-lottie';
 import Reveal from 'react-reveal/Reveal';
-import { observer } from 'mobx-react';
 
 import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
 import IconButton from '@material-ui/core/IconButton';

@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import Tester from './DebateTester';
 import LoadingScene from './LoadingScene';
-import { inject } from 'mobx-react';
 import DebateScene from './DebateScene';
 import PeerService from '../../services/PeerService';
 import DebateFeedback from './DebateFeedback';

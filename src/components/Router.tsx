@@ -2,7 +2,7 @@
 import React, { lazy, Suspense } from 'react';
 import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import * as AppModel from '../models/AppModel';
-import {observer} from 'mobx-react';
+import {observer} from 'mobx-react-lite';
 import LoadingMsg from './Loading';
 
 const AsyncHome = lazy(() => import('./home/home'));
