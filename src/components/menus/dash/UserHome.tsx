@@ -5,11 +5,11 @@ import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Helmet } from 'react-helmet';
 import DailyTimer from './DailyTimer';
-import * as Times from '../../services/TimeService';
-import * as AppModel from '../../models/AppModel';
+import * as Times from '../../../services/TimeService';
+import * as AppModel from '../../../models/AppModel';
 import Tooltip from './Tooltip';
 import DebateHistory from './DebateHistory';
-import Footer from '../home/Footer';
+import Footer from '../../home/Footer';
 import UserStats from './UserStats';
 
 import { useTranslation } from 'react-i18next';
@@ -17,13 +17,15 @@ import { useTheme, makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
+    paddingTop:'40px',
     background: '#ddd1bb'
   },
   backgroundImg: {
     display: 'block',
     margin: '0.5em auto 0em',
-    width: '100%',
+    width: 'auto',
     maxWidth: '1000px',
+    maxHeight: '50vh',
     height: 'auto'
   },
   divider: {
@@ -43,17 +45,15 @@ export default function UserHome(props: Props) {
   if (store.auth.isNotLoggedIn) store.router.push('/');
   else if (!store.auth.user) return null;
 
+  // <UserStats store={store} />
   return (
-    <React.Fragment>
+    <>
       <Helmet title="Dinnertable.chat Press">
         <meta name="og:url" content="https://dinnertable.chat/home" />
         <meta name="og:title" content="Dinnertable.chat Home" />
       </Helmet>
       <div className={classes.container}>
-        <UserStats store={store} />
-        <div className={classes.backgroundImg}>
-          <img src="imgs/press/01-scene1.png" width="100%" />
-        </div>
+        <img src="imgs/press/01-scene1.png" className={classes.backgroundImg} />
         <div className={classes.divider} />
 
         <div style={{ width: '100%', textAlign: 'center', marginTop: '12px' }}>
@@ -99,6 +99,6 @@ export default function UserHome(props: Props) {
         <DebateHistory store={store}/>
       </div>
       <Footer />
-    </React.Fragment>
+    </>
   );
 }

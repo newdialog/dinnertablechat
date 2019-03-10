@@ -12,7 +12,7 @@ const AsyncEducation = lazy(() => import('./pages/EducationHome'));
 const AsyncMediaKit = lazy(() => import('./mediakit/MediaKit'));
 const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
 const AsyncTester = lazy(() => import('./debate/DebateTester'));
-const UserHome = lazy(() => import('./menus/UserHome'));
+const UserHome = lazy(() => import('./menus/dash/UserHome'));
 const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
 const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));

@@ -18,11 +18,11 @@ import Info from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
-import * as AppModel from '../../models/AppModel';
+import * as AppModel from '../../../models/AppModel';
 // import HOC, { Authed } from '../HOC';
 // TODO: ADD AUTH CHECK
-import * as TopicInfo from '../../utils/TopicInfo';
-import API from '../../services/APIService';
+import * as TopicInfo from '../../../utils/TopicInfo';
+import API from '../../../services/APIService';
 
 import moment from 'moment';
 import { inject } from 'mobx-react';

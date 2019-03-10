@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Grid, Paper } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import * as AppModel from '../../models/AppModel';
+import * as AppModel from '../../../models/AppModel';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 

@@ -3,8 +3,8 @@ import Countdown from 'react-countdown-now';
 import { Typography, withStyles, Button } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
-import * as AppModel from '../../models/AppModel';
-import * as Times from '../../services/TimeService';
+import * as AppModel from '../../../models/AppModel';
+import * as Times from '../../../services/TimeService';
 
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
