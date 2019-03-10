@@ -89,7 +89,7 @@ export default function UserHome(props: Props) {
             )}
           </Grid>
           <div className={classes.divider} />
-          <DailyTimer />
+          <DailyTimer store={store} />
           <Tooltip />
         </div>
         <div className={classes.divider} />

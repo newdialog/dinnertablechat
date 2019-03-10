@@ -53,7 +53,7 @@ export default function UserStats(props: Props) {
   return (
     <div className={classes.root}>
     <Grid id="row" container justify="space-around" alignItems="center" spacing={16}>
-        <Grid item xs={3} className={classes.item} justify="center" alignItems="center">
+        <Grid item xs={3} className={classes.item}>
           <div className={classes.groupItem}>
             <i className="fas fa-trophy" style={{color:'#aee2ea', fontSize: '1.7em'}}></i>
             <Typography
@@ -67,7 +67,7 @@ export default function UserStats(props: Props) {
             </Typography>
           </div>
         </Grid>
-        <Grid item xs={3} className={classes.item} justify="center" alignItems="center">
+        <Grid item xs={3} className={classes.item}>
           <div className={classes.groupItem}>
             <i className="fas fa-star" style={{color:'#aee2ea', fontSize: '1.2em'}}></i>
             <Typography
@@ -87,7 +87,7 @@ export default function UserStats(props: Props) {
               />
           </div>
         </Grid>
-        <Grid item xs={3} className={classes.item} justify="center" alignItems="center">
+        <Grid item xs={3} className={classes.item}>
           <div className={classes.groupItem}>
             <i className="fas fa-comments" style={{color:'#aee2ea', fontSize: '1.7em'}}></i>
             <Typography
