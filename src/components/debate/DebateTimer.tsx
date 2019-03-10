@@ -6,12 +6,12 @@ import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
-import HOC from '../HOC';
-import { inject } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 
-const styles = (theme: Theme) =>
-  createStyles({
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
@@ -54,7 +54,7 @@ const styles = (theme: Theme) =>
         display: 'inline'
       }
     }
-  });
+  }));
 
 function onMenuClick(store: AppModel.Type) {
   // store.debate.resetQueue();
@@ -183,7 +183,9 @@ interface Props {
 }
 
 function DebateTimer(props) {
-  const { classes, t, onCompleted, store } = props;
+  const classes = useStyles({});
+  const { onCompleted } = props;
+  const store = props.store;
   step = 0;
 
   return (
@@ -195,4 +197,4 @@ function DebateTimer(props) {
   );
 }
 
-export default inject('store')(HOC(DebateTimer, styles));
+export default DebateTimer;

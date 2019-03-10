@@ -3,16 +3,13 @@ import Countdown from 'react-countdown-now';
 import { Typography, withStyles, Button } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import HOC from '../HOC';
-import { inject } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 import * as Times from '../../services/TimeService';
 
-const styles = (theme: Theme) =>
-  createStyles({
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
+
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
@@ -26,7 +23,7 @@ const styles = (theme: Theme) =>
         color: '#06616b',
         fontFamily: "'Roboto Mono', 'Courier New'",
     }
-  });
+  }));
 
 function onMenuClick(store: AppModel.Type) {
   // store.debate.resetQueue();
@@ -101,8 +98,9 @@ interface Props {
 }
 
 function DailyEndTimer(props) {
-  const { classes, t, onCompleted } = props;
-  const store = props.store as AppModel.Type;
+  const classes = useStyles({});
+  const { onCompleted } = props;
+  const store = props.store;
 
   const isDuringDebate = Times.isDuringDebate();
   const endTime = isDuringDebate ? Times.getDebateEnd().getTime() : Times.getDebateStart().getTime();
@@ -116,4 +114,4 @@ function DailyEndTimer(props) {
   );
 }
 
-export default inject('store')(HOC(DailyEndTimer, styles));
+export default DailyEndTimer;

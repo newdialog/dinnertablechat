@@ -1,10 +1,8 @@
-// stub
-
-import React from 'react';
+import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
 import {
   createStyles,
-  WithStyles
+  WithStyles, Theme
 } from '@material-ui/core/styles';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -13,16 +11,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import * as AppModel from '../../models/AppModel';
-import HOC from '../HOC';
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
 
-const styles = theme =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       justifyContent: 'center'
     }
-  });
+  }));
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
     error: string,
     store: AppModel.Type
 }
@@ -40,31 +38,27 @@ const errors = {
   'CANCELLED': 'There seems to be a duplicate of the same user in the match.'
 }
 
-class DebateError extends React.Component<Props, any> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { };
-  }
+export default function DebateError(props:Props) {
+  const [state, setState] = useState({open:false});
+  const classes = useStyles({});
+  const { t } = useTranslation();
 
-  private handleClose = () => {
-    this.setState({ open: false });
-    this.props.store.debate.resetQueue();
-    // this.props.store.router.push('/home');
+  const handleClose = () => {
+    setState({ open: false });
+    props.store.debate.resetQueue();
+    // props.store.router.push('/home');
     window.location.reload(true);
   };
-  
-  public render() {
-    const { classes } = this.props;
     
-    console.log('this.props.error', this.props.error);
+    console.log('props.error', props.error);
 
-    const err = this.props.error;
+    const err = props.error;
     const errorMsg = errors[err] || ('Misc error: ' + err);
 
     return (
         <Dialog
           open={true}
-          onClose={this.handleClose}
+          onClose={handleClose}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
@@ -77,12 +71,10 @@ class DebateError extends React.Component<Props, any> {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="secondary" autoFocus>
+            <Button onClick={handleClose} color="secondary" autoFocus>
               RESTART
             </Button>
           </DialogActions>
         </Dialog>
     );
   }
-}
-export default HOC(DebateError, styles);

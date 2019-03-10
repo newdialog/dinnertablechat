@@ -1,6 +1,5 @@
-import * as React from 'react';
+import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import HOC from '../HOC';
 
 import {
   Button,
@@ -20,9 +19,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 
 import Reveal from 'react-reveal/Reveal';
 import Bounce from 'react-reveal/Bounce';
+import { observer } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
 
-const styles = (theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 6,
@@ -96,7 +97,7 @@ const styles = (theme: Theme) =>
       fontWeight: 'bold',
       fontSize: '20px'
     }
-  });
+  }));
 
 const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
 const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interruptive'];
@@ -110,7 +111,7 @@ Debate badges (debate session level):
 * Charismatic (convincing, rhetoric master)
 */
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   store: AppModel.Type;
 }
 
@@ -120,54 +121,54 @@ interface State {
   agreed: boolean;
 }
 
-class DebateFeedback extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { traitHash: {}, platformFeedback: '', agreed: false };
-  }
+export default function DebateFeedback(props:Props) {
+  const store = useContext(AppModel.Context)!;
+  const classes = useStyles({});
+  const { t } = useTranslation();
+  const [state, setState] = useState({ traitHash: {}, platformFeedback: '', agreed: false });
 
-  private handleChipClick(label: string) {
-    const traitHash = this.state.traitHash;
+  function handleChipClick(label: string) {
+    const traitHash = state.traitHash;
     traitHash[label] = !traitHash[label];
-    this.setState({ traitHash });
+    setState({ ...state, traitHash });
   }
 
-  private handleTextFieldChange(e: any) {
-    this.setState({ platformFeedback: e.target.value });
+  function handleTextFieldChange(e: any) {
+    setState({ ...state, platformFeedback: e.target.value });
   }
 
-  public componentDidMount() {
+  useEffect( () => {
     window.gtag('event', 'debate_feedback_page', {
       event_category: 'debate',
-      guest: this.props.store.isGuest()
+      guest: store.isGuest()
     });
-    this.setState({ agreed: this.props.store.debate.agreed });
-  }
+    setState({ ...state, agreed: store.debate.agreed });
+  }, []);
 
-  private handleConfirm = async () => {
+  const handleConfirm = async () => {
     window.gtag('event', 'debate_feedback_page_submit', {
       event_category: 'debate',
-      guest: this.props.store.isGuest()
+      guest: store.isGuest()
     });
 
-    const hash = this.state.traitHash;
+    const hash = state.traitHash;
 
     // if they gave any review
     // if(Object.keys(hash).length > 0) 
     window.open('https://docs.google.com/forms/d/e/1FAIpQLScmmcorrmu2oO31_9-sU89S4BQXmjRlXvF7FasR_cw7NvxTCQ/viewform', '_blank');
     
     // If guest, just log them out now
-    if(this.props.store.isGuest()) {
+    if(store.isGuest()) {
       console.log('no review');
-      this.props.store.auth.logout();
+      store.auth.logout();
       return;
     }
     // If other was guest, just go back to debate home
-    if(this.props.store.debate.match!.otherState!.guest) {
-      // this.props.store.auth.logout();
+    if(store.debate.match!.otherState!.guest) {
+      // store.auth.logout();
       console.log('no review as other account was guest');
-      this.props.store.debate.resetQueue();
-      this.props.store.gotoHomeMenu();
+      store.debate.resetQueue();
+      store.gotoHomeMenu();
       return;
     }
 
@@ -184,24 +185,23 @@ class DebateFeedback extends React.Component<Props, State> {
 
     const response = {
       traits: traitsObj,
-      feedback: this.state.platformFeedback,
-      agreement: this.state.agreed
+      feedback: state.platformFeedback,
+      agreement: state.agreed
     };
     console.log('responses', response);
 
     // TODO: call endpoint
     const r = await APIService.reviewSession(
       response,
-      this.props.store.debate.match!.matchId
+      store.debate.match!.matchId
     );
 
-    this.props.store.debate.resetQueue();
-    this.props.store.gotoHomeMenu();
+    store.debate.resetQueue();
+    store.gotoHomeMenu();
   };
 
-  public render() {
-    const { classes } = this.props;
-    const traits = this.state.traitHash;
+  
+    const traits = state.traitHash;
     return (
       <div className={classes.pagebody}>
         <Grid
@@ -214,7 +214,7 @@ class DebateFeedback extends React.Component<Props, State> {
           <Paper>
             <Grid item className={classes.margin}>
             
-            { this.state.agreed && 
+            { state.agreed && 
                 <Bounce top duration={900}><Typography
                 component="span"
                 variant="h5"
@@ -226,7 +226,7 @@ class DebateFeedback extends React.Component<Props, State> {
                 </Typography></Bounce>
 
               }
-              { !this.state.agreed && 
+              { !state.agreed && 
                 <Reveal top duration={3000}><Typography
                 component="span"
                 variant="h5"
@@ -251,9 +251,9 @@ class DebateFeedback extends React.Component<Props, State> {
                       root: classes.iOSRoot
                     }}
                     disableRipple
-                    checked={this.state.agreed}
+                    checked={state.agreed}
                     onChange={e =>
-                      this.setState({ agreed: e.currentTarget.checked })
+                      setState({ ...state, agreed: e.currentTarget.checked })
                     }
                     value="agreed"
                   />
@@ -278,7 +278,7 @@ class DebateFeedback extends React.Component<Props, State> {
                     label={label}
                     className={classes.chip}
                     color={traits[label] ? 'primary' : 'default'}
-                    onClick={() => this.handleChipClick(label)}
+                    onClick={() => handleChipClick(label)}
                     clickable
                   />
                 );
@@ -290,7 +290,7 @@ class DebateFeedback extends React.Component<Props, State> {
                     key={i}
                     icon={<FaceIcon />}
                     label={label}
-                    onClick={() => this.handleChipClick(label)}
+                    onClick={() => handleChipClick(label)}
                     className={classes.chip}
                     color={traits[label] ? 'primary' : 'default'}
                     clickable
@@ -302,7 +302,7 @@ class DebateFeedback extends React.Component<Props, State> {
               color="primary"
               variant="contained"
               className={classes.button}
-              onClick={this.handleConfirm}
+              onClick={handleConfirm}
             >
               Confirm
             </Button>
@@ -311,9 +311,7 @@ class DebateFeedback extends React.Component<Props, State> {
       </div>
     );
   }
-}
 
-export default inject('store')(HOC(DebateFeedback, styles));
 
 /*
 <Divider className={classes.margin} />

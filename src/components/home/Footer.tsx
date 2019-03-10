@@ -1,12 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { Typography } from '@material-ui/core';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import HOC from '../HOC';
 import { inject } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 
-const styles = theme =>
-  createStyles({
+import { useTheme, makeStyles } from '@material-ui/styles';
+const useStyles = makeStyles((theme: any) => ({
     root: {
       justifyContent: 'center'
     },
@@ -31,17 +30,17 @@ const styles = theme =>
         textDecoration: 'underline'
       }
     }
-  });
+  }));
 
-interface Props extends WithStyles<typeof styles> {
-  store: AppModel.Type;
+interface Props {
   forceShow?: boolean;
 }
 
-function Footer(props: Props) {
-  const { classes } = props;
+export default function Footer(props: Props) {
+  const classes = useStyles({});
+  const store = useContext(AppModel.Context)!;
 
-  if (!props.forceShow && props.store.isStandalone()) return null;
+  if (!props.forceShow && store.isStandalone()) return null;
 
   return (
     <footer className={classes.centered}>
@@ -129,5 +128,3 @@ function Footer(props: Props) {
     </footer>
   );
 }
-
-export default inject('store')(HOC(Footer, styles));

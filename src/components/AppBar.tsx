@@ -5,12 +5,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import * as Store from '../models/AppModel'
-
+import { observer } from 'mobx-react-lite';
 import QueueIcon from '@material-ui/icons/QueuePlayNext'
-import HOC from './HOC';
 import * as Times from '../services/TimeService';
 
-const styles = theme => createStyles({
+import { useTheme, makeStyles } from '@material-ui/styles';
+const useStyles = makeStyles((theme: any) => ({
   root: {
     flexGrow: 1,
   },
@@ -22,9 +22,9 @@ const styles = theme => createStyles({
   btn: {
     // color: theme.palette.secondary.main
   },
-});
+}));
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   store: Store.Type
 }
 
@@ -45,8 +45,9 @@ function onHome(store: Store.Type) {
   store.router.push('/')
 }
 
-function ButtonAppBar(props:Props) {
-  const { classes, store } = props;
+export default observer(function ButtonAppBar(props:Props) {
+  const classes = useStyles({});
+  const store = props.store;
   const auth = store.auth.isAuthenticated();
   const isLive = props.store.isLive();
 
@@ -88,8 +89,8 @@ function ButtonAppBar(props:Props) {
       </AppBar>
     </div>
   );
-}
+})
 
-export default HOC(ButtonAppBar, styles);
+ // observer(ButtonAppBar)
 
 // <Button color="secondary" onClick={ () => onLogOut(store) }>Log Out</Button>

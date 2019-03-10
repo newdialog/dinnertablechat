@@ -3,6 +3,7 @@ import { RouterModel } from 'mst-react-router';
 import AuthModel from './AuthModel';
 import DebateModel from './DebateModel';
 import { Instance } from 'mobx-state-tree';
+import React from 'react';
 
 const AppModel = types
   .model({
@@ -91,3 +92,5 @@ export const create = (routerModel: RouterModel, fetcher: any) =>
       alert: m => console.log(m) // Noop for demo: window.alert(m)
     }
   );
+
+export const Context = React.createContext<Type | null>(null);

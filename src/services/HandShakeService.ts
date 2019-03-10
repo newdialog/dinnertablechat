@@ -72,7 +72,7 @@ export async function handshake(
   state: any,
   stream: MediaStream,
   unloadFlag: { flag: boolean }
-) {
+): Promise<{ peer: PeerService; otherPlayerState: any }> {
   return new Promise(async (resolve, reject) => {
     const ps = new PeerService(stream);
     // ====

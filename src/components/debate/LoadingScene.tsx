@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
@@ -9,12 +9,13 @@ import Reveal from 'react-reveal/Reveal';
 import getMedia from '../../utils/getMedia';
 import Lottie from 'react-lottie';
 import * as AppModel from '../../models/AppModel';
-import HOC from '../HOC';
 import DebateError from './DebateError';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { observer } from 'mobx-react-lite';
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
 
-const styles = (theme: Theme) =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing.unit * 20
@@ -30,7 +31,6 @@ const styles = (theme: Theme) =>
       maxWidth: '1000px',
       minWidth: '300px'
     },
-    bannerRef: {},
     bannerAnim: {
       position: 'absolute',
       left: 0,
@@ -73,7 +73,7 @@ const styles = (theme: Theme) =>
       backgroundColor: theme.palette.common.white,
       '&:focus': {}
     }
-  });
+  }));
 
 const bgOptions = {
   loop: true,
@@ -84,111 +84,151 @@ const bgOptions = {
   }
 };
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   store: AppModel.Type;
   onPeer: (p: any) => void;
 }
 
 interface State {
-  stream?: MediaStream;
+  // stream?: MediaStream | null;
   error?: string;
   ticketId?: string;
   copied?: boolean;
+  startedHandshake: boolean;
+  // loggedError: boolean;
+  // stream?: MediaStream;
+  // unloadFlag: {flag:boolean}
 }
 
-class LoadingScene extends React.Component<Props, State> {
-  loggedError = false;
-  myStream: MediaStream | null = null;
-  ticketIdProp = null;
-  startedHandshake = false;
-  unloadFlag = { flag: false };
+let unloadFlag = { flag: false };
+let loggedError = false;
+export default observer(function LoadingScene(props:Props) {
+  // let startedHandshake = false;
 
-  constructor(props: any) {
-    super(props);
-    this.state = {};
-  }
+  const store = useContext(AppModel.Context)!;
+  const classes = useStyles({});
+  const { t } = useTranslation();
+  const [state, setState] = useState<State>({
+    startedHandshake: false,
+    // stream: null
+    // loggedError: false,
+    // unloadFlag: { flag: false }
+  });
+  const [stream, setStream] = useState<MediaStream | null>(null);
 
-  private onMatched = (match: any) => {
-    if (this.unloadFlag.flag) return;
+  const onMatched = (match: any) => {
+    if (unloadFlag.flag) return;
     // TODO
     if (typeof match === 'string') {
       /// if(match === 'CANCELLED') return; // just end (why?)
-      this.setState({ error: match });
+      setState({ ...state, error: match });
       return;
     }
-    this.props.store.debate.createMatch(match);
+    store.debate.createMatch(match);
   };
 
-  public async componentDidMount() {
-    this.props.store.hideNavbar();
+  const startup = async ()=> {
+    store.hideNavbar();
 
     // Check if match params are set up
-    if (!this.props.store.auth.user || !this.props.store.auth.aws)
+    if (!store.auth.user || !store.auth.aws)
       throw new Error('user not logged in');
     if (
-      !this.props.store.debate.topic ||
-      this.props.store.debate.contribution === -1
+      !store.debate.topic ||
+      store.debate.contribution === -1
     )
       throw new Error('debate params not selected');
 
-    const topic = this.props.store.debate.topic;
-    const position = this.props.store.debate.position;
+    const topic = store.debate.topic;
+    const position = store.debate.position;
 
     // analytics
     window.gtag('event', 'debate_loading', {
       event_category: 'debate',
-      guest: this.props.store.isGuest(),
+      guest: store.isGuest(),
       topic,
       position
     });
     window.gtag('event', `debate_queue_${topic}_${position}`, {
       event_category: 'debate',
-      guest: this.props.store.isGuest()
+      guest: store.isGuest()
     });
     // Also add a metric for guests in queue
-    if (this.props.store.isGuest()) {
+    if (store.isGuest()) {
       window.gtag('event', 'debate_loading_guest', {
         event_category: 'debate',
         topic,
         position,
-        guest: this.props.store.isGuest()
+        guest: store.isGuest()
       });
     }
 
     // enable mic first
     try {
       const media = await getMedia();
-      // this.myStream = media;
-      this.setState({ stream: media });
+      if(!media) throw new Error('no media pulled'); //maybe not needed
+      console.log('startedHandshake-1');
+      setStream(media);
     } catch (e) {
       console.log('getMediaError', e);
-      this.setState({ error: 'mic_timeout' });
+      setState({ ...state, error: 'mic_timeout' });
       return; // do not continue to queue on error;
     }
 
-    window.addEventListener('beforeunload', this.onWindowBeforeUnload);
-    window.addEventListener('unload', this.onWindowUnload);
-    await this.getMatch();
+    window.addEventListener('beforeunload', onWindowBeforeUnload);
+    window.addEventListener('unload', onWindowUnload);
+    await getMatch();
   }
 
-  public async getMatch() {
-    const topic = this.props.store.debate.topic;
-    const position = this.props.store.debate.position;
-    const contribution = this.props.store.debate.contribution;
-    const chararacter = this.props.store.debate.character;
+  useEffect(()=> {
+    unloadFlag.flag = false;
+    startup();
+
+    return () => {
+      window.removeEventListener('beforeunload', onWindowBeforeUnload);
+      window.removeEventListener('unload', onWindowUnload);
+      // unload streams if nav to different page outside of match
+      // console.log('store.router', JSON.stringify(store.router));
+  
+      /* const navAway =
+        ((store.router.location as any).pathname as string).indexOf(
+          'match'
+        ) === -1; */
+  
+      const hasMatch =
+        store.debate.match && store.debate.match!.sync;
+  
+      console.log('componentWillUnmount 1', !hasMatch);
+      unloadFlag.flag = true;
+      /// setState({...state, unloadFlag: {...state.unloadFlag} });
+      if (!hasMatch) {
+        console.log('componentWillUnmount 2', state.ticketId);
+        if (state.ticketId) QS.stopMatchmaking(state.ticketId!);
+        store.showNavbar();
+        if (stream)
+          stream.getTracks().forEach(track => track.stop());
+      }
+    }
+  }, [])
+
+  const getMatch = async () => {
+    const topic = store.debate.topic;
+    const position = store.debate.position;
+    const contribution = store.debate.contribution;
+    const chararacter = store.debate.character;
 
     // start queue
-    const options = this.props.store.auth.aws!;
+    const options = store.auth.aws!;
     await QS.init(options);
 
     // const sameUserSeed = Math.round(new Date().getTime() / 1000);
 
-    if (!this.props.store.auth.user!.id) throw new Error('no valid user id');
+    if (!store.auth.user!.id) throw new Error('no valid user id');
 
-    let userid = this.props.store.auth.user!.id; // + '_' + sameUserSeed;
-    const guestSeed = this.props.store.auth.user!.guestSeed;
+    let userid = store.auth.user!.id; // + '_' + sameUserSeed;
+    const guestSeed = store.auth.user!.guestSeed;
     // Give guests a unique queue id
-    // if(this.props.store.isGuest())
+    // if(store.isGuest())
     // userid += '_' + Math.round(Math.random() * 1000);
 
     let ticketId: any;
@@ -200,127 +240,106 @@ class LoadingScene extends React.Component<Props, State> {
         guestSeed,
         contribution,
         chararacter,
-        // this.props.store.isGuest(),
-        this.onMatched
+        // store.isGuest(),
+        onMatched
       );
     } catch (e) {
       console.error('queueUp error', e);
-      this.setState({ error: 'matchtimeout' });
+      setState({ ...state, error: 'matchtimeout' });
       return;
     }
-    if (this.unloadFlag.flag) return;
-    this.setState({ ticketId });
+    if (unloadFlag.flag) return;
+    // console.log('{ ...state, ticketId }', { ...state, ticketId });
+    setState({ ...state, ticketId });
 
-    // this.ticketIdProp = ticketId;
-    // window.onunload = this.onWindowUnload;
+    // ticketIdProp = ticketId;
+    // window.onunload = onWindowUnload;
   }
 
-  private onWindowUnload = async (e: any) => {
+  const onWindowUnload = async (e: any) => {
     console.log('onWindowUnload');
-    if (this.state.ticketId) await QS.stopMatchmaking(this.state.ticketId!); // Simple
+    if (state.ticketId) await QS.stopMatchmaking(state.ticketId!); // Simple
     // return false;
   };
 
-  private onWindowBeforeUnload = async (e: any) => {
+  const onWindowBeforeUnload = async (e: any) => {
     console.log('onWindowBeforeUnload');
-    // if(this.state.ticketId) await QS.stopMatchmaking(this.state.ticketId!);
+    // if(state.ticketId) await QS.stopMatchmaking(state.ticketId!);
     e.preventDefault();
     e.returnValue = 'Are you sure you want to leave matchmaking?';
     return e.returnValue;
   };
 
-  public componentWillUnmount() {
-    window.removeEventListener('beforeunload', this.onWindowBeforeUnload);
-    window.removeEventListener('unload', this.onWindowUnload);
-    // unload streams if nav to different page outside of match
-    // console.log('this.props.store.router', JSON.stringify(this.props.store.router));
-
-    /* const navAway =
-      ((this.props.store.router.location as any).pathname as string).indexOf(
-        'match'
-      ) === -1; */
-
-    const hasMatch =
-      this.props.store.debate.match && this.props.store.debate.match!.sync;
-
-    console.log('componentWillUnmount 1', !hasMatch);
-    this.unloadFlag.flag = true;
-    if (!hasMatch) {
-      console.log('componentWillUnmount 2', this.state.ticketId);
-      if (this.state.ticketId) QS.stopMatchmaking(this.state.ticketId!);
-      this.props.store.showNavbar();
-      if (this.state.stream)
-        this.state.stream.getTracks().forEach(track => track.stop());
-    }
-  }
-
-  private gotMedia = async (stream: MediaStream) => {
+  const gotMedia = async (_stream: MediaStream) => {
     console.log('gotMedia, now handshaking');
-    const matchId = this.props.store.debate.match!.matchId;
-    const isLeader = this.props.store.debate.match!.leader;
-    const state = {
-      char: this.props.store.debate.character,
-      side: this.props.store.debate.position
+    const matchId = store.debate.match!.matchId;
+    const isLeader = store.debate.match!.leader;
+    const statePlayer= {
+      char: store.debate.character,
+      side: store.debate.position
     }; // TODO pretect against premium chars
 
-    let result: any;
+    let result;
     try {
       result = await shake.handshake(
         matchId,
         isLeader,
-        state,
-        stream,
-        this.unloadFlag
+        statePlayer,
+        _stream,
+        unloadFlag
       );
     } catch (e) {
-      if (this.unloadFlag.flag) return; // just exit if we already ending
-      this.unloadFlag.flag = true;
+      if (unloadFlag.flag) return; // just exit if we already ending
+      unloadFlag.flag = true;
       const retryError = e.toString().indexOf('retry') !== -1;
       console.warn('handshake error', retryError, e);
       if (retryError) {
         // retrying
         console.warn('retrying!');
-        this.unloadFlag.flag = false; // allow retry
-        this.startedHandshake = false;
-        this.props.store.debate.unMatch();
-        await this.getMatch();
+        unloadFlag.flag = false; // allow retry
+        // startedHandshake = false;
+        setState({...state, startedHandshake: false}); // maybe not neede?
+        store.debate.unMatch();
+        await getMatch();
         return;
-        // return this.setState({ error: 'handshake_timeout' });
-      } else return this.setState({ error: 'handshake_error' });
+        // return setState({ error: 'handshake_timeout' });
+      } else return setState({ ...state, error: 'handshake_error' });
     } finally {
-      if (this.unloadFlag.flag) {
+      if (unloadFlag.flag) {
         console.log('gotMedia stopping due to flag');
         return;
       }
     }
+    console.log('result', result);
     const { peer, otherPlayerState } = result;
 
-    this.props.onPeer(peer);
+    props.onPeer(peer);
     if (otherPlayerState)
-      this.props.store.debate.setOtherState({
+      store.debate.setOtherState({
         character: otherPlayerState.char,
         position: otherPlayerState.side,
         guest: otherPlayerState.guest
       });
-    this.props.store.debate.syncMatch();
+    store.debate.syncMatch();
   };
 
-  public async componentWillUpdate() {
+  
+  useEffect(() => {
     // Get Mic right away
-    if (this.unloadFlag.flag) return;
+    if (unloadFlag.flag) return;
+    console.log('0startedHandshake', 'store.debate.match:',!!store.debate.match, 'hasstream:', !!stream, 'startedHandshake:'+state.startedHandshake)
     if (
-      this.props.store.debate.match &&
-      this.state.stream &&
-      !this.startedHandshake
+      store.debate.match &&
+      stream &&
+      !state.startedHandshake
     ) {
-      this.startedHandshake = true;
-      this.gotMedia(this.state.stream!);
+      // startedHandshake = true;
+      console.log('1startedHandshake')
+      setState({...state, startedHandshake: true});
+      gotMedia(stream);
     }
-  }
+  }, [store, store.debate.match, state]); // , [store]
 
-  public render() {
-    const store = this.props.store;
-    const { classes } = this.props;
 
     const matchedUnsync = store.debate.match && !store.debate.match!.sync;
     const matchedsync = store.debate.match && store.debate.match!.sync;
@@ -330,25 +349,25 @@ class LoadingScene extends React.Component<Props, State> {
     if (matchedUnsync) text = 'found match... handshaking';
     if (matchedsync) text = 'handshaking complete';
 
-    if (this.state.error && !this.loggedError) {
-      window.gtag('event', this.state.error, {
+    if (state.error && !loggedError) {
+      window.gtag('event', state.error, {
         event_category: 'error',
         non_interaction: true
       });
-      this.loggedError = true;
+      loggedError = true;
     }
 
     const refURL = 'https://dinnertable.chat/?quickmatch=join';
 
     return (
       <div className={classes.centered}>
-        {this.state.error && (
-          <DebateError store={store} error={this.state.error} />
+        {state.error && (
+          <DebateError store={store} error={state.error} />
         )}
         <div className={classes.bannerAnim}>
           <Lottie
             options={bgOptions}
-            ref={classes.bannerRef}
+            // ref={bannerRef}
             isClickToPauseDisabled={true}
           />
         </div>
@@ -398,7 +417,7 @@ class LoadingScene extends React.Component<Props, State> {
                 color="white"
               />
               <CopyToClipboard
-                onCopy={() => this.setState({ copied: true })}
+                onCopy={() => setState({ ...state, copied: true })}
                 options={{ message: 'Whoa!' }}
                 text={refURL}
               >
@@ -413,7 +432,7 @@ class LoadingScene extends React.Component<Props, State> {
                   </Button>
               </CopyToClipboard>
               <section className="section">
-                {this.state.copied ? (
+                {state.copied ? (
                   <span style={{ color: '#fdcb92', fontSize: '.7em' }}>
                     copied link to clipboard
                   </span>
@@ -424,6 +443,4 @@ class LoadingScene extends React.Component<Props, State> {
         </div>
       </div>
     );
-  }
-}
-export default HOC(LoadingScene, styles);
+  });
