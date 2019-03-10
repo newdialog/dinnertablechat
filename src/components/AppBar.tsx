@@ -10,6 +10,7 @@ import QueueIcon from '@material-ui/icons/QueuePlayNext'
 import * as Times from '../services/TimeService';
 
 import { useTheme, makeStyles } from '@material-ui/styles';
+import UserStats from './menus/dash/UserStats';
 const useStyles = makeStyles((theme: any) => ({
   root: {
     flexGrow: 1,
@@ -72,6 +73,8 @@ export default observer(function ButtonAppBar(props:Props) {
           <img crossOrigin="anonymous" src={logo} style={{height:'3em', cursor: 'pointer'}} onClick={ onHome.bind(0,store) }/>
           { /* TODO BUG: empty component needed for alignment */ }
           <Typography variant="h6" className={classes.flex}></Typography>
+          
+          {isDashboard && <UserStats store={store}/>}
 
           {!auth && showAuth &&
             <Button variant="outlined" color="secondary" className={classes.btn} onClick={ () => onLogin(store) }>Login</Button>

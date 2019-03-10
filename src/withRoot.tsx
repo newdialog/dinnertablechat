@@ -35,7 +35,7 @@ export const theme = createMuiTheme({
     // type: 'dark',
     primary: {
       // light: will be calculated from palette.primary.main,
-      // light: '#ffba9a',
+      // light: '#000000',
       main: '#06a7bf',
       // contrastText: getContrastText(palette.primary[500]),
       contrastText: '#fff',

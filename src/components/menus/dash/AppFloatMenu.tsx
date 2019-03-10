@@ -8,7 +8,7 @@ import UpIcon from '@material-ui/icons/KeyboardArrowUp';
 import green from '@material-ui/core/colors/green';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import * as AppModel from '../../models/AppModel';
+import * as AppModel from '../../../models/AppModel';
 import Fab from '@material-ui/core/Fab';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';

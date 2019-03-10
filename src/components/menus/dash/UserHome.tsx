@@ -15,6 +15,7 @@ import GuestNotice from './GuestNotice';
 
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
+import AppFloatMenu from './AppFloatMenu';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -100,6 +101,7 @@ export default function UserHome(props: Props) {
         <div className={classes.divider} />
         <DebateHistory store={store}/>
       </div>
+      <AppFloatMenu />
       <Footer />
     </>
   );
