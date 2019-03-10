@@ -13,7 +13,6 @@ import {
   Collapse
 } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import Info from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -25,8 +24,6 @@ import * as TopicInfo from '../../../utils/TopicInfo';
 import API from '../../../services/APIService';
 
 import moment from 'moment';
-import { inject } from 'mobx-react';
-import MD5 from 'md5';
 
 import {
   TwitterShareButton,
@@ -34,23 +31,16 @@ import {
   TwitterIcon,
   FacebookIcon
 } from 'react-share';
-import { url } from 'inspector';
 
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
-    // backgroundImage: `url(${'./imgs/woodgrain.jpg'})`,
-    // backgroundPosition: 'center',
-    // backgroundSize: 'cover',
-    // backgroundRepeat: 'no-repeat'
     background: '#ddd1bb'
-    //backgroundColor: theme.palette.primary.light
   },
   centered: {
     marginTop: '0',
-    paddingTop: theme.spacing.unit * 8,
     paddingLeft: '1em',
     paddingRight: '1em',
     paddingBottom: '4em',
@@ -496,16 +486,6 @@ export default function DebateHistory(props: Props) {
       </div>
     ));
 
-  const signOutGuest = (e: any) => {
-    e.preventDefault();
-    window.gtag('event', 'guest_signup_click', {
-      event_category: 'splash'
-    });
-    props.store.auth.logout();
-    props.store.auth.login();
-    return true;
-  };
-
   const handleExpandClick = i => {
     if (state.expanded === i)
       return setState({ ...state, expanded: undefined });
@@ -521,53 +501,6 @@ export default function DebateHistory(props: Props) {
   return (
     <div className={classes.pagebody}>
       <div className={classes.centered}>
-        {store.isGuest() && (
-          <>
-            <div className={classes.headerContainer}>
-              <>
-                <Button
-                  style={{
-                    marginTop: '1vh',
-                    marginLeft: '12px',
-                    float: 'right'
-                  }}
-                  onClick={signOutGuest}
-                  variant="contained"
-                  color="secondary"
-                  size="large"
-                >
-                  Signup now
-                </Button>
-                <Typography
-                  variant="h1"
-                  align="left"
-                  color="textPrimary"
-                  className={classes.name}
-                  gutterBottom
-                  style={{ fontSize: '1.25em' }}
-                >
-                  <Info style={{ margin: '0px 3px -6px 0px' }} /> Temporary
-                  guest account
-                </Typography>
-                <Typography
-                  variant="body2"
-                  align="left"
-                  color="textPrimary"
-                  gutterBottom
-                  className={classes.nameSubstat}
-                  style={{ fontWeight: 'normal', fontSize: '1em' }}
-                >
-                  Guests can join others in matchmaking but will{' '}
-                  <b> not gain</b> xp/levels or any of the member perks.
-                  Registered users also have priority in matchmaking. Please
-                  signup to start building your character!
-                </Typography>
-              </>
-            </div>
-            <br />{' '}
-          </>
-        )}
-
         {false && showAchievements(classes)}
 
         <div style={{ paddingBottom: '1em' }} />
@@ -579,7 +512,7 @@ export default function DebateHistory(props: Props) {
             <Typography
               variant="body2"
               align="center"
-              color="textSecondary"
+              color="textPrimary"
               style={{ fontWeight: 'normal' }}
               gutterBottom
             >

@@ -11,6 +11,7 @@ import Tooltip from './Tooltip';
 import DebateHistory from './DebateHistory';
 import Footer from '../../home/Footer';
 import UserStats from './UserStats';
+import GuestNotice from './GuestNotice';
 
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
@@ -93,6 +94,7 @@ export default function UserHome(props: Props) {
           </Grid>
           <div className={classes.divider} />
           <DailyTimer store={store} />
+          <GuestNotice store={store}/>
           <Tooltip />
         </div>
         <div className={classes.divider} />
