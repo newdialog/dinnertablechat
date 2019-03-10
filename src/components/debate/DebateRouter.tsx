@@ -20,6 +20,10 @@ export default observer(function DebateRouter() {
 
   const [state, setState] = useState({ peer: null });
 
+  // Auth guard
+  if (store.auth.isNotLoggedIn) store.router.push('/');
+  else if (!store.auth.user) return null;
+
   const onPeer = (peer: any) => {
     setState({ peer });
   };

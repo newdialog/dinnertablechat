@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import HOC from '../HOC';
 import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Helmet } from 'react-helmet';
@@ -39,6 +38,10 @@ export default function UserHome(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
+
+  // Auth guard
+  if (store.auth.isNotLoggedIn) store.router.push('/');
+  else if (!store.auth.user) return null;
 
   return (
     <React.Fragment>
