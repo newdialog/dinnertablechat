@@ -1,13 +1,13 @@
 import React from 'react';
 import { Typography, Grid, Paper } from '@material-ui/core';
-import { createStyles, WithStyles } from '@material-ui/core/styles';
+import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import HOC from '../HOC';
 import * as AppModel from '../../models/AppModel';
-import { inject } from 'mobx-react';
+import { useTranslation } from 'react-i18next';
+import { useTheme, makeStyles } from '@material-ui/styles';
 
-const styles = theme =>
-  createStyles({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       marginTop: '55px',
       //background: '#a69c92', 
@@ -23,14 +23,15 @@ const styles = theme =>
       minWidth: '60px',
       maxWidth: '250px'
     },
-  });
+  }));
 
-interface Props extends WithStyles<typeof styles> {
+interface Props {
   store: AppModel.Type;
 }
 
-function UserStats(props: Props) {
-  const { classes, store } = props;
+export default function UserStats(props: Props) {
+  const { store } = props;
+  const classes = useStyles({});
 
   const numDebates = (store.auth.user) ? store.auth.user.numDebates : 0; 
   const m = 20;
@@ -104,5 +105,3 @@ function UserStats(props: Props) {
     </div>
   );
 }
-
-export default inject('store')(HOC(UserStats, styles));
