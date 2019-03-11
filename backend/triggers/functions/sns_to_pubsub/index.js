@@ -1,6 +1,7 @@
 // const AWSXRay = require('aws-xray-sdk');
 const AWS = require('aws-sdk'); // AWSXRay.captureAWS(require('aws-sdk'));
 const gamelift = new AWS.GameLift();
+const seedrandom = require('seedrandom');
 const {
   Pool
 } = require('pg'); // AWSXRay.capturePostgres(require('pg'));
@@ -187,7 +188,8 @@ async function saveDB(players, matchId) {
 }
 
 function getQParam(players, matchId) {
-  const ranPick = (Math.random() > .5) ? 0 : 1;
+  var rng = seedrandom(matchId);
+  const ranPick = (rng() > .5) ? 0 : 1; // stable random
   // leader
   var red = players[ranPick]; // players.filter(p => p.team === 'red')[0];
   // flip

@@ -9,6 +9,7 @@
   "author": "Jonathan Dunlap",
   "license": "ISC",
   "dependencies": {
-    "pg": "^7.7.1"
+    "pg": "^7.7.1",
+    "seedrandom": "^3.0.1"
   }
 }
