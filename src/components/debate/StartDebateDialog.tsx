@@ -101,6 +101,7 @@ export default withMobileDialog<Props>()(function StartDebateDialog(props) {
           color="secondary"
           autoFocus
           variant="contained"
+          style={{width:'80%', padding: '1em', margin:'0 auto 2em auto'}}
         >
           CLOSE
         </Button>
