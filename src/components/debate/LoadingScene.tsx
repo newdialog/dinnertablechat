@@ -84,6 +84,14 @@ const bgOptions = {
   }
 };
 
+const onWindowBeforeUnload = async (e: any) => {
+  console.log('onWindowBeforeUnload');
+  // if(state.ticketId) await QS.stopMatchmaking(state.ticketId!);
+  e.preventDefault();
+  e.returnValue = 'Are you sure you want to leave matchmaking?';
+  return e.returnValue;
+};
+
 interface Props {
   store: AppModel.Type;
   onPeer: (p: any) => void;
@@ -177,17 +185,18 @@ export default observer(function LoadingScene(props:Props) {
     }
 
     window.addEventListener('beforeunload', onWindowBeforeUnload);
-    window.addEventListener('unload', onWindowUnload);
+    window.addEventListener('unload', onWindowUnload.current);
     await getMatch();
   }
 
   useEffect(()=> {
-    unloadFlag.flag = false;
+    unloadFlag.flag = false; // reset global flags: refactor
+    loggedError = false;
     startup();
 
     return () => {
       window.removeEventListener('beforeunload', onWindowBeforeUnload);
-      window.removeEventListener('unload', onWindowUnload);
+      window.removeEventListener('unload', onWindowUnload.current);
       // unload streams if nav to different page outside of match
       // console.log('store.router', JSON.stringify(store.router));
   
@@ -256,19 +265,13 @@ export default observer(function LoadingScene(props:Props) {
     // window.onunload = onWindowUnload;
   }
 
-  const onWindowUnload = async (e: any) => {
+  const onWindowUnload = useRef(async (e: any) => {
     console.log('onWindowUnload');
     if (state.ticketId) await QS.stopMatchmaking(state.ticketId!); // Simple
     // return false;
-  };
+  });
 
-  const onWindowBeforeUnload = async (e: any) => {
-    console.log('onWindowBeforeUnload');
-    // if(state.ticketId) await QS.stopMatchmaking(state.ticketId!);
-    e.preventDefault();
-    e.returnValue = 'Are you sure you want to leave matchmaking?';
-    return e.returnValue;
-  };
+
 
   const gotMedia = async (_stream: MediaStream) => {
     console.log('gotMedia, now handshaking');
@@ -355,6 +358,7 @@ export default observer(function LoadingScene(props:Props) {
         non_interaction: true
       });
       loggedError = true;
+      window.removeEventListener('beforeunload', onWindowBeforeUnload); // allow restart button to work
     }
 
     const refURL = 'https://dinnertable.chat/?quickmatch=join';
