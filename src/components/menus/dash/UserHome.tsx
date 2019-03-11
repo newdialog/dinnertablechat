@@ -19,7 +19,7 @@ import AppFloatMenu from './AppFloatMenu';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
-    paddingTop:'40px',
+    paddingTop: '40px',
     background: '#ddd1bb'
   },
   backgroundImg: {
@@ -36,6 +36,13 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   divider: {
     margin: `${theme.spacing.unit * 4}px 0`
+  },
+  startLabel: {
+    fontSize: '1.7em',
+    fontWeight: 'normal',
+    color: '#fff',
+    lineHeight: '1.17',
+    letterSpacing: '-0.02em'
   }
 }));
 const debateOpen = Times.isDuringDebate();
@@ -77,9 +84,7 @@ export default function UserHome(props: Props) {
                   style={{ padding: '1em' }}
                   onClick={() => store.router.push('/quickmatch')}
                 >
-                  <Typography variant="h4" align="center" color="textSecondary">
-                    QuickMatch
-                  </Typography>
+                  <span className={classes.startLabel}>Begin QuickMatch</span>
                 </Button>
               </Grid>
             )}
@@ -99,11 +104,11 @@ export default function UserHome(props: Props) {
           </Grid>
           <div className={classes.divider} />
           <DailyTimer store={store} />
-          <GuestNotice store={store}/>
+          <GuestNotice store={store} />
           <Tooltip />
         </div>
         <div className={classes.divider} />
-        <DebateHistory store={store}/>
+        <DebateHistory store={store} />
       </div>
       <AppFloatMenu />
       <Footer />

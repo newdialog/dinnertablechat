@@ -24,8 +24,15 @@ export const theme = createMuiTheme({
       text: { // Name of the rule
         // color: 'white', // Some CSS
       },
+      contained: {
+        color: '#333'
+      },
+      label: {
+        // color: '#fff !important'
+      },
       containedSecondary: {
         color: '#52291d',
+        // color: '#fff'
       },
       flatSecondary: {
         color: '#ff896b', // primary // '#6f3727',
@@ -62,7 +69,7 @@ export const theme = createMuiTheme({
     },
     text: {
       primary: "#484866", //"#616161",
-      secondary: "#fff",
+      // secondary: "#fff", // will hide error messages
       // secondary: "rgba(50, 50, 50, 0.8)",
       disabled: "rgba(0, 0, 0, 0.38)",
       hint: "rgba(0, 0, 0, 0.38)"
@@ -149,6 +156,7 @@ theme.typography.h1 = Object.assign(theme.typography.h1, {
   }
 })
 
+/*
 function withRoot(Component: any) {
   function WithRoot(props: any) {
     // MuiThemeProvider makes the theme available down the React tree
@@ -163,5 +171,5 @@ function withRoot(Component: any) {
 
   return WithRoot;
 }
-
-export default withRoot;
+*/
+// export default withRoot;
