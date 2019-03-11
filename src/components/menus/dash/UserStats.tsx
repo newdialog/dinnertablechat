@@ -27,7 +27,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     // fontSize: '1em'
   },
   icon: {
-    color: '#aee2ea',
+    color: '#4dadef',
+    fontSize: '1.7em',
+    float: 'left',
+    marginRight: '.5em'
+  },
+  icon2: {
+    color: '#ef6c6c',
     fontSize: '1.7em',
     float: 'left',
     marginRight: '.5em'
@@ -87,7 +93,7 @@ export default observer(function UserStats(props: Props) {
         <Grid item xs={3}>
           <div className={classes.groupItem}>
             <i
-              className={"fas fa-comments " + classes.icon}
+              className={"fas fa-comments " + classes.icon2}
             />
             <Typography
               variant="h5"
