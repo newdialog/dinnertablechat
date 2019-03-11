@@ -15,6 +15,11 @@ export const theme = createMuiTheme({
         backgroundColor: '#ff896b' // primary
       }
     },
+    MuiStepLabel: {
+      label: {
+        color:'#484866'
+      }
+    },
     MuiButton: { // Name of the component ⚛️ / style sheet
       text: { // Name of the rule
         // color: 'white', // Some CSS

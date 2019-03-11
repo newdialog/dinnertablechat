@@ -215,7 +215,7 @@ export default function DebateScene(props: Props) {
 
   useEffect(()=>{
     if(talkingBlue !== prevBlue) {
-      setState({...state, blueTransition: false});
+      setState(p => ({...p, blueTransition: false}));
       setPrevBlue(talkingBlue);
     }
   }, [talkingBlue]);
@@ -258,17 +258,16 @@ export default function DebateScene(props: Props) {
   const onLoopComplete = () => {
     // console.log('onLoopComplete', props.talkingBlue)
     // if(props.talkingBlue) setState({ blueTransition: true });
-    setState({ ...state, blueState: props.talkingBlue ? 'talking' : 'idle' });
+    setState(p => ({...p, blueState: props.talkingBlue ? 'talking' : 'idle' }));
   };
 
   const onCompleted = () => {
     console.log('on debate timer complete');
-    setState({ ...state, ended: true });
+    setState(p => ({...p, ended: true }));
     trackDebateTimeEnd();
   };
 
   const onCharLoaded = x => {
-    console.log('aa', x, blueLottieRef.current!);
     const o = blueLottieRef.current!.anim;
     o.goToAndPlay(24 * 4, true);
   };

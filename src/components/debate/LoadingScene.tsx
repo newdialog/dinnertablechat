@@ -118,10 +118,11 @@ export default observer(function LoadingScene(props:Props) {
 
   const onMatched = (match: any) => {
     if (unloadFlag.flag) return;
+    console.log('onMatched', match);
     // TODO
     if (typeof match === 'string') {
       /// if(match === 'CANCELLED') return; // just end (why?)
-      setState({ ...state, error: match });
+      setState(p => ({...p, error: match }));
       return;
     }
     store.debate.createMatch(match);
@@ -171,7 +172,7 @@ export default observer(function LoadingScene(props:Props) {
       setStream(media);
     } catch (e) {
       console.log('getMediaError', e);
-      setState({ ...state, error: 'mic_timeout' });
+      setState(p => ({...p, error: 'mic_timeout' }));
       return; // do not continue to queue on error;
     }
 
@@ -200,7 +201,6 @@ export default observer(function LoadingScene(props:Props) {
   
       console.log('componentWillUnmount 1', !hasMatch);
       unloadFlag.flag = true;
-      /// setState({...state, unloadFlag: {...state.unloadFlag} });
       if (!hasMatch) {
         console.log('componentWillUnmount 2', state.ticketId);
         if (state.ticketId) QS.stopMatchmaking(state.ticketId!);
@@ -245,12 +245,12 @@ export default observer(function LoadingScene(props:Props) {
       );
     } catch (e) {
       console.error('queueUp error', e);
-      setState({ ...state, error: 'matchtimeout' });
+      setState(p => ({...p, error: 'matchtimeout' }));
       return;
     }
     if (unloadFlag.flag) return;
-    // console.log('{ ...state, ticketId }', { ...state, ticketId });
-    setState({ ...state, ticketId });
+    // console.log('p => ({...p, ticketId }', p => ({...p, ticketId });
+    setState(p => ({...p, ticketId }));
 
     // ticketIdProp = ticketId;
     // window.onunload = onWindowUnload;
@@ -298,12 +298,12 @@ export default observer(function LoadingScene(props:Props) {
         console.warn('retrying!');
         unloadFlag.flag = false; // allow retry
         // startedHandshake = false;
-        setState({...state, startedHandshake: false}); // maybe not neede?
+        setState(p => ({...p, startedHandshake: false})); // maybe not neede?
         store.debate.unMatch();
         await getMatch();
         return;
         // return setState({ error: 'handshake_timeout' });
-      } else return setState({ ...state, error: 'handshake_error' });
+      } else return setState(p => ({...p, error: 'handshake_error' }));
     } finally {
       if (unloadFlag.flag) {
         console.log('gotMedia stopping due to flag');
@@ -335,7 +335,7 @@ export default observer(function LoadingScene(props:Props) {
     ) {
       // startedHandshake = true;
       console.log('1startedHandshake')
-      setState({...state, startedHandshake: true});
+      setState(p => ({...p, startedHandshake: true}));
       gotMedia(stream);
     }
   }, [store, store.debate.match, state]); // , [store]
@@ -417,7 +417,7 @@ export default observer(function LoadingScene(props:Props) {
                 color="white"
               />
               <CopyToClipboard
-                onCopy={() => setState({ ...state, copied: true })}
+                onCopy={() => setState(p => ({...p, copied: true }))}
                 options={{ message: 'Whoa!' }}
                 text={refURL}
               >

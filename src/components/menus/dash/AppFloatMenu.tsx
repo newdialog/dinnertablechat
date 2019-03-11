@@ -55,11 +55,11 @@ export default function AppFloatMenu(props: Props) {
   const { t } = useTranslation();
 
   const handleClick = event => {
-    setState({ ...state, anchorEl: event.currentTarget });
+    setState(p => ({...p, anchorEl: event.currentTarget }));
   };
 
   const handleClose = () => {
-    setState({ ...state, anchorEl: null });
+    setState(p => ({...p, anchorEl: null }));
   };
 
   const logOut = () => {
@@ -67,7 +67,7 @@ export default function AppFloatMenu(props: Props) {
   };
 
   /* const closeSettings = () => {
-    setState({ ...state, showSettings: false, anchorEl: null });
+    setState(p => ({...p, showSettings: false, anchorEl: null });
   };*/
 
   const onFeedback = () => {

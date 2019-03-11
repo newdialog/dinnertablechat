@@ -110,13 +110,13 @@ function AudioSettings(props: Props) {
         console.log('Some other kind of source/device: ', deviceInfo);
       }
     }
-    setState({
-      ...state,
+    setState(p => ({
+      ...p,
       speakers,
       mics,
       mic: defaultVal.mic,
       speaker: defaultVal.speaker
-    });
+    }));
   };
 
   const handleError = () => {};
@@ -126,7 +126,7 @@ function AudioSettings(props: Props) {
     const deviceId = val; // e.target.value;
     console.log(deviceId);
     attachSinkId(props.videoEl.current!, deviceId);
-    setState({ ...state, mic: deviceId });
+    setState(p => ({...p, mic: deviceId }));
   };
 
   const handleChangePlayback = (e: React.ChangeEvent<{}>, val: string) => {
@@ -134,7 +134,7 @@ function AudioSettings(props: Props) {
     const deviceId = val;
     console.log(deviceId);
     attachSinkId(props.videoEl.current!, deviceId);
-    setState({ ...state, speaker: deviceId });
+    setState(p => ({...p, speaker: deviceId }));
   };
 
   useEffect(() => {

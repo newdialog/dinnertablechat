@@ -187,20 +187,20 @@ export default function DebateHistory(props: Props) {
     });
     trackHistoryTrigger = true;
 
-    if (props.store.isGuest()) return setState({ ...state, loaded: true });
+    if (props.store.isGuest()) return setState(p => ({...p, loaded: true }));
 
     API.getScores()
       .then(transformPayload)
       .catch(e => {
         console.error(e);
-        setState({ ...state, loaded: true, error: e });
+        setState(p => ({...p, loaded: true, error: e }));
       });
   }, []);
 
   const handleClick = (i: number) => {
     let open = state.open;
     open[i] = !open[i];
-    setState({ ...state, open });
+    setState(p => ({...p, open }));
   };
 
   const renderAchievements = () => {
@@ -303,7 +303,7 @@ export default function DebateHistory(props: Props) {
     // update store and state
     if (props.store.auth.user)
       props.store.auth.user.updateNumDebates(result.length);
-    setState({ ...state, data: result, open: flags, loaded: true });
+    setState(p => ({...p, data: result, open: flags, loaded: true }));
   };
 
   const showAchievements = classes => {
@@ -488,8 +488,8 @@ export default function DebateHistory(props: Props) {
 
   const handleExpandClick = i => {
     if (state.expanded === i)
-      return setState({ ...state, expanded: undefined });
-    setState({ ...state, expanded: i });
+      return setState(p => ({...p, expanded: undefined }));
+    setState(p => ({...p, expanded: i }));
   };
 
   // const { classes, store, t } = props;

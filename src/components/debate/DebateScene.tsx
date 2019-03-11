@@ -89,13 +89,13 @@ export default function DebateScene(props:Props) {
 
     speechSelfEvents.on('speaking', () => {
       // console.log('speaking');
-      setState({ ...state, talkingBlue: true });
+      setState(p => ({...p, talkingBlue: true }));
       // document.querySelector('#speaking').textContent = 'YES';
     });
 
     speechSelfEvents.on('stopped_speaking', () => {
       // console.log('stopped_speaking');
-      setState({ ...state, talkingBlue: false });
+      setState(p => ({...p, talkingBlue: false }));
       // document.querySelector('#speaking').textContent = 'NO';
     });
   }
@@ -113,9 +113,9 @@ export default function DebateScene(props:Props) {
 
     p.on('error', err => {
       if (err.toString().indexOf('connection failed') !== -1) {
-        setState({ ...state, error: 'other_disconnected' });
+        setState(p => ({...p, error: 'other_disconnected' }));
       } else {
-        setState({ ...state, error: 'webrtc_error' });
+        setState(p => ({...p, error: 'webrtc_error' }));
       }
       console.log('error', err);
     });
@@ -145,13 +145,13 @@ export default function DebateScene(props:Props) {
 
       speechEvents.on('speaking', () => {
         // console.log('speaking');
-        setState({ ...state, talkingRed: true });
+        setState(p => ({...p, talkingRed: true }));
         // document.querySelector('#speaking').textContent = 'YES';
       });
 
       speechEvents.on('stopped_speaking', () => {
         // console.log('stopped_speaking');
-        setState({ ...state, talkingRed: false });
+        setState(p => ({...p, talkingRed: false }));
         // document.querySelector('#speaking').textContent = 'NO';
       });
     });

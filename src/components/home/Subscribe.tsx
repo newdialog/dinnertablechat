@@ -57,11 +57,11 @@ export default function ButtonAppBar(props: Props) {
     console.log('email ' + email);
     if (!validEmail(email)) {
       console.log('!validEmail');
-      setState({ ...state, subscribe: 'Please enter a valid email first' });
+      setState(p => ({...p, subscribe: 'Please enter a valid email first' }));
       return;
     }
     let subscribe = 'form';
-    setState({ ...state, submitting: true });
+    setState(p => ({...p, submitting: true }));
     fetch('https://subscribe.api.dinnertable.chat/', {
       method: 'post',
       body: JSON.stringify({ email }),
@@ -73,11 +73,11 @@ export default function ButtonAppBar(props: Props) {
     })
       .then((res: any) => {
         subscribe = res && res.status && res.status < 299 ? 'success' : res.err;
-        setState({ ...state, subscribe });
+        setState(p => ({...p, subscribe }));
       })
       .catch((err: any) => {
         subscribe = err;
-        setState({ ...state, subscribe });
+        setState(p => ({...p, subscribe }));
       });
   }, [state, istate]);
 

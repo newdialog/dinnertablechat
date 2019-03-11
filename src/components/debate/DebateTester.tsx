@@ -8,6 +8,7 @@ import * as AppModel from '../../models/AppModel';
 import FPSStats from "react-fps-stats";
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
+// import { useMergeState } from 'react-hooks-lib';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -44,14 +45,19 @@ export default function DebateTester(props:Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = useState<State>({
-    talkingBlue: false,
-    talkingRed: false,
-    speaking: false,
+
+  const [state, setState] = useState<{start:boolean}>({
     start: false
   });
 
+  const [talk, setTalk] = useState<any>({
+    talkingBlue: false,
+    talkingRed: false,
+    speaking: false,
+  });
+
   useEffect(() => {
+    // console.log('------------------')
     if(!store.debate.isTest) {
       store.debate.setTest(true);
       store.debate.setPosition(0, "");
@@ -65,12 +71,12 @@ export default function DebateTester(props:Props) {
 
   const onClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    setState({ ...state, talkingBlue: !state.talkingBlue });
+    setTalk( (p) => ({...p, talkingBlue: !talk.talkingBlue }));
   };
 
   const onClickRed = (e: React.MouseEvent) => {
     e.preventDefault();
-    setState({ ...state, talkingRed: !state.talkingRed });
+    setTalk( (p) => ({...p, talkingRed: !talk.talkingRed }));
   };
 
 
@@ -85,7 +91,7 @@ export default function DebateTester(props:Props) {
     } catch (e) {
       console.error(e);
     }
-    setState({ ...state, start: true });
+    setState(p=>({...p, start: true }));
   };
 
   const gotMedia = (stream?: MediaStream) => {
@@ -95,7 +101,7 @@ export default function DebateTester(props:Props) {
     speechEvents.on('speaking', () => {
       rawSpeaking = true;
       // console.log('speaking');
-      setState({ ...state, talkingBlue: true });
+      setTalk( (p) => ({...p, talkingBlue: true }));
       // document.querySelector('#speaking').textContent = 'YES';
     });
 
@@ -103,21 +109,18 @@ export default function DebateTester(props:Props) {
       // console.log('stopped_speaking');
       rawSpeaking = false;
       // setTimeout(() => {
-      if (!rawSpeaking) setState({ ...state, talkingBlue: false });
+      if (!rawSpeaking) setTalk( (p) => ({...p, talkingBlue: false }));
       // }, 90);
       // document.querySelector('#speaking').textContent = 'NO';
     });
   };
-
-
-
-    const { talkingBlue, talkingRed, speaking } = state;
+    const { talkingBlue, talkingRed, speaking } = talk;
 
     let blueChar = 2
-    let redChar = 1;
+    const redChar = 1;
     if(store.debate && store.debate!.character > -1) {
       blueChar = store.debate!.character;
-      console.log('blueChar', blueChar)
+      // console.log('blueChar', blueChar)
     }
 
     return (

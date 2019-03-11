@@ -59,11 +59,11 @@ export default function FloatMenu(props:Props) {
   const { t } = useTranslation();
 
   const handleClick = event => {
-    setState({...state, anchorEl: event.currentTarget });
+    setState(p => ({...p, anchorEl: event.currentTarget }));
   };
 
   const handleClose = () => {
-    setState({...state, anchorEl: null, exitPrompt: false });
+    setState(p => ({...p, anchorEl: null, exitPrompt: false }));
   };
 
   const handleLeave = () => {
@@ -74,17 +74,17 @@ export default function FloatMenu(props:Props) {
 
   const handleLeaveRate = () => {
     console.log('handleLeaveRate');
-    // setState({...state,'exitPrompt': false, 'anchorEl': null})
+    // setState(p => ({...p,'exitPrompt': false, 'anchorEl': null})
     store.debate.endMatch();
     handleClose();
   }
 
   const handleMic = () => {
-    setState({...state, showSettings: true} );
+    setState(p => ({...p, showSettings: true} ));
   }
 
   const closeSettings = () => {
-    setState({...state, showSettings: false, anchorEl: null} );
+    setState(p => ({...p, showSettings: false, anchorEl: null} ));
   }
 
     const { videoEl } = props;
@@ -93,7 +93,7 @@ export default function FloatMenu(props:Props) {
       <React.Fragment>
         <DebateExitDialog 
           open={state.exitPrompt} 
-            onCancel={ ()=>setState({...state,'exitPrompt': false, 'anchorEl': null}) }
+            onCancel={ ()=>setState(p => ({...p,'exitPrompt': false, 'anchorEl': null})) }
             onExit={handleLeaveRate} />
         { state.showSettings && <AudioSettings onClose={closeSettings} videoEl={videoEl}/> }
         <Fab
@@ -112,7 +112,7 @@ export default function FloatMenu(props:Props) {
           onClose={handleClose}
         >
           <MenuItem onClick={handleMic}>Audio settings</MenuItem>
-          <MenuItem onClick={() => setState({...state,'exitPrompt': true})}>Leave debate now</MenuItem>
+          <MenuItem onClick={() => setState(p => ({...p,'exitPrompt': true}))}>Leave debate now</MenuItem>
         </Menu>
       </React.Fragment>
     );

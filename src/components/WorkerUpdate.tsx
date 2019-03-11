@@ -118,7 +118,7 @@ export default function WorkerUpdate(props: Props) {
 
     // TODO: this might be a problem with initialization
     setTimeout(() => {
-      setState({ ...state, showReload: true }); // , registration: registration
+      setState(p => ({...p, showReload: true })); // , registration: registration
     }, 1200);
   };
 
@@ -127,7 +127,7 @@ export default function WorkerUpdate(props: Props) {
     // var r = confirm('New dinnertable update available!');
     if (registration.waiting) registration.waiting.postMessage('skipWaiting');
     else alert('no registration waiting');
-    setState({ ...state, disableRefresh: true });
+    setState(p => ({...p, disableRefresh: true }));
     // failsafe
     setTimeout(() => bust(), 3000);
     setTimeout(() => window.location.reload(true), 4000);

@@ -129,11 +129,11 @@ export default function DebateFeedback(props:Props) {
   function handleChipClick(label: string) {
     const traitHash = state.traitHash;
     traitHash[label] = !traitHash[label];
-    setState({ ...state, traitHash });
+    setState(p => ({...p, traitHash }));
   }
 
   function handleTextFieldChange(e: any) {
-    setState({ ...state, platformFeedback: e.target.value });
+    setState(p => ({...p, platformFeedback: e.target.value }));
   }
 
   useEffect( () => {
@@ -141,7 +141,7 @@ export default function DebateFeedback(props:Props) {
       event_category: 'debate',
       guest: store.isGuest()
     });
-    setState({ ...state, agreed: store.debate.agreed });
+    setState(p => ({...p, agreed: store.debate.agreed }));
   }, []);
 
   const handleConfirm = async () => {
@@ -252,7 +252,7 @@ export default function DebateFeedback(props:Props) {
                     disableRipple
                     checked={state.agreed}
                     onChange={e =>
-                      setState({ ...state, agreed: e.currentTarget.checked })
+                      setState(p => ({...p, agreed: e.currentTarget.checked }))
                     }
                     value="agreed"
                   />

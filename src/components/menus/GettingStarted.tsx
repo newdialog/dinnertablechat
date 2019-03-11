@@ -135,11 +135,11 @@ export default function GettingStarted(props: Props) {
   const { t } = useTranslation();
 
   const handleNext = () => {
-    setState({ ...state, activeStep: state.activeStep + 1 });
+    setState(p => ({...p, activeStep: state.activeStep + 1 }));
   };
 
   const handleBack = () => {
-    setState({ ...state, activeStep: state.activeStep - 1 });
+    setState(p => ({...p, activeStep: state.activeStep - 1 }));
   };
 
   const routeToPlay = () => {
@@ -161,7 +161,7 @@ export default function GettingStarted(props: Props) {
   };
 
   const handleStepChange = activeStep => {
-    setState({ ...state, activeStep });
+    setState(p => ({...p, activeStep }));
   };
 
   const { activeStep } = state;

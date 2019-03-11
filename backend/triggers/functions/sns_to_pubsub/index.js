@@ -187,11 +187,11 @@ async function saveDB(players, matchId) {
 }
 
 function getQParam(players, matchId) {
-  const ranPick = (Math.round() > .5) ? 0 : 1;
+  const ranPick = (Math.random() > .5) ? 0 : 1;
   // leader
   var red = players[ranPick]; // players.filter(p => p.team === 'red')[0];
   // flip
-  var blue = players[ranPick === 0 ? 1 : 0]; // players.filter(p => p.team === 'blue')[0];
+  var blue = players[(ranPick === 0) ? 1 : 0]; // players.filter(p => p.team === 'blue')[0];
 
   const ttl = Math.round((new Date).getTime() / 1000) + 60 * 3; // +3min
   const ttl2 = Math.round((new Date).getTime() / 1000) + 60 * 60; // +60min
