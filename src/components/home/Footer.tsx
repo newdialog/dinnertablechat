@@ -1,7 +1,6 @@
 import React, {useContext} from 'react';
 import { Typography } from '@material-ui/core';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
-import { inject } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 
 import { useTheme, makeStyles } from '@material-ui/styles';
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme: any) => ({
       marginLeft: 'auto',
       marginRight: 'auto',
       width: '100%',
-      backgroundColor: '#484866', // theme.palette.secondary.dark,
+      backgroundColor: theme.palette.secondary.dark,
       textAlign: 'center'
     },
     links: {

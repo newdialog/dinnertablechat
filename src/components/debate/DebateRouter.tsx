@@ -2,7 +2,6 @@ import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import Tester from './DebateTester';
 import LoadingScene from './LoadingScene';
-import { inject } from 'mobx-react';
 import DebateScene from './DebateScene';
 import PeerService from '../../services/PeerService';
 import DebateFeedback from './DebateFeedback';
@@ -19,6 +18,10 @@ export default observer(function DebateRouter() {
   const { t } = useTranslation();
 
   const [state, setState] = useState({ peer: null });
+
+  // Auth guard
+  if (store.auth.isNotLoggedIn) store.router.push('/');
+  else if (!store.auth.user) return null;
 
   const onPeer = (peer: any) => {
     setState({ peer });

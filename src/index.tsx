@@ -5,7 +5,6 @@ import i18n from './services/i18n';
 import './index.css';
 
 import App from './App';
-import { Provider } from 'mobx-react';
 import * as AppModel from './models/AppModel';
 
 import { connectReduxDevtools } from 'mst-middlewares';
@@ -35,7 +34,6 @@ console.log('v1.2');
 ReactDOM.render(
   <Suspense fallback={LoadingMsg()}>
     <I18nextProvider i18n={i18n}>
-      <Provider store={store}>
         <AppModel.Context.Provider value={store}>
           <MuiThemeProvider theme={theme}>
             <ThemeProvider theme={theme}>
@@ -44,7 +42,6 @@ ReactDOM.render(
             </ThemeProvider>
           </MuiThemeProvider>
         </AppModel.Context.Provider>
-      </Provider>
     </I18nextProvider>
   </Suspense>,
   document.getElementById('root') as HTMLElement

@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import FaceIcon from '@material-ui/icons/Face';
 import * as AppModel from '../../models/AppModel';
-import { inject } from 'mobx-react';
 import APIService from '../../services/APIService';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';

@@ -3,16 +3,23 @@ import * as Auth from '../services/AuthService';
 import * as AuthService from '../services/AuthService';
 import uuid from 'short-uuid';
 
-const UserModel = types.model({
-  email: types.string,
-  name: types.string,
-  id: types.string,
-  guestSeed: types.string
-  // credits: types.integer,
-  // karma: types.maybe(types.integer),
-  // token: types.string,
-  // data: types.frozen({})
-});
+const UserModel = types
+  .model({
+    email: types.string,
+    name: types.string,
+    id: types.string,
+    guestSeed: types.string,
+    numDebates: types.number,
+    // credits: types.integer,
+    // karma: types.maybe(types.integer),
+    // token: types.string,
+    // data: types.frozen({})
+  })
+  .actions(self => ({
+    updateNumDebates(num: number) {
+      self.numDebates = num;
+    },
+}));
 
 // TODO: remove?
 const AWSModel = types.model({
@@ -85,11 +92,12 @@ const AuthModel = types
       }
       // ======
 
-      const umodel: Instance<typeof UserModel> = {
+      const umodel = {
         name: user.name,
         email: user.email,
         id: user.id,
-        guestSeed: seed
+        guestSeed: seed,
+        numDebates: 0
       };
 
       const aws: Instance<typeof AWSModel> = {
@@ -97,7 +105,8 @@ const AuthModel = types
       };
 
       self.aws = aws;
-      self.user = umodel;
+      self.user = UserModel.create(umodel);
+
       // self.loggedIn = true;
       self.isNotLoggedIn = false;
     }

@@ -5,7 +5,6 @@ import Content from './Content';
 import Subscribe from './Subscribe';
 import Footer from './Footer';
 import Announcement from '@material-ui/icons/RecordVoiceOver';
-// import { inject } from 'mobx-react';
 import * as AppModel from '../../models/AppModel';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';

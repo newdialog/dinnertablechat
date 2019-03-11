@@ -1,52 +1,37 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 
-import * as Store from '../../models/AppModel';
-import { observer } from 'mobx-react';
+import { observer } from 'mobx-react-lite';
 import * as AuthService from '../../services/AuthService';
-import { inject } from 'mobx-react';
 import { Typography } from '@material-ui/core';
-
+import * as AppModel from '../../models/AppModel';
 interface Props {
-  store: Store.Type;
   login: boolean;
 }
 
-interface State {
-  init: boolean;
-}
-
 //
-class AuthSignin extends React.Component<Props, any> {
-    refresh = false;
-  constructor(props: Props) {
-    super(props);
+export default observer(function AuthSignin(props: Props) {
+  const store = useContext(AppModel.Context)!;
+  let [refresh, setRefresh] = useState(false);
+
+  if (!refresh && store.auth.isAuthenticated()) {
+    window.gtag('event', 'logged_in', {
+      event_category: 'auth'
+    });
+
+    if (localStorage.getItem('quickmatch')) store.router.push('/quickmatch');
+    else if (store.isStandalone()) store.router.push('/home');
+    else store.router.push('/tutorial');
+    setRefresh(true);
   }
 
-  public componentWillMount() {
-    const props: any = this.props;
-  }
-
-  public componentDidMount() {
-    
-  }
-
-  public render() {
-    const {store} = this.props;
-    if(!this.refresh && store.auth.isAuthenticated()) {
-        window.gtag('event', 'logged_in', {
-            event_category: 'auth'
-          });
-
-        if(localStorage.getItem('quickmatch')) store.router.push('/quickmatch');
-        else if(store.isStandalone()) store.router.push('/home');
-        else store.router.push('/tutorial');
-        this.refresh = true;
-    }
-
-    return <React.Fragment><br/><br/><br/><Typography variant="h3" align="center" style={{color:'#555555'}}>Signing in...</Typography>
-      </React.Fragment>;
-  }
-}
-
-export default inject('store')(observer(AuthSignin));
-// withOAuth
+  return (
+    <React.Fragment>
+      <br />
+      <br />
+      <br />
+      <Typography variant="h3" align="center" style={{ color: '#555555' }}>
+        Signing in...
+      </Typography>
+    </React.Fragment>
+  );
+});

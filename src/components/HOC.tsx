@@ -1,6 +1,6 @@
 import { withTranslation, UseTranslationResponse } from 'react-i18next';
 import withRoot from '../withRoot';
-import { observer } from 'mobx-react';
+// import { observer } from 'mobx-react';
 import * as AppModel from '../models/AppModel';
 import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,7 @@ function noop(comp: any) {
 function noopHOC(noprop?: any) {
   return noop;
 }
-
+/*
 export default function HOC(
   Component: any,
   styles: any = null,
@@ -62,3 +62,4 @@ export interface IHook {
     t: any,
     store: AppModel.Type
 }
+*/

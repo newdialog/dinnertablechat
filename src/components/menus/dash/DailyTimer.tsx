@@ -3,8 +3,8 @@ import Countdown from 'react-countdown-now';
 import { Typography, withStyles, Button } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
-import * as AppModel from '../../models/AppModel';
-import * as Times from '../../services/TimeService';
+import * as AppModel from '../../../models/AppModel';
+import * as Times from '../../../services/TimeService';
 
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
@@ -17,10 +17,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     timerText: {
       padding: '0',
       margin: 0,
-      color: '#06616b'
+      color: theme.palette.secondary.dark,
     },
     time: {
-        color: '#06616b',
+        color: theme.palette.secondary.dark,
         fontFamily: "'Roboto Mono', 'Courier New'",
     }
   }));
