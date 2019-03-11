@@ -10,7 +10,8 @@ import { observer } from 'mobx-react-lite';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     width: '100%',
-    paddingLeft: '10vw'
+    paddingLeft: '10vw',
+    paddingRight: '2em'
     // marginTop: '55px',
     //background: '#a69c92',
     // backgroundImage: `url(${'./imgs/woodgrain.jpg'})`,
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   item: {
     // paddingLeft: '2em',
     textAlign: 'left',
-    minWidth: '100px',
+    minWidth: '118px',
     maxWidth: '260px'
     // fontSize: '1em'
   },
@@ -79,14 +80,14 @@ export default observer(function UserStats(props: Props) {
               className={classes.item}
             >
               lvl {level}
-              <br />
-            </Typography>
-            <LinearProgress
+              <LinearProgress
               color="primary"
               variant="determinate"
               value={normalise(xp)}
               style={{ height: '8px' }}
             />
+            </Typography>
+            
           </div>
         </Grid>
 

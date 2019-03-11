@@ -26,11 +26,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'block',
     margin: '0.5em auto 0em',
     width: 'auto',
-    maxWidth: '1000px',
+    maxWidth: '100%',
     maxHeight: '35vh',
     height: 'auto',
     [theme.breakpoints.up('md')]: {
       maxHeight: '50vh',
+      maxWidth: '1000px'
     }
   },
   divider: {
