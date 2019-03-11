@@ -27,8 +27,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: '0.5em auto 0em',
     width: 'auto',
     maxWidth: '1000px',
-    maxHeight: '50vh',
-    height: 'auto'
+    maxHeight: '35vh',
+    height: 'auto',
+    [theme.breakpoints.up('md')]: {
+      maxHeight: '50vh',
+    }
   },
   divider: {
     margin: `${theme.spacing.unit * 4}px 0`
