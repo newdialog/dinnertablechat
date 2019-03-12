@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import { Button, Typography, Paper, Grid, Card } from '@material-ui/core';
 import SwipeableViews from 'react-swipeable-views';
@@ -91,21 +91,21 @@ interface State {
 
 const tutorialSteps = [
   {
-    title: 'Select Topic',
+    title: 'Welcome Tutorial',
     subTitle:
-      'Get started by selecting your topic position. Topics are selected via news trends and your vote in DTC polls.',
+      'In quickmatch, we connect you with someone new to have a conversation centered around politics.',
     imgPath: './imgs/02-topics.png'
   },
   {
-    title: 'Choose Your Character',
+    title: 'Pick your Character',
     subTitle:
       'You control a virtual character that will talk as you do and listen to your matched partner.',
     imgPath: './imgs/04-select.png'
   },
   {
-    title: 'Join Debate',
+    title: 'Enjoy lively conversation',
     subTitle:
-      'Get matched with the other side. Be passionate about your views, keep an open mind and remember the golden rule.',
+      'Be passionate about your views, keep an open mind and remember the golden rule.',
     imgPath: './imgs/press/01-scene1.png'
   },
   {
@@ -114,12 +114,12 @@ const tutorialSteps = [
       'It is easy to disagree. Celebrate when you and your partner come to an agreement - big or small!',
     imgPath: './logos/dtclogo2.png'
   },
-  {
+  /* {
     title: 'Give Feedback',
     subTitle:
       'Was your partner respectful, knowledgeable or crude? Let them know what you thought!',
     imgPath: './imgs/07-newsletter.png'
-  },
+  },*/
   {
     title: 'Earn Achievements',
     subTitle:
@@ -147,6 +147,7 @@ export default function GettingStarted(props: Props) {
       event_category: 'splash',
       guest: store.isGuest()
     });
+    localStorage.setItem('tutorialDone', 'y');
 
     if (
       store.isStandalone() &&
@@ -159,6 +160,11 @@ export default function GettingStarted(props: Props) {
       else store.gotoHomeMenu();
     }
   };
+
+  useEffect( () => {
+    // TODO, do not apply to guests store.isGuest()
+    if(localStorage.getItem('tutorialDone')==='y') routeToPlay();
+  }, []);
 
   const handleStepChange = activeStep => {
     setState(p => ({...p, activeStep }));
