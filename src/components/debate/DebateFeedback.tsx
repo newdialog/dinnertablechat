@@ -156,10 +156,13 @@ export default function DebateFeedback(props:Props) {
     // if(Object.keys(hash).length > 0) 
     window.open('https://docs.google.com/forms/d/e/1FAIpQLScmmcorrmu2oO31_9-sU89S4BQXmjRlXvF7FasR_cw7NvxTCQ/viewform', '_blank');
     
+    // ------
     // If guest, just log them out now
     if(store.isGuest()) {
       console.log('no review');
-      store.auth.logout();
+      // store.auth.logout();
+      store.debate.resetQueue();
+      store.gotoHomeMenu();
       return;
     }
     // If other was guest, just go back to debate home
@@ -170,7 +173,8 @@ export default function DebateFeedback(props:Props) {
       store.gotoHomeMenu();
       return;
     }
-
+    // ------
+    
     // TODO: update endpt w user selection, route back home
     const traitsObj = Object.keys(hash)
       .filter(k => hash[k])

@@ -63,8 +63,9 @@ const AppModel = types
     },
     gotoHomeMenu() {
       self.showNav = true;
-      if (!self.debate.isTest) self.router.push('/home');
-      else self.router.push('/test');
+      // if (!self.debate.isTest)
+      self.router.push('/home');
+      // else self.router.push('/test');
     },
     showNavbar() {
       self.showNav = true;

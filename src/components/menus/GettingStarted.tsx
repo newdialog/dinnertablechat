@@ -156,6 +156,7 @@ export default function GettingStarted(props: Props) {
     )
       store.auth.login();
     else {
+      if(store.isGuest()) return store.router.push('/quickmatch'); // move guests right into quickmatch
       if (localStorage.getItem('quickmatch')) store.router.push('/quickmatch');
       else store.gotoHomeMenu();
     }
