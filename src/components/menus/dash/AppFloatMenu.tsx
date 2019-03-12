@@ -77,6 +77,11 @@ export default function AppFloatMenu(props: Props) {
     );
   };
 
+  const onTutorial = () => {
+    localStorage.setItem('tutorialDone', '');
+    store.router.push('/tutorial')
+  }
+
   const { videoEl } = props;
   const { anchorEl } = state;
   return (
@@ -100,7 +105,7 @@ export default function AppFloatMenu(props: Props) {
           DTC Homepage
         </MenuItem>
         <MenuItem onClick={onFeedback}>User Feedback</MenuItem>
-        <MenuItem onClick={() => store.router.push('/tutorial')}>
+        <MenuItem onClick={onTutorial}>
           Tutorial
         </MenuItem>
         <MenuItem onClick={() => store.router.push('/education')}>

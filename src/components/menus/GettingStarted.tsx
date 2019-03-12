@@ -234,12 +234,13 @@ export default function GettingStarted(props: Props) {
 
         {activeStep !== maxSteps - 1 ? null : (
           <div style={{ textAlign: 'center' }}>
-            <Button variant="contained" color="secondary" onClick={routeToPlay}>
-              Let's Begin
+            <Button variant="contained" color="secondary" onClick={routeToPlay} style={{lineHeight:'2.4em', width:'80%', maxWidth:'300px'}}>
+              Let's Begin!
             </Button>
           </div>
         )}
         <MobileStepper
+          style={{paddingTop:0}}
           steps={maxSteps}
           position="static"
           activeStep={activeStep}
@@ -248,7 +249,7 @@ export default function GettingStarted(props: Props) {
             <Button
               size="small"
               onClick={handleNext}
-              disabled={state.activeStep === 5}
+              disabled={state.activeStep === 4}
             >
               Next
               <KeyboardArrowRight />
