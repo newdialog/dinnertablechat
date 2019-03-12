@@ -264,6 +264,7 @@ export default function DebateHistory(props: Props) {
   };
 
   const transformSide = (topic: string, side: number) => {
+    if(side===100) return '';
     return TopicInfo.getTopic(topic, t)!.positions[side];
   };
 
@@ -351,17 +352,19 @@ export default function DebateHistory(props: Props) {
             }
             title={
               <>
+              {x.userSide!=='' && x.oppSide!=='' &&
                 <span style={{ color: '#5d4444' }}>
                   <span className="nowrap" style={{ fontWeight: 500 }}>
                     {x.userSide}
                   </span>
-                  <> vs </>
+                  <> - </>
                   <span className="nowrap" style={{ fontWeight: 500 }}>
                     {' '}
                     {x.oppSide}:
                   </span>
                   <> </>
                 </span>
+              }
                 <span
                   style={{
                     fontWeight: 500,

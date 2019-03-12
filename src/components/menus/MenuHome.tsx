@@ -76,7 +76,7 @@ interface Props {
 }
 
 function getSteps() {
-  return ['Pick your character', 'Select Postion']; // , 'Set contribution']
+  return ['Pick your character'] // , 'Select Postion']; // , 'Set contribution']
 }
 
 function onHistory(store: AppModel.Type) {
@@ -87,10 +87,10 @@ function getStepContent(step: number, store: AppModel.Type) {
   switch (step) {
     case 0:
       return <CharacterSelection store={store} />;
-    case 1:
+    /* case 1:
       return <PositionSelector store={store} />;
     case 2:
-      return null // <ContributionSelector store={store} />; 
+      return null // <ContributionSelector store={store} />;  */
     default:
       return (
         <Typography>

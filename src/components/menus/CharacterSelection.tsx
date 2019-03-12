@@ -5,6 +5,7 @@ import * as AppModel from '../../models/AppModel';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
+import * as TopicInfo from '../../utils/TopicInfo';
 
 // requires user action
 function setLandscape() {
@@ -138,6 +139,8 @@ export default function CharacterSelector(props: Props) {
   const onChipClick = (ev: any, item: any) => {
     setLandscape();
     props.store.debate.setCharacter(item.value);
+    // TODO for now skip topic selection
+    props.store.debate.setPosition(100, TopicInfo.getTopics(t)[0].id);
   };
 
   const contrib = defaultContributions;

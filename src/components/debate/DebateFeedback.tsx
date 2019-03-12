@@ -124,7 +124,7 @@ export default function DebateFeedback(props:Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = useState({ traitHash: {}, platformFeedback: '', agreed: false });
+  const [state, setState] = useState({ traitHash: {}, platformFeedback: '', agreed: true });
 
   function handleChipClick(label: string) {
     const traitHash = state.traitHash;
@@ -141,7 +141,7 @@ export default function DebateFeedback(props:Props) {
       event_category: 'debate',
       guest: store.isGuest()
     });
-    setState(p => ({...p, agreed: store.debate.agreed }));
+    // setState(p => ({...p, agreed: store.debate.agreed || false }));
   }, []);
 
   const handleConfirm = async () => {
@@ -251,8 +251,10 @@ export default function DebateFeedback(props:Props) {
                     }}
                     disableRipple
                     checked={state.agreed}
-                    onChange={e =>
-                      setState(p => ({...p, agreed: e.currentTarget.checked }))
+                    onChange={e => {
+                      console.log('e.currentTarget.checked', e.currentTarget.checked)
+                        setState(p => ({...p, agreed: e.currentTarget.checked }))
+                      }
                     }
                     value="agreed"
                   />

@@ -285,7 +285,9 @@ export default function DebateScene(props: Props) {
   const blueChar = characters[props.blueChar];
   return (
     <div id="debatedisplay">
-      <StartDebateDialog store={store} />
+      { 
+        // TODO: disable for now <StartDebateDialog store={store} /> 
+      }
       {agreed || ended ? (
         <Lottie options={confettiOptions} ref={confettiRef} />
       ) : null}
