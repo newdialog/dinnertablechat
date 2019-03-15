@@ -41,6 +41,8 @@ interface State {
   talkingBlue: boolean;
   talkingRed: boolean;
   error?: string;
+  speechEvents?:SpeechEvent;
+  speechSelfEvents?: SpeechEvent;
   // speaking:boolean
 }
 
@@ -50,11 +52,11 @@ export default function DebateScene(props:Props) {
   const { t } = useTranslation();
   const peer = props.peer;
   // let [peer, setPeer] = useState<PeerService|null>(null);
-  let speechEvents: SpeechEvent;
-  let speechSelfEvents: SpeechEvent;
+  // let speechEvents: SpeechEvent;
+  // let speechSelfEvents: SpeechEvent;
   const vidRef = useRef<HTMLVideoElement>(null);
 
-  const [state, setState] = useState<State>({ talkingBlue: false, talkingRed: false });
+  const [state, setState] = useState<State>({ talkingBlue: false, talkingRed: false, });
 
   useEffect(() => {
     gotMedia();
@@ -79,13 +81,13 @@ export default function DebateScene(props:Props) {
     return () => {
       console.log('debatescene unmounting');
       if(peer) peer!.destroy();
-      speechSelfEvents!.stop();
+      if(state.speechSelfEvents) state.speechSelfEvents.stop();
     }
   }, []);
 
   const setupSelfVoice= () => {
     const options = {};
-    speechSelfEvents = hark(peer!.getLocalStream(), options);
+    const speechSelfEvents = hark(peer!.getLocalStream(), options);
 
     speechSelfEvents.on('speaking', () => {
       // console.log('speaking');
@@ -98,6 +100,7 @@ export default function DebateScene(props:Props) {
       setState(p => ({...p, talkingBlue: false }));
       // document.querySelector('#speaking').textContent = 'NO';
     });
+    setState(p => ({...p, speechSelfEvents }));
   }
 
   const gotMedia = () => {
@@ -141,7 +144,7 @@ export default function DebateScene(props:Props) {
       /// video.play();
 
       const options = {};
-      speechEvents = hark(stream2, options);
+      const speechEvents = hark(stream2, options);
 
       speechEvents.on('speaking', () => {
         // console.log('speaking');
@@ -154,6 +157,8 @@ export default function DebateScene(props:Props) {
         setState(p => ({...p, talkingRed: false }));
         // document.querySelector('#speaking').textContent = 'NO';
       });
+      
+      setState(p => ({...p, speechEvents }));
     });
 
     // p.addStream(stream);

@@ -81,6 +81,7 @@ interface State {
   init?: boolean;
   disableRefresh: boolean;
   showReload?: boolean;
+  registration?:ServiceWorkerRegistration;
 }
 
 //
@@ -90,8 +91,6 @@ export default function WorkerUpdate(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  let refresh = false;
-  let registration: ServiceWorkerRegistration;
   const [state, setState] = useState<State>({
     disableRefresh: false
   });
@@ -102,12 +101,12 @@ export default function WorkerUpdate(props: Props) {
   }, []);
 
   const onSuccess = (registration: ServiceWorkerRegistration) => {
-    registration = registration;
+    setState(p=>({...p, registration}));
     console.log('worker loaded');
   };
 
   const onUpdate = (registration: ServiceWorkerRegistration) => {
-    if (registration) registration = registration;
+    if (registration) setState(p=>({...p, registration}));
 
     // #2
     navigator.serviceWorker.addEventListener('controllerchange', () => {
@@ -125,7 +124,7 @@ export default function WorkerUpdate(props: Props) {
   const onRefreshClick = e => {
     // const registration = registration!;
     // var r = confirm('New dinnertable update available!');
-    if (registration.waiting) registration.waiting.postMessage('skipWaiting');
+    if (state.registration && state.registration!.waiting) state.registration!.waiting.postMessage('skipWaiting');
     else alert('no registration waiting');
     setState(p => ({...p, disableRefresh: true }));
     // failsafe
