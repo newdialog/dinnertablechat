@@ -94,42 +94,56 @@ export default function WorkerUpdate(props: Props) {
     disableRefresh: false
   });
 
-  useEffect(() => {
-    serviceWorker.register({ onSuccess: onSuccess, onUpdate: onUpdate });
-    // serviceWorker.unregister();
-  }, []);
-
   const onSuccess = (registration: ServiceWorkerRegistration) => {
+    if (registration) setState(p=>({...p, registration}));
+    console.log('+worker onSuccess');
+  };
+
+  const onReg = (registration: ServiceWorkerRegistration) => {
     setState(p=>({...p, registration}));
-    console.log('worker loaded');
+    // console.log('+worker onReg');
+    // #2
   };
 
   const onUpdate = (registration: ServiceWorkerRegistration) => {
+    console.log('+worker onUpdate');
     if (registration) setState(p=>({...p, registration}));
-
-    // #2
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (refreshing) return;
-      refreshing = true; // preventDevToolsReloadLoop
-      window.location.reload(); // true
-    });
 
     // TODO: this might be a problem with initialization
     setTimeout(() => {
-      setState(p => ({...p, showReload: true })); // , registration: registration
+     setState(p => ({...p, showReload: true })); // , registration: registration
     }, 1001);
+
+    if (registration && registration!.waiting) {
+      registration!.waiting.postMessage('skipWaiting');
+    }
+    // setTimeout(() => { onRefreshClick(null); }, 100);
   };
 
+  useEffect(() => {
+    serviceWorker.register({ onSuccess, onUpdate, onReg });
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        refreshing = true; // preventDevToolsReloadLoop
+        window.location.reload(true); // true
+        console.log('worker reloading..');
+      });
+    }
+    // serviceWorker.unregister();
+  }, []);
+
   const onRefreshClick = e => {
-    // const registration = registration!;
     // var r = confirm('New dinnertable update available!');
-    if (state.registration && state.registration!.waiting) state.registration!.waiting.postMessage('skipWaiting');
+    if (state.registration && state.registration!.waiting) {
+      state.registration!.waiting.postMessage('skipWaiting');
+    }
     else alert('no registration waiting');
     setState(p => ({...p, disableRefresh: true }));
     // failsafe
     setTimeout(() => bust(), 3000);
     setTimeout(() => window.location.reload(true), 4000);
-    console.log('worker updated');
+    console.log('worker update click');
   };
 
   // Ensure not in a match

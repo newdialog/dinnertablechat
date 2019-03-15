@@ -23,6 +23,7 @@ const isLocalhost = Boolean(
 type Config = {
   onSuccess?: (registration: ServiceWorkerRegistration) => void;
   onUpdate?: (registration: ServiceWorkerRegistration) => void;
+  onReg?: (registration: ServiceWorkerRegistration) => void;
 };
 
 export function register(config?: Config) {
@@ -63,17 +64,29 @@ export function register(config?: Config) {
 }
 
 function registerValidSW(swUrl: string, config?: Config) {
-  navigator.serviceWorker
+  return navigator.serviceWorker
     .register(swUrl, { updateViaCache: 'none' })
     .then(registration => {
-      registration.onupdatefound = () => {
+      if (config && config.onReg) config.onReg(registration);
+      registration.addEventListener('updatefound', () => {
         const installingWorker = registration.installing;
         if (installingWorker == null) {
           return;
         }
-        installingWorker.onstatechange = () => {
+        installingWorker.addEventListener('statechange', () => {
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
+              const pushState = window.history.pushState;
+
+              // https://stackoverflow.com/questions/40100922/activate-updated-service-worker-on-refresh
+              window.history.pushState = function(...args) {
+                // make sure that the user lands on the "next" page
+                pushState.apply(window.history, args);
+
+                // makes the new service worker active
+                installingWorker.postMessage('skipWaiting');
+              };
+
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
               // content until all client tabs are closed.
@@ -98,8 +111,9 @@ function registerValidSW(swUrl: string, config?: Config) {
               }
             }
           }
-        };
-      };
+        });
+      });
+      return registration;
     })
     .catch(error => {
       console.error('Error during service worker registration:', error);

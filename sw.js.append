@@ -1,5 +1,5 @@
 
-self.addEventListener('message', (event) => {
+addEventListener('message', (event) => {
   if (!event.data){
     return;
   }
@@ -12,6 +12,22 @@ self.addEventListener('message', (event) => {
       // NOOP
       break;
   }
+});
+
+// pull latest on refresh, not sure if working
+addEventListener('fetch', event => {
+  event.respondWith((async () => {
+    if (event.request.mode === "navigate" &&
+      event.request.method === "GET" &&
+      registration.waiting &&
+      (await clients.matchAll()).length < 2
+    ) {
+      registration.waiting.postMessage('skipWaiting');
+      return new Response("", {headers: {"Refresh": "0"}});
+    }
+    return await caches.match(event.request) ||
+      fetch(event.request);
+  })());
 });
 
 // Cache the Google Fonts stylesheets with a stale-while-revalidate strategy.
