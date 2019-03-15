@@ -139,7 +139,7 @@ function BannerTimer(props:Props) {
     ? Times.getDebateEnd().getTime()
     : Times.getDebateStart().getTime();
 
-  console.log('isDuringDebate', isDuringDebate, 'endTime', endTime)
+  // console.log('isDuringDebate', isDuringDebate, 'endTime', endTime)
 
   return (
     <Countdown

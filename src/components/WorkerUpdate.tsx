@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
+import React, { useRef, useState, useEffect, useMemo, useContext, ReactNode } from 'react';
 
 import * as Store from '../models/AppModel';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
@@ -27,7 +27,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: '1000px',
     minWidth: '300px'
   },
-  bannerRef: {},
   bannerAnim: {
     position: 'absolute',
     left: 0,
@@ -73,7 +72,7 @@ const bgOptions = {
   }
 };
 interface Props {
-  children: any;
+  children: ReactNode;
   store: AppModel.Type;
 }
 
@@ -85,7 +84,7 @@ interface State {
 }
 
 //
-var refreshing;
+var refreshing:boolean = false;
 export default function WorkerUpdate(props: Props) {
   // const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
@@ -118,7 +117,7 @@ export default function WorkerUpdate(props: Props) {
     // TODO: this might be a problem with initialization
     setTimeout(() => {
       setState(p => ({...p, showReload: true })); // , registration: registration
-    }, 1200);
+    }, 1001);
   };
 
   const onRefreshClick = e => {
@@ -147,7 +146,6 @@ export default function WorkerUpdate(props: Props) {
         <div className={classes.bannerAnim}>
           <Lottie
             options={bgOptions}
-            ref={classes.bannerRef}
             isClickToPauseDisabled={true}
           />
         </div>
