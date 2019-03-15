@@ -244,12 +244,12 @@ export default function HomeBanner(props:Props) {
           {(!auth || store.isGuest()) && (
             <Button
               style={{ marginTop: '1vh', marginLeft: '12px', lineHeight:'2.6em' }}
-              onClick={() => store.login()}
+              onClick={() => store.isGuest() ? store.auth.guestSignup() : store.login()}
               variant="contained"
               color="secondary"
               size="large"
             >
-              {store.isGuest() ? 'Signout Guest' : 'Signup/Login'}
+              Signup/Login
               <QueueIcon style={{ marginLeft: '8px' }} />
             </Button>
           )}
