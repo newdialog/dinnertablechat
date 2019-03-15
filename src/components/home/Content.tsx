@@ -300,9 +300,23 @@ export default function HomeContent() {
               >
                 <i
                   id="social-tw"
+                  style={{ color: 'black' }}
                   className="fab fa-twitter-square social fa-3x "
                 />
               </a>
+
+              <a
+              style={{ color: 'black' }}
+              href="https://facebook.com/dinnertablechat"
+              onClick={trackOutboundLinkClick(
+                'https://facebook.com/dinnertablechat'
+              )}
+            >
+              <i
+                id="social-tw"
+                className="fab fa-facebook-square social fa-3x "
+              />
+            </a>
             </div>
           </Grid>
         </Grid>

@@ -59,6 +59,18 @@ export default function Footer(props: Props) {
             </a>
 
             <a
+              href="https://facebook.com/dinnertablechat"
+              onClick={trackOutboundLinkClick(
+                'https://facebook.com/dinnertablechat'
+              )}
+            >
+              <i
+                id="social-tw"
+                className="fab fa-facebook-square social fa-3x "
+              />
+            </a>
+
+            <a
               href="https://medium.com/dinnertablechat"
               onClick={trackOutboundLinkClick(
                 'https://medium.com/dinnertablechat'

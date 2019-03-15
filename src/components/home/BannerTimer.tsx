@@ -79,7 +79,7 @@ const renderer = (
           variant="h6"
           align="center"
           className={classes.timerText}
-          style={{ fontSize: '110%', color: '#555555' }}
+          style={{ fontSize: '110%' }}
         >
           {label}
         </Typography>
@@ -97,16 +97,26 @@ const renderer = (
           variant="h6"
           align="center"
           className={classes.timerText}
-          style={{ fontSize: '.75em', color: '#555555' }}
+          style={{ fontSize: '.75em' }}
         >
           HRS&nbsp;
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
-          <br/><span style={{color:'#844d4d'}}>Noon-10pm PST / 3pm-1am EST</span>
-          
+          <br/><span>Noon-10pm PST / 3pm-1am EST</span>
         </Typography>
 
-        <br />
+        <Typography
+          variant="h6"
+          align="center"
+          className={classes.timerText}
+          style={{ fontSize: '.75em' }}
+        >
+        <a 
+        style={{ color: '#95d4ff', textDecoration: 'underline' }}
+        onClick={trackOutboundLinkClick(
+                'https://www.facebook.com/events/522239821514316/'
+              )} href='https://www.facebook.com/events/522239821514316/'>Add to Facebook Calendar</a>
+        </Typography>
       </div>
     );
   }
