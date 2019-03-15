@@ -19,6 +19,7 @@ import * as Times from '../../services/TimeService';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
+import AppFloatMenu from './dash/AppFloatMenu';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
@@ -76,7 +77,7 @@ interface Props {
 }
 
 function getSteps() {
-  return ['Pick your character'] // , 'Select Postion']; // , 'Set contribution']
+  return ['Pick your character', 'Select Postion']; // , 'Set contribution']
 }
 
 function onHistory(store: AppModel.Type) {
@@ -87,10 +88,10 @@ function getStepContent(step: number, store: AppModel.Type) {
   switch (step) {
     case 0:
       return <CharacterSelection store={store} />;
-    /* case 1:
+    case 1:
       return <PositionSelector store={store} />;
     case 2:
-      return null // <ContributionSelector store={store} />;  */
+      return null // <ContributionSelector store={store} />;
     default:
       return (
         <Typography>
@@ -165,12 +166,13 @@ export default observer(function MenuHome(props: Props) {
   return (
     <div className={classes.pagebody}>
       <main className={classes.container}>
+        
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             {props.isTest && <h2>TEST MODE (/test)</h2>}
             <Typography
-              style={{ fontSize: '3em', paddingBottom: '0', color: '#ffffff' }}
+              style={{ fontSize: '2.5em', paddingBottom: '0', color: '#ffffff' }}
               variant="h3"
               align="center"
               color="textSecondary"
@@ -178,6 +180,20 @@ export default observer(function MenuHome(props: Props) {
             >
               Debate Quickmatch
             </Typography>
+            { store.isGuest() &&
+            <Button variant="contained" color="secondary" onClick={ () => store.router.push('/') } style={{lineHeight:'1.4em', backgroundColor:'#93cad2', marginRight:'12px'}}>
+                  About Us
+            </Button> }
+            <Button
+              // className={classes.linkhome}
+              // color="secondary"
+              // style={{backgroundColor:'#a3a3a3'}}
+              style={{lineHeight:'1.4em', backgroundColor:'#93cad2'}}
+              variant="contained" color="secondary"
+              onClick={() => onHistory(store)}
+            >
+              Profile History and Awards
+        </Button>
           </div>
         </div>
         {/* End hero unit */}
@@ -219,14 +235,7 @@ export default observer(function MenuHome(props: Props) {
           )}
         </div>
 
-        <Button
-          className={classes.linkhome}
-          color="secondary"
-          onClick={() => onHistory(store)}
-        >
-          Back to Profile Home
-          <HistoryIcon style={{ marginLeft: '8px' }} />
-        </Button>
+        <AppFloatMenu />
       </main>
     </div>
   );

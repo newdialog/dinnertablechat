@@ -90,7 +90,8 @@ export default function PositionSelector(props: Props) {
               <CardActions>
                 {card.positions.map((p, i) => (
                   <Button
-                    size="small"
+                    variant="contained"
+                    // size="small"
                     key={i}
                     color="secondary"
                     className={classes.btn}

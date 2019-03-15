@@ -101,15 +101,18 @@ export default function AppFloatMenu(props: Props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        {store.isGuest() && <MenuItem onClick={() => store.auth.guestSignup()}>
+          Login to Save Progress
+        </MenuItem>}
         <MenuItem onClick={() => store.router.push('/')}>
-          DTC Homepage
+          Home
         </MenuItem>
         <MenuItem onClick={onFeedback}>User Feedback</MenuItem>
         <MenuItem onClick={onTutorial}>
           Tutorial
         </MenuItem>
         <MenuItem onClick={() => store.router.push('/education')}>
-          EDU program
+          EDU program info
         </MenuItem>
         <MenuItem onClick={logOut}>Log out</MenuItem>
       </Menu>

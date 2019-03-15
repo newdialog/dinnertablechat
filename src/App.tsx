@@ -7,6 +7,7 @@ import { observer } from 'mobx-react-lite';
 import AuthWrapper from './components/aws/AuthWrapper';
 import WorkerUpdate from './components/WorkerUpdate';
 import Loading from './components/Loading';
+import * as TimeSerive from './services/TimeService';
 
 interface Props {
   store: import('./models/AppModel').Type,
@@ -17,8 +18,12 @@ export default observer( function App(props:Props) {
   const store = props.store;
   const history = props.history;
 
-  // let showLoading = false;
-  if (store.isQuickmatch()) {
+  if(localStorage.getItem('signup') && store.auth.isNotLoggedIn) {
+    localStorage.removeItem('signup');
+    store.auth.login();
+  }
+  // Feature: force quickmatch flow
+  else if (store.isQuickmatch()) {
     console.log('isQuickmatch');
     if (store.auth.isNotLoggedIn) {
       localStorage.setItem('quickmatch', 'y');
@@ -34,6 +39,17 @@ export default observer( function App(props:Props) {
   } else if (localStorage.getItem('quickmatch')) {
     if (store.auth.isAuthenticated()) {
       // localStorage.removeItem('quickmatch');
+      store.router.push('/quickmatch');
+    }
+  } else if(TimeSerive.isDuringDebate()) {
+    // Feature: faster flow
+    if (store.auth.isNotLoggedIn) {
+      localStorage.setItem('quickmatch', 'y');
+      store.auth.doGuestLogin();
+      return <Loading />;
+    }
+    if (localStorage.getItem('quickmatch') && store.auth.isAuthenticated() && store.isGuest()) {
+      // localStorage.setItem('quickmatch', 'y');
       store.router.push('/quickmatch');
     }
   }

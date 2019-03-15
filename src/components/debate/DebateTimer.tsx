@@ -123,7 +123,7 @@ const renderer = (
   { hours, minutes, seconds, completed }
 ) => {
   
-  const steps = ['Introductions', 'Debate', 'Find an Agreement'];
+  const steps = ['Introductions', 'Ask Questions', 'Find an Agreement'];
   const lastStep = step;
   if (Number(minutes) < 14) {
     step = 1;

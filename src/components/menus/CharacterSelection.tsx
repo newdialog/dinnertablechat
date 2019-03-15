@@ -140,7 +140,7 @@ export default function CharacterSelector(props: Props) {
     setLandscape();
     props.store.debate.setCharacter(item.value);
     // TODO for now skip topic selection
-    props.store.debate.setPosition(100, TopicInfo.getTopics(t)[0].id);
+    // props.store.debate.setPosition(100, TopicInfo.getTopics(t)[0].id);
   };
 
   const contrib = defaultContributions;

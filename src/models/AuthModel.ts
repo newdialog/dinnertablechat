@@ -9,7 +9,7 @@ const UserModel = types
     name: types.string,
     id: types.string,
     guestSeed: types.string,
-    numDebates: types.number,
+    numDebates: types.number
     // credits: types.integer,
     // karma: types.maybe(types.integer),
     // token: types.string,
@@ -18,8 +18,8 @@ const UserModel = types
   .actions(self => ({
     updateNumDebates(num: number) {
       self.numDebates = num;
-    },
-}));
+    }
+  }));
 
 // TODO: remove?
 const AWSModel = types.model({
@@ -53,6 +53,10 @@ const AuthModel = types
       self.aws = undefined;
       self.user = undefined;
       // self.isNotLoggedIn = true;
+    },
+    guestSignup() {
+      localStorage.setItem('signup', 'y');
+      (self as any).logout();
     },
     notLoggedIn() {
       self.isNotLoggedIn = true;

@@ -76,7 +76,7 @@ export default observer(function ButtonAppBar(props:Props) {
           
           {isDashboard && <UserStats store={store}/>}
 
-          {!auth && showAuth &&
+          {!auth && showAuth && !isDashboard && 
             <Button variant="outlined" color="secondary" className={classes.btn} onClick={ () => onLogin(store) }>Login</Button>
           }
           {auth && !isDashboard && 
