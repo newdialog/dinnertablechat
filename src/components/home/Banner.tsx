@@ -161,9 +161,8 @@ export default function HomeBanner(props:Props) {
 
   // const { store } = props;
   const auth = store.auth.isAuthenticated();
-  const isLive = store.isLive();
 
-  const isOpen = Times.isDuringDebate(); // store.dailyOpen; // !isLive ||  Times.isDuringDebate();
+  const isOpen = Times.isDuringDebate(store.isLive()); // store.dailyOpen; // !isLive ||  Times.isDuringDebate();
   // console.log('isOpen', isOpen);
 
   return (

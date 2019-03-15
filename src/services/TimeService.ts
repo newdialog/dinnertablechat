@@ -17,7 +17,10 @@ export function isAfterEndTime() {
     .isAfter(_getDebateEnd());
 }
 
-export function isDuringDebate() {
+export function isDuringDebate(isLive?: boolean) {
+  if (!isLive) {
+    return true;
+  }
   const m = moment().utc();
   return (
     m.isBetween(todaysStart(), todaysEnd()) ||

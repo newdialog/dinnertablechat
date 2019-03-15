@@ -45,14 +45,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     letterSpacing: '-0.02em'
   }
 }));
-const debateOpen = Times.isDuringDebate();
+
 interface Props {}
 interface State {}
-
 export default function UserHome(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
+  const debateOpen = Times.isDuringDebate(store.isLive());
 
   // Auth guard
   if (store.auth.isNotLoggedIn) store.router.push('/');
@@ -76,7 +76,7 @@ export default function UserHome(props: Props) {
             justify="space-around"
             alignItems="center"
           >
-            {(debateOpen || !store.isLive()) && (
+            {(debateOpen) && (
               <Grid item xs={12}>
                 <Button
                   variant="contained"

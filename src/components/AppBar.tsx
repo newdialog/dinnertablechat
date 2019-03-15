@@ -52,7 +52,6 @@ export default observer(function ButtonAppBar(props: Props) {
   const classes = useStyles({});
   const store = props.store;
   const auth = store.auth.isAuthenticated();
-  const isLive = props.store.isLive();
 
   const path = (store.router.location as any).pathname;
   const isDashboard = path === '/home' || path === '/quickmatch';

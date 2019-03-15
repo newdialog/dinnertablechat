@@ -202,3 +202,17 @@ export default function Home() {
     </React.Fragment>
   );
 }
+/*
+<div style={{ marginTop: '3em' }}>
+            <a
+              href="https://goo.gl/forms/KaZBtAxKRs2M1dY62"
+              onClick={window.trackOutboundLinkClick(
+                'https://goo.gl/forms/KaZBtAxKRs2M1dY62'
+              )}
+              className="minorlink"
+              style={{ textDecoration: 'none' }}
+            >
+              <Announcement /> help us out by taking a quick poll
+            </a>
+          </div>
+*/

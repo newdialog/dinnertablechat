@@ -45,7 +45,7 @@ const renderer = (
   isDuringDebate: boolean,
   { days, hours, minutes, seconds, completed }
 ) => {
-  isDuringDebate = Times.isDuringDebate();
+  isDuringDebate = Times.isDuringDebate(store.isLive());
   if (completed) {
 
       
@@ -97,7 +97,7 @@ function DailyEndTimer(props) {
   const { onCompleted } = props;
   const store = props.store;
 
-  const isDuringDebate = Times.isDuringDebate();
+  const isDuringDebate = Times.isDuringDebate(store.isLive());
   const endTime = isDuringDebate ? Times.getDebateEnd().getTime() : Times.getDebateStart().getTime();
 
   return (
