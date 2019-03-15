@@ -77,7 +77,7 @@ interface Props {
 }
 
 function getSteps() {
-  return ['Pick your character', 'Select Postion']; // , 'Set contribution']
+  return ['Pick your character']; //, 'Select Postion']; // , 'Set contribution']
 }
 
 function onHistory(store: AppModel.Type) {

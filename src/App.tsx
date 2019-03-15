@@ -40,9 +40,11 @@ export default observer( function App(props:Props) {
     if (store.auth.isAuthenticated()) {
       // localStorage.removeItem('quickmatch');
       store.router.push('/quickmatch');
+      localStorage.removeItem('quickmatch')
     }
-  } else if(TimeSerive.isDuringDebate()) {
-    // Feature: faster flow
+  } 
+  // Feature: faster flow
+  else if(TimeSerive.isDuringDebate(store.isLive())) {
     if (store.auth.isNotLoggedIn) {
       localStorage.setItem('quickmatch', 'y');
       store.auth.doGuestLogin();
@@ -50,7 +52,7 @@ export default observer( function App(props:Props) {
     }
     if (localStorage.getItem('quickmatch') && store.auth.isAuthenticated() && store.isGuest()) {
       // localStorage.setItem('quickmatch', 'y');
-      store.router.push('/quickmatch');
+      store.router.push('/tutorial');
     }
   }
   return (
