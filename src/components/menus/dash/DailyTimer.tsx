@@ -59,15 +59,6 @@ const renderer = (
     // Render a completed state
     return <Completionist store={store} />;
   } else {
-    const steps = ['Introductions', 'Debate', 'Find an Agreement'];
-
-    let step = 0;
-    if (Number(minutes) < 14) {
-      step = 1;
-    }
-    if (Number(minutes) < 5) {
-      step = 2;
-    }
 
     const label = isDuringDebate ? 'Daily event ending in' : 'Daily event starts in';
     return (
@@ -86,7 +77,11 @@ const renderer = (
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
         </Typography>
 
-        <br />
+        <a 
+        style={{ textDecoration: 'underline' }}
+        onClick={trackOutboundLinkClick(
+                'https://www.facebook.com/events/522239821514316/'
+              )} href='https://www.facebook.com/events/522239821514316/'>Add to Facebook Calendar</a>
         
       </div>
     );

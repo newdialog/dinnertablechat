@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-const hourOpen = 20;
+const hourOpen = 19;
 const minOpen = 0;
 
 const dur = moment.duration(10, 'hours').add(0, 'minutes');
