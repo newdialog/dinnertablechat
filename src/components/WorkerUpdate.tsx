@@ -1,4 +1,11 @@
-import React, { useRef, useState, useEffect, useMemo, useContext, ReactNode } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useMemo,
+  useContext,
+  ReactNode
+} from 'react';
 
 import * as Store from '../models/AppModel';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
@@ -80,11 +87,12 @@ interface State {
   init?: boolean;
   disableRefresh: boolean;
   showReload?: boolean;
-  registration?:ServiceWorkerRegistration;
+  registration?: ServiceWorkerRegistration;
 }
 
 //
-var refreshing:boolean = false;
+var refreshing: boolean = false;
+var updating: boolean = false;
 export default function WorkerUpdate(props: Props) {
   // const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
@@ -95,29 +103,31 @@ export default function WorkerUpdate(props: Props) {
   });
 
   const onSuccess = (registration: ServiceWorkerRegistration) => {
-    if (registration) setState(p=>({...p, registration}));
+    if (registration) setState(p => ({ ...p, registration }));
     console.log('+worker onSuccess');
   };
 
   const onReg = (registration: ServiceWorkerRegistration) => {
-    setState(p=>({...p, registration}));
+    setState(p => ({ ...p, registration }));
+    if(registration.waiting) onUpdate(registration);
     // console.log('+worker onReg');
     // #2
   };
 
   const onUpdate = (registration: ServiceWorkerRegistration) => {
+    if(updating) return;
+    updating = true;
     console.log('+worker onUpdate');
-    if (registration) setState(p=>({...p, registration}));
+    if (registration) setState(p => ({ ...p, registration }));
 
     // TODO: this might be a problem with initialization
     setTimeout(() => {
-     setState(p => ({...p, showReload: true })); // , registration: registration
-    }, 1001);
+      // if (registration && registration!.waiting)
+      //  registration!.waiting.postMessage('skipWaiting');
+      setState(p => ({ ...p, showReload: true })); // , registration: registration
+    }, 300);
 
-    if (registration && registration!.waiting) {
-      registration!.waiting.postMessage('skipWaiting');
-    }
-    // setTimeout(() => { onRefreshClick(null); }, 100);
+    if(registration.waiting) setTimeout(() => { refresh(registration); }, 1200);
   };
 
   useEffect(() => {
@@ -126,24 +136,34 @@ export default function WorkerUpdate(props: Props) {
       navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (refreshing) return;
         refreshing = true; // preventDevToolsReloadLoop
-        window.location.reload(true); // true
+        // window.location.reload(true); // true
+        setTimeout(()=>window.location.reload(true), 300);
         console.log('worker reloading..');
       });
     }
     // serviceWorker.unregister();
   }, []);
 
-  const onRefreshClick = e => {
-    // var r = confirm('New dinnertable update available!');
-    if (state.registration && state.registration!.waiting) {
-      state.registration!.waiting.postMessage('skipWaiting');
-    }
-    else alert('no registration waiting');
-    setState(p => ({...p, disableRefresh: true }));
+  const refresh = (registration:ServiceWorkerRegistration) => {
+    updating = true;
+    if (registration && registration!.waiting) {
+      registration!.waiting.postMessage('skipWaiting');
+    } // else alert('no registration waiting');
+    
     // failsafe
-    setTimeout(() => bust(), 3000);
-    setTimeout(() => window.location.reload(true), 4000);
+    // setTimeout(() => bust(), 3000);
+    bust();
+    // setTimeout(() => window.location.reload(true), 4000);
     console.log('worker update click');
+    if (refreshing) return;
+    refreshing = true;
+    setTimeout(()=>window.location.reload(true), 300);
+  }
+
+  const onRefreshClick = (e:any) => {
+    setState(p => ({ ...p, disableRefresh: true }));
+    // var r = confirm('New dinnertable update available!');
+    refresh(state.registration!);
   };
 
   // Ensure not in a match
@@ -158,10 +178,7 @@ export default function WorkerUpdate(props: Props) {
         }}
       >
         <div className={classes.bannerAnim}>
-          <Lottie
-            options={bgOptions}
-            isClickToPauseDisabled={true}
-          />
+          <Lottie options={bgOptions} isClickToPauseDisabled={true} />
         </div>
         <div className={classes.bannerAnimOverlay} />
         <div className={classes.centeredDown}>

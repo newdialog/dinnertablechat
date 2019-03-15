@@ -74,6 +74,12 @@ function registerValidSW(swUrl: string, config?: Config) {
           return;
         }
         installingWorker.addEventListener('statechange', () => {
+          // JD patch
+          if (registration.waiting) {
+            if (config && config.onUpdate) {
+              config.onUpdate(registration);
+            }
+          } // ------
           if (installingWorker.state === 'installed') {
             if (navigator.serviceWorker.controller) {
               const pushState = window.history.pushState;

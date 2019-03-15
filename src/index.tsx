@@ -29,7 +29,7 @@ const store = AppModel.create(routerModel, fetcher);
 // if(!store.isLive())
 connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting, prob bundled anyway
 
-console.log('v1.2.38');
+console.log('v1.2.55');
 
 ReactDOM.render(
   <Suspense fallback={LoadingMsg()}>
