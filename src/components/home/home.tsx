@@ -164,18 +164,6 @@ export default function Home() {
               <Subscribe />
             </Grid>
           </Grid>
-          <div style={{ marginTop: '3em' }}>
-            <a
-              href="https://goo.gl/forms/KaZBtAxKRs2M1dY62"
-              onClick={window.trackOutboundLinkClick(
-                'https://goo.gl/forms/KaZBtAxKRs2M1dY62'
-              )}
-              className="minorlink"
-              style={{ textDecoration: 'none' }}
-            >
-              <Announcement /> help us out by taking a quick poll
-            </a>
-          </div>
           <br />
           <Typography variant="body1" style={{ marginTop: '1em' }}>
             Also follow us on{' '}
