@@ -165,6 +165,12 @@ export default function GettingStarted(props: Props) {
   useEffect( () => {
     // TODO, do not apply to guests store.isGuest()
     if(localStorage.getItem('tutorialDone')==='y') routeToPlay();
+    else {
+      window.gtag('event', 'tutorial_started', {
+        event_category: 'splash',
+        guest: store.isGuest()
+      });
+    }
   }, []);
 
   const handleStepChange = activeStep => {
