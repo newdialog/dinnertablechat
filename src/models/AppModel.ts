@@ -92,7 +92,7 @@ const AppModel = types
         self.router.push('/quickmatch');
       } else if (self.isStandalone()) self.router.push('/home');
       else if (self.isGuest()) {
-        self.router.push('/tutorial');
+        self.router.push('/quickmatch');
       } else self.router.push('/tutorial');
       /* else if (
         localStorage.getItem('quickmatch') &&

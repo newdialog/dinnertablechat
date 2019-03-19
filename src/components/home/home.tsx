@@ -115,7 +115,7 @@ export default function Home() {
  
   useEffect(() => {
     const fp = (window as any).FloatingPrompt;
-    if (fp)
+    /* if (fp)
       fp({
         width: '300px',
         text:
@@ -123,7 +123,7 @@ export default function Home() {
         saveInCookies: true,
         name: 'DTC',
         url: 'https://www.producthunt.com/posts/dinnertable-chat-3'
-      });
+      }); */
   }, []);
 
   // const { classes, store } = this.props;
