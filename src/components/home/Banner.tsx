@@ -189,7 +189,10 @@ export default function HomeBanner(props:Props) {
             style={{ textShadow: '2px 2px #777755', color: '#ffffff' }}
           >
             <Reveal effect="fadeIn" duration={3500}>
-              {t('home-banner-title1')}
+              {
+                //t('home-banner-title1')
+              }
+              Isn't it time we talk?
             </Reveal>
           </Typography>
           <Typography
@@ -204,7 +207,7 @@ export default function HomeBanner(props:Props) {
           >
             <Reveal effect="fadeIn" duration={5500}>
               {true || !isOpen ? (
-                <>get matched for a live chat to find common ground</>
+                <>get matched with people with different views</>
               ) : (
                 <span style={{ fontSize: '110%' }}>
                   matchmaking event is <b>online</b> and ready to join

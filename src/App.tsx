@@ -52,7 +52,8 @@ export default observer( function App(props:Props) {
     }
     if (localStorage.getItem('quickmatch') && store.auth.isAuthenticated() && store.isGuest()) {
       // localStorage.setItem('quickmatch', 'y');
-      store.router.push('/tutorial');
+      // store.router.push('/tutorial');
+      store.router.push('/quickmatch'); // just do it
     }
   }
   return (

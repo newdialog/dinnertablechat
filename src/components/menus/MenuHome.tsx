@@ -20,6 +20,7 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 import AppFloatMenu from './dash/AppFloatMenu';
+import MicPermissionsBtn from './MicPermissionsBtn';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
@@ -49,6 +50,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: '0 auto',
     padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 0}px`
   },
+  micButton: {
+    maxWidth: 600,
+    textAlign: 'center',
+    margin: '0 auto',
+    padding: `0px 0 0px`
+  },
   stepper: {
     padding: theme.spacing.unit * 0
   },
@@ -77,7 +84,7 @@ interface Props {
 }
 
 function getSteps() {
-  return ['Pick your character']; //, 'Select Postion']; // , 'Set contribution']
+  return ['Pick your character to start']; //, 'Select Postion']; // , 'Set contribution']
 }
 
 function onHistory(store: AppModel.Type) {
@@ -91,7 +98,7 @@ function getStepContent(step: number, store: AppModel.Type) {
     case 1:
       return <PositionSelector store={store} />;
     case 2:
-      return null // <ContributionSelector store={store} />;
+      return null; // <ContributionSelector store={store} />;
     default:
       return (
         <Typography>
@@ -159,41 +166,64 @@ export default observer(function MenuHome(props: Props) {
 
   // if(store.debate.position !== -1 && store.debate.contribution !== -1) step = 2;
   // if(store.debate.character !== -1) step = 3;
-  if (step === 3) store.router.push('/match');
+  if (step === 3 && store.micAllowed) store.router.push('/match');
   // console.log('step', step)
   const steps = getSteps();
 
   return (
     <div className={classes.pagebody}>
       <main className={classes.container}>
-        
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             {props.isTest && <h2>TEST MODE (/test)</h2>}
             <Typography
-              style={{ fontSize: '2.5em', paddingBottom: '0', color: '#ffffff' }}
+              style={{
+                fontSize: '2.5em',
+                paddingBottom: '0',
+                color: '#ffffff'
+              }}
+              variant="h3"
+              align="center"
+              color="textSecondary"
+            >
+              Quickmatch
+            </Typography>
+            <Typography
+              style={{ fontSize: '1em', paddingBottom: '0', color: '#ffffff' }}
               variant="h3"
               align="center"
               color="textSecondary"
               gutterBottom
             >
-              Debate Quickmatch
+              Get matched with people with different opinions and talk with
+              them!
             </Typography>
-            { store.isGuest() &&
-            <Button variant="contained" color="secondary" onClick={ () => store.router.push('/') } style={{lineHeight:'1.4em', backgroundColor:'#93cad2', marginRight:'12px'}}>
-                  About Us
-            </Button> }
+            {store.isGuest() && (
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => store.router.push('/')}
+                style={{
+                  lineHeight: '1.4em',
+                  backgroundColor: '#93cad2',
+                  marginRight: '12px'
+                }}
+              >
+                About Us
+              </Button>
+            )}
             <Button
               // className={classes.linkhome}
               // color="secondary"
               // style={{backgroundColor:'#a3a3a3'}}
-              style={{lineHeight:'1.4em', backgroundColor:'#93cad2'}}
-              variant="contained" color="secondary"
+              style={{ lineHeight: '1.4em', backgroundColor: '#93cad2' }}
+              variant="contained"
+              color="secondary"
               onClick={() => onHistory(store)}
             >
               Profile History and Awards
-        </Button>
+            </Button>
           </div>
         </div>
         {/* End hero unit */}
@@ -218,23 +248,11 @@ export default observer(function MenuHome(props: Props) {
               );
             })}
           </Stepper>
-          {step > steps.length && (
-            <Paper square elevation={0} className={classes.resetContainer}>
-              <Typography>
-                All steps completed - you&quot;re about to enter the queue for{' '}
-                {store.debate.topic}!
-              </Typography>
-              <Button
-                color="secondary"
-                onClick={handleReset}
-                className={classes.button}
-              >
-                Reset
-              </Button>
-            </Paper>
-          )}
+          
         </div>
-
+        <div className={classes.micButton}>
+          <MicPermissionsBtn store={store}/>
+        </div>
         <AppFloatMenu />
       </main>
     </div>

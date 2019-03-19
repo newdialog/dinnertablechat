@@ -12,7 +12,8 @@ const AppModel = types
     router: RouterModel,
     showNav: true,
     _isStandalone: false,
-    dailyOpen: false // only use for invalidation
+    dailyOpen: false, // only use for invalidation
+    micAllowed: false
   })
   .views(self => ({
     /* isDailyOpen() {
@@ -35,9 +36,6 @@ const AppModel = types
         self.auth.user && self.auth.user!.id === 'Google_111841421166386376573'
       );
     },
-    setStandalone() {
-      self._isStandalone = true;
-    },
     isStandalone() {
       if (self._isStandalone) return true;
       // return true;
@@ -58,6 +56,12 @@ const AppModel = types
     }
   }))
   .actions(self => ({
+    setMicAllowed(isEnabled: boolean) {
+      self.micAllowed = isEnabled;
+    },
+    setStandalone() {
+      self._isStandalone = true;
+    },
     setDailyOpen(open: boolean) {
       self.dailyOpen = open;
     },

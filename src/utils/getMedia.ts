@@ -2,6 +2,7 @@ export default async function getMedia(
   options: any = { video: false, audio: true },
   timeoutMs: number = 35000
 ): Promise<MediaStream> {
+  if (!options) options = { video: false, audio: true };
   return new Promise<MediaStream>((resolve, reject) => {
     // Timeout system
     const timeoutId = setTimeout(() => {
