@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   btn: {
+    marginLeft: '1.5em'
     // color: theme.palette.secondary.main
   },
   cardGrid: {
@@ -43,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     // width:'auto!important'
   },
   cardMedia: {
-    paddingTop: '44.25%' // 16:9
+    /// paddingTop: '44.25%' // 16:9
   },
   cardContent: {
     flexGrow: 1
@@ -78,7 +79,7 @@ export default function PositionSelector(props: Props) {
             <Card className={classes.card}>
               <CardMedia
                 className={classes.cardMedia}
-                image={card.photo}
+                // image={card.photo}
                 title={card.topic}
               />
               <CardContent className={classes.cardContent}>
