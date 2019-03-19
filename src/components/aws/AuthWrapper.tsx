@@ -22,6 +22,7 @@ interface State {
 
 //
 function AuthComp(props: Props) {
+  const store = props.store;
   // Auth/Provider/withOAuth.jsx
   const signIn = () => {
     if (!Auth || typeof Auth.configure !== 'function') {
@@ -45,20 +46,26 @@ function AuthComp(props: Props) {
       responseType +
       '&client_id=' +
       (Auth.configure(null) as any).userPoolWebClientId;
+
+    localStorage.removeItem('signup');
     window.location.assign(url);
   };
 
   useEffect(() => {
     // const props: any = props; // required for OAuthSignIn
     // const { init } = state;
+    const path = (store.router.location as any).pathname;
+    const callbackPage = path.indexOf('callback')!==-1;
     if (!init) {
       init = true;
-      AuthService.auth(handleAuth);
+      AuthService.auth(handleAuth, callbackPage);
     }
   }, []);
 
   const handleAuth = (awsUser: AuthService.AwsAuth | null) => {
     const s = props.store;
+    if(s.auth.user) return;
+
     if (!awsUser) {
       console.log('+not logged in');
       // if(props.store.isStandalone()) signIn(); // MOBILE
@@ -67,29 +74,22 @@ function AuthComp(props: Props) {
       // AuthService.guestLogin();
       return;
     }
-    console.log('+logged in');
+    console.log('+login, type:', awsUser.event);
     // console.log('handleAuth', awsUser)
     s.auth.authenticated(awsUser);
+    if(awsUser.event === AuthService.LOGIN_EVENT) s.authenticated(true);
+    else s.authenticated(false);
 
     // TODO: cleanup guest login flow
-    if (
-      awsUser.user.email === 'guest@dinnertable.chat' &&
-      s.isGuest() &&
-      awsUser.event === AuthService.LOGIN_EVENT
-    )
-      if (props.store.isStandalone()) s.router.push('/home');
-      else {
-        if (localStorage.getItem('quickmatch')) s.router.push('/quickmatch');
-        else s.router.push('/tutorial');
-      }
+     
     /* if(awsUser.event !== AuthService.LOGIN_EVENT) {
       if(props.store.isStandalone()) props.store.router.push('/home');
     } */
   };
 
   /// console.time('AuthComp');
-
-  if (props.login) {
+  console.log('props.store.auth.doLogin', props.store.auth.doLogin, props.login)
+  if (props.login) { //props.login) {
     // props.OAuthSignIn()
     signIn();
   }

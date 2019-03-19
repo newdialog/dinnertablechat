@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 // import Index from './components/home/home';
 import AppBar from './components/AppBar';
 import AppRouter from './components/Router';
@@ -10,52 +10,52 @@ import Loading from './components/Loading';
 import * as TimeSerive from './services/TimeService';
 
 interface Props {
-  store: import('./models/AppModel').Type,
-  history: any
+  store: import('./models/AppModel').Type;
+  history: any;
 }
-export default observer( function App(props:Props) {
+export default observer(function App(props: Props) {
   (window as any).__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true; // mui
   const store = props.store;
   const history = props.history;
 
-  if(localStorage.getItem('signup') && store.auth.isNotLoggedIn) {
-    localStorage.removeItem('signup');
-    store.auth.login();
-  }
-  // Feature: force quickmatch flow
-  else if (store.isQuickmatch()) {
-    console.log('isQuickmatch');
-    if (store.auth.isNotLoggedIn) {
+  useEffect(() => {
+    // App flow
+    if (
+      store.isStandalone() &&
+      store.auth.isNotLoggedIn &&
+      !localStorage.getItem('quickmatch')
+    ) {
+      store.router.push('/tutorial');
+    }
+    // Auth guest to signup
+    else if (localStorage.getItem('signup')) {
+     if(store.auth.isNotLoggedIn) {
+      console.log('Auth guest to signup');
+      store.auth.login();
+     } else if(!store.isGuest() && !store.auth.isNotLoggedIn) {
+      // console.log('finished Auth guest to signup');
+      // localStorage.removeItem('signup');
+     }
+      // return <Loading />;
+    }
+    // Feature: force quickmatch flow
+    else if (store.isQuickmatch() && store.auth.isNotLoggedIn) {
+      console.log('isQuickmatch');
       localStorage.setItem('quickmatch', 'y');
       store.auth.doGuestLogin();
-      return <Loading />;
+      // return <Loading />;
+      // cant do this as it would cause quickmatch to bug
+      // else if(s.auth.isAuthenticated()) s.router.push('/quickmatch');
     }
-    if (store.auth.isAuthenticated()) {
-      localStorage.setItem('quickmatch', 'y');
-      store.router.push('/quickmatch');
-    }
-    // cant do this as it would cause quickmatch to bug
-    // else if(s.auth.isAuthenticated()) s.router.push('/quickmatch');
-  } else if (localStorage.getItem('quickmatch')) {
-    if (store.auth.isAuthenticated()) {
-      // localStorage.removeItem('quickmatch');
-      store.router.push('/quickmatch');
-      localStorage.removeItem('quickmatch')
-    }
-  } 
-  // Feature: faster flow
-  else if(TimeSerive.isDuringDebate(store.isLive())) {
-    if (store.auth.isNotLoggedIn) {
-      localStorage.setItem('quickmatch', 'y');
-      store.auth.doGuestLogin();
-      return <Loading />;
-    }
-    if (localStorage.getItem('quickmatch') && store.auth.isAuthenticated() && store.isGuest()) {
+    // Feature: faster flow
+    else if (store.auth.isNotLoggedIn && TimeSerive.isDuringDebate(store.isLive())) {
+      console.log('setting quickmatch');
       // localStorage.setItem('quickmatch', 'y');
-      // store.router.push('/tutorial');
-      store.router.push('/quickmatch'); // just do it
+      store.auth.doGuestLogin();
+      //  return <Loading />;
     }
-  }
+  }, [store.auth.isNotLoggedIn, store.auth.user]);
+
   return (
     <WorkerUpdate store={store}>
       <AuthWrapper store={store} login={store.auth.doLogin} />

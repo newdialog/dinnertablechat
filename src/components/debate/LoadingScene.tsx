@@ -349,8 +349,8 @@ export default observer(function LoadingScene(props:Props) {
 
     let text = 'IN QUEUE';
     if (!store.debate.match) text = 'this may take a few minutes!';
-    if (matchedUnsync) text = 'found match... handshaking';
-    if (matchedsync) text = 'handshaking complete';
+    if (matchedUnsync) text = 'match found! Trying to connect...';
+    if (matchedsync) text = 'connected to match!';
 
     if (state.error && !loggedError) {
       window.gtag('event', state.error, {
@@ -410,8 +410,10 @@ export default observer(function LoadingScene(props:Props) {
             }}
           >
             <Reveal effect="fadeIn" duration={1000}>
-              Click "Allow" when the browser asks to enable the microphone.
-              <br />
+              { 
+                // Click "Allow" when the browser asks to enable the microphone.
+                // <br />
+              }
               Share a match invite using the link below!
               <TextField
                 id="standard-name"

@@ -74,7 +74,7 @@ function getLoggger() {
 export const LOGIN_EVENT = 'signIn';
 export const LOGOUT_EVENT = 'signOut';
 
-function onHubCapsule(cb: AwsCB, capsule: any) {
+function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   // getLoggger().onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
@@ -90,17 +90,17 @@ function onHubCapsule(cb: AwsCB, capsule: any) {
   if (payload.event === LOGIN_EVENT || payload.event === 'cognitoHostedUI') {
     console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
-  } else if (payload.event === 'configured') checkUser(cb);
+  } else if (payload.event === 'configured' && !callbackPage) checkUser(cb);
 }
 
-export function auth(cb: AwsCB) {
+export function auth(cb: AwsCB, callbackPage: boolean = false) {
   // console.log('configuring aws');
   const awsmobileInjected = injectConfig(awsmobile);
 
   // Order is important
   Hub.listen(
     'auth',
-    { onHubCapsule: onHubCapsule.bind(null, cb) }
+    { onHubCapsule: onHubCapsule.bind(null, cb, callbackPage) }
     // ,'AuthService'
   );
   Auth.configure(awsmobileInjected);

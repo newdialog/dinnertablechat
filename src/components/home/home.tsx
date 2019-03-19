@@ -128,12 +128,6 @@ export default function Home() {
 
   // const { classes, store } = this.props;
   // TODO, only redirect at login action ( && store.auth.user!.)
-  if (
-    store.isStandalone() &&
-    store.auth.isNotLoggedIn &&
-    !localStorage.getItem('quickmatch')
-  )
-    store.router.push('/tutorial');
 
   return (
     <React.Fragment>

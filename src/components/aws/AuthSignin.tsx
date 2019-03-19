@@ -18,12 +18,9 @@ export default observer(function AuthSignin(props: Props) {
       event_category: 'auth'
     });
 
-    if (localStorage.getItem('quickmatch')) store.router.push('/quickmatch');
-    else if (store.isStandalone()) store.router.push('/home');
-    else store.router.push('/tutorial');
     setRefresh(true);
   }
-
+  
   return (
     <React.Fragment>
       <br />

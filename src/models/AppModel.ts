@@ -80,6 +80,31 @@ const AppModel = types
     login() {
       if (self.isGuest()) self.auth.logout();
       self.auth.login();
+    },
+    // Covers guest login action as well
+    authenticated(signedIn: boolean) {
+      console.log('signedIn');
+      // localStorage.removeItem('signup');
+      // if (!signedIn) return;
+
+      if (localStorage.getItem('quickmatch')) {
+        localStorage.removeItem('quickmatch');
+        self.router.push('/quickmatch');
+      } else if (self.isStandalone()) self.router.push('/home');
+      else if (self.isGuest()) {
+        self.router.push('/tutorial');
+      } else self.router.push('/tutorial');
+      /* else if (
+        localStorage.getItem('quickmatch') &&
+        self.auth.isAuthenticated() &&
+        self.isGuest()
+      ) {
+        // localStorage.setItem('quickmatch', 'y');
+        // store.router.push('/tutorial');
+        self.router.push('/quickmatch'); // just do it
+      }*/
+
+      // (self as any).signedIn();
     }
   }));
 
