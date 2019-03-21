@@ -105,10 +105,10 @@ interface State {
   startedHandshake: boolean;
   // loggedError: boolean;
   // stream?: MediaStream;
-  // unloadFlag: {flag:boolean}
+  unloadFlag: {flag:boolean}
 }
 
-let unloadFlag = { flag: false };
+// let unloadFlag:any = null; // { flag: false };
 let loggedError = false;
 export default observer(function LoadingScene(props:Props) {
   // let startedHandshake = false;
@@ -118,6 +118,7 @@ export default observer(function LoadingScene(props:Props) {
   const { t } = useTranslation();
   const [state, setState] = useState<State>({
     startedHandshake: false,
+    unloadFlag: {flag:false}
     // stream: null
     // loggedError: false,
     // unloadFlag: { flag: false }
@@ -125,7 +126,7 @@ export default observer(function LoadingScene(props:Props) {
   const [stream, setStream] = useState<MediaStream | null>(null);
 
   const onMatched = (match: any) => {
-    if (unloadFlag.flag) return;
+    if (state.unloadFlag.flag) return;
     console.log('onMatched', match);
     // TODO
     if (typeof match === 'string') {
@@ -189,12 +190,17 @@ export default observer(function LoadingScene(props:Props) {
     await getMatch();
   }
 
-  useEffect(()=> {
-    unloadFlag.flag = false; // reset global flags: refactor
+  useEffect(() => {
+    // state.unloadFlag =  { flag: false }; // reset global flags: refactor
     loggedError = false;
     startup();
+  }, []);
 
+  useEffect(() => {
     return () => {
+      if(!state.ticketId) return;
+      // if(state.unloadFlag.flag === false) return;
+      console.warn('UNLOADING', state.unloadFlag);
       window.removeEventListener('beforeunload', onWindowBeforeUnload);
       window.removeEventListener('unload', onWindowUnload.current);
       // unload streams if nav to different page outside of match
@@ -209,7 +215,11 @@ export default observer(function LoadingScene(props:Props) {
         store.debate.match && store.debate.match!.sync;
   
       console.log('componentWillUnmount 1', !hasMatch);
-      unloadFlag.flag = true;
+      // state.unloadFlag.flag = true;
+      setState(p => {
+        p.unloadFlag.flag = true;
+        return {...p};
+      });
       if (!hasMatch) {
         console.log('componentWillUnmount 2', state.ticketId);
         if (state.ticketId) QS.stopMatchmaking(state.ticketId!);
@@ -217,8 +227,30 @@ export default observer(function LoadingScene(props:Props) {
         if (stream)
           stream.getTracks().forEach(track => track.stop());
       }
+      // unloadFlag = null;
     }
-  }, [])
+  }, [state.ticketId]);
+
+  useEffect(() => {
+    console.log('useEffect run-', 'store.debate.match:',!!store.debate.match, 'hasstream:', !!stream, 'startedHandshake:'+state.startedHandshake)
+    if (
+      store.debate.match &&
+      stream &&
+      !state.startedHandshake
+    ) {
+      if (state.unloadFlag.flag) return;
+      // startedHandshake = true;
+      console.log('1startedHandshake')
+      setState(p => ({...p, startedHandshake: true}));
+      doHandshake(stream);
+    }
+
+    
+  }, [store, state.ticketId, stream, state.unloadFlag, store.debate.match]);
+
+  const unload = () => {
+
+  };
 
   const getMatch = async () => {
     const topic = store.debate.topic;
@@ -257,8 +289,12 @@ export default observer(function LoadingScene(props:Props) {
       setState(p => ({...p, error: 'matchtimeout' }));
       return;
     }
-    if (unloadFlag.flag) return;
+   
     // console.log('p => ({...p, ticketId }', p => ({...p, ticketId });
+    if (state.unloadFlag.flag) {
+      if(ticketId) QS.stopMatchmaking(ticketId!);
+      return;
+    }
     setState(p => ({...p, ticketId }));
 
     // ticketIdProp = ticketId;
@@ -266,15 +302,19 @@ export default observer(function LoadingScene(props:Props) {
   }
 
   const onWindowUnload = useRef(async (e: any) => {
-    console.log('onWindowUnload');
+    console.log('onWindowUnload', state.ticketId);
+    // TODO: none of this below really works
     if (state.ticketId) await QS.stopMatchmaking(state.ticketId!); // Simple
+    setState(p => {
+      if (p.ticketId) QS.stopMatchmaking(state.ticketId!);
+      p.unloadFlag.flag = true;
+      return {...p};
+    });
     // return false;
   });
 
-
-
-  const gotMedia = async (_stream: MediaStream) => {
-    console.log('gotMedia, now handshaking');
+  const doHandshake = async (_stream: MediaStream) => {
+    console.log('now handshaking');
     const matchId = store.debate.match!.matchId;
     const isLeader = store.debate.match!.leader;
     const statePlayer= {
@@ -289,27 +329,34 @@ export default observer(function LoadingScene(props:Props) {
         isLeader,
         statePlayer,
         _stream,
-        unloadFlag
+        state.unloadFlag
       );
     } catch (e) {
-      if (unloadFlag.flag) return; // just exit if we already ending
-      unloadFlag.flag = true;
+      if (state.unloadFlag.flag) return; // just exit if we already ending
+      // state.unloadFlag.flag = true;
+      
       const retryError = e.toString().indexOf('retry') !== -1;
       console.warn('handshake error', retryError, e);
       if (retryError) {
         // retrying
         console.warn('retrying!');
-        unloadFlag.flag = false; // allow retry
+        // unloadFlag.flag = false; // allow retry // no need
         // startedHandshake = false;
         setState(p => ({...p, startedHandshake: false})); // maybe not neede?
         store.debate.unMatch();
         await getMatch();
         return;
         // return setState({ error: 'handshake_timeout' });
-      } else return setState(p => ({...p, error: 'handshake_error' }));
+      } else {
+        setState(p => {
+          p.unloadFlag.flag = true;
+          return {...p};
+        });
+        return setState(p => ({...p, error: 'handshake_error' }));
+      }
     } finally {
-      if (unloadFlag.flag) {
-        console.log('gotMedia stopping due to flag');
+      if (state.unloadFlag.flag) {
+        console.log('handshaking stopping due to flag');
         return;
       }
     }
@@ -325,24 +372,6 @@ export default observer(function LoadingScene(props:Props) {
       });
     store.debate.syncMatch();
   };
-
-  
-  useEffect(() => {
-    // Get Mic right away
-    if (unloadFlag.flag) return;
-    console.log('0startedHandshake', 'store.debate.match:',!!store.debate.match, 'hasstream:', !!stream, 'startedHandshake:'+state.startedHandshake)
-    if (
-      store.debate.match &&
-      stream &&
-      !state.startedHandshake
-    ) {
-      // startedHandshake = true;
-      console.log('1startedHandshake')
-      setState(p => ({...p, startedHandshake: true}));
-      gotMedia(stream);
-    }
-  }, [store, store.debate.match, state]); // , [store]
-
 
     const matchedUnsync = store.debate.match && !store.debate.match!.sync;
     const matchedsync = store.debate.match && store.debate.match!.sync;

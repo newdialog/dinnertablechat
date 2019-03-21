@@ -77,11 +77,6 @@ export default function PositionSelector(props: Props) {
         {data.map((card, i) => (
           <Grid key={i} sm={10} md={10} lg={10} item>
             <Card className={classes.card}>
-              <CardMedia
-                className={classes.cardMedia}
-                // image={card.photo}
-                title={card.topic}
-              />
               <CardContent className={classes.cardContent}>
                 <Typography gutterBottom variant="h5" component="h2">
                   {card.topic}
@@ -118,3 +113,11 @@ export default function PositionSelector(props: Props) {
     </div>
   );
 }
+
+/*
+<CardMedia
+className={classes.cardMedia}
+// image={card.photo}
+title={card.topic}
+/>
+*/

@@ -74,8 +74,8 @@ function AuthComp(props: Props) {
       // AuthService.guestLogin();
       return;
     }
-    console.log('+login, type:', awsUser.event);
-    // console.log('handleAuth', awsUser)
+    // console.log('+login, type:', awsUser.event);
+
     s.auth.authenticated(awsUser);
     if(awsUser.event === AuthService.LOGIN_EVENT) s.authenticated(true);
     else s.authenticated(false);
@@ -87,8 +87,7 @@ function AuthComp(props: Props) {
     } */
   };
 
-  /// console.time('AuthComp');
-  console.log('props.store.auth.doLogin', props.store.auth.doLogin, props.login)
+  // console.log('props.store.auth.doLogin', props.store.auth.doLogin, props.login)
   if (props.login) { //props.login) {
     // props.OAuthSignIn()
     signIn();
