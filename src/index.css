@@ -5,6 +5,10 @@ body {
   color: #616161;
 }
 
+html {
+  scroll-behavior: smooth
+}
+
 .pagebody {
   margin: 0 auto 0 auto;
   width: auto;

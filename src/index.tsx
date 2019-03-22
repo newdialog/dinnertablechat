@@ -8,7 +8,7 @@ import App from './App';
 import * as AppModel from './models/AppModel';
 
 import { connectReduxDevtools } from 'mst-middlewares';
-import createBrowserHistory from 'history/createBrowserHistory';
+import {createBrowserHistory} from 'history';
 import { RouterModel, syncHistoryWithStore } from 'mst-react-router';
 
 import { StylesProvider, ThemeProvider } from '@material-ui/styles';

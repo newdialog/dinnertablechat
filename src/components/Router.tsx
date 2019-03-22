@@ -17,6 +17,9 @@ const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
 const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
+// https://news.ycombinator.com/item?id=19449279
+// const scrollToTop = () => document.getElementById('root').scrollIntoView();
+
 const NoMatch = ({ location }) => (
   <div>
     <h1>...</h1>
