@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import * as AppModel from '../../models/AppModel';
 import PositionSelector from './PositionSelector';
-
+import StepButton from '@material-ui/core/StepButton';
 import CharacterSelection from './CharacterSelection';
 import Footer from '../home/Footer';
 import HistoryIcon from '@material-ui/icons/History';
@@ -45,7 +45,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     // backgroundColor: theme.palette.background.paper,
   },
   heroContent: {
-    maxWidth: 600,
+    maxWidth: 800,
     textAlign: 'center',
     margin: '0 auto',
     padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 0}px`
@@ -76,7 +76,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   linkhome: {
     color: theme.palette.primary.dark
-  }
+  },
+  stepLabel: {
+    fontSize: '1.1em !important',
+    color: '#ffffff !important',
+    fontWeight: 'bold'
+  },
 }));
 
 interface Props {
@@ -109,6 +114,7 @@ function getStepContent(step: number, store: AppModel.Type) {
 }
 
 const renderStepButtons = (activeStep, classes, handleBack) => {
+  return null;
   return (
     <div className={classes.actionsContainer}>
       <Button
@@ -170,6 +176,10 @@ export default observer(function MenuHome(props: Props) {
   // console.log('step', step)
   const steps = getSteps();
 
+  const handleStep = step => () => {
+    store.debate.resetQueue();
+  };
+
   return (
     <div className={classes.pagebody}>
       <main className={classes.container}>
@@ -190,7 +200,7 @@ export default observer(function MenuHome(props: Props) {
               Quickmatch
             </Typography>
             <Typography
-              style={{ fontSize: '1em', paddingBottom: '0', color: '#ffffff' }}
+              style={{ fontSize: '1.2em', paddingBottom: '0', color: '#ffffff' }}
               variant="h3"
               align="center"
               color="textSecondary"
@@ -237,7 +247,12 @@ export default observer(function MenuHome(props: Props) {
             {steps.map((label, index) => {
               return (
                 <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
+                  <StepButton
+                    className={classes.stepLabel}
+                    onClick={handleStep(index)}
+                  >
+                    {label}
+                  </StepButton>
                   <StepContent>
                     {getStepContent(index, store)}
                     {step === 0
@@ -248,10 +263,9 @@ export default observer(function MenuHome(props: Props) {
               );
             })}
           </Stepper>
-          
         </div>
         <div className={classes.micButton}>
-          <MicPermissionsBtn store={store}/>
+          <MicPermissionsBtn store={store} />
         </div>
         <AppFloatMenu />
       </main>

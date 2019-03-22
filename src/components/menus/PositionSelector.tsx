@@ -98,15 +98,6 @@ export default function PositionSelector(props: Props) {
                 ))}
               </CardActions>
             </Card>
-            <Typography variant="caption">
-              <a
-                href="https://goo.gl/forms/TA1urn48JVhtpsO13"
-                className={classes.imgLink}
-                target="_blank"
-              >
-                Suggest a topic for next week ⬏
-              </a>
-            </Typography>
           </Grid>
         ))}
       </Grid>
