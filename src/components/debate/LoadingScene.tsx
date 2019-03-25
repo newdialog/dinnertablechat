@@ -185,8 +185,6 @@ export default observer(function LoadingScene(props:Props) {
       return; // do not continue to queue on error;
     }
 
-    window.addEventListener('beforeunload', onWindowBeforeUnload);
-    window.addEventListener('unload', onWindowUnload.current);
     await getMatch();
   }
 
@@ -197,12 +195,15 @@ export default observer(function LoadingScene(props:Props) {
   }, []);
 
   useEffect(() => {
+    window.addEventListener('beforeunload', onWindowBeforeUnload);
+    window.addEventListener('unload', onWindowUnload.current);
     return () => {
-      if(!state.ticketId) return;
-      // if(state.unloadFlag.flag === false) return;
-      console.warn('UNLOADING', state.unloadFlag);
       window.removeEventListener('beforeunload', onWindowBeforeUnload);
       window.removeEventListener('unload', onWindowUnload.current);
+
+      if(!state.ticketId) return;
+      // if(state.unloadFlag.flag === false) return;
+      // console.warn('UNLOADING', state.unloadFlag);
       // unload streams if nav to different page outside of match
       // console.log('store.router', JSON.stringify(store.router));
   
@@ -214,14 +215,14 @@ export default observer(function LoadingScene(props:Props) {
       const hasMatch =
         store.debate.match && store.debate.match!.sync;
   
-      console.log('componentWillUnmount 1', !hasMatch);
+      console.log('UNLOADING 1', !hasMatch);
       // state.unloadFlag.flag = true;
-      setState(p => {
+      /* setState(p => {
         p.unloadFlag.flag = true;
         return {...p};
-      });
+      });*/
       if (!hasMatch) {
-        console.log('componentWillUnmount 2', state.ticketId);
+        console.log('UNLOADING 2', state.ticketId);
         if (state.ticketId) QS.stopMatchmaking(state.ticketId!);
         store.showNavbar();
         if (stream)

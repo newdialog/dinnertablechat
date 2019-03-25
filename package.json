@@ -16,7 +16,7 @@
     "@material-ui/styles": "^3.0.0-alpha.10",
     "async-retry": "^1.2.3",
     "aws-amplify-react": "^2.3.2",
-    "aws-sdk": "^2.427.0",
+    "aws-sdk": "^2.428.0",
     "backoff-rxjs": "^6.3.2",
     "env-cmd": "^8.0.2",
     "formik": "^1.5.1",
@@ -44,7 +44,7 @@
     "react-fps-stats": "^0.1.1",
     "react-helmet": "^5.2.0",
     "react-hooks-lib": "0.0.16",
-    "react-i18next": "^10.5.3",
+    "react-i18next": "^10.6.0",
     "react-lottie": "^1.2.3",
     "react-mailchimp-subscribe": "^2.1.0",
     "react-responsive": "^6.1.1",
@@ -57,7 +57,7 @@
     "remotedev": "^0.2.9",
     "rxjs": "^6.4.0",
     "short-uuid": "^3.1.0",
-    "simple-peer": "^9.2.1",
+    "simple-peer": "^9.3.0",
     "webfontloader": "^1.6.28"
   },
   "scripts": {
@@ -76,7 +76,7 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.11",
-    "@types/node": "^11.11.6",
+    "@types/node": "^11.11.7",
     "@types/react": "^16.8.8",
     "@types/react-dom": "^16.8.3",
     "@types/react-responsive": "^3.0.3",

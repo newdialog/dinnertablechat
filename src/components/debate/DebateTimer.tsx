@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Countdown from 'react-countdown-now';
 import { Typography, withStyles, Button, StepIcon } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
@@ -115,6 +115,7 @@ function track(step:number, store: AppModel.Type) {
   });
 }
 
+const steps = ['Introductions', 'Ask Questions', 'Find an Agreement'];
 // Renderer callback with condition
 let step = 0; // state hack
 const renderer = (
@@ -122,8 +123,6 @@ const renderer = (
   store: AppModel.Type,
   { hours, minutes, seconds, completed }
 ) => {
-  
-  const steps = ['Introductions', 'Ask Questions', 'Find an Agreement'];
   const lastStep = step;
   if (Number(minutes) < 14) {
     step = 1;
@@ -186,12 +185,14 @@ function DebateTimer(props) {
   const classes = useStyles({});
   const { onCompleted } = props;
   const store = props.store;
-  step = 0;
 
+  const [time, setTime] = useState(Date.now() + 1000 * 60 * 16);
+
+  // step = 0;
   return (
     <Countdown
       onComplete={onCompleted}
-      date={Date.now() + 1000 * 60 * 16}
+      date={time}
       renderer={renderer.bind(null, classes, store)}
     />
   );
