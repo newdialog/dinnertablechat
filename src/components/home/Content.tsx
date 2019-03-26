@@ -6,8 +6,7 @@ import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 
-import Lottie from 'react-lottie';
-// import Lottie from 'lottie-react-web';
+import Lottie from '@jadbox/lottie-react-web';
 
 import Reveal from 'react-reveal/Reveal';
 import Flip from 'react-reveal/Flip';

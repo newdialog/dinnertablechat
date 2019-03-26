@@ -90,7 +90,7 @@ export const theme = createMuiTheme({
     fontWeightRegular: 400, // Work Sans
     fontWeightMedium: 600, // Roboto Condensed
     // color: 'white',
-    // useNextVariants: true,
+    useNextVariants: true,
     // suppressDeprecationWarnings: true,
     // Use the system font instead of the default Roboto font.
     body1: {

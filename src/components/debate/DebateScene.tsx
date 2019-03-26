@@ -6,7 +6,7 @@ import {
   Theme
 } from '@material-ui/core/styles';
 
-import Lottie from 'react-lottie';
+import Lottie from '@jadbox/lottie-react-web';
 import { Typography, Divider } from '@material-ui/core';
 import hark, { SpeechEvent } from 'hark';
 import DebateDisplay from './DebateDisplay';

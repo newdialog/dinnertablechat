@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
-import Lottie from 'react-lottie';
+import Lottie from '@jadbox/lottie-react-web';
 import Reveal from 'react-reveal/Reveal';
 
 import ArrowDown from '@material-ui/icons/KeyboardArrowDown';

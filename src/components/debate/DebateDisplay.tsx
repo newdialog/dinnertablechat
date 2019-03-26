@@ -3,7 +3,7 @@ import { Button, Typography } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
 import rottie from 'lottie-web';
-import Lottie from 'lottie-react-web';
+import Lottie from '@jadbox/lottie-react-web';
 // import { Typography, Divider } from '@material-ui/core';
 
 import DebateFloatMenu from './DebateFloatMenu';

@@ -13,7 +13,7 @@ import { Typography } from '@material-ui/core';
 import * as serviceWorker from '../serviceWorker';
 import Button from '@material-ui/core/Button';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
-import Lottie from 'react-lottie';
+import Lottie from '@jadbox/lottie-react-web';
 import * as AppModel from '../models/AppModel';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';

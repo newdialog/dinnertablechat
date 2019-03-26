@@ -7,7 +7,7 @@ import * as shake from '../../services/HandShakeService';
 import { Typography, Card } from '@material-ui/core';
 import Reveal from 'react-reveal/Reveal';
 import getMedia from '../../utils/getMedia';
-import Lottie from 'react-lottie';
+import Lottie from '@jadbox/lottie-react-web';
 import * as AppModel from '../../models/AppModel';
 import DebateError from './DebateError';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
