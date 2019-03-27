@@ -1,4 +1,4 @@
-import React, { useRef, useState, useContext, useEffect } from 'react';
+import React, { useCallback, useRef, useState, useContext, useEffect } from 'react';
 import { Button, Typography } from '@material-ui/core';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 
@@ -184,7 +184,6 @@ interface Props {
 }
 
 interface State {
-  blueTransition: boolean;
   blueState: string;
   redTransition: boolean;
   redState: string;
@@ -205,7 +204,6 @@ export default function DebateScene(props: Props) {
   let [prevBlue, setPrevBlue] = useState<boolean | null>(null);
 
   const [state, setState] = useState({
-    blueTransition: false,
     blueState: 'idle',
     redTransition: false,
     redState: 'idle',
@@ -213,16 +211,15 @@ export default function DebateScene(props: Props) {
     ended: false
   });
 
-  useEffect(()=>{
+  /* useEffect(()=>{
     if(talkingBlue !== prevBlue) {
-      setState(p => ({...p, blueTransition: false}));
+      // setState(p => ({...p, blueTransition: false}));
       setPrevBlue(talkingBlue);
     }
-  }, [talkingBlue]);
+  }, [talkingBlue]);*/
 
-  const blue = useRef<HTMLDivElement>(null);
-  const red = useRef<HTMLDivElement>(null);
   const blueLottieRef = useRef<Lottie>(null);
+  const blueLottieTalkRef = useRef<Lottie>(null);
 
   const bgEl = useRef<Lottie | any>();
   const tableEl = useRef<Lottie | any>();
@@ -255,11 +252,17 @@ export default function DebateScene(props: Props) {
     };
   }, []);
 
-  const onLoopComplete = () => {
-    // console.log('onLoopComplete', props.talkingBlue)
-    // if(props.talkingBlue) setState({ blueTransition: true });
-    setState(p => ({...p, blueState: props.talkingBlue ? 'talking' : 'idle' }));
-  };
+  const onLoopComplete = useCallback(() => {
+    // console.log('blue onLoopComplete', talkingBlue, talkingRed);
+
+    const swap = Math.random() > .5; // state.blueState === 'talking';
+    setState(p => ({...p, blueState: swap ? 'talking' : 'talking' })); // talkingBlue
+  }, [state, state.blueState, talkingBlue]);
+
+  const onLoopCompleteRed = useCallback(() => {
+    const swap = Math.random() > .5; // state.redState === 'talking';
+    setState(p => ({...p, redState: swap ? 'talking' : 'talking' })); // talkingRed
+  }, [state, state.redState, talkingRed]);
 
   const onCompleted = () => {
     console.log('on debate timer complete');
@@ -267,12 +270,12 @@ export default function DebateScene(props: Props) {
     trackDebateTimeEnd();
   };
 
-  const onCharLoaded = x => {
-    const o = blueLottieRef.current!.anim;
+  const onCharLoaded = lref => {
+    const o = lref.current!.anim;
     o.goToAndPlay(24 * 4, true);
   };
 
-  const { blueTransition, bothAgreed, ended } = state;
+  const { bothAgreed, ended } = state;
   const agreed = store.debate.agreed;
 
   const animBlue = state.blueState === 'talking';
@@ -280,6 +283,8 @@ export default function DebateScene(props: Props) {
 
   const blueCss = talkingBlue ? 'talking' : 'idle';
   const redCss = talkingRed ? 'talking' : 'idle';
+
+  // console.log('animBlue', animBlue, talkingBlue)
 
   const redChar = characters[props.redChar];
   const blueChar = characters[props.blueChar];
@@ -311,9 +316,9 @@ export default function DebateScene(props: Props) {
           </div>
           <div className={classes.foreground}>
             <div className={classes.leftPos + ' ' + blueCss}>
-              <div hidden={animBlue} ref={blue}>
+              {<div hidden={animBlue}>
                 <Lottie
-                  speed={1.2}
+                  speed={1.33}
                   ref={blueLottieRef}
                   options={blueChar.listen}
                   isClickToPauseDisabled={true}
@@ -324,34 +329,47 @@ export default function DebateScene(props: Props) {
                     },
                     {
                       eventName: 'DOMLoaded',
-                      callback: onCharLoaded
+                      callback: onCharLoaded.bind(null, blueLottieRef)
                     }
                   ]}
                 />
-              </div>
-              <div hidden={!animBlue}>
+              </div>}
+              {<div hidden={!animBlue}>
                 <Lottie
-                  speed={1.2}
+                  ref={blueLottieTalkRef}
+                  speed={1.33}
                   options={blueChar.talk}
                   isClickToPauseDisabled={true}
+                  eventListeners={[
+                    {
+                      eventName: 'DOMLoaded',
+                      callback: onCharLoaded.bind(null, blueLottieTalkRef)
+                    }
+                  ]}
                 />
-              </div>
+              </div>}
             </div>
             <div className={'flip ' + classes.rightPos + ' ' + redCss}>
-              <div hidden={animRed} ref={red}>
+            {<div hidden={animRed}>
                 <Lottie
-                  speed={1.2}
+                  speed={1.33}
                   options={redChar.listen}
                   isClickToPauseDisabled={true}
+                  eventListeners={[
+                    {
+                      eventName: 'loopComplete',
+                      callback: onLoopCompleteRed
+                    }
+                  ]}
                 />
-              </div>
-              <div hidden={!animRed}>
+              </div>}
+              {<div hidden={!animRed}>
                 <Lottie
-                  speed={1.2}
+                  speed={1.33}
                   options={redChar.talk}
                   isClickToPauseDisabled={true}
                 />
-              </div>
+              </div>}
             </div>
 
             <div className={classes.table}>
