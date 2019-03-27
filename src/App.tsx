@@ -19,6 +19,11 @@ export default observer(function App(props: Props) {
   const history = props.history;
 
   useEffect(() => {
+    const path = (store.router.location as any).pathname;
+    console.log('path', path)
+    const isTest = path === '/test' || path === '/test2';
+    if(isTest) return;
+    
     // App flow
     if (
       store.isStandalone() &&

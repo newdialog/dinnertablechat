@@ -66,7 +66,11 @@ const DTCRouter = ({
           <Route
             exact={true}
             path="/test"
-            render={() => <AsyncPlay isTest={true} />}
+            render={() => {
+              localStorage.setItem('test', 'y');
+              return <AsyncPlay />
+            }
+          }
           />
         )}
 

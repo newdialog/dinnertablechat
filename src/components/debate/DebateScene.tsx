@@ -1,13 +1,8 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import {
-  withStyles,
-  createStyles,
-  WithStyles,
   Theme
 } from '@material-ui/core/styles';
 
-import Lottie from '@jadbox/lottie-react-web';
-import { Typography, Divider } from '@material-ui/core';
 import hark, { SpeechEvent } from 'hark';
 import DebateDisplay from './DebateDisplay';
 import * as AppModel from '../../models/AppModel';
@@ -15,7 +10,7 @@ import PeerService from '../../services/PeerService';
 import DebateError from './DebateError';
 
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {

@@ -138,11 +138,15 @@ export default observer(function MenuHome(props: Props) {
   useEffect(() => localStorage.removeItem('quickmatch'), []);
 
   useEffect(() => {
+    const isTest = !!localStorage.getItem('test');
+    localStorage.removeItem('test');
+
+    if(isTest) console.log('props.isTest', isTest);
     if (!Times.isDuringDebate(store.isLive())) {
       store.router.push('/home');
     }
-    if (Boolean(props.isTest) !== store.debate.isTest) {
-      store.debate.setTest(props.isTest === true);
+    if (isTest !== store.debate.isTest) {
+      store.debate.setTest(isTest);
     }
     handleReset();
 
