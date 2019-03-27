@@ -114,10 +114,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 import * as AppModel from '../../models/AppModel';
 interface Props extends WithStyles {
-  store: AppModel.Type;
+  // store: AppModel.Type;
 }
 
-export default function Privacy({ props: Props }) {
+export default function Privacy(props: Props) {
   const classes = useStyles({});
   return (
     <React.Fragment>

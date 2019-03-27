@@ -75,10 +75,10 @@ import * as AppModel from '../../models/AppModel';
 import Footer from '../home/Footer';
 interface Props {
   // extends WithStyles<typeof styles> {
-  store: AppModel.Type;
+  // store: AppModel.Type;
 }
 
-export default function MediaKit({ props: Props }) {
+export default function MediaKit(props: Props) {
   const classes = useStyles({});
 
   const imgs = [

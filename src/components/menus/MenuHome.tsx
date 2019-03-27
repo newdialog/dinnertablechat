@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing.unit * 3
   },
   footer: {
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#1b6f7b',
     padding: theme.spacing.unit * 6
   },
   linkhome: {
@@ -271,8 +271,10 @@ export default observer(function MenuHome(props: Props) {
         <div className={classes.micButton}>
           <MicPermissionsBtn store={store} />
         </div>
-        <AppFloatMenu />
+        
       </main>
+      <Footer className={classes.footer}/>
+      <AppFloatMenu />
     </div>
   );
 });

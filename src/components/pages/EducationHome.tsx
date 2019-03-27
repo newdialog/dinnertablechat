@@ -29,10 +29,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 import * as AppModel from '../../models/AppModel';
 import Footer from '../home/Footer';
 interface Props {
-  store: AppModel.Type;
+  // store: AppModel.Type;
 }
 
-export default function EducationHome({ props: Props }) {
+export default function EducationHome(props: Props) {
   const classes = useStyles({});
 
   const imgs = [

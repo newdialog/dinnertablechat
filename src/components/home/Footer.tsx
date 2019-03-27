@@ -32,17 +32,19 @@ const useStyles = makeStyles((theme: any) => ({
   }));
 
 interface Props {
+  className?: string;
   forceShow?: boolean;
 }
 
 export default function Footer(props: Props) {
   const classes = useStyles({});
   const store = useContext(AppModel.Context)!;
+  const cn = props.className || '';
 
   if (!props.forceShow && store.isStandalone()) return null;
 
   return (
-    <footer className={classes.centered}>
+    <footer className={classes.centered + ' ' + cn}>
       <section id="social_icon_footer">
         <div className="container">
           <div className="text-center center-block">
@@ -101,6 +103,13 @@ export default function Footer(props: Props) {
       <Typography style={{ fontSize: '0.8em', color: 'white' }}>
         <br />
         PAGES:{' '}
+        <a
+          href="/"
+          className={classes.links}
+          style={{ margin: '0 10px 0 10px' }}
+        >
+          About DTC
+        </a>{' | '}
         <a
           href="/press"
           className={classes.links}

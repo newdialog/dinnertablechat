@@ -20,9 +20,12 @@ export default observer(function App(props: Props) {
 
   useEffect(() => {
     const path = (store.router.location as any).pathname;
-    console.log('path', path)
+
     const isTest = path === '/test' || path === '/test2';
     if(isTest) return;
+
+    const isHome = path === '/' || path === '';
+    if(!isHome) return; // j1, not sure if this fixes anything
     
     // App flow
     if (
