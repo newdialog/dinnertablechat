@@ -57,6 +57,10 @@ export default class PeerService extends EventEmitter {
   }
 
   public async init(initiator: boolean, cbs: CallBacks) {
+    if (this._peer) {
+      console.error('peer already init', initiator);
+      return;
+    }
     // Peer = window['SimplePeer'];
     const ice = ((await API.getICE()) as any[]).concat(config.iceServers);
     console.log('ice', ice);
@@ -90,11 +94,18 @@ export default class PeerService extends EventEmitter {
       // this.emit('stream', {data: stream});
     });
 
-    // this._peer.on('data', data => {
-    ///  console.log('got a message from peer: ' + data);
-    // });
+    this._peer.on('data', data => {
+      this.emit('data', data);
+    });
+
+    this._peer.on('close', e => {
+      console.warn('peer closed', e);
+      // emit as error
+      this.emit('error', { data: e, closed: true });
+    });
 
     this._peer.on('error', e => {
+      console.warn('peer failed', e);
       if (e.toString().indexOf('kStable') !== -1) {
         console.warn('kStable error', e);
         return; // ignore kStable
@@ -120,14 +131,7 @@ export default class PeerService extends EventEmitter {
       // check if we haven't been destroyed already
       if (this._peer) {
         this._peer.on('connect', () => {
-          console.log('#2connect: ', this.connected);
-          if (this.connected) return;
-          this.connected = true;
-          resolve();
-        });
-        this._peer.on('data', data => {
-          // todo: remove?
-          console.log('#2got a message from peer: ' + data, this.connected);
+          console.log('peer connected');
           if (this.connected) return;
           this.connected = true;
           resolve();
@@ -169,6 +173,12 @@ export default class PeerService extends EventEmitter {
 
   public onPeerEvent(event: string, cb: any) {
     this._peer.on(event, cb);
+  }
+
+  public send(data: string) {
+    // if(this._peer)
+    this._peer.send(data);
+    // else console.warn('trying to send msg to null peer', data);
   }
 
   public destroy() {

@@ -43,17 +43,25 @@ export default function DebateError(props:Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
 
+  const err = props.error;
+  const errorMsg = errors[err] || ('Misc error: ' + err);
+  const disconnected = err === 'other_disconnected';
+
   const handleClose = () => {
     setState({ open: false });
-    props.store.debate.resetQueue();
+    
+    if(disconnected) {
+      props.store.debate.endMatch();
+      return;
+    }
     // props.store.router.push('/home');
+    // props.store.debate.resetQueue();
     window.location.reload(true);
   };
     
     console.log('props.error', props.error);
 
-    const err = props.error;
-    const errorMsg = errors[err] || ('Misc error: ' + err);
+    
 
     return (
         <Dialog
@@ -62,17 +70,22 @@ export default function DebateError(props:Props) {
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
-          <DialogTitle id="alert-dialog-title">{'Oh no!'}</DialogTitle>
+          <DialogTitle id="alert-dialog-title">
+          {!disconnected && 'Oh no!'}
+          {disconnected && 'Session ended'}
+          </DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
               <i>{errorMsg}</i>
               <br/><br/>
-              Please try again in a few minutes :)
+              {!disconnected && 'Sorry about that, let\'s try again :)'}
+              {disconnected && 'User has left the session, click the button below to continue.'}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} color="secondary" autoFocus>
-              RESTART
+            {!disconnected && 'RESTART'}
+            {disconnected && 'End Match'}
             </Button>
           </DialogActions>
         </Dialog>

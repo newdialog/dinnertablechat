@@ -63,10 +63,10 @@ export default function DebateScene(props:Props) {
       sameSide: props.store.debate.position === props.store.debate.match!.otherState!.position,
       guest: props.store.isGuest()
     });
-    window.gtag('event', `debate_start_${props.store.debate.topic}_${props.store.debate.position}`, {
+    /* window.gtag('event', `debate_start_${props.store.debate.topic}_${props.store.debate.position}`, {
       event_category: 'debate',
       guest: props.store.isGuest()
-    });
+    }); */
     /* navigator.getUserMedia(
     { video: false, audio: true },
     gotMedia.bind(this),
@@ -87,13 +87,11 @@ export default function DebateScene(props:Props) {
     speechSelfEvents.on('speaking', () => {
       // console.log('speaking');
       setState(p => ({...p, talkingBlue: true }));
-      // document.querySelector('#speaking').textContent = 'YES';
     });
 
     speechSelfEvents.on('stopped_speaking', () => {
       // console.log('stopped_speaking');
       setState(p => ({...p, talkingBlue: false }));
-      // document.querySelector('#speaking').textContent = 'NO';
     });
     setState(p => ({...p, speechSelfEvents }));
   }
@@ -110,7 +108,8 @@ export default function DebateScene(props:Props) {
     const p = peer!;
 
     p.on('error', err => {
-      if (err.toString().indexOf('connection failed') !== -1) {
+      console.warn('peer error!', err);
+      if (err.closed || err.toString().indexOf('connection failed') !== -1) {
         setState(p => ({...p, error: 'other_disconnected' }));
       } else {
         setState(p => ({...p, error: 'webrtc_error' }));
@@ -119,7 +118,7 @@ export default function DebateScene(props:Props) {
     });
 
     p.on('data', data => {
-      console.log('data: ' + data);
+      console.log('peer msg data: ' + data);
     });
 
     p.onStream(stream2 => {
@@ -160,8 +159,11 @@ export default function DebateScene(props:Props) {
     console.log('addStream');
   };
 
-
     const { talkingBlue, talkingRed } = state;
+
+    if(talkingBlue) {
+      peer!.send('speaking');
+    }
 
     const blueChar = props.store.debate!.character;
     const redChar = props.store.debate!.match!.otherState!.character;

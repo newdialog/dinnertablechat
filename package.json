@@ -62,8 +62,8 @@
   "scripts": {
     "postinstall": "npm run i18n",
     "start": "HTTPS=false react-scripts start",
-    "build": "env-cmd ./.env.staging react-scripts build && cp -f CNAME ./build/ && npm run i18n && npm run patchsw",
-    "build:prod": "mkdir -p ./build && env-cmd ./.env.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && npm run i18n && rm build/robot.txt && npm run patchsw",
+    "build": "env-cmd ./.env.staging react-scripts build && cp -f CNAME ./build/ && npm run patchsw",
+    "build:prod": "mkdir -p ./build && env-cmd ./.env.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && npm run patchsw",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "proxy": "node proxy.js",

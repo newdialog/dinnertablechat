@@ -50,19 +50,19 @@ function getLoggger() {
   logger.onHubCapsule = capsule => {
     switch (capsule.payload.event) {
       case 'signIn':
-        logger.error('user signed in'); // [ERROR] Alexander_the_auth_watcher - user signed in
+        logger.warn('user signed in'); // [ERROR] Alexander_the_auth_watcher - user signed in
         break;
       case 'signUp':
-        logger.error('user signed up');
+        logger.warn('user signed up');
         break;
       case 'signOut':
-        logger.error('user signed out');
+        logger.warn('user signed out');
         break;
       case 'signIn_failure':
-        logger.error('user sign in failed');
+        logger.warn('user sign in failed');
         break;
       case 'configured':
-        logger.error('the Auth module is configured');
+        // logger.warn('the Auth module is configured');
         break;
       default:
         break;
@@ -75,7 +75,7 @@ export const LOGIN_EVENT = 'signIn';
 export const LOGOUT_EVENT = 'signOut';
 
 function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
-  // console.log('onHubCapsule', capsule);
+  console.log('onHubCapsule', capsule);
   // getLoggger().onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
