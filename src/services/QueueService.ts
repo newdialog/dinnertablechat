@@ -89,6 +89,7 @@ async function poll(
 
   // const info = await
   // gameLift.dec
+  const RETRY_TIME = 5000;
   gameLift.describeMatchmaking({ TicketIds: [tid] }, async (e: any, d: any) => {
     if (e) return console.log('err', e);
     if (stopFlag.flag) return; // end;
@@ -101,12 +102,12 @@ async function poll(
     if (ticket.Status === 'PLACING') {
       console.log('entering placing, stopping poll', ticket);
       // wait for dyanmo match to be saved
-      await delay(1500);
+      await delay(RETRY_TIME / 2);
       let player = await shake.sync(playerId); // allow time for lambda to save
-      if (!player) {
-        await delay(3000);
+      /* if (!player) {
+        await delay(RETRY_TIME / 2);
         player = await shake.sync(playerId);
-      }
+      }*/
       if (!player) return onMatchedCB('matchtimeout');
 
       onMatchedCB({
@@ -131,7 +132,7 @@ async function poll(
       return; // not polling
     }
     console.log('ticketinfo', ticket.Status, ticket);
-    setTimeout(poll, 9000, stopFlag, onMatchedCB, tid, playerId);
+    setTimeout(poll, RETRY_TIME, stopFlag, onMatchedCB, tid, playerId);
   });
   // console.log('info', info)
   //

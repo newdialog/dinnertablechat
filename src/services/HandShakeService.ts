@@ -108,6 +108,7 @@ export async function handshake(
     }
 
     const updates$ = getPartnerUpdates(matchid, otherColor).pipe(
+      throttleTime(3000),
       tap(x =>
         x.key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg)))
       )
@@ -116,10 +117,9 @@ export async function handshake(
     updates$
       .pipe(
         combineLatest(saveSignal$, (x, _) => x),
-        throttleTime(3000),
         takeUntil(defer(() => ps.onConnection())),
         takeUntil(whenFlag(stopFlag)),
-        timeout(64000),
+        timeout(24000),
         last()
       )
       .subscribe({
@@ -186,7 +186,7 @@ function getPartnerUpdates(matchid: string, team: 'blue' | 'red') {
       // x.key = x.key.map(b => JSON.parse(b));
       return of(x); // just return
     }),
-    retryBackoff({ maxRetries: 3, maxInterval: 4800, initialInterval: 4800 }),
+    retryBackoff({ maxRetries: 5, maxInterval: 5000, initialInterval: 3000 }),
     tap(x => console.log('rx tap', x.key.length, x.key))
   );
 }
