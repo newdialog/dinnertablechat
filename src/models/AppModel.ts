@@ -86,7 +86,8 @@ const AppModel = types
       const path = (self.router.location as any).pathname;
       const isTest = path === '/test' || path === '/test2';
       if (isTest) return;
-      const isSigninPath = path === '/signin' || path === '/callback';
+      
+      // const isSigninPath = path === '/signin' || path === '/callback';
       // if(!isHome) return; // j1, not sure if this fixes anything
       // localStorage.removeItem('signup');
       // if (!signedIn) return;
@@ -94,7 +95,7 @@ const AppModel = types
       if (localStorage.getItem('quickmatch')) {
         localStorage.removeItem('quickmatch');
         self.router.push('/quickmatch');
-      } else if (isSigninPath || !signedIn) return;
+      } else if (!signedIn) return; // isSigninPath || 
       else if (self.isStandalone()) self.router.push('/home');
       else if (self.isGuest()) {
         self.router.push('/quickmatch');

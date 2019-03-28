@@ -75,6 +75,7 @@ export const LOGIN_EVENT = 'signIn';
 export const LOGOUT_EVENT = 'signOut';
 
 function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
+  // console.log('onHubCapsule', capsule);
   // getLoggger().onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
@@ -100,7 +101,8 @@ export function auth(cb: AwsCB, callbackPage: boolean = false) {
   // Order is important
   Hub.listen(
     'auth',
-    { onHubCapsule: onHubCapsule.bind(null, cb, callbackPage) }
+    onHubCapsule.bind(null, cb, callbackPage)
+    // { onHubCapsule: onHubCapsule.bind(null, cb, callbackPage) }
     // ,'AuthService'
   );
   Auth.configure(awsmobileInjected);
