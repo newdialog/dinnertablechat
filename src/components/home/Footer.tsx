@@ -104,7 +104,7 @@ export default function Footer(props: Props) {
         <br />
         PAGES:{' '}
         <a
-          href="/"
+          href="/about"
           className={classes.links}
           style={{ margin: '0 10px 0 10px' }}
         >

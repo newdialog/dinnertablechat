@@ -81,7 +81,7 @@ const AppModel = types
       if (self.isGuest()) self.auth.logout();
       self.auth.login();
     },
-    // Covers guest login action as well
+    // Covers guest login action\ as well
     authenticated(signedIn: boolean) {
       const path = (self.router.location as any).pathname;
       const isTest = path === '/test' || path === '/test2';

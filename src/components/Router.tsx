@@ -44,6 +44,7 @@ const DTCRouter = ({
     <Suspense fallback={LoadingMsg()}>
       <Switch>
         <Route exact={true} path="/" component={AsyncHome} />
+        <Route exact={true} path="/about" component={AsyncHome} />
         <Route exact={true} path="/callback" component={AuthSignin} />
         <Route exact={true} path="/CALLBACK" component={AuthSignin} />
         <Route exact={true} path="/signin" component={AuthSignin} />
