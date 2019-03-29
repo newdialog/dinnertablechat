@@ -86,16 +86,24 @@ const AppModel = types
       const path = (self.router.location as any).pathname;
       const isTest = path === '/test' || path === '/test2';
       if (isTest) return;
-      
-      // const isSigninPath = path === '/signin' || path === '/callback';
+
+      const isSigninPath = path === '/signin' || path === '/callback';
       // if(!isHome) return; // j1, not sure if this fixes anything
       // localStorage.removeItem('signup');
       // if (!signedIn) return;
+      console.log(
+        'authenticated, signedIn, isSigninPath',
+        signedIn,
+        isSigninPath
+      );
 
       if (localStorage.getItem('quickmatch')) {
         localStorage.removeItem('quickmatch');
         self.router.push('/quickmatch');
-      } else if (!signedIn) return; // isSigninPath || 
+        // prevent being redirected when its not login time
+        // prevent redirect for if being signed in and not signedIn yet
+        // NOTE: DONT MESS WITH THIS
+      } else if (!isSigninPath && !signedIn) return;
       else if (self.isStandalone()) self.router.push('/home');
       else if (self.isGuest()) {
         self.router.push('/quickmatch');
