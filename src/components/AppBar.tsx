@@ -137,7 +137,7 @@ function socialLinks() {
       target="_blank"
         title="Instagram"
               href="https://www.instagram.com/dinnertable.chat/"
-              onClick={trackOutboundLinkClick('https://www.instagram.com/dinnertable.chat/', false, true)}
+              onClick={trackOutboundLinkClick('https://www.instagram.com/dinnertablechat/', false, true)}
             >
               <i id="social-discord" className="fab fa-instagram fa-2x social" style={{marginRight:'.15em'}}/>
             </a>

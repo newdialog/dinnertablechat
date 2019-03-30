@@ -87,7 +87,7 @@ export default function Footer(props: Props) {
             <a
               title="Instagram"
               href="https://www.instagram.com/dinnertable.chat/"
-              onClick={trackOutboundLinkClick('https://www.instagram.com/dinnertable.chat/', false, true)}
+              onClick={trackOutboundLinkClick('https://www.instagram.com/dinnertablechat/', false, true)}
             >
               <i id="social-discord" className="fab fa-instagram fa-3x social" />
             </a>
