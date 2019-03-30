@@ -6,8 +6,8 @@ declare module 'json!*' {
 }
 
 declare interface mixpanel {
-  track(name:string);
-};
+  track(name: string);
+}
 
 declare function gtag(
   action: string,
@@ -18,10 +18,15 @@ declare function gtag(
   eventValue?: any
 ): void;
 
-declare function trackOutboundLink(url: string, interactive?: boolean): void;
+declare function trackOutboundLink(
+  url: string,
+  interactive?: boolean,
+  newWin?: boolean
+): void;
 declare function trackOutboundLinkClick(
   url: string,
-  interactive?: boolean
+  interactive?: boolean,
+  newWin?: boolean
 ): (e: any) => any;
 
 declare global {

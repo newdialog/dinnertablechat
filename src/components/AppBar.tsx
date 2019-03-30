@@ -79,6 +79,7 @@ export default observer(function ButtonAppBar(props: Props) {
         <Toolbar variant="dense">
           <img
             crossOrigin="anonymous"
+            title="DTC Home"
             src={logo}
             style={{ height: '3em', cursor: 'pointer' }}
             onClick={onHome.bind(0, store)}
@@ -124,15 +125,28 @@ function socialLinks() {
   return (
     <>
       <a
+      target="_blank"
+      title="Medium"
         href="https://medium.com/dinnertablechat"
-        onClick={trackOutboundLinkClick('https://medium.com/dinnertablechat')}
+        onClick={trackOutboundLinkClick('https://medium.com/dinnertablechat', false, true)}
       >
         <i id="social-medium" className="fab fa-medium social fa-2x " style={{marginRight:'.15em'}} />
       </a>
 
       <a
+      target="_blank"
+        title="Instagram"
+              href="https://www.instagram.com/dinnertable.chat/"
+              onClick={trackOutboundLinkClick('https://www.instagram.com/dinnertable.chat/', false, true)}
+            >
+              <i id="social-discord" className="fab fa-instagram fa-2x social" style={{marginRight:'.15em'}}/>
+            </a>
+
+      <a
+      target="_blank"
+      title="Twitter"
         href="https://twitter.com/dintablechat"
-        onClick={trackOutboundLinkClick('https://twitter.com/dintablechat')}
+        onClick={trackOutboundLinkClick('https://twitter.com/dintablechat', false, true)}
       >
         <i
           id="social-tw"
@@ -141,8 +155,10 @@ function socialLinks() {
       </a>
 
       <a
+      target="_blank"
+      title="Facebook"
         href="https://facebook.com/dinnertablechat"
-        onClick={trackOutboundLinkClick('https://facebook.com/dinnertablechat')}
+        onClick={trackOutboundLinkClick('https://facebook.com/dinnertablechat', false, true)}
       >
         <i id="social-tw" className="fab fa-facebook-square social fa-2x " style={{marginRight:'.15em'}} 
         />

@@ -90,7 +90,7 @@ mixpanel.init("9faf8f07f48cf113e52cefb66f005408", {debug:false});</script><!-- e
     gtag('config', 'UA-119131630-1');
     gtag('create', 'UA-119131630-1', 'auto');
 
-    function trackOutboundLink(url, nonInteraction) {
+    function trackOutboundLink(url, nonInteraction, newWin) {
       var redirected = false;
 
       gtag('event', 'click', {
@@ -101,24 +101,26 @@ mixpanel.init("9faf8f07f48cf113e52cefb66f005408", {debug:false});</script><!-- e
         'event_callback': function () {
           if(redirected) return;
           redirected = true;
-          document.location = url;
+          if(!newWin) document.location = url;
+          else Object.assign(document.createElement('a'), { target: '_blank', href: url}).click();
         }
       });
       setTimeout(()=>{ 
         if(redirected) return;
         redirected = true;
-        document.location = url; 
+        if(!newWin) document.location = url;
+        else Object.assign(document.createElement('a'), { target: '_blank', href: url}).click();
         console.log('failsafe link used');
-      }, 1000); // failsafe for gtag not loading
+      }, 750); // failsafe for gtag not loading
 
       return false;
     }
     window.trackOutboundLink = trackOutboundLink;
 
-    function trackOutboundLinkClick(url, nonInteraction) {
+    function trackOutboundLinkClick(url, nonInteraction, newWin) {
       return (e) => {
         e.preventDefault();
-        trackOutboundLink(url, nonInteraction);
+        trackOutboundLink(url, nonInteraction, newWin);
         return false;
       }
     }

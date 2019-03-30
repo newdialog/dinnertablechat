@@ -49,9 +49,10 @@ export default function Footer(props: Props) {
         <div className="container">
           <div className="text-center center-block">
             <a
+              title="Twitter"
               href="https://twitter.com/dintablechat"
               onClick={trackOutboundLinkClick(
-                'https://twitter.com/dintablechat'
+                'https://twitter.com/dintablechat', false, true
               )}
             >
               <i
@@ -61,9 +62,10 @@ export default function Footer(props: Props) {
             </a>
 
             <a
+              title="Facebook"
               href="https://facebook.com/dinnertablechat"
               onClick={trackOutboundLinkClick(
-                'https://facebook.com/dinnertablechat'
+                'https://facebook.com/dinnertablechat', false, true
               )}
             >
               <i
@@ -73,22 +75,33 @@ export default function Footer(props: Props) {
             </a>
 
             <a
+              title="Medium"
               href="https://medium.com/dinnertablechat"
               onClick={trackOutboundLinkClick(
-                'https://medium.com/dinnertablechat'
+                'https://medium.com/dinnertablechat', false, true
               )}
             >
               <i id="social-medium" className="fab fa-medium social fa-3x " />
             </a>
 
             <a
+              title="Instagram"
+              href="https://www.instagram.com/dinnertable.chat/"
+              onClick={trackOutboundLinkClick('https://www.instagram.com/dinnertable.chat/', false, true)}
+            >
+              <i id="social-discord" className="fab fa-instagram fa-3x social" />
+            </a>
+
+            <a
+              title="Discord"
               href="https://discord.gg/U6h8pE9"
-              onClick={trackOutboundLinkClick('https://discord.gg/U6h8pE9')}
+              onClick={trackOutboundLinkClick('https://discord.gg/U6h8pE9', false, true)}
             >
               <i id="social-discord" className="fab fa-discord fa-3x social" />
             </a>
 
             <a
+              title="email team@dinnertable.chat"
               href="mailto:team@dinnertable.chat"
               onClick={trackOutboundLinkClick('mailto:team@dinnertable.chat')}
             >
