@@ -1,9 +1,9 @@
 import moment from 'moment';
 
-const hourOpen = 23;
+const hourOpen = 20;
 const minOpen = 0;
 
-const dur = moment.duration(4, 'hours').add(0, 'minutes');
+const dur = moment.duration(5, 'hours').add(0, 'minutes');
 
 export function isBeforeEndingTime() {
   return moment()
@@ -18,7 +18,7 @@ export function isAfterEndTime() {
 }
 
 export function isDuringDebate(isLive?: boolean) {
-  if (!isLive) {
+  if (isLive === false) {
     return true;
   }
   const m = moment().utc();

@@ -26,7 +26,7 @@ const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 const fetcher = url => window.fetch(url).then(response => response.json());
 const store = AppModel.create(routerModel, fetcher);
 
-// if(!store.isLive())
+// if(!store.isLive)
 connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting, prob bundled anyway
 
 console.log('v1.2.71');

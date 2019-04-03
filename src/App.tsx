@@ -26,8 +26,8 @@ export default observer(function App(props: Props) {
     if(isTest) return;
 
     const isHome = path === '/' || path === '';
-    const isDebateTime = TimeSerive.isDuringDebate(store.isLive());
-    // console.log('isHomeisHome', isHome, TimeSerive.isDuringDebate(store.isLive()))
+    const isDebateTime = TimeSerive.isDuringDebate(store.isLive);
+    // console.log('isHomeisHome', isHome, TimeSerive.isDuringDebate(store.isLive))
     if(!(isHome && isDebateTime)) return; // j1, not sure if this fixes anything
     // console.log('--')
     // App flow

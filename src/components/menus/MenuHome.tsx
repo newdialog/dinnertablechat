@@ -142,7 +142,7 @@ export default observer(function MenuHome(props: Props) {
     localStorage.removeItem('test');
 
     if(isTest) console.log('props.isTest', isTest);
-    if (!Times.isDuringDebate(store.isLive())) {
+    if (!Times.isDuringDebate(store.isLive)) {
       store.router.push('/home');
     }
     if (isTest !== store.debate.isTest) {

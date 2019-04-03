@@ -6,6 +6,15 @@ import { Instance } from 'mobx-state-tree';
 import React from 'react';
 import * as TimeService from '../services/TimeService';
 
+// let cacheIsLive: boolean | null = null;
+function isLive(): boolean {
+  // if (cacheIsLive !== null) return cacheIsLive;
+  const h = window.location.hostname;
+  const live = h.indexOf('test') === -1 && h.indexOf('dinnertable.chat') !== -1;
+  // cacheIsLive = live;
+  return live;
+}
+
 const AppModel = types
   .model({
     auth: AuthModel,
@@ -14,7 +23,8 @@ const AppModel = types
     showNav: true,
     _isStandalone: false,
     dailyOpen: false, // only use for invalidation
-    micAllowed: false
+    micAllowed: false,
+    isLive: isLive()
   })
   .views(self => ({
     /* isDailyOpen() {
@@ -24,12 +34,6 @@ const AppModel = types
       if (!self.auth.user) return false;
       return self.auth.user!.email === 'guest@dinnertable.chat';
     },
-    isLive() {
-      const h = window.location.hostname;
-      const live =
-        h.indexOf('test') === -1 && h.indexOf('dinnertable.chat') !== -1;
-      return live;
-    },
     isAdmin() {
       return (
         self.auth.user && self.auth.user!.id === 'Google_111841421166386376573'
@@ -37,17 +41,18 @@ const AppModel = types
     },
     isStandalone() {
       if (self._isStandalone) return true;
-      // return true;
+
       const enabledOnSafari = (window.navigator as any).standalone === true;
-      return (
+      const result =
         window.matchMedia('(display-mode: standalone)').matches ||
         enabledOnSafari ||
         !!window['cordova'] ||
         document.URL.indexOf('file://') > -1 ||
         document.URL.indexOf('FILE://') > -1 ||
         navigator.userAgent === 'Mozilla/5.0 Google' ||
-        navigator.userAgent === 'Mozilla/5.0 Google PWA'
-      );
+        navigator.userAgent === 'Mozilla/5.0 Google PWA';
+      if (result) (self as any).setStandalone(); // cache
+      return result;
     },
     isQuickmatch() {
       const param = new URLSearchParams(window.location.search);
@@ -89,7 +94,7 @@ const AppModel = types
       const isSigninPath = path === '/signin' || path === '/callback';
       const isHome = path === '/';
       // const homeAuthed =
-      //  signedIn && isHome && TimeService.isDuringDebate(self.isLive());
+      //  signedIn && isHome && TimeService.isDuringDebate(self.isLive);
       // console.log('isHome', isHome, homeAuthed);
       // if(!isHome) return; // j1, not sure if this fixes anything
       // localStorage.removeItem('signup');

@@ -41,7 +41,7 @@ const renderer = (
   isDuringDebate: boolean,
   { days, hours, minutes, seconds, completed }
 ) => {
-  isDuringDebate = Times.isDuringDebate();
+  isDuringDebate = Times.isDuringDebate(store.isLive);
   if (completed) {
     // store.setDailyOpen(true);
     // Render a completed state
@@ -102,7 +102,7 @@ const renderer = (
           HRS&nbsp;
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
-          <br/><span>4pm-8pm PST / 7pm-11pm EST</span>
+          <br/><span>1pm-6pm PST / 4pm-9pm EST</span>
         </Typography>
 
         <Typography
@@ -134,7 +134,7 @@ function BannerTimer(props:Props) {
 
   // const launch = Times.getDebateStart().getTime();
 
-  let isDuringDebate = Times.isDuringDebate();
+  let isDuringDebate = Times.isDuringDebate(store.isLive);
   const endTime = isDuringDebate
     ? Times.getDebateEnd().getTime()
     : Times.getDebateStart().getTime();
@@ -146,7 +146,7 @@ function BannerTimer(props:Props) {
       onComplete={() => {
         // setTimeout( () => {
           console.log('BannerTimer completed');
-          isDuringDebate = Times.isDuringDebate();
+          isDuringDebate = Times.isDuringDebate(store.isLive);
           store.setDailyOpen(isDuringDebate);
           !!onCompleted && onCompleted(isDuringDebate);
         // }, 2000);

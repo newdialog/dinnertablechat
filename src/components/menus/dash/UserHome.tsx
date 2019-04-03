@@ -52,7 +52,7 @@ export default function UserHome(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const debateOpen = Times.isDuringDebate(store.isLive());
+  const debateOpen = Times.isDuringDebate(store.isLive);
 
   // Auth guard
   if (store.auth.isNotLoggedIn) store.router.push('/');

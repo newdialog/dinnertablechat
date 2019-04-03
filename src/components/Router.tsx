@@ -60,10 +60,10 @@ const DTCRouter = ({
         <Route path="/quickmatch" component={AsyncPlay} />
         <Route path="/match" component={AsyncDebate} />
 
-        {store.isLive() === false && (
+        {store.isLive === false && (
           <Route exact={true} path="/test2" component={AsyncTester} />
         )}
-        {store.isLive() === false && (
+        {store.isLive === false && (
           <Route
             exact={true}
             path="/test"
