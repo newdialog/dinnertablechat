@@ -1,4 +1,4 @@
-import { types, Instance } from 'mobx-state-tree';
+import { types, Instance, flow } from 'mobx-state-tree';
 import * as Auth from '../services/AuthService';
 import * as AuthService from '../services/AuthService';
 import uuid from 'short-uuid';
@@ -35,12 +35,13 @@ const AuthModel = types
     isNotLoggedIn: false
   })
   .actions(self => ({
-    doGuestLogin() {
+    doGuestLogin: flow(function*() {
       window.gtag('event', 'guest_login_action', {
         event_category: 'auth'
       });
-      AuthService.guestLogin();
-    },
+      yield AuthService.guestLogin();
+      self.isNotLoggedIn = false;
+    }),
     login() {
       if (!self.doLogin)
         window.gtag('event', 'login_action', {

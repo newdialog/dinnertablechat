@@ -102,7 +102,7 @@ const renderer = (
           HRS&nbsp;
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
-          <br/><span>Noon-10pm PST / 3pm-1am EST</span>
+          <br/><span>4pm-8pm PST / 7pm-11pm EST</span>
         </Typography>
 
         <Typography

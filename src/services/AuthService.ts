@@ -88,7 +88,8 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
     /// checkUser(cb);
     // return;
   }
-  if (payload.event === LOGIN_EVENT || payload.event === 'cognitoHostedUI') {
+  if (payload.event === LOGIN_EVENT) {
+    //  || payload.event === 'cognitoHostedUI'
     console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
   } else if (payload.event === 'configured' && !callbackPage) checkUser(cb);
@@ -204,7 +205,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
   });
 }
 
-type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
+// type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
 
 export function logout() {
   // {global: true}
@@ -228,9 +229,18 @@ export async function guestLogin() {
   console.log('guestLogin');
   try {
     const user = await Auth.signIn('guest@dinnertable.chat', 'weallneed2talk'); // Guest
-    console.log(user);
+    console.log('user', user);
   } catch (err) {
-    if (err.code === 'UserNotConfirmedException') {
+    console.error('AuthServoce err', err.code, err);
+    alert(
+      'We encountered an error with guest login, going to try to fix it...'
+    );
+    window.location.reload(true);
+  }
+}
+
+/*
+if (err.code === 'UserNotConfirmedException') {
       // The error happens if the user didn't finish the confirmation step when signing up
       // In this case you need to resend the code and confirm the user
       // About how to resend the code and confirm the user, please check the signUp part
@@ -239,7 +249,5 @@ export async function guestLogin() {
       // In this case you need to call forgotPassword to reset the password
       // Please check the Forgot Password part.
     } else {
-      console.log(err);
     }
-  }
-}
+*/
