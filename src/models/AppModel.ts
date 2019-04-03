@@ -92,7 +92,7 @@ const AppModel = types
       if (isTest) return;
 
       const isSigninPath = path === '/signin' || path === '/callback';
-      const isHome = path === '/';
+      // const isHome = path === '/' || path === '';
       // const homeAuthed =
       //  signedIn && isHome && TimeService.isDuringDebate(self.isLive);
       // console.log('isHome', isHome, homeAuthed);

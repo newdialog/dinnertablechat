@@ -18,6 +18,7 @@ export function isAfterEndTime() {
 }
 
 export function isDuringDebate(isLive?: boolean) {
+  // TESTING Flag: always lock session open
   if (isLive === false) {
     return true;
   }

@@ -28,7 +28,7 @@ export default observer(function App(props: Props) {
     const isHome = path === '/' || path === '';
     const isDebateTime = TimeSerive.isDuringDebate(store.isLive);
     // console.log('isHomeisHome', isHome, TimeSerive.isDuringDebate(store.isLive))
-    if(!(isHome && isDebateTime)) return; // j1, not sure if this fixes anything
+    if(!isHome) return; // j1, not sure if this fixes anything
     // console.log('--')
     // App flow
     if (
@@ -64,7 +64,7 @@ export default observer(function App(props: Props) {
       // localStorage.setItem('quickmatch', 'y');
       store.auth.doGuestLogin();
       //  return <Loading />;
-    } else if(isHome && isDebateTime) {
+    } else if(isHome && isDebateTime && store.auth.isAuthenticated()) {
       store.router.push('/home');
     }
   }, [store.auth.isNotLoggedIn, store.auth.user]);
