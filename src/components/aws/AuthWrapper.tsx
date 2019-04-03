@@ -52,8 +52,6 @@ function AuthComp(props: Props) {
   };
 
   useEffect(() => {
-    // const props: any = props; // required for OAuthSignIn
-    // const { init } = state;
     const path = (store.router.location as any).pathname;
     const callbackPage = path.indexOf('callback')!==-1;
     if (!init) {

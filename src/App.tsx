@@ -26,8 +26,10 @@ export default observer(function App(props: Props) {
     if(isTest) return;
 
     const isHome = path === '/' || path === '';
-    if(!isHome) return; // j1, not sure if this fixes anything
-    
+    const isDebateTime = TimeSerive.isDuringDebate(store.isLive());
+    // console.log('isHomeisHome', isHome, TimeSerive.isDuringDebate(store.isLive()))
+    if(!(isHome && isDebateTime)) return; // j1, not sure if this fixes anything
+    // console.log('--')
     // App flow
     if (
       store.isStandalone() &&
@@ -57,11 +59,13 @@ export default observer(function App(props: Props) {
       // else if(s.auth.isAuthenticated()) s.router.push('/quickmatch');
     }
     // Feature: faster flow
-    else if (store.auth.isNotLoggedIn && TimeSerive.isDuringDebate(store.isLive())) {
+    else if (store.auth.isNotLoggedIn && isDebateTime) {
       console.log('setting quickmatch');
       // localStorage.setItem('quickmatch', 'y');
       store.auth.doGuestLogin();
       //  return <Loading />;
+    } else if(isHome && isDebateTime) {
+      store.router.push('/home');
     }
   }, [store.auth.isNotLoggedIn, store.auth.user]);
 

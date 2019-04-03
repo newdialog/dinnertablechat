@@ -4,6 +4,7 @@ import AuthModel from './AuthModel';
 import DebateModel from './DebateModel';
 import { Instance } from 'mobx-state-tree';
 import React from 'react';
+import * as TimeService from '../services/TimeService';
 
 const AppModel = types
   .model({
@@ -25,11 +26,9 @@ const AppModel = types
     },
     isLive() {
       const h = window.location.hostname;
-      return (
-        h.indexOf('test') === -1 &&
-        h.indexOf('.dinnertable') === -1 &&
-        h.indexOf('dinnertable.chat') !== -1
-      );
+      const live =
+        h.indexOf('test') === -1 && h.indexOf('dinnertable.chat') !== -1;
+      return live;
     },
     isAdmin() {
       return (
@@ -88,6 +87,10 @@ const AppModel = types
       if (isTest) return;
 
       const isSigninPath = path === '/signin' || path === '/callback';
+      const isHome = path === '/';
+      // const homeAuthed =
+      //  signedIn && isHome && TimeService.isDuringDebate(self.isLive());
+      // console.log('isHome', isHome, homeAuthed);
       // if(!isHome) return; // j1, not sure if this fixes anything
       // localStorage.removeItem('signup');
       // if (!signedIn) return;
@@ -103,8 +106,11 @@ const AppModel = types
         // prevent being redirected when its not login time
         // prevent redirect for if being signed in and not signedIn yet
         // NOTE: DONT MESS WITH THIS
-      } else if (!isSigninPath && !signedIn) return;
-      else if (self.isStandalone()) self.router.push('/home');
+      } else if (!isSigninPath && !signedIn) {
+        //  && !homeAuthed
+        // signed in on not home
+        return;
+      } else if (self.isStandalone()) self.router.push('/home');
       else if (self.isGuest()) {
         self.router.push('/quickmatch');
       } else self.router.push('/tutorial');
@@ -138,3 +144,7 @@ export const create = (routerModel: RouterModel, fetcher: any) =>
   );
 
 export const Context = React.createContext<Type | null>(null);
+
+function myXOR(a, b) {
+  return (a || b) && !(a && b);
+}
