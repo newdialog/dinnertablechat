@@ -14,8 +14,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       textAlign: 'center',
       // paddingTop: theme.spacing.unit * 20,
       padding: 0, 
-      margin: 0,
-      backgroundColor: '#90887a'
+      margin: 0
     },
     timerText2: {
       fontFamily: "'Roboto Mono', 'Courier New'",

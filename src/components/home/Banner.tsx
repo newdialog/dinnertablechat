@@ -115,7 +115,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: 0,
     width: '100%',
     objectFit: 'cover',
-    pointerEvents: 'none'
+    pointerEvents: 'none',
+    [theme.breakpoints.down('sm')]: {
+      display:'none'
+    }
   },
   bannerAnimOverlay: {
     zIndex: 1,
@@ -125,7 +128,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: 0,
     width: '100%',
     background: 'rgba(0, 0, 0, 0.35)',
-    backgroundBlendMode: 'multiply'
+    backgroundBlendMode: 'multiply',
+    [theme.breakpoints.down('sm')]: {
+      display:'none'
+    }
   },
   largeIcon: {
     width: 80,
@@ -189,14 +195,15 @@ export default function HomeBanner(props:Props) {
         onLeave={_handleWaypointLeave}
       />
       <div className={classes.banner}>
-        <div className={classes.bannerAnim}>
-          <Lottie
+      <div className={classes.bannerAnim}>
+        <Lottie
             options={bgOptions}
             ref={bannerRef}
             isClickToPauseDisabled={true}
-          />
+          />  
         </div>
         <div className={classes.bannerAnimOverlay} />
+        
         <div className={classes.centeredDown}>
           {yt(classes)}
 
@@ -289,7 +296,12 @@ export default function HomeBanner(props:Props) {
 function yt(classes) {
   return <iframe className={classes.banneryt} src="https://www.youtube.com/embed/Q8cW-ezofRM?rel=0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
 }
-/* <div className={classes.divider} />
+/* 
+
+
+
+
+<div className={classes.divider} />
 <Button
               href="#intro"
               variant="contained"
