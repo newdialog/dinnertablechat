@@ -75,11 +75,12 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundPosition: 'center 0',
     color: 'white',
     // justifyContent: 'center',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
     flexFlow: 'column nowrap',
+    paddingTop:'60px', // header
     [theme.breakpoints.down('sm')]: {
       height: 'calc(100vh - 32px)'
-    }
+    },
   },
   bannerTextDivider: {
     // fontFamily: 'Open Sans',
@@ -90,9 +91,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     // backgroundColor: '#00000044',
     // fontWeight: 'bold'
     // left: ''
-    height: '13vh',
+    height: '1em', // 13vh',
     [theme.breakpoints.down('sm')]: {
-      height: '4vh'
+      height: '1em' // '4vh'
     }
   },
   logoanim: {
@@ -125,6 +126,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   largeIcon: {
     width: 80,
     height: 60
+  },
+  banneryt: {
+    height: '35vh',
+    width: '63vh',
+    maxWidth: '90vw',
+    maxHeight: '80vh',
+    // maxWidth:'560px',
+   //  maxHeight:'315px',
+    [theme.breakpoints.down('xs')]: {
+      // display: 'none'
+    }
   }
 }), {withTheme: true, name:'Banner'});
 
@@ -183,6 +195,8 @@ export default function HomeBanner(props:Props) {
         </div>
         <div className={classes.bannerAnimOverlay} />
         <div className={classes.centeredDown}>
+          {yt(classes)}
+
           <Typography
             variant="h1"
             align="center"
@@ -269,6 +283,9 @@ export default function HomeBanner(props:Props) {
   );
 }
 
+function yt(classes) {
+  return <iframe className={classes.banneryt} src="https://www.youtube.com/embed/Q8cW-ezofRM?rel=0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+}
 /* <div className={classes.divider} />
 <Button
               href="#intro"

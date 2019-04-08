@@ -217,7 +217,7 @@ export default observer(function MenuHome(props: Props) {
               <Button
                 variant="contained"
                 color="secondary"
-                onClick={() => store.router.push('/')}
+                onClick={() => store.router.push('/about')}
                 style={{
                   lineHeight: '1.4em',
                   backgroundColor: '#93cad2',
