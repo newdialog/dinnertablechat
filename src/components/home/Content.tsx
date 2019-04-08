@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingTop: theme.spacing.unit * 20
   },
   container: {
-    marginTop: '30px',
+    // marginTop: '30px',
     paddingLeft: '3em',
     paddingRight: '3em',
     gridTemplateColumns: 'repeat(12, 1fr)',
@@ -114,7 +114,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       height: '4vh'
     }
   }
-}));
+}), {withTheme: true, name:'HomeContent'});
 
 const logoOptions = {
   renderer: 'svg',

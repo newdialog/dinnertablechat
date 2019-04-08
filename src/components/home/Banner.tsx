@@ -49,15 +49,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   centeredDown: {
+    zIndex: 2,
     marginLeft: 'auto',
     marginRight: 'auto',
-    paddingBottom: '5vh',
+    // paddingBottom: '5vh',
     color: '#ffffff88',
     textAlign: 'center',
     display: 'inline-block',
     [theme.breakpoints.down('sm')]: {
       //  paddingBottom: '80px'
-      paddingBottom: '2px'
+      // paddingBottom: '2px'
     }
   },
   divider: {
@@ -67,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     objectFit: 'cover',
     width: '100%',
-    height: 'calc(100vh - 14px)',
+    height: 'calc(100vh - 0px)',
     // backgroundImage: 'url("./imgs/DTC-scene3-bg2.png")', // DTC-scene3.png
     backgroundSize: 'cover',
     // backgroundAttachment: 'fixed',
@@ -76,11 +77,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: 'white',
     // justifyContent: 'center',
     justifyContent: 'center',
-    flexFlow: 'column nowrap',
+    flexFlow: 'column wrap',
     paddingTop:'60px', // header
+    backgroundColor: '#90887a',
+    minHeight: '665px',
     [theme.breakpoints.down('sm')]: {
-      height: 'calc(100vh - 32px)'
-    },
+      height: 'calc(100vh - 32px)',
+     //  minHeight: '710px',
+    }
   },
   bannerTextDivider: {
     // fontFamily: 'Open Sans',
@@ -105,7 +109,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex'
   },
   bannerAnim: {
-    zIndex: -1,
+    zIndex: 0,
     position: 'absolute',
     top: 0,
     bottom: 0,
@@ -114,7 +118,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     pointerEvents: 'none'
   },
   bannerAnimOverlay: {
-    zIndex: -1,
+    zIndex: 1,
     transform: 'translateZ(0)',
     position: 'absolute',
     top: 0,
@@ -128,14 +132,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 60
   },
   banneryt: {
-    height: '35vh',
-    width: '63vh',
-    maxWidth: '90vw',
-    maxHeight: '80vh',
-    // maxWidth:'560px',
-   //  maxHeight:'315px',
+    height: 'calc(50vw - 32px)',
+    width: 'calc(100vw - 32px)',
+    // maxWidth: '90vw',
+    // maxHeight: '80vh',
+    maxWidth:'560px',
+    maxHeight:'315px',
     [theme.breakpoints.down('xs')]: {
-      // display: 'none'
     }
   }
 }), {withTheme: true, name:'Banner'});

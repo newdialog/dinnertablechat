@@ -12,12 +12,15 @@ import { useTheme, makeStyles } from '@material-ui/styles';
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
-      paddingTop: theme.spacing.unit * 20
+      // paddingTop: theme.spacing.unit * 20,
+      padding: 0, 
+      margin: 0,
+      backgroundColor: '#90887a'
     },
     timerText2: {
       fontFamily: "'Roboto Mono', 'Courier New'",
       padding: '0',
-      margin: 0,
+      margin: 0
     },
     timerText: {
       padding: '0',
@@ -74,7 +77,7 @@ const renderer = (
       <>Daily event starts&nbsp;in:</>
     );
     return (
-      <div style={{ padding: 0, margin: 0 }}>
+      <div className={classes.root}>
         <Typography
           variant="h6"
           align="center"
@@ -114,8 +117,8 @@ const renderer = (
         <a 
         style={{ color: '#95d4ff', textDecoration: 'underline' }}
         onClick={trackOutboundLinkClick(
-                'https://www.facebook.com/events/522239821514316/'
-              )} href='https://www.facebook.com/events/522239821514316/'>Add to Facebook Calendar</a>
+                'https://www.facebook.com/events/522239821514316/',
+              true, true)} href='https://www.facebook.com/events/522239821514316/' target='_blank'>Add to Facebook Calendar</a>
         </Typography>
       </div>
     );
