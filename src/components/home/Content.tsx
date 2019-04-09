@@ -18,6 +18,7 @@ import Glide from '@glidejs/glide';
 
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
+import { useOnScreen } from 'react-hooks-set';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -120,6 +121,7 @@ const logoOptions = {
   renderer: 'svg',
   loop: false,
   autoplay: false,
+  // isPaused: true,
   path: 'assets/logo.json',
   subframeEnabled: false,
   rendererSettings: {
@@ -192,6 +194,11 @@ export default function HomeContent() {
   const topicsRef = useRef<Lottie | any>();
   const talkingRef = useRef<Lottie | any>();
   const diningRef = useRef<Lottie | any>();
+  
+  const [state, setState] = useState<any>({})
+
+  // const logoVisible = useOnScreen(logoRef, 0, true);
+  // const topicsVisible = useOnScreen(topicsRef, 0, true);
 
   useEffect(() => {
     new Glide('.glide', {
@@ -202,14 +209,19 @@ export default function HomeContent() {
     }).mount();
   }, []);
 
+  
   const _handleLogoWaypointEnter = () => {
+    // console.log('start');
+    // setState(p=>({...p, logoShow: true}));
     if (!logoRef.current) return;
     // console.log('logoRef.current', logoRef.current)
-    logoRef.current.stop();
+    // logoRef.current.stop();
     logoRef.current.play();
   };
 
   const _handleLogoWaypointLeave = () => {
+    // console.log('end');
+    // setState(p=>({...p, logoShow: false}));
     if (!logoRef.current) return;
     // console.log('logoRef.current', logoRef.current)
     logoRef.current.stop();
@@ -229,16 +241,16 @@ export default function HomeContent() {
           <Grid item xs={12} md={12} style={{ paddingBottom: '0' }}>
             <div className="paperimg" id="intro">
               <Waypoint
-                topOffset="-10%"
-                bottomOffset="0"
+                topOffset={280}
+                bottomOffset={900}
                 onEnter={_handleLogoWaypointEnter}
                 onLeave={_handleLogoWaypointLeave}
               />
-              <Lottie
+              {true && <Lottie
                 options={logoOptions}
                 ref={logoRef}
                 isClickToPauseDisabled={true}
-              />
+              />}
             </div>
           </Grid>
           <Grid item xs={12} md={12} style={{ paddingTop: '0' }}>
