@@ -12,7 +12,7 @@ import DebateHistory from './DebateHistory';
 import Footer from '../../home/Footer';
 import UserStats from './UserStats';
 import GuestNotice from './GuestNotice';
-
+import { Auther } from '../../Auther';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 import AppFloatMenu from './AppFloatMenu';
@@ -60,10 +60,10 @@ export default function UserHome(props: Props) {
 
   // <UserStats store={store} />
   return (
-    <>
-      <Helmet title="Dinnertable.chat Press">
+    <Auther>
+      <Helmet title="DTC User Dashboard">
         <meta name="og:url" content="https://dinnertable.chat/home" />
-        <meta name="og:title" content="Dinnertable.chat Home" />
+        <meta name="og:title" content="DTC User Dashboard" />
       </Helmet>
       <div className={classes.container}>
         <img src="imgs/press/01-scene1.png" className={classes.backgroundImg} />
@@ -112,6 +112,6 @@ export default function UserHome(props: Props) {
       </div>
       <AppFloatMenu />
       <Footer />
-    </>
+    </Auther>
   );
 }

@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 import AppFloatMenu from './dash/AppFloatMenu';
 import MicPermissionsBtn from './MicPermissionsBtn';
+import { Auther } from '../Auther';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
@@ -81,7 +82,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '1.1em !important',
     color: '#ffffff !important',
     fontWeight: 'bold'
-  },
+  }
 }));
 
 interface Props {
@@ -133,7 +134,7 @@ export default observer(function MenuHome(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = React.useState({ open: false, activeStep: 0 });
+  // const [state, setState] = React.useState({ open: false, activeStep: 0 });
 
   useEffect(() => localStorage.removeItem('quickmatch'), []);
 
@@ -141,7 +142,7 @@ export default observer(function MenuHome(props: Props) {
     const isTest = !!localStorage.getItem('test');
     localStorage.removeItem('test');
 
-    if(isTest) console.log('props.isTest', isTest);
+    if (isTest) console.log('props.isTest', isTest);
     if (!Times.isDuringDebate(store.isLive)) {
       store.router.push('/home');
     }
@@ -185,97 +186,102 @@ export default observer(function MenuHome(props: Props) {
   };
 
   return (
-    <div className={classes.pagebody}>
-      <main className={classes.container}>
-        {/* Hero unit */}
-        <div className={classes.heroUnit}>
-          <div className={classes.heroContent}>
-            {props.isTest && <h2>TEST MODE (/test)</h2>}
-            <Typography
-              style={{
-                fontSize: '2.5em',
-                paddingBottom: '0',
-                color: '#ffffff'
-              }}
-              variant="h3"
-              align="center"
-              color="textSecondary"
-            >
-              Quickmatch
-            </Typography>
-            <Typography
-              style={{ fontSize: '1.2em', paddingBottom: '0', color: '#ffffff' }}
-              variant="h3"
-              align="center"
-              color="textSecondary"
-              gutterBottom
-            >
-              Get matched with people with different opinions and talk with
-              them!
-            </Typography>
-            {store.isGuest() && (
+    <Auther>
+      <div className={classes.pagebody}>
+        <main className={classes.container}>
+          {/* Hero unit */}
+          <div className={classes.heroUnit}>
+            <div className={classes.heroContent}>
+              {props.isTest && <h2>TEST MODE (/test)</h2>}
+              <Typography
+                style={{
+                  fontSize: '2.5em',
+                  paddingBottom: '0',
+                  color: '#ffffff'
+                }}
+                variant="h3"
+                align="center"
+                color="textSecondary"
+              >
+                Quickmatch
+              </Typography>
+              <Typography
+                style={{
+                  fontSize: '1.2em',
+                  paddingBottom: '0',
+                  color: '#ffffff'
+                }}
+                variant="h3"
+                align="center"
+                color="textSecondary"
+                gutterBottom
+              >
+                Get matched with people with different opinions and talk with
+                them!
+              </Typography>
+              {store.isGuest() && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={() => store.router.push('/about')}
+                  style={{
+                    lineHeight: '1.4em',
+                    backgroundColor: '#93cad2',
+                    marginRight: '12px'
+                  }}
+                >
+                  About Us
+                </Button>
+              )}
               <Button
+                // className={classes.linkhome}
+                // color="secondary"
+                // style={{backgroundColor:'#a3a3a3'}}
+                style={{ lineHeight: '1.4em', backgroundColor: '#93cad2' }}
                 variant="contained"
                 color="secondary"
-                onClick={() => store.router.push('/about')}
-                style={{
-                  lineHeight: '1.4em',
-                  backgroundColor: '#93cad2',
-                  marginRight: '12px'
-                }}
+                onClick={() => onHistory(store)}
               >
-                About Us
+                Profile History and Awards
               </Button>
-            )}
-            <Button
-              // className={classes.linkhome}
-              // color="secondary"
-              // style={{backgroundColor:'#a3a3a3'}}
-              style={{ lineHeight: '1.4em', backgroundColor: '#93cad2' }}
-              variant="contained"
-              color="secondary"
-              onClick={() => onHistory(store)}
-            >
-              Profile History and Awards
-            </Button>
+            </div>
           </div>
-        </div>
-        {/* End hero unit */}
-        <div className={classes.stepper}>
-          <Stepper
-            color="primary"
-            activeStep={step}
-            orientation="vertical"
-            style={{ backgroundColor: '#2db8cc' }}
-          >
-            {steps.map((label, index) => {
-              return (
-                <Step key={label}>
-                  <StepButton
-                    className={classes.stepLabel}
-                    onClick={handleStep(index)}
-                  >
-                    {label}
-                  </StepButton>
-                  <StepContent>
-                    {getStepContent(index, store)}
-                    {step === 0
-                      ? null
-                      : renderStepButtons(step, classes, handleBack)}
-                  </StepContent>
-                </Step>
-              );
-            })}
-          </Stepper>
-        </div>
-        <div className={classes.micButton}>
-          <MicPermissionsBtn store={store} />
-        </div>
-        
-      </main>
-      <Footer className={classes.footer}/>
-      <AppFloatMenu />
-    </div>
+          {/* End hero unit */}
+          <div className={classes.stepper}>
+            <Stepper
+              color="primary"
+              activeStep={step}
+              orientation="vertical"
+              style={{ backgroundColor: '#2db8cc' }}
+            >
+              {steps.map((label, index) => {
+                return (
+                  <Step key={label}>
+                    <StepButton
+                      className={classes.stepLabel}
+                      onClick={handleStep(index)}
+                    >
+                      {label}
+                    </StepButton>
+                    <StepContent>
+                      {getStepContent(index, store)}
+                      {step === 0
+                        ? null
+                        : renderStepButtons(step, classes, handleBack)}
+                    </StepContent>
+                  </Step>
+                );
+              })}
+            </Stepper>
+          </div>
+          <div className={classes.micButton}>
+            <MicPermissionsBtn store={store} />
+          </div>
+        </main>
+        <Footer className={classes.footer} />
+        <AppFloatMenu />
+      </div>
+    </Auther>
   );
 });
 

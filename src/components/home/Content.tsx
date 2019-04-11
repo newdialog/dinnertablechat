@@ -212,7 +212,7 @@ export default function HomeContent() {
   
   const _handleLogoWaypointEnter = () => {
     // console.log('start');
-    // setState(p=>({...p, logoShow: true}));
+    setState(p=>({...p, logoShow: true}));
     if (!logoRef.current) return;
     // console.log('logoRef.current', logoRef.current)
     // logoRef.current.stop();
@@ -221,7 +221,7 @@ export default function HomeContent() {
 
   const _handleLogoWaypointLeave = () => {
     // console.log('end');
-    // setState(p=>({...p, logoShow: false}));
+    setState(p=>({...p, logoShow: false}));
     if (!logoRef.current) return;
     // console.log('logoRef.current', logoRef.current)
     logoRef.current.stop();
@@ -246,11 +246,12 @@ export default function HomeContent() {
                 onEnter={_handleLogoWaypointEnter}
                 onLeave={_handleLogoWaypointLeave}
               />
-              {true && <Lottie
+              <Lottie
+                isPaused={!state.logoShow}
                 options={logoOptions}
                 ref={logoRef}
                 isClickToPauseDisabled={true}
-              />}
+              />
             </div>
           </Grid>
           <Grid item xs={12} md={12} style={{ paddingTop: '0' }}>
