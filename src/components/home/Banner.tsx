@@ -300,7 +300,7 @@ function yt(classes) {
   return (
     <iframe
       className={classes.banneryt}
-      src="https://www.youtube.com/embed/Q8cW-ezofRM?rel=0"
+      src="https://www.youtube.com/embed/vzHKpUBAm48?rel=0"
       frameBorder="0"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
