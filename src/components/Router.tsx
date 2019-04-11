@@ -17,6 +17,8 @@ const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
 const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
+const Saas = lazy(() => import('./saas/menus/MenuHome'));
+
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();
 
@@ -61,7 +63,10 @@ const DTCRouter = ({
         <Route path="/match" component={AsyncDebate} />
 
         {store.isLive === false && (
-          <Route exact={true} path="/test2" component={AsyncTester} />
+          <>
+            <Route exact={true} path="/test2" component={AsyncTester} />
+            <Route exact={true} path="/saas" component={Saas} />
+          </>
         )}
         {store.isLive === false && (
           <Route
