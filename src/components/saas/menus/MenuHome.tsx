@@ -11,10 +11,7 @@ import {
 } from '@material-ui/core';
 import * as AppModel from '../../../models/AppModel';
 import PositionSelector from './PositionSelector';
-import StepButton from '@material-ui/core/StepButton';
-import CharacterSelection from './CharacterSelection';
 import Footer from '../../home/Footer';
-import HistoryIcon from '@material-ui/icons/History';
 import * as Times from '../../../services/TimeService';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +22,7 @@ import { Auther } from '../../Auther';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: '#d5d5d5',
     minHeight: '100vh'
   },
   container: {
@@ -33,7 +30,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     width: 'auto',
-    maxWidth: '1000px',
+    maxWidth: '100%',
+    padding: '1em 1em 0 1em',
     minWidth: '300px'
   },
   appBar: {
@@ -46,10 +44,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     // backgroundColor: theme.palette.background.paper,
   },
   heroContent: {
-    maxWidth: 800,
-    textAlign: 'center',
+    // maxWidth: 800,
+    textAlign: 'left',
     margin: '0 auto',
-    padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 0}px`
+    padding: `0`
   },
   micButton: {
     maxWidth: 600,
@@ -72,8 +70,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: theme.spacing.unit * 3
   },
   footer: {
-    backgroundColor: '#1b6f7b',
-    padding: theme.spacing.unit * 6
+    // backgroundColor: '#1b6f7b',
+    // padding: theme.spacing.unit * 6
+    width: '100%',
+    margin: '0 auto',
+    position: 'absolute',
+    bottom: '1em',
+    textAlign: 'center'
   },
   linkhome: {
     color: theme.palette.primary.dark
@@ -82,8 +85,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '1.1em !important',
     color: '#ffffff !important',
     fontWeight: 'bold'
-  }
-}));
+  },
+}), { withTheme: true, name: 'MenuHome' });
 
 interface Props {
   isTest?: boolean;
@@ -96,40 +99,6 @@ function getSteps() {
 function onHistory(store: AppModel.Type) {
   store.router.push('/home');
 }
-
-function getStepContent(step: number, store: AppModel.Type) {
-  switch (step) {
-    case 0:
-      return <PositionSelector store={store} />;
-
-    case 1:
-      return <CharacterSelection store={store} />;
-    case 2:
-      return null; // <ContributionSelector store={store} />;
-    default:
-      return (
-        <Typography>
-          Hmm, something went wrong. Please try again after refreshing the page.
-        </Typography>
-      );
-  }
-}
-
-const renderStepButtons = (activeStep, classes, handleBack) => {
-  return null;
-  return (
-    <div className={classes.actionsContainer}>
-      <Button
-        disabled={activeStep === 0}
-        onClick={handleBack}
-        className={classes.button}
-        color="secondary"
-      >
-        Reset Selections
-      </Button>
-    </div>
-  );
-};
 
 export default observer(function MenuHome(props: Props) {
   const store = useContext(AppModel.Context)!;
@@ -198,26 +167,18 @@ export default observer(function MenuHome(props: Props) {
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             {props.isTest && <h2>TEST MODE (/test)</h2>}
-            <Typography
-              style={{
-                fontSize: '2.5em',
-                paddingBottom: '0',
-                color: '#ffffff'
-              }}
-              variant="h3"
-              align="center"
-              color="textSecondary"
-            >
-              Quickmatch
-            </Typography>
+            <img src="./logos/appbar-logo-color.png" 
+              crossOrigin="anonymous"
+              title="DTC Home"
+              style={{ height: '3em', cursor: 'pointer' }}/>
             <Typography
               style={{
                 fontSize: '1.2em',
                 paddingBottom: '0',
-                color: '#ffffff'
+                width:'400px'
               }}
               variant="h3"
-              align="center"
+              align="left"
               color="textSecondary"
               gutterBottom
             >
@@ -226,42 +187,24 @@ export default observer(function MenuHome(props: Props) {
             </Typography>
           </div>
         </div>
-        {/* End hero unit */}
+
         <div className={classes.stepper}>
-          <Stepper
-            color="primary"
-            activeStep={step}
-            orientation="vertical"
-            style={{ backgroundColor: '#2db8cc' }}
-          >
-            {steps.map((label, index) => {
-              return (
-                <Step key={label}>
-                  <StepButton
-                    className={classes.stepLabel}
-                    onClick={handleStep(index)}
-                  >
-                    {label}
-                  </StepButton>
-                  <StepContent>
-                    {getStepContent(index, store)}
-                    {step === 0
-                      ? null
-                      : renderStepButtons(step, classes, handleBack)}
-                  </StepContent>
-                </Step>
-              );
-            })}
-          </Stepper>
+          <PositionSelector store={store} />
         </div>
-        <div className={classes.micButton}>
-          <MicPermissionsBtn store={store} />
-        </div>
+        
       </main>
-      <AppFloatMenu />
+      <div className={classes.footer}>
+        Limited time: You can debate every sunday from 18:00 till 19:00.<br/>
+        Feedback: <input type="input" defaultValue="Enter your feedback here"/>
+      </div>
     </div>
   );
 });
 
 // took this out as height is a little wierd on page
 // <Footer className={classes.footer}/>
+/*
+<div className={classes.micButton}>
+          <MicPermissionsBtn store={store} />
+        </div>
+*/

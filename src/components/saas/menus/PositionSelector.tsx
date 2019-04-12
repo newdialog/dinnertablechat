@@ -17,9 +17,9 @@ import { useTheme, makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   layout: {
-    width: 'auto',
-    marginLeft: 'auto', // theme.spacing.unit * 3,
-    marginRight: 'auto', // theme.spacing.unit * 3,
+    width: '100%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
     [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
       // width: 1100,
       // marginLeft: 'auto',
@@ -34,10 +34,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     // padding: `${theme.spacing.unit * 4}px 0`,
   },
   card: {
+    marginLeft: 'auto',
+    marginRight: 'auto',
     minWidth: '300px',
     width: '50vw',
     maxWidth: '500px',
     height: '100%',
+    textAlign:'center',
     // display: 'flex',
     flexDirection: 'column'
     // width: '100%'
@@ -52,7 +55,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   imgLink: {
     textDecoration: 'none'
   }
-}));
+}), { withTheme: true, name: 'PositionSelector' });
 
 interface Props {
   store: AppModel.Type;
