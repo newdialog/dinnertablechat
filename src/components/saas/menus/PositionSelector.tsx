@@ -69,6 +69,7 @@ export default function PositionSelector(props: Props) {
   // state = { noop: false };
 
   const onSelect = (position: number, card: TopicInfo.Card) => {
+    props.store.debate.setCharacter(1);
     props.store.debate.setPosition(position, card.id);
   };
 

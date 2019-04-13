@@ -150,10 +150,8 @@ export default observer(function MenuHome(props: Props) {
   if (!store.debate.topic || store.debate.position === -1) step = 1;
   if (store.debate.character === -1) step = 0;
 
-  // if(store.debate.position !== -1 && store.debate.contribution !== -1) step = 2;
-  // if(store.debate.character !== -1) step = 3;
-  if (step === 3 && store.micAllowed) store.router.push('/match');
-  // console.log('step', step)
+  if (step === 3) store.router.push('/match'); //  && store.micAllowed :SAAS
+
   const steps = getSteps();
 
   const handleStep = step => () => {
