@@ -15,51 +15,67 @@ import * as TopicInfo from '../../../utils/TopicInfo';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  layout: {
-    width: '100%',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
-      // width: 1100,
-      // marginLeft: 'auto',
-      // marginRight: 'auto',
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+
+import InboxIcon from '@material-ui/icons/MicRounded';
+import DraftsIcon from '@material-ui/icons/ChatBubbleOutlineRounded';
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    layout: {
+      width: '100%',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+        // width: 1100,
+        // marginLeft: 'auto',
+        // marginRight: 'auto',
+      }
+    },
+    btn: {
+      marginLeft: '1.5em',
+      width: '8em'
+      // color: theme.palette.secondary.main
+    },
+    cardGrid: {
+      // padding: `${theme.spacing.unit * 4}px 0`,
+    },
+    card: {
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      minWidth: '300px',
+      width: '50vw',
+      maxWidth: '500px',
+      height: '100%',
+      textAlign: 'center',
+      // display: 'flex',
+      flexDirection: 'column'
+      // width: '100%'
+      // width:'auto!important'
+    },
+    cardMedia: {
+      /// paddingTop: '44.25%' // 16:9
+    },
+    cardContent: {
+      flexGrow: 1
+    },
+    imgLink: {
+      textDecoration: 'none'
     }
-  },
-  btn: {
-    marginLeft: '1.5em',
-    width: '8em'
-    // color: theme.palette.secondary.main
-  },
-  cardGrid: {
-    // padding: `${theme.spacing.unit * 4}px 0`,
-  },
-  card: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    minWidth: '300px',
-    width: '50vw',
-    maxWidth: '500px',
-    height: '100%',
-    textAlign:'center',
-    // display: 'flex',
-    flexDirection: 'column'
-    // width: '100%'
-    // width:'auto!important'
-  },
-  cardMedia: {
-    /// paddingTop: '44.25%' // 16:9
-  },
-  cardContent: {
-    flexGrow: 1
-  },
-  imgLink: {
-    textDecoration: 'none'
-  }
-}), { withTheme: true, name: 'PositionSelector' });
+  }),
+  { withTheme: true, name: 'PositionSelector' }
+);
 
 interface Props {
   store: AppModel.Type;
+}
+
+function ListItemLink(props) {
+  return <ListItem button component="a" {...props} />;
 }
 
 export default function SMicSelector(props: Props) {
@@ -69,48 +85,50 @@ export default function SMicSelector(props: Props) {
 
   // state = { noop: false };
 
-  const onMic = () => {
-    
-  };
+  const onMic = () => {};
 
   const onStart = () => {
     props.store.debate.setCharacter(1);
+  };
+
+  const handleListItemClick = (e, index) => {
+    console.log('index', index);
+    if(index===0) onMic();
+    if(index===1) onStart();
   }
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
       <Grid container spacing={0} justify="center">
-        
-          <Grid sm={10} md={10} lg={10} item>
-            <Card className={classes.card}>
-              <CardContent className={classes.cardContent}>
-                <Typography></Typography>
-              </CardContent>
-              <CardActions style={{justifyContent: 'center'}}>
-                
-                  <Button
-                    variant="contained"
-                    // size="small"
-                    color="secondary"
-                    className={classes.btn}
-                    onClick={() => onMic()}
-                  >
-                    Allow microphone
-                  </Button>
-                  <Button
-                    variant="contained"
-                    // size="small"
-                    color="secondary"
-                    className={classes.btn}
-                    onClick={() => onStart()}
-                  >
-                    Start debate
-                  </Button>
-
-              </CardActions>
-            </Card>
-          </Grid>
-       
+        <Grid sm={10} md={10} lg={10} item>
+          <Card className={classes.card}>
+            <CardContent className={classes.cardContent}>
+              <List component="nav">
+                <ListItem button
+                selected={false}
+                onClick={event => handleListItemClick(event, 0)}
+                >
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Allow microphone" />
+                </ListItem>
+                <ListItem button selected={false}
+                onClick={event => handleListItemClick(event, 1)}
+                >
+                  <ListItemIcon>
+                    <DraftsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Start debate" />
+                </ListItem>
+              </List>
+              <Divider />
+            </CardContent>
+            <CardActions style={{ justifyContent: 'center' }}>
+              
+            </CardActions>
+          </Card>
+        </Grid>
       </Grid>
     </div>
   );
