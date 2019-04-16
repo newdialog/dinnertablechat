@@ -20,6 +20,7 @@ import AppFloatMenu from '../../menus/dash/AppFloatMenu';
 import MicPermissionsBtn from './SMicPermissionsBtn';
 import { Auther } from '../../Auther';
 import SMicSelector from './SMicSelector';
+import SClosedDialog from './SClosedDialog';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
@@ -148,7 +149,11 @@ export default observer(function MenuHome(props: Props) {
   // if (!store.debate.topic && store.debate.position > -1) step = 1;
   // if (store.debate.position === -1) step = 0;
 
-  if (step === 2) store.router.push('/saasmatch'); //  && store.micAllowed :SAAS
+  if (step === 2) {
+    // goto 3rd page if debate session is not open
+    if(Times.isDuringDebate(store.isLive)!==true) step = 3;
+    else store.router.push('/saasmatch'); //  && store.micAllowed :SAAS
+  }
 
   const handleStep = step => () => {
     store.debate.resetQueue();
@@ -188,6 +193,8 @@ export default observer(function MenuHome(props: Props) {
           <PositionSelector store={store} />}
         {step === 1 && 
           <SMicSelector store={store} />}
+        {step === 3 && 
+          <SClosedDialog store={store} />}
         </div>
         
       </main>

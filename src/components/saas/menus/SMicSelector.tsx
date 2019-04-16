@@ -69,9 +69,13 @@ export default function SMicSelector(props: Props) {
 
   // state = { noop: false };
 
-  const onSelect = () => {
-    props.store.debate.setCharacter(1);
+  const onMic = () => {
+    
   };
+
+  const onStart = () => {
+    props.store.debate.setCharacter(1);
+  }
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
@@ -89,27 +93,18 @@ export default function SMicSelector(props: Props) {
                     // size="small"
                     color="secondary"
                     className={classes.btn}
-                    onClick={() => onSelect()}
+                    onClick={() => onMic()}
                   >
-                    test
+                    Allow microphone
                   </Button>
                   <Button
                     variant="contained"
                     // size="small"
                     color="secondary"
                     className={classes.btn}
-                    onClick={() => null}
+                    onClick={() => onStart()}
                   >
-                    test
-                  </Button>
-                  <Button
-                    variant="contained"
-                    // size="small"
-                    color="secondary"
-                    className={classes.btn}
-                    onClick={() => null}
-                  >
-                    test
+                    Start debate
                   </Button>
 
               </CardActions>

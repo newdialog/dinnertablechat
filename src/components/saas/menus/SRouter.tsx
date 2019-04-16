@@ -64,7 +64,7 @@ export default observer(function SRouter(props: Props) {
   
     const inSync = ds.match && ds.match!.sync && state.peer;
   
-    if (ds.position === -1 || ds.contribution === -1) stage = 0;
+    if (ds.position === -1 || ds.contribution === -1 || ds.character < 0) stage = 0;
     else stage = 1;
   
     if (inSync) stage = 2;
