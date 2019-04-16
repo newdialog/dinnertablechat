@@ -62,7 +62,7 @@ interface Props {
   store: AppModel.Type;
 }
 
-export default function PositionSelector(props: Props) {
+export default function SMicSelector(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
@@ -70,38 +70,35 @@ export default function PositionSelector(props: Props) {
   // state = { noop: false };
 
   const onSelect = (position: number, card: TopicInfo.Card) => {
-    // props.store.debate.setCharacter(1);
+    props.store.debate.setCharacter(1);
     props.store.debate.setPosition(position, card.id);
   };
-
-  const data: TopicInfo.Card[] = TopicInfo.getTopics(t);
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
       <Grid container spacing={0} justify="center">
-        {data.map((card, i) => (
-          <Grid key={i} sm={10} md={10} lg={10} item>
+        
+          <Grid sm={10} md={10} lg={10} item>
             <Card className={classes.card}>
               <CardContent className={classes.cardContent}>
-                <Typography variant="h5">{card.proposition}</Typography>
+                <Typography variant="h5">123</Typography>
               </CardContent>
               <CardActions style={{justifyContent: 'center'}}>
-                {card.positions.map((p, i) => (
+                
                   <Button
                     variant="contained"
                     // size="small"
-                    key={i}
                     color="secondary"
                     className={classes.btn}
-                    onClick={() => onSelect(i, card)}
+                    onClick={() => null}
                   >
-                    {p}
+                    test
                   </Button>
-                ))}
+
               </CardActions>
             </Card>
           </Grid>
-        ))}
+       
       </Grid>
     </div>
   );

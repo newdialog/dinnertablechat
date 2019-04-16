@@ -77,17 +77,21 @@ export default observer(function SRouter(props: Props) {
     // if(stage === 2 && !this.state.peer) stage = 1;
   
     console.log(
-      'debate route stage:',
+      'saas debate route stage:',
       stage,
       ds.position,
       ds.contribution,
       'ds.match set ' + !!ds.match,
       'sync done:' + inSync
     );
+
+    if (stage === 0) {
+        console.log('lost state');
+        store.router.push('/saas');
+    }
   
     return (
       <>
-        {stage === 0 && <SMenuHome/>}
         {stage === 1 && <LoadingScene store={store} onPeer={onPeer} />}
         {stage === 2 && !isTest && (
           <DebateScene store={store} peer={state.peer!} />

@@ -19,6 +19,7 @@ import { useTheme, makeStyles } from '@material-ui/styles';
 import AppFloatMenu from '../../menus/dash/AppFloatMenu';
 import MicPermissionsBtn from './SMicPermissionsBtn';
 import { Auther } from '../../Auther';
+import SMicSelector from './SMicSelector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
@@ -128,7 +129,7 @@ export default observer(function MenuHome(props: Props) {
       guest: store.isGuest()
     });
   }, []);
-  
+
   const handleReset = () => {
     store.debate.resetQueue();
   };
@@ -136,13 +137,18 @@ export default observer(function MenuHome(props: Props) {
   if (store.auth.isNotLoggedIn) {
     return <div />;
   }
-  let step = 3;
+  let step = 0;
 
-  if (store.debate.contribution === -1) step = 2; // skip contribution
-  if (!store.debate.topic || store.debate.position === -1) step = 1;
-  if (store.debate.character === -1) step = 0;
+  const topicBit = store.debate.topic ? 1 : 0;
+  const charBit = store.debate.character !== -1 ? 1 : 0;
 
-  if (step === 3) store.router.push('/match'); //  && store.micAllowed :SAAS
+  step = topicBit + charBit;
+
+  // if (store.debate.contribution === -1) step = 2; // skip contribution
+  // if (!store.debate.topic && store.debate.position > -1) step = 1;
+  // if (store.debate.position === -1) step = 0;
+
+  if (step === 2) store.router.push('/saasmatch'); //  && store.micAllowed :SAAS
 
   const handleStep = step => () => {
     store.debate.resetQueue();
@@ -178,7 +184,10 @@ export default observer(function MenuHome(props: Props) {
         </div>
 
         <div className={classes.stepper}>
-          <PositionSelector store={store} />
+        {step === 0 && 
+          <PositionSelector store={store} />}
+        {step === 1 && 
+          <SMicSelector store={store} />}
         </div>
         
       </main>

@@ -18,6 +18,7 @@ const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
 const Saas = lazy(() => import('./saas/menus/SRouter'));
+const SMenuHome = lazy(() => import('./saas/menus/SMenuHome'));
 
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();
@@ -65,7 +66,8 @@ const DTCRouter = ({
         {store.isLive === false && (
           <>
             <Route exact={true} path="/test2" component={AsyncTester} />
-            <Route exact={true} path="/saas" component={Saas} />
+            <Route exact={true} path="/saas" component={SMenuHome} />
+            <Route exact={true} path="/saasmatch" component={Saas}/>
           </>
         )}
         {store.isLive === false && (
