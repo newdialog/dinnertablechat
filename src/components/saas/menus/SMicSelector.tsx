@@ -69,9 +69,8 @@ export default function SMicSelector(props: Props) {
 
   // state = { noop: false };
 
-  const onSelect = (position: number, card: TopicInfo.Card) => {
+  const onSelect = () => {
     props.store.debate.setCharacter(1);
-    props.store.debate.setPosition(position, card.id);
   };
 
   return (
@@ -81,10 +80,28 @@ export default function SMicSelector(props: Props) {
           <Grid sm={10} md={10} lg={10} item>
             <Card className={classes.card}>
               <CardContent className={classes.cardContent}>
-                <Typography variant="h5">123</Typography>
+                <Typography></Typography>
               </CardContent>
               <CardActions style={{justifyContent: 'center'}}>
                 
+                  <Button
+                    variant="contained"
+                    // size="small"
+                    color="secondary"
+                    className={classes.btn}
+                    onClick={() => onSelect()}
+                  >
+                    test
+                  </Button>
+                  <Button
+                    variant="contained"
+                    // size="small"
+                    color="secondary"
+                    className={classes.btn}
+                    onClick={() => null}
+                  >
+                    test
+                  </Button>
                   <Button
                     variant="contained"
                     // size="small"
