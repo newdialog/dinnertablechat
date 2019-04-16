@@ -17,7 +17,7 @@ const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
 const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
-const Saas = lazy(() => import('./saas/menus/MenuHome'));
+const Saas = lazy(() => import('./saas/menus/SRouter'));
 
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();

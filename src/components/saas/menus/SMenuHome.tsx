@@ -10,14 +10,14 @@ import {
   Paper
 } from '@material-ui/core';
 import * as AppModel from '../../../models/AppModel';
-import PositionSelector from './PositionSelector';
+import PositionSelector from './SPositionSelector';
 import Footer from '../../home/Footer';
 import * as Times from '../../../services/TimeService';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 import AppFloatMenu from '../../menus/dash/AppFloatMenu';
-import MicPermissionsBtn from './MicPermissionsBtn';
+import MicPermissionsBtn from './SMicPermissionsBtn';
 import { Auther } from '../../Auther';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -92,12 +92,8 @@ interface Props {
   isTest?: boolean;
 }
 
-function getSteps() {
-  return ['Select Postion']; // , 'Set contribution']
-}
-
-function onHistory(store: AppModel.Type) {
-  store.router.push('/home');
+function onHelp(store: AppModel.Type) {
+  store.router.push('/tutorial');
 }
 
 export default observer(function MenuHome(props: Props) {
@@ -132,11 +128,7 @@ export default observer(function MenuHome(props: Props) {
       guest: store.isGuest()
     });
   }, []);
-
-  const handleBack = () => {
-    handleReset();
-  };
-
+  
   const handleReset = () => {
     store.debate.resetQueue();
   };
@@ -151,8 +143,6 @@ export default observer(function MenuHome(props: Props) {
   if (store.debate.character === -1) step = 0;
 
   if (step === 3) store.router.push('/match'); //  && store.micAllowed :SAAS
-
-  const steps = getSteps();
 
   const handleStep = step => () => {
     store.debate.resetQueue();
@@ -172,6 +162,7 @@ export default observer(function MenuHome(props: Props) {
             <Typography
               style={{
                 fontSize: '1.2em',
+                fontWeight: 400,
                 paddingBottom: '0',
                 width:'400px'
               }}
@@ -192,8 +183,8 @@ export default observer(function MenuHome(props: Props) {
         
       </main>
       <div className={classes.footer}>
-        Limited time: You can debate every sunday from 18:00 till 19:00.<br/>
-        Feedback: <input type="input" defaultValue="Enter your feedback here"/>
+        <b>Limited time:</b> You can debate every sunday from 18:00 till 19:00.<br/>
+        <b>Feedback:</b> <input type="input" defaultValue="Enter your feedback here"/>
       </div>
     </div>
   );

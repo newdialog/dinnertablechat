@@ -27,7 +27,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   btn: {
-    marginLeft: '1.5em'
+    marginLeft: '1.5em',
+    width: '8em'
     // color: theme.palette.secondary.main
   },
   cardGrid: {
@@ -82,12 +83,9 @@ export default function PositionSelector(props: Props) {
           <Grid key={i} sm={10} md={10} lg={10} item>
             <Card className={classes.card}>
               <CardContent className={classes.cardContent}>
-                <Typography gutterBottom variant="h5" component="h2">
-                  {card.topic}
-                </Typography>
-                <Typography>{card.proposition}</Typography>
+                <Typography variant="h5">{card.proposition}</Typography>
               </CardContent>
-              <CardActions>
+              <CardActions style={{justifyContent: 'center'}}>
                 {card.positions.map((p, i) => (
                   <Button
                     variant="contained"
