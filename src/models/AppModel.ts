@@ -24,7 +24,8 @@ const AppModel = types
     _isStandalone: false,
     dailyOpen: false, // only use for invalidation
     micAllowed: false,
-    isLive: isLive()
+    isLive: isLive(),
+    isSaas: false
   })
   .views(self => ({
     /* isDailyOpen() {
@@ -69,6 +70,9 @@ const AppModel = types
     setDailyOpen(open: boolean) {
       self.dailyOpen = open;
     },
+    setSaas(isSaas: boolean) {
+      self.isSaas = isSaas;
+    },
     gotoHomeMenu() {
       self.showNav = true;
       // if (!self.debate.isTest)
@@ -87,6 +91,11 @@ const AppModel = types
     },
     // Covers guest login action\ as well
     authenticated(signedIn: boolean) {
+      if (self.isSaas) {
+        self.router.push('/saas');
+        return;
+      }
+
       const path = (self.router.location as any).pathname;
       const isTest = path === '/test' || path === '/test2';
       if (isTest) return;
