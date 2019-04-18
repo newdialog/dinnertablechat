@@ -57,9 +57,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: '0 auto',
     padding: `0px 0 0px`
   },
-  stepper: {
-    padding: theme.spacing.unit * 0
-  },
   button: {
     marginTop: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -88,6 +85,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: '#ffffff !important',
     fontWeight: 'bold'
   },
+  verticalCenter: {
+    margin: 0,
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translateY(-50%) translateX(-50%)'
+  }
 }), { withTheme: true, name: 'MenuHome' });
 
 interface Props {
@@ -188,7 +192,7 @@ export default observer(function MenuHome(props: Props) {
           </div>
         </div>
 
-        <div className={classes.stepper}>
+        <div className={classes.verticalCenter}>
         {step === 0 && 
           <PositionSelector store={store} />}
         {step === 1 && 
