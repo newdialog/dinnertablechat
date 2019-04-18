@@ -46,6 +46,7 @@ export default observer(function CharacterSelector(props: Props) {
         // setState(true);
         // console.log('set allowed');
         if (!enabled) store.setMicAllowed(true);
+        media.getTracks().forEach(track => track.stop());
       })
       .catch(() => {
         mutex = false;

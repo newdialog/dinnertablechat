@@ -17,7 +17,6 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 import AppFloatMenu from '../../menus/dash/AppFloatMenu';
-import MicPermissionsBtn from './SMicPermissionsBtn';
 import { Auther } from '../../Auther';
 
 import DebateFeedback from '../../debate/DebateFeedback';

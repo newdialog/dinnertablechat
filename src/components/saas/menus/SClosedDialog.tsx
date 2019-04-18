@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import * as React from 'react';
 import classNames from 'classnames';
 import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import {
@@ -23,8 +23,6 @@ import Divider from '@material-ui/core/Divider';
 
 import InboxIcon from '@material-ui/icons/MicRounded';
 import DraftsIcon from '@material-ui/icons/ChatBubbleOutlineRounded';
-import SMicPermissionsBtn from '../../menus/MicPermissionsBtn';
-import { observer } from 'mobx-react-lite';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -80,18 +78,14 @@ function ListItemLink(props) {
   return <ListItem button component="a" {...props} />;
 }
 
-export default observer(function SMicSelector(props: Props) {
+export default function SClosedDialog(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  const [state, setState] = useState({checkMic:false});
-
   // state = { noop: false };
 
-  const onMic = () => {
-    setState({checkMic: true});
-  };
+  const onMic = () => {};
 
   const onStart = () => {
     props.store.debate.setCharacter(1);
@@ -110,26 +104,34 @@ export default observer(function SMicSelector(props: Props) {
           <Card className={classes.card}>
             <CardContent className={classes.cardContent}>
               <List component="nav">
-              { !store.micAllowed && <ListItem button
+                <ListItem button
                 selected={false}
                 onClick={event => handleListItemClick(event, 0)}
                 >
                   <ListItemIcon>
                     <InboxIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Allow microphone" />
-                </ListItem>}
-                {store.micAllowed && <ListItem button selected={false}
+                  <ListItemText primary="Attend Facebook event" />
+                </ListItem>
+                <ListItem button selected={false}
                 onClick={event => handleListItemClick(event, 1)}
                 >
                   <ListItemIcon>
                     <DraftsIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Start debate" />
-                </ListItem>}
+                  <ListItemText primary="Download event" />
+                </ListItem>
+
+                <ListItem button selected={false}
+                onClick={event => handleListItemClick(event, 1)}
+                >
+                  <ListItemIcon>
+                    <DraftsIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Next week's question" />
+                </ListItem>
               </List>
-              <div style={{paddingTop:'2em'}}/>
-              { state.checkMic && <SMicPermissionsBtn store={store}/> }
+              <Divider />
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
               
@@ -139,12 +141,4 @@ export default observer(function SMicSelector(props: Props) {
       </Grid>
     </div>
   );
-});
-
-/*
-<CardMedia
-className={classes.cardMedia}
-// image={card.photo}
-title={card.topic}
-/>
-*/
+}
