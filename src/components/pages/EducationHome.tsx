@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useContext} from 'react';
 import { Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
@@ -34,6 +34,7 @@ interface Props {
 
 export default function EducationHome(props: Props) {
   const classes = useStyles({});
+  const store = useContext(AppModel.Context)!;
 
   const imgs = [
     './logos/dinnertable.gif',
@@ -41,6 +42,12 @@ export default function EducationHome(props: Props) {
     './logos/dtclogo3-1.png',
     './logos/dtclogo3.png'
   ];
+
+  const goHome = (e) => {
+    e.preventDefault();
+    store.router.push('/');
+  }
+
   return (
     <React.Fragment>
       <Helmet title="Dinnertable.chat Campus">
@@ -85,10 +92,7 @@ export default function EducationHome(props: Props) {
           .
         </Typography>
         <Typography gutterBottom={true}>
-          Return to{' '}
-          <a href="/" onClick={trackOutboundLinkClick('/')}>
-            homepage
-          </a>
+        <br/><a href="/about" onClick={goHome}>⬅ Return to homepage</a>
         </Typography>
       </div>
       <Footer />
