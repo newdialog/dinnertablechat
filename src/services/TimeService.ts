@@ -1,91 +1,86 @@
-import moment from 'moment';
+// import DateTime from 'DateTime';
+// import { DateTime, Duration } from 'luxon';
+const { DateTime, Duration } = luxon;
+// const {DateTime} = require("luxon");
+// import ical from 'ical-generator';
 
 const hourOpen = 20;
 const minOpen = 0;
 
-const dur = moment.duration(5, 'hours').add(0, 'minutes');
+const dur = Duration.fromObject({ hours: 5, minutes: 0 });
+
+// export function genIcal()
 
 export function isBeforeEndingTime() {
-  return moment()
-    .utc()
-    .isBefore(_getDebateEnd());
+  return DateTime.utc() < _getDebateEnd();
 }
 
 export function isAfterEndTime() {
-  return moment()
-    .utc()
-    .isAfter(_getDebateEnd());
+  return DateTime.utc() > _getDebateEnd();
 }
 
 export function isDuringDebate(isLive?: boolean) {
   // TESTING Flag: always lock session open
   if (isLive === false) {
     return true;
+    return !window.location.hostname.includes('jadbox');
   }
-  const m = moment().utc();
+  const m = DateTime.utc();
   return (
-    m.isBetween(todaysStart(), todaysEnd()) ||
-    m.isBetween(yestStart(), yestEnd())
+    (m >= todaysStart() && m <= todaysEnd()) ||
+    (m >= yestStart() && m <= yestEnd())
   );
   //.isBetween(_getDebateStart(), _getDebateEnd());
 }
 
 export function todaysStart() {
-  return moment()
-    .utc()
-    .hour(hourOpen)
-    .minute(minOpen)
-    .seconds(0);
+  return DateTime.utc().set({ hour: hourOpen, minute: 0, second: 0 });
   // .add(hourOpen)
   // .add(minOpen);
 }
 
 export function yestStart() {
-  return todaysStart().subtract(1, 'day');
+  return todaysStart().minus({ day: 1 });
 }
 export function yestEnd() {
-  return yestStart().add(dur);
+  return yestStart().plus(dur);
 }
 
 export function todaysEnd() {
-  return todaysStart().add(dur);
+  return todaysStart().plus(dur);
 }
 
 export function pastDaysEnd() {
-  return moment()
-    .utc()
-    .isAfter(todaysEnd());
+  return DateTime.utc() > todaysEnd();
 }
 
 export function pastDaysStart() {
-  return moment()
-    .utc()
-    .isAfter(todaysStart());
+  return DateTime.utc() > todaysStart();
 }
 
 // export function
 
 export function _getDebateStart() {
-  const m = moment().utc();
+  const m = DateTime.utc();
   const todayStart = todaysStart();
-  return m.isBetween(yestEnd(), todayStart) // return !pastDaysEnd()
+  return m >= yestEnd() && m <= todayStart // return !pastDaysEnd()
     ? todayStart
-    : todayStart.add('1', 'day');
+    : todayStart.plus({ day: 1 });
 }
 
 export function _getDebateEnd() {
   // return _getDebateStart().add(dur);
-  const m = moment().utc();
+  const m = DateTime.utc();
   const yend = yestEnd();
-  return m.isBetween(yestStart(), yend) // return !pastDaysEnd()
+  return m >= yestStart() && m <= yend // return !pastDaysEnd()
     ? yend
-    : yend.add('1', 'day');
+    : yend.plus({ day: 1 });
 }
 
 export function getDebateStart() {
-  return _getDebateStart().toDate();
+  return _getDebateStart().toJSDate();
 }
 
 export function getDebateEnd() {
-  return _getDebateEnd().toDate();
+  return _getDebateEnd().toJSDate();
 }

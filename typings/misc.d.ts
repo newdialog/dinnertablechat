@@ -1,5 +1,6 @@
 declare module 'jss-preset-default';
 declare module 'react-jss/*';
+declare var luxon: import('luxon');
 declare module 'json!*' {
   let json: any;
   export = json;

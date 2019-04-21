@@ -23,7 +23,9 @@ import * as AppModel from '../../../models/AppModel';
 import * as TopicInfo from '../../../utils/TopicInfo';
 import API from '../../../services/APIService';
 
-import moment from 'moment';
+// const {DateTime} = require("luxon");
+// import { DateTime } from 'luxon';
+const { DateTime } = luxon;
 
 import {
   TwitterShareButton,
@@ -259,8 +261,8 @@ export default function DebateHistory(props: Props) {
     };
   };
 
-  const transformDate = (timestamp: number) => {
-    return moment(timestamp).format('MMM DD, YYYY h:mma');
+  const transformDate = (isoTimestamp: string) => {
+    return DateTime.fromISO(isoTimestamp).toFormat('MMM DD, yyyy h:mma');
   };
 
   const transformSide = (topic: string, side: number) => {

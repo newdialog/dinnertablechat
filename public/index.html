@@ -91,6 +91,7 @@ mixpanel.init("9faf8f07f48cf113e52cefb66f005408", {debug:false});</script><!-- e
     gtag('create', 'UA-119131630-1', 'auto');
 
     function trackOutboundLink(url, nonInteraction, newWin) {
+      console.log('trackOutboundLink');
       var redirected = false;
 
       gtag('event', 'click', {
@@ -138,6 +139,7 @@ mixpanel.init("9faf8f07f48cf113e52cefb66f005408", {debug:false});</script><!-- e
       document.getElementsByTagName('head')[0].appendChild(css);
     })();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon@1.12.1/build/global/luxon.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/producthunt-floating-prompt/lib/producthunt-floating-prompt.min.js"></script>
 </body>
 
