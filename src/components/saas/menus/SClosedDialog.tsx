@@ -85,7 +85,13 @@ export default function SClosedDialog(props: Props) {
 
   // state = { noop: false };
 
-  const onMic = () => {};
+  const onFB = (e) => {
+    window.trackOutboundLinkClick(
+      'https://www.facebook.com/events/522239821514316/',
+      true,
+      true
+    )(e);
+  };
 
   const onStart = () => {
     props.store.debate.setCharacter(1);
@@ -93,9 +99,9 @@ export default function SClosedDialog(props: Props) {
 
   const handleListItemClick = (e, index) => {
     console.log('index', index);
-    if(index===0) onMic();
-    if(index===1) onStart();
-  }
+    if (index === 0) onFB(e);
+    if (index === 1) onStart();
+  };
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
@@ -104,17 +110,20 @@ export default function SClosedDialog(props: Props) {
           <Card className={classes.card}>
             <CardContent className={classes.cardContent}>
               <List component="nav">
-                <ListItem button
-                selected={false}
-                onClick={event => handleListItemClick(event, 0)}
+                <ListItem
+                  button
+                  selected={false}
+                  onClick={event => handleListItemClick(event, 0)}
                 >
                   <ListItemIcon>
                     <InboxIcon />
                   </ListItemIcon>
                   <ListItemText primary="Attend Facebook event" />
                 </ListItem>
-                <ListItem button selected={false}
-                onClick={event => handleListItemClick(event, 1)}
+                <ListItem
+                  button
+                  selected={false}
+                  onClick={event => handleListItemClick(event, 1)}
                 >
                   <ListItemIcon>
                     <DraftsIcon />
@@ -122,8 +131,10 @@ export default function SClosedDialog(props: Props) {
                   <ListItemText primary="Download event" />
                 </ListItem>
 
-                <ListItem button selected={false}
-                onClick={event => handleListItemClick(event, 1)}
+                <ListItem
+                  button
+                  selected={false}
+                  onClick={event => handleListItemClick(event, 1)}
                 >
                   <ListItemIcon>
                     <DraftsIcon />
@@ -133,9 +144,7 @@ export default function SClosedDialog(props: Props) {
               </List>
               <Divider />
             </CardContent>
-            <CardActions style={{ justifyContent: 'center' }}>
-              
-            </CardActions>
+            <CardActions style={{ justifyContent: 'center' }} />
           </Card>
         </Grid>
       </Grid>
