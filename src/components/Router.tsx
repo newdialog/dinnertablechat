@@ -4,6 +4,7 @@ import { Router, Route, Switch, Redirect } from 'react-router-dom';
 import * as AppModel from '../models/AppModel';
 import {observer} from 'mobx-react-lite';
 import LoadingMsg from './Loading';
+import SClosedDialog from './saas/menus/SClosedDialog';
 
 const AsyncHome = lazy(() => import('./home/home'));
 const AsyncPlay = lazy(() => import('./menus/MenuHome'));
@@ -67,6 +68,7 @@ const DTCRouter = ({
           <>
             <Route exact={true} path="/test2" component={AsyncTester} />
             <Route exact={true} path="/saas" component={SMenuHome} />
+            <Route exact={true} path="/saasend" component={SClosedDialog} />
             <Route exact={true} path="/saasmatch" component={Saas}/>
           </>
         )}

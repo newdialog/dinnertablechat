@@ -43,6 +43,9 @@ export default function Footer(props: Props) {
 
   if (!props.forceShow && store.isStandalone()) return null;
 
+  const path = (store.router.location as any).pathname;
+  const isHome = path === '/' || path === '/about';
+
   return (
     <footer className={classes.centered + ' ' + cn}>
       <section id="social_icon_footer">
@@ -116,13 +119,14 @@ export default function Footer(props: Props) {
       <Typography style={{ fontSize: '0.8em', color: 'white' }}>
         <br />
         PAGES:{' '}
-        <a
+        { !isHome && <><a
           href="/about"
           className={classes.links}
           style={{ margin: '0 10px 0 10px' }}
         >
           About DTC
-        </a>{' | '}
+        </a>{' | '}</>
+        }
         <a
           href="/press"
           className={classes.links}

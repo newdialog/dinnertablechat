@@ -169,7 +169,7 @@ export default observer(function MenuHome(props: Props) {
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             {props.isTest && <h2>TEST MODE (/test)</h2>}
-            <img src="./logos/appbar-logo-color.png" 
+            <img src="/logos/appbar-logo-color.png" 
               crossOrigin="anonymous"
               title="DTC Home"
               style={{ height: '3em', cursor: 'pointer' }}/>
