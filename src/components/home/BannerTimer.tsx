@@ -115,7 +115,7 @@ const renderer = (
         >
         <a 
         style={{ color: '#95d4ff', textDecoration: 'underline' }}
-        onClick={trackOutboundLinkClick(
+        onClick={window.trackOutboundLinkClick(
                 'https://www.facebook.com/events/522239821514316/',
               true, true)} href='https://www.facebook.com/events/522239821514316/' target='_blank'>Add to Facebook Calendar</a>
         </Typography>

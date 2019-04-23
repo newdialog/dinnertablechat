@@ -14,6 +14,8 @@ import StartDebateDialog from './StartDebateDialog';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 
+const screen = window.screen;
+
 const useStyles = makeStyles((theme: Theme) => ({
   centered: {
     marginTop: '60px',

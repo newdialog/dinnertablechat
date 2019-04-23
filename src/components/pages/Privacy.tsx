@@ -3,6 +3,7 @@ import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import Footer from '../home/Footer';
 import { Helmet } from 'react-helmet';
 import { useTheme, makeStyles } from '@material-ui/styles';
+import * as AppModel from '../../models/AppModel';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -112,7 +113,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-import * as AppModel from '../../models/AppModel';
 interface Props extends WithStyles {
   // store: AppModel.Type;
 }

@@ -20,6 +20,8 @@ import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 import { useOnScreen } from 'react-hooks-set';
 
+const trackOutboundLinkClick = window.trackOutboundLinkClick;
+
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     textAlign: 'center',

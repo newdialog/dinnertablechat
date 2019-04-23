@@ -14,6 +14,7 @@ import {
 } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Info from '@material-ui/icons/Info';
+/*global luxon*/
 import IconButton from '@material-ui/core/IconButton';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
@@ -22,20 +23,18 @@ import * as AppModel from '../../../models/AppModel';
 // TODO: ADD AUTH CHECK
 import * as TopicInfo from '../../../utils/TopicInfo';
 import API from '../../../services/APIService';
-
-// const {DateTime} = require("luxon");
-// import { DateTime } from 'luxon';
-const { DateTime } = luxon;
-
 import {
   TwitterShareButton,
   FacebookShareButton,
   TwitterIcon,
   FacebookIcon
 } from 'react-share';
-
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
+
+// const {DateTime} = require("luxon");
+// import { DateTime } from 'luxon';
+const { DateTime } = luxon;
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {

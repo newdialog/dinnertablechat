@@ -12,6 +12,7 @@ import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 
+const trackOutboundLinkClick = window.trackOutboundLinkClick;
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     textAlign: 'center',

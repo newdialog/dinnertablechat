@@ -3,6 +3,8 @@ import { Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
 import { useTheme, makeStyles } from '@material-ui/styles';
+import * as AppModel from '../../models/AppModel';
+import Footer from '../home/Footer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -26,8 +28,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-import * as AppModel from '../../models/AppModel';
-import Footer from '../home/Footer';
 interface Props {
   // store: AppModel.Type;
 }
@@ -85,7 +85,7 @@ export default function EducationHome(props: Props) {
           For inquires or help using DTC in the classroom, please{' '}
           <a
             href="mailto:edu@dinnertable.chat"
-            onClick={trackOutboundLinkClick('mailto:edu@dinnertable.chat')}
+            onClick={window.trackOutboundLinkClick('mailto:edu@dinnertable.chat')}
           >
             contact us at edu@dinnertable.chat
           </a>

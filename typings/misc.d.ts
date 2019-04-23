@@ -1,6 +1,9 @@
 declare module 'jss-preset-default';
 declare module 'react-jss/*';
 declare var luxon: import('luxon');
+// declare var trackOutboundLinkClick: any;
+// declare var trackOutboundLink: any;
+
 declare module 'json!*' {
   let json: any;
   export = json;
@@ -31,11 +34,13 @@ declare function trackOutboundLinkClick(
 ): (e: any) => any;
 
 declare global {
+  declare var luxon: import('luxon');
   interface Window {
     gtag: typeof gtag;
     mixpanel: mixpanel;
     trackOutboundLink: typeof trackOutboundLink;
     trackOutboundLinkClick: typeof trackOutboundLinkClick;
+    luxon: import('luxon');
   }
 }
 
@@ -44,4 +49,5 @@ interface Window {
   mixpanel: mixpanel;
   trackOutboundLink: typeof trackOutboundLink;
   trackOutboundLinkClick: typeof trackOutboundLinkClick;
+  luxon: import('luxon');
 }

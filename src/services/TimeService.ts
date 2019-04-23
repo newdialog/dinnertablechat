@@ -1,3 +1,4 @@
+/*global luxon*/
 // import DateTime from 'DateTime';
 // import { DateTime, Duration } from 'luxon';
 const { DateTime, Duration } = luxon;

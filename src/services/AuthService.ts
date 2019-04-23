@@ -9,6 +9,9 @@ import Auth from '@aws-amplify/auth';
 import API from './APIService'; // TODO refactor
 
 import retry from 'async-retry';
+// import { Logger } from 'aws-amplify';
+import { Hub, ConsoleLogger } from '@aws-amplify/core';
+import { injectConfig } from '../configs/AWSconfig';
 
 const delayFlag = async (obj: { flag: boolean }) =>
   await retry(
@@ -31,10 +34,6 @@ Amplify.Logger.LOG_LEVEL = 'DEBUG';
 */
 
 // https://github.com/aws-amplify/amplify-js/issues/1487
-
-// import { Logger } from 'aws-amplify';
-import { Hub, ConsoleLogger } from '@aws-amplify/core';
-import { injectConfig } from '../configs/AWSconfig';
 
 const awsconfig = injectConfig(awsmobile);
 const IdentityPoolId = awsconfig.Auth.identityPoolId;

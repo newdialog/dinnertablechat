@@ -79,7 +79,7 @@ const renderer = (
 
         <a 
         style={{ textDecoration: 'underline' }}
-        onClick={trackOutboundLinkClick(
+        onClick={window.trackOutboundLinkClick(
                 'https://www.facebook.com/events/522239821514316/'
               )} href='https://www.facebook.com/events/522239821514316/'>Add to Facebook Calendar</a>
         

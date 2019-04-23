@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 import * as TopicInfo from '../../utils/TopicInfo';
 
+const screen = window.screen;
 // requires user action
 function setLandscape() {
   // Lock orientation if possible

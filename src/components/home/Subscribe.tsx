@@ -48,7 +48,7 @@ export default function ButtonAppBar(props: Props) {
 
   const onSubmit = useMemo(() => async (e) => {
     e.preventDefault();
-    gtag('event', 'subscribe_action', {
+    window.gtag('event', 'subscribe_action', {
       event_category: 'splash',
       non_interaction: false
     });

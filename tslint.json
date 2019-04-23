@@ -9,6 +9,7 @@
   },
   "jsRules": { "no-console": false },
   "rules": {
+    "no-unused-vars": false,
     "align": [
         false,
         "parameters",

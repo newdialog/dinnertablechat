@@ -5,6 +5,8 @@ import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { Helmet } from 'react-helmet';
 import { makeStyles } from '@material-ui/styles';
+import * as AppModel from '../../models/AppModel';
+import Footer from '../home/Footer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -70,9 +72,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 60
   }
 }));
-
-import * as AppModel from '../../models/AppModel';
-import Footer from '../home/Footer';
 interface Props {
   // extends WithStyles<typeof styles> {
   // store: AppModel.Type;
@@ -126,7 +125,7 @@ export default function MediaKit(props: Props) {
           publication media kit needs, please{' '}
           <a
             href="mailto:press@dinnertable.chat"
-            onClick={trackOutboundLinkClick('mailto:press@dinnertable.chat')}
+            onClick={window.trackOutboundLinkClick('mailto:press@dinnertable.chat')}
           >
             contact us
           </a>
@@ -187,7 +186,7 @@ export default function MediaKit(props: Props) {
           General business inqueries{' '}
           <a
             href="mailto:team@dinnertable.chat"
-            onClick={trackOutboundLinkClick('mailto:team@dinnertable.chat')}
+            onClick={window.trackOutboundLinkClick('mailto:team@dinnertable.chat')}
           >
             team@dinnertable.chat
           </a>
@@ -195,7 +194,7 @@ export default function MediaKit(props: Props) {
           Press inquiries{' '}
           <a
             href="mailto:press@dinnertable.chat"
-            onClick={trackOutboundLinkClick('mailto:press@dinnertable.chat')}
+            onClick={window.trackOutboundLinkClick('mailto:press@dinnertable.chat')}
           >
             press@dinnertable.chat
           </a>

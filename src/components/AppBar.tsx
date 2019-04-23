@@ -28,6 +28,8 @@ const useStyles = makeStyles((theme: any) => ({
   }
 }));
 
+const trackOutboundLinkClick = window.trackOutboundLinkClick;
+
 interface Props {
   store: Store.Type;
 }

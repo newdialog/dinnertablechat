@@ -8,11 +8,10 @@ import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
 import * as DebateModel from '../models/DebateModel';
 import * as AuthService from './AuthService';
+import retry from 'async-retry';
 type OnMatched = DebateModel.MatchModelType;
 
 let gameLift: GameLift;
-
-import retry from 'async-retry';
 
 const stopFlags: { [ticket: string]: StopFlag } = {}; // ticketid: flag
 

@@ -4,6 +4,8 @@ import { createStyles, WithStyles } from '@material-ui/core/styles';
 import * as AppModel from '../../models/AppModel';
 
 import { useTheme, makeStyles } from '@material-ui/styles';
+const trackOutboundLinkClick = window.trackOutboundLinkClick;
+
 const useStyles = makeStyles((theme: any) => ({
     root: {
       justifyContent: 'center'
