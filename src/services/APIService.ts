@@ -1,4 +1,3 @@
-import { string } from 'prop-types';
 import API from '@aws-amplify/api';
 import Auth from '@aws-amplify/auth';
 
@@ -104,7 +103,7 @@ async function bail(matchId: string) {
     });
 }
 
-function configure(conf) {
+function configure(conf:any) {
   return API.configure(conf);
 }
 

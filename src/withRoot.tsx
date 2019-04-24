@@ -1,10 +1,4 @@
-import * as React from 'react';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import purple from '@material-ui/core/colors/purple';
-import green from '@material-ui/core/colors/green';
-import blue from '@material-ui/core/colors/blue';
-import red from '@material-ui/core/colors/red';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { createMuiTheme } from '@material-ui/core/styles';
 
 // A theme with custom primary and secondary color.
 // It's optional.
@@ -17,11 +11,13 @@ export const theme = createMuiTheme({
     },
     MuiStepLabel: {
       label: {
-        color:'#484866'
+        color: '#484866'
       }
     },
-    MuiButton: { // Name of the component ⚛️ / style sheet
-      text: { // Name of the rule
+    MuiButton: {
+      // Name of the component ⚛️ / style sheet
+      text: {
+        // Name of the rule
         // color: 'white', // Some CSS
       },
       contained: {
@@ -31,17 +27,16 @@ export const theme = createMuiTheme({
         // color: '#fff !important'
       },
       containedSecondary: {
-        color: '#52291d',
+        color: '#52291d'
         // color: '#fff'
       },
       flatSecondary: {
-        color: '#ff896b', // primary // '#6f3727',
+        color: '#ff896b' // primary // '#6f3727',
       },
       flatPrimary: {
         color: '#066873'
       }
-      
-    },
+    }
   },
   palette: {
     // type: 'dark',
@@ -52,37 +47,37 @@ export const theme = createMuiTheme({
       // contrastText: getContrastText(palette.primary[500]),
       contrastText: '#fff',
       dark: '#066873'
-      
+
       // dark: will be calculated from palette.primary.main,
       // contrastText: will be calculated to contrast with palette.primary.main
     },
     secondary: {
-      light: '#ffba9a', //'#ff92c4',
+      light: '#ffba9a', // '#ff92c4',
       main: '#ff896b',
       // dark: '#632d20',
-      //dark: '#06616b',
-      dark: '#484866',
+      // dark: '#06616b',
+      dark: '#484866'
       /// contrastText: 'white'
       // dark: '#c82466'
       // dark: will be calculated from palette.secondary.main,
       // contrastText: '#ffcc00',
     },
     text: {
-      primary: "#484866", //"#616161",
+      primary: '#484866', // "#616161",
       // secondary: "#fff", // will hide error messages
       // secondary: "rgba(50, 50, 50, 0.8)",
-      disabled: "rgba(0, 0, 0, 0.38)",
-      hint: "rgba(0, 0, 0, 0.38)"
+      disabled: 'rgba(0, 0, 0, 0.38)',
+      hint: 'rgba(0, 0, 0, 0.38)'
     },
     background: {
-      paper: "#fff",
-      default: "#fafafa"
+      paper: '#fff',
+      default: '#fafafa'
     },
     action: {
       active: '#555555'
     },
     contrastThreshold: 3,
-    tonalOffset: 0.2,
+    tonalOffset: 0.2
     // error: will use the default color
   },
   typography: {
@@ -117,7 +112,7 @@ export const theme = createMuiTheme({
       // color: 'white',
       fontFamily: ['Montserrat'].join(','),
       fontWeight: 600,
-      letterSpacing: '-0.02em',
+      letterSpacing: '-0.02em'
     },
     h3: {
       fontSize: '1.3em',
@@ -141,10 +136,10 @@ export const theme = createMuiTheme({
       letterSpacing: '0.03em'
     },
     caption: {
-      fontFamily: ['Montserrat'].join(','),
+      fontFamily: ['Montserrat'].join(',')
     },
     button: {
-      fontFamily: ['Montserrat'].join(','),
+      fontFamily: ['Montserrat'].join(',')
     }
   }
 });
@@ -154,7 +149,7 @@ theme.typography.h1 = Object.assign(theme.typography.h1, {
   [theme.breakpoints.down('xs')]: {
     fontSize: '2.3em'
   }
-})
+});
 
 /*
 function withRoot(Component: any) {

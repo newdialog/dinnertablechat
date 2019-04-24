@@ -235,7 +235,7 @@ export default function DebateScene(props: Props) {
   };
 
   useEffect(() => {
-    const t = tableEl.current!;
+    // const t = tableEl.current!;
     const table = rottie.loadAnimation({
       container: tableEl.current!, // the dom element that will contain the animation
       renderer: 'svg',
@@ -257,7 +257,7 @@ export default function DebateScene(props: Props) {
   const onLoopComplete = useCallback(() => {
     // console.log('blue onLoopComplete', talkingBlue, talkingRed);
 
-    const swap = Math.random() > .5; // state.blueState === 'talking';
+    const swap = Math.random() > (.5 + state.blueState === 'talking' ? 0.1 : 0);
     setState(p => ({...p, blueState: swap ? 'talking' : 'talking' })); // talkingBlue
   }, [state, state.blueState, talkingBlue]);
 
