@@ -1,29 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import {
-  Button,
-  Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  StepContent,
-  Paper
-} from '@material-ui/core';
-import * as AppModel from '../../../models/AppModel';
-import PositionSelector from './SPositionSelector';
-import Footer from '../../home/Footer';
-import * as Times from '../../../services/TimeService';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
-import AppFloatMenu from '../../menus/dash/AppFloatMenu';
-import { Auther } from '../../Auther';
 
+import * as AppModel from '../../../models/AppModel';
 import DebateFeedback from '../../debate/DebateFeedback';
-import LoadingScene from '../../debate/LoadingScene';
 import DebateScene from '../../debate/DebateScene';
-import SMenuHome from './SMenuHome';
 import DebateTester from '../../debate/DebateTester';
+import LoadingScene from '../../debate/LoadingScene';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {

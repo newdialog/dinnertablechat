@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import { Button, Chip, Paper, Typography } from '@material-ui/core';
-import * as AppModel from '../../models/AppModel';
+import { Typography } from '@material-ui/core';
 import ButtonBase from '@material-ui/core/ButtonBase';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
-import * as TopicInfo from '../../utils/TopicInfo';
+
+import * as AppModel from '../../models/AppModel';
 
 const screen = window.screen;
 // requires user action

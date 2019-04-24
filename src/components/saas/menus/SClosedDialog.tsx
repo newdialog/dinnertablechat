@@ -1,28 +1,18 @@
-import * as React from 'react';
-import classNames from 'classnames';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography
-} from '@material-ui/core';
-import * as AppModel from '../../../models/AppModel';
-import * as TopicInfo from '../../../utils/TopicInfo';
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
-
+import { Card, CardActions, CardContent, Grid } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-
-import InboxIcon from '@material-ui/icons/MicRounded';
+import { Theme } from '@material-ui/core/styles';
 import DraftsIcon from '@material-ui/icons/ChatBubbleOutlineRounded';
+import InboxIcon from '@material-ui/icons/MicRounded';
+import { makeStyles } from '@material-ui/styles';
+import classNames from 'classnames';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import * as AppModel from '../../../models/AppModel';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -74,7 +64,7 @@ interface Props {
   store: AppModel.Type;
 }
 
-function ListItemLink(props) {
+function ListItemLink(props:any) {
   return <ListItem button component="a" {...props} />;
 }
 

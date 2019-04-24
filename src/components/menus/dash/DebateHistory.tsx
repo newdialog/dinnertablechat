@@ -1,42 +1,39 @@
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import {
-  Grid,
-  Typography,
-  Paper,
-  Divider,
-  CardContent,
   Card,
   CardActions,
+  CardContent,
   CardHeader,
   CardMedia,
-  Collapse
+  Collapse,
+  Divider,
+  Grid,
+  Paper,
+  Typography,
 } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import Info from '@material-ui/icons/Info';
-/*global luxon*/
 import IconButton from '@material-ui/core/IconButton';
+import { Theme } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { makeStyles } from '@material-ui/styles';
+import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 
 import * as AppModel from '../../../models/AppModel';
+import API from '../../../services/APIService';
+import * as TopicInfo from '../../../utils/TopicInfo';
+
+/*global luxon*/
 // import HOC, { Authed } from '../HOC';
 // TODO: ADD AUTH CHECK
-import * as TopicInfo from '../../../utils/TopicInfo';
-import API from '../../../services/APIService';
-import {
-  TwitterShareButton,
-  FacebookShareButton,
-  TwitterIcon,
-  FacebookIcon
-} from 'react-share';
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
-
 // const {DateTime} = require("luxon");
 // import { DateTime } from 'luxon';
 const { DateTime } = luxon;
 
 const useStyles = makeStyles((theme: Theme) => ({
+  avatar: {
+
+  },
   pagebody: {
     background: '#ddd1bb'
   },
@@ -128,7 +125,7 @@ interface State {
   expanded?: number;
 }
 
-const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
+const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; // 'Open-minded', 'Concise'];
 const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interruptive'];
 const badgeConfig = {
   Respectful: './imgs/badges/copbadge.png',
@@ -308,7 +305,7 @@ export default function DebateHistory(props: Props) {
     setState(p => ({...p, data: result, open: flags, loaded: true }));
   };
 
-  const showAchievements = classes => {
+  const showAchievements = () => {
     return (
       <div className={classes.paper}>
         <Grid container spacing={16} justify="space-around" alignItems="center">
@@ -336,7 +333,7 @@ export default function DebateHistory(props: Props) {
     );
   };
   // <Typography variant="caption">Topic: <blockquote>"{TopicInfo.getTopic(x.topic, t)!.proposition}"</blockquote></Typography>
-  const renderList = (classes, t, data) =>
+  const renderList = (data) =>
     data.map((x, i) => (
       <div key={i}>
         <Card className={classes.paper}>
@@ -467,7 +464,7 @@ export default function DebateHistory(props: Props) {
               )}
 
               <IconButton
-                className={state.expanded === i ? classes.expandOpen : null}
+                className={state.expanded === i ? classes.expandOpen : ''}
                 onClick={handleExpandClick.bind(null, i)}
                 aria-expanded={state.expanded === i}
                 aria-label="Show more"
@@ -505,11 +502,11 @@ export default function DebateHistory(props: Props) {
   return (
     <div className={classes.pagebody}>
       <div className={classes.centered}>
-        {false && showAchievements(classes)}
+        {false && showAchievements()}
 
         <div style={{ paddingBottom: '1em' }} />
 
-        {renderList(classes, t, state.data)}
+        {renderList(state.data)}
 
         {state.data.length === 0 && (
           <Paper className={classes.paper}>

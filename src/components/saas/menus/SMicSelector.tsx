@@ -76,7 +76,7 @@ interface Props {
   store: AppModel.Type;
 }
 
-function ListItemLink(props) {
+function ListItemLink(props:any) {
   return <ListItem button component="a" {...props} />;
 }
 

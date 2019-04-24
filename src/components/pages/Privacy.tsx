@@ -1,9 +1,9 @@
+import { Theme, WithStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import Footer from '../home/Footer';
 import { Helmet } from 'react-helmet';
-import { useTheme, makeStyles } from '@material-ui/styles';
-import * as AppModel from '../../models/AppModel';
+
+import Footer from '../home/Footer';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

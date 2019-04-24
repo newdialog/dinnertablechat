@@ -1,18 +1,16 @@
-import React, { useCallback, useRef, useState, useContext, useEffect } from 'react';
-import { Button, Typography } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-
-import rottie from 'lottie-web';
 import Lottie from '@jadbox/lottie-react-web';
-// import { Typography, Divider } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
+import rottie from 'lottie-web';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import * as AppModel from '../../models/AppModel';
 import DebateFloatMenu from './DebateFloatMenu';
 import DebateTimer from './DebateTimer';
-import * as AppModel from '../../models/AppModel';
-import StartDebateDialog from './StartDebateDialog';
 
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+// import { Typography, Divider } from '@material-ui/core';
 
 const screen = window.screen;
 

@@ -158,7 +158,7 @@ export default observer(function MenuHome(props: Props) {
     else store.router.push('/saasmatch'); //  && store.micAllowed :SAAS
   }
 
-  const handleStep = step => () => {
+  const handleStep = step2 => () => {
     store.debate.resetQueue();
   };
 

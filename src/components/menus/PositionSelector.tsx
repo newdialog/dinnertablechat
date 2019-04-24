@@ -1,19 +1,12 @@
-import * as React from 'react';
+import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import classNames from 'classnames';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography
-} from '@material-ui/core';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   layout: {
@@ -84,14 +77,14 @@ export default function PositionSelector(props: Props) {
                 <Typography>{card.proposition}</Typography>
               </CardContent>
               <CardActions>
-                {card.positions.map((p, i) => (
+                {card.positions.map((p, positionIndex) => (
                   <Button
                     variant="contained"
                     // size="small"
-                    key={i}
+                    key={positionIndex}
                     color="secondary"
                     className={classes.btn}
-                    onClick={() => onSelect(i, card)}
+                    onClick={() => onSelect(positionIndex, card)}
                   >
                     {p}
                   </Button>

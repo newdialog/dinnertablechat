@@ -139,6 +139,7 @@ export default function Footer(props: Props) {
         <a
           href="https://ko-fi.com/E1E0OB0M"
           target="_blank"
+          rel="noopener noreferrer"
           className={classes.links}
           style={{ margin: '0 10px 0 10px' }}
         >

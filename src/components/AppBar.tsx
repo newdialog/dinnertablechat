@@ -130,6 +130,7 @@ function socialLinks() {
     <>
       <a
       target="_blank"
+      rel="noopener noreferrer"
       title="Medium"
         href="https://medium.com/dinnertablechat"
         onClick={trackOutboundLinkClick('https://medium.com/dinnertablechat', false, true)}
@@ -139,6 +140,7 @@ function socialLinks() {
 
       <a
       target="_blank"
+      rel="noopener noreferrer"
         title="Instagram"
               href="https://www.instagram.com/dinnertablechat/"
               onClick={trackOutboundLinkClick('https://www.instagram.com/dinnertablechat/', false, true)}
@@ -148,6 +150,7 @@ function socialLinks() {
 
       <a
       target="_blank"
+      rel="noopener noreferrer"
       title="Twitter"
         href="https://twitter.com/dintablechat"
         onClick={trackOutboundLinkClick('https://twitter.com/dintablechat', false, true)}
@@ -160,6 +163,7 @@ function socialLinks() {
 
       <a
       target="_blank"
+      rel="noopener noreferrer"
       title="Facebook"
         href="https://facebook.com/dinnertablechat"
         onClick={trackOutboundLinkClick('https://facebook.com/dinnertablechat', false, true)}

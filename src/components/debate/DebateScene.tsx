@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
-import {
-  Theme
-} from '@material-ui/core/styles';
-
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import hark, { SpeechEvent } from 'hark';
-import DebateDisplay from './DebateDisplay';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import * as AppModel from '../../models/AppModel';
 import PeerService from '../../services/PeerService';
+import DebateDisplay from './DebateDisplay';
 import DebateError from './DebateError';
-
-import { useTranslation } from 'react-i18next';
-import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {

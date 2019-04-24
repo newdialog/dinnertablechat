@@ -178,11 +178,11 @@ const renderer = (
 };
 
 interface Props {
-  onCompleted: () => void;
+  onCompleted?: () => void;
   store: any;
 }
 
-function DebateTimer(props) {
+function DebateTimer(props:Props) {
   const classes = useStyles({});
   const { onCompleted } = props;
   const store = props.store;

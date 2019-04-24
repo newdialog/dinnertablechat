@@ -81,7 +81,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   if (channel !== 'auth') return;
 
   /// console.log('payload.event', channel, payload.event);
-  if (payload.event == LOGOUT_EVENT) {
+  if (payload.event === LOGOUT_EVENT) {
     console.log('cog logout');
     /// checkUser(cb);
     // return;

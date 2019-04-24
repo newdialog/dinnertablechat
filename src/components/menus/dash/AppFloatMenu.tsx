@@ -1,17 +1,15 @@
 // stub
 
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
-import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import React, { useState, useContext } from 'react';
+import { Theme } from '@material-ui/core/styles';
 
 import UpIcon from '@material-ui/icons/KeyboardArrowUp';
-import green from '@material-ui/core/colors/green';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import * as AppModel from '../../../models/AppModel';
 import Fab from '@material-ui/core/Fab';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

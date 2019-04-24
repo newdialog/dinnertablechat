@@ -1,8 +1,9 @@
-import React, {useContext} from 'react';
-import { Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import { Helmet } from 'react-helmet';
+import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
+import React, { useContext } from 'react';
+import { Helmet } from 'react-helmet';
+
 import * as AppModel from '../../models/AppModel';
 import Footer from '../home/Footer';
 
