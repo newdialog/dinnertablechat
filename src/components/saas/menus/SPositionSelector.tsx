@@ -1,18 +1,12 @@
-import * as React from 'react';
-import classNames from 'classnames';
+import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
-import {
-  Button,
-  Card,
-  Grid,
-  CardActions,
-  CardContent,
-  Typography
-} from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+import classNames from 'classnames';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
 import * as AppModel from '../../../models/AppModel';
 import * as TopicInfo from '../../../utils/TopicInfo';
-import { useTranslation } from 'react-i18next';
-import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   layout: {

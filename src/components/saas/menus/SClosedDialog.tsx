@@ -64,7 +64,7 @@ interface Props {
   store: AppModel.Type;
 }
 
-function ListItemLink(props:any) {
+function ListItemLink(props: any) {
   return <ListItem button component="a" {...props} />;
 }
 
@@ -75,7 +75,7 @@ export default function SClosedDialog(props: Props) {
 
   // state = { noop: false };
 
-  const onFB = (e) => {
+  const onFB = e => {
     window.trackOutboundLinkClick(
       'https://www.facebook.com/events/522239821514316/',
       true,

@@ -212,7 +212,7 @@ export default function DebateHistory(props: Props) {
         key={i}
       >
         <Grid item xs={4}>
-          <img src={item.photo} width={'100%'} height={'100%'} />
+          <img src={item.photo} width={'100%'} height={'100%'} alt={item.text} />
         </Grid>
         <Grid item xs={8}>
           <Typography
@@ -311,6 +311,7 @@ export default function DebateHistory(props: Props) {
         <Grid container spacing={16} justify="space-around" alignItems="center">
           <Grid item xs={4}>
             <img
+              alt="achievement banner image"
               src={
                 'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG'
               }
