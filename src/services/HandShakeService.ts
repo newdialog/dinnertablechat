@@ -3,10 +3,10 @@ import DynamoDB from 'aws-sdk/clients/dynamodb';
 import PeerService from './PeerService';
 import { from, defer, throwError, of, interval, fromEvent } from 'rxjs';
 import {
-  delay as delayRx,
+  // delay as delayRx,
   map,
   filter,
-  retry as retryRx,
+  // retry as retryRx,
   tap,
   concatMap,
   timeout,
@@ -58,7 +58,7 @@ export async function sync(userid: string) {
   console.log('t,', params, ticket.Item);
 
   if (!ticket.Item) return null;
-  //throw new Error('no entry in dynamo: sns_to_pubsub');
+  // throw new Error('no entry in dynamo: sns_to_pubsub');
   else if (!ticket.Item!.match) return null; //  throw new Error('no match record');
 
   // const matchid = ticket.Item!.match;
@@ -83,7 +83,7 @@ export async function handshake(
     // const savedState = { flag: false };
     const stopFlag: StopFlag = unloadFlag; // { stop: false };
     const cbs = {
-      onError(e) {
+      onError(e:any) {
         console.log('webrtc error', e);
         reject('webrtc');
       }

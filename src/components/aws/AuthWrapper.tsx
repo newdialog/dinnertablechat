@@ -53,7 +53,7 @@ function AuthComp(props: Props) {
 
   useEffect(() => {
     const path = (store.router.location as any).pathname;
-    const callbackPage = path.indexOf('callback')!==-1;
+    const callbackPage = path.indexOf('callback') !== -1;
     if (!init) {
       init = true;
       AuthService.auth(handleAuth, callbackPage);
@@ -63,8 +63,8 @@ function AuthComp(props: Props) {
   const handleAuth = (awsUser: AuthService.AwsAuth | null) => {
     console.log('handleAuth', props.login);
     const s = props.store;
-    if(s.auth.user || s.isGuest()) {
-      console.warn('stopping.. already logged in.')
+    if (s.auth.user || s.isGuest()) {
+      console.warn('stopping.. already logged in.');
       return; // not sure if needed
     }
 
@@ -79,18 +79,19 @@ function AuthComp(props: Props) {
     // console.log('+login, type:', awsUser.event);
 
     s.auth.authenticated(awsUser);
-    if(awsUser.event === AuthService.LOGIN_EVENT) s.authenticated(true);
+    if (awsUser.event === AuthService.LOGIN_EVENT) s.authenticated(true);
     else s.authenticated(false);
 
     // TODO: cleanup guest login flow
-     
+
     /* if(awsUser.event !== AuthService.LOGIN_EVENT) {
       if(props.store.isStandalone()) props.store.router.push('/home');
     } */
   };
 
   // console.log('props.store.auth.doLogin', props.store.auth.doLogin, props.login)
-  if (props.login) { //props.login) {
+  if (props.login) {
+    // props.login) {
     // props.OAuthSignIn()
     signIn();
   }

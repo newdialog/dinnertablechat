@@ -5,7 +5,6 @@ import { Typography } from '@material-ui/core';
 import Paper from '@material-ui/core/Paper';
 import { Helmet } from 'react-helmet';
 import { makeStyles } from '@material-ui/styles';
-import * as AppModel from '../../models/AppModel';
 import Footer from '../home/Footer';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -104,7 +103,7 @@ export default function MediaKit(props: Props) {
           Press Kit
         </Typography>
         <div className={classes.centered}>
-          <img src="imgs/press/01-scene1.png" width={600} />
+          <img src="imgs/press/01-scene1.png" width={600} alt="screenshot-1" />
         </div>
         <div className={classes.divider} />
         <Typography gutterBottom={true} variant="h5" align={'left'}>
@@ -143,10 +142,10 @@ export default function MediaKit(props: Props) {
         <br />
         <Grid container spacing={16}>
           <Grid container justify="center" spacing={16}>
-            {imgs.map(value => (
+            {imgs.map( (value, index) => (
               <Grid key={value} item>
                 <Paper className={classes.paper2}>
-                  <img src={value} className={classes.paperimg} />
+                  <img src={value} className={classes.paperimg} alt={"dtc-design"+index} />
                 </Paper>
               </Grid>
             ))}

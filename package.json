@@ -20,6 +20,8 @@
     "aws-sdk": "^2.441.0",
     "backoff-rxjs": "^6.3.2",
     "env-cmd": "^8.0.2",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "formik": "^1.5.2",
     "hark": "^1.2.3",
     "history": "^4.9.0",

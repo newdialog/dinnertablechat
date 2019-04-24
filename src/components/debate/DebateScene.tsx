@@ -46,9 +46,6 @@ export default function DebateScene(props:Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
   const peer = props.peer;
-  // let [peer, setPeer] = useState<PeerService|null>(null);
-  // let speechEvents: SpeechEvent;
-  // let speechSelfEvents: SpeechEvent;
   const vidRef = useRef<HTMLVideoElement>(null);
 
   const [state, setState] = useState<State>({ talkingBlue: false, talkingRed: false, });
@@ -63,16 +60,6 @@ export default function DebateScene(props:Props) {
       sameSide: props.store.debate.position === props.store.debate.match!.otherState!.position,
       guest: props.store.isGuest()
     });
-    /* window.gtag('event', `debate_start_${props.store.debate.topic}_${props.store.debate.position}`, {
-      event_category: 'debate',
-      guest: props.store.isGuest()
-    }); */
-    /* navigator.getUserMedia(
-    { video: false, audio: true },
-    gotMedia.bind(this),
-    () => {}
-    );*/
-    // stream: MediaStream
     return () => {
       console.log('debatescene unmounting');
       if(peer) peer!.destroy();
@@ -98,21 +85,14 @@ export default function DebateScene(props:Props) {
 
   const gotMedia = () => {
     setupSelfVoice();
-
-    const isInit = false; // todo
-    /* const p = new Peer({
-      initiator: isInit,
-      trickle: false,
-      stream
-    });*/
     const p = peer!;
 
     p.on('error', err => {
       console.warn('peer error!', err);
       if (err.closed || err.toString().indexOf('connection failed') !== -1) {
-        setState(p => ({...p, error: 'other_disconnected' }));
+        setState(s => ({...s, error: 'other_disconnected' }));
       } else {
-        setState(p => ({...p, error: 'webrtc_error' }));
+        setState(s => ({...s, error: 'webrtc_error' }));
       }
       console.log('error', err);
     });
@@ -142,17 +122,17 @@ export default function DebateScene(props:Props) {
 
       speechEvents.on('speaking', () => {
         // console.log('speaking');
-        setState(p => ({...p, talkingRed: true }));
+        setState(s => ({...s, talkingRed: true }));
         // document.querySelector('#speaking').textContent = 'YES';
       });
 
       speechEvents.on('stopped_speaking', () => {
         // console.log('stopped_speaking');
-        setState(p => ({...p, talkingRed: false }));
+        setState(s => ({...s, talkingRed: false }));
         // document.querySelector('#speaking').textContent = 'NO';
       });
       
-      setState(p => ({...p, speechEvents }));
+      setState(s => ({...s, speechEvents }));
     });
 
     // p.addStream(stream);

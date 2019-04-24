@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import { Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 import * as AppModel from '../../models/AppModel';
 import Footer from '../home/Footer';
 
@@ -36,13 +36,6 @@ export default function EducationHome(props: Props) {
   const classes = useStyles({});
   const store = useContext(AppModel.Context)!;
 
-  const imgs = [
-    './logos/dinnertable.gif',
-    './logos/dtclogo.png',
-    './logos/dtclogo3-1.png',
-    './logos/dtclogo3.png'
-  ];
-
   const goHome = (e) => {
     e.preventDefault();
     store.router.push('/');
@@ -67,6 +60,7 @@ export default function EducationHome(props: Props) {
           height="520"
           allowFullScreen={true}
           className={classes.presentationFrame}
+          title="dtc presenation"
         />
         <div className={classes.divider} />
         <Typography gutterBottom={true} variant="h5" align={'left'}>

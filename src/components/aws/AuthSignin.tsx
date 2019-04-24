@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 
 import { observer } from 'mobx-react-lite';
-import * as AuthService from '../../services/AuthService';
 import { Typography } from '@material-ui/core';
 import * as AppModel from '../../models/AppModel';
 interface Props {

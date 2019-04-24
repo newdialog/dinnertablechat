@@ -1,5 +1,4 @@
 {
-  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
   "linterOptions": {
     "exclude": [
       "config/**/*.js",
@@ -9,6 +8,7 @@
   },
   "jsRules": { "no-console": false },
   "rules": {
+    "@typescript-eslint/no-unused-vars": false,
     "no-unused-vars": false,
     "align": [
         false,

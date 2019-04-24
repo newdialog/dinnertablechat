@@ -1,7 +1,7 @@
 // tslint:disable-next-line:max-line-length
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
@@ -17,8 +17,7 @@ import '@glidejs/glide/dist/css/glide.theme.min.css';
 import Glide from '@glidejs/glide';
 
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
-import { useOnScreen } from 'react-hooks-set';
+import { makeStyles } from '@material-ui/styles';
 
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
 
@@ -169,7 +168,6 @@ const cullingHandlers = (
   onLeave: boolean = false,
   speed = 1
 ) => {
-  const obj = id as any;
   if (!onLeave) {
     // if(obj.handlerOn) return obj.handlerOn;
     return () => {
@@ -183,7 +181,7 @@ const cullingHandlers = (
   } else {
     // if (obj.handlerOff) return obj.handlerOff;
     return () => {
-      id.current && id.current.stop();
+      if(id.current) id.current.stop();
     };
   }
 };
@@ -352,6 +350,7 @@ export default function HomeContent() {
             <div className={classes.paper}>
               <Flip bottom={true} fraction={0.7} onReveal={trackRulesView}>
                 <img
+                  alt="internet trolls"
                   src="https://via.placeholder.com/150"
                   data-src="./imgs/05-troll.png"
                   className={classes.paperimg + ' lazyload'}
@@ -415,6 +414,7 @@ export default function HomeContent() {
                   <ul className="glide__slides">
                     <li className="glide__slide">
                       <img
+                        alt="character1"
                         src="https://via.placeholder.com/150"
                         data-src="./imgs/04-select.png"
                         className={classes.paperimg + ' lazyload'}
@@ -422,6 +422,7 @@ export default function HomeContent() {
                     </li>
                     <li className="glide__slide">
                       <img
+                        alt="character2"
                         src="https://via.placeholder.com/150"
                         data-src="./imgs/04-select2.png"
                         className={classes.paperimg + ' lazyload'}
@@ -429,6 +430,7 @@ export default function HomeContent() {
                     </li>
                     <li className="glide__slide">
                       <img
+                        alt="character3"
                         src="https://via.placeholder.com/150"
                         data-src="./imgs/04-select3.png"
                         className={classes.paperimg + ' lazyload'}
