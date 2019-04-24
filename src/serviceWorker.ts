@@ -85,7 +85,7 @@ function registerValidSW(swUrl: string, config?: Config) {
               const pushState = window.history.pushState;
 
               // https://stackoverflow.com/questions/40100922/activate-updated-service-worker-on-refresh
-              window.history.pushState = function(...args) {
+              window.history.pushState = function(...args:any) {
                 // make sure that the user lands on the "next" page
                 pushState.apply(window.history, args);
 
@@ -119,6 +119,13 @@ function registerValidSW(swUrl: string, config?: Config) {
           }
         });
       });
+
+      setInterval( () => {
+        registration.update();
+      }, 10000);
+      setTimeout( () => {
+        registration.update();
+      }, 1000);
       return registration;
     })
     .catch(error => {

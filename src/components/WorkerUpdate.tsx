@@ -127,7 +127,7 @@ export default function WorkerUpdate(props: Props) {
       setState(p => ({ ...p, showReload: true })); // , registration: registration
     }, 300);
 
-    if(registration.waiting) setTimeout(() => { refresh(registration); }, 1200);
+    if(registration.waiting) setTimeout(() => { refresh(registration); }, 3000);
   };
 
   useEffect(() => {
