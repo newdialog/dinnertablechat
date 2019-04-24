@@ -11,7 +11,7 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import { Theme } from '@material-ui/core/styles';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import { makeStyles } from '@material-ui/styles';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../models/AppModel';
@@ -43,7 +43,6 @@ interface Props {
 }
 
 function AudioSettings(props: Props) {
-  const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
   const [state, setState] = useState<any>({
@@ -138,10 +137,10 @@ function AudioSettings(props: Props) {
       .catch(handleError);
   }, []);
 
-  const micRef = useRef<InputLabelProps>(null);
+  // const micRef = useRef<InputLabelProps>(null);
 
   const { onClose } = props; // , videoEl
-  const { anchorEl, options } = state;
+  // const { anchorEl, options } = state;
   const { fullScreen } = props;
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import Countdown from 'react-countdown-now';
 import { Typography, Button } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
@@ -187,13 +187,13 @@ function DebateTimer(props:Props) {
   const { onCompleted } = props;
   const store = props.store;
 
-  const [time, setTime] = useState(Date.now() + 1000 * 60 * 16);
+  const time = useRef(Date.now() + 1000 * 60 * 16);
 
   // step = 0;
   return (
     <Countdown
       onComplete={onCompleted}
-      date={time}
+      date={time.current}
       renderer={renderer.bind(null, classes, store)}
     />
   );

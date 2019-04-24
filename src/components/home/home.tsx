@@ -8,7 +8,6 @@ import * as AppModel from '../../models/AppModel';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
-import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/styles';
 
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
@@ -111,10 +110,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function Home() {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
  
-  useEffect(() => {
-    const fp = (window as any).FloatingPrompt;
+  // useEffect(() => {
+    // const fp = (window as any).FloatingPrompt;
     /* if (fp)
       fp({
         width: '300px',
@@ -124,7 +123,7 @@ export default function Home() {
         name: 'DTC',
         url: 'https://www.producthunt.com/posts/dinnertable-chat-3'
       }); */
-  }, []);
+  // }, []);
 
   // const { classes, store } = this.props;
   // TODO, only redirect at login action ( && store.auth.user!.)

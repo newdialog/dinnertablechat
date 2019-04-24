@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
-import * as React from 'react';
+import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../models/AppModel';
@@ -134,9 +134,9 @@ const defaultContributions: Array<{
 ];
 
 export default function CharacterSelector(props: Props) {
-  const store = props.store;
+  // const store = props.store;
   const classes = useStyles({});
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const onChipClick = (ev: any, item: any) => {
     setLandscape();
     props.store.debate.setCharacter(item.value);
