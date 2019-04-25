@@ -1,13 +1,11 @@
 import React from 'react';
 import Countdown from 'react-countdown-now';
-import { Typography, withStyles, Button } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-
+import { Typography } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
 import * as AppModel from '../../models/AppModel';
 import * as Times from '../../services/TimeService';
 
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -17,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       margin: 0
     },
     timerText2: {
-      fontFamily: "'Roboto Mono', 'Courier New'",
+      fontFamily: '\'Roboto Mono\', \'Courier New\'',
       padding: '0',
       margin: 0
     },
@@ -41,14 +39,14 @@ const renderer = (
   classes,
   store: AppModel.Type,
   isDuringDebate: boolean,
-  { days, hours, minutes, seconds, completed }
+  { hours, minutes, seconds, completed }
 ) => {
   isDuringDebate = Times.isDuringDebate(store.isLive);
   if (completed) {
     // store.setDailyOpen(true);
     // Render a completed state
     
-      if(store.dailyOpen!=isDuringDebate) {
+      if(store.dailyOpen !== isDuringDebate) {
         // setTimeout(() => {
           console.log('BannerTimer completed');
           store.setDailyOpen(isDuringDebate);
@@ -115,9 +113,11 @@ const renderer = (
         >
         <a 
         style={{ color: '#95d4ff', textDecoration: 'underline' }}
-        onClick={trackOutboundLinkClick(
+        onClick={window.trackOutboundLinkClick(
                 'https://www.facebook.com/events/522239821514316/',
-              true, true)} href='https://www.facebook.com/events/522239821514316/' target='_blank'>Add to Facebook Calendar</a>
+              true, true)} href="https://www.facebook.com/events/522239821514316/" target="_blank"
+              rel="noopener noreferrer"
+              >Add to Facebook Calendar</a>
         </Typography>
       </div>
     );
@@ -150,7 +150,7 @@ function BannerTimer(props:Props) {
           console.log('BannerTimer completed');
           isDuringDebate = Times.isDuringDebate(store.isLive);
           store.setDailyOpen(isDuringDebate);
-          !!onCompleted && onCompleted(isDuringDebate);
+          if(!!onCompleted) onCompleted(isDuringDebate);
         // }, 2000);
       }}
       date={endTime}

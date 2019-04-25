@@ -9,6 +9,9 @@ import Auth from '@aws-amplify/auth';
 import API from './APIService'; // TODO refactor
 
 import retry from 'async-retry';
+// import { Logger } from 'aws-amplify';
+import { Hub, ConsoleLogger } from '@aws-amplify/core';
+import { injectConfig } from '../configs/AWSconfig';
 
 const delayFlag = async (obj: { flag: boolean }) =>
   await retry(
@@ -32,12 +35,8 @@ Amplify.Logger.LOG_LEVEL = 'DEBUG';
 
 // https://github.com/aws-amplify/amplify-js/issues/1487
 
-// import { Logger } from 'aws-amplify';
-import { Hub, ConsoleLogger } from '@aws-amplify/core';
-import { injectConfig } from '../configs/AWSconfig';
-
 const awsconfig = injectConfig(awsmobile);
-const IdentityPoolId = awsconfig.Auth.identityPoolId;
+// const IdentityPoolId = awsconfig.Auth.identityPoolId;
 
 // console.log('IdentityPoolId', IdentityPoolId);
 
@@ -82,7 +81,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   if (channel !== 'auth') return;
 
   /// console.log('payload.event', channel, payload.event);
-  if (payload.event == LOGOUT_EVENT) {
+  if (payload.event === LOGOUT_EVENT) {
     console.log('cog logout');
     /// checkUser(cb);
     // return;

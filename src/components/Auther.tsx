@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import * as AppModel from '../models/AppModel';
 import { observer } from 'mobx-react-lite';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 
-export var Auther = observer(function Auther(props:any) {
+import * as AppModel from '../models/AppModel';
+
+export var Auther = observer(function AutherFunc(props:any) {
     const store = useContext(AppModel.Context)!;
     const redirecting = useRef(false);
 

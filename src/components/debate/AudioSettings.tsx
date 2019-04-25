@@ -1,26 +1,20 @@
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
-import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-
+import { Button } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import withMobileDialog from '@material-ui/core/withMobileDialog';
-import * as AppModel from '../../models/AppModel';
-
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
 import InputLabel, { InputLabelProps } from '@material-ui/core/InputLabel';
-
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormLabel from '@material-ui/core/FormLabel';
-
+import { Theme } from '@material-ui/core/styles';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
+import { makeStyles } from '@material-ui/styles';
+import React, { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+
+import * as AppModel from '../../models/AppModel';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -49,7 +43,6 @@ interface Props {
 }
 
 function AudioSettings(props: Props) {
-  const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
   const [state, setState] = useState<any>({
@@ -144,10 +137,10 @@ function AudioSettings(props: Props) {
       .catch(handleError);
   }, []);
 
-  const micRef = useRef<InputLabelProps>(null);
+  // const micRef = useRef<InputLabelProps>(null);
 
   const { onClose } = props; // , videoEl
-  const { anchorEl, options } = state;
+  // const { anchorEl, options } = state;
   const { fullScreen } = props;
 
   return (

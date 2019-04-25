@@ -1,18 +1,15 @@
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
-import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
-import {
-  createStyles,
-  WithStyles, Theme
-} from '@material-ui/core/styles';
-
+import { Button } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import * as AppModel from '../../models/AppModel';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+
+import * as AppModel from '../../models/AppModel';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {

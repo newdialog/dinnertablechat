@@ -1,16 +1,14 @@
-import React from 'react';
-import { createStyles, WithStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
+import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import * as Store from '../models/AppModel';
+import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
-import QueueIcon from '@material-ui/icons/QueuePlayNext';
-import * as Times from '../services/TimeService';
+import React from 'react';
 
-import { useTheme, makeStyles } from '@material-ui/styles';
+import * as Store from '../models/AppModel';
 import UserStats from './menus/dash/UserStats';
+
 const useStyles = makeStyles((theme: any) => ({
   root: {
     flexGrow: 1
@@ -23,10 +21,10 @@ const useStyles = makeStyles((theme: any) => ({
   btn: {
     // color: theme.palette.secondary.main
   },
-  social: {
-    
-  }
+  social: {}
 }));
+
+const trackOutboundLinkClick = window.trackOutboundLinkClick;
 
 interface Props {
   store: Store.Type;
@@ -69,7 +67,7 @@ export default observer(function ButtonAppBar(props: Props) {
     return null;
   }
 
-  if(path.indexOf('/saas') > -1) return null;
+  if (path.indexOf('/saas') > -1) return null;
 
   return (
     <div className={classes.root}>
@@ -127,42 +125,74 @@ function socialLinks() {
   return (
     <>
       <a
-      target="_blank"
-      title="Medium"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Medium"
         href="https://medium.com/dinnertablechat"
-        onClick={trackOutboundLinkClick('https://medium.com/dinnertablechat', false, true)}
-      >
-        <i id="social-medium" className="fab fa-medium social fa-2x " style={{marginRight:'.15em'}} />
-      </a>
-
-      <a
-      target="_blank"
-        title="Instagram"
-              href="https://www.instagram.com/dinnertablechat/"
-              onClick={trackOutboundLinkClick('https://www.instagram.com/dinnertablechat/', false, true)}
-            >
-              <i id="social-discord" className="fab fa-instagram fa-2x social" style={{marginRight:'.15em'}}/>
-            </a>
-
-      <a
-      target="_blank"
-      title="Twitter"
-        href="https://twitter.com/dintablechat"
-        onClick={trackOutboundLinkClick('https://twitter.com/dintablechat', false, true)}
+        onClick={trackOutboundLinkClick(
+          'https://medium.com/dinnertablechat',
+          false,
+          true
+        )}
       >
         <i
-          id="social-tw"
-          className="fab fa-twitter-square social fa-2x " style={{marginRight:'.15em'}}
+          id="social-medium"
+          className="fab fa-medium social fa-2x "
+          style={{ marginRight: '.15em' }}
         />
       </a>
 
       <a
-      target="_blank"
-      title="Facebook"
-        href="https://facebook.com/dinnertablechat"
-        onClick={trackOutboundLinkClick('https://facebook.com/dinnertablechat', false, true)}
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Instagram"
+        href="https://www.instagram.com/dinnertablechat/"
+        onClick={trackOutboundLinkClick(
+          'https://www.instagram.com/dinnertablechat/',
+          false,
+          true
+        )}
       >
-        <i id="social-tw" className="fab fa-facebook-square social fa-2x " style={{marginRight:'.15em'}} 
+        <i
+          id="social-discord"
+          className="fab fa-instagram fa-2x social"
+          style={{ marginRight: '.15em' }}
+        />
+      </a>
+
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Twitter"
+        href="https://twitter.com/dintablechat"
+        onClick={trackOutboundLinkClick(
+          'https://twitter.com/dintablechat',
+          false,
+          true
+        )}
+      >
+        <i
+          id="social-tw"
+          className="fab fa-twitter-square social fa-2x "
+          style={{ marginRight: '.15em' }}
+        />
+      </a>
+
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        title="Facebook"
+        href="https://facebook.com/dinnertablechat"
+        onClick={trackOutboundLinkClick(
+          'https://facebook.com/dinnertablechat',
+          false,
+          true
+        )}
+      >
+        <i
+          id="social-tw"
+          className="fab fa-facebook-square social fa-2x "
+          style={{ marginRight: '.15em' }}
         />
       </a>
     </>

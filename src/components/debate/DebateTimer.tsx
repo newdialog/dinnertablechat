@@ -1,60 +1,60 @@
-import React, {useEffect, useState} from 'react';
+import React, { useRef } from 'react';
 import Countdown from 'react-countdown-now';
-import { Typography, withStyles, Button, StepIcon } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { Typography, Button } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
 
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import * as AppModel from '../../models/AppModel';
 
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+// import { useTranslation } from 'react-i18next';
+import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-      textAlign: 'center',
-      paddingTop: theme.spacing.unit * 20
-    },
-    stepper: {
-      [theme.breakpoints.down('sm')]: {
-        display: 'none'
-      }
-    },
-    timerText: {
-      padding: '0',
-      margin: '0 auto 0 auto',
-      borderRadius: '20vh',
-      backgroundColor: '#a65451cc',
-      fontFamily: "'Roboto Mono', 'Courier New'",
-      color: '#ffffff',
-      fontSize: '2.5em',
-      [theme.breakpoints.down('sm')]: {
-        fontSize: '2.5em'
-      }
-    },
-    finishedText: {
-      padding: '0',
-      margin: '0 auto 0 auto',
-      borderRadius: '20vh',
-      backgroundColor: '#a65451cc',
-      color: '#ffffff',
-      fontSize: '2.6em',
-      [theme.breakpoints.down('sm')]: {
-        fontSize: '2.6em'
-      }
-    },
-    stepWord: {
-      margin: '-5px auto -10px auto',
-      display: 'none',
-      fontSize: '.75em',
-      padding: '0 0 0 0',
-      backgroundColor: '#a65451',
-      [theme.breakpoints.down('sm')]: {
-        display: 'inline'
-      }
+  root: {
+    textAlign: 'center',
+    paddingTop: theme.spacing.unit * 20
+  },
+  stepper: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
     }
-  }));
+  },
+  timerText: {
+    padding: '0',
+    margin: '0 auto 0 auto',
+    borderRadius: '20vh',
+    backgroundColor: '#a65451cc',
+    fontFamily: `'Roboto Mono', 'Courier New'`,
+    color: '#ffffff',
+    fontSize: '2.5em',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '2.5em'
+    }
+  },
+  finishedText: {
+    padding: '0',
+    margin: '0 auto 0 auto',
+    borderRadius: '20vh',
+    backgroundColor: '#a65451cc',
+    color: '#ffffff',
+    fontSize: '2.6em',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '2.6em'
+    }
+  },
+  stepWord: {
+    margin: '-5px auto -10px auto',
+    display: 'none',
+    fontSize: '.75em',
+    padding: '0 0 0 0',
+    backgroundColor: '#a65451',
+    [theme.breakpoints.down('sm')]: {
+      display: 'inline'
+    }
+  }
+}));
 
 function onMenuClick(store: AppModel.Type) {
   // store.debate.resetQueue();
@@ -72,16 +72,17 @@ const Completionist = ({
 }) => (
   <div style={{ textAlign: 'center' }}>
     <Button
-        variant="contained"
-        color="primary"
-        onClick={() => onMenuClick(store)}
-      >
+      variant="contained"
+      color="primary"
+      onClick={() => onMenuClick(store)}
+    >
       Leave & Give Review
-    </Button><br/><br/>
+    </Button>
+    <br />
+    <br />
     <Typography variant="h1" align="center" className={classes.finishedText}>
       Debate Finished
     </Typography>
-    
   </div>
 );
 
@@ -105,8 +106,8 @@ const AgreementStep = ({ store }: { store: AppModel.Type }) => (
   </div>
 );
 
-function track(step:number, store: AppModel.Type) {
-  window.gtag('event', 'debate_step_'+step, {
+function track(store: AppModel.Type) {
+  window.gtag('event', 'debate_step_' + step, {
     event_category: 'debate',
     step,
     topic: store.debate.topic,
@@ -133,7 +134,7 @@ const renderer = (
   if (completed) {
     step = 3;
   }
-  if(lastStep !== step) track(step, store);
+  if (lastStep !== step) track(store);
 
   if (step !== store.debate.quarter)
     setTimeout(() => store.debate.setQuarter(step), 1);
@@ -177,22 +178,22 @@ const renderer = (
 };
 
 interface Props {
-  onCompleted: () => void;
+  onCompleted?: () => void;
   store: any;
 }
 
-function DebateTimer(props) {
+function DebateTimer(props:Props) {
   const classes = useStyles({});
   const { onCompleted } = props;
   const store = props.store;
 
-  const [time, setTime] = useState(Date.now() + 1000 * 60 * 16);
+  const time = useRef(Date.now() + 1000 * 60 * 16);
 
   // step = 0;
   return (
     <Countdown
       onComplete={onCompleted}
-      date={time}
+      date={time.current}
       renderer={renderer.bind(null, classes, store)}
     />
   );

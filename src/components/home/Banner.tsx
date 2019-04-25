@@ -211,7 +211,7 @@ export default function HomeBanner(props: Props) {
           >
             <Reveal effect="fadeIn" duration={3500}>
               {
-                //t('home-banner-title1')
+                // t('home-banner-title1')
               }
               Isn't it time we talk?
             </Reveal>
@@ -296,7 +296,7 @@ export default function HomeBanner(props: Props) {
   );
 }
 
-function yt(classes) {
+function yt(classes:any) {
   return (
     <iframe
       className={classes.banneryt}

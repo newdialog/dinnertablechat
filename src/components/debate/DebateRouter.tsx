@@ -1,6 +1,5 @@
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
-import { Router, Route, Switch } from 'react-router-dom';
-import Tester from './DebateTester';
+import React, { useState, useContext } from 'react';
+// import Tester from './DebateTester';
 import LoadingScene from './LoadingScene';
 import DebateScene from './DebateScene';
 import PeerService from '../../services/PeerService';

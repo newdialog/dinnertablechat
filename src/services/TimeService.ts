@@ -1,3 +1,4 @@
+/*global luxon*/
 // import DateTime from 'DateTime';
 // import { DateTime, Duration } from 'luxon';
 const { DateTime, Duration } = luxon;
@@ -5,7 +6,7 @@ const { DateTime, Duration } = luxon;
 // import ical from 'ical-generator';
 
 const hourOpen = 20;
-const minOpen = 0;
+// const minOpen = 0;
 
 const dur = Duration.fromObject({ hours: 5, minutes: 0 });
 
@@ -29,7 +30,7 @@ export function isDuringDebate(isLive?: boolean) {
     (m >= todaysStart() && m <= todaysEnd()) ||
     (m >= yestStart() && m <= yestEnd())
   );
-  //.isBetween(_getDebateStart(), _getDebateEnd());
+  // .isBetween(_getDebateStart(), _getDebateEnd());
 }
 
 export function todaysStart() {

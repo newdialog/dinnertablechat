@@ -36,7 +36,7 @@ export default function Tooltip(props: Props) {
         <a
           href="https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef"
           target="_blank"
-          rel="noopener"
+          rel="noopener noreferrer"
         >
           Here's our recommendations
         </a>

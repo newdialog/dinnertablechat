@@ -1,43 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import { Button, Chip, Paper, Typography } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
 import * as AppModel from '../../models/AppModel';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
-import * as TopicInfo from '../../utils/TopicInfo';
+import { makeStyles } from '@material-ui/styles';
 import getMedia from '../../utils/getMedia';
 import Info from '@material-ui/icons/Info';
 import { observer } from 'mobx-react-lite';
 
-const useStyles = makeStyles((theme: Theme) => ({
+/* const useStyles = makeStyles((theme: Theme) => ({
   root: {}
-}));
+})); */
 
 interface Props {
   store: AppModel.Type;
   className?: string;
 }
 
-// let attempt = 0;
 let mutex = false;
 export default observer(function CharacterSelector(props: Props) {
   const store = props.store;
-  const classes = useStyles({});
-  const { t } = useTranslation();
+  // const classes = useStyles({});
+  // const { t } = useTranslation();
 
   const enabled = store.micAllowed;
 
   const [state, setState] = useState({ status: 'unknown' });
 
-  useEffect(() => {
-    mutex = false;
-    micGrant();
-  }, []);
-
   const micGrant = (e?: any) => {
-    // attempt++;
-    // const thisAttempt = attempt;
     if(mutex) return;
     mutex = true;
     getMedia(null, 30000)
@@ -57,6 +47,11 @@ export default observer(function CharacterSelector(props: Props) {
         setTimeout(micGrant, 2000);
       });
   };
+
+  useEffect(() => {
+    mutex = false;
+    micGrant();
+  }, []);
 
   return (
     <>

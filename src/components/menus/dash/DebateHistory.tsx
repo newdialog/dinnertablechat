@@ -1,43 +1,37 @@
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import {
-  Grid,
-  Typography,
-  Paper,
-  Divider,
-  CardContent,
   Card,
   CardActions,
+  CardContent,
   CardHeader,
   CardMedia,
-  Collapse
+  Collapse,
+  Divider,
+  Grid,
+  Paper,
+  Typography,
 } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
-import Info from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
+import { Theme } from '@material-ui/core/styles';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { makeStyles } from '@material-ui/styles';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 
 import * as AppModel from '../../../models/AppModel';
+import API from '../../../services/APIService';
+import * as TopicInfo from '../../../utils/TopicInfo';
+
+/*global luxon*/
 // import HOC, { Authed } from '../HOC';
 // TODO: ADD AUTH CHECK
-import * as TopicInfo from '../../../utils/TopicInfo';
-import API from '../../../services/APIService';
-
 // const {DateTime} = require("luxon");
 // import { DateTime } from 'luxon';
 const { DateTime } = luxon;
 
-import {
-  TwitterShareButton,
-  FacebookShareButton,
-  TwitterIcon,
-  FacebookIcon
-} from 'react-share';
-
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
-
 const useStyles = makeStyles((theme: Theme) => ({
+  avatar: {},
   pagebody: {
     background: '#ddd1bb'
   },
@@ -129,8 +123,8 @@ interface State {
   expanded?: number;
 }
 
-const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; //'Open-minded', 'Concise'];
-const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interruptive'];
+// const goodTraits = ['Respectful', 'Knowledgeable', 'Charismatic']; // 'Open-minded', 'Concise'];
+// const badTraits = ['Absent', 'Aggressive', 'Crude', 'Interruptive'];
 const badgeConfig = {
   Respectful: './imgs/badges/copbadge.png',
   Knowledgeable: './imgs/badges/openbook.png',
@@ -189,22 +183,16 @@ export default function DebateHistory(props: Props) {
     });
     trackHistoryTrigger = true;
 
-    if (props.store.isGuest()) return setState(p => ({...p, loaded: true }));
+    if (props.store.isGuest()) return setState(p => ({ ...p, loaded: true }));
 
     API.getScores()
       .then(transformPayload)
       .catch(e => {
         console.error(e);
-        setState(p => ({...p, loaded: true, error: e }));
+        setState(p => ({ ...p, loaded: true, error: e }));
       });
   }, []);
-
-  const handleClick = (i: number) => {
-    let open = state.open;
-    open[i] = !open[i];
-    setState(p => ({...p, open }));
-  };
-
+/*
   const renderAchievements = () => {
     console.log('ach', state.achievements);
     var view = state.achievements.map((item, i) => (
@@ -216,7 +204,12 @@ export default function DebateHistory(props: Props) {
         key={i}
       >
         <Grid item xs={4}>
-          <img src={item.photo} width={'100%'} height={'100%'} />
+          <img
+            src={item.photo}
+            width={'100%'}
+            height={'100%'}
+            alt={item.text}
+          />
         </Grid>
         <Grid item xs={8}>
           <Typography
@@ -232,7 +225,7 @@ export default function DebateHistory(props: Props) {
     ));
     return view;
   };
-
+*/
   const createAccordianFlags = data => {
     let flags: boolean[] = [];
     flags = data.map((x, i) => flags.push(false));
@@ -266,7 +259,7 @@ export default function DebateHistory(props: Props) {
   };
 
   const transformSide = (topic: string, side: number) => {
-    if(side===100) return '';
+    if (side === 100) return '';
     return TopicInfo.getTopic(topic, t)!.positions[side];
   };
 
@@ -306,15 +299,16 @@ export default function DebateHistory(props: Props) {
     // update store and state
     if (props.store.auth.user)
       props.store.auth.user.updateNumDebates(result.length);
-    setState(p => ({...p, data: result, open: flags, loaded: true }));
+    setState(p => ({ ...p, data: result, open: flags, loaded: true }));
   };
 
-  const showAchievements = classes => {
+  const showAchievements = () => {
     return (
       <div className={classes.paper}>
         <Grid container spacing={16} justify="space-around" alignItems="center">
           <Grid item xs={4}>
             <img
+              alt="achievement banner"
               src={
                 'http://animatedviews.com/wp-content/uploads/2007/02/cap158.JPG'
               }
@@ -337,7 +331,7 @@ export default function DebateHistory(props: Props) {
     );
   };
   // <Typography variant="caption">Topic: <blockquote>"{TopicInfo.getTopic(x.topic, t)!.proposition}"</blockquote></Typography>
-  const renderList = (classes, t, data) =>
+  const renderList = data =>
     data.map((x, i) => (
       <div key={i}>
         <Card className={classes.paper}>
@@ -349,24 +343,24 @@ export default function DebateHistory(props: Props) {
                 className={classes.avatar}
                 style={{ width: '3em', height: '3em' }}
               >
-                <img src={characters[x.oppCharacter].url} width={'150%'} />
+                <img src={characters[x.oppCharacter].url} width={'150%'} alt="other user's character" />
               </Avatar>
             }
             title={
               <>
-              {x.userSide!=='' && x.oppSide!=='' &&
-                <span style={{ color: '#5d4444' }}>
-                  <span className="nowrap" style={{ fontWeight: 500 }}>
-                    {x.userSide}
+                {x.userSide !== '' && x.oppSide !== '' && (
+                  <span style={{ color: '#5d4444' }}>
+                    <span className="nowrap" style={{ fontWeight: 500 }}>
+                      {x.userSide}
+                    </span>
+                    <> - </>
+                    <span className="nowrap" style={{ fontWeight: 500 }}>
+                      {' '}
+                      {x.oppSide}:
+                    </span>
+                    <> </>
                   </span>
-                  <> - </>
-                  <span className="nowrap" style={{ fontWeight: 500 }}>
-                    {' '}
-                    {x.oppSide}:
-                  </span>
-                  <> </>
-                </span>
-              }
+                )}
                 <span
                   style={{
                     fontWeight: 500,
@@ -468,7 +462,7 @@ export default function DebateHistory(props: Props) {
               )}
 
               <IconButton
-                className={state.expanded === i ? classes.expandOpen : null}
+                className={state.expanded === i ? classes.expandOpen : ''}
                 onClick={handleExpandClick.bind(null, i)}
                 aria-expanded={state.expanded === i}
                 aria-label="Show more"
@@ -493,8 +487,8 @@ export default function DebateHistory(props: Props) {
 
   const handleExpandClick = i => {
     if (state.expanded === i)
-      return setState(p => ({...p, expanded: undefined }));
-    setState(p => ({...p, expanded: i }));
+      return setState(p => ({ ...p, expanded: undefined }));
+    setState(p => ({ ...p, expanded: i }));
   };
 
   // const { classes, store, t } = props;
@@ -506,11 +500,11 @@ export default function DebateHistory(props: Props) {
   return (
     <div className={classes.pagebody}>
       <div className={classes.centered}>
-        {false && showAchievements(classes)}
+        {false && showAchievements()}
 
         <div style={{ paddingBottom: '1em' }} />
 
-        {renderList(classes, t, state.data)}
+        {renderList(state.data)}
 
         {state.data.length === 0 && (
           <Paper className={classes.paper}>

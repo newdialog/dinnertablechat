@@ -1,17 +1,16 @@
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import React, { useEffect, useContext } from 'react';
+import { Theme } from '@material-ui/core/styles';
 import Banner from './Banner';
 import Content from './Content';
 import Subscribe from './Subscribe';
 import Footer from './Footer';
-import Announcement from '@material-ui/icons/RecordVoiceOver';
 import * as AppModel from '../../models/AppModel';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 
+const trackOutboundLinkClick = window.trackOutboundLinkClick;
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     textAlign: 'center',
@@ -111,10 +110,10 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function Home() {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
  
-  useEffect(() => {
-    const fp = (window as any).FloatingPrompt;
+  // useEffect(() => {
+    // const fp = (window as any).FloatingPrompt;
     /* if (fp)
       fp({
         width: '300px',
@@ -124,7 +123,7 @@ export default function Home() {
         name: 'DTC',
         url: 'https://www.producthunt.com/posts/dinnertable-chat-3'
       }); */
-  }, []);
+  // }, []);
 
   // const { classes, store } = this.props;
   // TODO, only redirect at login action ( && store.auth.user!.)
@@ -149,6 +148,7 @@ export default function Home() {
           >
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
               <img
+                alt="newsletter owl"
                 src="https://via.placeholder.com/150"
                 data-src="./imgs/07-newsletter.png"
                 className={classes.paperimg + ' lazyload'}

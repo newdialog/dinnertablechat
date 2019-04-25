@@ -1,13 +1,11 @@
 import React from 'react';
 import Countdown from 'react-countdown-now';
-import { Typography, withStyles, Button } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { Typography } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
 
 import * as AppModel from '../../../models/AppModel';
 import * as Times from '../../../services/TimeService';
-
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import { makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -21,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     time: {
         color: theme.palette.secondary.dark,
-        fontFamily: "'Roboto Mono', 'Courier New'",
+        fontFamily: '\'Roboto Mono\', \'Courier New\'',
     }
   }));
 
@@ -49,7 +47,7 @@ const renderer = (
   if (completed) {
 
       
-      if(store.dailyOpen!=isDuringDebate) {
+      if(store.dailyOpen!==isDuringDebate) {
         // setTimeout(() => {
           console.log('BannerTimer completed');
           store.setDailyOpen(isDuringDebate);
@@ -79,9 +77,9 @@ const renderer = (
 
         <a 
         style={{ textDecoration: 'underline' }}
-        onClick={trackOutboundLinkClick(
+        onClick={window.trackOutboundLinkClick(
                 'https://www.facebook.com/events/522239821514316/'
-              )} href='https://www.facebook.com/events/522239821514316/'>Add to Facebook Calendar</a>
+              )} href="https://www.facebook.com/events/522239821514316/">Add to Facebook Calendar</a>
         
       </div>
     );
@@ -89,10 +87,11 @@ const renderer = (
 };
 
 interface Props {
-  onCompleted: () => void;
+  onCompleted?: () => void;
+  store:any;
 }
 
-function DailyEndTimer(props) {
+function DailyEndTimer(props:Props) {
   const classes = useStyles({});
   const { onCompleted } = props;
   const store = props.store;

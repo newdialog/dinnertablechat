@@ -8,11 +8,10 @@ import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
 import * as DebateModel from '../models/DebateModel';
 import * as AuthService from './AuthService';
+import retry from 'async-retry';
 type OnMatched = DebateModel.MatchModelType;
 
 let gameLift: GameLift;
-
-import retry from 'async-retry';
 
 const stopFlags: { [ticket: string]: StopFlag } = {}; // ticketid: flag
 
@@ -167,7 +166,7 @@ export async function queueUp(
   );
 
   const sideStr = '' + side;
-  const others = ['0', '1', '2'].filter(x => x != sideStr);
+  const others = ['0', '1', '2'].filter(x => x !== sideStr);
 
   const options: GameLift.StartMatchmakingInput = {
     ConfigurationName: 'dtc-match-config',
@@ -234,7 +233,7 @@ export async function stopMatchmakingSimple(TicketId: string) {
     console.log('queue stopFlag set');
     stopFlags[TicketId].flag = true;
   }
-  const r = gameLift.stopMatchmaking({ TicketId }, e => {
+  gameLift.stopMatchmaking({ TicketId }, e => {
     console.log('STOPPED');
   });
   console.log('stoppedMatchmakingSimple TicketId', TicketId);

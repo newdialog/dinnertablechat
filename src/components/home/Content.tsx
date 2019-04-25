@@ -1,121 +1,121 @@
 // tslint:disable-next-line:max-line-length
-import React, { useRef, useState, useEffect, useMemo } from 'react';
-import Typography from '@material-ui/core/Typography';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-
-import Divider from '@material-ui/core/Divider';
-import Grid from '@material-ui/core/Grid';
-
-import Lottie from '@jadbox/lottie-react-web';
-
-import Reveal from 'react-reveal/Reveal';
-import Flip from 'react-reveal/Flip';
-import { Waypoint } from 'react-waypoint';
-
 import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
+
 import Glide from '@glidejs/glide';
-
+import Lottie from '@jadbox/lottie-react-web';
+import Divider from '@material-ui/core/Divider';
+import Grid from '@material-ui/core/Grid';
+import { Theme } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/styles';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
-import { useOnScreen } from 'react-hooks-set';
+import Flip from 'react-reveal/Flip';
+import Reveal from 'react-reveal/Reveal';
+import { Waypoint } from 'react-waypoint';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    textAlign: 'center',
-    paddingTop: theme.spacing.unit * 20
-  },
-  container: {
-    // marginTop: '30px',
-    paddingLeft: '3em',
-    paddingRight: '3em',
-    gridTemplateColumns: 'repeat(12, 1fr)',
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: '1.6em',
-      paddingRight: '1.6em'
-    }
-  },
-  logoText: {
-    marginTop: '-1.25em !important',
-    [theme.breakpoints.down('xs')]: {
-      marginTop: '-0.6em !important'
-    }
-  },
-  containerRev: {
-    marginTop: '0px',
-    paddingLeft: '3em',
-    paddingRight: '3em',
-    gridTemplateColumns: 'repeat(12, 1fr)',
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: '0.5em',
-      paddingRight: '0.5em'
+const trackOutboundLinkClick = window.trackOutboundLinkClick;
+
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      textAlign: 'center',
+      paddingTop: theme.spacing.unit * 20
     },
-    flexWrap: 'wrap-reverse'
-  },
-  paper: {
-    padding: theme.spacing.unit,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    whiteSpace: 'nowrap',
-    // marginTop: theme.spacing.unit * 13,
-    flex: '1 1 auto',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    position: 'relative'
-  },
-  paperimg: {
-    height: 'auto',
-    width: 'auto',
-    maxWidth: '100%',
-    margin: 'auto',
-    display: 'block',
-    justifyContent: 'center',
-    alignItems: 'center',
-    objectFit: 'contain',
-    pointerEvents: 'none',
-    [theme.breakpoints.down('sm')]: {
-      paddingTop: `${theme.spacing.unit * 5}px`,
-      maxWidth: '80%'
+    container: {
+      // marginTop: '30px',
+      paddingLeft: '3em',
+      paddingRight: '3em',
+      gridTemplateColumns: 'repeat(12, 1fr)',
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: '1.6em',
+        paddingRight: '1.6em'
+      }
     },
-    [theme.breakpoints.down('xs')]: {
-      maxWidth: '100%'
+    logoText: {
+      marginTop: '-1.25em !important',
+      [theme.breakpoints.down('xs')]: {
+        marginTop: '-0.6em !important'
+      }
+    },
+    containerRev: {
+      marginTop: '0px',
+      paddingLeft: '3em',
+      paddingRight: '3em',
+      gridTemplateColumns: 'repeat(12, 1fr)',
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: '0.5em',
+        paddingRight: '0.5em'
+      },
+      flexWrap: 'wrap-reverse'
+    },
+    paper: {
+      padding: theme.spacing.unit,
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      whiteSpace: 'nowrap',
+      // marginTop: theme.spacing.unit * 13,
+      flex: '1 1 auto',
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      position: 'relative'
+    },
+    paperimg: {
+      height: 'auto',
+      width: 'auto',
+      maxWidth: '100%',
+      margin: 'auto',
+      display: 'block',
+      justifyContent: 'center',
+      alignItems: 'center',
+      objectFit: 'contain',
+      pointerEvents: 'none',
+      [theme.breakpoints.down('sm')]: {
+        paddingTop: `${theme.spacing.unit * 5}px`,
+        maxWidth: '80%'
+      },
+      [theme.breakpoints.down('xs')]: {
+        maxWidth: '100%'
+      }
+    },
+    centered: {
+      paddingTop: '0',
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '1000px',
+      minWidth: '300px'
+    },
+    centered2: {
+      paddingTop: '0',
+      paddingLeft: '1em',
+      paddingRight: '1em',
+      paddingBottom: '4em',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '1000px',
+      minWidth: '300px'
+    },
+    divider: {
+      margin: `${theme.spacing.unit * 3}px 0`,
+      [theme.breakpoints.down('sm')]: {
+        margin: `${theme.spacing.unit * 1}px 0`
+      }
+    },
+    divider2: {
+      height: '13vh',
+      [theme.breakpoints.down('sm')]: {
+        height: '4vh'
+      }
     }
-  },
-  centered: {
-    paddingTop: '0',
-    paddingLeft: '1em',
-    paddingRight: '1em',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: 'auto',
-    maxWidth: '1000px',
-    minWidth: '300px'
-  },
-  centered2: {
-    paddingTop: '0',
-    paddingLeft: '1em',
-    paddingRight: '1em',
-    paddingBottom: '4em',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: 'auto',
-    maxWidth: '1000px',
-    minWidth: '300px'
-  },
-  divider: {
-    margin: `${theme.spacing.unit * 3}px 0`,
-    [theme.breakpoints.down('sm')]: {
-      margin: `${theme.spacing.unit * 1}px 0`
-    }
-  },
-  divider2: {
-    height: '13vh',
-    [theme.breakpoints.down('sm')]: {
-      height: '4vh'
-    }
-  }
-}), {withTheme: true, name:'HomeContent'});
+  }),
+  { withTheme: true, name: 'HomeContent' }
+);
 
 const logoOptions = {
   renderer: 'svg',
@@ -167,7 +167,6 @@ const cullingHandlers = (
   onLeave: boolean = false,
   speed = 1
 ) => {
-  const obj = id as any;
   if (!onLeave) {
     // if(obj.handlerOn) return obj.handlerOn;
     return () => {
@@ -181,7 +180,7 @@ const cullingHandlers = (
   } else {
     // if (obj.handlerOff) return obj.handlerOff;
     return () => {
-      id.current && id.current.stop();
+      if (id.current) id.current.stop();
     };
   }
 };
@@ -194,8 +193,8 @@ export default function HomeContent() {
   const topicsRef = useRef<Lottie | any>();
   const talkingRef = useRef<Lottie | any>();
   const diningRef = useRef<Lottie | any>();
-  
-  const [state, setState] = useState<any>({})
+
+  const [state, setState] = useState<any>({});
 
   // const logoVisible = useOnScreen(logoRef, 0, true);
   // const topicsVisible = useOnScreen(topicsRef, 0, true);
@@ -209,10 +208,9 @@ export default function HomeContent() {
     }).mount();
   }, []);
 
-  
   const _handleLogoWaypointEnter = () => {
     // console.log('start');
-    setState(p=>({...p, logoShow: true}));
+    setState(p => ({ ...p, logoShow: true }));
     if (!logoRef.current) return;
     // console.log('logoRef.current', logoRef.current)
     // logoRef.current.stop();
@@ -221,7 +219,7 @@ export default function HomeContent() {
 
   const _handleLogoWaypointLeave = () => {
     // console.log('end');
-    setState(p=>({...p, logoShow: false}));
+    setState(p => ({ ...p, logoShow: false }));
     if (!logoRef.current) return;
     // console.log('logoRef.current', logoRef.current)
     logoRef.current.stop();
@@ -318,17 +316,17 @@ export default function HomeContent() {
               </a>
 
               <a
-              style={{ color: 'black' }}
-              href="https://facebook.com/dinnertablechat"
-              onClick={trackOutboundLinkClick(
-                'https://facebook.com/dinnertablechat'
-              )}
-            >
-              <i
-                id="social-tw"
-                className="fab fa-facebook-square social fa-3x "
-              />
-            </a>
+                style={{ color: 'black' }}
+                href="https://facebook.com/dinnertablechat"
+                onClick={trackOutboundLinkClick(
+                  'https://facebook.com/dinnertablechat'
+                )}
+              >
+                <i
+                  id="social-tw"
+                  className="fab fa-facebook-square social fa-3x "
+                />
+              </a>
             </div>
           </Grid>
         </Grid>
@@ -350,6 +348,7 @@ export default function HomeContent() {
             <div className={classes.paper}>
               <Flip bottom={true} fraction={0.7} onReveal={trackRulesView}>
                 <img
+                  alt="internet trolls"
                   src="https://via.placeholder.com/150"
                   data-src="./imgs/05-troll.png"
                   className={classes.paperimg + ' lazyload'}
@@ -413,6 +412,7 @@ export default function HomeContent() {
                   <ul className="glide__slides">
                     <li className="glide__slide">
                       <img
+                        alt="character1"
                         src="https://via.placeholder.com/150"
                         data-src="./imgs/04-select.png"
                         className={classes.paperimg + ' lazyload'}
@@ -420,6 +420,7 @@ export default function HomeContent() {
                     </li>
                     <li className="glide__slide">
                       <img
+                        alt="character2"
                         src="https://via.placeholder.com/150"
                         data-src="./imgs/04-select2.png"
                         className={classes.paperimg + ' lazyload'}
@@ -427,6 +428,7 @@ export default function HomeContent() {
                     </li>
                     <li className="glide__slide">
                       <img
+                        alt="character3"
                         src="https://via.placeholder.com/150"
                         data-src="./imgs/04-select3.png"
                         className={classes.paperimg + ' lazyload'}

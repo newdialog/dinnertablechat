@@ -1,18 +1,18 @@
-import React, { useCallback, useRef, useState, useContext, useEffect } from 'react';
-import { Button, Typography } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-
-import rottie from 'lottie-web';
 import Lottie from '@jadbox/lottie-react-web';
-// import { Typography, Divider } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
+import rottie from 'lottie-web';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
+import * as AppModel from '../../models/AppModel';
 import DebateFloatMenu from './DebateFloatMenu';
 import DebateTimer from './DebateTimer';
-import * as AppModel from '../../models/AppModel';
-import StartDebateDialog from './StartDebateDialog';
 
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+// import { Typography, Divider } from '@material-ui/core';
+
+const screen = window.screen;
 
 const useStyles = makeStyles((theme: Theme) => ({
   centered: {
@@ -233,7 +233,7 @@ export default function DebateScene(props: Props) {
   };
 
   useEffect(() => {
-    const t = tableEl.current!;
+    // const t = tableEl.current!;
     const table = rottie.loadAnimation({
       container: tableEl.current!, // the dom element that will contain the animation
       renderer: 'svg',
@@ -255,7 +255,7 @@ export default function DebateScene(props: Props) {
   const onLoopComplete = useCallback(() => {
     // console.log('blue onLoopComplete', talkingBlue, talkingRed);
 
-    const swap = Math.random() > .5; // state.blueState === 'talking';
+    const swap = Math.random() > (.5 + state.blueState === 'talking' ? 0.1 : 0);
     setState(p => ({...p, blueState: swap ? 'talking' : 'talking' })); // talkingBlue
   }, [state, state.blueState, talkingBlue]);
 

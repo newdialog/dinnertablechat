@@ -1,11 +1,11 @@
-import React from 'react';
-import { Typography, Grid, Paper } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { Grid, Typography } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
-import * as AppModel from '../../../models/AppModel';
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
+import React from 'react';
+
+import * as AppModel from '../../../models/AppModel';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     paddingLeft: '10vw',
     paddingRight: '2em'
     // marginTop: '55px',
-    //background: '#a69c92',
+    // background: '#a69c92',
     // backgroundImage: `url(${'./imgs/woodgrain.jpg'})`,
     // backgroundPosition: 'center',
     // backgroundSize: 'cover',
@@ -72,7 +72,7 @@ export default observer(function UserStats(props: Props) {
       <Grid container justify="space-around" alignItems="center" spacing={16}>
         <Grid item xs={3}>
           <div className={classes.groupItem}>
-            <i className={"fas fa-trophy " + classes.icon} />
+            <i className={'fas fa-trophy ' + classes.icon} />
             <Typography
               variant="h5"
               align="left"
@@ -81,21 +81,18 @@ export default observer(function UserStats(props: Props) {
             >
               lvl {level}
               <LinearProgress
-              color="primary"
-              variant="determinate"
-              value={normalise(xp)}
-              style={{ height: '8px' }}
-            />
+                color="primary"
+                variant="determinate"
+                value={normalise(xp)}
+                style={{ height: '8px' }}
+              />
             </Typography>
-            
           </div>
         </Grid>
 
         <Grid item xs={3}>
           <div className={classes.groupItem}>
-            <i
-              className={"fas fa-comments " + classes.icon2}
-            />
+            <i className={'fas fa-comments ' + classes.icon2} />
             <Typography
               variant="h5"
               align="center"

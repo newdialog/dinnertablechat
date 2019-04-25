@@ -4,7 +4,6 @@ import AuthModel from './AuthModel';
 import DebateModel from './DebateModel';
 import { Instance } from 'mobx-state-tree';
 import React from 'react';
-import * as TimeService from '../services/TimeService';
 
 // let cacheIsLive: boolean | null = null;
 function isLive(): boolean {
@@ -158,7 +157,3 @@ export const create = (routerModel: RouterModel, fetcher: any) =>
   );
 
 export const Context = React.createContext<Type | null>(null);
-
-function myXOR(a, b) {
-  return (a || b) && !(a && b);
-}

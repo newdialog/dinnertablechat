@@ -7,7 +7,7 @@ import Backend from 'i18next-chained-backend';
 // import { withI18n, reactI18nextModule } from 'react-i18next';
 import LocalStorageBackend from 'i18next-localstorage-backend';
 
-const instance = i18n
+i18n
   // .use(XHR)
   .use(LanguageDetector)
   .use(Backend)

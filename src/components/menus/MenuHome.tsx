@@ -1,27 +1,19 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import {
-  Button,
-  Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  StepContent,
-  Paper
-} from '@material-ui/core';
-import * as AppModel from '../../models/AppModel';
-import PositionSelector from './PositionSelector';
+import { Button, Step, StepContent, Stepper, Typography } from '@material-ui/core';
 import StepButton from '@material-ui/core/StepButton';
-import CharacterSelection from './CharacterSelection';
-import Footer from '../home/Footer';
-import HistoryIcon from '@material-ui/icons/History';
-import * as Times from '../../services/TimeService';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+
+import * as AppModel from '../../models/AppModel';
+import * as Times from '../../services/TimeService';
+import { Auther } from '../Auther';
+import Footer from '../home/Footer';
+import CharacterSelection from './CharacterSelection';
 import AppFloatMenu from './dash/AppFloatMenu';
 import MicPermissionsBtn from './MicPermissionsBtn';
-import { Auther } from '../Auther';
+import PositionSelector from './PositionSelector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
@@ -181,7 +173,7 @@ export default observer(function MenuHome(props: Props) {
   // console.log('step', step)
   const steps = getSteps();
 
-  const handleStep = step => () => {
+  const handleStep = step2 => () => {
     store.debate.resetQueue();
   };
 

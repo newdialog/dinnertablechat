@@ -6,7 +6,6 @@ import AppRouter from './components/Router';
 import { observer } from 'mobx-react-lite';
 import AuthWrapper from './components/aws/AuthWrapper';
 import WorkerUpdate from './components/WorkerUpdate';
-import Loading from './components/Loading';
 import * as TimeSerive from './services/TimeService';
 
 interface Props {
@@ -37,9 +36,8 @@ export default observer(function App(props: Props) {
       !localStorage.getItem('quickmatch')
     ) {
       store.router.push('/tutorial');
-    }
-    // Auth guest to signup
-    else if (localStorage.getItem('signup')) {
+    } else if (localStorage.getItem('signup')) {
+      // Auth guest to signup
      if(store.auth.isNotLoggedIn) {
       console.log('Auth guest to signup');
       store.auth.login();
@@ -48,18 +46,16 @@ export default observer(function App(props: Props) {
       // localStorage.removeItem('signup');
      }
       // return <Loading />;
-    }
-    // Feature: force quickmatch flow
-    else if (store.isQuickmatch() && store.auth.isNotLoggedIn) {
+    } else if (store.isQuickmatch() && store.auth.isNotLoggedIn) {
+      // Feature: force quickmatch flow
       console.log('isQuickmatch');
       localStorage.setItem('quickmatch', 'y');
       store.auth.doGuestLogin();
       // return <Loading />;
       // cant do this as it would cause quickmatch to bug
       // else if(s.auth.isAuthenticated()) s.router.push('/quickmatch');
-    }
-    // Feature: faster flow
-    else if (store.auth.isNotLoggedIn && isDebateTime) {
+    } else if (store.auth.isNotLoggedIn && isDebateTime) {
+      // Feature: faster flow
       console.log('setting quickmatch');
       // localStorage.setItem('quickmatch', 'y');
       store.auth.doGuestLogin();
@@ -67,7 +63,7 @@ export default observer(function App(props: Props) {
     } else if(isHome && isDebateTime && store.auth.isAuthenticated()) {
       store.router.push('/quickmatch'); // /home
     }
-  }, [store.auth.isNotLoggedIn, store.auth.user]);
+  }, [store, store.auth.isNotLoggedIn, store.auth.user]);
 
   return (
     <WorkerUpdate store={store}>

@@ -1,14 +1,14 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import { Button, Typography, Paper, Grid, Card } from '@material-ui/core';
-import SwipeableViews from 'react-swipeable-views';
+import { Button, Grid, Typography } from '@material-ui/core';
 import MobileStepper from '@material-ui/core/MobileStepper';
+import { Theme } from '@material-ui/core/styles';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import { makeStyles } from '@material-ui/styles';
+import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import SwipeableViews from 'react-swipeable-views';
 
 import * as AppModel from '../../models/AppModel';
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
@@ -173,8 +173,8 @@ export default function GettingStarted(props: Props) {
     }
   }, []);
 
-  const handleStepChange = activeStep => {
-    setState(p => ({...p, activeStep }));
+  const handleStepChange = activeStep2 => {
+    setState(p => ({...p, activeStep2 }));
   };
 
   const { activeStep } = state;

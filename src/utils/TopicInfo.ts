@@ -28,7 +28,7 @@ export function getTopicByIndex(index: number, t: any): Card {
   return data[index];
 }
 
-export function getOldTopics(t) {
+export function getOldTopics(t:any) {
   const topics = t('topics-old').split(',');
   const data: Card[] = [];
   for (let i = 0; i < topics.length; i++) {

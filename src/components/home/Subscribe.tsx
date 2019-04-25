@@ -32,7 +32,7 @@ interface Props {
 
 function validEmail(email: string) {
   if (!email) return false;
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 }
 
@@ -48,7 +48,7 @@ export default function ButtonAppBar(props: Props) {
 
   const onSubmit = useMemo(() => async (e) => {
     e.preventDefault();
-    gtag('event', 'subscribe_action', {
+    window.gtag('event', 'subscribe_action', {
       event_category: 'splash',
       non_interaction: false
     });
@@ -60,7 +60,7 @@ export default function ButtonAppBar(props: Props) {
       setState(p => ({...p, subscribe: 'Please enter a valid email first' }));
       return;
     }
-    let subscribe = 'form';
+    let _subscribe = 'form';
     setState(p => ({...p, submitting: true }));
     fetch('https://subscribe.api.dinnertable.chat/', {
       method: 'post',
@@ -72,16 +72,16 @@ export default function ButtonAppBar(props: Props) {
       }
     })
       .then((res: any) => {
-        subscribe = res && res.status && res.status < 299 ? 'success' : res.err;
-        setState(p => ({...p, subscribe }));
+        _subscribe = res && res.status && res.status < 299 ? 'success' : res.err;
+        setState(p => ({...p, _subscribe }));
       })
       .catch((err: any) => {
-        subscribe = err;
-        setState(p => ({...p, subscribe }));
+        _subscribe = err;
+        setState(p => ({...p, _subscribe }));
       });
   }, [state, istate]);
 
-  const renderForm = (classes: any, t: any) => {
+  const renderForm = () => {
     return (
       <div className={classes.centered}>
         <br />
@@ -159,9 +159,9 @@ export default function ButtonAppBar(props: Props) {
             Hmm, something went wrong. {subscribe}
           </Reveal>
         </Typography>
-        {renderForm(classes, t)}
+        {renderForm()}
       </div>
     );
   }
-  return renderForm(classes, t);
+  return renderForm();
 }

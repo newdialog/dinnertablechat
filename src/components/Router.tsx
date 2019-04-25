@@ -10,7 +10,7 @@ const AsyncHome = lazy(() => import('./home/home'));
 const AsyncPlay = lazy(() => import('./menus/MenuHome'));
 const AsyncPrivacy = lazy(() => import('./pages/Privacy'));
 const AsyncEducation = lazy(() => import('./pages/EducationHome'));
-const AsyncMediaKit = lazy(() => import('./mediakit/MediaKit'));
+const AsyncMediaKit = lazy(() => import('./pages/MediaKit'));
 const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
 const AsyncTester = lazy(() => import('./debate/DebateTester'));
 const UserHome = lazy(() => import('./menus/dash/UserHome'));
@@ -20,6 +20,8 @@ const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
 const Saas = lazy(() => import('./saas/menus/SRouter'));
 const SMenuHome = lazy(() => import('./saas/menus/SMenuHome'));
+
+const AsyncPitch = lazy(() => import('./saas/pitch/SPitch'));
 
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();
@@ -63,6 +65,8 @@ const DTCRouter = ({
         <Route path="/home" component={UserHome} />
         <Route path="/quickmatch" component={AsyncPlay} />
         <Route path="/match" component={AsyncDebate} />
+
+        <Route path="/pitch" component={AsyncPitch} />
 
         {store.isLive === false && (
           <>

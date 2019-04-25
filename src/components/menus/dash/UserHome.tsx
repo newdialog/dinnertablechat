@@ -1,21 +1,20 @@
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
+import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet';
-import DailyTimer from './DailyTimer';
-import * as Times from '../../../services/TimeService';
-import * as AppModel from '../../../models/AppModel';
-import Tooltip from './Tooltip';
-import DebateHistory from './DebateHistory';
-import Footer from '../../home/Footer';
-import UserStats from './UserStats';
-import GuestNotice from './GuestNotice';
-import { Auther } from '../../Auther';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+
+import * as AppModel from '../../../models/AppModel';
+import * as Times from '../../../services/TimeService';
+import { Auther } from '../../Auther';
+import Footer from '../../home/Footer';
 import AppFloatMenu from './AppFloatMenu';
+import DailyTimer from './DailyTimer';
+import DebateHistory from './DebateHistory';
+import GuestNotice from './GuestNotice';
+import Tooltip from './Tooltip';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {

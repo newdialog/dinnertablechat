@@ -1,12 +1,7 @@
-import { withTranslation, UseTranslationResponse } from 'react-i18next';
+import React, { useContext } from 'react';
+
 // import withRoot from '../withRoot';
 // import { observer } from 'mobx-react';
-import * as AppModel from '../models/AppModel';
-import React, { useContext } from 'react';
-import { useTranslation } from 'react-i18next';
-import { withStyles } from '@material-ui/core/styles';
-import { useTheme, makeStyles } from '@material-ui/styles';
-
 function noop(comp: any) {
   return comp;
 }

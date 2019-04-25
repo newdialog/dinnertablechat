@@ -1,25 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import {
-  Button,
-  Typography,
-  Stepper,
-  Step,
-  StepLabel,
-  StepContent,
-  Paper
-} from '@material-ui/core';
-import * as AppModel from '../../../models/AppModel';
-import PositionSelector from './SPositionSelector';
-import Footer from '../../home/Footer';
-import * as Times from '../../../services/TimeService';
+import { Typography } from '@material-ui/core';
+import { Theme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
+import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
-import AppFloatMenu from '../../menus/dash/AppFloatMenu';
-import { Auther } from '../../Auther';
-import SMicSelector from './SMicSelector';
+
+import * as AppModel from '../../../models/AppModel';
+import * as Times from '../../../services/TimeService';
 import SClosedDialog from './SClosedDialog';
+import SMicSelector from './SMicSelector';
+import PositionSelector from './SPositionSelector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
@@ -158,7 +148,7 @@ export default observer(function MenuHome(props: Props) {
     else store.router.push('/saasmatch'); //  && store.micAllowed :SAAS
   }
 
-  const handleStep = step => () => {
+  const handleStep = step2 => () => {
     store.debate.resetQueue();
   };
 

@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { SvgIcon, Button, IconButton, Typography } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-
+import { Button, Typography } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { Theme } from '@material-ui/core/styles';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
-import MenuHome from '../menus/MenuHome';
+import { makeStyles } from '@material-ui/styles';
+import React, { useContext, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
-
-import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -36,13 +33,13 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface Props {
-  // fullScreen?: boolean;
+  fullScreen?: boolean;
   // error: string;
   open?: boolean;
   store: AppModel.Type;
 }
 
-export default withMobileDialog<Props>()(function StartDebateDialog(props) {
+export default withMobileDialog<Props>()(function StartDebateDialog(props:Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
   const store = props.store;
@@ -101,7 +98,7 @@ export default withMobileDialog<Props>()(function StartDebateDialog(props) {
           color="secondary"
           autoFocus
           variant="contained"
-          style={{width:'80%', padding: '1em', margin:'0 auto 2em auto'}}
+          style={{ width: '80%', padding: '1em', margin: '0 auto 2em auto' }}
         >
           CLOSE
         </Button>

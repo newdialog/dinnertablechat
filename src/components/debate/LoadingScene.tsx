@@ -1,19 +1,20 @@
-import React, { useRef, useState, useEffect, useMemo, useContext } from 'react';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
-import * as QS from '../../services/QueueService';
-import * as shake from '../../services/HandShakeService';
-import { Typography, Card } from '@material-ui/core';
-import Reveal from 'react-reveal/Reveal';
-import getMedia from '../../utils/getMedia';
 import Lottie from '@jadbox/lottie-react-web';
-import * as AppModel from '../../models/AppModel';
-import DebateError from './DebateError';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { Typography } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import { Theme } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import Reveal from 'react-reveal/Reveal';
+
+import * as AppModel from '../../models/AppModel';
+import * as shake from '../../services/HandShakeService';
+import * as QS from '../../services/QueueService';
+import getMedia from '../../utils/getMedia';
+import DebateError from './DebateError';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -173,7 +174,7 @@ export default observer(function LoadingScene(props: Props) {
     // enable mic first
     try {
       const media = await getMedia();
-      if (!media) throw new Error('no media pulled'); //maybe not needed
+      if (!media) throw new Error('no media pulled'); // maybe not needed
       console.log('startedHandshake-1');
       setStream(media);
     } catch (e) {

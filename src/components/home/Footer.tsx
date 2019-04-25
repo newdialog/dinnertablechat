@@ -4,6 +4,8 @@ import { createStyles, WithStyles } from '@material-ui/core/styles';
 import * as AppModel from '../../models/AppModel';
 
 import { useTheme, makeStyles } from '@material-ui/styles';
+const trackOutboundLinkClick = window.trackOutboundLinkClick;
+
 const useStyles = makeStyles((theme: any) => ({
     root: {
       justifyContent: 'center'
@@ -137,6 +139,7 @@ export default function Footer(props: Props) {
         <a
           href="https://ko-fi.com/E1E0OB0M"
           target="_blank"
+          rel="noopener noreferrer"
           className={classes.links}
           style={{ margin: '0 10px 0 10px' }}
         >
