@@ -1,10 +1,11 @@
-import * as React from 'react';
-import { Theme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import { Helmet } from 'react-helmet';
+import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
+import * as React from 'react';
+import { Helmet } from 'react-helmet';
+
 import Footer from '../home/Footer';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -124,7 +125,9 @@ export default function MediaKit(props: Props) {
           publication media kit needs, please{' '}
           <a
             href="mailto:press@dinnertable.chat"
-            onClick={window.trackOutboundLinkClick('mailto:press@dinnertable.chat')}
+            onClick={window.trackOutboundLinkClick(
+              'mailto:press@dinnertable.chat'
+            )}
           >
             contact us
           </a>
@@ -142,10 +145,14 @@ export default function MediaKit(props: Props) {
         <br />
         <Grid container spacing={16}>
           <Grid container justify="center" spacing={16}>
-            {imgs.map( (value, index) => (
+            {imgs.map((value, index) => (
               <Grid key={value} item>
                 <Paper className={classes.paper2}>
-                  <img src={value} className={classes.paperimg} alt={"dtc-design"+index} />
+                  <img
+                    src={value}
+                    className={classes.paperimg}
+                    alt={'dtc-design' + index}
+                  />
                 </Paper>
               </Grid>
             ))}
@@ -185,7 +192,9 @@ export default function MediaKit(props: Props) {
           General business inqueries{' '}
           <a
             href="mailto:team@dinnertable.chat"
-            onClick={window.trackOutboundLinkClick('mailto:team@dinnertable.chat')}
+            onClick={window.trackOutboundLinkClick(
+              'mailto:team@dinnertable.chat'
+            )}
           >
             team@dinnertable.chat
           </a>
@@ -193,7 +202,9 @@ export default function MediaKit(props: Props) {
           Press inquiries{' '}
           <a
             href="mailto:press@dinnertable.chat"
-            onClick={window.trackOutboundLinkClick('mailto:press@dinnertable.chat')}
+            onClick={window.trackOutboundLinkClick(
+              'mailto:press@dinnertable.chat'
+            )}
           >
             press@dinnertable.chat
           </a>

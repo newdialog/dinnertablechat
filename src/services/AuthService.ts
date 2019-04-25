@@ -36,7 +36,7 @@ Amplify.Logger.LOG_LEVEL = 'DEBUG';
 // https://github.com/aws-amplify/amplify-js/issues/1487
 
 const awsconfig = injectConfig(awsmobile);
-const IdentityPoolId = awsconfig.Auth.identityPoolId;
+// const IdentityPoolId = awsconfig.Auth.identityPoolId;
 
 // console.log('IdentityPoolId', IdentityPoolId);
 

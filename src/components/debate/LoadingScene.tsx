@@ -5,7 +5,7 @@ import { Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
-import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import Reveal from 'react-reveal/Reveal';
