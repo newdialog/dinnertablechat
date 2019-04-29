@@ -57,6 +57,12 @@ const DTCRouter = ({
         <Route exact={true} path="/feedback" component={DebateFeedback} />
         <Route exact={true} path="/tutorial" component={GettingStarted} />
 
+        <Route exact={true} path="/signout" render={() => {
+          // PATCH, redirects not working
+          store.router.push('/');
+          return null;
+        }} />
+
         <Route path="/press" component={AsyncMediaKit} />
         <Route path="/privacy" component={AsyncPrivacy} />
 
