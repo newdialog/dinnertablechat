@@ -101,73 +101,255 @@ export default function MediaKit(props: Props) {
           style={{ color: 'black', fontSize: '2.5em' }}
           align={'center'}
         >
-          Personal Discussion Platform
+          Integration - Be Your Own Host 
         </Typography>
         <div className={classes.centered}>
           <img src="imgs/press/01-scene1.png" width={600} alt="screenshot-1" />
         </div>
         <div className={classes.divider} />
-        <Typography gutterBottom={true} variant="h5" align={'left'}>
-          
-        </Typography>
+        <Typography gutterBottom={true} variant="h5" align={'left'} />
         <Typography gutterBottom={true}>
-          The Personal Discussion Platform [PDP] is powered by Dinnertable.chat
-          to provide a fundamentally improved means
-          of empowering your users to effectively discuss select topics or
-          content. Better communication allows users to actively engage with
-          your content longer (while also attracting new users), and encourages
-          readers to think critically about the content in a more organic way
-          than the text-based discussion widgets of yesterday. PDP turbocharges
-          everyone from universities to publishers, allowing their users to both
-          better express themselves and also improve their understanding of the
-          subject matter being presented.
+          <p className="c0 c15">
+            <span className="c5">
+              Online discussion and debate platform,
+              Dinnertable.chat is pleased to announce the launch of its{' '}
+            </span>
+            <span className="c5">host</span>
+            <span className="c5">
+              &nbsp;SaaS offering for media outlets and higher education
+              institutions. The{' '}
+            </span>
+            <span className="c5">platform</span>
+            <span className="c4">
+              &nbsp;web add-on was inspired by the Dinnertable.chat platform, an
+              online space where people can enter into constructive dialogue
+              with those who hold differing viewpoints for the purpose of
+              finding common ground on various social and political issues.
+            </span>
+          </p>
+          <p className="c0 c3">
+            <span className="c4" />
+          </p>
+          <p className="c0 c15">
+            <span className="c4">
+              Existing modes of public online discussion offer little, if any,
+              encouragement to maintain constructive dialogue and respectful
+              debate, and also face external challenges including:
+            </span>
+          </p>
+          <p className="c0 c3">
+            <span className="c4" />
+          </p>
+          <ol className="c11 lst-kix_9avvhvrdeikr-0 start">
+            <li className="c0 c10">
+              <span className="c4">
+                People maliciously abusing systems to publicly and/or visibly
+                spread toxic ideas
+              </span>
+            </li>
+            <li className="c0 c10">
+              <span className="c4">
+                Bad actors trolling serious conversations, diminishing focus and
+                overall value
+              </span>
+            </li>
+            <li className="c0 c10">
+              <span className="c4">
+                Confusion and misinterpretation due to text often lacking
+                contextual and emotive cues
+              </span>
+            </li>
+            <li className="c0 c10">
+              <span className="c4">
+                Text-based conversations that lack higher forms of emotional
+                expression are often dry and bland
+              </span>
+            </li>
+            <li className="c0 c10">
+              <span className="c4">
+                Echo chambers develop when majority &ldquo;gangs up,&rdquo;
+                squeezing out minority viewpoints
+              </span>
+            </li>
+          </ol>
+          <p className="c0 c3">
+            <span className="c4" />
+          </p>
+          <p className="c0 c15">
+            <span className="c5">The Dinnertable.chat </span>
+            <span className="c5">hosting service</span>
+            <span className="c4">
+              &nbsp;add-on is explicitly designed to actively combat these
+              problems and promote positive communication traits. This is
+              accomplished in the following ways:
+            </span>
+          </p>
+          <p className="c0 c3">
+            <span className="c4" />
+          </p>
+          <ol className="c11 lst-kix_k5e2mrvp4ebx-0 start">
+            <li className="c0 c10">
+              <span className="c4">
+                One-on-one communication, minimizing the visible &ldquo;blast
+                radius&rdquo; of toxic messaging
+              </span>
+            </li>
+            <li className="c0 c10">
+              <span className="c4">
+                Participants rate one another post-discussion, which quickly
+                identifies and minimizes trolls
+              </span>
+            </li>
+            <li className="c0 c10">
+              <span className="c4">
+                Communication is verbal and dynamic which allows for a higher
+                message bandwidth
+              </span>
+            </li>
+            <li className="c0 c10">
+              <span className="c4">
+                Voice-based communication provides an intimate, exciting, and
+                emotionally vulnerable experience
+              </span>
+            </li>
+            <li className="c0 c10">
+              <span className="c4">
+                One-on-one conversation dynamic eliminates ability to gang up or
+                drown out minority viewpoints
+              </span>
+            </li>
+          </ol>
+          <p className="c0 c3">
+            <span className="c4" />
+          </p>
+          <p className="c0 c15">
+            <span className="c5">The </span>
+            <span className="c5">hosting service</span>
+            <span className="c5">&rsquo;s functionality mimics that of </span>
+            <span className="c18 c5">
+              <a
+                className="c1"
+                href="https://www.google.com/url?q=https://www.youtube.com/watch?v%3DvzHKpUBAm48&amp;sa=D&amp;ust=1557073702001000"
+              >
+                the Dinnertable.chat platform
+              </a>
+            </span>
+            <span className="c5">
+              &nbsp;and can be easily implemented by media sites, publishers,
+              colleges, and universities to enhance the online conversation
+              experience for their respective users, leading to better
+              conversation on whatever is being discussed. Better communication
+              allows users to actively engage with content longer and encourages
+              readers to think critically about that content in a more organic
+              way than the text-based discussion widgets of yesterday. The
+              add-on turbocharges universities and publishers, allowing their
+              users to both better express themselves while improving their
+              understanding of the subject matter being presented. The{' '}
+            </span>
+            <span className="c5">host integration</span>
+            <span className="c5">
+              &nbsp;can easily be integrated into a range of mobile apps and
+              websites, and can be customized and branded for specific needs.
+            </span>
+          </p>
+          <p className="c0 c8">
+            <span className="c4" />
+          </p>
+          <p className="c0 c15">
+            <span className="c20 c19">For publishers</span>
+            <span className="c20">, </span>
+            <span className="c5">service</span>
+            <span className="c20">
+              &nbsp;allows you to add real-time personable conversation to your
+              content. This allows your users to speak directly with others
+              about what they think about the content, how it makes them feel,
+              and whatever differences of opinion they may have. For the
+              journalists,{' '}
+            </span>
+            <span className="c5">the add-on</span>
+            <span className="c7">
+              &nbsp;allows their readers to speak &lsquo;truth to power&rsquo;
+              by being able to directly express their ideas and views without
+              drowning out others, which is a major issue on social networks
+              like Twitter.
+            </span>
+          </p>
+          <p className="c0 c3">
+            <span className="c7" />
+          </p>
+          <p className="c0 c15">
+            <span className="c20 c19">For universities</span>
+            <span className="c20">, </span>
+            <span className="c5">the hosted service</span>
+            <span className="c20">
+              &nbsp;provides professors with a means of allowing students to
+              freely exercise ideas through conversation and debate with other
+              students, while still keeping student anonymity. However, these
+              discussions are fundamentally structured to encourage positivity
+              and productivity, as users are prompted to rate how good of a
+              conversationalist the other was post-conversation. For larger
+              discussions and more challenging ideologies, universities can host
+              partnership debate challenges with other schools to increase the
+              diversity of ideas and culture.
+            </span>
+          </p>
+          <p className="c0 c3">
+            <span className="c4" />
+          </p>
+          <p className="c0 c15">
+            <span className="c5">&ldquo;One of t</span>
+            <span className="c5">
+              he core issues with having a &nbsp;discussion forum is that it
+              only works for talking about topics in an organized and
+              professional way, which is not how most of the Internet behaves.
+            </span>
+            <span className="c5">,&rdquo; says </span>
+            <span className="c5">Jonathan Dunlap</span>
+            <span className="c5">
+              , the founder of Dinnertable.chat. &ldquo;
+            </span>
+            <span className="c5">
+              We&#39;re providing a new kind of integrated user communication
+              platform that provides an environment where people can be their
+              authentic selves while holding each other to be accountable to be
+              fair and open minded.
+            </span>
+            <span className="c4">&rdquo;</span>
+          </p>
+          <p className="c0 c3">
+            <span className="c4" />
+          </p>
+          <p className="c23 c15">
+            <br/><hr/>
+          </p>
+          <p className="c0 c3">
+            <span className="c4" />
+          </p>
+          <p className="c0 c15">
+              About Dinntertable.chat and the Hosting
+          </p>
+          <p className="c0 c15">
+            <span className="c5">Dinnertable.chat</span>
+            <span className="c20">
+              &nbsp;is a mobile app and web platform that facilitates real-time
+              discussions and debates on a range of social and political issues,
+              and the Hosting (service) is
+              Dinnertable.chat&rsquo;s integratable SaaS add-on for websites,
+              media outlets, and higher education institutions. Designed to act
+              as virtual matchmakers for people with political differences,
+              Dinnertable.chat and the service let users choose a topic they are
+              interested in or have a position on, then connects them with
+              someone who holds an appropriately contrasting viewpoint. Matched
+              users then each control a fun virtual character who represents
+              their respective words and emotions on-screen during the
+              conversation. The vision of Dinnertable.chat is to provide
+              accessible tools that help engage people in good-faith dialogue
+              for the purpose of finding common ground through live
+              conversation.
+            </span>
+          </p>
           <br />
-          <br />
-          PDP can integrate into mobile apps and websites to facilitate
-          real-time discussions or debates on any selected topic, article, or
-          theme. Designed to act as a virtual matchmaker for people with
-          differing viewpoints, Dinnertable.chat’s PDP engine connects users
-          with someone who holds an appropriately contrasting viewpoint. Matched
-          users then each control a fun virtual character who represents their
-          respective words and emotions on-screen during the conversation. The
-          PDP vision is to provide an accessible tool that helps engage people
-          in good faith dialogue for the purpose of finding common ground
-          through live conversation. PDP conversations are personal between
-          matched individuals and are not recorded, which both improves privacy
-          as well as reduces the need for moderation as compared to existing
-          public forums and discussion widgets.
-          <br />
-          <br />
-          PDP can be customized and branded for your needs, and is easily
-          integrated via a web widget or custom domain. Topics and contexts for
-          matchmaking can be configured as needed to reduce echo chambers and
-          minimize toxic behavior. The matching process is fully-automatic once
-          configured, and you can also choose to match between industry partners
-          to have “their users talk to your users” if desired. Integration takes
-          roughly 2 weeks.
-          <br />
-          <br />
-          For publishers, PDP allows you to add real-time personable
-          conversation to your content. This allows your users to speak directly
-          with others about what they think about the content, how it makes them
-          feel, and whatever differences of opinion they may have. For
-          journalists, PDP allows their readers to speak ‘truth to power’ by
-          being able to directly express their ideas and views without drowning
-          out others, which is a major issue on social networks like Twitter.
-          <br />
-          <br />
-          For universities, PDP provides professors with a means of allowing
-          students to freely exercise ideas through conversation and debate with
-          other students, while still keeping student anonymity. However, these
-          discussions are fundamentally structured to encourage positivity and
-          productivity, as users are prompted to rate how good of a
-          conversationalist the other was post-conversation. For larger
-          discussions and more challenging ideologies , universities can host
-          partnership debate challenges with other schools to increase the
-          diversity of ideas and culture.
-          <br />
-          <br />
-          For pricing and availability, please email us below.
+          <b>For pricing and availability, please contact us below:</b>
         </Typography>
 
         <div className={classes.divider} />

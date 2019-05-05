@@ -4,6 +4,7 @@ import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Reveal from 'react-reveal/Reveal';
 
 import * as AppModel from '../../../models/AppModel';
 import * as Times from '../../../services/TimeService';
@@ -183,11 +184,11 @@ export default observer(function MenuHome(props: Props) {
 
         <div className={classes.verticalCenter}>
         {step === 0 && 
-          <PositionSelector store={store} />}
+          <Reveal effect="fadeInUp" duration={2200}><PositionSelector store={store} /></Reveal>}
         {step === 1 && 
-          <SMicSelector store={store} />}
+          <Reveal effect="fadeInUp" duration={1100}><SMicSelector store={store} /></Reveal>}
         {step === 3 && 
-          <SClosedDialog store={store} />}
+          <Reveal effect="fadeInUp" duration={1100}><SClosedDialog store={store} /></Reveal>}
         </div>
         
       </main>

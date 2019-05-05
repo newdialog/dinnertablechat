@@ -72,7 +72,7 @@ const DTCRouter = ({
         <Route path="/quickmatch" component={AsyncPlay} />
         <Route path="/match" component={AsyncDebate} />
 
-        <Route path="/pitch" component={AsyncPitch} />
+        <Route path="/hosting" component={AsyncPitch} />
 
         {store.isLive === false && (
           <>

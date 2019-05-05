@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Reveal from 'react-reveal/Reveal';
 
 import * as AppModel from '../../../models/AppModel';
 import SMicPermissionsBtn from '../../menus/MicPermissionsBtn';
@@ -114,7 +115,7 @@ export default observer(function SMicSelector(props: Props) {
                   <ListItemIcon>
                     <DraftsIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Start debate" />
+                  <Reveal effect="fadeIn" duration={1000}><ListItemText style={{fontWeight:'bold'}} primary="Start debate" /></Reveal>
                 </ListItem>}
               </List>
               <div style={{paddingTop:'2em'}}/>

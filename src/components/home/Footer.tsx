@@ -129,6 +129,15 @@ export default function Footer(props: Props) {
           About DTC
         </a>{' | '}</>
         }
+
+        <a
+          href="/hosting"
+          className={classes.links}
+          style={{ margin: '0 10px 0 10px' }}
+        >
+          Hosting &amp; Integration
+        </a>{' | '}
+        
         <a
           href="/press"
           className={classes.links}
