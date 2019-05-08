@@ -223,19 +223,9 @@ export default function MediaKit(props: Props) {
             <span className="c4" />
           </p>
           <p className="c0 c15">
-            <span className="c5">The </span>
-            <span className="c5">hosting service</span>
-            <span className="c5">&rsquo;s functionality mimics that of </span>
-            <span className="c18 c5">
-              <a
-                className="c1"
-                href="https://www.google.com/url?q=https://www.youtube.com/watch?v%3DvzHKpUBAm48&amp;sa=D&amp;ust=1557073702001000"
-              >
-                the Dinnertable.chat platform
-              </a>
-            </span>
+              The Dinnertable.chat platform integrated service
             <span className="c5">
-              &nbsp;and can be easily implemented by media sites, publishers,
+              &nbsp;can be easily implemented by media sites, publishers,
               colleges, and universities to enhance the online conversation
               experience for their respective users, leading to better
               conversation on whatever is being discussed. Better communication
@@ -258,7 +248,7 @@ export default function MediaKit(props: Props) {
           <p className="c0 c15">
             <span className="c20 c19">For publishers</span>
             <span className="c20">, </span>
-            <span className="c5">service</span>
+            <span className="c5">DTC integration</span>
             <span className="c20">
               &nbsp;allows you to add real-time personable conversation to your
               content. This allows your users to speak directly with others
@@ -280,7 +270,7 @@ export default function MediaKit(props: Props) {
           <p className="c0 c15">
             <span className="c20 c19">For universities</span>
             <span className="c20">, </span>
-            <span className="c5">the hosted service</span>
+            <span className="c5">DTC integration</span>
             <span className="c20">
               &nbsp;provides professors with a means of allowing students to
               freely exercise ideas through conversation and debate with other
@@ -326,7 +316,7 @@ export default function MediaKit(props: Props) {
             <span className="c4" />
           </p>
           <p className="c0 c15">
-              About Dinntertable.chat and the Hosting
+              About the Dinntertable.chat platform
           </p>
           <p className="c0 c15">
             <span className="c5">Dinnertable.chat</span>
