@@ -223,7 +223,7 @@ export default function MediaKit(props: Props) {
             <span className="c4" />
           </p>
           <p className="c0 c15">
-              The Dinnertable.chat platform integrated service
+              The Dinnertable.chat platform integration service
             <span className="c5">
               &nbsp;can be easily implemented by media sites, publishers,
               colleges, and universities to enhance the online conversation
