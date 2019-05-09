@@ -64,6 +64,11 @@ export function register(config?: Config) {
 }
 
 function registerValidSW(swUrl: string, config?: Config) {
+  if ('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('controllerchange', () => {
+    console.log('+++ontrollerchange');
+    setTimeout(()=>window.location.reload(true), 500);
+  });
+
   return navigator.serviceWorker
     .register(swUrl, { updateViaCache: 'none' })
     .then(registration => {
@@ -85,13 +90,14 @@ function registerValidSW(swUrl: string, config?: Config) {
               const pushState = window.history.pushState;
 
               // https://stackoverflow.com/questions/40100922/activate-updated-service-worker-on-refresh
-              window.history.pushState = function(...args:any) {
+             /// window.history.pushState = function(...args:any) {
                 // make sure that the user lands on the "next" page
-                pushState.apply(window.history, args);
+                /// pushState.apply(window.history, args);
 
                 // makes the new service worker active
                 installingWorker.postMessage('skipWaiting');
-              };
+                setTimeout(()=>window.location.reload(true), 500);
+             /// };
 
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older
@@ -122,10 +128,13 @@ function registerValidSW(swUrl: string, config?: Config) {
 
       setInterval( () => {
         registration.update();
+        if(registration.waiting) registration!.waiting!.postMessage('skipWaiting');
+        if(registration.installing) registration!.installing!.postMessage('skipWaiting');
       }, 10000);
       setTimeout( () => {
         registration.update();
-      }, 1000);
+      }, 3000);
+      
       return registration;
     })
     .catch(error => {

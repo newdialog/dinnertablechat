@@ -92,7 +92,7 @@ interface State {
 
 //
 var refreshing: boolean = false;
-var updating: boolean = false;
+// var updating: boolean = false;
 export default function WorkerUpdate(props: Props) {
   // const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
@@ -108,61 +108,72 @@ export default function WorkerUpdate(props: Props) {
   };
 
   const onReg = (registration: ServiceWorkerRegistration) => {
+    console.log('+worker: onReg')
     setState(p => ({ ...p, registration }));
-    if(registration.waiting) onUpdate(registration);
+    if (registration.waiting) onUpdate(registration);
     // console.log('+worker onReg');
     // #2
   };
 
   const onUpdate = (registration: ServiceWorkerRegistration) => {
-    if(updating) return;
-    updating = true;
+    if (!registration) return;
+    // if(updating) return;
+    // updating = true;
     console.log('+worker onUpdate');
-    if (registration) setState(p => ({ ...p, registration }));
+    setState(p => ({ ...p, registration, showReload: true }));
+    if(registration!.waiting!) registration!.waiting!.postMessage('skipWaiting');
+    // if(registration.waiting) {
+    // setTimeout(() => { refresh(registration); }, 3000);
+    // refresh(registration);
+    // }
 
     // TODO: this might be a problem with initialization
-    setTimeout(() => {
-      // if (registration && registration!.waiting)
-      //  registration!.waiting.postMessage('skipWaiting');
-      setState(p => ({ ...p, showReload: true })); // , registration: registration
-    }, 300);
-
-    if(registration.waiting) setTimeout(() => { refresh(registration); }, 3000);
+    /// setTimeout(() => {
+    // if (registration && registration!.waiting)
+    //  registration!.waiting.postMessage('skipWaiting');
+    ///  setState(p => ({ ...p, showReload: true })); // , registration: registration
+    /// }, 300);
   };
 
   useEffect(() => {
     serviceWorker.register({ onSuccess, onUpdate, onReg });
-    if ('serviceWorker' in navigator) {
+
+    /* if ('serviceWorker' in navigator) {
       navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (refreshing) return;
-        refreshing = true; // preventDevToolsReloadLoop
+        console.log('+ontrollerchange');
+        refresh();
+        // if (refreshing) return;
+        // refreshing = true; // preventDevToolsReloadLoop
         // window.location.reload(true); // true
-        setTimeout(()=>window.location.reload(true), 300);
-        console.log('worker reloading..');
+        // setTimeout(()=>window.location.reload(true), 300);
+        // console.log('worker reloading..');
+        // refresh()
       });
-    }
+    }*/
     // serviceWorker.unregister();
   }, []);
 
-  const refresh = (registration:ServiceWorkerRegistration) => {
-    updating = true;
-    if (registration && registration!.waiting) {
-      registration!.waiting.postMessage('skipWaiting');
-    } // else alert('no registration waiting');
-    
+  const refresh = (registration?: ServiceWorkerRegistration) => {
+    // updating = true;
+    // if (registration && registration!.waiting) {
+    //   registration!.waiting.postMessage('skipWaiting');
+    // } // else alert('no registration waiting');
+
     // failsafe
     // setTimeout(() => bust(), 3000);
-    bust();
+    // bust();
     // setTimeout(() => window.location.reload(true), 4000);
-    console.log('worker update click');
+    console.log('+worker update click');
     if (refreshing) return;
     refreshing = true;
-    setTimeout(()=>window.location.reload(true), 300);
-  }
+    // setTimeout(() => window.location.reload(true), 300);
+    window.location.reload();
+  };
 
-  const onRefreshClick = (e:any) => {
+  const onRefreshClick = (e: any) => {
     setState(p => ({ ...p, disableRefresh: true }));
     // var r = confirm('New dinnertable update available!');
+    if(state.registration && state.registration!.waiting) state.registration!.waiting.postMessage('skipWaiting');
     refresh(state.registration!);
   };
 
