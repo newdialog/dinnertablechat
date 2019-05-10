@@ -1,5 +1,3 @@
-// workbox.core.clientsClaim();
-
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
 
@@ -12,7 +10,7 @@ addEventListener('message', (event) => {
     case 'skipWaiting':
       self.skipWaiting();
       // if(workbox && workbox.core.skipWaiting) workbox.core.skipWaiting();
-      else console.log('workbox not found');
+      // else console.log('workbox not found');
       break;
     default:
       // NOOP

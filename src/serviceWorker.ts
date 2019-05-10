@@ -85,13 +85,14 @@ function registerValidSW(swUrl: string, config?: Config) {
               const pushState = window.history.pushState;
 
               // https://stackoverflow.com/questions/40100922/activate-updated-service-worker-on-refresh
-              window.history.pushState = function(...args:any) {
+              /// window.history.pushState = function(...args:any) {
                 // make sure that the user lands on the "next" page
-                pushState.apply(window.history, args);
+                /// pushState.apply(window.history, args);
 
                 // makes the new service worker active
                 installingWorker.postMessage('skipWaiting');
-              };
+                window.location.reload(); // PATCH
+              /// };
 
               // At this point, the updated precached content has been fetched,
               // but the previous service worker will still serve the older

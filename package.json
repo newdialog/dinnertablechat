@@ -31,7 +31,7 @@
     "i18next-localstorage-backend": "^2.1.2",
     "i18next-xhr-backend": "^2.0.1",
     "lottie-web": "^5.5.2",
-    "luxon": "^1.13.1",
+    "luxon": "^1.13.2",
     "material-auto-rotating-carousel": "^3.0.1",
     "md5": "^2.2.1",
     "mobx": "^5.9.4",
@@ -57,7 +57,7 @@
     "react-swipeable-views": "^0.13.1",
     "react-waypoint": "^9.0.2",
     "remotedev": "^0.2.9",
-    "rxjs": "^6.5.1",
+    "rxjs": "^6.5.2",
     "short-uuid": "^3.1.1",
     "simple-peer": "^9.3.0",
     "webfontloader": "^1.6.28"
