@@ -8,6 +8,10 @@ import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Bounce from 'react-reveal/Bounce';
 import Reveal from 'react-reveal/Reveal';
+import Checkbox, { CheckboxProps } from '@material-ui/core/Checkbox';
+import green from '@material-ui/core/colors/green';
+import { withStyles } from '@material-ui/core/styles';
+
 
 import * as AppModel from '../../models/AppModel';
 import APIService from '../../services/APIService';
@@ -109,6 +113,17 @@ interface State {
   platformFeedback: '';
   agreed: boolean;
 }
+
+const GreenCheckbox = withStyles({
+  root: {
+    color: green[400],
+    '&$checked': {
+      color: green[600],
+    },
+  },
+  checked: {},
+})((props: CheckboxProps) => <Checkbox color="default" {...props} />);
+
 
 export default function DebateFeedback(props: Props) {
   const store = useContext(AppModel.Context)!;
@@ -245,24 +260,11 @@ export default function DebateFeedback(props: Props) {
               </Reveal>
             )}
 
-            <FormControlLabel
+      <FormControlLabel
               control={
-                <Switch
-                  classes={{
-                    switchBase: classes.iOSSwitchBase,
-                    bar: classes.iOSBar,
-                    icon: classes.iOSIcon,
-                    iconChecked: classes.iOSIconChecked,
-                    checked: classes.iOSChecked,
-                    root: classes.iOSRoot
-                  }}
-                  disableRipple
+                <GreenCheckbox
                   checked={state.agreed}
                   onChange={e => {
-                    console.log(
-                      'e.currentTarget.checked',
-                      e.currentTarget.checked
-                    );
                     setState(p => ({ ...p, agreed: e.currentTarget.checked }));
                   }}
                   value="agreed"
