@@ -8,12 +8,12 @@ import Footer from '../home/Footer';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     textAlign: 'center',
-    paddingTop: theme.spacing.unit * 20
+    paddingTop: theme.spacing(20)
   },
   container: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, 300px)',
-    // gridGap: `${theme.spacing.unit * 3}px`,
+    // gridGap: `${theme.spacing(3)}px`,
     marginTop: '60px',
     alignItems: 'center',
     // gridAutoFlow: 'column',
@@ -23,11 +23,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   paper: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     textAlign: 'center',
     color: theme.palette.text.secondary,
     whiteSpace: 'nowrap',
-    marginBottom: theme.spacing.unit
+    marginBottom: theme.spacing(1)
   },
   centered: {
     marginTop: '60px',
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'center'
   },
   divider: {
-    margin: `${theme.spacing.unit * 2}px 0`
+    margin: `${theme.spacing(2)}px 0`
   },
   banner: {
     display: 'flex',
@@ -104,7 +104,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     objectFit: 'contain',
     pointerEvents: 'none',
     [theme.breakpoints.down('sm')]: {
-      paddingTop: `${theme.spacing.unit * 5}px`
+      paddingTop: `${theme.spacing(5)}px`
       // maxWidth: '80%'
     },
     [theme.breakpoints.down('xs')]: {

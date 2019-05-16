@@ -15,30 +15,30 @@ import APIService from '../../services/APIService';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     textAlign: 'center',
-    paddingTop: theme.spacing.unit * 6,
+    paddingTop: theme.spacing(6),
     height: '100vh'
   },
   pagebody: {
     backgroundColor: theme.palette.primary.light
   },
   margin: {
-    margin: theme.spacing.unit * 2
+    margin: theme.spacing(2)
   },
   button: {
-    marginBottom: theme.spacing.unit * 2
+    marginBottom: theme.spacing(2)
   },
   header: {
     position: 'relative',
-    margin: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 4}px ${theme
-      .spacing.unit + 6}px`
+    margin: `${theme.spacing(2)}px ${theme.spacing(4)}px ${theme
+      .spacing(1) + 6}px`
   },
   chip: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     fontWeight: 'bold'
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 320
   },
 
@@ -269,7 +269,7 @@ export default function DebateFeedback(props: Props) {
                 />
               }
               label="Found an agreement?"
-            />
+            /><hr/><br/>
 
             <Typography
               component="span"
@@ -279,7 +279,7 @@ export default function DebateFeedback(props: Props) {
               className={classes.header}
             >
               Your partner was ...
-            </Typography>
+            </Typography><br/>
             {goodTraits.map((label, i) => {
               return (
                 <Chip

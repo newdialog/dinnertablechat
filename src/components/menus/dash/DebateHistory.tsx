@@ -1,3 +1,4 @@
+/*global luxon*/
 import {
   Card,
   CardActions,
@@ -23,12 +24,12 @@ import * as AppModel from '../../../models/AppModel';
 import API from '../../../services/APIService';
 import * as TopicInfo from '../../../utils/TopicInfo';
 
-/*global luxon*/
+
 // import HOC, { Authed } from '../HOC';
 // TODO: ADD AUTH CHECK
 // const {DateTime} = require("luxon");
-// import { DateTime } from 'luxon';
-const { DateTime } = luxon;
+import { DateTime } from 'luxon';
+// const { DateTime } = luxon;
 
 const useStyles = makeStyles((theme: Theme) => ({
   avatar: {},
@@ -71,7 +72,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   paper: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 2
+    padding: theme.spacing(2)
   },
   paperimg: {
     height: '30%',
@@ -198,7 +199,7 @@ export default function DebateHistory(props: Props) {
     var view = state.achievements.map((item, i) => (
       <Grid
         container
-        spacing={16}
+        spacing={2}
         justify="space-around"
         alignItems="center"
         key={i}
@@ -305,7 +306,7 @@ export default function DebateHistory(props: Props) {
   const showAchievements = () => {
     return (
       <div className={classes.paper}>
-        <Grid container spacing={16} justify="space-around" alignItems="center">
+        <Grid container spacing={2} justify="space-around" alignItems="center">
           <Grid item xs={4}>
             <img
               alt="achievement banner"
@@ -433,7 +434,7 @@ export default function DebateHistory(props: Props) {
             </Grid>
             <br />
             <Divider />
-            <CardActions className={classes.actions} disableActionSpacing>
+            <CardActions className={classes.actions} disableSpacing>
               {x.oppReview.traits.pos.length > 0 && (
                 <>
                   <IconButton aria-label="Share">

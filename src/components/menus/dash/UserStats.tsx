@@ -69,7 +69,7 @@ export default observer(function UserStats(props: Props) {
 
   return (
     <div className={classes.root}>
-      <Grid container justify="space-around" alignItems="center" spacing={16}>
+      <Grid container justify="space-around" alignItems="center" spacing={2}>
         <Grid item xs={3}>
           <div className={classes.groupItem}>
             <i className={'fas fa-trophy ' + classes.icon} />

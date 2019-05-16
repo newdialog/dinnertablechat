@@ -62,8 +62,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     // display: 'block',
   },
   button: {
-    marginTop: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(1)
   },
   title: {
     color: theme.palette.secondary.main,

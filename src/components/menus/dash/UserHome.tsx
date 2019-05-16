@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   divider: {
-    margin: `${theme.spacing.unit * 4}px 0`
+    margin: `${theme.spacing(4)}px 0`
   },
   startLabel: {
     fontSize: '1.7em',

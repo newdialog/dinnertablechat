@@ -11,7 +11,7 @@ import Footer from '../home/Footer';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     textAlign: 'center',
-    paddingTop: theme.spacing.unit * 20
+    paddingTop: theme.spacing(20)
   },
   container: {
     marginTop: '100px',
@@ -23,14 +23,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '0 14px 0 14px'
   },
   paper: {
-    padding: theme.spacing.unit * 1.5,
+    padding: theme.spacing(1.5),
     color: theme.palette.text.secondary,
-    marginBottom: theme.spacing.unit
+    marginBottom: theme.spacing(1)
   },
   paper2: {
     color: theme.palette.text.secondary,
     whiteSpace: 'nowrap',
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing(1),
     height: '240px',
     width: '240px',
     textAlign: 'center',
@@ -49,10 +49,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     transform: 'translateY(-50%)',
     margin: 'auto',
     verticalAlign: 'middle',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
     color: theme.palette.text.secondary,
     whiteSpace: 'nowrap',
-    marginBottom: theme.spacing.unit,
+    marginBottom: theme.spacing(1),
     maxWidth: '200px'
   },
   centered: {
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'center'
   },
   divider: {
-    margin: `${theme.spacing.unit * 4}px 0`
+    margin: `${theme.spacing(4)}px 0`
   },
   largeIcon: {
     width: 80,
@@ -143,8 +143,8 @@ export default function MediaKit(props: Props) {
         </Typography>
 
         <br />
-        <Grid container spacing={16}>
-          <Grid container justify="center" spacing={16}>
+        <Grid container spacing={2}>
+          <Grid container justify="center" spacing={2}>
             {imgs.map((value, index) => (
               <Grid key={value} item>
                 <Paper className={classes.paper2}>

@@ -19,7 +19,7 @@ import DebateError from './DebateError';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     textAlign: 'center',
-    paddingTop: theme.spacing.unit * 20
+    paddingTop: theme.spacing(20)
   },
   centered: {
     marginTop: '60px',
@@ -67,8 +67,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundBlendMode: 'multiply'
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     textAlign: 'center',
     width: 350,
     backgroundColor: theme.palette.common.white,

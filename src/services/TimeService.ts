@@ -1,7 +1,7 @@
 /*global luxon*/
 // import DateTime from 'DateTime';
-// import { DateTime, Duration } from 'luxon';
-const { DateTime, Duration } = luxon;
+import { DateTime, Duration } from 'luxon';
+// const { DateTime, Duration } = (window as any).luxon;
 // const {DateTime} = require("luxon");
 // import ical from 'ical-generator';
 

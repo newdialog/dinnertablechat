@@ -29,8 +29,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   fab: {
     position: 'absolute',
-    bottom: theme.spacing.unit * 5,
-    right: theme.spacing.unit * 5
+    bottom: theme.spacing(5),
+    right: theme.spacing(5)
   }
 }));
 

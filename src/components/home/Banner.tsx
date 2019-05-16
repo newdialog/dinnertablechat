@@ -21,21 +21,21 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       textAlign: 'center',
-      paddingTop: theme.spacing.unit * 20
+      paddingTop: theme.spacing(20)
     },
     container: {
       display: 'grid',
       gridTemplateColumns: 'repeat(12, 1fr)',
-      gridGap: `${theme.spacing.unit * 3}px`
+      gridGap: `${theme.spacing(3)}px`
       // gridAutoFlow: 'column',
       // gridAutoColumns: '200px'
     },
     paper: {
-      padding: theme.spacing.unit,
+      padding: theme.spacing(1),
       textAlign: 'center',
       color: theme.palette.text.secondary,
       whiteSpace: 'nowrap',
-      marginBottom: theme.spacing.unit
+      marginBottom: theme.spacing(1)
     },
     centered: {
       marginLeft: 'auto',
@@ -63,7 +63,7 @@ const useStyles = makeStyles(
       }
     },
     divider: {
-      margin: `${theme.spacing.unit * 2}px 0`
+      margin: `${theme.spacing(2)}px 0`
     },
     banner: {
       display: 'flex',

@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   fab: {
     position: 'fixed',
-    bottom: theme.spacing.unit * 5,
-    right: theme.spacing.unit * 5
+    bottom: theme.spacing(5),
+    right: theme.spacing(5)
   }
 }));
 
@@ -109,7 +109,7 @@ export default function AppFloatMenu(props: Props) {
         <MenuItem onClick={onTutorial}>
           Tutorial
         </MenuItem>
-        <MenuItem onClick={() => store.router.push('/education')}>
+        <MenuItem onClick={() => store.router.push('/campus')}>
           EDU program info
         </MenuItem>
         <MenuItem onClick={logOut}>Log out</MenuItem>
