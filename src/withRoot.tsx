@@ -3,6 +3,7 @@ import { createMuiTheme } from '@material-ui/core/styles';
 // A theme with custom primary and secondary color.
 // It's optional.
 export const theme = createMuiTheme({
+  spacing: 8,
   overrides: {
     MuiMobileStepper: {
       dotActive: {
@@ -30,10 +31,10 @@ export const theme = createMuiTheme({
         color: '#52291d'
         // color: '#fff'
       },
-      flatSecondary: {
+      textSecondary: {
         color: '#ff896b' // primary // '#6f3727',
       },
-      flatPrimary: {
+      textPrimary: {
         color: '#066873'
       }
     }
@@ -85,7 +86,6 @@ export const theme = createMuiTheme({
     fontWeightRegular: 400, // Work Sans
     fontWeightMedium: 600, // Roboto Condensed
     // color: 'white',
-    useNextVariants: true,
     // suppressDeprecationWarnings: true,
     // Use the system font instead of the default Roboto font.
     body1: {

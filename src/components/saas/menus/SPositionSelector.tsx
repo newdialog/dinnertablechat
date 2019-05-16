@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     marginLeft: 'auto',
     marginRight: 'auto',
-    [theme.breakpoints.up(1100 + theme.spacing.unit * 3 * 2)]: {
+    [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
       // width: 1100,
       // marginLeft: 'auto',
       // marginRight: 'auto',
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     // color: theme.palette.secondary.main
   },
   cardGrid: {
-    // padding: `${theme.spacing.unit * 4}px 0`,
+    // padding: `${theme.spacing(4)}px 0`,
   },
   card: {
     marginLeft: 'auto',

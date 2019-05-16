@@ -6,11 +6,12 @@ import { Helmet } from 'react-helmet';
 
 import * as AppModel from '../../models/AppModel';
 import Footer from '../home/Footer';
+import {withRouter} from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     textAlign: 'center',
-    paddingTop: theme.spacing.unit * 20
+    paddingTop: theme.spacing(20)
   },
   container: {
     marginTop: '52px',
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: '0 14px 0 14px'
   },
   divider: {
-    margin: `${theme.spacing.unit * 4}px 0`
+    margin: `${theme.spacing(4)}px 0`
   },
   presentationFrame: {
     border: '0'
@@ -93,7 +94,7 @@ export default function EducationHome(props: Props) {
       <Footer />
     </React.Fragment>
   );
-}
+};
 
 /*
 <Typography

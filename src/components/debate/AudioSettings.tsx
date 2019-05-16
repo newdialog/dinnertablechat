@@ -22,14 +22,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex'
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     minWidth: 120
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing(2),
   },
   group: {
-    margin: `${theme.spacing.unit}px 0`
+    margin: `${theme.spacing(1)}px 0`
   },
   label: {
     fontSize: '0.8em'

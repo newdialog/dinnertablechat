@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: 'relative'
   },
   icon: {
-    marginRight: theme.spacing.unit * 2
+    marginRight: theme.spacing(2)
   },
   heroUnit: {
     // backgroundColor: theme.palette.background.paper,
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: 800,
     textAlign: 'center',
     margin: '0 auto',
-    padding: `${theme.spacing.unit * 8}px 0 ${theme.spacing.unit * 0}px`
+    padding: `${theme.spacing(8)}px 0 ${theme.spacing(1) * 0}px`
   },
   micButton: {
     maxWidth: 600,
@@ -50,22 +50,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: `0px 0 0px`
   },
   stepper: {
-    padding: theme.spacing.unit * 0
+    padding: theme.spacing(1) * 0
   },
   button: {
-    marginTop: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(1),
     color: theme.palette.primary.dark
   },
   actionsContainer: {
-    marginBottom: theme.spacing.unit * 2
+    marginBottom: theme.spacing(2)
   },
   resetContainer: {
-    padding: theme.spacing.unit * 3
+    padding: theme.spacing(3)
   },
   footer: {
     backgroundColor: '#1b6f7b',
-    padding: theme.spacing.unit * 6
+    padding: theme.spacing(6)
   },
   linkhome: {
     color: theme.palette.primary.dark

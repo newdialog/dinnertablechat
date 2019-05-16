@@ -21,7 +21,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     root: {
       textAlign: 'center',
-      paddingTop: theme.spacing.unit * 20
+      paddingTop: theme.spacing(20)
     },
     container: {
       // marginTop: '30px',
@@ -51,11 +51,11 @@ const useStyles = makeStyles(
       flexWrap: 'wrap-reverse'
     },
     paper: {
-      padding: theme.spacing.unit,
+      padding: theme.spacing(1),
       textAlign: 'center',
       color: theme.palette.text.secondary,
       whiteSpace: 'nowrap',
-      // marginTop: theme.spacing.unit * 13,
+      // marginTop: theme.spacing(13),
       flex: '1 1 auto',
       display: 'flex',
       justifyContent: 'center',
@@ -73,7 +73,7 @@ const useStyles = makeStyles(
       objectFit: 'contain',
       pointerEvents: 'none',
       [theme.breakpoints.down('sm')]: {
-        paddingTop: `${theme.spacing.unit * 5}px`,
+        paddingTop: `${theme.spacing(5)}px`,
         maxWidth: '80%'
       },
       [theme.breakpoints.down('xs')]: {
@@ -102,9 +102,9 @@ const useStyles = makeStyles(
       minWidth: '300px'
     },
     divider: {
-      margin: `${theme.spacing.unit * 3}px 0`,
+      margin: `${theme.spacing(3)}px 0`,
       [theme.breakpoints.down('sm')]: {
-        margin: `${theme.spacing.unit * 1}px 0`
+        margin: `${theme.spacing(1)}px 0`
       }
     },
     divider2: {
@@ -235,12 +235,12 @@ export default function HomeContent() {
   return (
     <React.Fragment>
       <div className={classes.centered2}>
-        <Grid container spacing={24} className={classes.container}>
+        <Grid container spacing={3} className={classes.container}>
           <Grid item xs={12} md={12} style={{ paddingBottom: '0' }}>
             <div className="paperimg" id="intro">
               <Waypoint
-                topOffset={280}
-                bottomOffset={900}
+                topOffset={"-400px"}
+                bottomOffset={"450px"}
                 onEnter={_handleLogoWaypointEnter}
                 onLeave={_handleLogoWaypointLeave}
               />
@@ -332,7 +332,7 @@ export default function HomeContent() {
         </Grid>
       </div>
       <div className={classes.centered}>
-        <Grid container spacing={24} className={classes.containerRev}>
+        <Grid container spacing={3} className={classes.containerRev}>
           <Grid item xs={12} md={6}>
             <Reveal effect="fadeInUp" fraction={0.35}>
               <Typography variant="h6" gutterBottom align="left">

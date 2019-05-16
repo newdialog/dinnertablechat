@@ -15,7 +15,7 @@ import DebateDisplay from './DebateDisplay';
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
     textAlign: 'center',
-    paddingTop: theme.spacing.unit * 20
+    paddingTop: theme.spacing(20)
   },
   centered: {
     marginTop: '60px',

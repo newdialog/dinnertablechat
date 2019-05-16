@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     position: 'relative'
   },
   icon: {
-    marginRight: theme.spacing.unit * 2
+    marginRight: theme.spacing(2)
   },
   heroUnit: {
     // backgroundColor: theme.palette.background.paper,
@@ -48,19 +48,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     padding: `0px 0 0px`
   },
   button: {
-    marginTop: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginTop: theme.spacing(1),
+    marginRight: theme.spacing(1),
     color: theme.palette.primary.dark
   },
   actionsContainer: {
-    marginBottom: theme.spacing.unit * 2
+    marginBottom: theme.spacing(2)
   },
   resetContainer: {
-    padding: theme.spacing.unit * 3
+    padding: theme.spacing(3)
   },
   footer: {
     // backgroundColor: '#1b6f7b',
-    // padding: theme.spacing.unit * 6
+    // padding: theme.spacing(6)
     width: '100%',
     margin: '0 auto',
     position: 'absolute',

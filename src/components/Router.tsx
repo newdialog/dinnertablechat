@@ -1,9 +1,9 @@
 // @ts-ignore
-import React, { lazy, Suspense } from 'react';
-import { Router, Route, Switch, Redirect } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import React, { lazy } from 'react';
+import { Redirect, Route, Router, Switch } from 'react-router-dom';
+
 import * as AppModel from '../models/AppModel';
-import {observer} from 'mobx-react-lite';
-import LoadingMsg from './Loading';
 import SClosedDialog from './saas/menus/SClosedDialog';
 
 const AsyncHome = lazy(() => import('./home/home'));
@@ -47,69 +47,67 @@ const DTCRouter = ({
   store: AppModel.Type;
 }) => (
   <Router history={history}>
-    <Suspense fallback={LoadingMsg()}>
-      <Switch>
-        <Route exact={true} path="/" component={AsyncHome} />
-        <Route exact={true} path="/about" component={AsyncHome} />
-        <Route exact={true} path="/callback" component={AuthSignin} />
-        <Route exact={true} path="/CALLBACK" component={AuthSignin} />
-        <Route exact={true} path="/signin" component={AuthSignin} />
-        <Route exact={true} path="/feedback" component={DebateFeedback} />
-        <Route exact={true} path="/tutorial" component={GettingStarted} />
-
-        <Route exact={true} path="/signout" render={() => {
+    <Switch>
+      <Redirect from="/education" to="/campus" />
+      <Redirect from="/signout" to="/" />
+      <Redirect from="/play" to="/home" /> {/* legacy route */}
+      
+      <Route exact={true} path="/" component={AsyncHome} />
+      <Route exact={true} path="/about" component={AsyncHome} />
+      <Route exact={true} path="/callback" component={AuthSignin} />
+      <Route exact={true} path="/CALLBACK" component={AuthSignin} />
+      <Route exact={true} path="/signin" component={AuthSignin} />
+      <Route exact={true} path="/feedback" component={DebateFeedback} />
+      <Route exact={true} path="/tutorial" component={GettingStarted} />
+      <Route
+        exact={true}
+        path="/signout"
+        render={() => {
           // PATCH, redirects not working
           store.router.push('/');
           return null;
-        }} />
-
-        <Route path="/press" component={AsyncMediaKit} />
-        <Route path="/privacy" component={AsyncPrivacy} />
-
-        <Route path="/campus" component={AsyncEducation} />
-
-        <Route path="/home" component={UserHome} />
-        <Route path="/quickmatch" component={AsyncPlay} />
-        <Route path="/match" component={AsyncDebate} />
-
-        <Route path="/hosting" component={AsyncPitch} />
-
-        {store.isLive === false && (
-          <>
-            <Route exact={true} path="/test2" component={AsyncTester} />
-            <Route exact={true} path="/saas" component={SMenuHome} />
-            <Route exact={true} path="/saasend" component={SClosedDialog} />
-            <Route exact={true} path="/saasmatch" component={Saas}/>
-          </>
-        )}
-        {store.isLive === false && (
-          <Route
-            exact={true}
-            path="/test"
-            render={() => {
-              localStorage.setItem('test', 'y');
-              return <AsyncPlay />
-            }
-          }
-          />
-        )}
-
-        <Redirect from="/education" to="/campus" />
-        <Redirect from="/signout" to="/" />
-        <Redirect from="/play" to="/home" /> { /* legacy route */ }
-
-        <Route render={() => <Redirect to="/" />} />
-      </Switch>
-    </Suspense>
+        }}
+      />
+      <Route path="/press" component={AsyncMediaKit} />
+      <Route path="/privacy" component={AsyncPrivacy} />
+      <Route path="/campus" component={AsyncEducation} />
+      <Route path="/home" component={UserHome} />
+      <Route path="/quickmatch" component={AsyncPlay} />
+      <Route path="/match" component={AsyncDebate} />
+      <Route path="/hosting" component={AsyncPitch} />
+      {store.isLive === false && (
+        <>
+          <Route exact={true} path="/test2" component={AsyncTester} />
+          <Route exact={true} path="/saas" component={SMenuHome} />
+          <Route exact={true} path="/saasend" component={SClosedDialog} />
+          <Route exact={true} path="/saasmatch" component={Saas} />
+        </>
+      )}
+      {store.isLive === false && (
+        <Route
+          exact={true}
+          path="/test"
+          render={() => {
+            localStorage.setItem('test', 'y');
+            return <AsyncPlay />;
+          }}
+        />
+      )}
+      
+      <Route render={() => <Redirect to="/" />} />
+    </Switch>
   </Router>
 );
 
-const authenticated = (store:AppModel.Type, Component:React.LazyExoticComponent<any>) => {
+const authenticated = (
+  store: AppModel.Type,
+  Component: React.LazyExoticComponent<any>
+) => {
   const isAuth = store.auth.isAuthenticated();
   // console.log('store.auth.loggedIn', isAuth);
-  if(isAuth) return <Component/>;
+  if (isAuth) return <Component />;
   return <div>Loading...</div>;
-}
+};
 
 function Loading(props: any) {
   if (props.error) {

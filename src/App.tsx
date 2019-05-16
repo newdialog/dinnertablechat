@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
-// import Index from './components/home/home';
-import AppBar from './components/AppBar';
-import AppRouter from './components/Router';
-// import { withRouter } from 'react-router';
 import { observer } from 'mobx-react-lite';
+import React, { Suspense, useEffect } from 'react';
+import { withRouter } from 'react-router-dom';
+
+import AppBar from './components/AppBar';
 import AuthWrapper from './components/aws/AuthWrapper';
+import LoadingMsg from './components/Loading';
+import AppRouter from './components/Router';
 import WorkerUpdate from './components/WorkerUpdate';
 import * as TimeSerive from './services/TimeService';
 
+// import Index from './components/home/home';
+// import { withRouter } from 'react-router';
 interface Props {
   store: import('./models/AppModel').Type;
   history: any;
@@ -66,10 +69,12 @@ export default observer(function App(props: Props) {
   }, [store, store.auth.isNotLoggedIn, store.auth.user]);
 
   return (
-    <WorkerUpdate store={store}>
-      <AuthWrapper store={store} login={store.auth.doLogin} />
-      <AppBar store={store} />
-      <AppRouter history={history} store={store} />
-    </WorkerUpdate>
+    <Suspense fallback={LoadingMsg()}>
+      <WorkerUpdate store={store}>
+        <AuthWrapper store={store} login={store.auth.doLogin} />
+        <AppBar store={store} />
+        <AppRouter history={history} store={store} />
+      </WorkerUpdate>
+    </Suspense>
   );
 });

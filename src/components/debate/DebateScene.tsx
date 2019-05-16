@@ -12,7 +12,7 @@ import DebateError from './DebateError';
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
       textAlign: 'center',
-      paddingTop: theme.spacing.unit * 20
+      paddingTop: theme.spacing(20)
     },
     centered2: {
       paddingTop: '0',
