@@ -123,7 +123,7 @@ export default class PeerService extends EventEmitter {
   public async onConnection() {
     return new Promise((resolve, reject) => {
       if (this.connected) {
-        setTimeout(() => resolve(), 1000);
+        setTimeout(() => resolve(), 2000);
         return;
       }
       if (!this._peer) {
@@ -131,13 +131,15 @@ export default class PeerService extends EventEmitter {
       }
       // check if we haven't been destroyed already
       if (this._peer) {
+        // Also check for data, sometimes connect not firing
         this._peer.on('data', () => {
+          console.log('peer connected: data');
           if (this.connected) return;
           this.connected = true;
           setTimeout(() => resolve(), 2000);
         });
         this._peer.on('connect', () => {
-          console.log('peer connected');
+          console.log('peer connected: connect');
           if (this.connected) return;
           this.connected = true;
           setTimeout(() => resolve(), 2000); // allow for sending buffer to drain

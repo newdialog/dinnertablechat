@@ -93,7 +93,7 @@ export async function handshake(
     const saveSignal$ = fromEvent<{ data: any }>(ps, 'signal').pipe(
       map(x => x.data),
       tap(x => console.log('rx batch buffer')),
-      bufferTime(200),
+      bufferTime(250),
       filter(xs => xs.length > 0),
       // tap(xs => console.log('rx batch signal', JSON.stringify(xs))),
       flatMap(xs => from(updateMatch(matchid, mycolor, xs, state))),
@@ -186,7 +186,7 @@ function getPartnerUpdates(matchid: string, team: 'blue' | 'red') {
       return { key: keyval, state: stateval };
     }),
     filter(x => x.key.length > lastIndex),
-    concatMap(x => {
+    map(x => {
       /*if (x.key.length <= lastIndex) {
         console.log('getPartnerUpdates: found no update yet');
         return throwError(new Error('retry')); // throw if no new data from DB
@@ -196,7 +196,7 @@ function getPartnerUpdates(matchid: string, team: 'blue' | 'red') {
       lastIndex = x.key.length; // update the lastIndex to what was read
 
       // x.key = x.key.map(b => JSON.parse(b));
-      return of(x); // just return
+      return x; // just return
     }),
     // retryBackoff({ maxRetries: 5, maxInterval: 5000, initialInterval: 3000 }),
     tap(x => console.log('rx tap: getPartnerUpdates', x.key.length, x.key))
