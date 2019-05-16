@@ -92,7 +92,8 @@ export async function handshake(
     // ({ matchid, team:mycolor, key:x.data, state })
     const saveSignal$ = fromEvent<{ data: any }>(ps, 'signal').pipe(
       map(x => x.data),
-      bufferTime(1100, null, 10),
+      tap(x => console.log('rx batch buffer')),
+      bufferTime(200),
       filter(xs => xs.length > 0),
       // tap(xs => console.log('rx batch signal', JSON.stringify(xs))),
       flatMap(xs => from(updateMatch(matchid, mycolor, xs, state))),
@@ -108,12 +109,12 @@ export async function handshake(
     }
 
     const throttleConfig = {
-      leading: true,
+      leading: false,
       trailing: true
     };
 
     const updates$ = getPartnerUpdates(matchid, otherColor).pipe(
-      throttleTime(3000, undefined, throttleConfig),
+      // throttleTime(3000, undefined, throttleConfig),
       tap(x =>
         x.key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg)))
       )
@@ -174,8 +175,9 @@ function getPartnerUpdates(matchid: string, team: 'blue' | 'red') {
   const statekey = team + 'state';
   console.log('rx handshakeUntilConnected', matchid, team);
 
-  return defer(() => readMatch(matchid)).pipe(
+  return interval(3000).pipe(
     tap(x => console.log('rx readMatchWait (re)start')),
+    concatMap(x => defer(() => readMatch(matchid))),
     map(match => {
       const keyval = match[teamkey] as Array<any>;
       // console.log('rx getPartnerUpdates keyval', keyval, JSON.stringify(match));
@@ -183,16 +185,21 @@ function getPartnerUpdates(matchid: string, team: 'blue' | 'red') {
       if (stateval) stateval!.guest = match[team + 'guest'];
       return { key: keyval, state: stateval };
     }),
+    filter(x => x.key.length > lastIndex),
     concatMap(x => {
-      if (x.key.length <= lastIndex) return throwError('retry'); // throw if no new data from DB
+      /*if (x.key.length <= lastIndex) {
+        console.log('getPartnerUpdates: found no update yet');
+        return throwError(new Error('retry')); // throw if no new data from DB
+      }*/
+      console.log('getPartnerUpdates: found updates', x.key.length - lastIndex);
       if (lastIndex > 0) x.key.splice(0, lastIndex);
       lastIndex = x.key.length; // update the lastIndex to what was read
 
       // x.key = x.key.map(b => JSON.parse(b));
       return of(x); // just return
     }),
-    retryBackoff({ maxRetries: 5, maxInterval: 5000, initialInterval: 3000 }),
-    tap(x => console.log('rx tap', x.key.length, x.key))
+    // retryBackoff({ maxRetries: 5, maxInterval: 5000, initialInterval: 3000 }),
+    tap(x => console.log('rx tap: getPartnerUpdates', x.key.length, x.key))
   );
 }
 
