@@ -269,7 +269,7 @@ export default function DebateFeedback(props: Props) {
                 />
               }
               label="Found an agreement?"
-            />
+            /><hr/><br/>
 
             <Typography
               component="span"
@@ -279,7 +279,7 @@ export default function DebateFeedback(props: Props) {
               className={classes.header}
             >
               Your partner was ...
-            </Typography>
+            </Typography><br/>
             {goodTraits.map((label, i) => {
               return (
                 <Chip

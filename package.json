@@ -59,7 +59,7 @@
     "remotedev": "^0.2.9",
     "rxjs": "^6.5.2",
     "short-uuid": "^3.1.1",
-    "simple-peer": "^9.3.0",
+    "simple-peer": "github:feross/simple-peer#master",
     "webfontloader": "^1.6.28"
   },
   "scripts": {

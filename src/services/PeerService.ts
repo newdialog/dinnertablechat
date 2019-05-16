@@ -84,6 +84,7 @@ export default class PeerService extends EventEmitter {
     this._peer.on('connect', e => {
       // this.connected = true;
       // if (cbs.onConnected) cbs.onConnected();
+      console.log('rx internal connect');
       this._peer.send('syn');
       this.emit('connect', { data: null });
     });
@@ -122,7 +123,7 @@ export default class PeerService extends EventEmitter {
   public async onConnection() {
     return new Promise((resolve, reject) => {
       if (this.connected) {
-        resolve();
+        setTimeout(() => resolve(), 2000);
         return;
       }
       if (!this._peer) {
@@ -130,11 +131,18 @@ export default class PeerService extends EventEmitter {
       }
       // check if we haven't been destroyed already
       if (this._peer) {
-        this._peer.on('connect', () => {
-          console.log('peer connected');
+        // Also check for data, sometimes connect not firing
+        this._peer.on('data', () => {
+          console.log('peer connected: data');
           if (this.connected) return;
           this.connected = true;
-          resolve();
+          setTimeout(() => resolve(), 2000);
+        });
+        this._peer.on('connect', () => {
+          console.log('peer connected: connect');
+          if (this.connected) return;
+          this.connected = true;
+          setTimeout(() => resolve(), 2000); // allow for sending buffer to drain
         });
         this._peer.on('error', reject);
       }
@@ -146,7 +154,7 @@ export default class PeerService extends EventEmitter {
   }
 
   public giveResponse(data: string) {
-    // console.log('response', data);
+    console.log('rx giveResponse');
     let parse: any = null;
     try {
       parse = data; // JSON.parse(data);
