@@ -83,7 +83,7 @@ export async function handshake(
     // const savedState = { flag: false };
     const stopFlag: StopFlag = unloadFlag; // { stop: false };
     const cbs = {
-      onError(e:any) {
+      onError(e: any) {
         console.log('webrtc error', e);
         reject('webrtc');
       }
@@ -107,8 +107,13 @@ export async function handshake(
       return;
     }
 
+    const throttleConfig = {
+      leading: true,
+      trailing: true
+    };
+
     const updates$ = getPartnerUpdates(matchid, otherColor).pipe(
-      throttleTime(3000),
+      throttleTime(3000, undefined, throttleConfig),
       tap(x =>
         x.key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg)))
       )
