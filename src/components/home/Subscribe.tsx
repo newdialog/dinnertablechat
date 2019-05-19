@@ -72,12 +72,13 @@ export default function ButtonAppBar(props: Props) {
       }
     })
       .then((res: any) => {
+        console.log('sub result');
         _subscribe = res && res.status && res.status < 299 ? 'success' : res.err;
-        setState(p => ({...p, _subscribe }));
+        setState(p => ({...p, subscribe:_subscribe, submitting: false }));
       })
       .catch((err: any) => {
         _subscribe = err;
-        setState(p => ({...p, _subscribe }));
+        setState(p => ({...p, subscribe:_subscribe, submitting: false }));
       });
   }, [state, istate]);
 
