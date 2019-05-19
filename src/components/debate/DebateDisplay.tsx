@@ -2,7 +2,7 @@ import Lottie from '@jadbox/lottie-react-web';
 import { Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
-import rottie from 'lottie-web';
+import rottie, {AnimationEventName} from 'lottie-web';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -242,7 +242,7 @@ export default function DebateScene(props: Props) {
       path: tableOptions.path // the path to the animation json
     });
     table.setSpeed(1.5);
-    table.addEventListener('DOMLoaded', () => {
+    table.addEventListener('DOMLoaded' as any, () => {
       table.playSegments([0, 200], true);
     });
 
