@@ -362,10 +362,10 @@ export default function HomeContent() {
             <Reveal effect="fadeInUp" fraction={0.35}>
               <Typography variant="h6" gutterBottom align="left">
                 <div className={classes.divider} />
-                {t('home-tiers-title')}
+                Bringing your best
               </Typography>
               <Typography variant="body2" gutterBottom align="left">
-                {t('home-tiers')}
+                Like any good home, the dining table is a place to talk about the things most important while still upholding the highest respect for others that attend.
               </Typography>
             </Reveal>
           </Grid>
@@ -381,7 +381,7 @@ export default function HomeContent() {
                   diningRef
                 ])}
               >
-                <div style={{ width: '120%', margin: '0 -1.8em 0 -1.8em' }}>
+                <div style={{ width: '120%', margin: '-74px -4em -94px -1.8em' }}>
                   <Lottie
                     speed={1.6}
                     options={diningOptions}
