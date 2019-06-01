@@ -66,7 +66,8 @@ export default function PositionSelector(props: Props) {
     props.store.debate.setPosition(position, card.id);
   };
 
-  const data: TopicInfo.Card[] = TopicInfo.getTopics(t);
+  const data: TopicInfo.Card[] = TopicInfo.getSaaSTopics(t);
+  console.log('data', data);
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>

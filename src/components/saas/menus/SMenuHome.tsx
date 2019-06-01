@@ -192,10 +192,13 @@ export default observer(function MenuHome(props: Props) {
         </div>
         
       </main>
+      { false && <>
       <div className={classes.footer}>
         <b>Limited time:</b> You can debate every sunday from 18:00 till 19:00.<br/>
         <b>Feedback:</b> <input type="input" defaultValue="Enter your feedback here"/>
       </div>
+      </>
+      }
     </div>
   );
 });
