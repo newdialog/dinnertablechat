@@ -44,13 +44,10 @@ const useStyles = makeStyles(
       maxWidth: '500px',
       height: '100%',
       textAlign: 'center',
-      // display: 'flex',
-      flexDirection: 'column'
-      // width: '100%'
-      // width:'auto!important'
+      flexDirection: 'column',
+      backgroundColor: '#eceadb'
     },
     cardMedia: {
-      /// paddingTop: '44.25%' // 16:9
     },
     cardContent: {
       flexGrow: 1
