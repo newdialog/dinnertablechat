@@ -101,10 +101,11 @@ export default observer(function SMicSelector(props: Props) {
           <Card className={classes.card}>
             <CardContent className={classes.cardContent}>
               <List component="nav">
-                {!store.micAllowed && (
+                {true && (
                   <ListItem
                     button
                     selected={false}
+                    disabled={store.micAllowed}
                     onClick={event => handleListItemClick(event, 0)}
                   >
                     <ListItemIcon>
@@ -113,14 +114,15 @@ export default observer(function SMicSelector(props: Props) {
                     <ListItemText
                       className={classes.list}
                       primaryTypographyProps={{ style: { fontWeight: 'bold' } }}
-                      primary="Allow microphone"
+                      primary={!store.micAllowed?'Allow microphone':'Mic enabled'}
                     />
                   </ListItem>
                 )}
-                {store.micAllowed && (
+                {true && (
                   <ListItem
                     button
                     selected={false}
+                    disabled={!store.micAllowed}
                     onClick={event => handleListItemClick(event, 1)}
                   >
                     <ListItemIcon>

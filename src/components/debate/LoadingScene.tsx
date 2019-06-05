@@ -424,6 +424,7 @@ export default observer(function LoadingScene(props: Props) {
         </Typography>
         <br />
         <br />
+        {!store.isSaas && 
         <Typography
           variant="h1"
           align="center"
@@ -474,6 +475,7 @@ export default observer(function LoadingScene(props: Props) {
             </section>
           </Reveal>
         </Typography>
+        }
       </div>
     </div>
   );
