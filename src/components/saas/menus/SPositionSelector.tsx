@@ -20,7 +20,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     }
   },
   btn: {
-    marginLeft: '1.5em'
+    marginLeft: '1.5em',
+    color: '#ffffff',
+    fontSize: '1.2em'
     // color: theme.palette.secondary.main
   },
   cardGrid: {

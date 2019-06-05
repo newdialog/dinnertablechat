@@ -28,9 +28,14 @@ const useStyles = makeStyles(
         // marginRight: 'auto',
       }
     },
+    list: {
+      fontSize: '1.2em'
+    },
     btn: {
       marginLeft: '1.5em',
-      width: '8em'
+      width: '8em',
+      color: '#ffffff',
+      fontSize: '1.2em'
       // color: theme.palette.secondary.main
     },
     cardGrid: {
@@ -47,8 +52,7 @@ const useStyles = makeStyles(
       flexDirection: 'column',
       backgroundColor: '#eceadb'
     },
-    cardMedia: {
-    },
+    cardMedia: {},
     cardContent: {
       flexGrow: 1
     },
@@ -63,7 +67,7 @@ interface Props {
   store: AppModel.Type;
 }
 
-function ListItemLink(props:any) {
+function ListItemLink(props: any) {
   return <ListItem button component="a" {...props} />;
 }
 
@@ -72,12 +76,12 @@ export default observer(function SMicSelector(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  const [state, setState] = useState({checkMic:false});
+  const [state, setState] = useState({ checkMic: false });
 
   // state = { noop: false };
 
   const onMic = () => {
-    setState({checkMic: true});
+    setState({ checkMic: true });
   };
 
   const onStart = () => {
@@ -86,9 +90,9 @@ export default observer(function SMicSelector(props: Props) {
 
   const handleListItemClick = (e, index) => {
     console.log('index', index);
-    if(index===0) onMic();
-    if(index===1) onStart();
-  }
+    if (index === 0) onMic();
+    if (index === 1) onStart();
+  };
 
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
@@ -97,30 +101,51 @@ export default observer(function SMicSelector(props: Props) {
           <Card className={classes.card}>
             <CardContent className={classes.cardContent}>
               <List component="nav">
-              { !store.micAllowed && <ListItem button
-                selected={false}
-                onClick={event => handleListItemClick(event, 0)}
-                >
-                  <ListItemIcon>
-                    <InboxIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Allow microphone" />
-                </ListItem>}
-                {store.micAllowed && <ListItem button selected={false}
-                onClick={event => handleListItemClick(event, 1)}
-                >
-                  <ListItemIcon>
-                    <DraftsIcon />
-                  </ListItemIcon>
-                  <Reveal effect="fadeIn" duration={1000}><ListItemText style={{fontWeight:'bold'}} primary="Start debate" /></Reveal>
-                </ListItem>}
+                {!store.micAllowed && (
+                  <ListItem
+                    button
+                    selected={false}
+                    onClick={event => handleListItemClick(event, 0)}
+                  >
+                    <ListItemIcon>
+                      <InboxIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      className={classes.list}
+                      primaryTypographyProps={{ style: { fontWeight: 'bold' } }}
+                      primary="Allow microphone"
+                    />
+                  </ListItem>
+                )}
+                {store.micAllowed && (
+                  <ListItem
+                    button
+                    selected={false}
+                    onClick={event => handleListItemClick(event, 1)}
+                  >
+                    <ListItemIcon>
+                      <DraftsIcon />
+                    </ListItemIcon>
+                    <Reveal effect="fadeIn" duration={1000}>
+                      <ListItemText
+                        primaryTypographyProps={{
+                          style: { fontWeight: 'bold' }
+                        }}
+                        className={classes.list}
+                        primary="Start Debate"
+                      />
+                    </Reveal>
+                  </ListItem>
+                )}
               </List>
-              <div style={{paddingTop:'2em'}}/>
-              { state.checkMic && <SMicPermissionsBtn store={store}/> }
+              <div style={{ paddingTop: '2em' }} />
+              {state.checkMic && (
+                <div style={{ display: 'none' }}>
+                  <SMicPermissionsBtn store={store} />
+                </div>
+              )}
             </CardContent>
-            <CardActions style={{ justifyContent: 'center' }}>
-              
-            </CardActions>
+            <CardActions style={{ justifyContent: 'center' }} />
           </Card>
         </Grid>
       </Grid>
