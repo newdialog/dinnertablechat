@@ -13,6 +13,20 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../../models/AppModel';
+import AddToCalendar from 'react-add-to-calendar';
+import * as TimeService from 'services/TimeService';
+
+function getEvent() {
+  console.log('TimeService.getDebateStart().toISOString()', TimeService.getDebateStart().toISOString());
+  const _event = {
+    title: 'Sample Event',
+    description: 'This is the sample event provided as an example only',
+    location: 'http://dinnertable.chat',
+    startTime: TimeService.getDebateStart().toISOString(), // '2016-09-16T20:15:00-04:00',
+    endTime: TimeService.getDebateEnd().toISOString() // '2016-09-16T21:45:00-04:00'
+  }
+  return _event;
+}
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -111,14 +125,9 @@ export default function SClosedDialog(props: Props) {
                   <ListItemText primary="Attend Facebook event" />
                 </ListItem>
                 <ListItem
-                  button
                   selected={false}
-                  onClick={event => handleListItemClick(event, 1)}
                 >
-                  <ListItemIcon>
-                    <DraftsIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="Download event" />
+                  <AddToCalendar buttonLabel="Add next event to my calendar" event={getEvent()} displayItemIcons={false}/>
                 </ListItem>
 
                 <ListItem

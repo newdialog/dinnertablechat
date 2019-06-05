@@ -14,7 +14,7 @@ import PositionSelector from './SPositionSelector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   pagebody: {
-    backgroundColor: '#d5d5d5',
+    backgroundColor: '#ddd1bb',
     minHeight: '100vh'
   },
   container: {
