@@ -75,15 +75,17 @@ const DTCRouter = ({
       <Route path="/quickmatch" component={AsyncPlay} />
       <Route path="/match" component={AsyncDebate} />
       <Route path="/hosting" component={AsyncPitch} />
+
+      <Route exact={true} path="/saas" component={SMenuHome} />
       {store.isLive === false && (
         <>
-          <Route exact={true} path="/test2" component={AsyncTester} />
-          <Route exact={true} path="/saas" component={SMenuHome} />
           <Route exact={true} path="/saasend" component={SClosedDialog} />
           <Route exact={true} path="/saasmatch" component={Saas} />
         </>
       )}
       {store.isLive === false && (
+        <>
+        <Route exact={true} path="/test2" component={AsyncTester} />
         <Route
           exact={true}
           path="/test"
@@ -92,6 +94,7 @@ const DTCRouter = ({
             return <AsyncPlay />;
           }}
         />
+        </>
       )}
       
       <Route render={() => <Redirect to="/" />} />

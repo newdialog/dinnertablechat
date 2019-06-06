@@ -163,7 +163,7 @@ export default observer(function MenuHome(props: Props) {
             <img src="/logos/appbar-logo-color.png" 
               crossOrigin="anonymous"
               title="DTC Home"
-              style={{ height: '3em', cursor: 'pointer' }}/>
+              style={{ height: '6em', cursor: 'pointer' }}/>
             <Typography
               style={{
                 fontSize: '1.2em',
@@ -176,8 +176,9 @@ export default observer(function MenuHome(props: Props) {
               color="textSecondary"
               gutterBottom
             >
-              Get matched with people with different opinions and talk with
-              them!
+              Talk to people with different opinions.<br/>
+              Anonymous discussion via audio call.<br/>
+              Every Sunday from 18:00 till 19:00.
             </Typography>
           </div>
         </div>

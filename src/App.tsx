@@ -25,15 +25,18 @@ export default observer(function App(props: Props) {
     // console.log('path', path);
 
     const isTest = path === '/test' || path === '/test2';
+    const isSaasDomain = window.location.hostname.match('debateplatform');
     if(isTest) return;
 
     const isHome = path === '/' || path === '';
     const isDebateTime = TimeSerive.isDuringDebate(store.isLive);
     // console.log('isHomeisHome', isHome, TimeSerive.isDuringDebate(store.isLive))
     if(!isHome) return; // j1, not sure if this fixes anything
-    // console.log('--')
+
     // App flow
-    if (
+    if(isSaasDomain) {
+      store.router.push('/saas');
+    } else if (
       store.isStandalone() &&
       store.auth.isNotLoggedIn &&
       !localStorage.getItem('quickmatch')
