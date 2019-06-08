@@ -5,4 +5,8 @@ https://dtc-prod.netlify.com/* https://dinnertable.chat/:splat 301!
 https://dtc-staging.netlify.com https://test.dinnertable.chat/:splat 301!
 http://dtc-staging.netlify.com/* https://test.dinnertable.chat/:splat 301!
 https://dtc-staging.netlify.com/* https://test.dinnertable.chat/:splat 301!
+
+http://debateplatform.org/* https://debateplatform.org/:splat 301!
+http://test.debateplatform.org/* https://test.debateplatform.org/:splat 301!
+
 /*    /index.html   200
