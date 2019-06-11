@@ -55,25 +55,25 @@ const DTCRouter = ({
         <Redirect from="/play" to="/home" /> {/* legacy route */}
         <Redirect from="/CALLBACK" to="/callback" />
         <Redirect from="/signout" to="/" />
-        <Route exact={true} path="/" component={AsyncHome} />
-        <Route exact={true} path="/about" component={AsyncHome} />
-        <Route exact={true} path="/callback" component={AuthSignin} />
-        <Route exact={true} path="/signin" component={AuthSignin} />
-        <Route exact={true} path="/feedback" component={DebateFeedback} />
-        <Route exact={true} path="/tutorial" component={GettingStarted} />
-        <Route path="/press" component={AsyncMediaKit} />
-        <Route path="/privacy" component={AsyncPrivacy} />
-        <Route path="/campus" component={AsyncEducation} />
-        <Route path="/home" component={UserHome} />
-        <Route path="/quickmatch" component={AsyncPlay} />
-        <Route path="/match" component={AsyncDebate} />
-        <Route path="/hosting" component={AsyncPitch} />
-        <Route exact={true} path="/saas" component={SMenuHome} />
+        <Route exact path="/" component={AsyncHome} />
+        <Route exact path="/about" component={AsyncHome} />
+        <Route exact path="/callback" component={AuthSignin} />
+        <Route exact path="/signin" component={AuthSignin} />
+        <Route exact path="/feedback" component={DebateFeedback} />
+        <Route exact path="/tutorial" component={GettingStarted} />
+        <Route exact path="/press" component={AsyncMediaKit} />
+        <Route exact path="/privacy" component={AsyncPrivacy} />
+        <Route exact path="/campus" component={AsyncEducation} />
+        <Route exact path="/home" component={UserHome} />
+        <Route exact path="/quickmatch" component={AsyncPlay} />
+        <Route exact path="/match" component={AsyncDebate} />
+        <Route exact path="/hosting" component={AsyncPitch} />
+        <Route exact path="/saas" component={SMenuHome} />
         {!live && (
-          <Route exact={true} path="/saasend" component={SClosedDialog} />
+          <Route exact path="/saasend" component={SClosedDialog} />
         )}
-        {!live && <Route exact={true} path="/saasmatch" component={Saas} />}
-        {!live && <Route exact={true} path="/test2" component={AsyncTester} />}
+        {!live && <Route exact path="/saasmatch" component={Saas} />}
+        {!live && <Route exact path="/test2" component={AsyncTester} />}
         {!live && (
           <Route
             exact={true}
@@ -84,7 +84,7 @@ const DTCRouter = ({
             }}
           />
         )}
-        <Route exact={false} path="/" render={() => <Redirect to="/" />} />
+        <Route path="/" render={() => <Redirect to="/" />} />
       </Switch>
     </Router>
   );
