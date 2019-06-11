@@ -45,62 +45,50 @@ const DTCRouter = ({
 }: {
   history: any;
   store: AppModel.Type;
-}) => (
-  <Router history={history}>
-    <Switch>
-      <Redirect from="/education" to="/campus" />
-      <Redirect from="/signout" to="/" />
-      <Redirect from="/play" to="/home" /> {/* legacy route */}
-      
-      <Route exact={true} path="/" component={AsyncHome} />
-      <Route exact={true} path="/about" component={AsyncHome} />
-      <Route exact={true} path="/callback" component={AuthSignin} />
-      <Route exact={true} path="/CALLBACK" component={AuthSignin} />
-      <Route exact={true} path="/signin" component={AuthSignin} />
-      <Route exact={true} path="/feedback" component={DebateFeedback} />
-      <Route exact={true} path="/tutorial" component={GettingStarted} />
-      <Route
-        exact={true}
-        path="/signout"
-        render={() => {
-          // PATCH, redirects not working
-          store.router.push('/');
-          return null;
-        }}
-      />
-      <Route path="/press" component={AsyncMediaKit} />
-      <Route path="/privacy" component={AsyncPrivacy} />
-      <Route path="/campus" component={AsyncEducation} />
-      <Route path="/home" component={UserHome} />
-      <Route path="/quickmatch" component={AsyncPlay} />
-      <Route path="/match" component={AsyncDebate} />
-      <Route path="/hosting" component={AsyncPitch} />
-
-      <Route exact={true} path="/saas" component={SMenuHome} />
-      {store.isLive === false && (
-        <>
+}) => {
+  const live = store.isLive;
+  return (
+    <Router history={history}>
+      <Switch>
+        <Redirect from="/education" to="/campus" />
+        <Redirect from="/signout" to="/" />
+        <Redirect from="/play" to="/home" /> {/* legacy route */}
+        <Redirect from="/CALLBACK" to="/callback" />
+        <Redirect from="/signout" to="/" />
+        <Route exact={true} path="/" component={AsyncHome} />
+        <Route exact={true} path="/about" component={AsyncHome} />
+        <Route exact={true} path="/callback" component={AuthSignin} />
+        <Route exact={true} path="/signin" component={AuthSignin} />
+        <Route exact={true} path="/feedback" component={DebateFeedback} />
+        <Route exact={true} path="/tutorial" component={GettingStarted} />
+        <Route path="/press" component={AsyncMediaKit} />
+        <Route path="/privacy" component={AsyncPrivacy} />
+        <Route path="/campus" component={AsyncEducation} />
+        <Route path="/home" component={UserHome} />
+        <Route path="/quickmatch" component={AsyncPlay} />
+        <Route path="/match" component={AsyncDebate} />
+        <Route path="/hosting" component={AsyncPitch} />
+        <Route exact={true} path="/saas" component={SMenuHome} />
+        {!live && (
           <Route exact={true} path="/saasend" component={SClosedDialog} />
-          <Route exact={true} path="/saasmatch" component={Saas} />
-        </>
-      )}
-      {store.isLive === false && (
-        <>
-        <Route exact={true} path="/test2" component={AsyncTester} />
-        <Route
-          exact={true}
-          path="/test"
-          render={() => {
-            localStorage.setItem('test', 'y');
-            return <AsyncPlay />;
-          }}
-        />
-        </>
-      )}
-      
-      <Route render={() => <Redirect to="/" />} />
-    </Switch>
-  </Router>
-);
+        )}
+        {!live && <Route exact={true} path="/saasmatch" component={Saas} />}
+        {!live && <Route exact={true} path="/test2" component={AsyncTester} />}
+        {!live && (
+          <Route
+            exact={true}
+            path="/test"
+            render={() => {
+              localStorage.setItem('test', 'y');
+              return <AsyncPlay />;
+            }}
+          />
+        )}
+        <Route exact={false} path="/" render={() => <Redirect to="/" />} />
+      </Switch>
+    </Router>
+  );
+};
 
 const authenticated = (
   store: AppModel.Type,
@@ -131,3 +119,15 @@ function Loading(props: any) {
 <DefaultRoute component={Home} />
 */
 export default observer(DTCRouter);
+
+/*
+<Route
+        exact={true}
+        path="/signout"
+        render={() => {
+          // PATCH, redirects not working
+          store.router.push('/');
+          return null;
+        }}
+      />
+*/

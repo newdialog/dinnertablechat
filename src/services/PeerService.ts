@@ -65,9 +65,10 @@ export default class PeerService extends EventEmitter {
     const ice = ((await API.getICE()) as any[]).concat(config.iceServers);
     console.log('ice', ice);
     this.initiator = initiator;
+    // Turning off trickle: https://github.com/feross/simple-peer/issues/382
     this._peer = new Peer({
       initiator,
-      trickle: true,
+      trickle: false,
       // allowHalfTrickle: false,
       stream: this._stream,
       constraints,

@@ -5,8 +5,16 @@ https://dtc-prod.netlify.com/* https://dinnertable.chat/:splat 301!
 https://dtc-staging.netlify.com https://test.dinnertable.chat/:splat 301!
 http://dtc-staging.netlify.com/* https://test.dinnertable.chat/:splat 301!
 https://dtc-staging.netlify.com/* https://test.dinnertable.chat/:splat 301!
+<<<<<<< Updated upstream
 
 http://debateplatform.org/* https://debateplatform.org/:splat 301!
 http://test.debateplatform.org/* https://test.debateplatform.org/:splat 301!
 
+=======
+https://www.debateplatform.org https://debateplatform.org 301!
+http://www.debateplatform.org https://debateplatform.org 301!
+
+https://*.dinnertable.chat https://dinnertable.chat/saas?q=:splat 200
+https://*.debateplatform.org https://debateplatform.org/saas?q=:splat 200
+>>>>>>> Stashed changes
 /*    /index.html   200
