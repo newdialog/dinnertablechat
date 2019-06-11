@@ -12,77 +12,103 @@ import SClosedDialog from './SClosedDialog';
 import SMicSelector from './SMicSelector';
 import PositionSelector from './SPositionSelector';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  pagebody: {
-    backgroundColor: '#ddd1bb',
-    minHeight: '100vh'
-  },
-  container: {
-    marginTop: '0px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: 'auto',
-    maxWidth: '100%',
-    padding: '1em 1em 0 1em',
-    minWidth: '300px'
-  },
-  appBar: {
-    position: 'relative'
-  },
-  icon: {
-    marginRight: theme.spacing(2)
-  },
-  heroUnit: {
-    // backgroundColor: theme.palette.background.paper,
-  },
-  heroContent: {
-    // maxWidth: 800,
-    textAlign: 'left',
-    margin: '0 auto',
-    padding: `0`
-  },
-  micButton: {
-    maxWidth: 600,
-    textAlign: 'center',
-    margin: '0 auto',
-    padding: `0px 0 0px`
-  },
-  button: {
-    marginTop: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    color: theme.palette.primary.dark
-  },
-  actionsContainer: {
-    marginBottom: theme.spacing(2)
-  },
-  resetContainer: {
-    padding: theme.spacing(3)
-  },
-  footer: {
-    // backgroundColor: '#1b6f7b',
-    // padding: theme.spacing(6)
-    width: '100%',
-    margin: '0 auto',
-    position: 'absolute',
-    bottom: '1em',
-    textAlign: 'center'
-  },
-  linkhome: {
-    color: theme.palette.primary.dark
-  },
-  stepLabel: {
-    fontSize: '1.1em !important',
-    color: '#ffffff !important',
-    fontWeight: 'bold'
-  },
-  verticalCenter: {
-    margin: 0,
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translateY(-50%) translateX(-50%)'
-  }
-}), { withTheme: true, name: 'MenuHome' });
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    pagebody: {
+      backgroundColor: '#ddd1bb',
+      minHeight: '100vh'
+    },
+    container: {
+      marginTop: '0px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '100%',
+      padding: '1em 1em 0 1em',
+      minWidth: '300px'
+    },
+    appBar: {
+      position: 'relative'
+    },
+    icon: {
+      marginRight: theme.spacing(2)
+    },
+    heroUnit: {
+      // backgroundColor: theme.palette.background.paper,
+    },
+    heroContent: {
+      maxWidth: '100vw',
+      textAlign: 'left',
+      margin: '0 auto',
+      padding: `0`
+    },
+    micButton: {
+      maxWidth: 600,
+      textAlign: 'center',
+      margin: '0 auto',
+      padding: `0px 0 0px`
+    },
+    button: {
+      marginTop: theme.spacing(1),
+      marginRight: theme.spacing(1),
+      color: theme.palette.primary.dark
+    },
+    actionsContainer: {
+      marginBottom: theme.spacing(2)
+    },
+    resetContainer: {
+      padding: theme.spacing(3)
+    },
+    footer: {
+      // backgroundColor: '#1b6f7b',
+      // padding: theme.spacing(6)
+      width: '100%',
+      margin: '0 auto',
+      position: 'absolute',
+      bottom: '1em',
+      textAlign: 'center'
+    },
+    linkhome: {
+      color: theme.palette.primary.dark
+    },
+    stepLabel: {
+      fontSize: '1.1em !important',
+      color: '#ffffff !important',
+      fontWeight: 'bold'
+    },
+    verticalCenter: {
+      margin: 0,
+      position: 'absolute',
+      marginTop: '1em',
+      top: '50%',
+      left: '50%',
+      transform: 'translateY(-50%) translateX(-50%)',
+      '@media screen and ( max-height: 495px )': {
+        bottom: '1em',
+        top: 'auto'
+      }
+    },
+    herotext: {
+      fontSize: '1.2em',
+      fontWeight: 400,
+      paddingBottom: '0',
+      width: '400px',
+      [theme.breakpoints.down(500)]: {
+        fontSize: '4.85vw',
+        width: '100vw',
+      }
+    },
+    heroLogo: {
+      height: '6em', 
+      cursor: 'pointer',
+      [theme.breakpoints.down(480)]: {
+        fontSize: '4.85vw',
+        width: '90vw',
+      }
+    }
+  }),
+  { withTheme: true, name: 'MenuHome' }
+);
 
 interface Props {
   isTest?: boolean;
@@ -102,7 +128,7 @@ export default observer(function MenuHome(props: Props) {
 
   useEffect(() => {
     store.setSaas(true);
-    if(store.auth.isNotLoggedIn) {
+    if (store.auth.isNotLoggedIn) {
       store.auth.doGuestLogin();
     }
 
@@ -145,7 +171,7 @@ export default observer(function MenuHome(props: Props) {
 
   if (step === 2) {
     // goto 3rd page if debate session is not open
-    if(Times.isDuringDebate(store.isLive)!==true) step = 3;
+    if (Times.isDuringDebate(store.isLive) !== true) step = 3;
     else store.router.push('/saasmatch'); //  && store.micAllowed :SAAS
   }
 
@@ -160,46 +186,61 @@ export default observer(function MenuHome(props: Props) {
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             {props.isTest && <h2>TEST MODE (/test)</h2>}
-            <img src="/logos/appbar-logo-color.png" 
+            <img
+              src="/logos/appbar-logo-color.png"
               crossOrigin="anonymous"
               title="DTC Home"
-              style={{ height: '6em', cursor: 'pointer' }}/>
+              className={classes.heroLogo}
+            />
             <Typography
-              style={{
-                fontSize: '1.2em',
-                fontWeight: 400,
-                paddingBottom: '0',
-                width:'400px'
-              }}
+              className={classes.herotext}
               variant="h3"
               align="left"
               color="textSecondary"
               gutterBottom
             >
-              Talk to people with different opinions.<br/>
-              Anonymous discussion via audio call.<br/>
+              Talk to people with different opinions.
+              <br />
+              Anonymous discussion via audio call.
+              <br />
               Every Sunday from 18:00 till 19:00.
             </Typography>
           </div>
         </div>
 
         <div className={classes.verticalCenter}>
-        {step === 0 && 
-          <Reveal effect="fadeInUp" duration={2200}><PositionSelector store={store} /></Reveal>}
-        {step === 1 && 
-          <Reveal effect="fadeInUp" duration={1100}><SMicSelector store={store} /></Reveal>}
-        {step === 3 && 
-          <Reveal effect="fadeInUp" duration={1100}><SClosedDialog store={store} /></Reveal>}
+          {step === 0 && (
+            <Reveal effect="fadeInUp" duration={2200}>
+              <PositionSelector store={store} />
+            </Reveal>
+          )}
+          {step === 1 && (
+            <Reveal effect="fadeInUp" duration={1100}>
+              <SMicSelector store={store} />
+            </Reveal>
+          )}
+          {step === 3 && (
+            <Reveal effect="fadeInUp" duration={1100}>
+              <SClosedDialog store={store} />
+            </Reveal>
+          )}
         </div>
-        
       </main>
-      { false && <>
       <div className={classes.footer}>
-        <b>Limited time:</b> You can debate every sunday from 18:00 till 19:00.<br/>
-        <b>Feedback:</b> <input type="input" defaultValue="Enter your feedback here"/>
+        {false && (
+          <>
+            <b>Limited time:</b> You can debate every sunday from 18:00 till
+            19:00.
+            <br />
+            <b>Feedback:</b>{' '}
+            <input type="input" defaultValue="Enter your feedback here" />
+          </>
+        )}
+        <b>
+          Questions?{' '}
+          <a href="mailto:team@dinnertable.chat">team@dinnertable.chat</a>
+        </b>
       </div>
-      </>
-      }
     </div>
   );
 });
