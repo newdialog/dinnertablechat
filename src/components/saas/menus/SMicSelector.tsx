@@ -39,7 +39,7 @@ const useStyles = makeStyles(
     },
     btn: {
       marginLeft: '1.5em',
-      width: '8em',
+      width: 'auto',
       color: '#ffffff',
       fontSize: '1.2em'
       // color: theme.palette.secondary.main
@@ -50,13 +50,19 @@ const useStyles = makeStyles(
     card: {
       marginLeft: 'auto',
       marginRight: 'auto',
-      minWidth: '300px',
+      minWidth: '320px',
       width: '50vw',
       maxWidth: '500px',
       height: '100%',
       textAlign: 'center',
       flexDirection: 'column',
-      backgroundColor: '#eceadb'
+      backgroundColor: '#eceadb',
+      [theme.breakpoints.down('md')]: {
+        width: '80vw',
+      },
+      [theme.breakpoints.down('sm')]: {
+        width: '100vw',
+      }
     },
     cardMedia: {},
     cardContent: {
@@ -64,6 +70,9 @@ const useStyles = makeStyles(
     },
     imgLink: {
       textDecoration: 'none'
+    },
+    icon: {
+      marginRight:'.5em'
     }
   }),
   { withTheme: true, name: 'PositionSelector' }
@@ -103,7 +112,7 @@ export default observer(function SMicSelector(props: Props) {
   return (
     <div className={classNames(classes.layout, classes.cardGrid)}>
       <Grid container spacing={0} justify="center">
-        <Grid sm={10} md={10} lg={10} item>
+        <Grid sm={12} md={12} lg={12} item>
           <Card className={classes.card}>
             <CardContent className={classes.cardContent}>
             <div style={{ paddingTop: '2em' }} />
@@ -114,10 +123,9 @@ export default observer(function SMicSelector(props: Props) {
                   className={classes.btn}
                   disabled={store.micAllowed}
                   onClick={event => handleListItemClick(event, 0)}
-                >
-                  {!store.micAllowed ? 'Allow microphone' : 'Mic enabled'}
+                > <InboxIcon className={classes.icon} />{!store.micAllowed ? 'Allow microphone' : 'Mic enabled'}
                 </Button>
-
+                <div style={{ paddingTop: '2em' }} />
                 <Button
                   variant="contained"
                   // size="small"
@@ -126,7 +134,7 @@ export default observer(function SMicSelector(props: Props) {
                   disabled={!store.micAllowed}
                   onClick={event => handleListItemClick(event, 1)}
                 >
-                  Start Debate
+                  <DraftsIcon className={classes.icon}/>Start Debate
                 </Button>
               <div style={{ paddingTop: '2em' }} />
               {state.checkMic && (

@@ -37,7 +37,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: '100%',
     textAlign:'center',
     flexDirection: 'column',
-    backgroundColor: '#eceadb'
+    backgroundColor: '#eceadb',
+    [theme.breakpoints.down('md')]: {
+      width: '80vw',
+    },
+    [theme.breakpoints.down('sm')]: {
+      width: '100vw',
+    }
   },
   cardMedia: {
   },

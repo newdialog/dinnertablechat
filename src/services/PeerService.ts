@@ -68,7 +68,7 @@ export default class PeerService extends EventEmitter {
     // Turning off trickle: https://github.com/feross/simple-peer/issues/382
     this._peer = new Peer({
       initiator,
-      trickle: false,
+      trickle: true,
       // allowHalfTrickle: false,
       stream: this._stream,
       constraints,

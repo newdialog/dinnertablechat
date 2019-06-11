@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: '300px'
   },
   bannerAnim: {
+    backgroundColor: '#ddd1bb',
     position: 'absolute',
     left: 0,
     top: 0,
@@ -392,11 +393,15 @@ export default observer(function LoadingScene(props: Props) {
     <div className={classes.centered}>
       {state.error && <DebateError store={store} error={state.error} />}
       <div className={classes.bannerAnim}>
-        <Lottie
+        {
+          /*
+          <Lottie
           options={bgOptions}
           // ref={bannerRef}
           isClickToPauseDisabled={true}
         />
+        */
+        }
       </div>
       <div className={classes.bannerAnimOverlay} />
 
