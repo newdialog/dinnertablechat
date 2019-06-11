@@ -33,7 +33,8 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: '300px'
   },
   bannerAnim: {
-    backgroundColor: '#ddd1bb',
+    backgroundColor: '#af9667', // new
+    height: '100vh',
     position: 'absolute',
     left: 0,
     top: 0,
@@ -392,6 +393,7 @@ export default observer(function LoadingScene(props: Props) {
   return (
     <div className={classes.centered}>
       {state.error && <DebateError store={store} error={state.error} />}
+      <Reveal effect="fadeIn" duration={1200}>
       <div className={classes.bannerAnim}>
         {
           /*
@@ -402,8 +404,10 @@ export default observer(function LoadingScene(props: Props) {
         />
         */
         }
-      </div>
-      <div className={classes.bannerAnimOverlay} />
+      </div></Reveal>
+      { 
+        // <div className={classes.bannerAnimOverlay} />
+      }
 
       <div className={classes.centeredDown}>
         <Typography
@@ -423,7 +427,7 @@ export default observer(function LoadingScene(props: Props) {
           align="center"
           style={{ textShadow: '2px 2px #777755', color: '#ffffff' }}
         >
-          <Reveal effect="fadeIn" duration={3000}>
+          <Reveal effect="fadeInUp" duration={3000} wait={2500}>
             {text}
           </Reveal>
         </Typography>
@@ -440,7 +444,7 @@ export default observer(function LoadingScene(props: Props) {
             textShadow: '2px 2px #777755'
           }}
         >
-          <Reveal effect="fadeIn" duration={1000}>
+          <Reveal effect="fadeIn" duration={1000} wait={2500}>
             {
               // Click "Allow" when the browser asks to enable the microphone.
               // <br />
