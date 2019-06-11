@@ -1,4 +1,10 @@
-import { Card, CardActions, CardContent, Grid } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid
+} from '@material-ui/core';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -100,46 +106,28 @@ export default observer(function SMicSelector(props: Props) {
         <Grid sm={10} md={10} lg={10} item>
           <Card className={classes.card}>
             <CardContent className={classes.cardContent}>
-              <List component="nav">
-                {true && (
-                  <ListItem
-                    button
-                    selected={false}
-                    disabled={store.micAllowed}
-                    onClick={event => handleListItemClick(event, 0)}
-                  >
-                    <ListItemIcon>
-                      <InboxIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      className={classes.list}
-                      primaryTypographyProps={{ style: { fontWeight: 'bold' } }}
-                      primary={!store.micAllowed?'Allow microphone':'Mic enabled'}
-                    />
-                  </ListItem>
-                )}
-                {true && (
-                  <ListItem
-                    button
-                    selected={false}
-                    disabled={!store.micAllowed}
-                    onClick={event => handleListItemClick(event, 1)}
-                  >
-                    <ListItemIcon>
-                      <DraftsIcon />
-                    </ListItemIcon>
-                    <Reveal effect="fadeIn" duration={1000}>
-                      <ListItemText
-                        primaryTypographyProps={{
-                          style: { fontWeight: 'bold' }
-                        }}
-                        className={classes.list}
-                        primary="Start Debate"
-                      />
-                    </Reveal>
-                  </ListItem>
-                )}
-              </List>
+            <div style={{ paddingTop: '2em' }} />
+                <Button
+                  variant="contained"
+                  // size="small"
+                  color="secondary"
+                  className={classes.btn}
+                  disabled={store.micAllowed}
+                  onClick={event => handleListItemClick(event, 0)}
+                >
+                  {!store.micAllowed ? 'Allow microphone' : 'Mic enabled'}
+                </Button>
+
+                <Button
+                  variant="contained"
+                  // size="small"
+                  color="secondary"
+                  className={classes.btn}
+                  disabled={!store.micAllowed}
+                  onClick={event => handleListItemClick(event, 1)}
+                >
+                  Start Debate
+                </Button>
               <div style={{ paddingTop: '2em' }} />
               {state.checkMic && (
                 <div style={{ display: 'none' }}>
