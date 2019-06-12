@@ -13,7 +13,7 @@ i18n
   .use(Backend)
   .init({
     react: {
-      wait: true
+      useSuspense: true
       // withRef: false,
       // bindI18n: 'languageChanged loaded',
       // bindStore: 'added removed',
@@ -21,21 +21,24 @@ i18n
     },
     fallbackLng: 'en',
     debug: false,
+    interpolation: {
+      escapeValue: false, // not needed for react as it escapes by default
+    },
     // ns: ['special', 'common'],
     // defaultNS: 'special',
     backend: {
       backends: [
-        LocalStorageBackend, // primary
+        // LocalStorageBackend, // primary
         XHR // fallback
       ],
       backendOptions: [
-        {
+        /* {
           expirationTime: 1 * 60 * 1000
-        },
+        },*/
         {
           // load from i18next-gitbook repo https://raw.githubusercontent.com/i18next/i18next-gitbook/master/locales/
           // loadPath: 'i18n/{{lng}}/{{ns}}.json',
-          loadPath: 'i18n/{{lng}}.json',
+          loadPath: '/i18n/{{lng}}.json',
           crossDomain: true
         }
       ]

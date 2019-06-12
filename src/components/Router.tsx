@@ -4,8 +4,11 @@ import React, { lazy } from 'react';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 
 import * as AppModel from '../models/AppModel';
-import SClosedDialog from './saas/menus/SClosedDialog';
 
+// import SMenuHome from './saas/menus/SMenuHome';
+const SMenuHome = lazy(() => import('./saas/menus/SMenuHome'));
+
+const SClosedDialog = lazy(() => import('./saas/menus/SClosedDialog'));
 const AsyncHome = lazy(() => import('./home/home'));
 const AsyncPlay = lazy(() => import('./menus/MenuHome'));
 const AsyncPrivacy = lazy(() => import('./pages/Privacy'));
@@ -19,9 +22,8 @@ const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
 const Saas = lazy(() => import('./saas/menus/SRouter'));
-const SMenuHome = lazy(() => import('./saas/menus/SMenuHome'));
-
 const AsyncPitch = lazy(() => import('./saas/pitch/SPitch'));
+
 
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();
@@ -55,6 +57,14 @@ const DTCRouter = ({
         <Redirect from="/play" to="/home" /> {/* legacy route */}
         <Redirect from="/CALLBACK" to="/callback" />
         <Redirect from="/signout" to="/" />
+        <Redirect exact from="/saas" to="/r" />
+        <Route
+          exact
+          path="/saas/:id"
+          render={props => (
+            <Redirect to={`/r/${props.match.params.id}`} />
+          )}
+        />
         <Route exact path="/" component={AsyncHome} />
         <Route exact path="/about" component={AsyncHome} />
         <Route exact path="/callback" component={AuthSignin} />
@@ -68,7 +78,10 @@ const DTCRouter = ({
         <Route exact path="/quickmatch" component={AsyncPlay} />
         <Route exact path="/match" component={AsyncDebate} />
         <Route exact path="/hosting" component={AsyncPitch} />
-        <Route exact path="/saas" component={SMenuHome} />
+        
+        <Route exact path="/r/:id" render={props => (
+            <SMenuHome id={props.match.params.id} />
+          )} />
         {!live && (
           <Route exact path="/saasend" component={SClosedDialog} />
         )}
@@ -84,7 +97,7 @@ const DTCRouter = ({
             }}
           />
         )}
-        <Route path="/" render={() => <Redirect to="/" />} />
+        <Route render={() => <Redirect to="/" />} />
       </Switch>
     </Router>
   );

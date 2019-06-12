@@ -23,11 +23,14 @@ export function getTopics(t: any): Card[] {
   return data;
 }
 
-export function getSaaSTopics(t: any): Card[] {
+export function getSaaSTopics(topicid:string, t: any): Card[] {
   // utility
   const getSaaSQKey = topicid => i => 'saas-' + topicid + '-q' + i;
   // topicid example "pub1"
-  let topicid = new URLSearchParams(window.location.search).get('q');
+  // const qCode = (new URLSearchParams(window.location.search).get('q'));
+  // const urlParam = window.location.href.split('/').slice(-1)[0];
+  // let topicid =  urlParam || qCode;
+  // console.log('topicid', topicid);
   // if not exists in sheet, use default
   if (!topicid) {
     topicid = t('saas-DEFAULT-id');
@@ -35,7 +38,9 @@ export function getSaaSTopics(t: any): Card[] {
   }
   if (!topicid) throw new Error('no matching default question');
   // get number of questions
-  const topics = Number.parseInt(t('saas-' + topicid + '-qnum'), 10);
+  const keyT = 'saas-' + topicid + '-qnum';
+  // console.log('keyT', keyT);
+  const topics = Number.parseInt(t(keyT), 10);
   if(!topics) console.log('found no topics: ', )
 
   const q = getSaaSQKey(topicid);
@@ -43,7 +48,7 @@ export function getSaaSTopics(t: any): Card[] {
   const data: Card[] = [];
   for (let i = 0; i < topics; i++) {
     const qs = q(i);
-    console.log('qs:', qs, 'topic:',qs + '-topic');
+    // console.log('qs:', qs, 'topic:',qs + '-topic');
     data.push({
       topic: t(qs + '-topic'),
       photo: t(qs + '-photo'),

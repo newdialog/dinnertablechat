@@ -99,11 +99,18 @@ const useStyles = makeStyles(
       }
     },
     heroLogo: {
-      height: '6em', 
+      height: '3em', 
       cursor: 'pointer',
       [theme.breakpoints.down(480)]: {
-        fontSize: '4.85vw',
         width: '90vw',
+      }
+    },
+    heroLogoText: {
+      color: '#9f7b74',
+      fontSize: '2.6em', 
+      cursor: 'pointer',
+      [theme.breakpoints.down(550)]: {
+        fontSize: '8vw',
       }
     }
   }),
@@ -112,6 +119,7 @@ const useStyles = makeStyles(
 
 interface Props {
   isTest?: boolean;
+  id:string;
 }
 
 function onHelp(store: AppModel.Type) {
@@ -186,12 +194,15 @@ export default observer(function MenuHome(props: Props) {
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
             {props.isTest && <h2>TEST MODE (/test)</h2>}
-            <img
-              src="/logos/appbar-logo-color.png"
-              crossOrigin="anonymous"
-              title="DTC Home"
-              className={classes.heroLogo}
-            />
+            <Typography
+              variant="h1"
+              align="left"
+              color="textSecondary"
+              className={classes.heroLogoText}
+              gutterBottom
+            >
+              DebatePlatform
+              </Typography>
             <Typography
               className={classes.herotext}
               variant="h3"
@@ -211,7 +222,7 @@ export default observer(function MenuHome(props: Props) {
         <div className={classes.verticalCenter}>
           {step === 0 && (
             <Reveal effect="fadeInUp" duration={2200}>
-              <PositionSelector store={store} />
+              <PositionSelector id={props.id} store={store} />
             </Reveal>
           )}
           {step === 1 && (
@@ -237,8 +248,7 @@ export default observer(function MenuHome(props: Props) {
           </>
         )}
         <b>
-          Questions?{' '}
-          <a href="mailto:team@dinnertable.chat">team@dinnertable.chat</a>
+          Powered by <a href="https://dinnertable.chat/about" target="_blank">dinnertable.chat</a>
         </b>
       </div>
     </div>

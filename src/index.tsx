@@ -27,20 +27,20 @@ const store = AppModel.create(routerModel, fetcher);
 // if(!store.isLive)
 connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting, prob bundled anyway
 
-console.log('v1.2.851');
+console.log('v1.2.86');
 
 ReactDOM.render(
-  <Suspense fallback={LoadingMsg()}>
-    <I18nextProvider i18n={i18n}>
-        <AppModel.Context.Provider value={store}>
-          <MuiThemeProvider theme={theme}>
-            <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <App history={history} store={store} />
-            </ThemeProvider>
-          </MuiThemeProvider>
-        </AppModel.Context.Provider>
-    </I18nextProvider>
-  </Suspense>,
+  <I18nextProvider i18n={i18n}>
+    <AppModel.Context.Provider value={store}>
+      <MuiThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Suspense fallback={LoadingMsg()}>
+            <App history={history} store={store} />
+          </Suspense>
+        </ThemeProvider>
+      </MuiThemeProvider>
+    </AppModel.Context.Provider>
+  </I18nextProvider>,
   document.getElementById('root') as HTMLElement
 );

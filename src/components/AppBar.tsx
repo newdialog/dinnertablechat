@@ -67,7 +67,7 @@ export default observer(function ButtonAppBar(props: Props) {
     return null;
   }
 
-  if (path.indexOf('/saas') > -1) return null;
+  if (store.isSaas) return null;
 
   return (
     <div className={classes.root}>
