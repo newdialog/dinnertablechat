@@ -57,12 +57,11 @@ const DTCRouter = ({
         <Redirect from="/play" to="/home" /> {/* legacy route */}
         <Redirect from="/CALLBACK" to="/callback" />
         <Redirect from="/signout" to="/" />
-        <Redirect exact from="/saas" to="/r" />
         <Route
           exact
-          path="/saas/:id"
+          path="/saas"
           render={props => (
-            <Redirect to={`/r/${props.match.params.id}`} />
+            <Redirect to={`/r`} />
           )}
         />
         <Route exact path="/" component={AsyncHome} />
@@ -82,6 +81,9 @@ const DTCRouter = ({
         <Route exact path="/r/:id" render={props => (
             <SMenuHome id={props.match.params.id} />
           )} />
+        <Route exact path="/r" render={props => (
+            <SMenuHome id={''} />
+        )} />
         {!live && (
           <Route exact path="/saasend" component={SClosedDialog} />
         )}

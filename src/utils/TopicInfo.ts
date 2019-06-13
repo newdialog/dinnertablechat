@@ -32,7 +32,7 @@ export function getSaaSTopics(topicid:string, t: any): Card[] {
   // let topicid =  urlParam || qCode;
   // console.log('topicid', topicid);
   // if not exists in sheet, use default
-  if (!topicid) {
+  if (!topicid || topicid === '') {
     topicid = t('saas-DEFAULT-id');
     console.log('no q query param: pulled from saas-DEFAULT-id:', topicid);
   }

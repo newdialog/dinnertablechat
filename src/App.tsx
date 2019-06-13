@@ -35,7 +35,7 @@ export default observer(function App(props: Props) {
 
     // App flow
     if(isSaasDomain) {
-      store.router.push('/saas');
+      store.router.push('/r');
     } else if (
       store.isStandalone() &&
       store.auth.isNotLoggedIn &&

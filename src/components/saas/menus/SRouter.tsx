@@ -67,7 +67,7 @@ export default observer(function SRouter(props: Props) {
 
   if (stage === 0) {
     console.log('lost state');
-    store.router.push('/saas');
+    store.router.push('/r');
   }
 
   return (
