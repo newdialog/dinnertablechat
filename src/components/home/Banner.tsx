@@ -169,6 +169,7 @@ export default function HomeBanner(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
   const bannerRef = useRef<Lottie | any>();
+  const [isLoggingIn, setLogin] = useState(false);
 
   const _handleWaypointEnter = () => {
     if (!bannerRef.current) return;
@@ -256,7 +257,8 @@ export default function HomeBanner(props: Props) {
             <>
               <Button
                 style={{ marginTop: '1vh', lineHeight: '2.6em' }}
-                onClick={() => store.auth.doGuestLogin()}
+                onClick={() => store.auth.doGuestLogin() && setLogin(true)}
+                disabled={isLoggingIn}
                 variant="contained"
                 color="default"
                 size="large"

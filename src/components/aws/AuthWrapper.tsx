@@ -63,7 +63,8 @@ function AuthComp(props: Props) {
   const handleAuth = (awsUser: AuthService.AwsAuth | null) => {
     // console.log('handleAuth', props.login);
     const s = props.store;
-    if (s.auth.user || s.isGuest()) {
+
+    if (s.auth.user && s.auth.user.id) { // || s.isGuest()
       console.warn('stopping.. already logged in.');
       return; // not sure if needed
     }

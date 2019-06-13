@@ -10,6 +10,7 @@
 /*
     Content-Security-Policy: frame-ancestors 'none';
     X-Frame-Options: DENY
+    Access-Control-Allow-Origin: *
 /service-worker.js
     cache-control: max-age=0,no-cache,no-store,must-revalidate
 /sw.js
