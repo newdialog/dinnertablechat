@@ -54,8 +54,6 @@ const DTCRouter = ({
       <Switch>
         <Redirect from="/education" to="/campus" />
         <Redirect from="/signout" to="/" />
-        <Redirect from="/play" to="/home" /> {/* legacy route */}
-        <Redirect from="/CALLBACK" to="/callback" />
         <Redirect from="/signout" to="/" />
         <Route
           exact
@@ -66,7 +64,8 @@ const DTCRouter = ({
         />
         <Route exact path="/" component={AsyncHome} />
         <Route exact path="/about" component={AsyncHome} />
-        <Route exact path="/callback" component={AuthSignin} />
+        <Route path="/callback" component={AuthSignin} />
+        <Route path="/CALLBACK" component={AuthSignin} /> { /* do not redirect */ }
         <Route exact path="/signin" component={AuthSignin} />
         <Route exact path="/feedback" component={DebateFeedback} />
         <Route exact path="/tutorial" component={GettingStarted} />
