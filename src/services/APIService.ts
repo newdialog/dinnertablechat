@@ -1,5 +1,12 @@
-import API from '@aws-amplify/api';
-import Auth from '@aws-amplify/auth';
+// import API from '@aws-amplify/api';
+import { Auth, API } from 'aws-amplify'; // API
+
+let _cfg = {};
+/* const API:any = {
+  get: () => {},
+  post: () => {},
+  configure: (cfg) => _cfg = Object.assign(_cfg, cfg)
+}*/
 
 async function getScores() {
   let apiName = 'History';
@@ -104,6 +111,7 @@ async function bail(matchId: string) {
 }
 
 function configure(conf:any) {
+  console.log('conf', conf);
   return API.configure(conf);
 }
 

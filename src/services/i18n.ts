@@ -13,7 +13,8 @@ i18n
   .use(Backend)
   .init({
     react: {
-      useSuspense: true
+      useSuspense: true,
+      wait: false
       // withRef: false,
       // bindI18n: 'languageChanged loaded',
       // bindStore: 'added removed',

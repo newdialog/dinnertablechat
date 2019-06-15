@@ -1,5 +1,5 @@
 // TODO HOOKS
-import Auth from '@aws-amplify/auth';
+import { Auth } from 'aws-amplify';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import MediaQuery from 'react-responsive';

@@ -11,7 +11,18 @@
     Content-Security-Policy: frame-ancestors 'none';
     X-Frame-Options: DENY
     Access-Control-Allow-Origin: *
+    cache-control: max-age=0
+    cache-control: no-cache
+    cache-control: must-revalidate
 /service-worker.js
     cache-control: max-age=0,no-cache,no-store,must-revalidate
 /sw.js
     cache-control: max-age=0,no-cache,no-store,must-revalidate
+/static/*
+    cache-control: max-age=31536000
+/assets/*
+    cache-control: max-age=31536000
+/imgs/*
+    cache-control: max-age=31536000
+/logos/*
+    cache-control: max-age=86400

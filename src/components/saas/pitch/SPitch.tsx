@@ -22,6 +22,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: '300px',
     padding: '0 14px 0 14px'
   },
+  containerRev: {
+    marginTop: '100px',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    width: 'auto',
+    maxWidth: '800px',
+    minWidth: '300px',
+    padding: '0 14px 0 14px',
+    flexWrap: 'wrap-reverse',
+  },
   paper: {
     padding: theme.spacing(1.5),
     color: theme.palette.text.secondary,
@@ -61,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: 'auto',
     maxWidth: '800px',
     minWidth: '300px',
-    alignContent: 'centered',
+    // alignContent: 'centered',
     textAlign: 'center'
   },
   divider: {
@@ -70,6 +80,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   largeIcon: {
     width: 80,
     height: 60
+  },
+  gridEl: {
+    display: 'inline-flex',
+    padding: '.5em'
   }
 }));
 interface Props {
@@ -98,21 +112,39 @@ export default function MediaKit(props: Props) {
         <Typography
           gutterBottom={true}
           variant="h3"
-          style={{ color: 'black', fontSize: '2.5em' }}
+          style={{ color: 'black', fontSize: '2.1em', margin: '200px 0 100px' }}
           align={'center'}
         >
-          Integration - Be Your Own Host 
+          DTC is an online debate platform that connects people and communities
+          with different opinions for a respectful dialog.
         </Typography>
-        <div className={classes.centered}>
-          <img src="imgs/press/01-scene1.png" width={600} alt="screenshot-1" />
-        </div>
+        <Grid container spacing={0} className={classes.containerRev}>
+          <Grid className={classes.gridEl}
+              item xs={12} md={6}>
+            <Typography
+              gutterBottom={true}
+              variant="h3"
+              align={'center'}
+              style={{ fontSize: '1.6m', margin: '0'}}
+            >
+              Use our debate platform to get people talking about <u>YOUR</u> topics.
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <img
+              src="imgs/press/01-scene1.png"
+              width="100%"
+              alt="screenshot-1"
+            />
+          </Grid>
+        </Grid>
         <div className={classes.divider} />
         <Typography gutterBottom={true} variant="h5" align={'left'} />
-        <Typography gutterBottom={true}>
+        <Typography gutterBottom={true} component="div">
           <p className="c0 c15">
             <span className="c5">
-              Online discussion and debate platform,
-              Dinnertable.chat is pleased to announce the launch of its{' '}
+              Online discussion and debate platform, Dinnertable.chat is pleased
+              to announce the launch of its{' '}
             </span>
             <span className="c5">host</span>
             <span className="c5">
@@ -223,7 +255,7 @@ export default function MediaKit(props: Props) {
             <span className="c4" />
           </p>
           <p className="c0 c15">
-              The Dinnertable.chat platform integration service
+            The Dinnertable.chat platform integration service
             <span className="c5">
               &nbsp;can be easily implemented by media sites, publishers,
               colleges, and universities to enhance the online conversation
@@ -309,33 +341,31 @@ export default function MediaKit(props: Props) {
           <p className="c0 c3">
             <span className="c4" />
           </p>
-          <p className="c23 c15">
-            <br/><hr/>
-          </p>
+         
+            <br />
+            <hr />
+          
           <p className="c0 c3">
             <span className="c4" />
           </p>
-          <p className="c0 c15">
-              About the Dinntertable.chat platform
-          </p>
+          <p className="c0 c15">About the Dinntertable.chat platform</p>
           <p className="c0 c15">
             <span className="c5">Dinnertable.chat</span>
             <span className="c20">
               &nbsp;is a mobile app and web platform that facilitates real-time
               discussions and debates on a range of social and political issues,
-              and the Hosting (service) is
-              Dinnertable.chat&rsquo;s integratable SaaS add-on for websites,
-              media outlets, and higher education institutions. Designed to act
-              as virtual matchmakers for people with political differences,
-              Dinnertable.chat and the service let users choose a topic they are
-              interested in or have a position on, then connects them with
-              someone who holds an appropriately contrasting viewpoint. Matched
-              users then each control a fun virtual character who represents
-              their respective words and emotions on-screen during the
-              conversation. The vision of Dinnertable.chat is to provide
-              accessible tools that help engage people in good-faith dialogue
-              for the purpose of finding common ground through live
-              conversation.
+              and the Hosting (service) is Dinnertable.chat&rsquo;s integratable
+              SaaS add-on for websites, media outlets, and higher education
+              institutions. Designed to act as virtual matchmakers for people
+              with political differences, Dinnertable.chat and the service let
+              users choose a topic they are interested in or have a position on,
+              then connects them with someone who holds an appropriately
+              contrasting viewpoint. Matched users then each control a fun
+              virtual character who represents their respective words and
+              emotions on-screen during the conversation. The vision of
+              Dinnertable.chat is to provide accessible tools that help engage
+              people in good-faith dialogue for the purpose of finding common
+              ground through live conversation.
             </span>
           </p>
           <br />
