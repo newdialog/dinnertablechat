@@ -54,8 +54,8 @@ export default observer(function ButtonAppBar(props: Props) {
   const path = (store.router.location as any).pathname;
   const isDashboard = path === '/home' || path === '/quickmatch';
   let logo = !isDashboard
-    ? './logos/appbar-logo-color.png'
-    : './logos/appbar-logo-color-short.png';
+    ? './logos/appbar-logo-color2.png'
+    : './logos/appbar-logo-color-short2.png';
 
   const showAuth = true; // !isLive || Times.isDuringDebate();
 
