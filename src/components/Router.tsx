@@ -54,7 +54,6 @@ const DTCRouter = ({
       <Switch>
         <Redirect from="/education" to="/campus" />
         <Redirect from="/signout" to="/" />
-        <Redirect from="/signout" to="/" />
         <Route
           exact
           path="/saas"

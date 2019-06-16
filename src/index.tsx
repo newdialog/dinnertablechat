@@ -30,17 +30,17 @@ connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting,
 console.log('v1.2.86');
 
 ReactDOM.render(
-  <I18nextProvider i18n={i18n}>
-    <AppModel.Context.Provider value={store}>
-      <MuiThemeProvider theme={theme}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Suspense fallback={LoadingMsg()}>
+  <AppModel.Context.Provider value={store}>
+    <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Suspense fallback={LoadingMsg()}>
+          <I18nextProvider i18n={i18n}>
             <App history={history} store={store} />
-          </Suspense>
-        </ThemeProvider>
-      </MuiThemeProvider>
-    </AppModel.Context.Provider>
-  </I18nextProvider>,
+          </I18nextProvider>
+        </Suspense>
+      </ThemeProvider>
+    </MuiThemeProvider>
+  </AppModel.Context.Provider>,
   document.getElementById('root') as HTMLElement
 );

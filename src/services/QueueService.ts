@@ -2,7 +2,7 @@
 
 import GameLift from 'aws-sdk/clients/gamelift';
 // import DynamoDB from 'aws-sdk/clients/dynamodb'
-import AWS from 'aws-sdk/global';
+// import AWS from 'aws-sdk/global';
 import { isLive } from '../utils/AppMeta';
 import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
@@ -51,7 +51,7 @@ interface StopFlag {
 function onMatchEvent(
   stopFlag: StopFlag,
   onMatchedCB: OnMatchedCB,
-  err: AWS.AWSError,
+  err: any, // AWS.AWSError,
   data: GameLift.StartMatchmakingOutput
 ) {
   if (err) {

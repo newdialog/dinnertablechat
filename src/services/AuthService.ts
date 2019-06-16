@@ -3,15 +3,18 @@ import awsmobile from '../aws-exports.js';
 import 'aws-sdk/lib/node_loader'; // first time only
 
 // import Core from 'aws-sdk/lib/core';
-import AWS from 'aws-sdk/global';
+import {config, Config, Credentials} from 'aws-sdk/global';
 
-import Auth from '@aws-amplify/auth';
+// import Auth from '@aws-amplify/auth';
+import { Auth } from 'aws-amplify';
 import API from './APIService'; // TODO refactor
 
 import retry from 'async-retry';
 // import { Logger } from 'aws-amplify';
-import { Hub, ConsoleLogger } from '@aws-amplify/core';
+import { Hub } from 'aws-amplify';
 import { injectConfig } from '../configs/AWSconfig';
+
+const AWS = {config, Credentials, Config};
 
 const delayFlag = async (obj: { flag: boolean }) =>
   await retry(
@@ -45,7 +48,7 @@ if (!AWS.config || !AWS.config.region) {
 }
 
 function getLoggger() {
-  const logger: any = new ConsoleLogger('dtc_aws_log');
+  /* const logger: any = new ConsoleLogger('dtc_aws_log');
   logger.onHubCapsule = capsule => {
     switch (capsule.payload.event) {
       case 'signIn':
@@ -67,7 +70,7 @@ function getLoggger() {
         break;
     }
   };
-  return logger;
+  return logger; */
 }
 
 export const LOGIN_EVENT = 'signIn';

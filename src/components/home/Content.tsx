@@ -266,7 +266,7 @@ export default function HomeContent() {
                 <img
                   alt="Get it on Google Play"
                   className="lazyload"
-                  data-src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png"
+                  data-src="/imgs/en_badge_web_generic.png"
                   width="170px"
                 />
               </a>
