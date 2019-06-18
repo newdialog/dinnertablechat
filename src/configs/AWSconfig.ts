@@ -1,5 +1,6 @@
 /* tslint:disable:no-bitwise */
-import { Auth } from 'aws-amplify';
+import Auth from '@aws-amplify/auth';
+// import { Auth } from 'aws-amplify';
 
 // AWS Mobile Hub Project Constants
 const awsOauth = {

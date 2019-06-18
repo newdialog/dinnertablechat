@@ -3,18 +3,18 @@ import awsmobile from '../aws-exports.js';
 import 'aws-sdk/lib/node_loader'; // first time only
 
 // import Core from 'aws-sdk/lib/core';
-import {config, Config, Credentials} from 'aws-sdk/global';
+import { config, Config, Credentials } from 'aws-sdk/global';
 
-// import Auth from '@aws-amplify/auth';
-import { Auth } from 'aws-amplify';
+import Auth from '@aws-amplify/auth';
+// import { Auth } from 'aws-amplify';
 import API from './APIService'; // TODO refactor
 
 import retry from 'async-retry';
 // import { Logger } from 'aws-amplify';
-import { Hub } from 'aws-amplify';
+import { Hub } from '@aws-amplify/core';
 import { injectConfig } from '../configs/AWSconfig';
 
-const AWS = {config, Credentials, Config};
+const AWS = { config, Credentials, Config };
 
 const delayFlag = async (obj: { flag: boolean }) =>
   await retry(

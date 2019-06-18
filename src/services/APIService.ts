@@ -1,5 +1,6 @@
-// import API from '@aws-amplify/api';
-import { Auth, API } from 'aws-amplify'; // API
+import API from '@aws-amplify/api';
+import Auth from '@aws-amplify/auth';
+// import { Auth, API } from 'aws-amplify'; // API
 
 let _cfg = {};
 /* const API:any = {
@@ -110,7 +111,7 @@ async function bail(matchId: string) {
     });
 }
 
-function configure(conf:any) {
+function configure(conf: any) {
   console.log('conf', conf);
   return API.configure(conf);
 }
