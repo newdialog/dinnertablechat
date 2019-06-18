@@ -1,3 +1,4 @@
+/*
 declare module 'aws-amplify-react' {
   export const withOAuth: any;
 
@@ -34,3 +35,4 @@ declare module 'aws-amplify-react' {
   export const SelectMFAType: any;
   export const TOTPSetupComp: any;
 }
+*/
