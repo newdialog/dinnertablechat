@@ -3,7 +3,7 @@ import awsmobile from '../aws-exports.js';
 import 'aws-sdk/lib/node_loader'; // first time only
 
 // import Core from 'aws-sdk/lib/core';
-import {config, Config, Credentials} from 'aws-sdk/global';
+import AWS from 'aws-sdk/global';
 
 // import Auth from '@aws-amplify/auth';
 import { Auth } from 'aws-amplify';
@@ -13,8 +13,6 @@ import retry from 'async-retry';
 // import { Logger } from 'aws-amplify';
 import { Hub } from 'aws-amplify';
 import { injectConfig } from '../configs/AWSconfig';
-
-const AWS = {config, Credentials, Config};
 
 const delayFlag = async (obj: { flag: boolean }) =>
   await retry(
@@ -142,9 +140,10 @@ export async function refreshCredentials() {
   ));
 
   AWS.config.credentials = new AWS.Credentials(credentials);
-  AWS.config.update({
+  /* AWS.config.update({
     credentials: new AWS.Credentials(credentials)
-  });
+  });*/
+  // console.log('refreshCredentials', credentials);
 
   return {
     accessKeyId: credentials.accessKeyId,

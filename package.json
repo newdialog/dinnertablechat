@@ -17,7 +17,7 @@
     "@material-ui/utils": "^4.1.0",
     "async-retry": "^1.2.3",
     "aws-amplify-react": "^2.3.9",
-    "aws-sdk": "^2.477.0",
+    "aws-sdk": "^2.478.0",
     "backoff-rxjs": "^6.3.2",
     "eslint-plugin-prettier": "^3.1.0",
     "formik": "^1.5.7",

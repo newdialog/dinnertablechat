@@ -39,8 +39,7 @@ export async function init(options: GameLift.ClientConfiguration) {
     secretAccessKey,
     sessionToken
   }; */
-  const cr = await AuthService.refreshCredentials();
-  console.log('refreshCredentials', cr);
+  await AuthService.refreshCredentials();
   gameLift = new GameLift(options);
 }
 
