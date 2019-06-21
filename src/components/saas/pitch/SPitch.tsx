@@ -164,6 +164,8 @@ export default function MediaKit(props: Props) {
         <Four className={classes.bullet}/>YOUR community engages with your content<br/>
         <div className={classes.divider} />
         If you are a university, you can help students have an anonymous and free debate on topics you choose. Students can debate with students from other universities and countries.
+        <br/><br/>
+        If you are a publisher, we can help improve user retention by providing an engaging activity for your readers. Often users want to learn more from other members who have read or watched the same content, and our conversation platform helps facilitate a safe and fun way for users to share and express themselves. 
         <div className={classes.divider} />
         <Typography
               gutterBottom={true}
