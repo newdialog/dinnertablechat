@@ -1,4 +1,9 @@
 import { Typography } from '@material-ui/core';
+import One from '@material-ui/icons/LooksOne';
+import Two from '@material-ui/icons/LooksTwo';
+import Three from '@material-ui/icons/Looks3';
+import Four from '@material-ui/icons/Looks4';
+// import Four from '@material-ui/icons/Quest
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Theme } from '@material-ui/core/styles';
@@ -7,6 +12,8 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet';
 
 import Footer from '../../home/Footer';
+import Button from '@material-ui/core/Button';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -75,7 +82,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     textAlign: 'center'
   },
   divider: {
-    margin: `${theme.spacing(4)}px 0`
+    margin: `${theme.spacing(4)}px 0`,
+    height: '1px',
+    backgroundColor: '#999999'
   },
   largeIcon: {
     width: 80,
@@ -84,6 +93,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   gridEl: {
     display: 'inline-flex',
     padding: '.5em'
+  },
+  bullet: {
+    marginLeft: '.5em',
+    marginBottom: '-.25em',
+    marginRight: '.25em',
+    fontSize: '2em'
   }
 }));
 interface Props {
@@ -93,6 +108,10 @@ interface Props {
 
 export default function MediaKit(props: Props) {
   const classes = useStyles({});
+
+  const contact = () => {
+    window.location.href = "mailto:team@dinnertable.chat";
+  }
 
   const imgs = [
     './logos/dinnertable.gif',
@@ -119,7 +138,7 @@ export default function MediaKit(props: Props) {
           with different opinions for a respectful dialog.
         </Typography>
         <Grid container spacing={0} className={classes.containerRev}>
-          <Grid className={classes.gridEl}
+          <Grid className={classes.gridEl} style={{alignItems:'center'}}
               item xs={12} md={6}>
             <Typography
               gutterBottom={true}
@@ -139,7 +158,36 @@ export default function MediaKit(props: Props) {
           </Grid>
         </Grid>
         <div className={classes.divider} />
-        <Typography gutterBottom={true} variant="h5" align={'left'} />
+        <One className={classes.bullet}/>WE create a custom debate platform for you<br/>
+        <Two className={classes.bullet}/>YOU Choose the questions use debate<br/>
+        <Three className={classes.bullet}/>YOU promote your platform in your media channels<br/>
+        <Four className={classes.bullet}/>YOUR community engages with your content<br/>
+        <div className={classes.divider} />
+        If you are a university, you can help students have an anonymous and free debate on topics you choose. Students can debate with students from other universities and countries.
+        <div className={classes.divider} />
+        <Typography
+              gutterBottom={true}
+              variant="h1"
+              align={'center'}
+              style={{ fontSize: '1em', margin: '0'}}
+            >
+             Contact us for:
+        </Typography><br/>
+        <ButtonGroup fullWidth aria-label="Full width outlined button group">
+          <Button onClick={contact}>a free sample</Button>
+          <Button onClick={contact}>a custom solution</Button>
+          <Button onClick={contact}>any other questions</Button>
+        </ButtonGroup>
+        <br/><br/><br/><br/>
+        <div className={classes.divider} />
+        <Typography
+              gutterBottom={true}
+              variant="body1"
+              align={'left'}
+              style={{ fontSize: '1em', margin: '0'}}
+            >
+             More about our SaaS launch:
+        </Typography><br/>
         <Typography gutterBottom={true} component="div">
           <p className="c0 c15">
             <span className="c5">
@@ -369,11 +417,10 @@ export default function MediaKit(props: Props) {
             </span>
           </p>
           <br />
-          <b>For pricing and availability, please contact us below:</b>
+          <b>For pricing and availability:</b>
         </Typography>
 
-        <div className={classes.divider} />
-        <Typography gutterBottom={true} align={'center'}>
+        <Typography gutterBottom={true} align={'left'}>
           Sales{' '}
           <a
             href="mailto:sales@dinnertable.chat"
