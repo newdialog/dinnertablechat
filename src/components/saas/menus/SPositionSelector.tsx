@@ -61,7 +61,7 @@ const useStyles = makeStyles(
       textDecoration: 'none'
     }
   }),
-  { withTheme: true, name: 'PositionSelector' }
+  { name: 'PositionSelector' }
 );
 
 interface Props {

@@ -5,6 +5,14 @@ import { createMuiTheme } from '@material-ui/core/styles';
 export const theme = createMuiTheme({
   spacing: 8,
   overrides: {
+    MuiCssBaseline: {
+      '@global': {
+        '@font-face': {
+          fontWeight: 400,
+          fontDisplay: 'fallback'
+        }
+      },
+    },
     MuiMobileStepper: {
       dotActive: {
         backgroundColor: '#ff896b' // primary

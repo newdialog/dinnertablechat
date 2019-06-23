@@ -114,7 +114,7 @@ const useStyles = makeStyles(
       }
     }
   }),
-  { withTheme: true, name: 'HomeContent' }
+  { name: 'HomeContent' }
 );
 
 const logoOptions = {

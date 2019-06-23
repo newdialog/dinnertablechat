@@ -105,7 +105,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       maxWidth: '100px'
     }
   }
-}), {withTheme: true, name:'Home'});
+}), {name:'Home'});
 
 export default function Home() {
   const store = useContext(AppModel.Context)!;

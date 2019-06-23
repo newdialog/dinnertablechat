@@ -29,13 +29,13 @@ i18n
     // defaultNS: 'special',
     backend: {
       backends: [
-        // LocalStorageBackend, // primary
+        LocalStorageBackend, // primary
         XHR // fallback
       ],
       backendOptions: [
-        /* {
-          expirationTime: 1 * 60 * 1000
-        },*/
+        {
+          expirationTime: 1 * 10 * 60 * 1000
+        },
         {
           // load from i18next-gitbook repo https://raw.githubusercontent.com/i18next/i18next-gitbook/master/locales/
           // loadPath: 'i18n/{{lng}}/{{ns}}.json',

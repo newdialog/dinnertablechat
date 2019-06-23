@@ -26,3 +26,5 @@
     cache-control: max-age=31536000
 /logos/*
     cache-control: max-age=86400
+/i18n/*
+    cache-control: max-age=600

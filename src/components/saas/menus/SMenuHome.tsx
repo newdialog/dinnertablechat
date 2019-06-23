@@ -114,7 +114,7 @@ const useStyles = makeStyles(
       }
     }
   }),
-  { withTheme: true, name: 'MenuHome' }
+  { name: 'MenuHome' }
 );
 
 interface Props {

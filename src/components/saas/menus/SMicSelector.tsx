@@ -75,7 +75,7 @@ const useStyles = makeStyles(
       marginRight:'.5em'
     }
   }),
-  { withTheme: true, name: 'PositionSelector' }
+  { name: 'PositionSelector' }
 );
 
 interface Props {

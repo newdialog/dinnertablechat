@@ -151,7 +151,7 @@ export default function MediaKit(props: Props) {
           </Grid>
           <Grid item xs={12} md={6}>
             <img
-              src="imgs/press/01-scene1.png"
+              src="imgs/press/01-scene1-sm.jpg"
               width="100%"
               alt="screenshot-1"
             />

@@ -148,7 +148,7 @@ const useStyles = makeStyles(
       [theme.breakpoints.down('xs')]: {}
     }
   }),
-  { withTheme: true, name: 'Banner' }
+  { name: 'Banner' }
 );
 
 const bgOptions = {
