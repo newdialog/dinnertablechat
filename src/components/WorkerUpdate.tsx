@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     minWidth: '300px'
   },
   bannerAnim: {
+    backgroundColor: '#af9667', // new
     position: 'absolute',
     left: 0,
     top: 0,
@@ -56,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       paddingTop: '2vh'
     }
   },
-  bannerAnimOverlay: {
+  /* bannerAnimOverlay: {
     zIndex: -1,
     transform: 'translateZ(0)',
     position: 'absolute',
@@ -67,17 +68,17 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     background: 'rgba(0, 0, 0, 0.35)',
     backgroundBlendMode: 'multiply'
-  }
+  } */
 }));
 
-const bgOptions = {
+/* const bgOptions = {
   loop: true,
   autoplay: true,
   path: 'assets/background.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
-};
+}; */
 interface Props {
   children: ReactNode;
   store: AppModel.Type;
@@ -178,9 +179,9 @@ export default function WorkerUpdate(props: Props) {
         }}
       >
         <div className={classes.bannerAnim}>
-          <Lottie options={bgOptions} isClickToPauseDisabled={true} />
+          
         </div>
-        <div className={classes.bannerAnimOverlay} />
+        { /* <div className={classes.bannerAnimOverlay} /> */ }
         <div className={classes.centeredDown}>
           <Typography
             variant="h1"
@@ -222,3 +223,5 @@ function bust() {
     if (registrationsArray.length > 0) registrationsArray[0].update();
   });
 }
+
+// <Lottie options={bgOptions} isClickToPauseDisabled={true} />

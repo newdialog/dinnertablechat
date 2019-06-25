@@ -7,7 +7,7 @@ const loader = () => {
         <br />
         <br />
         <br />
-        <Typography variant="h3" align="center" style={{color:'#555555'}}>Loading...</Typography>
+        <h2 style={{color:'gray', textAlign:'center'}}>Loading...</h2>
       </div>
     );
   };

@@ -56,7 +56,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       paddingTop: '2vh'
     }
   },
-  bannerAnimOverlay: {
+  /* bannerAnimOverlay: {
     zIndex: -1,
     transform: 'translateZ(0)',
     position: 'absolute',
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     background: 'rgba(0, 0, 0, 0.35)',
     backgroundBlendMode: 'multiply'
-  },
+  }, */
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
@@ -78,14 +78,14 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-const bgOptions = {
+/* const bgOptions = {
   loop: true,
   autoplay: true,
   path: 'assets/background.json',
   rendererSettings: {
     preserveAspectRatio: 'xMidYMid slice'
   }
-};
+}; */
 
 const onWindowBeforeUnload = async (e: any) => {
   console.log('onWindowBeforeUnload');

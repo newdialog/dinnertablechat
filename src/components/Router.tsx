@@ -4,6 +4,7 @@ import React, { lazy } from 'react';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 
 import * as AppModel from '../models/AppModel';
+import AsyncPitch from './saas/pitch/SPitch';
 
 // import SMenuHome from './saas/menus/SMenuHome';
 const SMenuHome = lazy(() => import('./saas/menus/SMenuHome'));
@@ -22,8 +23,7 @@ const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
 const Saas = lazy(() => import('./saas/menus/SRouter'));
-const AsyncPitch = lazy(() => import('./saas/pitch/SPitch'));
-
+  // lazy(() => import('./saas/pitch/SPitch'));
 
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();
@@ -103,6 +103,7 @@ const DTCRouter = ({
   );
 };
 
+/*
 const authenticated = (
   store: AppModel.Type,
   Component: React.LazyExoticComponent<any>
@@ -112,8 +113,9 @@ const authenticated = (
   if (isAuth) return <Component />;
   return <div>Loading...</div>;
 };
+*/
 
-function Loading(props: any) {
+/* function Loading(props: any) {
   if (props.error) {
     return (
       <div>
@@ -126,6 +128,7 @@ function Loading(props: any) {
     return null;
   }
 }
+*/
 
 /*
 <Route path="/rtc" component={RTCHome}/>

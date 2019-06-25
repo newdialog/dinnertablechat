@@ -13,7 +13,7 @@ import * as AppModel from '../../models/AppModel';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
 import BannerTimer from './BannerTimer';
 import * as Times from '../../services/TimeService';
-// const bgData = require('../../assets/background.json');
+
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 

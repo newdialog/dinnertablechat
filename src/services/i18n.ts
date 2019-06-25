@@ -1,8 +1,6 @@
 import i18n from 'i18next';
 import XHR from 'i18next-xhr-backend';
 import * as LanguageDetector from 'i18next-browser-languagedetector';
-// import config from '../src/config/config'
-// import config from '../src/config/config'
 import Backend from 'i18next-chained-backend';
 // import { withI18n, reactI18nextModule } from 'react-i18next';
 import LocalStorageBackend from 'i18next-localstorage-backend';
@@ -14,7 +12,7 @@ i18n
   .init({
     react: {
       useSuspense: true,
-      wait: false
+      // wait: false
       // withRef: false,
       // bindI18n: 'languageChanged loaded',
       // bindStore: 'added removed',
