@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import { Typography } from '@material-ui/core';
 import { createStyles, WithStyles } from '@material-ui/core/styles';
 import * as AppModel from '../../models/AppModel';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useTheme, makeStyles } from '@material-ui/styles';
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
 
@@ -60,10 +60,7 @@ export default function Footer(props: Props) {
                 'https://twitter.com/dintablechat', false, true
               )}
             >
-              <i
-                id="social-tw"
-                className="fab fa-twitter-square social fa-3x "
-              />
+              <FontAwesomeIcon className="social-tw social" size="4x" icon={['fab', 'twitter-square']} />
             </a>
 
             <a
@@ -73,10 +70,7 @@ export default function Footer(props: Props) {
                 'https://facebook.com/dinnertablechat', false, true
               )}
             >
-              <i
-                id="social-tw"
-                className="fab fa-facebook-square social fa-3x "
-              />
+              <FontAwesomeIcon className="social-tw social" size="4x" icon={['fab', 'facebook-square']} />
             </a>
 
             <a
@@ -86,7 +80,7 @@ export default function Footer(props: Props) {
                 'https://medium.com/dinnertablechat', false, true
               )}
             >
-              <i id="social-medium" className="fab fa-medium social fa-3x " />
+              <FontAwesomeIcon className="social-tw social" size="4x" icon={['fab', 'medium']} />
             </a>
 
             <a
@@ -94,7 +88,7 @@ export default function Footer(props: Props) {
               href="https://www.instagram.com/dinnertablechat/"
               onClick={trackOutboundLinkClick('https://www.instagram.com/dinnertablechat/', false, true)}
             >
-              <i id="social-discord" className="fab fa-instagram fa-3x social" />
+              <FontAwesomeIcon className="social-tw social" size="4x" icon={['fab', 'instagram']} />
             </a>
 
             <a
@@ -102,7 +96,7 @@ export default function Footer(props: Props) {
               href="https://discord.gg/U6h8pE9"
               onClick={trackOutboundLinkClick('https://discord.gg/U6h8pE9', false, true)}
             >
-              <i id="social-discord" className="fab fa-discord fa-3x social" />
+              <FontAwesomeIcon className="social-tw social" size="4x" icon={['fab', 'discord']} />
             </a>
 
             <a
@@ -110,10 +104,7 @@ export default function Footer(props: Props) {
               href="mailto:team@dinnertable.chat"
               onClick={trackOutboundLinkClick('mailto:team@dinnertable.chat')}
             >
-              <i
-                id="social-em"
-                className="fa fa-envelope-square fa-3x social"
-              />
+              <FontAwesomeIcon className="social-tw social" size="4x" icon="envelope-square" />
             </a>
           </div>
         </div>

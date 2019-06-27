@@ -4,10 +4,12 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, {useContext, useMemo} from 'react';
 
 import * as Store from '../models/AppModel';
 import UserStats from './menus/dash/UserStats';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const useStyles = makeStyles((theme: any) => ({
   root: {
@@ -27,7 +29,7 @@ const useStyles = makeStyles((theme: any) => ({
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
 
 interface Props {
-  store: Store.Type;
+ store: Store.Type;
 }
 
 function onLogin(store: Store.Type) {
@@ -46,9 +48,9 @@ function onHome(store: Store.Type) {
   store.router.push('/');
 }
 
-export default observer(function ButtonAppBar(props: Props) {
+export default function ButtonAppBar(props: Props) {
   const classes = useStyles({});
-  const store = props.store;
+  const store = useContext(Store.Context)!; // props.store;
   const auth = store.auth.isAuthenticated();
 
   const path = (store.router.location as any).pathname;
@@ -59,18 +61,14 @@ export default observer(function ButtonAppBar(props: Props) {
 
   const showAuth = true; // !isLive || Times.isDuringDebate();
 
-  if (store.debate.match && store.debate.match.sync) {
-    return null; // <React.Fragment></React.Fragment>
-  }
+  const deps = [store.auth, store.isSaas, store.debate.match, store.showNav];
 
-  if (!store.showNav) {
-    return null;
-  }
+  return useMemo( () => {
+    if(store.debate.match && store.debate.match.sync) return null;
+    if (!store.showNav) return null;
+    if (store.isSaas) return null;
 
-  if (store.isSaas) return null;
-
-  return (
-    <div className={classes.root}>
+    return (<div className={classes.root}>
       <AppBar
         position="fixed"
         color="default"
@@ -114,8 +112,8 @@ export default observer(function ButtonAppBar(props: Props) {
         </Toolbar>
       </AppBar>
     </div>
-  );
-});
+  )}, deps);
+};
 
 // observer(ButtonAppBar)
 
@@ -135,11 +133,7 @@ function socialLinks() {
           true
         )}
       >
-        <i
-          id="social-medium"
-          className="fab fa-medium social fa-2x "
-          style={{ marginRight: '.15em' }}
-        />
+        <FontAwesomeIcon className="social-tw social" size="2x" icon={['fab', 'medium']} style={{ marginRight: '.15em' }} />
       </a>
 
       <a
@@ -153,11 +147,7 @@ function socialLinks() {
           true
         )}
       >
-        <i
-          id="social-discord"
-          className="fab fa-instagram fa-2x social"
-          style={{ marginRight: '.15em' }}
-        />
+        <FontAwesomeIcon className="social-tw social" size="2x" icon={['fab', 'instagram']} style={{ marginRight: '.15em' }} />
       </a>
 
       <a
@@ -171,11 +161,7 @@ function socialLinks() {
           true
         )}
       >
-        <i
-          id="social-tw"
-          className="fab fa-twitter-square social fa-2x "
-          style={{ marginRight: '.15em' }}
-        />
+        <FontAwesomeIcon className="social-tw social" size="2x" icon={['fab', 'twitter-square']} style={{ marginRight: '.15em' }} />
       </a>
 
       <a
@@ -189,11 +175,7 @@ function socialLinks() {
           true
         )}
       >
-        <i
-          id="social-tw"
-          className="fab fa-facebook-square social fa-2x "
-          style={{ marginRight: '.15em' }}
-        />
+        <FontAwesomeIcon className="social-tw social" size="2x" icon={['fab', 'facebook-square']} style={{ marginRight: '.15em' }} />
       </a>
     </>
   );

@@ -106,21 +106,13 @@ interface Props {
   // store: AppModel.Type;
 }
 
-export default function MediaKit(props: Props) {
+export default function SPitch(props: Props) {
   const classes = useStyles({});
 
   const contact = () => {
-    window.location.href = "mailto:team@dinnertable.chat";
+    window.location.href = 'mailto:team@dinnertable.chat';
   }
 
-  const imgs = [
-    './logos/dinnertable.gif',
-    './logos/dtclogo.png',
-    './logos/dtclogo3-1.png',
-    './logos/dtclogo3.png'
-  ];
-  // const { classes } = props;
-  // const { open } = this.state;
   return (
     <React.Fragment>
       <Helmet title="Dinnertable.chat Press">

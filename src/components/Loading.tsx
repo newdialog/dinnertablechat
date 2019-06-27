@@ -13,3 +13,4 @@ const loader = () => {
   };
 
 export default loader;
+// <Typography variant="h3" align="center" style={{color:'#555555'}}>Loading...</Typography>

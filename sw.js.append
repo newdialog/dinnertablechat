@@ -63,9 +63,12 @@ workbox.routing.registerRoute(
 // Cache images
 workbox.routing.registerRoute(
   /\.(?:png|gif|jpg|jpeg|svg)$/,
-  workbox.strategies.networkFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'images',
     plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200],
+      }),
       new workbox.expiration.Plugin({
         maxEntries: 60,
         maxAgeSeconds: 30 * 24 * 60 * 1, // 2 Days
@@ -77,9 +80,12 @@ workbox.routing.registerRoute(
 // cache svg animations
 workbox.routing.registerRoute(
   /.*(?:assets).*\.(?:json)$/,
-  workbox.strategies.networkFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'assets',
     plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200],
+      }),
       new workbox.expiration.Plugin({
         maxEntries: 60,
         maxAgeSeconds: 30 * 24 * 60 * 1, // 2 Days
@@ -91,12 +97,32 @@ workbox.routing.registerRoute(
 // cache i18n
 workbox.routing.registerRoute(
   /.*(?:i18n).*\.(?:json)$/,
-  workbox.strategies.networkFirst({
+  workbox.strategies.cacheFirst({
     cacheName: 'i18n',
     plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200],
+      }),
       new workbox.expiration.Plugin({
         maxEntries: 60,
-        maxAgeSeconds: 600, // 10m, same as _headers
+        maxAgeSeconds: 300, // 5m, same as _headers
+      }),
+    ],
+  })
+);
+
+// cache fonts
+workbox.routing.registerRoute(
+  /.*(?:fonts).*\.(?:woff).*$/,
+  workbox.strategies.cacheFirst({
+    cacheName: 'fonts',
+    plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.Plugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 1, // 2 Days
       }),
     ],
   })
@@ -108,6 +134,9 @@ workbox.routing.registerRoute(
   workbox.strategies.networkFirst({
     cacheName: 'api',
     plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200],
+      }),
       new workbox.expiration.Plugin({
         maxEntries: 60,
         maxAgeSeconds: 30 * 24 * 60 * 1, // 1 Days

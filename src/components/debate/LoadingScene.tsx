@@ -15,6 +15,7 @@ import * as shake from '../../services/HandShakeService';
 import * as QS from '../../services/QueueService';
 import getMedia from '../../utils/getMedia';
 import DebateError from './DebateError';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -113,7 +114,7 @@ interface State {
 
 // let unloadFlag:any = null; // { flag: false };
 let loggedError = false;
-export default observer(function LoadingScene(props: Props) {
+export default function LoadingScene(props: Props) {
   // let startedHandshake = false;
 
   const store = useContext(AppModel.Context)!;
@@ -416,10 +417,9 @@ export default observer(function LoadingScene(props: Props) {
           align="center"
           style={{ textShadow: '2px 2px #777755', color: '#ffffff' }}
         >
-          <i
-            className="fa fa-1x fa-compact-disc fa-pulse"
-            style={{ margin: '0 0 .5em', color: '#152630', fontSize: '50px' }}
-          />
+          <FontAwesomeIcon pulse={true} size="2x" icon="compact-disc" 
+            style={{ margin: '0 0 .5em', color: '#152630', fontSize: '50px' }}/>
+
           <br /> Searching for a match...
         </Typography>
         <Typography
@@ -463,15 +463,13 @@ export default observer(function LoadingScene(props: Props) {
               text={refURL}
             >
               <Button variant="contained" color="secondary" size="large">
-                <i
-                  className="far fa-clipboard"
-                  style={{
-                    marginRight: '8px',
-                    fontSize: '2em',
-                    color: '#ffffff',
-                    cursor: 'pointer'
-                  }}
-                />
+              <FontAwesomeIcon size="2x" icon="clipboard" 
+            style={{
+              marginRight: '8px',
+              fontSize: '2em',
+              color: '#ffffff',
+              cursor: 'pointer'
+            }}/>
                 click to copy link
               </Button>
             </CopyToClipboard>
@@ -488,4 +486,4 @@ export default observer(function LoadingScene(props: Props) {
       </div>
     </div>
   );
-});
+};

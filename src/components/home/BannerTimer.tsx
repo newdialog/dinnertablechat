@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     timerText2: {
       fontFamily: '\'Roboto Mono\', \'Courier New\'',
+      fontWeight: 'bold',
       padding: '0',
       margin: 0
     },

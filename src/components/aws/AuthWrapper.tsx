@@ -81,7 +81,7 @@ function AuthComp(props: Props) {
 
     s.auth.authenticated(awsUser);
     if (awsUser.event === AuthService.LOGIN_EVENT) s.authenticated(true);
-    else s.authenticated(false);
+    /// else s.authenticated(false); // not sure if needed
 
     // TODO: cleanup guest login flow
 

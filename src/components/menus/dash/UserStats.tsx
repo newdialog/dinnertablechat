@@ -4,6 +4,7 @@ import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import * as AppModel from '../../../models/AppModel';
 

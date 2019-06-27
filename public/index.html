@@ -33,7 +33,7 @@
   <meta name="msapplication-config" content="/logos/icons/browserconfig.xml">
 
   <link rel="preconnect" href="https://via.placeholder.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+  <!-- <link rel="preload" href="/i18n/en.json" as="fetch">  -->
   <!--
     <script src="js/hark.bundle.js"></script>
   -->
@@ -44,12 +44,11 @@
     You need to enable JavaScript to run this app.
   </noscript>
   <div id="root"></div>
-
-  <script async src="https://cdn.jsdelivr.net/npm/pwacompat@2.0.9/pwacompat.min.js"
-    crossorigin="anonymous"></script>
-  <link onload="this.onload=null;this.rel='stylesheet'" rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Montserrat:bold,light,regular,medium&display=swap&subset=cyrillic">
-  <link onload="this.onload=null;this.rel='stylesheet'" rel="preload" as="style" href="https://fonts.googleapis.com/css?family=Roboto+Mono:400,600&display=swap&text=0123456789">
-  <link onload="this.onload=null;this.rel='stylesheet'" rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.2/animate.min.css">
+  <!-- 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789">
+  -->
+  <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/js/animate.min.css"/>
   
   <script type='text/javascript'>
     (function () {
@@ -57,8 +56,9 @@
         window.location = 'https://dinnertable.chat/'
     })();
   </script>
-  <script async src="/js/lazysizes.min.js"></script>
-  <script async src="https://cdnjs.cloudflare.com/ajax/libs/zenscroll/4.0.2/zenscroll-min.js"></script>
+  <script async src="/js/pwacompat.209.min.js"></script>
+  <script async src="/js/lazysizes-umd.min.js"></script>
+  <script async src="/js/zenscroll-min.js"></script>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119131630-1"></script>
   <!-- <script async src="js/simplepeer.min.js"></script> -->
@@ -125,16 +125,6 @@
     window.trackOutboundLinkClick = trackOutboundLinkClick;
 
     window.gtag = gtag;
-  </script>
-  <script type="text/javascript">
-    (function() {
-      var css = document.createElement('link');
-      css.href = 'https://use.fontawesome.com/releases/v5.9.0/css/all.css';
-      css.rel = 'stylesheet';
-      css.type = 'text/css';
-      css.crossOrigin = "anonymous";
-      document.getElementsByTagName('head')[0].appendChild(css);
-    })();
   </script>
     <!--  <script src="https://cdn.jsdelivr.net/npm/producthunt-floating-prompt/lib/producthunt-floating-prompt.min.js"></script> -->
     <!-- start Mixpanel --><script type="text/javascript">(function(c,a){if(!a.__SV){var b=window;try{var d,m,j,k=b.location,f=k.hash;d=function(a,b){return(m=a.match(RegExp(b+"=([^&]*)")))?m[1]:null};f&&d(f,"state")&&(j=JSON.parse(decodeURIComponent(d(f,"state"))),"mpeditor"===j.action&&(b.sessionStorage.setItem("_mpcehash",f),history.replaceState(j.desiredHash||"",c.title,k.pathname+k.search)))}catch(n){}var l,h;window.mixpanel=a;a._i=[];a.init=function(b,d,g){function c(b,i){var a=i.split(".");2==a.length&&(b=b[a[0]],i=a[1]);b[i]=function(){b.push([i].concat(Array.prototype.slice.call(arguments,

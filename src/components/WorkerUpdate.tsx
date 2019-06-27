@@ -138,7 +138,7 @@ export default function WorkerUpdate(props: Props) {
         if (refreshing) return;
         refreshing = true; // preventDevToolsReloadLoop
         // window.location.reload(true); // true
-        setTimeout(()=>window.location.reload(true), 300);
+        setTimeout(()=>window.location.reload(true), 3300);
         console.log('worker reloading..');
       });
     }
@@ -158,7 +158,7 @@ export default function WorkerUpdate(props: Props) {
     console.log('worker update click');
     if (refreshing) return;
     refreshing = true;
-    setTimeout(()=>window.location.reload(true), 300);
+    setTimeout(()=>window.location.reload(true), 3300);
   }
 
   const onRefreshClick = (e:any) => {

@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import Flip from 'react-reveal/Flip';
 import Reveal from 'react-reveal/Reveal';
 import { Waypoint } from 'react-waypoint';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
 
@@ -298,7 +299,7 @@ export default function HomeContent() {
                   'https://medium.com/dinnertablechat'
                 )}
               >
-                <i id="social-medium" className="fab fa-medium social fa-3x " />
+                <FontAwesomeIcon className="social-tw social" size="4x" icon={['fab', 'medium']} style={{ color: 'black' }} />
               </a>
 
               <a
@@ -308,11 +309,7 @@ export default function HomeContent() {
                   'https://twitter.com/dintablechat'
                 )}
               >
-                <i
-                  id="social-tw"
-                  style={{ color: 'black' }}
-                  className="fab fa-twitter-square social fa-3x "
-                />
+                <FontAwesomeIcon className="social-tw social" size="4x" icon={['fab', 'twitter-square']} style={{ color: 'black' }} />
               </a>
 
               <a
@@ -322,10 +319,7 @@ export default function HomeContent() {
                   'https://facebook.com/dinnertablechat'
                 )}
               >
-                <i
-                  id="social-tw"
-                  className="fab fa-facebook-square social fa-3x "
-                />
+                <FontAwesomeIcon className="social-tw social" size="4x" icon={['fab', 'facebook-square']} style={{ color: 'black' }} />
               </a>
             </div>
           </Grid>

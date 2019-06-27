@@ -10,4 +10,5 @@ http://debateplatform.org/* https://debateplatform.org/:splat 301!
 http://test.debateplatform.org/* https://test.debateplatform.org/:splat 301!
 /saas q=:q  /r/:q  301!
 /r q=:q  /r/:q  301!
+/i18n/* /i18n/en.json 301
 /*    /index.html   200
