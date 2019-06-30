@@ -17,15 +17,15 @@ import { faCheckSquare, faEnvelopeSquare, faCompactDisc, faClipboard } from '@fo
 library.add(faTwitter, faTwitterSquare, faCheckSquare, faFacebookSquare, faInstagram, 
   faMedium, faEnvelopeSquare, faDiscord, faCompactDisc, faClipboard );
 // ----------
-/* var WebFont = require('webfontloader');
-(function() {
+var WebFont = require('webfontloader');
+setTimeout(() => {
   WebFont.load({
     custom: {
       families: ['Montserrat', 'Roboto Mono'],
-      urls: ['/fonts.css']
+      urls: ['/fonts/fonts.css']
     }
   });
-})() */
+}, 0);
 // ----------
 
 // import Index from './components/home/home';
