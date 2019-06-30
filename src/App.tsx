@@ -9,13 +9,6 @@ import * as TimeSerive from './services/TimeService';
 
 // import AppBar from './components/AppBar';
 
-// Lazy Sizes
-import lazySizes from 'lazysizes';
-import 'lazysizes/plugins/native-loading/ls.native-loading';
-
-// ---- fonts
-(lazySizes as any).test = 1;
-
 const AuthWrapper = React.lazy( ()=>import('./components/aws/AuthWrapper'));
 const AppBar = React.lazy( ()=>import('./components/AppBar'));
 // ----------
