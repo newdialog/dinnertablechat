@@ -11,9 +11,11 @@ import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
 
-import Footer from '../../home/Footer';
+// import Footer from '../../home/Footer';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+
+const Footer = React.lazy( () => import('../../home/Footer'));
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -143,9 +145,12 @@ export default function SPitch(props: Props) {
           </Grid>
           <Grid item xs={12} md={6}>
             <img
-              src="imgs/press/01-scene1-sm.jpg"
+              data-srcset="imgs/press/01-scene1-sm.jpg"
+              style={{width: 372, height: 209}}
+              data-src="https://via.placeholder.com/372x209"
               width="100%"
               alt="screenshot-1"
+              className="lazyload"
             />
           </Grid>
         </Grid>

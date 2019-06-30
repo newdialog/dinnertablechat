@@ -32,3 +32,5 @@
     cache-control: max-age=86400
 /i18n/*
     cache-control: max-age=600
+/manifest.json
+    cache-control: max-age=600

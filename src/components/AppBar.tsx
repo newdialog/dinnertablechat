@@ -11,6 +11,14 @@ import UserStats from './menus/dash/UserStats';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+// Load Fonts
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTwitter, faTwitterSquare, faFacebookSquare, faInstagram, faMedium, faDiscord } from '@fortawesome/free-brands-svg-icons'
+import { faCheckSquare, faEnvelopeSquare, faCompactDisc, faClipboard } from '@fortawesome/free-solid-svg-icons'
+library.add(faTwitter, faTwitterSquare, faCheckSquare, faFacebookSquare, faInstagram, 
+  faMedium, faEnvelopeSquare, faDiscord, faCompactDisc, faClipboard );
+// -------
+
 const useStyles = makeStyles((theme: any) => ({
   root: {
     flexGrow: 1

@@ -4,7 +4,7 @@ import React, { lazy } from 'react';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 
 import * as AppModel from '../models/AppModel';
-import AsyncPitch from './saas/pitch/SPitch';
+// import AsyncPitch from './saas/pitch/SPitch';
 
 // import SMenuHome from './saas/menus/SMenuHome';
 const SMenuHome = lazy(() => import('./saas/menus/SMenuHome'));
@@ -23,7 +23,7 @@ const GettingStarted = lazy(() => import('./menus/GettingStarted'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
 const Saas = lazy(() => import('./saas/menus/SRouter'));
-  // lazy(() => import('./saas/pitch/SPitch'));
+const AsyncPitch = lazy(() => import('./saas/pitch/SPitch'));
 
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();

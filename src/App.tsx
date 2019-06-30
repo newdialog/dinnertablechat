@@ -1,31 +1,33 @@
 import { observer } from 'mobx-react-lite';
 import React, { Suspense, useEffect } from 'react';
-import { withRouter } from 'react-router-dom';
 
-import AppBar from './components/AppBar';
-import AuthWrapper from './components/aws/AuthWrapper';
+// import AuthWrapper from './components/aws/AuthWrapper';
 import LoadingMsg from './components/Loading';
 import AppRouter from './components/Router';
 import WorkerUpdate from './components/WorkerUpdate';
 import * as TimeSerive from './services/TimeService';
 
+// import AppBar from './components/AppBar';
+
+// Lazy Sizes
+import lazySizes from 'lazysizes';
+import 'lazysizes/plugins/native-loading/ls.native-loading';
+
 // ---- fonts
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTwitter, fab, faTwitterSquare, faFacebookSquare, faInstagram, faMedium, faDiscord } from '@fortawesome/free-brands-svg-icons'
-import { faCheckSquare, faEnvelopeSquare, faCompactDisc, faClipboard } from '@fortawesome/free-solid-svg-icons'
- 
-library.add(faTwitter, faTwitterSquare, faCheckSquare, faFacebookSquare, faInstagram, 
-  faMedium, faEnvelopeSquare, faDiscord, faCompactDisc, faClipboard );
+(lazySizes as any).test = 1;
+
+const AuthWrapper = React.lazy( ()=>import('./components/aws/AuthWrapper'));
+const AppBar = React.lazy( ()=>import('./components/AppBar'));
 // ----------
-var WebFont = require('webfontloader');
-setTimeout(() => {
-  WebFont.load({
-    custom: {
-      families: ['Montserrat', 'Roboto Mono'],
-      urls: ['/fonts/fonts.css']
-    }
-  });
-}, 0);
+/* var WebFont = require('webfontloader');
+
+WebFont.load({
+  custom: {
+    families: ['Montserrat', 'Roboto Mono'],
+    urls: ['/fonts/fonts.css']
+  }
+});
+*/
 // ----------
 
 // import Index from './components/home/home';
@@ -92,8 +94,10 @@ export default observer(function App(props: Props) {
 
   return (
     <WorkerUpdate store={store}>
-      <AuthWrapper store={store} login={store.auth.doLogin} />
-      <AppBar store={store} />
+      <Suspense fallback={null}>
+        <AppBar store={store} />
+        <AuthWrapper store={store} login={store.auth.doLogin} />
+      </Suspense>
       <Suspense fallback={LoadingMsg()}>
         <AppRouter history={history} store={store} />
       </Suspense>

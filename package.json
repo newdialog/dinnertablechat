@@ -30,6 +30,7 @@
     "i18next-chained-backend": "^2.0.0",
     "i18next-localstorage-backend": "^3.0.0",
     "i18next-xhr-backend": "^3.0.0",
+    "lazysizes": "^5.1.0",
     "lottie-web": "^5.5.5",
     "luxon": "^1.16.0",
     "material-auto-rotating-carousel": "^3.0.1",
