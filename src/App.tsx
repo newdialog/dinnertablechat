@@ -9,6 +9,14 @@ import * as TimeSerive from './services/TimeService';
 
 // import AppBar from './components/AppBar';
 
+// Load Fonts
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTwitter, faTwitterSquare, faFacebookSquare, faInstagram, faMedium, faDiscord } from '@fortawesome/free-brands-svg-icons'
+import { faCheckSquare, faEnvelopeSquare, faCompactDisc, faClipboard } from '@fortawesome/free-solid-svg-icons'
+library.add(faTwitter, faTwitterSquare, faCheckSquare, faFacebookSquare, faInstagram, 
+  faMedium, faEnvelopeSquare, faDiscord, faCompactDisc, faClipboard );
+// -------
+
 const AuthWrapper = React.lazy( ()=>import('./components/aws/AuthWrapper'));
 const AppBar = React.lazy( ()=>import('./components/AppBar'));
 // ----------

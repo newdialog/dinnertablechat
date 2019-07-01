@@ -15,6 +15,7 @@ import Flip from 'react-reveal/Flip';
 import Reveal from 'react-reveal/Reveal';
 import { Waypoint } from 'react-waypoint';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import WaypointLottie from 'WaypointLottie';
 
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
 
@@ -186,16 +187,16 @@ const cullingHandlers = (
   }
 };
 
+const trackRulesView = () => {
+  window.gtag('event', 'scroll_rules', {
+    event_category: 'splash',
+    non_interaction: true
+  });
+};
+
 export default function HomeContent() {
   const classes = useStyles({});
   const { t } = useTranslation();
-
-  const logoRef = useRef<Lottie | any>();
-  const topicsRef = useRef<Lottie | any>();
-  const talkingRef = useRef<Lottie | any>();
-  const diningRef = useRef<Lottie | any>();
-
-  const [state, setState] = useState<any>({});
 
   // const logoVisible = useOnScreen(logoRef, 0, true);
   // const topicsVisible = useOnScreen(topicsRef, 0, true);
@@ -209,29 +210,7 @@ export default function HomeContent() {
     }).mount();
   }, []);
 
-  const _handleLogoWaypointEnter = () => {
-    // console.log('start');
-    setState(p => ({ ...p, logoShow: true }));
-    if (!logoRef.current) return;
-    // console.log('logoRef.current', logoRef.current)
-    // logoRef.current.stop();
-    logoRef.current.play();
-  };
-
-  const _handleLogoWaypointLeave = () => {
-    // console.log('end');
-    setState(p => ({ ...p, logoShow: false }));
-    if (!logoRef.current) return;
-    // console.log('logoRef.current', logoRef.current)
-    logoRef.current.stop();
-  };
-
-  const trackRulesView = () => {
-    window.gtag('event', 'scroll_rules', {
-      event_category: 'splash',
-      non_interaction: true
-    });
-  };
+  console.log('===');
 
   return (
     <React.Fragment>
@@ -239,18 +218,7 @@ export default function HomeContent() {
         <Grid container spacing={3} className={classes.container}>
           <Grid item xs={12} md={12} style={{ paddingBottom: '0' }}>
             <div className="paperimg" id="intro">
-              <Waypoint
-                topOffset={"-400px"}
-                bottomOffset={"450px"}
-                onEnter={_handleLogoWaypointEnter}
-                onLeave={_handleLogoWaypointLeave}
-              />
-              <Lottie
-                isPaused={!state.logoShow}
-                options={logoOptions}
-                ref={logoRef}
-                isClickToPauseDisabled={true}
-              />
+              <WaypointLottie options={logoOptions}/>
             </div>
           </Grid>
           <Grid item xs={12} md={12} style={{ paddingTop: '0' }}>
@@ -365,25 +333,12 @@ export default function HomeContent() {
           </Grid>
           <Grid item xs={12} md={12}>
             <div className={classes.paper}>
-              <Waypoint
-                topOffset="-10%"
-                bottomOffset="0"
-                onEnter={useMemo(() => cullingHandlers(diningRef, false, 1.6), [
-                  diningRef
-                ])}
-                onLeave={useMemo(() => cullingHandlers(diningRef, true), [
-                  diningRef
-                ])}
-              >
                 <div style={{ width: '120%', margin: '-74px -4em -94px -1.8em' }}>
-                  <Lottie
+                  <WaypointLottie
                     speed={1.6}
                     options={diningOptions}
-                    ref={diningRef}
-                    isClickToPauseDisabled={true}
                   />
                 </div>
-              </Waypoint>
             </div>
           </Grid>
 
@@ -448,22 +403,9 @@ export default function HomeContent() {
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
-              <Waypoint
-                topOffset="-10%"
-                bottomOffset="0"
-                onEnter={useMemo(() => cullingHandlers(topicsRef), [topicsRef])}
-                onLeave={useMemo(() => cullingHandlers(topicsRef, true), [
-                  topicsRef
-                ])}
-              >
-                <div>
-                  <Lottie
-                    options={topicsOptions}
-                    ref={topicsRef}
-                    isClickToPauseDisabled={true}
-                  />
-                </div>
-              </Waypoint>
+              <WaypointLottie
+                options={topicsOptions}
+              />
             </div>
           </Grid>
 
@@ -480,24 +422,9 @@ export default function HomeContent() {
           </Grid>
           <Grid item xs={12} md={6}>
             <div className={classes.paper}>
-              <Waypoint
-                topOffset="-10%"
-                bottomOffset="0"
-                onEnter={useMemo(() => cullingHandlers(talkingRef), [
-                  talkingRef
-                ])}
-                onLeave={useMemo(() => cullingHandlers(talkingRef, true), [
-                  talkingRef
-                ])}
-              >
-                <div>
-                  <Lottie
-                    options={talkingOptions}
-                    ref={talkingRef}
-                    isClickToPauseDisabled={true}
-                  />
-                </div>
-              </Waypoint>
+              <WaypointLottie
+                options={talkingOptions}
+              />
             </div>
           </Grid>
         </Grid>

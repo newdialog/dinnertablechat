@@ -1,5 +1,6 @@
 {
   "root": true,
+  "parser": "babel-eslint",
   "rules": {
     "comma-dangle": ["error", "always-multiline"],
     "no-mixed-operators": "error",

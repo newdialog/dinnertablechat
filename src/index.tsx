@@ -1,7 +1,6 @@
 import './index.css';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { MuiThemeProvider } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import { createBrowserHistory } from 'history';
 import { connectReduxDevtools } from 'mst-middlewares';
@@ -30,17 +29,16 @@ connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting,
 console.log('v1.2.86');
 
 ReactDOM.render(
-  <AppModel.Context.Provider value={store}>
-    <MuiThemeProvider theme={theme}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Suspense fallback={LoadingMsg()}>
-          <I18nextProvider i18n={i18n}>
+  
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Suspense fallback={LoadingMsg()}>
+        <I18nextProvider i18n={i18n}>
+          <AppModel.Context.Provider value={store}>
             <App history={history} store={store} />
-          </I18nextProvider>
-        </Suspense>
-      </ThemeProvider>
-    </MuiThemeProvider>
-  </AppModel.Context.Provider>,
+          </AppModel.Context.Provider>
+        </I18nextProvider>
+      </Suspense>
+    </ThemeProvider>,
   document.getElementById('root') as HTMLElement
 );
