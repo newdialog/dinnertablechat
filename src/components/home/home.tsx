@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from 'react';
 import { Theme } from '@material-ui/core/styles';
 import Banner from './Banner';
-import Subscribe from './Subscribe';
-import Footer from './Footer';
+// import Subscribe from './Subscribe';
+// import Footer from './Footer';
 import * as AppModel from '../../models/AppModel';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
@@ -10,6 +10,8 @@ import { Helmet } from 'react-helmet';
 import { makeStyles } from '@material-ui/styles';
 
 const Content = React.lazy( () => import('./Content') );
+const Footer = React.lazy( () => import('./Footer') );
+const Subscribe = React.lazy( () => import('./Subscribe') );
 
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
 const useStyles = makeStyles((theme: Theme) => ({
