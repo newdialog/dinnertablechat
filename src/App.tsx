@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { Suspense, useEffect } from 'react';
 
-// import AuthWrapper from './components/aws/AuthWrapper';
 import LoadingMsg from './components/Loading';
 import AppRouter from './components/Router';
 import WorkerUpdate from './components/WorkerUpdate';
@@ -17,7 +16,6 @@ library.add(faTwitter, faTwitterSquare, faCheckSquare, faFacebookSquare, faInsta
   faMedium, faEnvelopeSquare, faDiscord, faCompactDisc, faClipboard );
 // -------
 
-const AuthWrapper = React.lazy( ()=>import('./components/aws/AuthWrapper'));
 const AppBar = React.lazy( ()=>import('./components/AppBar'));
 // ----------
 /* var WebFont = require('webfontloader');
@@ -97,7 +95,6 @@ export default observer(function App(props: Props) {
     <WorkerUpdate store={store}>
       <Suspense fallback={null}>
         <AppBar store={store} />
-        <AuthWrapper store={store} login={store.auth.doLogin} />
       </Suspense>
       <Suspense fallback={LoadingMsg()}>
         <AppRouter history={history} store={store} />

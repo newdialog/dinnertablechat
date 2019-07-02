@@ -73,12 +73,15 @@
 
     function gtag() {
       if(!window.isLive) return; // do not track
-      if(arguments[0] && arguments[0] === 'event') {
+
+      // Mixpanel
+      if(window["mixpanel"] && arguments[0] && arguments[0] === 'event') {
         if(arguments.length > 2 && arguments[2].event_category) {
-          if(mixpanel) mixpanel.track(arguments[1], {...arguments[2]});
+          window.mixpanel.track(arguments[1], {...arguments[2]});
         }
-        else if(mixpanel) mixpanel.track(arguments[1]);
+        else window.mixpanel.track(arguments[1]);
       }
+
       dataLayer.push(arguments);
     }
     gtag('js', new Date());

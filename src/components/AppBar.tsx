@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
 import React, {useContext, useMemo} from 'react';
-
+import AuthWrapper from '../components/aws/AuthWrapper';
 import * as Store from '../models/AppModel';
 import UserStats from './menus/dash/UserStats';
 
@@ -14,6 +14,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // Lazy Sizes
 import lazySizes from 'lazysizes';
 import 'lazysizes/plugins/native-loading/ls.native-loading';
+
+
 
 (lazySizes as any).test = 1;
 
@@ -81,6 +83,7 @@ export default function ButtonAppBar(props: Props) {
         style={{ backgroundColor: 'rgb(255,255,255,0.9)' }}
       >
         <Toolbar variant="dense">
+          <AuthWrapper store={store} login={store.auth.doLogin} />
           <img
             crossOrigin="anonymous"
             title="DTC Home"

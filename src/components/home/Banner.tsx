@@ -117,8 +117,13 @@ const useStyles = makeStyles(
       width: '100%',
       objectFit: 'cover',
       pointerEvents: 'none',
+      backgroundImage: 'auto', // 'url("./imgs/bannerbg.jpg")'
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      backgroundSize: 'cover',
       [theme.breakpoints.down('sm')]: {
-        display: 'none'
+        display: 'none',
+        backgroundImage: 'auto'
       }
     },
     bannerAnimOverlay: {
@@ -199,7 +204,7 @@ export default function HomeBanner(props: Props) {
       />
       <div className={classes.banner}>
         <div className={classes.bannerAnim}>
-          <img src="./imgs/bannerbg.jpg" style={{width:'100%'}}/>
+          { /* <img src="./imgs/bannerbg.jpg" style={{width:'100%'}}/> */ }
         </div>
 
         <div className={classes.centeredDown}>

@@ -8,12 +8,11 @@
     Link: </assets/background.json>; rel=prefetch; as=fetch; crossorigin=anonymous
     Link: <https://via.placeholder.com>; rel=preconnect
 /*
-    Content-Security-Policy: frame-ancestors 'none';
-    X-Frame-Options: DENY
     Access-Control-Allow-Origin: *
     cache-control: max-age=0
     cache-control: no-cache
     cache-control: must-revalidate
+    Feature-Policy: picture-in-picture *; fullscreen *
 /service-worker.js
     cache-control: max-age=0,no-cache,no-store,must-revalidate
 /sw.js
@@ -34,3 +33,6 @@
     cache-control: max-age=600
 /manifest.json
     cache-control: max-age=600
+/tmp
+    Content-Security-Policy: frame-ancestors 'none';
+    X-Frame-Options: DENY
