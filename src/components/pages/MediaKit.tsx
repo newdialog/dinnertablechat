@@ -73,8 +73,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 interface Props {
-  // extends WithStyles<typeof styles> {
-  // store: AppModel.Type;
 }
 
 export default function MediaKit(props: Props) {

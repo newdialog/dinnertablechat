@@ -1,22 +1,13 @@
-import React, {
-  useRef,
-  useState,
-  useEffect,
-  useMemo,
-  useContext,
-  ReactNode
-} from 'react';
-
-import * as Store from '../models/AppModel';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
 import { Typography } from '@material-ui/core';
-import * as serviceWorker from '../serviceWorker';
 import Button from '@material-ui/core/Button';
+import { Theme } from '@material-ui/core/styles';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
-import Lottie from '@jadbox/lottie-react-web';
-import * as AppModel from '../models/AppModel';
+import { makeStyles } from '@material-ui/styles';
+import React, { ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+
+import * as AppModel from '../models/AppModel';
+import * as serviceWorker from '../serviceWorker';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

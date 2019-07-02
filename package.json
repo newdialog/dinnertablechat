@@ -57,11 +57,13 @@
     "react-router-dom": "^5.0.1",
     "react-share": "^3.0.0",
     "react-swipeable-views": "^0.13.3",
+    "react-use-visibility": "^0.2.0",
     "react-waypoint": "^9.0.2",
     "remotedev": "^0.2.9",
     "rxjs": "^6.5.2",
     "short-uuid": "^3.1.1",
     "simple-peer": "github:feross/simple-peer#master",
+    "use-is-in-viewport": "^1.0.3",
     "webfontloader": "^1.6.28"
   },
   "scripts": {

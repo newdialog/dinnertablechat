@@ -1,4 +1,4 @@
-import { Theme, WithStyles } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
 import { Helmet } from 'react-helmet';
@@ -113,8 +113,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-interface Props extends WithStyles {
-  // store: AppModel.Type;
+interface Props {
 }
 
 export default function Privacy(props: Props) {

@@ -1,7 +1,7 @@
 import React, { useState, createRef, useMemo } from 'react';
 
 import { Typography, TextField, Button } from '@material-ui/core';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, Theme } from '@material-ui/core/styles';
 import Reveal from 'react-reveal/Reveal';
 import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';

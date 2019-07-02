@@ -1,14 +1,11 @@
 import React, { useRef, useState } from 'react';
-import { createStyles, WithStyles, Theme } from '@material-ui/core/styles';
+import { Theme } from '@material-ui/core/styles';
 
-import Lottie from '@jadbox/lottie-react-web';
-import Reveal from 'react-reveal/Reveal';
+// import Reveal from 'react-reveal/Reveal';
 
 import ArrowDown from '@material-ui/icons/KeyboardArrowDown';
-import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import { Typography } from '@material-ui/core';
-import { Waypoint } from 'react-waypoint';
 import * as AppModel from '../../models/AppModel';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
 import BannerTimer from './BannerTimer';
@@ -173,20 +170,7 @@ export default function HomeBanner(props: Props) {
   const { store } = props;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const bannerRef = useRef<Lottie | any>();
   const [isLoggingIn, setLogin] = useState(false);
-
-  const _handleWaypointEnter = () => {
-    if (!bannerRef.current) return;
-    bannerRef.current!.play();
-    // console.log('play');
-  };
-
-  const _handleWaypointLeave = () => {
-    if (!bannerRef.current) return;
-    bannerRef.current!.stop();
-    // console.log('stop');
-  };
 
   // const { store } = props;
   const auth = store.auth.isAuthenticated();
@@ -196,12 +180,6 @@ export default function HomeBanner(props: Props) {
 
   return (
     <React.Fragment>
-      <Waypoint
-        topOffset="-60%"
-        bottomOffset="0"
-        onEnter={_handleWaypointEnter}
-        onLeave={_handleWaypointLeave}
-      />
       <div className={classes.banner}>
         <div className={classes.bannerAnim}>
           { /* <img src="./imgs/bannerbg.jpg" style={{width:'100%'}}/> */ }
@@ -215,12 +193,12 @@ export default function HomeBanner(props: Props) {
             align="center"
             style={{ textShadow: '2px 2px #777755', color: '#ffffff' }}
           >
-            <Reveal effect="fadeIn" duration={3500}>
+           
               {
                 // t('home-banner-title1')
               }
               Isn't it time we talk?
-            </Reveal>
+            
           </Typography>
           <Typography
             className={classes.xsHide}
@@ -232,7 +210,7 @@ export default function HomeBanner(props: Props) {
               padding: '0 12px 0 12px'
             }}
           >
-            <Reveal effect="fadeIn" duration={5500}>
+            
               {true || !isOpen ? (
                 <>get matched with people with different views</>
               ) : (
@@ -242,7 +220,7 @@ export default function HomeBanner(props: Props) {
               )
               // t('home-banner-title2')
               }
-            </Reveal>
+            
           </Typography>
           {auth && (
             <React.Fragment>
@@ -306,8 +284,8 @@ export default function HomeBanner(props: Props) {
 function yt(classes:any) {
   return (
     <iframe
-      className={classes.banneryt + ' lazyload'}
-      data-src="//www.youtube.com/embed/vzHKpUBAm48?rel=0"
+      className={classes.banneryt}
+      src="//www.youtube.com/embed/vzHKpUBAm48?rel=0"
       frameBorder="0"
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
