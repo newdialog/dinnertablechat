@@ -31,6 +31,7 @@ export default function WaypointLottie(props: Props) {
       // console.log('stopping', id);
     }
   }, [isInViewport, ref]);
+
   // isPaused={!state.play}
   /* useEffect( () => {
     // hack to help improve pagespeed
@@ -73,6 +74,38 @@ export default function WaypointLottie(props: Props) {
 
 //}, [state, props.options, ref]);
 }
+
+export function WaypointLazy(props:any) {
+  const ref = useRef<Lottie>();
+  const [state, setState] = useState<any>({});
+
+  // const isVisible = useVisibility(pRef.current, {partial: true});
+  const [isInViewport, childRef] = useIsInViewport({threshold: 1})
+  // console.log('isVisible', isVisible, props.options.path)
+
+  useEffect( () => {
+    if(isInViewport && !state.seen) setState(p => ({ ...p, play: true, seen: true }));
+    else if(!isInViewport && state.seen) setState(p => ({ ...p, play: false  }));
+
+    if(!ref.current) return;
+    if(isInViewport) {
+    } else {
+    }
+  }, [isInViewport, ref]);
+
+  // const Lazy = React.useMemo( () => React.lazy(f), [f] );
+
+  return (
+    <div ref={childRef}>
+      { (state.seen) ? (<>{props.children}</>) : <div style={{width:400, height:300}}/>
+    }</div>)
+}
+
+export function WaypointLazySuspend(props:any) {
+  return <React.Suspense fallback={null}><WaypointLazy {...props}/></React.Suspense>
+}
+
+
 
 /*
   <Waypoint

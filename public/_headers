@@ -29,13 +29,9 @@
 /fonts/*
     cache-control: public, max-age=31536000
 /logos/*
-<<<<<<< Updated upstream
-    cache-control: max-age=86400
-=======
     cache-control: public, max-age=31536000
 /favicon.ico
     cache-control: public, max-age=86400
->>>>>>> Stashed changes
 /js/*
     cache-control: public, max-age=86400
 /i18n/*

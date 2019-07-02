@@ -59,15 +59,6 @@ const renderer = (
     // !!onCompleted && onCompleted(isDuringDebate);
     return <Completionist store={store} />;
   } else {
-    // const steps = ['Introductions', 'Debate', 'Find an Agreement'];
-
-    /* let step = 0;
-    if (Number(minutes) < 14) {
-      step = 1;
-    }
-    if (Number(minutes) < 5) {
-      step = 2;
-    }*/
 
     const label = isDuringDebate ? (
       <>Daily event ending&nbsp;in:</>
@@ -94,36 +85,42 @@ const renderer = (
           {hours < 10 ? '0' + hours : hours}&nbsp;{minutes < 10 ? '0' + minutes : minutes}&nbsp;{seconds < 10 ? '0' + seconds : seconds}
         </Typography>
 
-        <Typography
-          variant="h6"
-          align="center"
-          className={classes.timerText}
-          style={{ fontSize: '.75em' }}
-        >
-          HRS&nbsp;
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
-          <br/><span>1pm-6pm PST / 4pm-9pm EST</span>
-        </Typography>
-
-        <Typography
-          variant="h6"
-          align="center"
-          className={classes.timerText}
-          style={{ fontSize: '.75em' }}
-        >
-        <a 
-        style={{ color: '#95d4ff', textDecoration: 'underline' }}
-        onClick={window.trackOutboundLinkClick(
-                'https://www.facebook.com/events/522239821514316/',
-              true, true)} href="https://www.facebook.com/events/522239821514316/" target="_blank"
-              rel="noopener noreferrer"
-              >Add to Facebook Calendar</a>
-        </Typography>
+        <ClockFooter classes={classes}/>
       </div>
     );
   }
 };
+
+const ClockFooter = React.memo(function ClockFooterMemo(props:any) {
+      return (<><Typography
+        variant="h6"
+        align="center"
+        className={props.classes.timerText}
+        style={{ fontSize: '.75em' }}
+      >
+        HRS&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MINS
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SECS
+        <br/><span>1pm-6pm PST / 4pm-9pm EST</span>
+      </Typography>
+
+      <Typography
+        variant="h6"
+        align="center"
+        className={props.classes.timerText}
+        style={{ fontSize: '.75em' }}
+      >
+      <a 
+      style={{ color: '#95d4ff', textDecoration: 'underline' }}
+      onClick={window.trackOutboundLinkClick(
+              'https://www.facebook.com/events/522239821514316/',
+            true, true)} href="https://www.facebook.com/events/522239821514316/" target="_blank"
+            rel="noopener noreferrer"
+            >Add to Facebook Calendar</a>
+      </Typography>
+    </>);
+});
+
 // <br/><span style={{color:'#844d4d'}}>For one hour daily!</span>
 interface Props {
   onCompleted?: (isDuringDebate: boolean) => void;

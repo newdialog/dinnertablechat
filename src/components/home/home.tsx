@@ -8,6 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
 import { makeStyles } from '@material-ui/styles';
+import { WaypointLazy, WaypointLazySuspend } from 'WaypointLottie';
 
 const Content = React.lazy( () => import('./Content') );
 const Footer = React.lazy( () => import('./Footer') );
@@ -141,7 +142,9 @@ export default function Home() {
         <Banner store={store} />
 
         <React.Suspense fallback={<div style={{marginTop:'120px'}}>Loading...</div>}>
-          <Content />
+          <WaypointLazy>
+            <Content />
+          </WaypointLazy>
         </React.Suspense>
         <div className="pagebody">
           <Grid
@@ -159,7 +162,7 @@ export default function Home() {
               />
             </Grid>
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
-              <Subscribe />
+              <WaypointLazySuspend><Subscribe /></WaypointLazySuspend>
             </Grid>
           </Grid>
           <br />
@@ -196,7 +199,9 @@ export default function Home() {
           </a>
         </div>
       </div>
-      <Footer forceShow={true} />
+      <WaypointLazySuspend>
+        <Footer forceShow={true} />
+      </WaypointLazySuspend>
     </React.Fragment>
   );
 }
