@@ -11,18 +11,26 @@ export default function WaypointLottie(props: Props) {
   const ref = useRef<Lottie>();
   const [state, setState] = useState<any>({});
 
+  useEffect( () => {
+    // hack to help improve pagespeed
+    setTimeout(()=> {
+      // console.log('aaa', props.options.path);
+      setState(p => ({ ...p, startDelay: true}));
+    }, 60);
+  }, [])
+
     // return React.useMemo( () => {
     // console.log('rr', props.options.path);
   
     const _handleWaypointEnter = () => {
-      console.log('start');
+      // console.log('start');
       setState(p => ({ ...p, play: true, seen: true }));
       if (!ref.current) return;
       ref.current.play();
     };
   
     const _handleWaypointLeave = () => {
-      console.log('end');
+      // console.log('end');
       setState(p => ({ ...p, play: false }));
       if (!ref.current) return;
       ref.current.stop();
@@ -34,7 +42,7 @@ export default function WaypointLottie(props: Props) {
       onEnter={_handleWaypointEnter}
       onLeave={_handleWaypointLeave}>
       <div>
-        {state.seen ? (<Lottie
+        {state.seen && state.startDelay ? (<Lottie
         isPaused={!state.play}
         options={props.options}
         speed={props.speed}
