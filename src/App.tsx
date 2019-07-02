@@ -8,14 +8,6 @@ import * as TimeSerive from './services/TimeService';
 
 // import AppBar from './components/AppBar';
 
-// Load Fonts
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { faTwitter, faTwitterSquare, faFacebookSquare, faInstagram, faMedium, faDiscord } from '@fortawesome/free-brands-svg-icons'
-import { faCheckSquare, faEnvelopeSquare, faCompactDisc, faClipboard } from '@fortawesome/free-solid-svg-icons'
-library.add(faTwitter, faTwitterSquare, faCheckSquare, faFacebookSquare, faInstagram, 
-  faMedium, faEnvelopeSquare, faDiscord, faCompactDisc, faClipboard );
-// -------
-
 const AppBar = React.lazy( ()=>import('./components/AppBar'));
 // ----------
 /* var WebFont = require('webfontloader');
@@ -89,16 +81,14 @@ export default observer(function App(props: Props) {
     } else if (isHome && isDebateTime && store.auth.isAuthenticated()) {
       store.router.push('/quickmatch'); // /home
     }
-  }, [store, store.auth.isNotLoggedIn, store.auth.user]);
+  }, [store, store.auth, store.auth.user]);
 
-  return (
-    <WorkerUpdate store={store}>
+  return (<WorkerUpdate store={store}>
       <Suspense fallback={null}>
         <AppBar store={store} />
       </Suspense>
       <Suspense fallback={LoadingMsg()}>
         <AppRouter history={history} store={store} />
       </Suspense>
-    </WorkerUpdate>
-  );
+  </WorkerUpdate>);
 });

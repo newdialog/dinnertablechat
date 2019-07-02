@@ -32,7 +32,7 @@ function AuthComp(props: Props) {
     }
 
     const config = (Auth.configure(null) as any).oauth;
-    console.log('withOAuth configuration', config);
+    // console.log('withOAuth configuration', config);
 
     const { domain, redirectSignIn, redirectSignOut, responseType } = config;
 
@@ -113,5 +113,5 @@ function AuthComp(props: Props) {
   );
 }
 
-export default observer(AuthComp);
+export default React.memo(observer(AuthComp));
 // withOAuth

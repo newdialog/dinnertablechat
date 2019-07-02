@@ -15,6 +15,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import lazySizes from 'lazysizes';
 import 'lazysizes/plugins/native-loading/ls.native-loading';
 
+// Load Fonts
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faTwitter, faTwitterSquare, faFacebookSquare, faInstagram, faMedium, faDiscord } from '@fortawesome/free-brands-svg-icons'
+import { faCheckSquare, faEnvelopeSquare, faCompactDisc, faClipboard } from '@fortawesome/free-solid-svg-icons'
+library.add(faTwitter, faTwitterSquare, faCheckSquare, faFacebookSquare, faInstagram, 
+  faMedium, faEnvelopeSquare, faDiscord, faCompactDisc, faClipboard );
+// -------
 
 
 (lazySizes as any).test = 1;
