@@ -42,7 +42,7 @@ export default function WaypointLottie(props: Props) {
       onEnter={_handleWaypointEnter}
       onLeave={_handleWaypointLeave}>
       <div>
-        {state.seen && state.startDelay ? (<Lottie
+        { (state.seen && state.startDelay) ? (<Lottie
         isPaused={!state.play}
         options={props.options}
         speed={props.speed}

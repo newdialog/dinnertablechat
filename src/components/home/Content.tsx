@@ -3,7 +3,6 @@ import '@glidejs/glide/dist/css/glide.core.min.css';
 import '@glidejs/glide/dist/css/glide.theme.min.css';
 
 import Glide from '@glidejs/glide';
-import Lottie from '@jadbox/lottie-react-web';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 import { Theme } from '@material-ui/core/styles';
@@ -13,7 +12,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Flip from 'react-reveal/Flip';
 import Reveal from 'react-reveal/Reveal';
-import { Waypoint } from 'react-waypoint';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import WaypointLottie from 'WaypointLottie';
 
