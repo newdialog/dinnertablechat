@@ -59,15 +59,15 @@ const renderer = (
     // !!onCompleted && onCompleted(isDuringDebate);
     return <Completionist store={store} />;
   } else {
-    const steps = ['Introductions', 'Debate', 'Find an Agreement'];
+    // const steps = ['Introductions', 'Debate', 'Find an Agreement'];
 
-    let step = 0;
+    /* let step = 0;
     if (Number(minutes) < 14) {
       step = 1;
     }
     if (Number(minutes) < 5) {
       step = 2;
-    }
+    }*/
 
     const label = isDuringDebate ? (
       <>Daily event ending&nbsp;in:</>

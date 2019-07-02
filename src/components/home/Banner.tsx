@@ -11,7 +11,7 @@ import QueueIcon from '@material-ui/icons/QueuePlayNext';
 import BannerTimer from './BannerTimer';
 import * as Times from '../../services/TimeService';
 
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 
 const useStyles = makeStyles(
@@ -169,7 +169,7 @@ interface Props {
 export default function HomeBanner(props: Props) {
   const { store } = props;
   const classes = useStyles({});
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const [isLoggingIn, setLogin] = useState(false);
 
   // const { store } = props;
