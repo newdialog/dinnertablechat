@@ -11,6 +11,8 @@ import QueueIcon from '@material-ui/icons/QueuePlayNext';
 import BannerTimer from './BannerTimer';
 import * as Times from '../../services/TimeService';
 
+import ReactPlayer from 'react-player';
+
 // import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
 
@@ -19,13 +21,6 @@ const useStyles = makeStyles(
     root: {
       textAlign: 'center',
       paddingTop: theme.spacing(20)
-    },
-    container: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(12, 1fr)',
-      gridGap: `${theme.spacing(3)}px`
-      // gridAutoFlow: 'column',
-      // gridAutoColumns: '200px'
     },
     paper: {
       padding: theme.spacing(1),
@@ -47,14 +42,17 @@ const useStyles = makeStyles(
       }
     },
     centeredDown: {
-      zIndex: 2,
+      // zIndex: 2,
+      paddingTop: 10,
       marginLeft: 'auto',
       marginRight: 'auto',
       // paddingBottom: '5vh',
       color: '#ffffff88',
       textAlign: 'center',
-      display: 'inline-block',
+      // display: 'inline-block',
+      // paddingTop: '60px',
       [theme.breakpoints.down('sm')]: {
+        
         //  paddingBottom: '80px'
         // paddingBottom: '2px'
       }
@@ -66,7 +64,7 @@ const useStyles = makeStyles(
       display: 'flex',
       objectFit: 'cover',
       width: '100%',
-      height: 'calc(100vh - 0px)',
+      // eight: 'calc(100vh - 0px)',
       // backgroundImage: 'url("./imgs/DTC-scene3-bg2.png")', // DTC-scene3.png
       backgroundSize: 'cover',
       // backgroundAttachment: 'fixed',
@@ -76,7 +74,7 @@ const useStyles = makeStyles(
       // justifyContent: 'center',
       justifyContent: 'center',
       flexFlow: 'column wrap',
-      paddingTop: '60px', // header
+      // paddingTop: '60px', // header
       backgroundColor: '#90887a',
       minHeight: '665px',
       [theme.breakpoints.down('sm')]: {
@@ -95,12 +93,12 @@ const useStyles = makeStyles(
       // left: ''
       height: '1em', // 13vh',
       [theme.breakpoints.down('sm')]: {
-        height: '1em' // '4vh'
+        // height: '.5em' // '4vh'
       }
     },
     logoanim: {
       width: '100vw',
-      maxWidth: '600px',
+      maxWidth: '620px',
       // minHeight: '300px',
       marginLeft: 'auto',
       marginRight: 'auto',
@@ -136,6 +134,11 @@ const useStyles = makeStyles(
         display: 'none'
       }
     },
+    timer: {
+      [theme.breakpoints.down('sm')]: {
+        display: 'none'
+      }
+    },
     largeIcon: {
       width: 80,
       height: 60
@@ -148,6 +151,32 @@ const useStyles = makeStyles(
       maxWidth: '560px',
       maxHeight: '315px',
       [theme.breakpoints.down('xs')]: {}
+    },
+    video: {
+      // maxWidth:'99vw',
+      // maxHeight: '50vh',
+      // display:'inline-table',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      [theme.breakpoints.up('md')]: {
+        // display:'inline-table',
+        // maxWidth: '500px',
+      },
+      [theme.breakpoints.down('xs')]: {
+        
+      }
+    },
+    videoWrapper: {
+      maxHeight: '50vh',
+      maxWidth: '720px',
+      margin: 'auto',
+      position: 'relative',
+      width: '100vw',
+      paddingTop: '51%',
+      marginTop: '40px'
     }
   }),
   { name: 'Banner' }
@@ -179,12 +208,8 @@ export default function HomeBanner(props: Props) {
   // console.log('isOpen', isOpen);
 
   return (
-    <React.Fragment>
+    <>
       <div className={classes.banner}>
-        <div className={classes.bannerAnim}>
-          { /* <img src="./imgs/bannerbg.jpg" style={{width:'100%'}}/> */ }
-        </div>
-
         <div className={classes.centeredDown}>
           {yt(classes)}
 
@@ -270,19 +295,30 @@ export default function HomeBanner(props: Props) {
           )}
 
           <div className={classes.bannerTextDivider} />
-          <BannerTimer store={store} />
+          <div className={classes.timer}><BannerTimer store={store} /></div>
 
           <a href="#intro" className={classes.xsHide}>
             <ArrowDown style={{ color: '#ffffff' }} width="1em" />
           </a>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 }
 
 function yt(classes:any) {
-  return (
+  return <div className={classes.videoWrapper}><ReactPlayer 
+    // width="480px"
+    className={classes.video}
+    url={'https://www.youtube.com/embed/vzHKpUBAm48?rel=0'}
+    width={'100%'}
+    height={'100%'}
+    youtubeConfig={{ playerVars: { showinfo: 1 } }} 
+    controls={true} 
+    light 
+    playing={true}/></div>;
+
+  /* return (
     <iframe
       className={classes.banneryt}
       src="//www.youtube.com/embed/vzHKpUBAm48?rel=0"
@@ -290,7 +326,7 @@ function yt(classes:any) {
       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       allowFullScreen
     />
-  );
+  ); */
 }
 /* 
 <Lottie
