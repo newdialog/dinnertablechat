@@ -21,6 +21,7 @@ addEventListener('message', (event) => {
 
 // pull latest on refresh, not sure if working
 addEventListener('fetch', event => {
+  // console.log('event.request', event.request);
   event.respondWith((async () => {
     if (event.request.mode === "navigate" &&
       event.request.method === "GET" &&
@@ -30,6 +31,7 @@ addEventListener('fetch', event => {
       registration.waiting.postMessage('skipWaiting');
       return new Response("", {headers: {"Refresh": "0"}});
     }
+
     return await caches.match(event.request) ||
       fetch(event.request);
   })());
@@ -60,9 +62,26 @@ workbox.routing.registerRoute(
   })
 );
 
+// Cache polyfills
+workbox.routing.registerRoute(
+  /^https:\/\/polyfill\.io/,
+  workbox.strategies.cacheFirst({
+    cacheName: 'google-polyfills',
+    plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200, 302],
+      }),
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 60 * 60 * 24 * 7,
+        maxEntries: 30,
+      }),
+    ],
+  })
+);
+
 // Cache images
 workbox.routing.registerRoute(
-  /\.(?:png|gif|jpg|jpeg|svg)$/,
+  /\.(?:png|gif|jpg|jpeg|svg|ico)$/,
   workbox.strategies.cacheFirst({
     cacheName: 'images',
     plugins: [
@@ -70,8 +89,8 @@ workbox.routing.registerRoute(
         statuses: [0, 200],
       }),
       new workbox.expiration.Plugin({
-        maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 1, // 2 Days
+        maxEntries: 80,
+        maxAgeSeconds: 30 * 24 * 60 * 1, // 1 Days
       }),
     ],
   })
@@ -79,16 +98,16 @@ workbox.routing.registerRoute(
 
 // cache svg animations
 workbox.routing.registerRoute(
-  /.*(?:assets).*\.(?:json)$/,
+  /(?:assets).*\.(?:json)$/,
   workbox.strategies.cacheFirst({
-    cacheName: 'assets',
+    cacheName: 'assets-svg-json',
     plugins: [
       new workbox.cacheableResponse.Plugin({
         statuses: [0, 200],
       }),
       new workbox.expiration.Plugin({
         maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 1, // 2 Days
+        maxAgeSeconds: 30 * 24 * 60 * 1, // 1 Days
       }),
     ],
   })
@@ -96,16 +115,16 @@ workbox.routing.registerRoute(
 
 // cache i18n
 workbox.routing.registerRoute(
-  /.*(?:i18n).*\.(?:json)$/,
-  workbox.strategies.cacheFirst({
+  /(?:i18n).*\.(?:json)$/,
+  workbox.strategies.staleWhileRevalidate({
     cacheName: 'i18n',
     plugins: [
       new workbox.cacheableResponse.Plugin({
-        statuses: [0, 200],
+        statuses: [0, 200, 301, 302],
       }),
       new workbox.expiration.Plugin({
         maxEntries: 60,
-        maxAgeSeconds: 300, // 5m, same as _headers
+        maxAgeSeconds: 60 * 60 * 6, // 6 hours
       }),
     ],
   })
@@ -113,16 +132,16 @@ workbox.routing.registerRoute(
 
 // cache fonts
 workbox.routing.registerRoute(
-  /.*(?:fonts).*\.(?:woff).*$/,
+  /(?:fonts).*\.(?:woff).*$/,
   workbox.strategies.cacheFirst({
-    cacheName: 'fonts',
+    cacheName: 'local-fonts',
     plugins: [
       new workbox.cacheableResponse.Plugin({
         statuses: [0, 200],
       }),
       new workbox.expiration.Plugin({
         maxEntries: 60,
-        maxAgeSeconds: 30 * 24 * 60 * 1, // 2 Days
+        maxAgeSeconds:  60 * 60 * 24 * 365, // 1 year
       }),
     ],
   })
@@ -130,7 +149,7 @@ workbox.routing.registerRoute(
 
 // cache lambda calls
 workbox.routing.registerRoute(
-  /.*(?:execute).*(?:production|staging|dev).*$/,
+  /(?:execute).*(?:production|staging|dev).*$/,
   workbox.strategies.networkFirst({
     cacheName: 'api',
     plugins: [
@@ -139,6 +158,23 @@ workbox.routing.registerRoute(
       }),
       new workbox.expiration.Plugin({
         maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 1, // 1 Days
+      }),
+    ],
+  })
+);
+
+// local js/ cache
+workbox.routing.registerRoute(
+  /\/js\/.*\.(?:css|js)$/,
+  workbox.strategies.staleWhileRevalidate({
+    cacheName: 'local-js',
+    plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200],
+      }),
+      new workbox.expiration.Plugin({
+        maxEntries: 80,
         maxAgeSeconds: 30 * 24 * 60 * 1, // 1 Days
       }),
     ],

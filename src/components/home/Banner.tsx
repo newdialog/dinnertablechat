@@ -313,9 +313,9 @@ function yt(classes:any) {
     url={'https://www.youtube.com/embed/vzHKpUBAm48?rel=0'}
     width={'100%'}
     height={'100%'}
-    youtubeConfig={{ playerVars: { showinfo: 1 } }} 
+    config={{ youtube:{ playerVars: { showinfo: 1 } }}} 
     controls={true} 
-    light 
+    light="/imgs/hqdefault.jpg" 
     playing={true}/></div>;
 
   /* return (
