@@ -1,121 +1,49 @@
 import Lottie from '@jadbox/lottie-react-web';
-import { Waypoint } from 'react-waypoint';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-// import useVisibility from 'react-use-visibility';
 import useIsInViewport from 'use-is-in-viewport';
+import LazyLoadComp from 'react-lazy-load-component'
 
 interface Props {
   options: any;
   speed?: number;
+  threshold?: number;
 }
 export default function WaypointLottie(props: Props) {
   // console.log('props', props);
   const ref = useRef<Lottie>();
-  const [state, setState] = useState<any>({});
+  // const [state, setState] = useState<any>({});
 
   const id = props.options.path;
 
   // const isVisible = useVisibility(pRef.current, {partial: true});
-  const [isInViewport, childRef] = useIsInViewport({threshold: 1})
+  // const [isInViewport, childRef] = useIsInViewport({threshold: 1})
   // console.log('isVisible', isVisible, props.options.path)
 
-  useEffect( () => {
-    if(isInViewport && !state.seen) setState(p => ({ ...p, play: true, seen: true }));
-    else if(!isInViewport && state.seen) setState(p => ({ ...p, play: false  }));
+  const onVisibleChange = (visible:boolean) => {
+    // console.log('onVisibleChange', visible);
+    // if(visible && !state.seen) setState(p => ({ ...p, play: true, seen: true }));
+    // else if(!visible && state.seen) setState(p => ({ ...p, seen: true  }));
 
     if(!ref.current) return;
-    if(isInViewport) {
+    if(visible) {
       ref.current.play();
     } else {
       ref.current.stop();
       // console.log('stopping', id);
     }
-  }, [isInViewport, ref]);
-
-  // isPaused={!state.play}
-  /* useEffect( () => {
-    // hack to help improve pagespeed
-    setTimeout(()=> {
-      // console.log('aaa', props.options.path);
-      setState(p => ({ ...p, startDelay: true}));
-    }, 60);
-  }, []) */
-
-    // return React.useMemo( () => {
-    // console.log('rr', props.options.path);
-  
-    /*
-    const _handleWaypointEnter = () => {
-      // console.log('start');
-      setState(p => ({ ...p, play: true, seen: true }));
-      if (!ref.current) return;
-      ref.current.play();
-    };
-  
-    const _handleWaypointLeave = () => {
-      // console.log('end');
-      setState(p => ({ ...p, play: false }));
-      if (!ref.current) return;
-      ref.current.stop();
-    };
-    */
+    // isPaused={!state.play}
+    // setState(p => ({ ...p, seen: visible }));
+  }
 
     return (
-      <div ref={childRef}>
-        { (state.seen) ? (<Lottie
-        isPaused={!state.play}
-        options={props.options}
-        speed={props.speed}
-        ref={ref}
-        isClickToPauseDisabled={true}
-      />) : <div style={{width:400, height:300}}/>
-      }</div>
+      <LazyLoadComp onVisibleChange={onVisibleChange} threshold={props.threshold || 0.1}>
+        <Lottie
+          options={props.options}
+          speed={props.speed}
+          ref={ref}
+          isClickToPauseDisabled={true}
+        />
+      }</LazyLoadComp>
   )
 
-//}, [state, props.options, ref]);
 }
-
-export function WaypointLazy(props:any) {
-  const ref = useRef<Lottie>();
-  const [state, setState] = useState<any>({});
-
-  // const isVisible = useVisibility(pRef.current, {partial: true});
-  const [isInViewport, childRef] = useIsInViewport({threshold: 1})
-  // console.log('isVisible', isVisible, props.options.path)
-
-  useEffect( () => {
-    if(isInViewport && !state.seen) setState(p => ({ ...p, play: true, seen: true }));
-    else if(!isInViewport && state.seen) setState(p => ({ ...p, play: false  }));
-
-    if(!ref.current) return;
-    if(isInViewport) {
-    } else {
-    }
-  }, [isInViewport, ref]);
-
-  // const Lazy = React.useMemo( () => React.lazy(f), [f] );
-
-  return (
-    <div ref={childRef}>
-      { (state.seen) ? (<>{props.children}</>) : <div style={{width:400, height:300}}/>
-    }</div>)
-}
-
-export function WaypointLazySuspend(props:any) {
-  return <React.Suspense fallback={null}><WaypointLazy {...props}/></React.Suspense>
-}
-
-
-
-/*
-  <Waypoint
-  topOffset="-10%"
-  bottomOffset="0"
-  onEnter={useMemo(() => cullingHandlers(diningRef, false, 1.6), [
-    diningRef
-  ])}
-  onLeave={useMemo(() => cullingHandlers(diningRef, true), [
-    diningRef
-  ])}
-  >
-*/

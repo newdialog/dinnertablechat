@@ -50,6 +50,7 @@
     "react-hooks-lib": "0.0.18",
     "react-hooks-set": "^1.1.9",
     "react-i18next": "^10.11.3",
+    "react-lazy-load-component": "^1.0.6",
     "react-mailchimp-subscribe": "^2.1.0",
     "react-player": "^1.11.1",
     "react-responsive": "^7.0.0",
@@ -64,7 +65,6 @@
     "rxjs": "^6.5.2",
     "short-uuid": "^3.1.1",
     "simple-peer": "github:feross/simple-peer#master",
-    "use-is-in-viewport": "^1.0.3",
     "webfontloader": "^1.6.28"
   },
   "scripts": {

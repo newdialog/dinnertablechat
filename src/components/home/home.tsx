@@ -8,80 +8,82 @@ import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import { Helmet } from 'react-helmet';
 import { makeStyles } from '@material-ui/styles';
-import { WaypointLazy, WaypointLazySuspend } from 'WaypointLottie';
 
-const Content = React.lazy( () => import('./Content') );
-const Footer = React.lazy( () => import('./Footer') );
-const Subscribe = React.lazy( () => import('./Subscribe') );
+import LazyLoadComp from 'react-lazy-load-component';
+
+const Content = React.lazy(() => import('./Content'));
+const Footer = React.lazy(() => import('./Footer'));
+const Subscribe = React.lazy(() => import('./Subscribe'));
 
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    textAlign: 'center',
-    paddingTop: theme.spacing(20)
-  },
-  container: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, 300px)',
-    marginTop: '60px',
-    alignItems: 'center',
-    [theme.breakpoints.down('sm')]: {
-      gridTemplateColumns: '1fr'
-    }
-  },
-  paper: {
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    whiteSpace: 'nowrap',
-    marginBottom: theme.spacing(1)
-  },
-  centered: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    width: 'auto',
-    maxWidth: '800px',
-    minWidth: '300px',
-    textAlign: 'center'
-  },
-  divider: {
-    margin: `${theme.spacing(2)}px 0`
-  },
-  banner: {
-    display: 'flex',
-    objectFit: 'cover',
-    width: '100%',
-    height: 'calc(100vh - 0px)',
-    backgroundImage: 'url("./banner.jpg")',
-    backgroundSize: 'cover',
-    backgroundAttachment: 'fixed',
-    backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center 0',
-    color: 'white',
-    justifyContent: 'flex-end',
-    flexFlow: 'column nowrap'
-  },
-  bannerText: {
-    fontFamily: 'Open Sans',
-    color: 'white',
-    bottom: '20%',
-    marginBottom: '15vh',
-    backgroundColor: '#00000044',
-    fontWeight: 'bold'
-  },
-  logoanim: {
-    width: '100vw',
-    maxWidth: '600px',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    display: 'flex'
-  },
-  largeIcon: {
-    width: 80,
-    height: 60
-  },
-  body: {
-    /*
+const useStyles = makeStyles(
+  (theme: Theme) => ({
+    root: {
+      textAlign: 'center',
+      paddingTop: theme.spacing(20)
+    },
+    container: {
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fit, 300px)',
+      marginTop: '60px',
+      alignItems: 'center',
+      [theme.breakpoints.down('sm')]: {
+        gridTemplateColumns: '1fr'
+      }
+    },
+    paper: {
+      padding: theme.spacing(1),
+      textAlign: 'center',
+      color: theme.palette.text.secondary,
+      whiteSpace: 'nowrap',
+      marginBottom: theme.spacing(1)
+    },
+    centered: {
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 'auto',
+      maxWidth: '800px',
+      minWidth: '300px',
+      textAlign: 'center'
+    },
+    divider: {
+      margin: `${theme.spacing(2)}px 0`
+    },
+    banner: {
+      display: 'flex',
+      objectFit: 'cover',
+      width: '100%',
+      height: 'calc(100vh - 0px)',
+      backgroundImage: 'url("./banner.jpg")',
+      backgroundSize: 'cover',
+      backgroundAttachment: 'fixed',
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center 0',
+      color: 'white',
+      justifyContent: 'flex-end',
+      flexFlow: 'column nowrap'
+    },
+    bannerText: {
+      fontFamily: 'Open Sans',
+      color: 'white',
+      bottom: '20%',
+      marginBottom: '15vh',
+      backgroundColor: '#00000044',
+      fontWeight: 'bold'
+    },
+    logoanim: {
+      width: '100vw',
+      maxWidth: '600px',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      display: 'flex'
+    },
+    largeIcon: {
+      width: 80,
+      height: 60
+    },
+    body: {
+      /*
       width: '100%',
       backgroundImage: 'url("./imgs/07-newsletter.png")', // DTC-scene3.png
       backgroundSize: 'cover',
@@ -89,35 +91,37 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundRepeat: 'no-repeat',
       backgroundPosition: 'bottom 0px left'
       */
-  },
-  paperimg: {
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    height: 'auto',
-    width: 'auto',
-    maxWidth: '300px',
-    minWidth: '200px',
-    margin: 0,
-    display: 'block',
-    objectFit: 'contain',
-    pointerEvents: 'none',
-    [theme.breakpoints.down('sm')]: {
-      paddingTop: `${theme.spacing(5)}px`
-      // maxWidth: '80%'
     },
-    [theme.breakpoints.down('xs')]: {
-      maxWidth: '100px'
+    paperimg: {
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      height: 'auto',
+      width: 'auto',
+      maxWidth: '300px',
+      minWidth: '200px',
+      margin: 0,
+      display: 'block',
+      objectFit: 'contain',
+      pointerEvents: 'none',
+      [theme.breakpoints.down('sm')]: {
+        paddingTop: `${theme.spacing(5)}px`
+        // maxWidth: '80%'
+      },
+      [theme.breakpoints.down('xs')]: {
+        maxWidth: '100px'
+      }
     }
-  }
-}), {name:'Home'});
+  }),
+  { name: 'Home' }
+);
 
 export default function Home() {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
- 
+
   // useEffect(() => {
-    // const fp = (window as any).FloatingPrompt;
-    /* if (fp)
+  // const fp = (window as any).FloatingPrompt;
+  /* if (fp)
       fp({
         width: '300px',
         text:
@@ -141,11 +145,11 @@ export default function Home() {
       <div>
         <Banner store={store} />
 
-        <React.Suspense fallback={<div style={{marginTop:'120px'}}>Loading...</div>}>
-          <WaypointLazy>
-            <Content />
-          </WaypointLazy>
-        </React.Suspense>
+        <LazyLoadComp
+          fallback={<div style={{ marginTop: '120px' }}>Loading...</div>}
+        >
+          <Content />
+        </LazyLoadComp>
         <div className="pagebody">
           <Grid
             container
@@ -162,7 +166,9 @@ export default function Home() {
               />
             </Grid>
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
-              <WaypointLazySuspend><Subscribe /></WaypointLazySuspend>
+              <LazyLoadComp>
+                <Subscribe />
+              </LazyLoadComp>
             </Grid>
           </Grid>
           <br />
@@ -199,9 +205,9 @@ export default function Home() {
           </a>
         </div>
       </div>
-      <WaypointLazySuspend>
+      <LazyLoadComp>
         <Footer forceShow={true} />
-      </WaypointLazySuspend>
+      </LazyLoadComp>
     </React.Fragment>
   );
 }
