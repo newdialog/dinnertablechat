@@ -9,9 +9,14 @@ addEventListener('message', (event) => {
   switch (event.data) {
     case 'skipWaiting':
       // self.skipWaiting();
-      workbox.core.skipWaiting();
+      // workbox.core.skipWaiting();
       // if(workbox && workbox.core.skipWaiting) workbox.core.skipWaiting();
       // else console.log('workbox not found');
+      self.skipWaiting();
+      self.clients.claim();
+      self.clients.matchAll().then((clients) => {
+        clients.forEach((client) => client.postMessage('reload-window'));
+      });
       break;
     default:
       // NOOP
@@ -20,8 +25,11 @@ addEventListener('message', (event) => {
 });
 
 // pull latest on refresh, not sure if working
+// not an no-op https://developers.google.com/web/fundamentals/primers/service-workers/high-performance-loading
+
 addEventListener('fetch', event => {
   // console.log('event.request', event.request);
+  if(event.request.mode !== "navigate") return;
   event.respondWith((async () => {
     if (event.request.mode === "navigate" &&
       event.request.method === "GET" &&

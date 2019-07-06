@@ -4,7 +4,7 @@ import { Theme } from '@material-ui/core/styles';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
 import { makeStyles } from '@material-ui/styles';
 import React, { ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+// import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../models/AppModel';
 import * as serviceWorker from '../serviceWorker';
@@ -48,28 +48,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       paddingTop: '2vh'
     }
   },
-  /* bannerAnimOverlay: {
-    zIndex: -1,
-    transform: 'translateZ(0)',
-    position: 'absolute',
-    left: 0,
-    top: 0,
-    bottom: 0,
-    right: 0,
-    width: '100%',
-    background: 'rgba(0, 0, 0, 0.35)',
-    backgroundBlendMode: 'multiply'
-  } */
 }));
-
-/* const bgOptions = {
-  loop: true,
-  autoplay: true,
-  path: 'assets/background.json',
-  rendererSettings: {
-    preserveAspectRatio: 'xMidYMid slice'
-  }
-}; */
 interface Props {
   children: ReactNode;
   store: AppModel.Type;
@@ -88,7 +67,7 @@ var updating: boolean = false;
 export default function WorkerUpdate(props: Props) {
   // const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
 
   const [state, setState] = useState<State>({
     disableRefresh: false
@@ -101,55 +80,62 @@ export default function WorkerUpdate(props: Props) {
 
   const onReg = (registration: ServiceWorkerRegistration) => {
     setState(p => ({ ...p, registration }));
-    if(registration.waiting) onUpdate(registration);
-    // console.log('+worker onReg');
+    // if(registration.waiting) onUpdate(registration);
+    console.log('+worker onReg', registration.waiting);
     // #2
   };
 
   const onUpdate = (registration: ServiceWorkerRegistration) => {
     if(updating) return;
     updating = true;
-    console.log('+worker onUpdate');
+    console.log('+worker onUpdate', registration);
     if (registration) setState(p => ({ ...p, registration }));
 
     // TODO: this might be a problem with initialization
-    setTimeout(() => {
-      // if (registration && registration!.waiting)
-      //  registration!.waiting.postMessage('skipWaiting');
-      setState(p => ({ ...p, showReload: true })); // , registration: registration
-    }, 300);
+    // if (registration && registration!.waiting)
+    //  registration!.waiting.postMessage('skipWaiting');
+    setState(p => ({ ...p, showReload: true })); // , registration: registration
 
-    if(registration.waiting) setTimeout(() => { refresh(registration); }, 3000);
+    // if(registration.waiting) 
+    refresh(registration);
   };
 
   useEffect(() => {
+    if (! ('serviceWorker' in navigator) ) return;
     serviceWorker.register({ onSuccess, onUpdate, onReg });
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (refreshing) return;
-        refreshing = true; // preventDevToolsReloadLoop
-        // window.location.reload(true); // true
-        setTimeout(()=>window.location.reload(true), 3300);
-        console.log('worker reloading..');
-      });
-    }
+
+    // Anytime a new SW is activated
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true; // preventDevToolsReloadLoop
+      refresh();
+    });
+
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      console.log('sw msg', event.data);
+      
+      switch (event.data) {
+        case 'reload-window':
+          window.location.reload();
+          break;
+        default:
+          // NOOP
+          break;
+      }
+    });
     // serviceWorker.unregister();
   }, []);
 
-  const refresh = (registration:ServiceWorkerRegistration) => {
+  const refresh = (registration?:ServiceWorkerRegistration) => {
+    registration = registration || state.registration;
     updating = true;
-    if (registration && registration!.waiting) {
-      registration!.waiting.postMessage('skipWaiting');
-    } // else alert('no registration waiting');
+
+    if(!registration) return;
+    if(registration!.waiting) registration!.waiting!.postMessage('skipWaiting');
+    if(registration!.active) registration!.active!.postMessage('skipWaiting');
     
-    // failsafe
-    // setTimeout(() => bust(), 3000);
     bust();
-    // setTimeout(() => window.location.reload(true), 4000);
     console.log('worker update click');
-    if (refreshing) return;
-    refreshing = true;
-    setTimeout(()=>window.location.reload(true), 3300);
   }
 
   const onRefreshClick = (e:any) => {
@@ -203,16 +189,12 @@ export default function WorkerUpdate(props: Props) {
     );
   } else return <>{props.children}</>;
 }
-// withOAuth
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: http://bit.ly/CRA-PWA
-
 function bust() {
   navigator.serviceWorker.getRegistrations().then(registrationsArray => {
     if (registrationsArray.length > 0) registrationsArray[0].update();
   });
 }
-
-// <Lottie options={bgOptions} isClickToPauseDisabled={true} />

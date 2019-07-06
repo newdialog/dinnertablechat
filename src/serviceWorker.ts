@@ -91,7 +91,7 @@ function registerValidSW(swUrl: string, config?: Config) {
 
                 // makes the new service worker active
                 installingWorker.postMessage('skipWaiting');
-                window.location.reload(); // PATCH
+                /// window.location.reload(); // PATCH
               /// };
 
               // At this point, the updated precached content has been fetched,
