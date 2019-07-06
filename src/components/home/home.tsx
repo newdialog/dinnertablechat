@@ -1,16 +1,17 @@
-import React, { useEffect, useContext } from 'react';
-import { Theme } from '@material-ui/core/styles';
-import Banner from './Banner';
-// import Subscribe from './Subscribe';
-// import Footer from './Footer';
-import * as AppModel from '../../models/AppModel';
-import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
-import { Helmet } from 'react-helmet';
+import Grid from '@material-ui/core/Grid';
+import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
-
+import React, { useContext, useEffect } from 'react';
+import { Helmet } from 'react-helmet';
 import LazyLoadComp from 'react-lazy-load-component';
 
+import * as AppModel from '../../models/AppModel';
+import LoadingMsg from '../Loading';
+import Banner from './Banner';
+
+// import Subscribe from './Subscribe';
+// import Footer from './Footer';
 const Content = React.lazy(() => import('./Content'));
 const Footer = React.lazy(() => import('./Footer'));
 const Subscribe = React.lazy(() => import('./Subscribe'));
@@ -144,12 +145,10 @@ export default function Home() {
       </Helmet>
       <div>
         <Banner store={store} />
-
-        <LazyLoadComp
-          fallback={<div style={{ marginTop: '120px' }}>Loading...</div>}
-        >
+        
+        <React.Suspense fallback={LoadingMsg()}>
           <Content />
-        </LazyLoadComp>
+        </React.Suspense>
         <div className="pagebody">
           <Grid
             container

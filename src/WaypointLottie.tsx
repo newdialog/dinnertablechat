@@ -1,7 +1,9 @@
-import Lottie from '@jadbox/lottie-react-web';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import useIsInViewport from 'use-is-in-viewport';
 import LazyLoadComp from 'react-lazy-load-component'
+
+declare type LottieType = import('@jadbox/lottie-react-web').Lottie;
+const Lottie = React.lazy( () => import('@jadbox/lottie-react-web') );
 
 interface Props {
   options: any;
@@ -10,10 +12,10 @@ interface Props {
 }
 export default function WaypointLottie(props: Props) {
   // console.log('props', props);
-  const ref = useRef<Lottie>();
+  const ref = useRef<LottieType>();
   // const [state, setState] = useState<any>({});
 
-  const id = props.options.path;
+  // const id = props.options.path;
 
   // const isVisible = useVisibility(pRef.current, {partial: true});
   // const [isInViewport, childRef] = useIsInViewport({threshold: 1})
@@ -43,7 +45,7 @@ export default function WaypointLottie(props: Props) {
           ref={ref}
           isClickToPauseDisabled={true}
         />
-      }</LazyLoadComp>
+      </LazyLoadComp>
   )
 
 }
