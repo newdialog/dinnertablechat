@@ -90,7 +90,7 @@ workbox.routing.registerRoute(
 // Cache images
 workbox.routing.registerRoute(
   /\.(?:png|gif|jpg|jpeg|svg|ico)$/,
-  workbox.strategies.cacheFirst({
+  new workbox.strategies.StaleWhileRevalidate({
     cacheName: 'images',
     plugins: [
       new workbox.cacheableResponse.Plugin({
@@ -107,7 +107,7 @@ workbox.routing.registerRoute(
 // cache svg animations
 workbox.routing.registerRoute(
   /(?:assets).*\.(?:json)$/,
-  workbox.strategies.cacheFirst({
+  new workbox.strategies.StaleWhileRevalidate({
     cacheName: 'assets-svg-json',
     plugins: [
       new workbox.cacheableResponse.Plugin({
@@ -124,7 +124,7 @@ workbox.routing.registerRoute(
 // cache i18n
 workbox.routing.registerRoute(
   /(?:i18n).*\.(?:json)$/,
-  workbox.strategies.staleWhileRevalidate({
+  new workbox.strategies.NetworkFirst({
     cacheName: 'i18n',
     plugins: [
       new workbox.cacheableResponse.Plugin({
@@ -175,7 +175,7 @@ workbox.routing.registerRoute(
 // local js/ cache
 workbox.routing.registerRoute(
   /\/js\/.*\.(?:css|js)$/,
-  workbox.strategies.staleWhileRevalidate({
+  new workbox.strategies.StaleWhileRevalidate({
     cacheName: 'local-js',
     plugins: [
       new workbox.cacheableResponse.Plugin({
