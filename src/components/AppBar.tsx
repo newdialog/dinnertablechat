@@ -63,7 +63,7 @@ function onHome(store: Store.Type) {
   store.router.push('/');
 }
 
-export default function ButtonAppBar(props: Props) {
+export default observer(function ButtonAppBar(props: Props) {
   const classes = useStyles({});
   const store = useContext(Store.Context)!; // props.store;
   const auth = store.auth.isAuthenticated();
@@ -130,7 +130,7 @@ export default function ButtonAppBar(props: Props) {
       </AppBar>
     </div>
   )}, deps);
-};
+});
 
 // observer(ButtonAppBar)
 

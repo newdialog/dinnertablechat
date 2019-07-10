@@ -20,7 +20,9 @@ const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 const SRouter = lazy(() => import('../pages/saas/SRouter'));
 const SPitch = lazy(() => import('../pages/saas/SPitch'));
 const SClosed = lazy(() => import('../pages/saas/SClosed'));
-const SMenuHome = lazy(() => import('../pages/saas/SMenuHome'));
+const SHome = lazy(() => import('../pages/saas/sindex'));
+
+const CHome = lazy(() => import('../pages/conf/cindex'));
 
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();
@@ -72,12 +74,23 @@ const DTCRouter = ({
         <Route exact path="/match" component={Debate} />
         <Route exact path="/hosting" component={SPitch} />
         
+        { /* saas */ }
         <Route exact path="/r/:id" render={props => (
-            <SMenuHome id={props.match.params.id} />
+            <SHome id={props.match.params.id} />
           )} />
         <Route exact path="/r" render={props => (
-            <SMenuHome id={''} />
+            <SHome id={''} />
         )} />
+
+        { /* conference app */ }
+        <Route exact path="/c/:id" render={props => (
+            <CHome id={props.match.params.id} />
+          )} />
+        <Route exact path="/c" render={props => (
+            <CHome id={''} />
+        )} />
+
+        { /* dev routes */ }
         {!live && (
           <Route exact path="/saasend" component={SClosed} />
         )}
