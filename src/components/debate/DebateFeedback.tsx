@@ -253,6 +253,7 @@ export default function DebateFeedback(props: Props) {
                   <a
                     href="https://medium.com/wikitribune/our-list-of-preferred-news-sources-c90922ba22ef"
                     target="_blank"
+                    rel="noopener noreferrer"
                   >
                     debate preparation!
                   </a>

@@ -4,26 +4,23 @@ import React, { lazy } from 'react';
 import { Redirect, Route, Router, Switch } from 'react-router-dom';
 
 import * as AppModel from '../models/AppModel';
-// import AsyncPitch from './saas/pitch/SPitch';
 
-// import SMenuHome from './saas/menus/SMenuHome';
-const SMenuHome = lazy(() => import('./saas/menus/SMenuHome'));
-
-const SClosedDialog = lazy(() => import('./saas/menus/SClosedDialog'));
-const AsyncHome = lazy(() => import('./home/home'));
-const AsyncPlay = lazy(() => import('./menus/MenuHome'));
-const AsyncPrivacy = lazy(() => import('./pages/Privacy'));
-const AsyncEducation = lazy(() => import('./pages/EducationHome'));
-const AsyncMediaKit = lazy(() => import('./pages/MediaKit'));
-const AsyncDebate = lazy(() => import('./debate/DebateRouter'));
-const AsyncTester = lazy(() => import('./debate/DebateTester'));
-const UserHome = lazy(() => import('./menus/dash/UserHome'));
+const Home = lazy(() => import('../pages/index'));
+const Play = lazy(() => import('../pages/MenuHome'));
+const Privacy = lazy(() => import('../pages/privacy'));
+const Campus = lazy(() => import('../pages/campus'));
+const Press = lazy(() => import('../pages/press'));
+const Debate = lazy(() => import('../pages/DebateRouter'));
+const Tester = lazy(() => import('./debate/DebateTester'));
+const Dashboard = lazy(() => import('../pages/dashboard'));
 const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
-const GettingStarted = lazy(() => import('./menus/GettingStarted'));
+const Tutorial = lazy(() => import('../pages/tutorial'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
 
-const Saas = lazy(() => import('./saas/menus/SRouter'));
-const AsyncPitch = lazy(() => import('./saas/pitch/SPitch'));
+const SRouter = lazy(() => import('../pages/saas/SRouter'));
+const SPitch = lazy(() => import('../pages/saas/SPitch'));
+const SClosed = lazy(() => import('../pages/saas/SClosed'));
+const SMenuHome = lazy(() => import('../pages/saas/SMenuHome'));
 
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();
@@ -52,7 +49,6 @@ const DTCRouter = ({
   return (
     <Router history={history}>
       <Switch>
-        <Redirect from="/education" to="/campus" />
         <Redirect from="/signout" to="/" />
         <Route
           exact
@@ -61,20 +57,20 @@ const DTCRouter = ({
             <Redirect to={`/r`} />
           )}
         />
-        <Route exact path="/" component={AsyncHome} />
-        <Route exact path="/about" component={AsyncHome} />
+        <Route exact path="/" component={Home} />
+        <Route exact path="/about" component={Home} />
         <Route path="/callback" component={AuthSignin} />
         <Route path="/CALLBACK" component={AuthSignin} /> { /* do not redirect */ }
         <Route exact path="/signin" component={AuthSignin} />
         <Route exact path="/feedback" component={DebateFeedback} />
-        <Route exact path="/tutorial" component={GettingStarted} />
-        <Route exact path="/press" component={AsyncMediaKit} />
-        <Route exact path="/privacy" component={AsyncPrivacy} />
-        <Route exact path="/campus" component={AsyncEducation} />
-        <Route exact path="/home" component={UserHome} />
-        <Route exact path="/quickmatch" component={AsyncPlay} />
-        <Route exact path="/match" component={AsyncDebate} />
-        <Route exact path="/hosting" component={AsyncPitch} />
+        <Route exact path="/tutorial" component={Tutorial} />
+        <Route exact path="/press" component={Press} />
+        <Route exact path="/privacy" component={Privacy} />
+        <Route exact path="/campus" component={Campus} />
+        <Route exact path="/home" component={Dashboard} />
+        <Route exact path="/quickmatch" component={Play} />
+        <Route exact path="/match" component={Debate} />
+        <Route exact path="/hosting" component={SPitch} />
         
         <Route exact path="/r/:id" render={props => (
             <SMenuHome id={props.match.params.id} />
@@ -83,17 +79,17 @@ const DTCRouter = ({
             <SMenuHome id={''} />
         )} />
         {!live && (
-          <Route exact path="/saasend" component={SClosedDialog} />
+          <Route exact path="/saasend" component={SClosed} />
         )}
-        {!live && <Route exact path="/saasmatch" component={Saas} />}
-        {!live && <Route exact path="/test2" component={AsyncTester} />}
+        {!live && <Route exact path="/saasmatch" component={SRouter} />}
+        {!live && <Route exact path="/test2" component={Tester} />}
         {!live && (
           <Route
             exact={true}
             path="/test"
             render={() => {
               localStorage.setItem('test', 'y');
-              return <AsyncPlay />;
+              return <Play />;
             }}
           />
         )}

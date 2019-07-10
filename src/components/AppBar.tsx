@@ -94,6 +94,7 @@ export default function ButtonAppBar(props: Props) {
           <img
             crossOrigin="anonymous"
             title="DTC Home"
+            alt="home"
             src={logo}
             style={{ height: '3em', cursor: 'pointer' }}
             onClick={onHome.bind(0, store)}

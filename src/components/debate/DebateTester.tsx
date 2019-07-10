@@ -127,9 +127,9 @@ export default function DebateTester(props: Props) {
     <React.Fragment>
       <div className={classes.centered}>
         {state.start && (
-          <a href="#" onClick={onClickRed}>
+          <button onClick={onClickRed}>
             devToggle
-          </a>
+          </button>
         )}
         <div id="video">
           <video ref={vidRef} autoPlay={true} hidden={true} />

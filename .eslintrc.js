@@ -14,6 +14,7 @@ module.exports = {
                 ...baseTsOverride.rules,
 
                 // Remove with next npm release of eslint-config-react-app:
+                'react-hooks/exhaustive-deps': 'off',
                 'default-case': 'off',
                 'no-useless-constructor': 'off',
                 '@typescript-eslint/no-useless-constructor': 'warn',
