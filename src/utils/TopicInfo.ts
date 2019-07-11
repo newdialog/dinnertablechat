@@ -23,9 +23,14 @@ export function getTopics(t: any): Card[] {
   return data;
 }
 
-export function getSaaSTopics(topicid:string, t: any): Card[] {
+export function getSaaSTopics(
+  topicid: string,
+  t: any,
+  prefix?: string
+): Card[] {
+  if (!prefix) prefix = 'saas';
   // utility
-  const getSaaSQKey = topicid => i => 'saas-' + topicid + '-q' + i;
+  const getSaaSQKey = topicid => i => prefix + '-' + topicid + '-q' + i;
   // topicid example "pub1"
   // const qCode = (new URLSearchParams(window.location.search).get('q'));
   // const urlParam = window.location.href.split('/').slice(-1)[0];
@@ -33,15 +38,15 @@ export function getSaaSTopics(topicid:string, t: any): Card[] {
   // console.log('topicid', topicid);
   // if not exists in sheet, use default
   if (!topicid || topicid === '') {
-    topicid = t('saas-DEFAULT-id');
+    topicid = t(prefix + '-DEFAULT-id');
     console.log('no q query param: pulled from saas-DEFAULT-id:', topicid);
   }
   if (!topicid) throw new Error('no matching default question');
   // get number of questions
-  const keyT = 'saas-' + topicid + '-qnum';
+  const keyT = prefix + '-' + topicid + '-qnum';
   // console.log('keyT', keyT);
   const topics = Number.parseInt(t(keyT), 10);
-  if(!topics) console.log('found no topics: ', )
+  if (!topics) console.log('found no topics: ');
 
   const q = getSaaSQKey(topicid);
 
@@ -57,7 +62,7 @@ export function getSaaSTopics(topicid:string, t: any): Card[] {
       id: t(qs + '-id')
     });
   }
-  if(data.length===0) console.log('found no questions:', topicid);
+  if (data.length === 0) console.log('found no questions:', topicid);
   return data;
 }
 

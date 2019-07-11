@@ -67,6 +67,7 @@ const useStyles = makeStyles(
 interface Props {
   store: AppModel.Type;
   id: string;
+  prefix?: string;
 }
 
 export default function PositionSelector(props: Props) {
@@ -82,7 +83,7 @@ export default function PositionSelector(props: Props) {
   };
 
   const data: TopicInfo.Card[] = React.useMemo(
-    () => TopicInfo.getSaaSTopics(props.id, t),
+    () => TopicInfo.getSaaSTopics(props.id, t, props.prefix),
     [props.id, t]
   );
   // console.log('TopicInfo.Card data', data);
