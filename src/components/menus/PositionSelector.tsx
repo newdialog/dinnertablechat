@@ -1,7 +1,6 @@
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
-import classNames from 'classnames';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -22,9 +21,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   btn: {
     marginLeft: '1.5em'
     // color: theme.palette.secondary.main
-  },
-  cardGrid: {
-    // padding: `${theme.spacing(4)}px 0`,
   },
   card: {
     minWidth: '300px',
@@ -65,7 +61,7 @@ export default function PositionSelector(props: Props) {
   const data: TopicInfo.Card[] = TopicInfo.getTopics(t);
 
   return (
-    <div className={classNames(classes.layout, classes.cardGrid)}>
+    <div className={classes.layout}>
       <Grid container spacing={0} justify="center">
         {data.map((card, i) => (
           <Grid key={i} sm={10} md={10} lg={10} item>

@@ -4,6 +4,7 @@ import AuthModel from './AuthModel';
 import DebateModel from './DebateModel';
 import { Instance } from 'mobx-state-tree';
 import React from 'react';
+import uuid from 'short-uuid';
 
 // let cacheIsLive: boolean | null = null;
 function isLive(): boolean {
@@ -30,6 +31,15 @@ const AppModel = types
     /* isDailyOpen() {
       return self.dailyOpen || TimeService.
     },*/
+    getRID() {
+      let rid = localStorage.getItem('guestSeed'); // reuse guest seed
+      if (!rid) {
+        rid = uuid.generate();
+        console.log('guestSeed generate seed', rid);
+        localStorage.setItem('guestSeed', rid);
+      }
+      return rid;
+    },
     isGuest() {
       if (!self.auth.user) return false;
       return self.auth.user!.email === 'guest@dinnertable.chat';

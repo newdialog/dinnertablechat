@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
-import * as AppModel from '../../../models/AppModel';
-import * as TopicInfo from '../../../utils/TopicInfo';
+import * as AppModel from '../../models/AppModel';
+import * as TopicInfo from '../../utils/TopicInfo';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -68,81 +68,41 @@ interface Props {
   prefix?: string;
 }
 
-export default function PositionSelector(props: Props) {
+export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = React.useState<any>({ready:false, selected: {}, submitted: false});
-
-  const data: TopicInfo.Card[] = React.useMemo(
-    () => TopicInfo.getSaaSTopics(props.id, t, props.prefix),
-    [props.id, t]
-  );
-
-  const numQ = data.length;
-
-  const onSelect = (position: number, card: TopicInfo.Card) => {
-    if(state.submitted) return;
-    setState(x=>({...x, selected: {...x.selected, [card.id]: position } }));
-    
-    // store.debate.setCharacter(1);
-    // store.debate.setPosition(position, card.id);
-  };
-
-  React.useEffect(()=>{
-    if(Object.keys(state.selected).length === numQ) setState(x=>({...x, ready: true }));
-  }, [state]);
-
-  const submit = () => {
-    setState(x=>({...x, submitted: true }));
-    console.log('state', state.selected);
-  }
 
   // console.log('TopicInfo.Card data', data);
+  const onSelect = () => {
+
+  };
 
   return (
     <div className={classes.layout}>
       <Grid container spacing={2} justify="center">
-        {data.map((card, i) => (
-          <Grid key={i} sm={10} md={10} lg={10} item>
+        
+          <Grid sm={10} md={10} lg={10} item>
             <Card className={classes.card + ' ' + classes.bgCardColor}>
               <CardContent className={classes.cardContent}>
-                <Typography variant="h5">{card.proposition}</Typography>
+                <Typography variant="h5">Please Wait</Typography>
               </CardContent>
               <CardActions style={{ justifyContent: 'center' }}>
-                {card.positions.map((p, positionIndex) => (
+                
                   <Button
-                    disabled={state.selected[card.id]===positionIndex}
                     variant="contained"
                     // size="small"
-                    style={{marginLeft: (positionIndex > 0) ? '1em':0}}
-                    key={positionIndex}
                     color="secondary"
                     className={classes.btn}
-                    onClick={() => onSelect(positionIndex, card)}
+                    onClick={() => onSelect()}
                   >
-                    {p}
+                    Retry
                   </Button>
-                ))}
+                
               </CardActions>
             </Card>
           </Grid>
-        ))}
-
-      <Grid sm={10} md={10} lg={10} item>
-      <div className={classes.card}>
-      <Button
-          variant="contained"
-          disabled={!state.ready || state.submitted}
-          // size="small"
-          color="secondary"
-          className={classes.submit}
-          onClick={submit}
-        >
-          SUBMIT
-        </Button>
-        </div>
-        </Grid>
+        
         
       </Grid>
       
