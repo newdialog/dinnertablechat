@@ -79,6 +79,7 @@ export default observer(function App(props: Props) {
       store.auth.doGuestLogin();
       //  return <Loading />;
     } else if (isHome && isDebateTime && store.auth.isAuthenticated()) {
+      console.log('isHome', isHome);
       store.router.push('/quickmatch'); // /home
     }
   }, [store, store.auth, store.auth.user]);

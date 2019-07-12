@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
 
+import {submit} from '../../services/ConfService';
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     layout: {
@@ -64,14 +66,23 @@ const useStyles = makeStyles(
 
 interface Props {
   store: AppModel.Type;
-  id: string;
-  prefix?: string;
 }
+
+
 
 export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
+
+  React.useEffect( () => {
+    const pos = store.conf.positions;
+    const user = store.getRID();
+    const conf = '111';
+
+    console.log('starting test');
+    submit(pos, conf, user);
+  }, []);
 
   // console.log('TopicInfo.Card data', data);
   const onSelect = () => {

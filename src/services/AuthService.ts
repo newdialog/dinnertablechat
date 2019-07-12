@@ -114,6 +114,7 @@ export function auth(cb: AwsCB, callbackPage: boolean = false) {
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;
+
 export interface AwsAuth {
   event: string;
   user: any;
@@ -232,10 +233,12 @@ export async function guestLogin() {
     console.log('user', user);
   } catch (err) {
     console.error('AuthServoce err', err.code, err);
-    alert(
+    /* alert(
       'We encountered an error with guest login, going to try to fix it...'
-    );
-    window.location.reload(true);
+    ); */
+
+    // if (navigator.userAgent.toLocaleLowerCase().indexOf('headless') === -1)
+    //  window.location.reload(true);
   }
 }
 

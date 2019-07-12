@@ -1,10 +1,11 @@
-import { types } from 'mobx-state-tree';
+import { types, onSnapshot, getSnapshot, applySnapshot } from 'mobx-state-tree';
 import { RouterModel } from 'mst-react-router';
 import AuthModel from './AuthModel';
 import DebateModel from './DebateModel';
 import { Instance } from 'mobx-state-tree';
 import React from 'react';
 import uuid from 'short-uuid';
+import ConfModel from './ConfModel';
 
 // let cacheIsLive: boolean | null = null;
 function isLive(): boolean {
@@ -17,6 +18,7 @@ function isLive(): boolean {
 
 const AppModel = types
   .model({
+    conf: ConfModel,
     auth: AuthModel,
     debate: DebateModel,
     router: RouterModel,
@@ -153,11 +155,12 @@ const AppModel = types
 
 export type Type = Instance<typeof AppModel>;
 
-export const create = (routerModel: RouterModel, fetcher: any) =>
-  AppModel.create(
+export const create = (routerModel: RouterModel, fetcher: any) => {
+  const model = AppModel.create(
     {
       auth: AuthModel.create({}),
       debate: DebateModel.create({}),
+      conf: ConfModel.create({}),
       router: routerModel
     },
     {
@@ -166,4 +169,19 @@ export const create = (routerModel: RouterModel, fetcher: any) =>
     }
   );
 
+  // Pre-render restoring (for react-snap)
+  const w = window as any;
+
+  if (w.STORE) {
+    console.log('applying snapshot', w.STORE);
+    applySnapshot(model, w.STORE as any);
+    delete w.STORE;
+  }
+
+  (w as any).snapSaveState = () => ({
+    STORE: getSnapshot(model)
+  });
+
+  return model;
+};
 export const Context = React.createContext<Type | null>(null);

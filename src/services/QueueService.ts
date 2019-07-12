@@ -7,7 +7,7 @@ import { isLive } from '../utils/AppMeta';
 import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
 import * as DebateModel from '../models/DebateModel';
-import * as AuthService from './AuthService';
+import { refreshCredentials } from './AuthService';
 import retry from 'async-retry';
 type OnMatched = DebateModel.MatchModelType;
 
@@ -39,7 +39,7 @@ export async function init(options: GameLift.ClientConfiguration) {
     secretAccessKey,
     sessionToken
   }; */
-  await AuthService.refreshCredentials();
+  await refreshCredentials();
   gameLift = new GameLift(options);
 }
 

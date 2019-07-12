@@ -132,7 +132,19 @@ export default observer(function MenuHome(props: Props) {
   const { t } = useTranslation();
   // const [state, setState] = React.useState({ open: false, activeStep: 0 });
 
-  useEffect(() => localStorage.removeItem('quickmatch'), []);
+  useEffect(() => {
+    if(store.auth.isAuthenticated) return;
+    if(store.auth.doLogin) return;
+    
+    
+    if(!store.auth.user) {
+      store.login();
+      setTimeout(store.auth.doGuestLogin.bind(store.auth), 100);
+    }
+    else console.log('user', store.auth.user);
+  }, [store.auth.isNotLoggedIn, store.auth]);
+
+
 
   useEffect(() => {
     store.setSaas(true);
@@ -187,6 +199,12 @@ export default observer(function MenuHome(props: Props) {
     store.debate.resetQueue();
   };
 
+  const onSubmit = (positions:any) => {
+    const firstCardID = Object.keys(positions)[0]; // HACK
+    const firstKeyPosition = positions[firstCardID]; // HACK
+    store.debate.setPosition(firstKeyPosition, firstCardID);
+  }
+
   return (
     <div className={classes.pagebody}>
       <main className={classes.container}>
@@ -222,7 +240,7 @@ export default observer(function MenuHome(props: Props) {
         <div className={classes.verticalCenter}>
           {step === 0 && (
             <Reveal effect="fadeInUp" duration={2200}>
-              <PositionSelector id={props.id} store={store} />
+              <PositionSelector onSubmit={onSubmit} id={props.id} store={store} />
             </Reveal>
           )}
           {step === 1 && (

@@ -9,6 +9,7 @@ import Reveal from 'react-reveal/Reveal';
 import * as AppModel from '../../models/AppModel';
 import * as Times from '../../services/TimeService';
 import PositionSelector from '../../components/saas/menus/SPositionSelector';
+import PleaseWaitResults from 'components/conf/PleaseWaitResults';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -128,12 +129,27 @@ export default observer(function MenuHome(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
-  // const [state, setState] = React.useState({ open: false, activeStep: 0 });
 
-  useEffect(() => localStorage.removeItem('quickmatch'), []);
+  // Guest login
+  useEffect(() => {
+    store.hideNavbar();
+  }, []);
 
   useEffect(() => {
-    store.setSaas(true);
+    if(store.auth.isAuthenticated) return;
+    if(store.auth.doLogin) return;
+    
+    
+    if(!store.auth.user) {
+      store.login();
+      setTimeout(store.auth.doGuestLogin.bind(store.auth), 100);
+    }
+    else console.log('user', store.auth.user);
+  }, [store.auth.isNotLoggedIn, store.auth]);
+
+  useEffect(() => {
+    // store.setSaas(true);
+
     if (store.auth.isNotLoggedIn) {
       store.auth.doGuestLogin();
     }
@@ -164,26 +180,22 @@ export default observer(function MenuHome(props: Props) {
   if (store.auth.isNotLoggedIn) {
     return <div />;
   }
+
   let step = 0;
+  const posBit = store.conf.positions ? 1 : 0;
+  step = posBit;
 
-  const topicBit = store.debate.topic ? 1 : 0;
-  const charBit = store.debate.character !== -1 ? 1 : 0;
-
-  step = topicBit + charBit;
-
-  // if (store.debate.contribution === -1) step = 2; // skip contribution
-  // if (!store.debate.topic && store.debate.position > -1) step = 1;
-  // if (store.debate.position === -1) step = 0;
-
-  if (step === 2) {
-    // goto 3rd page if debate session is not open
-    if (Times.isDuringDebate(store.isLive) !== true) step = 3;
-    else store.router.push('/saasmatch'); //  && store.micAllowed :SAAS
+  if (step === 1) {
+    console.log('move to next step');
   }
 
   const handleStep = step2 => () => {
     store.debate.resetQueue();
   };
+
+  const onSubmit = (positions:any) => {
+    store.conf.setPosition(positions);
+  }
 
   return (
     <div className={classes.pagebody}>
@@ -218,12 +230,12 @@ export default observer(function MenuHome(props: Props) {
         <div className={classes.verticalCenter}>
           {step === 0 && (
             <Reveal effect="fadeInUp" duration={2200}>
-              <PositionSelector id={props.id} store={store} prefix="conf" />
+              <PositionSelector onSubmit={onSubmit} id={props.id} store={store} prefix="conf" />
             </Reveal>
           )}
           {step === 1 && (
             <Reveal effect="fadeInUp" duration={1100}>
-             
+              <PleaseWaitResults store={store}/>
             </Reveal>
           )}
         </div>
