@@ -133,13 +133,10 @@ export default observer(function MenuHome(props: Props) {
   // const [state, setState] = React.useState({ open: false, activeStep: 0 });
 
   useEffect(() => {
-    if(store.auth.isAuthenticated) return;
-    if(store.auth.doLogin) return;
-    
+    if(store.auth.isAuthenticated && !store.auth.isNotLoggedIn) return;
     
     if(!store.auth.user) {
-      store.login();
-      setTimeout(store.auth.doGuestLogin.bind(store.auth), 100);
+      store.auth.guestLogin();
     }
     else console.log('user', store.auth.user);
   }, [store.auth.isNotLoggedIn, store.auth]);
@@ -149,7 +146,7 @@ export default observer(function MenuHome(props: Props) {
   useEffect(() => {
     store.setSaas(true);
     if (store.auth.isNotLoggedIn) {
-      store.auth.doGuestLogin();
+      store.auth.guestLogin();
     }
 
     const isTest = !!localStorage.getItem('test');
@@ -176,7 +173,8 @@ export default observer(function MenuHome(props: Props) {
   };
 
   if (store.auth.isNotLoggedIn) {
-    return <div />;
+    store.auth.guestLogin();
+    return <div className={classes.pagebody}><h3>Authorizing...</h3></div>;
   }
   let step = 0;
 

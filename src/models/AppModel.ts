@@ -101,7 +101,7 @@ const AppModel = types
       self.auth.login();
     },
     // Covers guest login action\ as well
-    authenticated(signedIn: boolean) {
+    authenticated() {
       if (self.isSaas) {
         self.router.push('/saas');
         return;
@@ -119,11 +119,7 @@ const AppModel = types
       // if(!isHome) return; // j1, not sure if this fixes anything
       // localStorage.removeItem('signup');
       // if (!signedIn) return;
-      console.log(
-        'authenticated, signedIn, isSigninPath',
-        signedIn,
-        isSigninPath
-      );
+      console.log('login authenticated, isSigninPath', isSigninPath);
 
       if (localStorage.getItem('quickmatch')) {
         localStorage.removeItem('quickmatch');
@@ -131,9 +127,8 @@ const AppModel = types
         // prevent being redirected when its not login time
         // prevent redirect for if being signed in and not signedIn yet
         // NOTE: DONT MESS WITH THIS
-      } else if (!isSigninPath && !signedIn) {
-        //  && !homeAuthed
-        // signed in on not home
+      } else if (isSigninPath === false) {
+        // do nothing if not on signup page
         return;
       } else if (self.isStandalone()) self.router.push('/home');
       else if (self.isGuest()) {

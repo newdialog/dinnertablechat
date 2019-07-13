@@ -95,7 +95,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
 }
 
 export function auth(cb: AwsCB, callbackPage: boolean = false) {
-  // console.log('configuring aws');
+  // console.log('auth aws');
   const awsmobileInjected = injectConfig(awsmobile);
 
   // Order is important
@@ -208,9 +208,9 @@ async function checkUser(cb: AwsCB, event: string = '') {
 
 // type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
 
-export function logout() {
+export async function logout() {
   // {global: true}
-  Auth.signOut()
+  return await Auth.signOut()
     .then()
     .catch((err: any) => console.log(err));
 }

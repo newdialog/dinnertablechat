@@ -1,6 +1,4 @@
-import { types, Instance, flow } from 'mobx-state-tree';
-import * as Auth from '../services/AuthService';
-import * as AuthService from '../services/AuthService';
+import { types, Instance, flow, getSnapshot } from 'mobx-state-tree';
 import uuid from 'short-uuid';
 
 const UserModel = types
@@ -31,17 +29,26 @@ const AuthModel = types
     user: types.maybe(UserModel),
     aws: types.maybe(AWSModel),
     doLogin: false,
-    // loggedIn: false,
-    isNotLoggedIn: false
+    doGuestLogin: false,
+    doLogout: false,
+    // didLogin: false,
+    isNotLoggedIn: types.maybeNull(types.boolean)
   })
   .actions(self => ({
-    doGuestLogin: flow(function*() {
+    guestLogin: function() {
+      if (self.doGuestLogin) return;
       window.gtag('event', 'guest_login_action', {
         event_category: 'auth'
       });
-      yield AuthService.guestLogin();
-      self.isNotLoggedIn = false;
-    }),
+      // yield AuthService.guestLogin();
+
+      self.doGuestLogin = true;
+
+      // self.loggedIn = true;
+    },
+    snapshot() {
+      return JSON.stringify(getSnapshot(self));
+    },
     login() {
       if (!self.doLogin)
         window.gtag('event', 'login_action', {
@@ -49,8 +56,13 @@ const AuthModel = types
         });
       self.doLogin = true;
     },
-    logout() {
-      Auth.logout();
+    logout(didLogOut: boolean = false) {
+      if (didLogOut) {
+        self.doLogout = false;
+        return;
+      }
+      // Auth.logout();
+      self.doLogout = true;
       self.aws = undefined;
       self.user = undefined;
       // self.isNotLoggedIn = true;
@@ -62,7 +74,7 @@ const AuthModel = types
     notLoggedIn() {
       self.isNotLoggedIn = true;
     },
-    authenticated(authServiceData: any) {
+    authenticated(authServiceData: any, viaLogin: boolean) {
       const {
         user,
         region
@@ -71,6 +83,7 @@ const AuthModel = types
         region: any;
       } = authServiceData;
 
+      // self.didLogin = viaLogin;
       /* if (!self.user)
         window.gtag('event', 'authenticated', {
           event_category: 'auth'
@@ -114,6 +127,8 @@ const AuthModel = types
 
       // self.loggedIn = true;
       self.isNotLoggedIn = false;
+      self.doGuestLogin = false;
+      self.doLogin = false;
     }
   }))
   .views(self => ({

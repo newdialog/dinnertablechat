@@ -68,7 +68,7 @@ export default observer(function App(props: Props) {
       // Feature: force quickmatch flow
       console.log('isQuickmatch');
       localStorage.setItem('quickmatch', 'y');
-      store.auth.doGuestLogin();
+      store.auth.guestLogin();
       // return <Loading />;
       // cant do this as it would cause quickmatch to bug
       // else if(s.auth.isAuthenticated()) s.router.push('/quickmatch');
@@ -76,10 +76,10 @@ export default observer(function App(props: Props) {
       // Feature: faster flow
       console.log('setting quickmatch');
       // localStorage.setItem('quickmatch', 'y');
-      store.auth.doGuestLogin();
+      store.auth.guestLogin();
       //  return <Loading />;
     } else if (isHome && isDebateTime && store.auth.isAuthenticated()) {
-      console.log('isHome', isHome);
+      // console.log('isHome', isHome);
       store.router.push('/quickmatch'); // /home
     }
   }, [store, store.auth, store.auth.user]);

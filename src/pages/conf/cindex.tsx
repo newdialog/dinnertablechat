@@ -130,19 +130,19 @@ export default observer(function MenuHome(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
 
+  // console.log(store.auth.snapshot());
+
   // Guest login
   useEffect(() => {
     store.hideNavbar();
   }, []);
 
   useEffect(() => {
-    if(store.auth.isAuthenticated) return;
-    if(store.auth.doLogin) return;
-    
+    console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
+    if(store.auth.isAuthenticated() && !store.auth.isNotLoggedIn) return;
     
     if(!store.auth.user) {
-      store.login();
-      setTimeout(store.auth.doGuestLogin.bind(store.auth), 100);
+      store.auth.guestLogin();
     }
     else console.log('user', store.auth.user);
   }, [store.auth.isNotLoggedIn, store.auth]);
@@ -150,18 +150,10 @@ export default observer(function MenuHome(props: Props) {
   useEffect(() => {
     // store.setSaas(true);
 
-    if (store.auth.isNotLoggedIn) {
-      store.auth.doGuestLogin();
-    }
-
     const isTest = !!localStorage.getItem('test');
     localStorage.removeItem('test');
 
     if (isTest) console.log('props.isTest', isTest);
-    if (!Times.isDuringDebate(store.isLive)) {
-      // store.router.push('/home');
-      // TODO: show end-debate popup :sass
-    }
     if (isTest !== store.debate.isTest) {
       store.debate.setTest(isTest);
     }
@@ -174,11 +166,12 @@ export default observer(function MenuHome(props: Props) {
   }, []);
 
   const handleReset = () => {
-    store.debate.resetQueue();
+    if(store.conf.positions) store.conf.resetQueue();
   };
 
   if (store.auth.isNotLoggedIn) {
-    return <div />;
+    store.auth.guestLogin();
+    return <div className={classes.pagebody}><h3>Authorizing...</h3></div>;
   }
 
   let step = 0;
