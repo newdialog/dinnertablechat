@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
 
-import {submit} from '../../services/ConfService';
+import {submit, getAll} from '../../services/ConfService';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -66,6 +66,7 @@ const useStyles = makeStyles(
 
 interface Props {
   store: AppModel.Type;
+  id: string;
 }
 
 
@@ -74,19 +75,25 @@ export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
+  const [state, setState] = React.useState<any>({data:{}});
+
+  const conf = props.id || '111';
 
   React.useEffect( () => {
     const pos = store.conf.positions;
     const user = store.getRID();
-    const conf = '111';
+
+    if(!pos || Object.keys(pos).length === 0) return;
 
     console.log('starting test');
     submit(pos, conf, user);
   }, []);
 
   // console.log('TopicInfo.Card data', data);
-  const onSelect = () => {
-
+  const onSelect = async () => {
+    const data = await getAll(conf);
+    console.log('data', data);
+    setState(p=>({...p, data}));
   };
 
   return (
@@ -97,6 +104,7 @@ export default function PleaseWaitResults(props: Props) {
             <Card className={classes.card + ' ' + classes.bgCardColor}>
               <CardContent className={classes.cardContent}>
                 <Typography variant="h5">Please Wait</Typography>
+                <Typography variant="body2">{JSON.stringify(state.data)}</Typography>
               </CardContent>
               <CardActions style={{ justifyContent: 'center' }}>
                 

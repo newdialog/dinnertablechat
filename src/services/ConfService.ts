@@ -45,36 +45,13 @@ export async function submit(positions: any, conf: string, user: string) {
     );
 }
 
-async function updateMatch(state: any) {
-  const teamkey = '';
-  const key = '';
+export async function getAll(conf: string) {
+  if (!docClient) await init();
 
-  const params2: DynamoDB.DocumentClient.UpdateItemInput = {
-    Key: {
-      id: ''
-    },
-    AttributeUpdates: {
-      [teamkey]: {
-        Action: 'ADD', // ADD | PUT | DELETE,
-        Value: [
-          key // .map(k => JSON.stringify(key))
-        ] /* "str" | 10 | true | false | null | [1, "a"] | {a: "b"} */
-      }
-      /* [statekey]: {
-            Action: 'PUT',
-            Value: state
-          } */
-    },
-    TableName: 'match'
-  };
-  // console.log('rx save data', JSON.stringify(params2));
-  await docClient
-    .update(params2)
-    .promise()
-    .catch(e => {
-      console.error(e);
-      throw new Error(e);
-    });
-  // console.log('ut2,', ticket2);
-  return true;
+  return docClient
+    .table('conf')
+    .select('user', 'answers')
+    .having('conf')
+    .eq(conf)
+    .scan();
 }

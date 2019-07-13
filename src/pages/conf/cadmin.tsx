@@ -1,4 +1,4 @@
-import { Typography } from '@material-ui/core';
+import { Typography, Button } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
@@ -125,10 +125,12 @@ function onHelp(store: AppModel.Type) {
   store.router.push('/tutorial');
 }
 
-export default observer(function CIndex(props: Props) {
+export default observer(function CAdmin(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
+
+  const [state, setState] = useState<any>({});
 
   const id = props.id;
   console.log('id', props.id);
@@ -178,7 +180,7 @@ export default observer(function CIndex(props: Props) {
   }
 
   let step = 0;
-  const posBit = store.conf.positions ? 1 : 0;
+  const posBit = state.show ? 1 : 0;
   step = posBit;
 
   if (step === 1) {
@@ -189,8 +191,8 @@ export default observer(function CIndex(props: Props) {
     store.debate.resetQueue();
   };
 
-  const onSubmit = (positions:any) => {
-    store.conf.setPosition(positions);
+  const show = () => {
+    setState({show:true});
   }
 
   return (
@@ -207,7 +209,7 @@ export default observer(function CIndex(props: Props) {
               className={classes.heroLogoText}
               gutterBottom
             >
-              DebateConference
+              DebateConference Admin
               </Typography>
             <Typography
               className={classes.herotext}
@@ -226,7 +228,30 @@ export default observer(function CIndex(props: Props) {
         <div className={classes.verticalCenter}>
           {step === 0 && (
             <Reveal effect="fadeInUp" duration={2200}>
-              <PositionSelector onSubmit={onSubmit} id={props.id} store={store} prefix="conf" />
+                <Typography
+              variant="h4"
+              align="center"
+              color="textSecondary"
+              gutterBottom
+            >
+              To start matching, please visit:
+            </Typography>
+              <Typography
+              variant="h2"
+              align="center"
+              color="textSecondary"
+              gutterBottom
+            >
+              dinnertable.chat/c/{id}
+            </Typography>
+            <Button
+                    variant="contained"
+                    // size="small"
+                    color="secondary"
+                    onClick={show}
+                  >
+                    Show Results
+            </Button>
             </Reveal>
           )}
           {step === 1 && (
