@@ -8,15 +8,15 @@ const UserModel = types
     id: types.string,
     guestSeed: types.string,
     numDebates: types.number
-    // credits: types.integer,
-    // karma: types.maybe(types.integer),
-    // token: types.string,
-    // data: types.frozen({})
+    // creds: types.maybeNull(types.frozen<any>())
   })
   .actions(self => ({
     updateNumDebates(num: number) {
       self.numDebates = num;
     }
+    /* setCred(creds: any) {
+      self.creds = creds;
+    } */
   }));
 
 // TODO: remove?
@@ -40,10 +40,8 @@ const AuthModel = types
       window.gtag('event', 'guest_login_action', {
         event_category: 'auth'
       });
-      // yield AuthService.guestLogin();
 
       self.doGuestLogin = true;
-
       // self.loggedIn = true;
     },
     snapshot() {
@@ -59,13 +57,13 @@ const AuthModel = types
     logout(didLogOut: boolean = false) {
       if (didLogOut) {
         self.doLogout = false;
+        self.isNotLoggedIn = true;
         return;
       }
-      // Auth.logout();
+
       self.doLogout = true;
       self.aws = undefined;
       self.user = undefined;
-      // self.isNotLoggedIn = true;
     },
     guestSignup() {
       localStorage.setItem('signup', 'y');

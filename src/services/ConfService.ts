@@ -6,9 +6,9 @@ import { refreshCredentials } from './AuthService';
 // use Guest Login, use RID or guestSeed
 let docClient: any; // DynamoDB.DocumentClient;
 
-export async function init() {
+export async function init(creds?: any) {
   if (!docClient)
-    docClient = DynamodbFactory(new DynamoDB(await refreshCredentials()));
+    docClient = DynamodbFactory(new DynamoDB(await refreshCredentials())); //await refreshCredentials()));
 
   docClient.schema([
     {
