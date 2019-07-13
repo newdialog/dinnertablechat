@@ -81,6 +81,7 @@ const DTCRouter = ({
         <Route exact path="/r" render={props => (
             <SHome id={''} />
         )} />
+        <Route exact path="/saasmatch" component={SRouter} />
 
         { /* conference app */ }
         <Route exact path="/c/:id" render={props => (
@@ -94,7 +95,6 @@ const DTCRouter = ({
         {!live && (
           <Route exact path="/saasend" component={SClosed} />
         )}
-        {!live && <Route exact path="/saasmatch" component={SRouter} />}
         {!live && <Route exact path="/test2" component={Tester} />}
         {!live && (
           <Route
@@ -122,21 +122,6 @@ const authenticated = (
   if (isAuth) return <Component />;
   return <div>Loading...</div>;
 };
-*/
-
-/* function Loading(props: any) {
-  if (props.error) {
-    return (
-      <div>
-        Error! <button onClick={props.retry}>Retry</button>
-      </div>
-    );
-  } else if (props.pastDelay) {
-    return <div>Loading...</div>;
-  } else {
-    return null;
-  }
-}
 */
 
 /*

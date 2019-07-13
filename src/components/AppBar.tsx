@@ -78,19 +78,21 @@ export default observer(function ButtonAppBar(props: Props) {
 
   const deps = [store.auth, store.isSaas, store.debate.match, store.showNav];
 
+  const AuthMod = () => <AuthWrapper store={store} login={store.auth.doLogin} />;
+
   return useMemo( () => {
-    if(store.debate.match && store.debate.match.sync) return null;
-    if (!store.showNav) return null;
-    if (store.isSaas) return null;
+    if(store.debate.match && store.debate.match.sync) return <AuthMod/>;
+    if (!store.showNav) return <AuthMod/>;
+    if (store.isSaas) return <AuthMod/>;
 
     return (<div className={classes.root}>
+      <AuthMod/>
       <AppBar
         position="fixed"
         color="default"
         style={{ backgroundColor: 'rgb(255,255,255,0.9)' }}
       >
         <Toolbar variant="dense">
-          <AuthWrapper store={store} login={store.auth.doLogin} />
           <img
             crossOrigin="anonymous"
             title="DTC Home"

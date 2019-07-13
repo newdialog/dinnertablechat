@@ -1,6 +1,4 @@
 import { types, Instance, SnapshotIn } from 'mobx-state-tree';
-import { string, number } from 'prop-types';
-import { boolean } from 'mobx-state-tree/dist/internal';
 
 const OtherPlayerModel = types.model({
   character: -1,

@@ -132,12 +132,21 @@ export default observer(function MenuHome(props: Props) {
   const { t } = useTranslation();
   // const [state, setState] = React.useState({ open: false, activeStep: 0 });
 
-  useEffect(() => localStorage.removeItem('quickmatch'), []);
+  useEffect(() => {
+    if(store.auth.isAuthenticated && !store.auth.isNotLoggedIn) return;
+    
+    if(!store.auth.user) {
+      store.auth.guestLogin();
+    }
+    else console.log('user', store.auth.user);
+  }, [store.auth.isNotLoggedIn, store.auth]);
+
+
 
   useEffect(() => {
     store.setSaas(true);
     if (store.auth.isNotLoggedIn) {
-      store.auth.doGuestLogin();
+      store.auth.guestLogin();
     }
 
     const isTest = !!localStorage.getItem('test');
@@ -164,7 +173,8 @@ export default observer(function MenuHome(props: Props) {
   };
 
   if (store.auth.isNotLoggedIn) {
-    return <div />;
+    store.auth.guestLogin();
+    return <div className={classes.pagebody}><h3>Authorizing...</h3></div>;
   }
   let step = 0;
 
@@ -186,6 +196,12 @@ export default observer(function MenuHome(props: Props) {
   const handleStep = step2 => () => {
     store.debate.resetQueue();
   };
+
+  const onSubmit = (positions:any) => {
+    const firstCardID = Object.keys(positions)[0]; // HACK
+    const firstKeyPosition = positions[firstCardID]; // HACK
+    store.debate.setPosition(firstKeyPosition, firstCardID);
+  }
 
   return (
     <div className={classes.pagebody}>
@@ -222,7 +238,7 @@ export default observer(function MenuHome(props: Props) {
         <div className={classes.verticalCenter}>
           {step === 0 && (
             <Reveal effect="fadeInUp" duration={2200}>
-              <PositionSelector id={props.id} store={store} />
+              <PositionSelector onSubmit={onSubmit} id={props.id} store={store} />
             </Reveal>
           )}
           {step === 1 && (

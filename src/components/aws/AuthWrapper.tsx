@@ -23,7 +23,30 @@ interface State {
 //
 function AuthComp(props: Props) {
   const store = props.store;
+  const s = props.store;
   // Auth/Provider/withOAuth.jsx
+
+  console.log('AuthComp');
+  useEffect(() => {
+    if (init) {
+      // console.warn('stopping.. already logged in.');
+      return; // not sure if needed
+    }
+    init = true;
+    const path = (store.router.location as any).pathname;
+    const callbackPage = path.indexOf('callback') !== -1;
+    AuthService.auth(handleAuth, callbackPage);
+  }, [store.auth]);
+
+  useEffect( () => {
+    console.log('store.auth.doGuestLogin', store.auth.doGuestLogin)
+    if(store.auth.doGuestLogin) AuthService.guestLogin();
+  }, [store.auth.doGuestLogin]);
+
+  useEffect( () => {
+    if(store.auth.doLogout) AuthService.logout().then( () => store.auth.logout(true));
+  }, [store.auth.doLogout]);
+
   const signIn = () => {
     if (!Auth || typeof Auth.configure !== 'function') {
       throw new Error(
@@ -51,18 +74,8 @@ function AuthComp(props: Props) {
     window.location.assign(url);
   };
 
-  useEffect(() => {
-    const path = (store.router.location as any).pathname;
-    const callbackPage = path.indexOf('callback') !== -1;
-    if (!init) {
-      init = true;
-      AuthService.auth(handleAuth, callbackPage);
-    }
-  }, []);
-
   const handleAuth = (awsUser: AuthService.AwsAuth | null) => {
     // console.log('handleAuth', props.login);
-    const s = props.store;
 
     if (s.auth.user && s.auth.user.id) { // || s.isGuest()
       console.warn('stopping.. already logged in.');
@@ -79,8 +92,9 @@ function AuthComp(props: Props) {
     }
     // console.log('+login, type:', awsUser.event);
 
-    s.auth.authenticated(awsUser);
-    if (awsUser.event === AuthService.LOGIN_EVENT) s.authenticated(true);
+    const viaLogin = awsUser.event === AuthService.LOGIN_EVENT;
+    s.auth.authenticated(awsUser, viaLogin);
+    if (viaLogin) s.authenticated();
     /// else s.authenticated(false); // not sure if needed
 
     // TODO: cleanup guest login flow
@@ -113,5 +127,5 @@ function AuthComp(props: Props) {
   );
 }
 
-export default React.memo(observer(AuthComp));
+export default observer(AuthComp);
 // withOAuth

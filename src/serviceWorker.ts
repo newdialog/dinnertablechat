@@ -86,12 +86,12 @@ function registerValidSW(swUrl: string, config?: Config) {
 
               // https://stackoverflow.com/questions/40100922/activate-updated-service-worker-on-refresh
               /// window.history.pushState = function(...args:any) {
-                // make sure that the user lands on the "next" page
-                /// pushState.apply(window.history, args);
+              // make sure that the user lands on the "next" page
+              /// pushState.apply(window.history, args);
 
-                // makes the new service worker active
-                installingWorker.postMessage('skipWaiting');
-                /// window.location.reload(); // PATCH
+              // makes the new service worker active
+              installingWorker.postMessage('skipWaiting');
+              /// window.location.reload(); // PATCH
               /// };
 
               // At this point, the updated precached content has been fetched,
@@ -121,10 +121,10 @@ function registerValidSW(swUrl: string, config?: Config) {
         });
       });
 
-      setInterval( () => {
+      setInterval(() => {
         registration.update();
       }, 10000);
-      setTimeout( () => {
+      setTimeout(() => {
         registration.update();
       }, 1000);
       return registration;
@@ -144,6 +144,8 @@ function checkValidServiceWorker(swUrl: string, config?: Config) {
         response.status === 404 ||
         (contentType != null && contentType.indexOf('javascript') === -1)
       ) {
+        if (navigator.userAgent.toLocaleLowerCase().indexOf('headless') !== -1)
+          return;
         // No service worker found. Probably a different app. Reload the page.
         navigator.serviceWorker.ready.then(registration => {
           registration.unregister().then(() => {

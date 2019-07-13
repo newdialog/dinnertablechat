@@ -1,10 +1,11 @@
-import { types } from 'mobx-state-tree';
+import { types, onSnapshot, getSnapshot, applySnapshot } from 'mobx-state-tree';
 import { RouterModel } from 'mst-react-router';
 import AuthModel from './AuthModel';
 import DebateModel from './DebateModel';
 import { Instance } from 'mobx-state-tree';
 import React from 'react';
 import uuid from 'short-uuid';
+import ConfModel from './ConfModel';
 
 // let cacheIsLive: boolean | null = null;
 function isLive(): boolean {
@@ -17,6 +18,7 @@ function isLive(): boolean {
 
 const AppModel = types
   .model({
+    conf: ConfModel,
     auth: AuthModel,
     debate: DebateModel,
     router: RouterModel,
@@ -99,7 +101,7 @@ const AppModel = types
       self.auth.login();
     },
     // Covers guest login action\ as well
-    authenticated(signedIn: boolean) {
+    authenticated() {
       if (self.isSaas) {
         self.router.push('/saas');
         return;
@@ -117,11 +119,7 @@ const AppModel = types
       // if(!isHome) return; // j1, not sure if this fixes anything
       // localStorage.removeItem('signup');
       // if (!signedIn) return;
-      console.log(
-        'authenticated, signedIn, isSigninPath',
-        signedIn,
-        isSigninPath
-      );
+      console.log('login authenticated, isSigninPath', isSigninPath);
 
       if (localStorage.getItem('quickmatch')) {
         localStorage.removeItem('quickmatch');
@@ -129,9 +127,8 @@ const AppModel = types
         // prevent being redirected when its not login time
         // prevent redirect for if being signed in and not signedIn yet
         // NOTE: DONT MESS WITH THIS
-      } else if (!isSigninPath && !signedIn) {
-        //  && !homeAuthed
-        // signed in on not home
+      } else if (isSigninPath === false) {
+        // do nothing if not on signup page
         return;
       } else if (self.isStandalone()) self.router.push('/home');
       else if (self.isGuest()) {
@@ -153,11 +150,12 @@ const AppModel = types
 
 export type Type = Instance<typeof AppModel>;
 
-export const create = (routerModel: RouterModel, fetcher: any) =>
-  AppModel.create(
+export const create = (routerModel: RouterModel, fetcher: any) => {
+  const model = AppModel.create(
     {
       auth: AuthModel.create({}),
       debate: DebateModel.create({}),
+      conf: ConfModel.create({}),
       router: routerModel
     },
     {
@@ -166,4 +164,19 @@ export const create = (routerModel: RouterModel, fetcher: any) =>
     }
   );
 
+  // Pre-render restoring (for react-snap)
+  const w = window as any;
+
+  if (w.STORE) {
+    console.log('applying snapshot', w.STORE);
+    applySnapshot(model, w.STORE as any);
+    delete w.STORE;
+  }
+
+  (w as any).snapSaveState = () => ({
+    STORE: getSnapshot(model)
+  });
+
+  return model;
+};
 export const Context = React.createContext<Type | null>(null);

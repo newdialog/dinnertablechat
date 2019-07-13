@@ -54,8 +54,10 @@ export default observer((props: Props) => {
   const debateOpen = Times.isDuringDebate(store.isLive);
 
   // Auth guard
-  if (store.auth.isNotLoggedIn) store.router.push('/');
-  else if (!store.auth.user) return null;
+  if (store.auth.isNotLoggedIn || !store.auth.user) {
+    store.router.push('/');
+    return null;
+  }
 
   // <UserStats store={store} />
   return (

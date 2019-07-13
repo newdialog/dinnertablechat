@@ -265,7 +265,7 @@ export default function HomeBanner(props: Props) {
             <>
               <Button
                 style={{ marginTop: '1vh', lineHeight: '2.6em' }}
-                onClick={() => store.auth.doGuestLogin() && setLogin(true)}
+                onClick={() => {store.auth.guestLogin(); setLogin(true); } }
                 disabled={isLoggingIn}
                 variant="contained"
                 color="default"

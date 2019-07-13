@@ -66,6 +66,7 @@ interface Props {
   store: AppModel.Type;
   id: string;
   prefix?: string;
+  onSubmit: (selected:any) => void;
 }
 
 export default function PositionSelector(props: Props) {
@@ -84,9 +85,6 @@ export default function PositionSelector(props: Props) {
   const onSelect = (position: number, card: TopicInfo.Card) => {
     if(state.submitted) return;
     setState(x=>({...x, selected: {...x.selected, [card.id]: position } }));
-    
-    // store.debate.setCharacter(1);
-    // store.debate.setPosition(position, card.id);
   };
 
   React.useEffect(()=>{
@@ -96,6 +94,8 @@ export default function PositionSelector(props: Props) {
   const submit = () => {
     setState(x=>({...x, submitted: true }));
     console.log('state', state.selected);
+
+    props.onSubmit(state.selected);
   }
 
   // console.log('TopicInfo.Card data', data);

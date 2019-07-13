@@ -95,7 +95,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
 }
 
 export function auth(cb: AwsCB, callbackPage: boolean = false) {
-  // console.log('configuring aws');
+  // console.log('auth aws');
   const awsmobileInjected = injectConfig(awsmobile);
 
   // Order is important
@@ -114,6 +114,7 @@ export function auth(cb: AwsCB, callbackPage: boolean = false) {
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;
+
 export interface AwsAuth {
   event: string;
   user: any;
@@ -207,9 +208,9 @@ async function checkUser(cb: AwsCB, event: string = '') {
 
 // type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
 
-export function logout() {
+export async function logout() {
   // {global: true}
-  Auth.signOut()
+  return await Auth.signOut()
     .then()
     .catch((err: any) => console.log(err));
 }
@@ -232,10 +233,12 @@ export async function guestLogin() {
     console.log('user', user);
   } catch (err) {
     console.error('AuthServoce err', err.code, err);
-    alert(
+    /* alert(
       'We encountered an error with guest login, going to try to fix it...'
-    );
-    window.location.reload(true);
+    ); */
+
+    // if (navigator.userAgent.toLocaleLowerCase().indexOf('headless') === -1)
+    //  window.location.reload(true);
   }
 }
 
