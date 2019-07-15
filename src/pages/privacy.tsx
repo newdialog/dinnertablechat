@@ -122,7 +122,7 @@ export default function Privacy(props: Props) {
     <React.Fragment>
       <Helmet title="Dinnertable.chat Privacy">
         <meta itemProp="name" content="Dinnertable.chat Privacy" />
-        <meta name="og:url" content="https://dinnertable.chat/privacy" />
+        <meta name="og:url" content="https://www.dinnertable.chat/privacy" />
         <meta name="og:title" content="Dinnertable.chat Privacy" />
       </Helmet>
       <div className={classes.centered}>
@@ -133,7 +133,7 @@ export default function Privacy(props: Props) {
         <p>
           This Privacy Policy describes how your personal information is
           collected, used, and shared when you visit or make a microtransaction
-          purchase from https://dinnertable.chat (the "Site").
+          purchase from https://www.dinnertable.chat (the "Site").
         </p>
 
         <p>PERSONAL INFORMATION WE COLLECT</p>

@@ -47,7 +47,7 @@ export default function EducationHome(props: Props) {
     <React.Fragment>
       <Helmet title="Dinnertable.chat Campus">
         <meta itemProp="name" content="Dinnertable.chat Campus" />
-        <meta name="og:url" content="https://dinnertable.chat/campus" />
+        <meta name="og:url" content="https://www.dinnertable.chat/campus" />
         <meta name="og:title" content="Dinnertable.chat Campus" />
         <meta
           name="title"

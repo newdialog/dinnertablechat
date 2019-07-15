@@ -138,7 +138,7 @@ export default function Home() {
     <React.Fragment>
       <Helmet title="Dinnertable.chat">
         <meta itemProp="name" content="Dinnertable.chat" />
-        <meta name="og:url" content="https://dinnertable.chat" />
+        <meta name="og:url" content="https://www.dinnertable.chat" />
         <meta name="og:title" content="Dinnertable.chat" />
       </Helmet>
       <div>

@@ -263,7 +263,7 @@ export default observer(function CAdmin(props: Props) {
       </main>
       <div className={classes.footer}>
         <b>
-          Powered by <a href="https://dinnertable.chat/about" target="_blank" rel="noopener noreferrer">dinnertable.chat</a>
+          Powered by <a href="https://www.dinnertable.chat/about" target="_blank" rel="noopener noreferrer">dinnertable.chat</a>
         </b>
       </div>
     </div>

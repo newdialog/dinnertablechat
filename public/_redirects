@@ -1,13 +1,16 @@
 # Redirect default Netlify subdomain to primary domain
-https://dtc-prod.netlify.com https://dinnertable.chat:splat 301!
-http://dtc-prod.netlify.com/* https://dinnertable.chat/:splat 301!
-https://dtc-prod.netlify.com/* https://dinnertable.chat/:splat 301!
+https://dtc-prod.netlify.com https://www.dinnertable.chat:splat 301!
+http://dtc-prod.netlify.com/* https://www.dinnertable.chat/:splat 301!
+https://dtc-prod.netlify.com/* https://www.dinnertable.chat/:splat 301!
 https://dtc-staging.netlify.com https://test.dinnertable.chat/:splat 301!
 http://dtc-staging.netlify.com/* https://test.dinnertable.chat/:splat 301!
 https://dtc-staging.netlify.com/* https://test.dinnertable.chat/:splat 301!
 
-http://debateplatform.org/* https://debateplatform.org/:splat 301!
+http://debateplatform.org/* https://www.debateplatform.org/:splat 301!
 http://test.debateplatform.org/* https://test.debateplatform.org/:splat 301!
+
+http://dinnertable.chat/* https://www.dinnertable.chat/:splat 301!
+https://dinnertable.chat/*  https://www.dinnertable.chat/:splat 301!
 /saas q=:q  /r/:q  301!
 /r q=:q  /r/:q  301!
 /i18n/* /i18n/en.json 301

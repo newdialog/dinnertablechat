@@ -16,10 +16,10 @@ const awsOauth = {
   ],
 
   // Callback URL
-  redirectSignIn: 'https://dinnertable.chat/callback',
+  redirectSignIn: 'https://www.dinnertable.chat/callback',
 
   // Sign out URL
-  redirectSignOut: 'https://dinnertable.chat/signout',
+  redirectSignOut: 'https://www.dinnertable.chat/signout',
 
   // 'code' for Authorization code grant,
   // 'token' for Implicit grant

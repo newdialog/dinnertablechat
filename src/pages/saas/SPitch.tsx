@@ -117,7 +117,7 @@ export default function SPitch(props: Props) {
   return (
     <React.Fragment>
       <Helmet title="Dinnertable.chat Press">
-        <meta name="og:url" content="https://dinnertable.chat/press" />
+        <meta name="og:url" content="https://www.dinnertable.chat/press" />
         <meta name="og:title" content="Dinnertable.chat Press" />
       </Helmet>
       <div className={classes.container}>

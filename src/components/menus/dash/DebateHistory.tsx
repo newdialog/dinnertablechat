@@ -439,7 +439,7 @@ export default function DebateHistory(props: Props) {
                 <>
                   <IconButton aria-label="Share">
                     <TwitterShareButton
-                      url={'https://dinnertable.chat'}
+                      url={'https://www.dinnertable.chat'}
                       title={`I've debated with my political opposite and was rated: ${x.oppReview.traits.pos.join(
                         ', '
                       )}`}
@@ -450,7 +450,7 @@ export default function DebateHistory(props: Props) {
                   </IconButton>
                   <IconButton aria-label="Share">
                     <FacebookShareButton
-                      url={'https://dinnertable.chat'}
+                      url={'https://www.dinnertable.chat'}
                       quote={`I've debated with my political opposite and was rated: ${x.oppReview.traits.pos.join(
                         ', '
                       )}`}

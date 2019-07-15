@@ -63,7 +63,7 @@ export default observer((props: Props) => {
   return (
     <Auther>
       <Helmet title="DTC User Dashboard">
-        <meta name="og:url" content="https://dinnertable.chat/home" />
+        <meta name="og:url" content="https://www.dinnertable.chat/home" />
         <meta name="og:title" content="DTC User Dashboard" />
       </Helmet>
       <div className={classes.container}>

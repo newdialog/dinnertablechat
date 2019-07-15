@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
+import useInterval from '@use-it/interval';
 
 import {submit, getAll} from '../../services/ConfService';
 
@@ -95,6 +96,10 @@ export default function PleaseWaitResults(props: Props) {
     console.log('data', data);
     setState(p=>({...p, data}));
   };
+
+  useInterval(() => {
+    onSelect();
+  }, 3500);
 
   return (
     <div className={classes.layout}>

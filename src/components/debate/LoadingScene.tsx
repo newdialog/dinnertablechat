@@ -389,7 +389,7 @@ export default function LoadingScene(props: Props) {
     window.removeEventListener('beforeunload', onWindowBeforeUnload); // allow restart button to work
   }
 
-  const refURL = 'https://dinnertable.chat/?quickmatch=join';
+  const refURL = 'https://www.dinnertable.chat/?quickmatch=join';
 
   return (
     <div className={classes.centered}>

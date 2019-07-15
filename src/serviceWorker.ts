@@ -63,6 +63,8 @@ export function register(config?: Config) {
   }
 }
 
+let checkOnce = false;
+
 function registerValidSW(swUrl: string, config?: Config) {
   return navigator.serviceWorker
     .register(swUrl, { updateViaCache: 'none' })
@@ -121,12 +123,14 @@ function registerValidSW(swUrl: string, config?: Config) {
         });
       });
 
+      if(checkOnce) return;
+      checkOnce = true;
+
       setInterval(() => {
         registration.update();
-      }, 10000);
-      setTimeout(() => {
-        registration.update();
-      }, 1000);
+      }, 10 * 1000);
+
+      registration.update();
       return registration;
     })
     .catch(error => {

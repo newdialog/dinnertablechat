@@ -264,7 +264,7 @@ export default observer(function MenuHome(props: Props) {
           </>
         )}
         <b>
-          Powered by <a href="https://dinnertable.chat/about" target="_blank" rel="noopener noreferrer">dinnertable.chat</a>
+          Powered by <a href="https://www.dinnertable.chat/about" target="_blank" rel="noopener noreferrer">dinnertable.chat</a>
         </b>
       </div>
     </div>

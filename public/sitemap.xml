@@ -6,23 +6,23 @@
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
 <url>
-  <loc>https://dinnertable.chat/</loc>
+  <loc>https://www.dinnertable.chat/</loc>
   <lastmod>2019-01-18</lastmod>
 </url>
 <url>
-  <loc>https://dinnertable.chat/about</loc>
+  <loc>https://www.dinnertable.chat/about</loc>
   <lastmod>2019-01-18</lastmod>
 </url>
 <url>
-  <loc>https://dinnertable.chat/hosting</loc>
+  <loc>https://www.dinnertable.chat/hosting</loc>
   <lastmod>2019-01-18</lastmod>
 </url>
 <url>
-  <loc>https://dinnertable.chat/campus</loc>
+  <loc>https://www.dinnertable.chat/campus</loc>
   <lastmod>2019-01-18</lastmod>
 </url>
 <url>
-  <loc>https://dinnertable.chat/press</loc>
+  <loc>https://www.dinnertable.chat/press</loc>
   <lastmod>2019-01-18</lastmod>
 </url>
 </urlset>
