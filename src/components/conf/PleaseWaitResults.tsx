@@ -76,7 +76,7 @@ export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = React.useState<any>({data:{}});
+  const [state, setState] = React.useState<any>({data:{},checks:0});
 
   const conf = props.id || '111';
 
@@ -98,8 +98,11 @@ export default function PleaseWaitResults(props: Props) {
   };
 
   useInterval(() => {
+    if(state.checks > 20) return; // stop
+    console.log('state.checks', state.checks);
+    setState(p=>({...p, checks: p.checks + 1}));
     onSelect();
-  }, 3500);
+  }, 4000);
 
   return (
     <div className={classes.layout}>
