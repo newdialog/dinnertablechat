@@ -26,7 +26,7 @@ function AuthComp(props: Props) {
   const s = props.store;
   // Auth/Provider/withOAuth.jsx
 
-  console.log('AuthComp');
+  // console.log('AuthComp');
   useEffect(() => {
     if (init) {
       // console.warn('stopping.. already logged in.');
@@ -39,7 +39,7 @@ function AuthComp(props: Props) {
   }, [store.auth]);
 
   useEffect( () => {
-    console.log('store.auth.doGuestLogin', store.auth.doGuestLogin)
+    // console.log('store.auth.doGuestLogin', store.auth.doGuestLogin)
     if(store.auth.doGuestLogin) AuthService.guestLogin();
   }, [store.auth.doGuestLogin]);
 
