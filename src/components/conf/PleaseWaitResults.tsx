@@ -9,7 +9,7 @@ import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
 import {submit, getAll} from '../../services/ConfService';
-import {match} from '../../services/ConfMath';
+import {match, match2} from '../../services/ConfMath';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -79,7 +79,13 @@ interface User {
 type Data = Array<User>;
 interface State {
   checks:number;
-  data:Data;
+  data:any;
+}
+
+function showData(data:Array<any>) {
+  return data.map( (users, index)=>{
+    return 'Group ' + index + ': ' + Object.keys(users).join(', ');
+  });
 }
 
 export default function PleaseWaitResults(props: Props) {
@@ -105,23 +111,10 @@ export default function PleaseWaitResults(props: Props) {
   // console.log('TopicInfo.Card data', data);
   const onSelect = async () => {
     var data:Data = await getAll(conf);
-    data.map(x=> {
-      x.answersHash = x.answers;
-      // stable sorting answers
-      x.answers = Object.keys(x.answersHash).sort().map(k => x.answersHash![k]) as number[][];
-      return x;
-    });
-
-    console.log('data', JSON.stringify(data));
-
-    
-    const rawListOfAnswers = data.map(x=> (x.answers));
-    const names = data.map(x=>x.user);
-    const maxGroups = 2;
-    const result = match(maxGroups, rawListOfAnswers, names);
+    const result = match2(data);
     
     console.log('r', JSON.stringify(result));
-    setState(p=>({...p, data}));
+    setState(p=>({...p, data: result }));
   };
 
   useInterval(() => {
@@ -139,7 +132,7 @@ export default function PleaseWaitResults(props: Props) {
             <Card className={classes.card + ' ' + classes.bgCardColor}>
               <CardContent className={classes.cardContent}>
                 <Typography variant="h5">Please Wait</Typography>
-                <Typography variant="body2">{JSON.stringify(state.data)}</Typography>
+                <Typography variant="body2">{showData(state.data)}</Typography>
               </CardContent>
               <CardActions style={{ justifyContent: 'center' }}>
                 

@@ -19,6 +19,7 @@ function groupify(
   const groups = Array(k);
   for (var i = 0; i < pnts.length; i++) {
     var pnt: Person = { index: i, answers: pnts[i], user: indexedNames[i] };
+    // console.log('pnt', pnt);
     var g = assignments[i]; // group assigned
 
     if (!groups[g]) groups[g] = [];
@@ -57,6 +58,18 @@ function diversify(
     rb = ++rb % k;
   }
 
+  // remove single person groups
+  // const removeSingleUserGroups: Groups = [];
+  for (var i = dgroups.length; i >= 0; i--) {
+    if (!dgroups[i]) {
+      dgroups[i] = [];
+      continue; // group is empty
+    }
+    if (dgroups[i].length === 1 && i !== 0) {
+      dgroups[i - 1].push(dgroups[i].pop()!);
+    }
+  }
+
   return dgroups;
 }
 
@@ -80,44 +93,92 @@ var pnts = [
   [0, 0, 0]
 ];
 
-export function match2() {}
+// Basically just convert data types
+export function match2(getAllData: any, maxGroups: number = 2) {
+  const data = getAllData;
+  let rawListOfAnswersIds: string[] = [];
+
+  data.map(x => {
+    x.answersHash = x.answers;
+    // stable sorting answers
+    const sortedKeys: string[] = Object.keys(x.answersHash).sort();
+    x.answers = sortedKeys.map(k => x.answersHash![k]) as number[][];
+    // if not set, set the keys
+    if (rawListOfAnswersIds.length === 0)
+      rawListOfAnswersIds = sortedKeys.concat([]);
+    return x;
+  });
+
+  console.log(
+    'data',
+    JSON.stringify(data),
+    'rawListOfAnswersIds',
+    rawListOfAnswersIds
+  );
+
+  const rawListOfAnswers = data.map(x => x.answers);
+  const names = data.map(x => x.user);
+
+  // console.log('rawListOfAnswers', JSON.stringify(rawListOfAnswers));
+  const result = match(maxGroups, rawListOfAnswers, names).filter(
+    x => x.length !== 0
+  );
+
+  console.log('result', JSON.stringify(result));
+
+  // unwrangle into user[] = [answers]
+  const obj = result.map(g =>
+    g.reduce((acc, x) => {
+      // check if group is null
+      if (x.user)
+        acc[x.user] = x.answers.reduce((acc, x, index) => {
+          const key = rawListOfAnswersIds[index];
+          acc[key] = x;
+          return acc;
+        }, {});
+      return acc;
+    }, {})
+  );
+
+  return obj;
+}
 
 export function match(
-  clusters?: number,
-  people?: Array<Array<Number>>,
+  clusters: number,
+  people: Array<Array<number>>,
   names?: Array<string>
 ): Person[][] {
   // K clusters
-  var k = clusters || 3;
+  var k = clusters;
 
-  const p = people || pnts;
+  const p = people;
   // Run k-means
   var r = kmpp(p, {
     k: k,
     maxIterations: 30
   });
 
-  console.log('p', JSON.stringify(p), names);
+  // console.log('p', JSON.stringify(p), names);
 
   names = names || p.map(x => 'user' + x);
 
-  console.log('k', k);
+  // console.log('k', k);
 
   // Get the count of non-empty kmean clusters
   var counts = r.counts.filter(x => x > 0).reduce((a, b) => ++a, 0);
-  console.log('counts', counts);
+  // console.log('counts', counts);
 
   // Group the actual points of the kmeans pass
-  var groups = groupify(pnts, names, r.assignments, counts);
-  console.log('k-means clusters');
-  console.log(JSON.stringify(groups));
+  var groups = groupify(p, names, r.assignments, counts);
+  // console.log('k-means clusters');
+  // console.log('groups', JSON.stringify(groups));
 
   const tables = 3;
   // Diversify them into new groups!
   var r2 = diversify(groups, r.assignments.length, counts, tables);
 
-  console.log('-diversified table-');
-  console.log(r2);
+  // console.log('-diversified table-');
+  // console.log(r2);
 
   return r2;
 }
