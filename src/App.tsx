@@ -1,14 +1,23 @@
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { ThemeProvider } from '@material-ui/styles';
+import { createBrowserHistory } from 'history';
 import { observer } from 'mobx-react-lite';
+import { connectReduxDevtools } from 'mst-middlewares';
+import { RouterModel, syncHistoryWithStore } from 'mst-react-router';
 import React, { Suspense, useEffect } from 'react';
+import { I18nextProvider } from 'react-i18next';
 
 import LoadingMsg from './components/Loading';
 import AppRouter from './components/Router';
 import WorkerUpdate from './components/WorkerUpdate';
+import * as AppModel from './models/AppModel';
+import i18n from './services/i18n';
 import * as TimeSerive from './services/TimeService';
+import { theme } from './withRoot';
 
 // import AppBar from './components/AppBar';
 
-const AppBar = React.lazy( ()=>import('./components/AppBar'));
+const AppBar = React.lazy(() => import('./components/AppBar'));
 // ----------
 /* var WebFont = require('webfontloader');
 
@@ -23,11 +32,50 @@ WebFont.load({
 
 // import Index from './components/home/home';
 // import { withRouter } from 'react-router';
+
+let _cache:any = null;
+function init() {
+  if(_cache) return _cache;
+  const routerModel = (RouterModel as any).create(); // TS Hack
+  const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
+
+  // Configure MST Store
+  const fetcher = url => window.fetch(url).then(response => response.json());
+  const store = AppModel.create(routerModel, fetcher);
+
+  // if(!store.isLive)
+  connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting, prob bundled anyway
+
+  return _cache = {history, store};
+}
+
+export const App = () => {
+  const {history, store} = init();
+
+  console.log('v1.3.11');
+
+  const AppBase = (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Suspense fallback={LoadingMsg()}>
+        <I18nextProvider i18n={i18n}>
+          <AppModel.Context.Provider value={store}>
+            <Base history={history} store={store} />
+          </AppModel.Context.Provider>
+        </I18nextProvider>
+      </Suspense>
+    </ThemeProvider>
+  );
+
+  return AppBase;
+};
+
+
 interface Props {
   store: import('./models/AppModel').Type;
   history: any;
 }
-export default observer(function App(props: Props) {
+export const Base = observer(function _Base(props: Props) {
   (window as any).__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true; // mui
   const store = props.store;
   const history = props.history;
@@ -84,12 +132,14 @@ export default observer(function App(props: Props) {
     }
   }, [store, store.auth, store.auth.user]);
 
-  return (<WorkerUpdate store={store}>
+  return (
+    <WorkerUpdate store={store}>
       <Suspense fallback={null}>
         <AppBar store={store} />
       </Suspense>
       <Suspense fallback={LoadingMsg()}>
         <AppRouter history={history} store={store} />
       </Suspense>
-  </WorkerUpdate>);
+    </WorkerUpdate>
+  );
 });

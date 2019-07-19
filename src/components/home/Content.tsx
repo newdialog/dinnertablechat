@@ -208,8 +208,6 @@ export default function HomeContent() {
     }).mount();
   }, []);
 
-  console.log('===');
-
   return (
     <React.Fragment>
       <div className={classes.centered2}>

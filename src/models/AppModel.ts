@@ -55,6 +55,8 @@ const AppModel = types
       if (self._isStandalone) return true;
 
       const enabledOnSafari = (window.navigator as any).standalone === true;
+      if(!window.matchMedia) return false; // local testing
+
       const result =
         window.matchMedia('(display-mode: standalone)').matches ||
         enabledOnSafari ||

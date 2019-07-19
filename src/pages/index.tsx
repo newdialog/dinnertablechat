@@ -163,7 +163,7 @@ export default function Home() {
               />
             </Grid>
             <Grid item xs={2} sm={2} md={1} lg={1} className={classes.centered}>
-              <LazyLoadComp>
+              <LazyLoadComp fallback={<span/>}>
                 <Subscribe />
               </LazyLoadComp>
             </Grid>
@@ -202,7 +202,7 @@ export default function Home() {
           </a>
         </div>
       </div>
-      <LazyLoadComp>
+      <LazyLoadComp fallback={<span/>}>
         <Footer forceShow={true} />
       </LazyLoadComp>
     </React.Fragment>

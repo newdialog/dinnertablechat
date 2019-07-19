@@ -38,7 +38,7 @@ export default function WaypointLottie(props: Props) {
   }
 
     return (
-      <LazyLoadComp onVisibleChange={onVisibleChange} threshold={props.threshold || 0.1}>
+      <LazyLoadComp fallback={<span/>} onVisibleChange={onVisibleChange} threshold={props.threshold || 0.1}>
         <Lottie
           options={props.options}
           speed={props.speed}

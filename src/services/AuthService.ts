@@ -75,7 +75,7 @@ export const LOGIN_EVENT = 'signIn';
 export const LOGOUT_EVENT = 'signOut';
 
 function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
-  console.log('onHubCapsule', capsule);
+  // console.log('onHubCapsule', capsule);
   // getLoggger().onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
@@ -166,14 +166,11 @@ async function checkUser(cb: AwsCB, event: string = '') {
     // console.timeEnd('currentAuthenticatedUser');
   } catch (e) {
     // console.timeEnd('currentAuthenticatedUser');
-    console.log(
-      '---currentAuthenticatedUser not logged in, double checking',
-      e
-    );
+    // console.log('---currentAuthenticatedUser not logged in, double checking', e);
     // await delay(1600);
     // console.time('currentAuthenticatedUser2');
     // data = await Auth.currentAuthenticatedUser().catch(e => {
-    console.log('---currentAuthenticatedUser not logged in:', e);
+    // console.log('---currentAuthenticatedUser not logged in:', e);
     cb(null);
     return;
     //   return null;

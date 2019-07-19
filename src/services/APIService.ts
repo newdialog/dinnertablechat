@@ -111,7 +111,7 @@ async function bail(matchId: string) {
 }
 
 function configure(conf:any) {
-  console.log('conf', conf);
+  // console.log('conf', conf);
   return API.configure(conf);
 }
 

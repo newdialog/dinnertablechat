@@ -109,12 +109,12 @@ export function match2(getAllData: any, maxGroups: number = 2) {
     return x;
   });
 
-  console.log(
+  /* console.log(
     'data',
     JSON.stringify(data),
     'rawListOfAnswersIds',
     rawListOfAnswersIds
-  );
+  ); */
 
   const rawListOfAnswers = data.map(x => x.answers);
   const names = data.map(x => x.user);

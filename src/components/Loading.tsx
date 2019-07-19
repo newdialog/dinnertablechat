@@ -7,7 +7,7 @@ const loader = () => {
         <br />
         <br />
         <br />
-        <h2 style={{color:'gray', textAlign:'center'}}>Loading...</h2>
+        <h2 data-testid="loading" style={{color:'gray', textAlign:'center'}}>Loading...</h2>
       </div>
     );
   };

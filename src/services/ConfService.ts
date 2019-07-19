@@ -8,7 +8,7 @@ let docClient: any; // DynamoDB.DocumentClient;
 
 export async function init(creds?: any) {
   if (!docClient)
-    docClient = DynamodbFactory(new DynamoDB(await refreshCredentials())); //await refreshCredentials()));
+    docClient = DynamodbFactory(new DynamoDB(await refreshCredentials())); // await refreshCredentials()));
 
   docClient.schema([
     {
@@ -39,8 +39,8 @@ export async function submit(positions: any, conf: string, user: string) {
         user,
         answers: positions
       },
-      function(err, data) {
-        console.log(err, data);
+      function(err:any, data:any) {
+        console.log('saved', err, data);
       }
     );
 }
