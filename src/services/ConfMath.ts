@@ -73,26 +73,6 @@ function diversify(
   return dgroups;
 }
 
-var pnts_old_test_case = [
-  [0, 1, 0],
-  [0, 1, 0],
-  [1, 0, 0],
-  [1, 0, 1],
-  [0, 0, 1],
-  [0, 0, 0],
-  [0, 0, 1]
-];
-
-var pnts = [
-  [0, 1, 0],
-  [0, 1, 0],
-  [0, 0, 0],
-  [0, 0, 0],
-  [0, 0, 0],
-  [0, 0, 0],
-  [0, 0, 0]
-];
-
 // Basically just convert data types
 export function match2(getAllData: any, maxGroups: number = 2) {
   const data = getAllData;
@@ -108,13 +88,6 @@ export function match2(getAllData: any, maxGroups: number = 2) {
       rawListOfAnswersIds = sortedKeys.concat([]);
     return x;
   });
-
-  /* console.log(
-    'data',
-    JSON.stringify(data),
-    'rawListOfAnswersIds',
-    rawListOfAnswersIds
-  ); */
 
   const rawListOfAnswers = data.map(x => x.answers);
   const names = data.map(x => x.user);
@@ -141,6 +114,19 @@ export function match2(getAllData: any, maxGroups: number = 2) {
   );
 
   return obj;
+}
+
+export function findMyGroup(user: string, match2Data: Array<any>) {
+  const findGroup = match2Data
+    .map((g, index) => {
+      g = Object.assign({}, g);
+      g.gid = index;
+      return g;
+    })
+    .filter(group => !!group[user]);
+
+  if (findGroup.length === 0) return null;
+  return findGroup[0];
 }
 
 export function match(

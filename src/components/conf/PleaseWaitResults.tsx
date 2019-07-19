@@ -1,4 +1,11 @@
-import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography
+} from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
@@ -8,8 +15,8 @@ import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
-import {submit, getAll} from '../../services/ConfService';
-import {match, match2} from '../../services/ConfMath';
+import { submit, getAll } from '../../services/ConfService';
+import { match, match2, findMyGroup } from '../../services/ConfMath';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -44,7 +51,7 @@ const useStyles = makeStyles(
       height: '100%',
       textAlign: 'center',
       flexDirection: 'column',
-      
+
       [theme.breakpoints.down('md')]: {
         width: '80vw'
       },
@@ -53,7 +60,7 @@ const useStyles = makeStyles(
       }
     },
     bgCardColor: {
-      backgroundColor: '#eceadb',
+      backgroundColor: '#eceadb'
     },
     cardMedia: {},
     cardContent: {
@@ -72,19 +79,41 @@ interface Props {
 }
 
 interface User {
-  user:string; 
-  answers:Array<any>; 
-  answersHash?:Array<any>;
+  user: string;
+  answers: Array<any>;
+  answersHash?: Array<any>;
 }
 type Data = Array<User>;
 interface State {
-  checks:number;
-  data:any;
+  checks: number;
+  data: any;
+  myGroup?: any;
 }
 
-function showData(data:Array<any>) {
-  return data.map( (users, index)=>{
-    return 'Group ' + index + ': ' + Object.keys(users).join(', ');
+function showData(state: State) {
+  const data = state.data;
+
+  let groupId = -1;
+  if (state.myGroup) groupId = state.myGroup.gid;
+
+  let test = <>{groupId > -1 && <div>please see table: {groupId}</div>}</>;
+  return test;
+  // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
+}
+
+function showDataAdmin(state: State) {
+  const data = state.data;
+  return data.map((users, index) => {
+    let groupId = -1;
+    if (state.myGroup) groupId = state.myGroup.gid;
+
+    let test = (
+      <>
+        <div>{'Group ' + index + ': ' + Object.keys(users).join(', ')}</div>
+      </>
+    );
+    return test;
+    // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
   });
 }
 
@@ -92,67 +121,69 @@ export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = React.useState<State>({data:[],checks:0});
+  const [state, setState] = React.useState<State>({ data: [], checks: 0 });
 
   const pos = store.conf.positions;
+  const isAdmin = !pos || Object.keys(pos).length === 0;
   const conf = props.id || '111';
   const user = store.getRID();
 
-  React.useEffect( () => {
-    if(!pos || Object.keys(pos).length === 0) {
+  React.useEffect(() => {
+    if (isAdmin) {
       // is teacher
       return;
     }
 
-    console.log('starting test');
-    submit(pos, conf, user);
+    console.log('sending data');
+    submit(pos, conf, user).then(x => onSelect());
   }, []);
 
   // console.log('TopicInfo.Card data', data);
   const onSelect = async () => {
-    var data:Data = await getAll(conf);
+    var data: Data = await getAll(conf);
     const result = match2(data);
-    
+
+    if (!isAdmin) {
+      const myGroup = findMyGroup(store.getRID(), result);
+      if (myGroup) setState(p => ({ ...p, myGroup }));
+    }
+
     console.log('r', JSON.stringify(result));
-    setState(p=>({...p, data: result }));
+    setState(p => ({ ...p, data: result }));
   };
 
   useInterval(() => {
-    if(state.checks > 0) return; // stop
+    if (state.checks > 0) return; // stop
     console.log('state.checks', state.checks);
-    setState(p=>({...p, checks: p.checks + 1}));
+    setState(p => ({ ...p, checks: p.checks + 1 }));
     onSelect();
   }, 1000);
 
   return (
     <div className={classes.layout}>
       <Grid container spacing={2} justify="center">
-        
-          <Grid sm={10} md={10} lg={10} item>
-            <Card className={classes.card + ' ' + classes.bgCardColor}>
-              <CardContent className={classes.cardContent}>
-                <Typography variant="h5">Please Wait</Typography>
-                <Typography variant="body2">{showData(state.data)}</Typography>
-              </CardContent>
-              <CardActions style={{ justifyContent: 'center' }}>
-                
-                  <Button
-                    variant="contained"
-                    // size="small"
-                    color="secondary"
-                    className={classes.btn}
-                    onClick={() => onSelect()}
-                  >
-                    Retry
-                  </Button>
-                
-              </CardActions>
-            </Card>
-          </Grid>
-        
-        
+        <Grid sm={10} md={10} lg={10} item>
+          <Card className={classes.card + ' ' + classes.bgCardColor}>
+            <CardContent className={classes.cardContent}>
+              {state.data.length < 1 && <Typography variant="h5">Please Wait</Typography>}
+              <Typography variant="body2">
+                {isAdmin ? showDataAdmin(state) : showData(state)}
+              </Typography>
+            </CardContent>
+            <CardActions style={{ justifyContent: 'center' }}>
+              <Button
+                variant="contained"
+                // size="small"
+                color="secondary"
+                className={classes.btn}
+                onClick={() => onSelect()}
+              >
+                Retry
+              </Button>
+            </CardActions>
+          </Card>
+        </Grid>
       </Grid>
-      
     </div>
   );
 }
