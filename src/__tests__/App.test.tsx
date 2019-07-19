@@ -6,7 +6,7 @@ import { App } from '../App';
 
 afterEach(cleanup);
 
-it('renders without crashing', async () => {
+xit('renders without crashing', async () => {
   const { getByTestId, getByText, queryByText, findByRole, getByLabelText, container } = render(<App />);
 
   const greetingTextNode = await waitForElement(() =>

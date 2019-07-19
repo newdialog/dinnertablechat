@@ -57,7 +57,7 @@
     "react-dom": "^16.8.6",
     "react-fps-stats": "^0.1.2",
     "react-helmet": "^5.2.1",
-    "react-hooks-lib": "0.0.18",
+    "react-hooks-lib": "0.0.19",
     "react-hooks-set": "^1.1.9",
     "react-i18next": "^10.11.4",
     "react-lazy-load-component": "^1.0.8",
