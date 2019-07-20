@@ -17,6 +17,7 @@ import useInterval from '@use-it/interval';
 
 import { submit, getAll } from '../../services/ConfService';
 import { match, match2, findMyGroup } from '../../services/ConfMath';
+import ConfGraph from './ConfGraph';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -169,6 +170,7 @@ export default function PleaseWaitResults(props: Props) {
               <Typography variant="body2">
                 {isAdmin ? showDataAdmin(state) : showData(state)}
               </Typography>
+              <ConfGraph store={store}/>
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
               <Button
