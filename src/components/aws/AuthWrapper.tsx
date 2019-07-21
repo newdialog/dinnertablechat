@@ -78,7 +78,7 @@ function AuthComp(props: Props) {
     // console.log('handleAuth', props.login);
 
     if (s.auth.user && s.auth.user.id) { // || s.isGuest()
-      console.warn('stopping.. already logged in.');
+      /// console.warn('stopping.. already logged in.');
       return; // not sure if needed
     }
 

@@ -131,7 +131,7 @@ export default observer(function CIndex(props: Props) {
   const { t } = useTranslation();
 
   const id = props.id;
-  console.log('id', props.id);
+  // console.log('id', props.id);
 
   // console.log(store.auth.snapshot());
 

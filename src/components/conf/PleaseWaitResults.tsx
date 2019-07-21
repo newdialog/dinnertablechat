@@ -15,9 +15,14 @@ import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
-import { submit, getAll } from '../../services/ConfService';
+import { submit, getAll, isReady, submitReady, init } from '../../services/ConfService';
 import { match, match2, findMyGroup } from '../../services/ConfMath';
 import ConfGraph from './ConfGraph';
+
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+import FaceIcon from '@material-ui/icons/Face';
+import DoneIcon from '@material-ui/icons/Done';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -69,7 +74,10 @@ const useStyles = makeStyles(
     },
     imgLink: {
       textDecoration: 'none'
-    }
+    },
+    chip: {
+      margin: theme.spacing(1),
+    },
   }),
   { name: 'PositionSelector' }
 );
@@ -87,8 +95,9 @@ interface User {
 type Data = Array<User>;
 interface State {
   checks: number;
-  data: any;
+  data: any[];
   myGroup?: any;
+  ready: boolean;
 }
 
 function showData(state: State) {
@@ -103,9 +112,23 @@ function showData(state: State) {
   // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
 }
 
-function showDataAdmin(state: State) {
-  return '';
+function showDataAdmin(state: State, classes:any) {
+  const responses =  state.data.map(x=>Object.keys(x).length).reduce((a,b)=>a+b, 0);
 
+  return <><Chip
+      icon={<FaceIcon />}
+      label={'Groups: ' + state.data.length}
+      className={classes.chip}
+      color="primary"
+    /><Chip
+    icon={<FaceIcon />}
+    label={'Responses: ' + responses}
+    className={classes.chip}
+    color="primary"
+  /></>
+  
+  // =====
+  /* 
   const data = state.data;
   return data.map((users, index) => {
     let groupId = -1;
@@ -117,20 +140,28 @@ function showDataAdmin(state: State) {
     return test;
     // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
   });
+  */
 }
 
 export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = React.useState<State>({ data: [], checks: 0 });
+  const [state, setState] = React.useState<State>({ data: [], checks: 0, ready: false });
 
   const pos = store.conf.positions;
   const isAdmin = !pos || Object.keys(pos).length === 0;
   const conf = props.id || '111';
   const user = store.getRID();
 
+  const checkReady = async () => {
+    if(state.ready) return; // end checking if ready is true
+    const ready = await isReady(conf);
+    setState(p => ({ ...p, ready }));
+  }
+
   React.useEffect(() => {
+    checkReady();
     if (isAdmin) {
       // is teacher
       return;
@@ -156,10 +187,20 @@ export default function PleaseWaitResults(props: Props) {
 
   useInterval(() => {
     if (state.checks > 0) return; // stop
+    checkReady();
     console.log('state.checks', state.checks);
     setState(p => ({ ...p, checks: p.checks + 1 }));
     onSelect();
   }, 1000);
+
+  const onAdminReady = () => {
+    submitReady(true, conf);
+    checkReady();
+  };
+
+  React.useEffect( () => {
+    init();
+  }, []);
 
   return (
     <div className={classes.layout}>
@@ -169,7 +210,7 @@ export default function PleaseWaitResults(props: Props) {
             <CardContent className={classes.cardContent}>
               {state.data.length < 1 && <Typography variant="h5">Please Wait</Typography>}
               <Typography variant="body2">
-                {isAdmin ? showDataAdmin(state) : showData(state)}
+                {isAdmin ? showDataAdmin(state, classes) : showData(state)}
               </Typography>
               <ConfGraph store={store} data={state.data as any}/>
             </CardContent>
@@ -183,6 +224,16 @@ export default function PleaseWaitResults(props: Props) {
               >
                 Reload
               </Button>
+              { isAdmin && <Button
+                variant="contained"
+                disabled={state.ready}
+                // size="small"
+                color="secondary"
+                className={classes.btn}
+                onClick={() => onAdminReady()}
+              >
+                Set Ready
+              </Button>}
             </CardActions>
           </Card>
         </Grid>
