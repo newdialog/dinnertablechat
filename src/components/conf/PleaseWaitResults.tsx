@@ -104,6 +104,8 @@ function showData(state: State) {
 }
 
 function showDataAdmin(state: State) {
+  return '';
+
   const data = state.data;
   return data.map((users, index) => {
     let groupId = -1;
@@ -179,7 +181,7 @@ export default function PleaseWaitResults(props: Props) {
                 className={classes.btn}
                 onClick={() => onSelect()}
               >
-                Retry
+                Reload
               </Button>
             </CardActions>
           </Card>
