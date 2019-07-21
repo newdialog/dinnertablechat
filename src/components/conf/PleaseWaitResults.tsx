@@ -97,7 +97,8 @@ function showData(state: State) {
   let groupId = -1;
   if (state.myGroup) groupId = state.myGroup.gid;
 
-  let test = <>{groupId > -1 && <div>please see table: {groupId}</div>}</>;
+  const msg = 'please see table: ' + groupId;
+  let test = groupId > -1 ? msg : 'group error';
   return test;
   // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
 }
@@ -109,9 +110,7 @@ function showDataAdmin(state: State) {
     if (state.myGroup) groupId = state.myGroup.gid;
 
     let test = (
-      <>
-        <div>{'Group ' + index + ': ' + Object.keys(users).join(', ')}</div>
-      </>
+        <span key={index}>{'Group ' + index + ': ' + Object.keys(users).join(', ')}<br/></span>
     );
     return test;
     // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
@@ -170,7 +169,7 @@ export default function PleaseWaitResults(props: Props) {
               <Typography variant="body2">
                 {isAdmin ? showDataAdmin(state) : showData(state)}
               </Typography>
-              <ConfGraph store={store}/>
+              <ConfGraph store={store} data={state.data as any}/>
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
               <Button
