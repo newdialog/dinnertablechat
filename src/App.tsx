@@ -15,27 +15,12 @@ import i18n from './services/i18n';
 import * as TimeSerive from './services/TimeService';
 import { theme } from './withRoot';
 
-// import AppBar from './components/AppBar';
-
+const CookieCheck = React.lazy(() => import('./components/CookieCheck'));
 const AppBar = React.lazy(() => import('./components/AppBar'));
-// ----------
-/* var WebFont = require('webfontloader');
 
-WebFont.load({
-  custom: {
-    families: ['Montserrat', 'Roboto Mono'],
-    urls: ['/fonts/fonts.css']
-  }
-});
-*/
-// ----------
-
-// import Index from './components/home/home';
-// import { withRouter } from 'react-router';
-
-let _cache:any = null;
+let _cache: any = null;
 function init() {
-  if(_cache) return _cache;
+  if (_cache) return _cache;
   const routerModel = (RouterModel as any).create(); // TS Hack
   const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
@@ -46,11 +31,11 @@ function init() {
   // if(!store.isLive)
   connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting, prob bundled anyway
 
-  return _cache = {history, store};
+  return (_cache = { history, store });
 }
 
 export const App = () => {
-  const {history, store} = init();
+  const { history, store } = init();
 
   console.log('v1.3.11');
 
@@ -69,7 +54,6 @@ export const App = () => {
 
   return AppBase;
 };
-
 
 interface Props {
   store: import('./models/AppModel').Type;
@@ -139,6 +123,9 @@ export const Base = observer(function _Base(props: Props) {
       </Suspense>
       <Suspense fallback={LoadingMsg()}>
         <AppRouter history={history} store={store} />
+      </Suspense>
+      <Suspense fallback={null}>
+        <CookieCheck/>
       </Suspense>
     </WorkerUpdate>
   );
