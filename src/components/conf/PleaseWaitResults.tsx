@@ -15,7 +15,7 @@ import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
-import { submit, getAll, isReady, submitReady, init } from '../../services/ConfService';
+import { submit, getAll, isReady, submitReady, init, waitForReady } from '../../services/ConfService';
 import { match, match2, findMyGroup } from '../../services/ConfMath';
 import ConfGraph from './ConfGraph';
 
@@ -98,16 +98,18 @@ interface State {
   data: any[];
   myGroup?: any;
   ready: boolean;
+  submitBlocked: boolean;
 }
 
 function showData(state: State) {
-  const data = state.data;
+  // console.log('state.ready', state.ready);
+  if(!state.ready) return 'Waiting for assignments...';
 
   let groupId = -1;
   if (state.myGroup) groupId = state.myGroup.gid;
 
   const msg = 'please see table: ' + groupId;
-  let test = groupId > -1 ? msg : 'group error';
+  let test = groupId > -1 ? msg : 'Sorry, groups already assigned.'; // no group yet
   return test;
   // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
 }
@@ -143,37 +145,72 @@ function showDataAdmin(state: State, classes:any) {
   */
 }
 
+let checking = false;
 export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = React.useState<State>({ data: [], checks: 0, ready: false });
+  const [state, setState] = React.useState<State>({ data: [], checks: 0, ready: false, submitBlocked:false });
 
   const pos = store.conf.positions;
   const isAdmin = !pos || Object.keys(pos).length === 0;
   const conf = props.id || '111';
   const user = store.getRID();
 
-  const checkReady = async () => {
-    if(state.ready) return; // end checking if ready is true
-    const ready = await isReady(conf);
+  const checkReady = async (forceReady:boolean | null = null) => {
+    // if(state.ready) return; // end checking if ready is true
+    const ready = forceReady === null ? await isReady(conf) : forceReady;
+
+    // we have an update to submit but couldnt at start as we were in ready-state
+    if(!ready && state.submitBlocked === true) {
+      setState(p => ({ ...p, submitBlocked:false }));
+      await submit(pos, conf, user); // .then(onSelect);
+    }
+
     setState(p => ({ ...p, ready }));
+    return ready;
+    // !ready && // check even if Ready, because admin might unready
   }
 
+  const onStart = async () => {
+    console.log('sending data');
+
+    const ready = await checkReady();
+
+    if(!ready) await submit(pos, conf, user); // .then(checkReady);
+    else {
+      setState(p => ({ ...p, submitBlocked:true }));
+    }
+    await onSelect();
+
+    console.log('finished start');
+  };
+
   React.useEffect(() => {
-    checkReady();
+    console.log('user', user);
     if (isAdmin) {
+      // checkReady();
+      onSelect();
       // is teacher
       return;
     }
+    onStart();
 
-    console.log('sending data');
-    submit(pos, conf, user).then(x => onSelect());
+    /* submit(pos, conf, user).then(x => {
+      onSelect();
+      checkReady();
+    }); */
   }, []);
 
   // console.log('TopicInfo.Card data', data);
   const onSelect = async () => {
-    var data: Data = await getAll(conf);
+    //
+
+    const rdata = await getAll(conf);
+    console.log('rdata', rdata);
+    if(rdata.results)  await checkReady(rdata.meta.ready);
+
+    var data:Data = rdata.results;
     const result = match2(data);
 
     if (!isAdmin) {
@@ -181,21 +218,27 @@ export default function PleaseWaitResults(props: Props) {
       if (myGroup) setState(p => ({ ...p, myGroup }));
     }
 
-    console.log('r', JSON.stringify(result));
+    // console.log('r', JSON.stringify(result));
     setState(p => ({ ...p, data: result }));
   };
 
-  useInterval(() => {
+  const onInterval = React.useCallback( () => {
+    if (state.checks > 20) return;
+    onSelect();
+    setState(p => ({ ...p, checks: p.checks + 1 }));
+    /*
     if (state.checks > 0) return; // stop
     checkReady();
     console.log('state.checks', state.checks);
     setState(p => ({ ...p, checks: p.checks + 1 }));
     onSelect();
-  }, 1000);
+    */
+  }, [conf, user]);
 
-  const onAdminReady = () => {
-    submitReady(true, conf);
-    checkReady();
+  useInterval(onInterval, 8000);
+
+  const onAdminReady = (toggle:boolean) => {
+    submitReady(toggle, conf).then(x=>checkReady());
   };
 
   React.useEffect( () => {
@@ -226,13 +269,13 @@ export default function PleaseWaitResults(props: Props) {
               </Button>
               { isAdmin && <Button
                 variant="contained"
-                disabled={state.ready}
+                // disabled={state.ready}
                 // size="small"
                 color="secondary"
                 className={classes.btn}
-                onClick={() => onAdminReady()}
+                onClick={() => onAdminReady(!state.ready)}
               >
-                Set Ready
+                {!state.ready ? 'Set Ready' : 'Unready'}
               </Button>}
             </CardActions>
           </Card>

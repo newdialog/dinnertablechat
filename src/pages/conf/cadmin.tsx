@@ -133,7 +133,7 @@ export default observer(function CAdmin(props: Props) {
   const [state, setState] = useState<any>({});
 
   const id = props.id;
-  console.log('id', props.id);
+  // console.log('id', props.id);
 
   // console.log(store.auth.snapshot());
 

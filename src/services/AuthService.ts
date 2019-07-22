@@ -156,6 +156,7 @@ export async function refreshCredentials() {
 
 // const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function checkUser(cb: AwsCB, event: string = '') {
+  // console.log('checkUser');
   let data: any;
   cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
@@ -180,6 +181,8 @@ async function checkUser(cb: AwsCB, event: string = '') {
     // else console.log('+++ currentAuthenticatedUser found on retry');
   }
   const user = data.attributes;
+  // console.log('user', user);
+  refreshCredentials();
 
   //// AWS.config.credentials = new AWS.Credentials(credentials);
   // FIX: https://github.com/aws-amplify/amplify-js/issues/581

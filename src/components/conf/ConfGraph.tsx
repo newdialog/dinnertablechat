@@ -66,7 +66,7 @@ export default function ConfGraph(props: Props) {
   const { t } = useTranslation();
   // const [state, setState] = React.useState<State>({ data: [], checks: 0 });
 
-  console.log('ConfGraph', props.data);
+  // console.log('ConfGraph', props.data);
   if(props.data.length === 0) return null;
 
   const data2 = props.data.map( (g, index) => {
@@ -84,7 +84,7 @@ export default function ConfGraph(props: Props) {
     children: data2
   }
 
-  console.log(JSON.stringify(valo, null, 2));
+  // console.log(JSON.stringify(valo, null, 2));
 
   return (
     <div className={classes.layout}>
