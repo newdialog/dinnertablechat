@@ -11,6 +11,11 @@
       "cache": false
     }
   },
+  "resolutions": {
+    "aws-sdk": "^2.496.0",
+    "**/aws-sdk": "^2.496.0",
+    "**/moment": "^2.24.0"
+  },
   "dependencies": {
     "@awspilot/dynamodb": "^1.5.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",

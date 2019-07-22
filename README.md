@@ -1,8 +1,8 @@
 Dinnertable.chat
 
-- [Stack](#stack)
-- [Getting started](#getting-started)
-- [Configs](#configs)
+- [Stack](#Stack)
+- [Getting started](#Getting-started)
+- [Configs](#Configs)
 
 ### Stack
 
@@ -22,10 +22,10 @@ awsmobile configure
 
 After cloning project:
 ```
-npm install
+yarn install
 awsmobile init 842a85ef-0cf3-4602-beac-784388fbbf64
 
-npm start
+yarn start
 ```
 
 ### Configs
