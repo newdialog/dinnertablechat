@@ -242,7 +242,7 @@ export default observer(function CAdmin(props: Props) {
               color="textSecondary"
               gutterBottom
             >
-              dinnertable.chat/c/{id}
+              {window.location.origin}/c/{id}
             </Typography>
             <Button
                     variant="contained"
