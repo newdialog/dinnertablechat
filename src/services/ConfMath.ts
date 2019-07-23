@@ -26,7 +26,7 @@ function groupify(
     groups[g] = groups[g].concat([pnt]);
   }
 
-  console.log('groups', groups);
+  // console.log('groups', groups);
   return groups;
 }
 

@@ -142,7 +142,10 @@ export default observer(function CIndex(props: Props) {
 
   useEffect(() => {
     // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
-    if(store.auth.isAuthenticated() && !store.auth.isNotLoggedIn) return;
+    if(store.auth.isAuthenticated()) return;
+    if(!store.auth.isNotLoggedIn) return;
+
+    console.log('--logging in as guest');
     
     if(!store.auth.user) {
       store.auth.guestLogin();

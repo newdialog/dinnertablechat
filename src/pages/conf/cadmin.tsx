@@ -143,11 +143,14 @@ export default observer(function CAdmin(props: Props) {
   }, []);
 
   useEffect(() => {
+    if(store.auth.isAuthenticated() && !store.auth.isAdmin()) store.auth.logout();
     // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
-    if(store.auth.isAuthenticated() && !store.auth.isNotLoggedIn) return;
+    if(store.auth.isAuthenticated()) return;
+    if(!store.auth.isNotLoggedIn) return;
     
     if(!store.auth.user) {
-      store.auth.guestLogin();
+      // store.auth.guestLogin();
+      store.auth.login(window.location.pathname);
     }
     else console.log('user', store.auth.user);
   }, [store.auth.isNotLoggedIn, store.auth.user]);
@@ -201,6 +204,7 @@ export default observer(function CAdmin(props: Props) {
         {/* Hero unit */}
         <div className={classes.heroUnit}>
           <div className={classes.heroContent}>
+            { store.auth.isAdmin() ? <button onClick={()=>store.auth.logout()}>logout</button>  : 'not an admin' }
             {props.isTest && <h2>TEST MODE (/test)</h2>}
             <Typography
               variant="h1"

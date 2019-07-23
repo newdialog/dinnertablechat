@@ -153,7 +153,7 @@ export default function PleaseWaitResults(props: Props) {
   const [state, setState] = React.useState<State>({ data: [], checks: 0, ready: false, submitBlocked:false });
 
   const pos = store.conf.positions;
-  const isAdmin = !pos || Object.keys(pos).length === 0;
+  const isAdminPage = !pos || Object.keys(pos).length === 0;
   const conf = props.id || '111';
   const user = store.getRID();
 
@@ -188,7 +188,7 @@ export default function PleaseWaitResults(props: Props) {
 
   React.useEffect(() => {
     console.log('user', user);
-    if (isAdmin) {
+    if (isAdminPage) {
       // checkReady();
       onSelect();
       // is teacher
@@ -213,7 +213,7 @@ export default function PleaseWaitResults(props: Props) {
     var data:Data = rdata.results;
     const result = match2(data);
 
-    if (!isAdmin) {
+    if (!isAdminPage) {
       const myGroup = findMyGroup(store.getRID(), result);
       if (myGroup) setState(p => ({ ...p, myGroup }));
     }
@@ -223,9 +223,9 @@ export default function PleaseWaitResults(props: Props) {
   };
 
   const onInterval = React.useCallback( () => {
-    if (state.checks > 6) return;
+    if (state.checks > 5) return;
     onSelect();
-    setState(p => ({ ...p, checks: p.checks + 1 }));
+    setState(p => ({ ...p, checks: state.checks+1}));
     /*
     if (state.checks > 0) return; // stop
     checkReady();
@@ -233,9 +233,9 @@ export default function PleaseWaitResults(props: Props) {
     setState(p => ({ ...p, checks: p.checks + 1 }));
     onSelect();
     */
-  }, [conf, user]);
+  }, [conf, user, state.checks]);
 
-  useInterval(onInterval, 10000);
+  useInterval(onInterval, 20 * 1000);
 
   const onAdminReady = (toggle:boolean) => {
     submitReady(toggle, conf).then(x=>checkReady());
@@ -253,7 +253,7 @@ export default function PleaseWaitResults(props: Props) {
             <CardContent className={classes.cardContent}>
               {state.data.length < 1 && <Typography variant="h5">Please Wait</Typography>}
               <Typography variant="body2">
-                {isAdmin ? showDataAdmin(state, classes) : showData(state)}
+                {isAdminPage ? showDataAdmin(state, classes) : showData(state)}
               </Typography>
               <ConfGraph store={store} data={state.data as any}/>
             </CardContent>
@@ -267,7 +267,7 @@ export default function PleaseWaitResults(props: Props) {
               >
                 Reload
               </Button>
-              { isAdmin && <Button
+              { isAdminPage && <Button
                 variant="contained"
                 // disabled={state.ready}
                 // size="small"

@@ -107,7 +107,7 @@ function AuthComp(props: Props) {
   };
 
   // console.log('props.store.auth.doLogin', props.store.auth.doLogin, props.login)
-  console.log('props.login', props.login);
+  // console.log('props.login', props.login);
   if (props.login) {
     // props.login) {
     // props.OAuthSignIn()

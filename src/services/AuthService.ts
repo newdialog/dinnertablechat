@@ -13,6 +13,11 @@ import retry from 'async-retry';
 // import { Logger } from 'aws-amplify';
 import { Hub } from 'aws-amplify';
 import { injectConfig } from '../configs/AWSconfig';
+
+// Fix analytics error message
+import { Analytics } from 'aws-amplify';
+import { CognitoUserSession } from 'amazon-cognito-identity-js';
+Analytics.configure({ disabled: true });
 // import { ConsoleLogger } from '@aws-amplify/core';
 
 const delayFlag = async (obj: { flag: boolean }) =>
@@ -92,7 +97,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   }
   if (payload.event === LOGIN_EVENT) {
     //  || payload.event === 'cognitoHostedUI'
-    console.log('onHubCapsule signIn', capsule);
+    // console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
   } else if (payload.event === 'configured' && !callbackPage) checkUser(cb);
 }
@@ -103,7 +108,7 @@ export function auth(cb: AwsCB, callbackPage: boolean = false) {
 
   // Order is important
   Hub.listen(/.*/, x => {
-    console.log('hubevent:', x);
+    // console.log('hubevent:', x);
   });
   Hub.listen(
     'auth',
@@ -164,10 +169,12 @@ export async function refreshCredentials() {
 async function checkUser(cb: AwsCB, event: string = '') {
   // console.log('checkUser');
   let data: any;
+  let session: CognitoUserSession;
   cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
     // console.time('currentAuthenticatedUser');
     data = await Auth.currentAuthenticatedUser();
+    session = await await Auth.currentSession();
     // bypassCheck; // Auth.currentUserCredentials();
     // console.timeEnd('currentAuthenticatedUser');
   } catch (e) {
@@ -190,8 +197,8 @@ async function checkUser(cb: AwsCB, event: string = '') {
   }
   const user = data.attributes;
 
-  console.log('user', data);
-  refreshCredentials();
+  console.log('user', data, '----', await Auth.currentSession());
+  refreshCredentials(); // needed for dynamo labs
 
   //// AWS.config.credentials = new AWS.Credentials(credentials);
   // FIX: https://github.com/aws-amplify/amplify-js/issues/581
@@ -209,8 +216,17 @@ async function checkUser(cb: AwsCB, event: string = '') {
     cb(null);
     return;
   }
+  console.log(
+    'session.getIdToken()',
+    session.getIdToken().payload['cognito:groups']
+  );
   cb({
-    user: { name: user.name, email: user.email, id: data.username },
+    user: {
+      name: user.name,
+      email: user.email,
+      id: data.username,
+      groups: session.getIdToken().payload['cognito:groups']
+    },
     ...authParams
   });
 }
@@ -240,7 +256,7 @@ export async function guestLogin() {
   try {
     // await Auth.currentCredentials(); //
     const user = await Auth.signIn('guest@dinnertable.chat', 'weallneed2talk'); // Guest
-    console.log('user', user);
+    // console.log('user', user);
     // Hub.dispatch('auth', { event: LOGIN_EVENT, ...user });
   } catch (err) {
     console.error('AuthServoce err', err.code, err);

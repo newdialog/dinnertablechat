@@ -7,6 +7,7 @@ const UserModel = types
     email: types.string,
     name: types.string,
     id: types.string,
+    groups: types.array(types.string),
     guestSeed: types.string,
     numDebates: types.number
     // creds: types.maybeNull(types.frozen<any>())
@@ -48,11 +49,15 @@ const AuthModel = types
     snapshot() {
       return JSON.stringify(getSnapshot(self));
     },
-    login() {
+    login(loginTo?: string) {
       if (!self.doLogin)
         window.gtag('event', 'login_action', {
           event_category: 'auth'
         });
+
+      if (loginTo) {
+        localStorage.setItem('loginTo', loginTo!);
+      }
       self.doLogin = true;
       // signIn();
     },
@@ -79,7 +84,12 @@ const AuthModel = types
         user,
         region
       }: {
-        user: { name: string; email: string; id: string };
+        user: {
+          name: string;
+          email: string;
+          id: string;
+          groups: Array<string>;
+        };
         region: any;
       } = authServiceData;
 
@@ -100,6 +110,7 @@ const AuthModel = types
       let idWithSeed = !isGuest ? user.id : user.id + '__' + seed;
       // console.log('idWithSeed', idWithSeed);
       window.gtag('set', 'userId', idWithSeed);
+      // mixpanel auth
       if (window.mixpanel) {
         (window.mixpanel as any).identify(idWithSeed);
         user.email &&
@@ -113,6 +124,7 @@ const AuthModel = types
       const umodel = {
         name: user.name,
         email: user.email,
+        groups: user.groups,
         id: user.id,
         guestSeed: seed,
         numDebates: 0
@@ -132,6 +144,10 @@ const AuthModel = types
     }
   }))
   .views(self => ({
+    isAdmin() {
+      if (self.isNotLoggedIn || !self.user) return false;
+      return self.user.groups.indexOf('conf_admins') !== -1;
+    },
     geCogId() {
       return self.aws!.region + ':' + self.user!.id;
     },
