@@ -77,6 +77,7 @@ const useStyles = makeStyles(
     },
     verticalCenter: {
       margin: 0,
+      textAlign: 'center',
       position: 'absolute',
       marginTop: '1em',
       top: '50%',
