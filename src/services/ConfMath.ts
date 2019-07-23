@@ -76,6 +76,8 @@ function diversify(
 // Basically just convert data types
 export function match2(getAllData: any, maxGroups: number = 2) {
   const data = getAllData;
+  if (data.length === 0) return [];
+
   let rawListOfAnswersIds: string[] = [];
 
   data.map(x => {

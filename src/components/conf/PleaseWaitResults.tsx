@@ -208,7 +208,7 @@ export default function PleaseWaitResults(props: Props) {
 
     const rdata = await getAll(conf);
     console.log('rdata', rdata);
-    if(rdata.results)  await checkReady(rdata.meta.ready);
+    if(rdata.results)  await checkReady(rdata.meta ? rdata.meta.ready : null);
 
     var data:Data = rdata.results;
     const result = match2(data);

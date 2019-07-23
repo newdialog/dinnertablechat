@@ -1,5 +1,5 @@
 import { retryBackoff, intervalBackoff } from 'backoff-rxjs';
-import { Auth, API } from 'aws-amplify';
+// import { Auth, API } from 'aws-amplify';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 import DynamodbFactory from '@awspilot/dynamodb';
 import { refreshCredentials } from './AuthService';
@@ -28,6 +28,10 @@ import {
 let docClient: any; // DynamoDB.DocumentClient;
 let started: boolean = false;
 
+const USERS_TABLE = 'conf-users';
+const CONF_TABLE = 'conf';
+
+let identityId: string = '';
 export async function init() {
   if (docClient) return docClient;
 
@@ -42,12 +46,15 @@ export async function init() {
     )
     .toPromise();
 
+  identityId = cr.identityId;
+
   console.log('DB init');
   console.log('DB cr', cr); // , Object.keys(cr).length < 2);
 
   /// console.log('DB cred', cr);
   docClient = DynamodbFactory(new DynamoDB(cr)); // await refreshCredentials()));
   started = true;
+
   docClient.schema([
     {
       TableName: 'conf',
@@ -58,6 +65,22 @@ export async function init() {
         },
         {
           AttributeName: 'user',
+          KeyType: 'RANGE'
+        }
+      ]
+    }
+  ]);
+
+  docClient.schema([
+    {
+      TableName: 'conf-users',
+      KeySchema: [
+        {
+          AttributeName: 'user',
+          KeyType: 'HASH'
+        },
+        {
+          AttributeName: 'conf',
           KeyType: 'RANGE'
         }
       ]
@@ -79,62 +102,66 @@ export async function submitAll(
 export async function delAll(conf: string) {
   if (!docClient) await init();
 
-  const p = new Promise((resolve, reject) => {
-    docClient
-      .table('conf')
-      .where('conf')
-      .eq(conf)
-      .delete((err: any, data: any) => {
-        if (err) reject(err);
-        else resolve(data);
-      });
-  });
-  return await p;
+  return docClient
+    .table(USERS_TABLE)
+    .where('conf')
+    .eq(conf)
+    .delete();
 }
 
-export async function submit(positions: any, conf: string, user: string) {
+export async function submit(positions: any, conf: string, user?: string) {
   if (!docClient) await init();
 
-  const p = new Promise((resolve, reject) => {
-    docClient
-      .table('conf')
-      .return(docClient.UPDATED_OLD)
-      .insert_or_update(
-        {
-          conf,
-          user,
-          answers: positions
-        },
-        (err: any, data: any) => {
-          if (err) reject(err);
-          else resolve(data);
-          // console.log('saved', err, data);
-        }
-      );
+  user = identityId;
+
+  console.log('submit user', user);
+
+  return docClient
+    .table(USERS_TABLE)
+    .return(docClient.UPDATED_OLD)
+    .insert_or_update({
+      conf,
+      user,
+      answers: positions
+    });
+}
+
+export async function submitSeats(
+  seatIndex: number[],
+  users: number[],
+  conf: string
+  // user: string
+) {
+  if (!docClient) await init();
+
+  let batch = docClient
+    .batch()
+    .table(USERS_TABLE)
+    .return(docClient.UPDATED_OLD);
+
+  seatIndex.forEach((seat, index) => {
+    const user = users[index];
+    batch = batch.insert_or_update({
+      conf,
+      user,
+      seat: seat
+    });
   });
-  return await p;
+
+  return batch.write();
 }
 
 export async function submitReady(ready: boolean, conf: string) {
   if (!docClient) await init();
 
-  const p = new Promise((resolve, reject) => {
-    docClient
-      .table('conf')
-      .return(docClient.UPDATED_OLD)
-      .insert_or_update(
-        {
-          conf,
-          user: '_',
-          answers: { ready }
-        },
-        (err: any, data: any) => {
-          if (err) reject(err);
-          else resolve(data);
-        }
-      );
-  });
-  return await p;
+  return docClient
+    .table(USERS_TABLE)
+    .return(docClient.UPDATED_OLD)
+    .insert_or_update({
+      conf,
+      user: '_',
+      answers: { ready }
+    });
 }
 
 export async function waitForReady(conf: string, targetState: boolean = true) {
@@ -146,23 +173,13 @@ export async function waitForReady(conf: string, targetState: boolean = true) {
       takeWhile(x => x !== targetState)
     )
     .toPromise();
-
-  /* return defer(() => isReady(conf))
-    .pipe(
-      map(x => {
-        if (!x) throw x;
-        return x;
-      }),
-      retryBackoff({ initialInterval: 3000, maxRetries: 10 })
-    )
-    .toPromise(); */
 }
 
 export async function isReady(conf: string) {
   if (!docClient) await init();
 
   const p = docClient // new Promise( (resolve, reject) => {
-    .table('conf')
+    .table(USERS_TABLE)
     .return(docClient.UPDATED_OLD)
     .select('user', 'answers')
     .having('user')
@@ -170,7 +187,6 @@ export async function isReady(conf: string) {
     .having('conf')
     .eq(conf)
     .scan();
-  // });
 
   const re = (await p) as any[];
   if (re && re.length > 0) console.log(re[0].answers);
@@ -186,7 +202,7 @@ export async function getAll(
   if (!docClient) await init();
 
   return docClient
-    .table('conf')
+    .table(USERS_TABLE)
     .select('user', 'answers')
     .having('conf')
     .eq(conf)

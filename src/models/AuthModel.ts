@@ -1,5 +1,6 @@
 import { types, Instance, flow, getSnapshot } from 'mobx-state-tree';
 import uuid from 'short-uuid';
+import { signIn } from 'components/aws/AuthWrapper';
 
 const UserModel = types
   .model({
@@ -53,6 +54,7 @@ const AuthModel = types
           event_category: 'auth'
         });
       self.doLogin = true;
+      signIn();
     },
     logout(didLogOut: boolean = false) {
       if (didLogOut) {
@@ -130,6 +132,9 @@ const AuthModel = types
     }
   }))
   .views(self => ({
+    geCogId() {
+      return self.aws!.region + ':' + self.user!.id;
+    },
     isAuthenticated() {
       return self.user && self.aws && !self.isNotLoggedIn;
     }

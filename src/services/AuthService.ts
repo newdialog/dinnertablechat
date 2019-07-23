@@ -13,6 +13,7 @@ import retry from 'async-retry';
 // import { Logger } from 'aws-amplify';
 import { Hub } from 'aws-amplify';
 import { injectConfig } from '../configs/AWSconfig';
+// import { ConsoleLogger } from '@aws-amplify/core';
 
 const delayFlag = async (obj: { flag: boolean }) =>
   await retry(
@@ -45,8 +46,9 @@ if (!AWS.config || !AWS.config.region) {
   AWS.config = new AWS.Config({ region: 'us-east-1' });
 }
 
+/*
 function getLoggger() {
-  /* const logger: any = new ConsoleLogger('dtc_aws_log');
+  const logger: any = new ConsoleLogger('dtc_aws_log');
   logger.onHubCapsule = capsule => {
     switch (capsule.payload.event) {
       case 'signIn':
@@ -68,8 +70,9 @@ function getLoggger() {
         break;
     }
   };
-  return logger; */
+  return logger;
 }
+*/
 
 export const LOGIN_EVENT = 'signIn';
 export const LOGOUT_EVENT = 'signOut';
@@ -99,6 +102,9 @@ export function auth(cb: AwsCB, callbackPage: boolean = false) {
   const awsmobileInjected = injectConfig(awsmobile);
 
   // Order is important
+  Hub.listen(/.*/, x => {
+    console.log('hubevent:', x);
+  });
   Hub.listen(
     'auth',
     onHubCapsule.bind(null, cb, callbackPage)
@@ -161,13 +167,15 @@ async function checkUser(cb: AwsCB, event: string = '') {
   cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
     // console.time('currentAuthenticatedUser');
-    data = await Auth.currentAuthenticatedUser({
-      bypassCache: false // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-    });
+    data = await Auth.currentAuthenticatedUser();
+    // bypassCheck; // Auth.currentUserCredentials();
     // console.timeEnd('currentAuthenticatedUser');
   } catch (e) {
     // console.timeEnd('currentAuthenticatedUser');
-    // console.log('---currentAuthenticatedUser not logged in, double checking', e);
+    console.log(
+      '---currentAuthenticatedUser not logged in, double checking',
+      e
+    );
     // await delay(1600);
     // console.time('currentAuthenticatedUser2');
     // data = await Auth.currentAuthenticatedUser().catch(e => {
@@ -181,7 +189,8 @@ async function checkUser(cb: AwsCB, event: string = '') {
     // else console.log('+++ currentAuthenticatedUser found on retry');
   }
   const user = data.attributes;
-  // console.log('user', user);
+
+  console.log('user', data);
   refreshCredentials();
 
   //// AWS.config.credentials = new AWS.Credentials(credentials);
@@ -229,8 +238,10 @@ function uuidv4(): string {
 export async function guestLogin() {
   console.log('guestLogin');
   try {
+    // await Auth.currentCredentials(); //
     const user = await Auth.signIn('guest@dinnertable.chat', 'weallneed2talk'); // Guest
     console.log('user', user);
+    // Hub.dispatch('auth', { event: LOGIN_EVENT, ...user });
   } catch (err) {
     console.error('AuthServoce err', err.code, err);
     /* alert(

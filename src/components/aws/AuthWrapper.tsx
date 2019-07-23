@@ -20,6 +20,33 @@ interface State {
   init: boolean;
 }
 
+export const signIn = () => {
+  if (!Auth || typeof Auth.configure !== 'function') {
+    throw new Error(
+      'No Auth module found, please ensure @aws-amplify/auth is imported'
+    );
+  }
+
+  const config = (Auth.configure(null) as any).oauth;
+  // console.log('withOAuth configuration', config);
+
+  const { domain, redirectSignIn, redirectSignOut, responseType } = config;
+
+  // const options = config.options || {};
+  const url =
+    'https://' +
+    domain +
+    '/signup?redirect_uri=' +
+    redirectSignIn +
+    '&response_type=' +
+    responseType +
+    '&client_id=' +
+    (Auth.configure(null) as any).userPoolWebClientId;
+
+  localStorage.removeItem('signup');
+  window.location.assign(url);
+};
+
 //
 function AuthComp(props: Props) {
   const store = props.store;
@@ -47,32 +74,7 @@ function AuthComp(props: Props) {
     if(store.auth.doLogout) AuthService.logout().then( () => store.auth.logout(true));
   }, [store.auth.doLogout]);
 
-  const signIn = () => {
-    if (!Auth || typeof Auth.configure !== 'function') {
-      throw new Error(
-        'No Auth module found, please ensure @aws-amplify/auth is imported'
-      );
-    }
-
-    const config = (Auth.configure(null) as any).oauth;
-    // console.log('withOAuth configuration', config);
-
-    const { domain, redirectSignIn, redirectSignOut, responseType } = config;
-
-    // const options = config.options || {};
-    const url =
-      'https://' +
-      domain +
-      '/signup?redirect_uri=' +
-      redirectSignIn +
-      '&response_type=' +
-      responseType +
-      '&client_id=' +
-      (Auth.configure(null) as any).userPoolWebClientId;
-
-    localStorage.removeItem('signup');
-    window.location.assign(url);
-  };
+  
 
   const handleAuth = (awsUser: AuthService.AwsAuth | null) => {
     // console.log('handleAuth', props.login);
@@ -105,6 +107,7 @@ function AuthComp(props: Props) {
   };
 
   // console.log('props.store.auth.doLogin', props.store.auth.doLogin, props.login)
+  console.log('props.login', props.login);
   if (props.login) {
     // props.login) {
     // props.OAuthSignIn()

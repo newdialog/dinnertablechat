@@ -34,6 +34,8 @@ const AppModel = types
       return self.dailyOpen || TimeService.
     },*/
     getRID() {
+      if (self.auth.user) return self.auth.geCogId();
+
       let rid = localStorage.getItem('guestSeed'); // reuse guest seed
       if (!rid) {
         rid = uuid.generate();
@@ -55,7 +57,7 @@ const AppModel = types
       if (self._isStandalone) return true;
 
       const enabledOnSafari = (window.navigator as any).standalone === true;
-      if(!window.matchMedia) return false; // local testing
+      if (!window.matchMedia) return false; // local testing
 
       const result =
         window.matchMedia('(display-mode: standalone)').matches ||

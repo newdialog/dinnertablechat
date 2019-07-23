@@ -78,6 +78,7 @@ export default observer(function ButtonAppBar(props: Props) {
 
   const deps = [store.auth, store.isSaas, store.debate.match, store.showNav];
 
+  console.log('store.auth.doLogin', store.auth.doLogin);
   const AuthMod = () => <AuthWrapper store={store} login={store.auth.doLogin} />;
 
   return useMemo( () => {
