@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
 import { observer } from 'mobx-react-lite';
 import React, {useContext, useMemo} from 'react';
-import AuthWrapper from '../components/aws/AuthWrapper';
+
 import * as Store from '../models/AppModel';
 import UserStats from './menus/dash/UserStats';
 
@@ -78,16 +78,12 @@ export default observer(function ButtonAppBar(props: Props) {
 
   const deps = [store.auth, store.isSaas, store.debate.match, store.showNav];
 
-  console.log('store.auth.doLogin', store.auth.doLogin);
-  const AuthMod = () => <AuthWrapper store={store} login={store.auth.doLogin} />;
-
   return useMemo( () => {
-    if(store.debate.match && store.debate.match.sync) return <AuthMod/>;
-    if (!store.showNav) return <AuthMod/>;
-    if (store.isSaas) return <AuthMod/>;
+    if(store.debate.match && store.debate.match.sync) return null;
+    if (!store.showNav) return null;
+    if (store.isSaas) return null;
 
     return (<div className={classes.root}>
-      <AuthMod/>
       <AppBar
         position="fixed"
         color="default"

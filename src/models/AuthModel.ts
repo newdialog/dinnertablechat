@@ -1,6 +1,6 @@
 import { types, Instance, flow, getSnapshot } from 'mobx-state-tree';
 import uuid from 'short-uuid';
-import { signIn } from 'components/aws/AuthWrapper';
+// import { signIn } from 'components/aws/AuthWrapper';
 
 const UserModel = types
   .model({
@@ -54,7 +54,7 @@ const AuthModel = types
           event_category: 'auth'
         });
       self.doLogin = true;
-      signIn();
+      // signIn();
     },
     logout(didLogOut: boolean = false) {
       if (didLogOut) {

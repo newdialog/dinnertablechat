@@ -17,6 +17,7 @@ import { theme } from './withRoot';
 
 const CookieCheck = React.lazy(() => import('./components/CookieCheck'));
 const AppBar = React.lazy(() => import('./components/AppBar'));
+const AuthWrapper = React.lazy(() => import('./components/aws/AuthWrapper'));
 
 let _cache: any = null;
 function init() {
@@ -120,6 +121,7 @@ export const Base = observer(function _Base(props: Props) {
     <WorkerUpdate store={store}>
       <Suspense fallback={null}>
         <AppBar store={store} />
+        <AuthWrapper store={store} login={store.auth.doLogin}/>
       </Suspense>
       <Suspense fallback={LoadingMsg()}>
         <AppRouter history={history} store={store} />

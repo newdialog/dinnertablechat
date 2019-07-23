@@ -223,7 +223,7 @@ export default function PleaseWaitResults(props: Props) {
   };
 
   const onInterval = React.useCallback( () => {
-    if (state.checks > 20) return;
+    if (state.checks > 6) return;
     onSelect();
     setState(p => ({ ...p, checks: p.checks + 1 }));
     /*
@@ -235,7 +235,7 @@ export default function PleaseWaitResults(props: Props) {
     */
   }, [conf, user]);
 
-  useInterval(onInterval, 8000);
+  useInterval(onInterval, 10000);
 
   const onAdminReady = (toggle:boolean) => {
     submitReady(toggle, conf).then(x=>checkReady());
