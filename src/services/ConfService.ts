@@ -151,7 +151,7 @@ export async function submitSeats(
   return batch.write();
 }
 
-export async function submitReady(ready: boolean, conf: string) {
+export async function submitReady(ready: boolean, conf: string, results:any) {
   if (!docClient) await init();
 
   return docClient
@@ -160,7 +160,7 @@ export async function submitReady(ready: boolean, conf: string) {
     .insert_or_update({
       conf,
       user: '_',
-      answers: { ready }
+      answers: { ready, results }
     });
 }
 
@@ -194,6 +194,29 @@ export async function isReady(conf: string) {
   if (!re) return false;
   if (re.length === 0) return false;
   return re[0].answers.ready === true;
+}
+
+export async function getResults(conf: string) {
+  if (!docClient) await init();
+
+  const p = docClient // new Promise( (resolve, reject) => {
+    .table(USERS_TABLE)
+    .return(docClient.UPDATED_OLD)
+    .select('user', 'answers')
+    .having('user')
+    .eq('_')
+    .having('conf')
+    .eq(conf)
+    .scan();
+
+  const re = (await p) as any[];
+  if (re && re.length > 0) console.log(re[0].answers);
+
+  if (!re) return null;
+  if (re.length === 0) return null;
+
+  if(re[0].answers.ready === true) return re[0].answers.results;
+  else return null;
 }
 
 export async function getAll(

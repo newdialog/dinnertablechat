@@ -17,7 +17,7 @@ import { injectConfig } from '../configs/AWSconfig';
 // Fix analytics error message
 import { Analytics } from 'aws-amplify';
 import { CognitoUserSession } from 'amazon-cognito-identity-js';
-import { ICredentials } from '@aws-amplify/core';
+
 Analytics.configure({ disabled: true });
 // import { ConsoleLogger } from '@aws-amplify/core';
 
@@ -138,7 +138,7 @@ export interface AwsAuth {
 }
 
 let cacheCred: any = null;
-export async function refreshCredentials(): Promise<ICredentials | any> {
+export async function refreshCredentials(): Promise<any> { // ICredentials | 
   if (cacheCred) return cacheCred;
   // wait while another call is configuring
   if (cacheCred && !cacheCred.flag) {
@@ -172,7 +172,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
   // console.log('checkUser');
   // let data: any;
   let session: CognitoUserSession | null = null;
-  let cr: ICredentials | null = null;
+  let cr: any = null;
   cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
     // console.time('currentAuthenticatedUser');

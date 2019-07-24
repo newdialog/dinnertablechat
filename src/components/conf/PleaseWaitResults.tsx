@@ -15,7 +15,15 @@ import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
-import { submit, getAll, isReady, submitReady, init, waitForReady } from '../../services/ConfService';
+import {
+  submit,
+  getAll,
+  isReady,
+  getResults,
+  submitReady,
+  init,
+  waitForReady
+} from '../../services/ConfService';
 import { match, match2, findMyGroup } from '../../services/ConfMath';
 import ConfGraph from './ConfGraph';
 
@@ -76,8 +84,8 @@ const useStyles = makeStyles(
       textDecoration: 'none'
     },
     chip: {
-      margin: theme.spacing(1),
-    },
+      margin: theme.spacing(1)
+    }
   }),
   { name: 'PositionSelector' }
 );
@@ -103,7 +111,7 @@ interface State {
 
 function showData(state: State) {
   // console.log('state.ready', state.ready);
-  if(!state.ready) return 'Waiting for assignments...';
+  if (!state.ready) return 'Waiting for assignments...';
 
   let groupId = -1;
   if (state.myGroup) groupId = state.myGroup.gid;
@@ -114,21 +122,28 @@ function showData(state: State) {
   // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
 }
 
-function showDataAdmin(state: State, classes:any) {
-  const responses =  state.data.map(x=>Object.keys(x).length).reduce((a,b)=>a+b, 0);
+function showDataAdmin(state: State, classes: any) {
+  const responses = state.data
+    .map(x => Object.keys(x).length)
+    .reduce((a, b) => a + b, 0);
 
-  return <><Chip
-      icon={<FaceIcon />}
-      label={'Groups: ' + state.data.length}
-      className={classes.chip}
-      color="primary"
-    /><Chip
-    icon={<FaceIcon />}
-    label={'Responses: ' + responses}
-    className={classes.chip}
-    color="primary"
-  /></>
-  
+  return (
+    <>
+      <Chip
+        icon={<FaceIcon />}
+        label={'Groups: ' + state.data.length}
+        className={classes.chip}
+        color="primary"
+      />
+      <Chip
+        icon={<FaceIcon />}
+        label={'Responses: ' + responses}
+        className={classes.chip}
+        color="primary"
+      />
+    </>
+  );
+
   // =====
   /* 
   const data = state.data;
@@ -150,36 +165,42 @@ export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = React.useState<State>({ data: [], checks: 0, ready: false, submitBlocked:false });
+  const [state, setState] = React.useState<State>({
+    data: [],
+    checks: 0,
+    ready: false,
+    submitBlocked: false
+  });
 
   const pos = store.conf.positions;
   const isAdminPage = !pos || Object.keys(pos).length === 0;
   const conf = props.id || '111';
   const user = store.getRID();
 
-  const checkReady = async (forceReady:boolean | null = null) => {
+  const checkReady = async (forceReady: boolean | null = null) => {
     // if(state.ready) return; // end checking if ready is true
     const ready = forceReady === null ? await isReady(conf) : forceReady;
 
     // we have an update to submit but couldnt at start as we were in ready-state
-    if(!ready && state.submitBlocked === true) {
-      setState(p => ({ ...p, submitBlocked:false }));
+    if (!ready && state.submitBlocked === true) {
+      setState(p => ({ ...p, submitBlocked: false }));
       await submit(pos, conf, user); // .then(onSelect);
     }
 
     setState(p => ({ ...p, ready }));
     return ready;
     // !ready && // check even if Ready, because admin might unready
-  }
+  };
 
   const onStart = async () => {
     console.log('sending data');
 
     const ready = await checkReady();
 
-    if(!ready) await submit(pos, conf, user); // .then(checkReady);
+    if (!ready) await submit(pos, conf, user);
+    // .then(checkReady);
     else {
-      setState(p => ({ ...p, submitBlocked:true }));
+      setState(p => ({ ...p, submitBlocked: true }));
     }
     await onSelect();
 
@@ -203,18 +224,34 @@ export default function PleaseWaitResults(props: Props) {
   }, []);
 
   // console.log('TopicInfo.Card data', data);
-  const onSelect = async () => {
+  const matchUp = async () => {
     //
 
     const rdata = await getAll(conf);
+    // console.log('rdata', rdata);
+    if (rdata.results) await checkReady(rdata.meta ? rdata.meta.ready : null);
+
+    var data: Data = rdata.results;
+    const result = match2(data);
+
+    return result;
+  };
+
+  const onSelect = async () => {
+    //
+
+    /* const rdata = await getAll(conf);
     console.log('rdata', rdata);
     if(rdata.results)  await checkReady(rdata.meta ? rdata.meta.ready : null);
 
     var data:Data = rdata.results;
     const result = match2(data);
+    */
+    const result = await getResults(conf);
+    if (!result) return;
 
     if (!isAdminPage) {
-      const myGroup = findMyGroup(store.getRID(), result);
+      const myGroup = findMyGroup(store.auth.user!.id, result);
       if (myGroup) setState(p => ({ ...p, myGroup }));
     }
 
@@ -222,10 +259,10 @@ export default function PleaseWaitResults(props: Props) {
     setState(p => ({ ...p, data: result }));
   };
 
-  const onInterval = React.useCallback( () => {
+  const onInterval = React.useCallback(() => {
     if (state.checks > 5) return;
     onSelect();
-    setState(p => ({ ...p, checks: state.checks+1}));
+    setState(p => ({ ...p, checks: state.checks + 1 }));
     /*
     if (state.checks > 0) return; // stop
     checkReady();
@@ -237,11 +274,13 @@ export default function PleaseWaitResults(props: Props) {
 
   useInterval(onInterval, 20 * 1000);
 
-  const onAdminReady = (toggle:boolean) => {
-    submitReady(toggle, conf).then(x=>checkReady());
+  const onAdminReady = async (toggle: boolean) => {
+    const results = await matchUp();
+    await submitReady(toggle, conf, results); // .then(x=>checkReady());
+    checkReady();
   };
 
-  React.useEffect( () => {
+  React.useEffect(() => {
     init();
   }, []);
 
@@ -251,11 +290,13 @@ export default function PleaseWaitResults(props: Props) {
         <Grid sm={10} md={10} lg={10} item>
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
-              {state.data.length < 1 && <Typography variant="h5">Please Wait</Typography>}
+              {state.data.length < 1 && (
+                <Typography variant="h5">Please Wait</Typography>
+              )}
               <Typography variant="body2">
                 {isAdminPage ? showDataAdmin(state, classes) : showData(state)}
               </Typography>
-              <ConfGraph store={store} data={state.data as any}/>
+              <ConfGraph store={store} data={state.data as any} />
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
               <Button
@@ -267,16 +308,18 @@ export default function PleaseWaitResults(props: Props) {
               >
                 Reload
               </Button>
-              { isAdminPage && <Button
-                variant="contained"
-                // disabled={state.ready}
-                // size="small"
-                color="secondary"
-                className={classes.btn}
-                onClick={() => onAdminReady(!state.ready)}
-              >
-                {!state.ready ? 'Set Ready' : 'Unready'}
-              </Button>}
+              {isAdminPage && (
+                <Button
+                  variant="contained"
+                  // disabled={state.ready}
+                  // size="small"
+                  color="secondary"
+                  className={classes.btn}
+                  onClick={() => onAdminReady(!state.ready)}
+                >
+                  {!state.ready ? 'Set Ready' : 'Unready'}
+                </Button>
+              )}
             </CardActions>
           </Card>
         </Grid>
