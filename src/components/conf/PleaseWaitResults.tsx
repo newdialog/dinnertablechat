@@ -107,6 +107,7 @@ interface State {
   myGroup?: any;
   ready: boolean;
   submitBlocked: boolean;
+  numUsers?:number;
 }
 
 function showData(state: State) {
@@ -123,9 +124,10 @@ function showData(state: State) {
 }
 
 function showDataAdmin(state: State, classes: any) {
-  const responses = state.data
+  const responses = state.numUsers || 0;
+  /* state.data
     .map(x => Object.keys(x).length)
-    .reduce((a, b) => a + b, 0);
+    .reduce((a, b) => a + b, 0); */
 
   return (
     <>
@@ -253,6 +255,12 @@ export default function PleaseWaitResults(props: Props) {
     if (!isAdminPage) {
       const myGroup = findMyGroup(store.auth.user!.id, result);
       if (myGroup) setState(p => ({ ...p, myGroup }));
+    } else {
+      const rdata = await getAll(conf);
+
+      const numUsers = rdata.results.length;
+      // console.log('rdata', rdata);
+      setState(p => ({ ...p, numUsers }));
     }
 
     // console.log('r', JSON.stringify(result));
