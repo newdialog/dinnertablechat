@@ -179,7 +179,7 @@ export default function PleaseWaitResults(props: Props) {
   const conf = props.id || '111';
   const user = store.getRID();
 
-  const checkReady = async (forceReady: boolean | null = null) => {
+  /* const checkReady = async (forceReady: boolean | null = null) => {
     // if(state.ready) return; // end checking if ready is true
     const ready = forceReady === null ? await isReady(conf) : forceReady;
 
@@ -192,19 +192,19 @@ export default function PleaseWaitResults(props: Props) {
     setState(p => ({ ...p, ready }));
     return ready;
     // !ready && // check even if Ready, because admin might unready
-  };
+  }; */
 
   const onStart = async () => {
     console.log('sending data');
 
-    const ready = await checkReady();
+    const ready = state.ready; // await checkReady();
 
     if (!ready) await submit(pos, conf, user);
     // .then(checkReady);
     else {
       setState(p => ({ ...p, submitBlocked: true }));
     }
-    await onSelect();
+    await onRefresh();
 
     console.log('finished start');
   };
@@ -212,26 +212,16 @@ export default function PleaseWaitResults(props: Props) {
   React.useEffect(() => {
     console.log('user', user);
     if (isAdminPage) {
-      // checkReady();
-      onSelect();
+      onRefresh();
       // is teacher
       return;
     }
     onStart();
-
-    /* submit(pos, conf, user).then(x => {
-      onSelect();
-      checkReady();
-    }); */
   }, []);
 
-  // console.log('TopicInfo.Card data', data);
   const matchUp = async () => {
-    //
-
     const rdata = await getAll(conf);
-    // console.log('rdata', rdata);
-    if (rdata.results) await checkReady(rdata.meta ? rdata.meta.ready : null);
+    // if (rdata.results) await checkReady(rdata.meta ? rdata.meta.ready : null);
 
     var data: Data = rdata.results;
     const result = match2(data);
@@ -239,45 +229,31 @@ export default function PleaseWaitResults(props: Props) {
     return result;
   };
 
-  const onSelect = async () => {
-    //
+  const onRefresh = async () => {
+    const result = (await getResults(conf)) || [];
+    const ready = result.length > 0;
 
-    /* const rdata = await getAll(conf);
-    console.log('rdata', rdata);
-    if(rdata.results)  await checkReady(rdata.meta ? rdata.meta.ready : null);
+    // console.log('result', result);
 
-    var data:Data = rdata.results;
-    const result = match2(data);
-    */
-    const result = await getResults(conf);
-    if (!result) return;
-
-    if (!isAdminPage) {
+    if (!isAdminPage && result) {
       const myGroup = findMyGroup(store.auth.user!.id, result);
-      if (myGroup) setState(p => ({ ...p, myGroup }));
-    } else {
+
+      if (myGroup!==null) setState(p => ({ ...p, myGroup }));
+    } else if (isAdminPage) {
       const rdata = await getAll(conf);
 
       const numUsers = rdata.results.length;
-      // console.log('rdata', rdata);
       setState(p => ({ ...p, numUsers }));
     }
 
+    setState(p => ({ ...p, data: result, ready  }));
     // console.log('r', JSON.stringify(result));
-    setState(p => ({ ...p, data: result }));
   };
 
   const onInterval = React.useCallback(() => {
     if (state.checks > 5) return;
-    onSelect();
+    onRefresh();
     setState(p => ({ ...p, checks: state.checks + 1 }));
-    /*
-    if (state.checks > 0) return; // stop
-    checkReady();
-    console.log('state.checks', state.checks);
-    setState(p => ({ ...p, checks: p.checks + 1 }));
-    onSelect();
-    */
   }, [conf, user, state.checks]);
 
   useInterval(onInterval, 20 * 1000);
@@ -285,7 +261,9 @@ export default function PleaseWaitResults(props: Props) {
   const onAdminReady = async (toggle: boolean) => {
     const results = await matchUp();
     await submitReady(toggle, conf, results); // .then(x=>checkReady());
-    checkReady();
+    
+    // checkReady();
+    onRefresh();
   };
 
   React.useEffect(() => {
@@ -298,7 +276,7 @@ export default function PleaseWaitResults(props: Props) {
         <Grid sm={10} md={10} lg={10} item>
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
-              {state.data.length < 1 && (
+              {!isAdminPage && state.data.length < 1 && (
                 <Typography variant="h5">Please Wait</Typography>
               )}
               <Typography variant="body2">
@@ -312,7 +290,7 @@ export default function PleaseWaitResults(props: Props) {
                 // size="small"
                 color="secondary"
                 className={classes.btn}
-                onClick={() => onSelect()}
+                onClick={() => onRefresh()}
               >
                 Reload
               </Button>

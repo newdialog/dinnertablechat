@@ -151,9 +151,18 @@ export async function submitSeats(
   return batch.write();
 }
 
-export async function submitReady(ready: boolean, conf: string, results:any) {
+export async function submitReady(ready: boolean, conf: string, results: any) {
   if (!docClient) await init();
 
+  if (!ready) {
+    return await docClient
+      .table(USERS_TABLE)
+      .where('conf')
+      .eq(conf)
+      .where('user')
+      .eq('_')
+      .delete();
+  }
   return docClient
     .table(USERS_TABLE)
     .return(docClient.UPDATED_OLD)
@@ -215,7 +224,7 @@ export async function getResults(conf: string) {
   if (!re) return null;
   if (re.length === 0) return null;
 
-  if(re[0].answers.ready === true) return re[0].answers.results;
+  if (re[0].answers.ready === true) return re[0].answers.results;
   else return null;
 }
 
