@@ -120,8 +120,8 @@ async function poll(
       return;
     }
     if (ticket.Status === 'TIMED_OUT') {
-      onMatchedCB('matchtimeout');
       console.log('timed out, stopping poll');
+      onMatchedCB('matchtimeout');
       return; // not polling
     }
     if (ticket.Status === 'CANCELLED') {
@@ -142,7 +142,7 @@ export async function queueUp(
   topic: string,
   side: integer,
   playerId: string,
-  guestSeed: string,
+  // guestSeed: string,
   donation: float,
   chararacter: integer,
   onMatchedCB: OnMatchedCB
@@ -150,8 +150,8 @@ export async function queueUp(
   const env = isLive() ? 'prod' : 'dev';
 
   // add uuid to guest
-  if (playerId === '78439c31-beef-4f4d-afbb-e948e3d3c932')
-    playerId += '__' + guestSeed; // ensure session uniqueness in dtc_sync pool
+  // if (playerId === '78439c31-beef-4f4d-afbb-e948e3d3c932')
+  //  playerId += '__' + guestSeed; // ensure session uniqueness in dtc_sync pool
 
   console.log(
     'queueUp:',

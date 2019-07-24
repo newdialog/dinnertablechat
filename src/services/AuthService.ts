@@ -17,6 +17,7 @@ import { injectConfig } from '../configs/AWSconfig';
 // Fix analytics error message
 import { Analytics } from 'aws-amplify';
 import { CognitoUserSession } from 'amazon-cognito-identity-js';
+import { ICredentials } from '@aws-amplify/core';
 Analytics.configure({ disabled: true });
 // import { ConsoleLogger } from '@aws-amplify/core';
 
@@ -137,7 +138,7 @@ export interface AwsAuth {
 }
 
 let cacheCred: any = null;
-export async function refreshCredentials() {
+export async function refreshCredentials(): Promise<ICredentials | any> {
   if (cacheCred) return cacheCred;
   // wait while another call is configuring
   if (cacheCred && !cacheCred.flag) {
@@ -158,23 +159,27 @@ export async function refreshCredentials() {
   // console.log('refreshCredentials', credentials);
 
   return {
-    accessKeyId: credentials.accessKeyId,
-    secretAccessKey: credentials.secretAccessKey,
-    sessionToken: credentials.sessionToken,
-    region: 'us-east-1'
+    // accessKeyId: credentials.accessKeyId,
+    // secretAccessKey: credentials.secretAccessKey,
+    // sessionToken: credentials.sessionToken,
+    region: 'us-east-1',
+    ...credentials
   };
 }
 
 // const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function checkUser(cb: AwsCB, event: string = '') {
   // console.log('checkUser');
-  let data: any;
-  let session: CognitoUserSession;
+  // let data: any;
+  let session: CognitoUserSession | null = null;
+  let cr: ICredentials | null = null;
   cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
     // console.time('currentAuthenticatedUser');
-    data = await Auth.currentAuthenticatedUser();
-    session = await await Auth.currentSession();
+    // data = await Auth.currentAuthenticatedUser();
+    cr = await Auth.currentUserCredentials();
+
+    session = await Auth.currentSession();
     // bypassCheck; // Auth.currentUserCredentials();
     // console.timeEnd('currentAuthenticatedUser');
   } catch (e) {
@@ -187,18 +192,57 @@ async function checkUser(cb: AwsCB, event: string = '') {
     // console.time('currentAuthenticatedUser2');
     // data = await Auth.currentAuthenticatedUser().catch(e => {
     // console.log('---currentAuthenticatedUser not logged in:', e);
-    cb(null);
-    return;
+    ///// cb(null);
+    ////return;
     //   return null;
     // });
     // console.timeEnd('currentAuthenticatedUser2');
     // if (!data) return;
     // else console.log('+++ currentAuthenticatedUser found on retry');
   }
-  const user = data.attributes;
 
-  console.log('user', data, '----', await Auth.currentSession());
-  refreshCredentials(); // needed for dynamo labs
+  // const idenity = cr.identityId;
+  // console.log('rrrr', cr, idenity);
+
+  // console.log('session', session);
+
+  let email: string = 'guest@dinnertable.chat';
+  let name: string = '';
+  let groups: string[] = [];
+
+  if (session) {
+    console.log('session', session);
+
+    email = session.getIdToken().payload['email'];
+    name = session.getIdToken().payload['name'];
+    groups = session.getIdToken().payload['cognito:groups'];
+    // identityId = 'us-east1:' + session.getIdToken().payload['sub'];
+  } else if (cr) {
+    console.log('unauth user');
+    name = 'Guest';
+    // identityId = cr.identityId;
+  } else {
+    cb(null);
+    return;
+  }
+
+  // const email = session.getIdToken().payload['email'] || '';
+  // const sub = session.getIdToken().payload['sub']; // || uuidv4();
+  // const name = session.getIdToken().payload['name'] || 'Guest';
+  // const groups = session.getIdToken().payload['cognito:groups'];
+
+  const newCred = await refreshCredentials(); // needed for dynamo labs
+  const identityId = newCred.identityId;
+
+  const user = {
+    name,
+    email,
+    id: identityId, // data.username,
+    groups
+  };
+  // const user = data.attributes;
+
+  console.log('user', user);
 
   //// AWS.config.credentials = new AWS.Credentials(credentials);
   // FIX: https://github.com/aws-amplify/amplify-js/issues/581
@@ -216,17 +260,8 @@ async function checkUser(cb: AwsCB, event: string = '') {
     cb(null);
     return;
   }
-  console.log(
-    'session.getIdToken()',
-    session.getIdToken().payload['cognito:groups']
-  );
   cb({
-    user: {
-      name: user.name,
-      email: user.email,
-      id: data.username,
-      groups: session.getIdToken().payload['cognito:groups']
-    },
+    user,
     ...authParams
   });
 }
@@ -252,6 +287,8 @@ function uuidv4(): string {
 }
 
 export async function guestLogin() {
+  Hub.dispatch('auth', { event: LOGIN_EVENT });
+  return;
   console.log('guestLogin');
   try {
     // await Auth.currentCredentials(); //

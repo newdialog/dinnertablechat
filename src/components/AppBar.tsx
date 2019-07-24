@@ -76,7 +76,7 @@ export default observer(function ButtonAppBar(props: Props) {
 
   const showAuth = true; // !isLive || Times.isDuringDebate();
 
-  const deps = [store.auth, store.isSaas, store.debate.match, store.showNav];
+  const deps = [auth, isDashboard, path, store.auth, store.isSaas, store.debate.match, store.showNav];
 
   return useMemo( () => {
     if(store.debate.match && store.debate.match.sync) return null;

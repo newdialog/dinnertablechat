@@ -73,8 +73,9 @@ const AuthModel = types
       self.user = undefined;
     },
     guestSignup() {
-      localStorage.setItem('signup', 'y');
+      localStorage.setItem('signup', 'y'); // TODO: figure out if this is still needed
       (self as any).logout();
+      (self as any).login();
     },
     notLoggedIn() {
       self.isNotLoggedIn = true;

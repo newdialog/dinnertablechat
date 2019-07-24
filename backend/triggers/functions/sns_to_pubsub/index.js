@@ -105,8 +105,8 @@ async function forEachSNS(record) {
   players[0].realId = players[0].playerId.split('__')[0];
   players[1].realId = players[1].playerId.split('__')[0];
 
-  players[0].guest = players[0].realId === '78439c31-beef-4f4d-afbb-e948e3d3c932'; 
-  players[1].guest = players[1].realId === '78439c31-beef-4f4d-afbb-e948e3d3c932'; 
+  players[0].guest = true; // players[0].realId === '78439c31-beef-4f4d-afbb-e948e3d3c932'; 
+  players[1].guest = true; // players[1].realId === '78439c31-beef-4f4d-afbb-e948e3d3c932'; 
 
   const success = await savePG(players, matchId, matchInfo);
   if (success) await saveDB(players, matchId);
@@ -127,8 +127,8 @@ async function savePG(players, matchId, matchInfo) {
   const side1 = parseInt(player1.PlayerAttributes.side.S);
   const chracter1 = player1.PlayerAttributes.character.N;
 
-  const player0_isGuest = player0Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; // guest id attached // players[0].guest;
-  const player1_isGuest = player1Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; // guest id attached // players[1].guest;
+  const player0_isGuest = true; // player0Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; // guest id attached // players[0].guest;
+  const player1_isGuest = true; // player1Id === '78439c31-beef-4f4d-afbb-e948e3d3c932'; // guest id attached // players[1].guest;
 
   // if (player0_isGuest) player0Id = player0.PlayerId.split('__')[1]; // take uuid
   // if (player1_isGuest) player1Id = player1.PlayerId.split('__')[1]; // take uuid

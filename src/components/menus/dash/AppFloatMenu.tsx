@@ -112,7 +112,7 @@ export default function AppFloatMenu(props: Props) {
         <MenuItem onClick={() => store.router.push('/campus')}>
           EDU program info
         </MenuItem>
-        <MenuItem onClick={logOut}>Log out</MenuItem>
+        { !store.isGuest() && <MenuItem onClick={logOut}>Log out</MenuItem> }
       </Menu>
     </React.Fragment>
   );

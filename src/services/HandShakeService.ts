@@ -55,7 +55,7 @@ export async function sync(userid: string) {
     TableName: 'dtc_sync'
   };
   const ticket = await docClient.get(params).promise();
-  console.log('t,', params, ticket.Item);
+  console.log('HS sync:', params, ticket.Item);
 
   if (!ticket.Item) return null;
   // throw new Error('no entry in dynamo: sns_to_pubsub');

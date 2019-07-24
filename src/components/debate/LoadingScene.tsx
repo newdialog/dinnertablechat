@@ -266,7 +266,7 @@ export default function LoadingScene(props: Props) {
     if (!store.auth.user!.id) throw new Error('no valid user id');
 
     let userid = store.auth.user!.id; // + '_' + sameUserSeed;
-    const guestSeed = store.auth.user!.guestSeed;
+    const guestSeed = userid; // store.auth.user!.guestSeed;
     // Give guests a unique queue id
     // if(store.isGuest())
     // userid += '_' + Math.round(Math.random() * 1000);
@@ -277,7 +277,7 @@ export default function LoadingScene(props: Props) {
         topic,
         position,
         userid,
-        guestSeed,
+        // guestSeed,
         contribution,
         chararacter,
         // store.isGuest(),
@@ -331,6 +331,7 @@ export default function LoadingScene(props: Props) {
         state.unloadFlag
       );
     } catch (e) {
+      console.error('handshake stopped', e);
       if (state.unloadFlag.flag) return; // just exit if we already ending
       // state.unloadFlag.flag = true;
 
