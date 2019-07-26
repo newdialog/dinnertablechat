@@ -129,9 +129,7 @@
     "source-map-explorer": "^2.0.1",
     "typescript": "^3.5.3"
   },
-  "optionalDependencies": {
-    "fsevents": "1.2.4"
-  },
+  "optionalDependencies": {},
   "browserslist": [
     ">0.9%",
     "last 2 versions",

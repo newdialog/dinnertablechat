@@ -7,7 +7,7 @@ import AWS from 'aws-sdk/global';
 
 // import Auth from '@aws-amplify/auth';
 import { Auth } from 'aws-amplify';
-import API from './APIService'; // TODO refactor
+import * as API from './APIService'; // TODO refactor
 
 import retry from 'async-retry';
 // import { Logger } from 'aws-amplify';
@@ -21,6 +21,7 @@ import { CognitoUserSession } from 'amazon-cognito-identity-js';
 Analytics.configure({ disabled: true });
 // import { ConsoleLogger } from '@aws-amplify/core';
 
+/*
 const delayFlag = async (obj: { flag: boolean }) =>
   await retry(
     async bail => {
@@ -34,6 +35,7 @@ const delayFlag = async (obj: { flag: boolean }) =>
       minTimeout: 2000
     }
   );
+*/
 
 /* Debug only 
 import Amplify from 'aws-amplify';
@@ -103,9 +105,9 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   } else if (payload.event === 'configured' && !callbackPage) checkUser(cb);
 }
 
-export function auth(cb: AwsCB, callbackPage: boolean = false) {
+export async function auth(cb: AwsCB, callbackPage: boolean = false) {
   // console.log('auth aws');
-  const awsmobileInjected = injectConfig(awsmobile);
+  // const awsmobileInjected = injectConfig(awsmobile);
 
   // Order is important
   Hub.listen(/.*/, x => {
@@ -117,12 +119,12 @@ export function auth(cb: AwsCB, callbackPage: boolean = false) {
     // { onHubCapsule: onHubCapsule.bind(null, cb, callbackPage) }
     // ,'AuthService'
   );
-  Auth.configure(awsmobileInjected);
+  Auth.configure(awsconfig);
   // checkUser(cb); // required by amplify, for existing login
 
   // Configure APIService
   // console.log('awsmobileInjected', awsmobileInjected);
-  API.configure(awsmobileInjected);
+  API.configure({ ...awsconfig, Auth: await refreshCredentials() });
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;
@@ -137,34 +139,33 @@ export interface AwsAuth {
   SessionToken: string;
 }
 
-let cacheCred: any = null;
-export async function refreshCredentials(): Promise<any> { // ICredentials | 
-  if (cacheCred) return cacheCred;
+// let cacheCred: any = null;
+export async function refreshCredentials(): Promise<any> {
+  // ICredentials |
+  // if (cacheCred) return cacheCred;
   // wait while another call is configuring
+  /*
   if (cacheCred && !cacheCred.flag) {
     await delayFlag(cacheCred);
     return cacheCred;
   }
-  cacheCred = { flag: false };
+  */
+  // cacheCred = { flag: false };
 
   const currentCredentials = await Auth.currentCredentials();
-  const credentials = (cacheCred = Auth.essentialCredentials(
+  /* const credentials = (cacheCred = Auth.essentialCredentials(
     currentCredentials
-  ));
+  )); */
 
-  AWS.config.credentials = new AWS.Credentials(credentials);
+  AWS.config.credentials = new AWS.Credentials(currentCredentials);
   /* AWS.config.update({
     credentials: new AWS.Credentials(credentials)
   });*/
   // console.log('refreshCredentials', credentials);
 
-  return {
-    // accessKeyId: credentials.accessKeyId,
-    // secretAccessKey: credentials.secretAccessKey,
-    // sessionToken: credentials.sessionToken,
-    region: 'us-east-1',
-    ...credentials
-  };
+  (currentCredentials as any).region = 'us-east-1';
+
+  return currentCredentials;
 }
 
 // const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -173,7 +174,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
   // let data: any;
   let session: CognitoUserSession | null = null;
   let cr: any = null;
-  cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
+  // cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
     // console.time('currentAuthenticatedUser');
     // data = await Auth.currentAuthenticatedUser();
@@ -206,9 +207,10 @@ async function checkUser(cb: AwsCB, event: string = '') {
 
   // console.log('session', session);
 
-  let email: string = 'guest@dinnertable.chat';
+  let email: string = '';
   let name: string = '';
   let groups: string[] = [];
+  let id: string | null = null;
 
   if (session) {
     console.log('session', session);
@@ -216,10 +218,15 @@ async function checkUser(cb: AwsCB, event: string = '') {
     email = session.getIdToken().payload['email'];
     name = session.getIdToken().payload['name'];
     groups = session.getIdToken().payload['cognito:groups'];
+    id = session.getIdToken().payload['sub'];
     // identityId = 'us-east1:' + session.getIdToken().payload['sub'];
   } else if (cr) {
-    console.log('unauth user');
+    console.log('unauth user', cr);
+    // const newCred = await refreshCredentials(); // needed for dynamo labs
+    // console.log('newCred', newCred);
+    id = cr.identityId; // newCred.identityId;
     name = 'Guest';
+    email = 'guest@dinnertable.chat';
     // identityId = cr.identityId;
   } else {
     cb(null);
@@ -231,13 +238,12 @@ async function checkUser(cb: AwsCB, event: string = '') {
   // const name = session.getIdToken().payload['name'] || 'Guest';
   // const groups = session.getIdToken().payload['cognito:groups'];
 
-  const newCred = await refreshCredentials(); // needed for dynamo labs
-  const identityId = newCred.identityId;
+  if (!id) throw new Error('checkuser: no id');
 
   const user = {
     name,
     email,
-    id: identityId, // data.username,
+    id, // data.username,
     groups
   };
   // const user = data.attributes;
@@ -286,6 +292,7 @@ function uuidv4(): string {
   );
 }
 
+/*
 export async function guestLogin() {
   Hub.dispatch('auth', { event: LOGIN_EVENT });
   return;
@@ -297,14 +304,11 @@ export async function guestLogin() {
     // Hub.dispatch('auth', { event: LOGIN_EVENT, ...user });
   } catch (err) {
     console.error('AuthServoce err', err.code, err);
-    /* alert(
-      'We encountered an error with guest login, going to try to fix it...'
-    ); */
-
     // if (navigator.userAgent.toLocaleLowerCase().indexOf('headless') === -1)
     //  window.location.reload(true);
   }
 }
+*/
 
 /*
 if (err.code === 'UserNotConfirmedException') {

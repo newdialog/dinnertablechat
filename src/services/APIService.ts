@@ -8,7 +8,7 @@ let _cfg = {};
   configure: (cfg) => _cfg = Object.assign(_cfg, cfg)
 }*/
 
-async function getScores() {
+export async function getScores() {
   let apiName = 'History';
   let path = '/history'; // /hello
   let myInit = {
@@ -31,7 +31,7 @@ async function getScores() {
     });
 }
 
-async function reviewSession(review: any, matchId: string) {
+export async function reviewSession(review: any, matchId: string) {
   let apiName = 'History';
   let path = '/review'; // /hello
   let myInit = {
@@ -58,7 +58,7 @@ async function reviewSession(review: any, matchId: string) {
     });
 }
 
-async function getICE() {
+export async function getICE() {
   let apiName = 'Ice';
   let path = '/ice'; // /hello
   let myInit = {
@@ -80,11 +80,12 @@ async function getICE() {
       });
     })
     .catch(error => {
-      console.log(apiName, path, error.response);
+      console.error(apiName, path, error.response);
+      throw error;
     });
 }
 
-async function bail(matchId: string) {
+export async function bail(matchId: string) {
   let apiName = 'History';
   let path = '/bail'; // /hello
   let myInit = {
@@ -110,7 +111,7 @@ async function bail(matchId: string) {
     });
 }
 
-function configure(conf:any) {
+export function configure(conf: any) {
   // console.log('conf', conf);
   return API.configure(conf);
 }
@@ -121,7 +122,7 @@ async function getTokenHeaders() {
   };
 }
 
-export default { getScores, configure, reviewSession, bail, getICE };
+// export default { getScores, configure, reviewSession, bail, getICE };
 
 // import axios, { AxiosRequestConfig } from 'axios';
 /*

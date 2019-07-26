@@ -21,18 +21,20 @@ interface State {
 }
 
 export const signIn = () => {
-  if (!Auth || typeof Auth.configure !== 'function') {
-    throw new Error(
-      'No Auth module found, please ensure @aws-amplify/auth is imported'
-    );
-  }
-
-  const config = (Auth.configure(null) as any).oauth;
+  // const config = (Auth.configure(null) as any).oauth;
   // console.log('withOAuth configuration', config);
 
+  // const { domain, redirectSignIn, redirectSignOut, responseType } = config;
+
+  localStorage.removeItem('signup');
+  Auth.federatedSignIn();
+};
+
+export const signUp = () => {
+  const config = (Auth.configure(null) as any).oauth;
+  // console.log('withOAuth configuration', config);
   const { domain, redirectSignIn, redirectSignOut, responseType } = config;
 
-  // const options = config.options || {};
   const url =
     'https://' +
     domain +
@@ -43,9 +45,9 @@ export const signIn = () => {
     '&client_id=' +
     (Auth.configure(null) as any).userPoolWebClientId;
 
-  localStorage.removeItem('signup');
+  
   window.location.assign(url);
-};
+}
 
 //
 function AuthComp(props: Props) {
@@ -65,10 +67,12 @@ function AuthComp(props: Props) {
     AuthService.auth(handleAuth, callbackPage);
   }, [store.auth]);
 
-  useEffect( () => {
+  /*
+    old guest login 
+    useEffect( () => {
     // console.log('store.auth.doGuestLogin', store.auth.doGuestLogin)
     if(store.auth.doGuestLogin) AuthService.guestLogin();
-  }, [store.auth.doGuestLogin]);
+  }, [store.auth.doGuestLogin]); */
 
   useEffect( () => {
     if(store.auth.doLogout) AuthService.logout().then( () => store.auth.logout(true));

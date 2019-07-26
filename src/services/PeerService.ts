@@ -1,5 +1,5 @@
 import Peer from 'simple-peer'; // TODO: readd after simple-peer gets update
-import API from './APIService';
+import { getICE } from './APIService';
 import { EventEmitter } from 'events';
 type OnStream = (stream: MediaStream) => void;
 
@@ -62,7 +62,15 @@ export default class PeerService extends EventEmitter {
       return;
     }
     // Peer = window['SimplePeer'];
-    const ice = ((await API.getICE()) as any[]).concat(config.iceServers);
+
+    let ice: string[] = [];
+    try {
+      ice = ((await getICE()) as any[]).concat(config.iceServers);
+    } catch (e) {
+      console.error('PS getICE err', e);
+      throw e;
+    }
+
     console.log('ice', ice);
     this.initiator = initiator;
     // Turning off trickle: https://github.com/feross/simple-peer/issues/382
@@ -121,7 +129,7 @@ export default class PeerService extends EventEmitter {
     return this.clientStream;
   }
 
-  public async onConnection() {
+  public onConnection() {
     return new Promise((resolve, reject) => {
       if (this.connected) {
         setTimeout(() => resolve(), 2000);

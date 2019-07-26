@@ -1,4 +1,3 @@
-import { bool } from 'aws-sdk/clients/signer';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 import PeerService from './PeerService';
 import { from, defer, throwError, of, interval, fromEvent } from 'rxjs';
@@ -18,6 +17,7 @@ import {
   flatMap
 } from 'rxjs/operators';
 import { retryBackoff } from 'backoff-rxjs';
+import { refreshCredentials } from './AuthService';
 
 const whenFlag = (obj: StopFlag) =>
   interval(1000).pipe(
@@ -35,7 +35,7 @@ export interface StopFlag {
 export interface SyncCallback {
   user: string;
   team: 'blue' | 'red';
-  leader: bool;
+  leader: boolean;
   match: string;
 }
 
@@ -46,7 +46,7 @@ export interface HandShakeCallback {
 }
 
 export async function sync(userid: string) {
-  init();
+  await init();
 
   const params = {
     Key: {
@@ -54,7 +54,15 @@ export async function sync(userid: string) {
     },
     TableName: 'dtc_sync'
   };
-  const ticket = await docClient.get(params).promise();
+
+  let ticket: any;
+  try {
+    ticket = await docClient.get(params).promise();
+  } catch (e) {
+    console.error('e', e);
+    throw e;
+  }
+
   console.log('HS sync:', params, ticket.Item);
 
   if (!ticket.Item) return null;
@@ -72,67 +80,78 @@ export async function handshake(
   state: any,
   stream: MediaStream,
   unloadFlag: { flag: boolean }
-): Promise<{ peer: PeerService; otherPlayerState: any }> {
-  return new Promise(async (resolve, reject) => {
-    const ps = new PeerService(stream);
-    // ====
-    const mycolor = isLeader ? 'red' : 'blue';
-    const otherColor = isLeader ? 'blue' : 'red';
-    console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
+) {
+  // : Promise<{ peer: PeerService; otherPlayerState: any }> {
+  // return new Promise(async (resolve, reject) => {
+  const ps = new PeerService(stream);
+  // ====
+  const mycolor = isLeader ? 'red' : 'blue';
+  const otherColor = isLeader ? 'blue' : 'red';
+  console.log('handshake', 'for:' + mycolor, ' other:' + otherColor);
 
-    // const savedState = { flag: false };
-    const stopFlag: StopFlag = unloadFlag; // { stop: false };
-    const cbs = {
-      onError(e: any) {
-        console.log('webrtc error', e);
-        reject('webrtc');
-      }
-    };
-
-    // ({ matchid, team:mycolor, key:x.data, state })
-    const saveSignal$ = fromEvent<{ data: any }>(ps, 'signal').pipe(
-      map(x => x.data),
-      tap(x => console.log('rx batch buffer')),
-      bufferTime(250),
-      filter(xs => xs.length > 0),
-      // tap(xs => console.log('rx batch signal', JSON.stringify(xs))),
-      flatMap(xs => from(updateMatch(matchid, mycolor, xs, state))),
-      tap(x => console.log('rx batch sent'))
-    );
-
-    await ps.init(isLeader, cbs); // await is important
-
-    if (!stopFlag.flag) console.log('started listening, isLeader', isLeader);
-    else {
-      console.log('cancelled listening, isLeader', isLeader);
-      return;
+  // const savedState = { flag: false };
+  const stopFlag: StopFlag = unloadFlag; // { stop: false };
+  const cbs = {
+    onError(e: any) {
+      console.error('webrtc error', e);
+      // reject('webrtc');
+      throw new Error('webrtc');
     }
+  };
 
-    const throttleConfig = {
-      leading: false,
-      trailing: true
-    };
+  // ({ matchid, team:mycolor, key:x.data, state })
+  const saveSignal$ = fromEvent<{ data: any }>(ps, 'signal').pipe(
+    map(x => x.data),
+    tap(x => console.log('rx batch buffer')),
+    bufferTime(250),
+    filter(xs => xs.length > 0),
+    // tap(xs => console.log('rx batch signal', JSON.stringify(xs))),
+    flatMap(xs => from(updateMatch(matchid, mycolor, xs, state))),
+    tap(x => console.log('rx batch sent'))
+  );
 
-    const updates$ = getPartnerUpdates(matchid, otherColor).pipe(
-      // throttleTime(3000, undefined, throttleConfig),
-      tap(x =>
-        x.key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg)))
-      )
-    );
+  try {
+    await ps.init(isLeader, cbs); // await is important
+  } catch (e) {
+    console.error('ps init error:', e);
+    throw e;
+  }
 
-    updates$
-      .pipe(
-        combineLatest(saveSignal$, (x, _) => x),
-        takeUntil(defer(() => ps.onConnection())),
-        takeUntil(whenFlag(stopFlag)),
-        timeout(24000),
-        last()
-      )
+  if (!stopFlag.flag) console.log('started listening, isLeader', isLeader);
+  else {
+    console.log('cancelled listening, isLeader', isLeader);
+    return;
+  }
+
+  const updates$ = getPartnerUpdates(matchid, otherColor).pipe(
+    // throttleTime(3000, undefined, throttleConfig),
+    tap(x => x.key.forEach(batch => batch.forEach(msg => ps.giveResponse(msg))))
+  );
+
+  const pr = updates$
+    .pipe(
+      combineLatest(saveSignal$, (x, _) => x),
+      takeUntil(defer(() => ps.onConnection())),
+      takeUntil(whenFlag(stopFlag)),
+      timeout(24000),
+      last(),
+      map(x => ({ peer: ps, otherPlayerState: x.state }))
+    )
+    .toPromise();
+
+  // pr.catch(r => console.error('err', r));
+
+  // const upResult = await pr;
+
+  return pr; // { peer: ps, otherPlayerState: upResult.state };
+
+  /*
       .subscribe({
         error: e => {
           console.log('rx e', e);
           // if(e.name === 'EmptyError') return; // silently fail when stream exists
-          reject('' + e);
+          // reject('' + e);
+          throw new Error('' + e)
         },
         next: d => {
           console.log('rx done', d);
@@ -140,7 +159,8 @@ export async function handshake(
         },
         complete: () => console.log('rx completed')
       });
-  });
+      */
+  //});
 }
 
 async function readMatch(matchid: string): Promise<HandShakeCallback> {
@@ -150,7 +170,14 @@ async function readMatch(matchid: string): Promise<HandShakeCallback> {
     },
     TableName: 'match'
   };
-  const ticket2 = await docClient.get(params2).promise();
+
+  let ticket2: any;
+  try {
+    ticket2 = await docClient.get(params2).promise();
+  } catch (e) {
+    console.error('HS readMatch err', e);
+    throw e;
+  }
   // console.log('t2,', ticket2.Item);
 
   return ticket2.Item! as HandShakeCallback;
@@ -252,17 +279,29 @@ async function updateMatch(
     .update(params2)
     .promise()
     .catch(e => {
-      console.error(e);
-      throw new Error(e);
+      console.error('docClient updateMatch err', e);
+      throw e;
     });
   // console.log('ut2,', ticket2);
   return true;
 }
 
 let docClient: DynamoDB.DocumentClient;
-export function init(): void {
-  if (!docClient)
+export async function init() {
+  if (docClient) return;
+  let cr: any;
+
+  try {
+    cr = await refreshCredentials();
+    console.log('cr', cr);
     docClient = new DynamoDB.DocumentClient({
-      apiVersion: '2012-08-10'
+      apiVersion: '2012-08-10',
+      ...cr
     });
+  } catch (e) {
+    console.error('failed to connect to db', e);
+    throw e;
+  }
+
+  return docClient;
 }

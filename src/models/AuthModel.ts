@@ -94,6 +94,8 @@ const AuthModel = types
         region: any;
       } = authServiceData;
 
+      if (!user.id) throw new Error('no id');
+
       // self.didLogin = viaLogin;
       /* if (!self.user)
         window.gtag('event', 'authenticated', {
@@ -107,13 +109,13 @@ const AuthModel = types
       }
 
       // Update analytics
-      const isGuest = user.id === '78439c31-beef-4f4d-afbb-e948e3d3c932';
-      let idWithSeed = !isGuest ? user.id : user.id + '__' + seed;
+      // const isGuest = user.id === '78439c31-beef-4f4d-afbb-e948e3d3c932';
+      // let idWithSeed = !isGuest ? user.id : user.id + '__' + seed;
       // console.log('idWithSeed', idWithSeed);
-      window.gtag('set', 'userId', idWithSeed);
+      window.gtag('set', 'userId', user.id);
       // mixpanel auth
       if (window.mixpanel) {
-        (window.mixpanel as any).identify(idWithSeed);
+        (window.mixpanel as any).identify(user.id);
         user.email &&
           (window.mixpanel as any).people.set({
             $email: user.email,

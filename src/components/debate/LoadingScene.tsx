@@ -331,6 +331,7 @@ export default function LoadingScene(props: Props) {
         state.unloadFlag
       );
     } catch (e) {
+      // throw new Error(e);
       console.error('handshake stopped', e);
       if (state.unloadFlag.flag) return; // just exit if we already ending
       // state.unloadFlag.flag = true;
