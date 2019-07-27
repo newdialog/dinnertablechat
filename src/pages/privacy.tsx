@@ -120,20 +120,20 @@ export default function Privacy(props: Props) {
   const classes = useStyles({});
   return (
     <React.Fragment>
-      <Helmet title="Dinnertable.chat Privacy">
-        <meta itemProp="name" content="Dinnertable.chat Privacy" />
+      <Helmet title="Privacy">
+        <meta itemProp="name" content="Privacy" />
         <meta name="og:url" content="https://www.dinnertable.chat/privacy" />
-        <meta name="og:title" content="Dinnertable.chat Privacy" />
+        <meta name="og:title" content="Privacy" />
       </Helmet>
       <div className={classes.centered}>
         <p>
-          <strong>Dinnertable.chat Privacy Policy</strong>
+          <strong>Privacy Policy</strong>
         </p>
 
         <p>
           This Privacy Policy describes how your personal information is
-          collected, used, and shared when you visit or make a microtransaction
-          purchase from https://www.dinnertable.chat (the "Site").
+          collected, used, and shared when you visit or make transactions
+          from {window.location.origin} (the "Site").
         </p>
 
         <p>PERSONAL INFORMATION WE COLLECT</p>
@@ -173,15 +173,17 @@ export default function Privacy(props: Props) {
 
         <p>
           When we talk about "Personal Information" in this Privacy Policy, we
-          are talking both about Device Information and Order Information.
+          are talking both about Device Information, Account Profile, and Order Information.
         </p>
 
         <p>HOW DO WE USE YOUR PERSONAL INFORMATION?</p>
 
         <p>
-          We use the Microtransaction Information that we collect generally to
-          fulfill any purchases placed through the Site. Additionally, we use
-          this Order Information to:
+          We use this information to improve matchmaking within the app, 
+          and we also use data anayltics to best understand how to grow and 
+          develop our services.
+          <br/>
+          Additionally, we may use this information to:
         </p>
 
         <p>Communicate with you;</p>
@@ -246,12 +248,12 @@ export default function Privacy(props: Props) {
           States.
         </p>
 
-        <p>DATA RETENTION</p>
+        <p>DATA ACCESS AND RETENTION</p>
 
         <p>
-          When you place an order through the Site, we will maintain your Order
-          Information for our records unless and until you ask us to delete this
-          information.
+          When you use the Site, we will maintain your
+          personal information for our records unless and until you ask us to delete this
+          data. You can request a copy of your information or ask to delete it by emailing admin@dinnertable.chat.
         </p>
 
         <p>MINORS</p>

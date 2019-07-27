@@ -14,7 +14,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 
 import * as AppModel from '../../models/AppModel';
-import APIService from '../../services/APIService';
+import {reviewSession} from '../../services/APIService';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -206,7 +206,7 @@ export default function DebateFeedback(props: Props) {
     console.log('responses', response);
 
     // TODO: call endpoint
-    const r = await APIService.reviewSession(
+    const r = await reviewSession(
       response,
       store.debate.match!.matchId
     );

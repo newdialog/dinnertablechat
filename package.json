@@ -11,6 +11,11 @@
       "cache": false
     }
   },
+  "resolutions": {
+    "aws-sdk": "^2.496.0",
+    "**/aws-sdk": "^2.496.0",
+    "**/moment": "^2.24.0"
+  },
   "dependencies": {
     "@awspilot/dynamodb": "^1.5.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
@@ -25,6 +30,8 @@
     "@material-ui/icons": "^4.2.1",
     "@material-ui/styles": "^4.2.1",
     "@material-ui/utils": "^4.1.0",
+    "@nivo/circle-packing": "^0.59.1",
+    "@segment/in-eu": "^0.2.1",
     "@use-it/interval": "^0.1.3",
     "async-retry": "^1.2.3",
     "aws-sdk": "^2.496.0",
@@ -41,7 +48,7 @@
     "jest-extended": "^0.11.2",
     "kmpp": "^0.1.1",
     "lazysizes": "^5.1.0",
-    "lottie-web": "^5.5.6",
+    "lottie-web": "^5.5.7",
     "luxon": "^1.17.1",
     "material-auto-rotating-carousel": "^3.0.1",
     "md5": "^2.2.1",
@@ -52,6 +59,7 @@
     "mst-react-router": "^2.3.1",
     "react": "^16.8.6",
     "react-add-to-calendar": "^0.1.5",
+    "react-cookie-consent": "^2.3.2",
     "react-copy-to-clipboard": "^5.0.1",
     "react-countdown-now": "^2.1.1",
     "react-dom": "^16.8.6",
@@ -100,6 +108,7 @@
     "@testing-library/dom": "^5.6.0",
     "@testing-library/jest-dom": "^4.0.0",
     "@testing-library/react": "^8.0.5",
+    "@types/history": "^4.7.2",
     "@types/i18next-browser-languagedetector": "^3.0.0",
     "@types/i18next-xhr-backend": "^1.4.2",
     "@types/jest": "^24.0.15",
@@ -121,9 +130,7 @@
     "source-map-explorer": "^2.0.1",
     "typescript": "^3.5.3"
   },
-  "optionalDependencies": {
-    "fsevents": "1.2.4"
-  },
+  "optionalDependencies": {},
   "browserslist": [
     ">0.9%",
     "last 2 versions",

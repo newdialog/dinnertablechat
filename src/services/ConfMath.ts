@@ -26,7 +26,7 @@ function groupify(
     groups[g] = groups[g].concat([pnt]);
   }
 
-  console.log('groups', groups);
+  // console.log('groups', groups);
   return groups;
 }
 
@@ -76,6 +76,8 @@ function diversify(
 // Basically just convert data types
 export function match2(getAllData: any, maxGroups: number = 2) {
   const data = getAllData;
+  if (data.length === 0) return [];
+
   let rawListOfAnswersIds: string[] = [];
 
   data.map(x => {
@@ -116,7 +118,10 @@ export function match2(getAllData: any, maxGroups: number = 2) {
   return obj;
 }
 
-export function findMyGroup(user: string, match2Data: Array<any>) {
+export function findMyGroup(
+  user: string,
+  match2Data: Array<any>
+): any[] | null {
   const findGroup = match2Data
     .map((g, index) => {
       g = Object.assign({}, g);

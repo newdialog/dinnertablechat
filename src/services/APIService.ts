@@ -1,3 +1,5 @@
+// Note: only include headers on non-IAM resources, guest accounts are only IAM
+
 // import API from '@aws-amplify/api';
 import { Auth, API } from 'aws-amplify'; // API
 
@@ -8,7 +10,7 @@ let _cfg = {};
   configure: (cfg) => _cfg = Object.assign(_cfg, cfg)
 }*/
 
-async function getScores() {
+export async function getScores() {
   let apiName = 'History';
   let path = '/history'; // /hello
   let myInit = {
@@ -31,7 +33,7 @@ async function getScores() {
     });
 }
 
-async function reviewSession(review: any, matchId: string) {
+export async function reviewSession(review: any, matchId: string) {
   let apiName = 'History';
   let path = '/review'; // /hello
   let myInit = {
@@ -58,12 +60,12 @@ async function reviewSession(review: any, matchId: string) {
     });
 }
 
-async function getICE() {
+export async function getICE() {
   let apiName = 'Ice';
   let path = '/ice'; // /hello
   let myInit = {
     // OPTIONAL
-    headers: await getTokenHeaders(), // OPTIONAL
+    //// headers: await getTokenHeaders(), // OPTIONAL
     // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
     queryStringParameters: {
       cb: '' + Math.random() * 100000
@@ -80,16 +82,17 @@ async function getICE() {
       });
     })
     .catch(error => {
-      console.log(apiName, path, error.response);
+      console.error('getICE err', apiName, path, error.response);
+      throw error;
     });
 }
 
-async function bail(matchId: string) {
+export async function bail(matchId: string) {
   let apiName = 'History';
   let path = '/bail'; // /hello
   let myInit = {
     // OPTIONAL
-    headers: await getTokenHeaders(), // OPTIONAL
+    /// headers: await getTokenHeaders(), // OPTIONAL
     // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
     queryStringParameters: {
       // name: 'param'
@@ -110,8 +113,8 @@ async function bail(matchId: string) {
     });
 }
 
-function configure(conf:any) {
-  // console.log('conf', conf);
+export function configure(conf: any) {
+  // console.log('API conf', conf);
   return API.configure(conf);
 }
 
@@ -121,7 +124,7 @@ async function getTokenHeaders() {
   };
 }
 
-export default { getScores, configure, reviewSession, bail, getICE };
+// export default { getScores, configure, reviewSession, bail, getICE };
 
 // import axios, { AxiosRequestConfig } from 'axios';
 /*

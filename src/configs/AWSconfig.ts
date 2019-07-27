@@ -73,23 +73,25 @@ const pubSubCfg = (region: string) => ({
 });
 
 export const oauth = awsOauth;
-let initLog = false;
+// let initLog = false;
 export const injectConfig = (cfg: any) => {
   const localServer: string = String(process.env.REACT_APP_HOST_URL);
-  const prod = process.env.REACT_APP_ENV === 'production';
+  // const prod = process.env.REACT_APP_ENV === 'production';
 
   cfg.Analytics = cfg.Analytics || {};
   cfg.Analytics.disabled = true;
+  // cfg['aws_appsync_authenticationType'] = 'AWS_IAM';
   cfg['aws_app_analytics'] = false;
   // OPTIONAL - disable Analytics if true
 
   cfg.API = API_CONF_PROD; // prod ? API_CONF_PROD : API_CONF;
 
   cfg.Auth = {
-    oauth: awsOauth
+    oauth: awsOauth,
+    mandatorySignIn: false
   };
 
-  const region = cfg.aws_cognito_region;
+  // const region = cfg.aws_cognito_region;
 
   // cfg.PubSub = pubSubCfg(region);
 
@@ -114,7 +116,7 @@ export const injectConfig = (cfg: any) => {
 
   // if (!initLog) console.log(cfg);
 
-  initLog = true;
+  // initLog = true;
   return cfg;
 };
 

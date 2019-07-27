@@ -7,13 +7,23 @@ import AWS from 'aws-sdk/global';
 
 // import Auth from '@aws-amplify/auth';
 import { Auth } from 'aws-amplify';
-import API from './APIService'; // TODO refactor
+import * as API from './APIService'; // TODO refactor
 
 import retry from 'async-retry';
 // import { Logger } from 'aws-amplify';
 import { Hub } from 'aws-amplify';
 import { injectConfig } from '../configs/AWSconfig';
 
+// Fix analytics error message
+import { Analytics } from 'aws-amplify';
+import { CognitoUserSession } from 'amazon-cognito-identity-js';
+
+Analytics.configure({ disabled: true });
+
+// (window as any).LOG_LEVEL = 'DEBUG';
+// import { ConsoleLogger } from '@aws-amplify/core';
+
+/*
 const delayFlag = async (obj: { flag: boolean }) =>
   await retry(
     async bail => {
@@ -27,6 +37,7 @@ const delayFlag = async (obj: { flag: boolean }) =>
       minTimeout: 2000
     }
   );
+*/
 
 /* Debug only 
 import Amplify from 'aws-amplify';
@@ -45,8 +56,9 @@ if (!AWS.config || !AWS.config.region) {
   AWS.config = new AWS.Config({ region: 'us-east-1' });
 }
 
+/*
 function getLoggger() {
-  /* const logger: any = new ConsoleLogger('dtc_aws_log');
+  const logger: any = new ConsoleLogger('dtc_aws_log');
   logger.onHubCapsule = capsule => {
     switch (capsule.payload.event) {
       case 'signIn':
@@ -68,8 +80,9 @@ function getLoggger() {
         break;
     }
   };
-  return logger; */
+  return logger;
 }
+*/
 
 export const LOGIN_EVENT = 'signIn';
 export const LOGOUT_EVENT = 'signOut';
@@ -89,28 +102,32 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   }
   if (payload.event === LOGIN_EVENT) {
     //  || payload.event === 'cognitoHostedUI'
-    console.log('onHubCapsule signIn', capsule);
+    // console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
   } else if (payload.event === 'configured' && !callbackPage) checkUser(cb);
 }
 
-export function auth(cb: AwsCB, callbackPage: boolean = false) {
+export async function auth(cb: AwsCB, callbackPage: boolean = false) {
   // console.log('auth aws');
-  const awsmobileInjected = injectConfig(awsmobile);
+  // const awsmobileInjected = injectConfig(awsmobile);
 
   // Order is important
+  Hub.listen(/.*/, x => {
+    // console.log('hubevent:', x);
+  });
   Hub.listen(
     'auth',
     onHubCapsule.bind(null, cb, callbackPage)
     // { onHubCapsule: onHubCapsule.bind(null, cb, callbackPage) }
     // ,'AuthService'
   );
-  Auth.configure(awsmobileInjected);
+  Auth.configure(awsconfig);
   // checkUser(cb); // required by amplify, for existing login
 
   // Configure APIService
   // console.log('awsmobileInjected', awsmobileInjected);
-  API.configure(awsmobileInjected);
+  const credentials = await refreshCredentials();
+  API.configure({ ...awsconfig, Auth: credentials, credentials });
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;
@@ -125,61 +142,118 @@ export interface AwsAuth {
   SessionToken: string;
 }
 
-let cacheCred: any = null;
-export async function refreshCredentials() {
-  if (cacheCred) return cacheCred;
+// let cacheCred: any = null;
+export async function refreshCredentials(): Promise<any> {
+  // ICredentials |
+  // if (cacheCred) return cacheCred;
   // wait while another call is configuring
+  /*
   if (cacheCred && !cacheCred.flag) {
     await delayFlag(cacheCred);
     return cacheCred;
   }
-  cacheCred = { flag: false };
+  */
+  // cacheCred = { flag: false };
 
   const currentCredentials = await Auth.currentCredentials();
-  const credentials = (cacheCred = Auth.essentialCredentials(
+  (currentCredentials as any).region = 'us-east-1';
+  /* const credentials = (cacheCred = Auth.essentialCredentials(
     currentCredentials
-  ));
+  )); */
 
-  AWS.config.credentials = new AWS.Credentials(credentials);
+  const params = (currentCredentials as any).params;
+  // console.log('currentCredentials', params);
+
+  AWS.config.credentials = new AWS.CognitoIdentityCredentials(params as any);
   /* AWS.config.update({
     credentials: new AWS.Credentials(credentials)
   });*/
   // console.log('refreshCredentials', credentials);
 
-  return {
-    accessKeyId: credentials.accessKeyId,
-    secretAccessKey: credentials.secretAccessKey,
-    sessionToken: credentials.sessionToken,
-    region: 'us-east-1'
-  };
+  return currentCredentials;
 }
 
 // const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function checkUser(cb: AwsCB, event: string = '') {
-  let data: any;
-  cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
+  // console.log('checkUser');
+  // let data: any;
+  let session: CognitoUserSession | null = null;
+  let cr: any = null;
+  // cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
     // console.time('currentAuthenticatedUser');
-    data = await Auth.currentAuthenticatedUser({
-      bypassCache: false // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-    });
+    // data = await Auth.currentAuthenticatedUser();
+    cr = await Auth.currentUserCredentials();
+
+    session = await Auth.currentSession();
+    // bypassCheck; // Auth.currentUserCredentials();
     // console.timeEnd('currentAuthenticatedUser');
   } catch (e) {
     // console.timeEnd('currentAuthenticatedUser');
-    // console.log('---currentAuthenticatedUser not logged in, double checking', e);
+    console.log(
+      '---currentAuthenticatedUser not logged in, double checking',
+      e
+    );
     // await delay(1600);
     // console.time('currentAuthenticatedUser2');
     // data = await Auth.currentAuthenticatedUser().catch(e => {
     // console.log('---currentAuthenticatedUser not logged in:', e);
-    cb(null);
-    return;
+    ///// cb(null);
+    ////return;
     //   return null;
     // });
     // console.timeEnd('currentAuthenticatedUser2');
     // if (!data) return;
     // else console.log('+++ currentAuthenticatedUser found on retry');
   }
-  const user = data.attributes;
+
+  // const idenity = cr.identityId;
+  // console.log('rrrr', cr, idenity);
+
+  // console.log('session', session);
+
+  let email: string = '';
+  let name: string = '';
+  let groups: string[] = [];
+  let id: string | null = null;
+
+  if (session) {
+    console.log('session', session);
+
+    email = session.getIdToken().payload['email'];
+    name = session.getIdToken().payload['name'];
+    groups = session.getIdToken().payload['cognito:groups'];
+    id = session.getIdToken().payload['sub'];
+    // identityId = 'us-east1:' + session.getIdToken().payload['sub'];
+  } else if (cr) {
+    console.log('unauth user', cr);
+    // const newCred = await refreshCredentials(); // needed for dynamo labs
+    // console.log('newCred', newCred);
+    id = cr.identityId; // newCred.identityId;
+    name = 'Guest';
+    email = 'guest@dinnertable.chat';
+    // identityId = cr.identityId;
+  } else {
+    cb(null);
+    return;
+  }
+
+  // const email = session.getIdToken().payload['email'] || '';
+  // const sub = session.getIdToken().payload['sub']; // || uuidv4();
+  // const name = session.getIdToken().payload['name'] || 'Guest';
+  // const groups = session.getIdToken().payload['cognito:groups'];
+
+  if (!id) throw new Error('checkuser: no id');
+
+  const user = {
+    name,
+    email,
+    id, // data.username,
+    groups
+  };
+  // const user = data.attributes;
+
+  console.log('user', user);
 
   //// AWS.config.credentials = new AWS.Credentials(credentials);
   // FIX: https://github.com/aws-amplify/amplify-js/issues/581
@@ -198,7 +272,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
     return;
   }
   cb({
-    user: { name: user.name, email: user.email, id: data.username },
+    user,
     ...authParams
   });
 }
@@ -223,21 +297,23 @@ function uuidv4(): string {
   );
 }
 
+/*
 export async function guestLogin() {
+  Hub.dispatch('auth', { event: LOGIN_EVENT });
+  return;
   console.log('guestLogin');
   try {
+    // await Auth.currentCredentials(); //
     const user = await Auth.signIn('guest@dinnertable.chat', 'weallneed2talk'); // Guest
-    console.log('user', user);
+    // console.log('user', user);
+    // Hub.dispatch('auth', { event: LOGIN_EVENT, ...user });
   } catch (err) {
     console.error('AuthServoce err', err.code, err);
-    /* alert(
-      'We encountered an error with guest login, going to try to fix it...'
-    ); */
-
     // if (navigator.userAgent.toLocaleLowerCase().indexOf('headless') === -1)
     //  window.location.reload(true);
   }
 }
+*/
 
 /*
 if (err.code === 'UserNotConfirmedException') {

@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { FacebookIcon, FacebookShareButton, TwitterIcon, TwitterShareButton } from 'react-share';
 
 import * as AppModel from '../../../models/AppModel';
-import API from '../../../services/APIService';
+import {getScores} from '../../../services/APIService';
 import * as TopicInfo from '../../../utils/TopicInfo';
 
 
@@ -186,7 +186,7 @@ export default function DebateHistory(props: Props) {
 
     if (props.store.isGuest()) return setState(p => ({ ...p, loaded: true }));
 
-    API.getScores()
+    getScores()
       .then(transformPayload)
       .catch(e => {
         console.error(e);

@@ -30,10 +30,10 @@ CREATE TABLE IF NOT EXISTS debate_session (
 CREATE TABLE IF NOT EXISTS users (
   created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  id VARCHAR(36) NOT NULL,
+  id VARCHAR(46) NOT NULL,
   xp INT NOT NULL default 0,
   status SMALLINT NOT NULL default 0,
-  username VARCHAR(45) NULL,
+  username VARCHAR(46) NULL,
   email VARCHAR(64) NULL,
   credits INT NOT NULL default 0,
   -- badges TEXT NULL,
@@ -73,7 +73,7 @@ CREATE INDEX fk_debate_review_debate_session1_idx ON debate_review (debate_sessi
 -- Table `.`debate_session_users`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS debate_session_users (
-  user_id VARCHAR(36) NOT NULL,
+  user_id VARCHAR(46) NOT NULL,
   debate_session_id CHAR(36) NOT NULL,
   -- badges TEXT NULL, -- needed?
   side SMALLINT NULL,
