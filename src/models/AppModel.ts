@@ -100,17 +100,12 @@ const AppModel = types
     hideNavbar() {
       self.showNav = false;
     },
-    login() {
-      if (self.isGuest()) self.auth.logout();
-      self.auth.login();
+    login(location?: string) {
+      // if (self.isGuest()) self.auth.logout();
+      self.auth.login(location);
     },
     // Covers guest login action\ as well
     authenticated() {
-      if (self.isSaas) {
-        self.router.push('/saas');
-        return;
-      }
-
       const path = (self.router.location as any).pathname;
       const isTest = path === '/test' || path === '/test2';
       if (isTest) return;
@@ -123,21 +118,29 @@ const AppModel = types
       // if(!isHome) return; // j1, not sure if this fixes anything
       // localStorage.removeItem('signup');
       // if (!signedIn) return;
-      console.log('login authenticated, isSigninPath', isSigninPath);
+      // console.log('login authenticated, isSigninPath', isSigninPath);
 
       if (localStorage.getItem('quickmatch')) {
         localStorage.removeItem('quickmatch');
-        self.router.push('/quickmatch');
-        // prevent being redirected when its not login time
-        // prevent redirect for if being signed in and not signedIn yet
-        // NOTE: DONT MESS WITH THIS
-      } else if (isSigninPath === false) {
-        // do nothing if not on signup page
-        return;
-      } else if (self.isStandalone()) self.router.push('/home');
+        self.router.replace('/quickmatch');
+      }
+      // prevent being redirected when its not login time
+      // prevent redirect for if being signed in and not signedIn yet
+      // NOTE: DONT MESS WITH THIS
+      //  } else if (isSigninPath === false) {
+      // do nothing if not on signup page
+      //   return;
+      // } else if (self.isStandalone()) self.router.push('/home');
+      if (isSigninPath) return;
+
+      if (self.isStandalone()) self.router.push('/home');
+
+      /* 
       else if (self.isGuest()) {
         self.router.push('/quickmatch');
-      } else self.router.push('/tutorial');
+      } else self.router.push('/tutorial'); 
+      */
+
       /* else if (
         localStorage.getItem('quickmatch') &&
         self.auth.isAuthenticated() &&

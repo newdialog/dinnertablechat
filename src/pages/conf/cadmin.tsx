@@ -150,7 +150,6 @@ export default observer(function CAdmin(props: Props) {
     if(!store.auth.isNotLoggedIn) return;
     
     if(!store.auth.user) {
-      // store.auth.guestLogin();
       store.auth.login(window.location.pathname);
     }
     else console.log('user', store.auth.user);
@@ -179,7 +178,7 @@ export default observer(function CAdmin(props: Props) {
   };
 
   if (store.auth.isNotLoggedIn) {
-    store.auth.guestLogin();
+    store.auth.login();
     return <div className={classes.pagebody}><h3>Authorizing...</h3></div>;
   }
 

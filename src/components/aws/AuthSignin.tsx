@@ -15,24 +15,26 @@ export default observer(function AuthSignin(props: Props) {
   let [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    if (!refresh && store.auth.isAuthenticated()) {
-      window.gtag('event', 'logged_in', {
-        event_category: 'auth'
-      });
+    if (refresh || !store.auth.isAuthenticated()) return;
+    window.gtag('event', 'logged_in', {
+      event_category: 'auth'
+    });
 
-      const redirectTo = localStorage.getItem('loginTo');
-      if (redirectTo) {
-        setRefresh(true);
-        localStorage.getItem('loginTo');
-        store.router.push(redirectTo);
-      }
+    // alow keep it around in case of back btn
+    const redirectTo = localStorage.getItem('loginTo'); 
+    if (redirectTo) {
+      store.router.push(redirectTo);
+      setRefresh(true);
+      return;
     }
+    store.router.push('/');
+    setRefresh(true);
   }, [store.auth, store.auth.user]);
 
   useInterval(() => {
     // failsafe
     if (!refresh) store.router.push('/');
-  }, 12000);
+  }, 10000);
 
   return (
     <React.Fragment>

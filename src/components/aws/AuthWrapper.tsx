@@ -67,13 +67,6 @@ function AuthComp(props: Props) {
     AuthService.auth(handleAuth, callbackPage);
   }, [store.auth]);
 
-  /*
-    old guest login 
-    useEffect( () => {
-    // console.log('store.auth.doGuestLogin', store.auth.doGuestLogin)
-    if(store.auth.doGuestLogin) AuthService.guestLogin();
-  }, [store.auth.doGuestLogin]); */
-
   useEffect( () => {
     if(store.auth.doLogout) AuthService.logout().then( () => store.auth.logout(true));
   }, [store.auth.doLogout]);

@@ -188,3 +188,34 @@ workbox.routing.registerRoute(
     ],
   })
 );
+
+// *.html no cache
+workbox.routing.registerRoute(
+  "/index.html",
+  workbox.strategies.networkFirst({
+    cacheName: 'htmlcache',
+    plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200, 302, 301],
+      }),
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 0
+      }),
+    ],
+  })
+);
+
+workbox.routing.registerRoute(
+  "/",
+  workbox.strategies.networkFirst({
+    cacheName: 'htmlcache2',
+    plugins: [
+      new workbox.cacheableResponse.Plugin({
+        statuses: [0, 200, 302, 301],
+      }),
+      new workbox.expiration.Plugin({
+        maxAgeSeconds: 0
+      }),
+    ],
+  })
+);

@@ -15,6 +15,7 @@ import ReactPlayer from 'react-player';
 
 // import { useTranslation } from 'react-i18next';
 import { useTheme, makeStyles } from '@material-ui/styles';
+import { observer } from 'mobx-react-lite';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -195,7 +196,7 @@ const bgOptions = {
 interface Props {
   store: AppModel.Type;
 }
-export default function HomeBanner(props: Props) {
+export default observer(function HomeBanner(props: Props) {
   const { store } = props;
   const classes = useStyles({});
   // const { t } = useTranslation();
@@ -247,7 +248,7 @@ export default function HomeBanner(props: Props) {
               }
             
           </Typography>
-          {auth && (
+          {auth && !store.isGuest() && (
             <React.Fragment>
               <Button
                 style={{ marginTop: '1vh', lineHeight: '2.6em' }}
@@ -256,22 +257,22 @@ export default function HomeBanner(props: Props) {
                 size="large"
                 onClick={() => store.router.push('/home')}
               >
-                {store.auth.user!.name.split(' ')[0]}'s Home
+                {store.auth.user!.name.split(' ')[0] + '\'s Home'}
                 <QueueIcon style={{ marginLeft: '8px' }} />
               </Button>
             </React.Fragment>
           )}
-          {!auth && (
+          {auth && store.isGuest() && (
             <>
               <Button
                 style={{ marginTop: '1vh', lineHeight: '2.6em' }}
-                onClick={() => {store.auth.guestLogin(); setLogin(true); } }
+                onClick={() => store.router.push('/home')}
                 disabled={isLoggingIn}
                 variant="contained"
                 color="default"
                 size="large"
               >
-                Guest Pass
+                Guest Access
               </Button>
             </>
           )}
@@ -283,7 +284,7 @@ export default function HomeBanner(props: Props) {
                 lineHeight: '2.6em'
               }}
               onClick={() =>
-                store.isGuest() ? store.auth.guestSignup() : store.login()
+                store.login('/home')
               }
               variant="contained"
               color="secondary"
@@ -303,8 +304,8 @@ export default function HomeBanner(props: Props) {
         </div>
       </div>
     </>
-  );
-}
+  )
+});
 
 function yt(classes:any) {
   return <div className={classes.videoWrapper}><ReactPlayer 

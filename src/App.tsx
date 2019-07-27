@@ -97,22 +97,25 @@ export const Base = observer(function _Base(props: Props) {
         // localStorage.removeItem('signup');
       }
       // return <Loading />;
-    } else if (store.isQuickmatch() && store.auth.isNotLoggedIn) {
+    } else if (store.isQuickmatch()) {
       // Feature: force quickmatch flow
       console.log('isQuickmatch');
       localStorage.setItem('quickmatch', 'y');
-      store.auth.guestLogin();
+      // store.auth.guestLogin();
+      store.router.push('/quickmatch');
       // return <Loading />;
       // cant do this as it would cause quickmatch to bug
       // else if(s.auth.isAuthenticated()) s.router.push('/quickmatch');
-    } else if (store.auth.isNotLoggedIn && isDebateTime) {
+    } 
+      /* no longer needed with auto guest login
+      else if (store.auth.isNotLoggedIn && isDebateTime) {
       // Feature: faster flow
       console.log('setting quickmatch');
       // localStorage.setItem('quickmatch', 'y');
-      store.auth.guestLogin();
       //  return <Loading />;
-    } else if (isHome && isDebateTime && store.auth.isAuthenticated()) {
-      // console.log('isHome', isHome);
+    } */ 
+    else if (isHome && isDebateTime && store.auth.isAuthenticated()) {
+      // Move both guest and auth user here
       store.router.push('/quickmatch'); // /home
     }
   }, [store, store.auth, store.auth.user]);

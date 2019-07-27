@@ -148,7 +148,7 @@ export default observer(function CIndex(props: Props) {
     console.log('--logging in as guest');
     
     if(!store.auth.user) {
-      store.auth.guestLogin();
+      store.auth.login();
     }
     else console.log('user', store.auth.user);
   }, [store.auth.isNotLoggedIn, store.auth.user]);
@@ -176,7 +176,7 @@ export default observer(function CIndex(props: Props) {
   };
 
   if (store.auth.isNotLoggedIn) {
-    store.auth.guestLogin();
+    // store.auth.login();
     return <div className={classes.pagebody}><h3>Authorizing...</h3></div>;
   }
 

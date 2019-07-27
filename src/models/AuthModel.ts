@@ -55,27 +55,27 @@ const AuthModel = types
           event_category: 'auth'
         });
 
-      if (loginTo) {
-        localStorage.setItem('loginTo', loginTo!);
-      }
+      //if (loginTo) {
+      const current = window.location.href;
+      localStorage.setItem('loginTo', loginTo || current);
+      //}
       self.doLogin = true;
       // signIn();
+    },
+    signUp(loginTo?: string) {
+      (self as any).login(loginTo);
     },
     logout(didLogOut: boolean = false) {
       if (didLogOut) {
         self.doLogout = false;
         self.isNotLoggedIn = true;
+        window.location.assign('/about');
         return;
       }
 
       self.doLogout = true;
       self.aws = undefined;
       self.user = undefined;
-    },
-    guestSignup() {
-      localStorage.setItem('signup', 'y'); // TODO: figure out if this is still needed
-      (self as any).logout();
-      (self as any).login();
     },
     notLoggedIn() {
       self.isNotLoggedIn = true;

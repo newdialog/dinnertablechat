@@ -99,7 +99,7 @@ export default function AppFloatMenu(props: Props) {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {store.isGuest() && <MenuItem onClick={() => store.auth.guestSignup()}>
+        {store.isGuest() && <MenuItem onClick={() => store.auth.signUp('/home')}>
           Login to Save Progress
         </MenuItem>}
         <MenuItem onClick={() => store.router.push('/')}>

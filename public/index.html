@@ -31,6 +31,9 @@
   <link rel="icon" type="image/png" href="/logos/icons/android-192x192.png" sizes="192x192">
   <link rel="apple-touch-icon" href="/logos/icons/apple-touch-icon-180x180.png" sizes="180x180">
   <meta name="msapplication-config" content="/logos/icons/browserconfig.xml">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
 
   <!-- <link rel="preload" href="/i18n/en.json" as="fetch">  -->
   <!--
@@ -52,7 +55,9 @@
   <script type='text/javascript'>
     (function () {
       if(/test\./.test(window.location.href)) return;
-      else if (/github/.test(window.location.href) || /netlify/.test(window.location.href) || /\/\/dinnertable/.test(window.location.href))
+      else if ( /\/\/dinnertable/.test(window.location.href))
+        window.location.replace(location.href.replace(/(https?:\/\/)[^/]+/,'https://www.dinnertable.chat'));
+      else if (/github/.test(window.location.href) || /netlify/.test(window.location.href))
         window.location.assign('https://www.dinnertable.chat/');
     })();
   </script>

@@ -44,7 +44,7 @@ export default function Tooltip(props: Props) {
     window.gtag('event', 'guest_signup_click', {
       event_category: 'splash'
     });
-    store.auth.guestSignup();
+    store.auth.signUp();
     // store.auth.login();
     return true;
   };
