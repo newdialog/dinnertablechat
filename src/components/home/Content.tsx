@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 import Flip from 'react-reveal/Flip';
 import Reveal from 'react-reveal/Reveal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import WaypointLottie from 'WaypointLottie';
+import WaypointLottie from '../../WaypointLottie';
 
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
 

@@ -19,6 +19,8 @@ import { Analytics } from 'aws-amplify';
 import { CognitoUserSession } from 'amazon-cognito-identity-js';
 
 Analytics.configure({ disabled: true });
+
+// (window as any).LOG_LEVEL = 'DEBUG';
 // import { ConsoleLogger } from '@aws-amplify/core';
 
 /*
@@ -124,7 +126,8 @@ export async function auth(cb: AwsCB, callbackPage: boolean = false) {
 
   // Configure APIService
   // console.log('awsmobileInjected', awsmobileInjected);
-  API.configure({ ...awsconfig, Auth: await refreshCredentials() });
+  const credentials = await refreshCredentials();
+  API.configure({ ...awsconfig, Auth: credentials, credentials });
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;
@@ -153,17 +156,19 @@ export async function refreshCredentials(): Promise<any> {
   // cacheCred = { flag: false };
 
   const currentCredentials = await Auth.currentCredentials();
+  (currentCredentials as any).region = 'us-east-1';
   /* const credentials = (cacheCred = Auth.essentialCredentials(
     currentCredentials
   )); */
 
-  AWS.config.credentials = new AWS.Credentials(currentCredentials);
+  const params = (currentCredentials as any).params;
+  // console.log('currentCredentials', params);
+
+  AWS.config.credentials = new AWS.CognitoIdentityCredentials(params as any);
   /* AWS.config.update({
     credentials: new AWS.Credentials(credentials)
   });*/
   // console.log('refreshCredentials', credentials);
-
-  (currentCredentials as any).region = 'us-east-1';
 
   return currentCredentials;
 }

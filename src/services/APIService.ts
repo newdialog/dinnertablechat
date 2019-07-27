@@ -1,3 +1,5 @@
+// Note: only include headers on non-IAM resources, guest accounts are only IAM
+
 // import API from '@aws-amplify/api';
 import { Auth, API } from 'aws-amplify'; // API
 
@@ -63,7 +65,7 @@ export async function getICE() {
   let path = '/ice'; // /hello
   let myInit = {
     // OPTIONAL
-    headers: await getTokenHeaders(), // OPTIONAL
+    //// headers: await getTokenHeaders(), // OPTIONAL
     // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
     queryStringParameters: {
       cb: '' + Math.random() * 100000
@@ -80,7 +82,7 @@ export async function getICE() {
       });
     })
     .catch(error => {
-      console.error(apiName, path, error.response);
+      console.error('getICE err', apiName, path, error.response);
       throw error;
     });
 }
@@ -90,7 +92,7 @@ export async function bail(matchId: string) {
   let path = '/bail'; // /hello
   let myInit = {
     // OPTIONAL
-    headers: await getTokenHeaders(), // OPTIONAL
+    /// headers: await getTokenHeaders(), // OPTIONAL
     // response: true, // OPTIONAL (return the entire Axios response object instead of only response.data)
     queryStringParameters: {
       // name: 'param'
@@ -112,7 +114,7 @@ export async function bail(matchId: string) {
 }
 
 export function configure(conf: any) {
-  // console.log('conf', conf);
+  // console.log('API conf', conf);
   return API.configure(conf);
 }
 

@@ -65,7 +65,8 @@ export default class PeerService extends EventEmitter {
 
     let ice: string[] = [];
     try {
-      ice = ((await getICE()) as any[]).concat(config.iceServers);
+      const gi = getICE();
+      ice = ((await gi) as any[]).concat(config.iceServers);
     } catch (e) {
       console.error('PS getICE err', e);
       throw e;
