@@ -98,6 +98,11 @@ export default function WorkerUpdate(props: Props) {
 
     // if(registration.waiting) 
     refresh(registration);
+
+    setTimeout(()=> {
+      // failsafe
+      window.location.reload(true);
+    }, 3000);
   };
 
   useEffect(() => {

@@ -51,8 +51,9 @@
   
   <script type='text/javascript'>
     (function () {
-      if (/github/.test(window.location.href) || /netlify/.test(window.location.href))
-        window.location = 'https://www.dinnertable.chat/'
+      if(/test\./.test(window.location.href)) return;
+      else if (/github/.test(window.location.href) || /netlify/.test(window.location.href) || /\/\/dinnertable/.test(window.location.href))
+        window.location.assign('https://www.dinnertable.chat/');
     })();
   </script>
    <!-- <script async src="/js/pwacompat.209.min.js"></script> -->
