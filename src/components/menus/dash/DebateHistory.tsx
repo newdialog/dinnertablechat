@@ -29,6 +29,8 @@ import * as TopicInfo from '../../../utils/TopicInfo';
 // TODO: ADD AUTH CHECK
 // const {DateTime} = require("luxon");
 import { DateTime } from 'luxon';
+import LoaderMsg from 'components/Loading';
+import { observer } from 'mobx-react-lite';
 // const { DateTime } = luxon;
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -160,7 +162,7 @@ const characters = [
 ]; // TODO: refactor into one resource file: also ref'd in CharacterSelection
 
 let trackHistoryTrigger = false; // refactor
-export default function DebateHistory(props: Props) {
+export default observer(function DebateHistory(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
@@ -494,8 +496,7 @@ export default function DebateHistory(props: Props) {
 
   // const { classes, store, t } = props;
   if (store.auth.isNotLoggedIn) {
-    store.router.push('/');
-    return null;
+    return <LoaderMsg/>;
   }
 
   return (
@@ -529,4 +530,4 @@ export default function DebateHistory(props: Props) {
       </div>
     </div>
   );
-}
+});

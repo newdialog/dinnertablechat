@@ -95,8 +95,6 @@ function getStepContent(step: number, store: AppModel.Type) {
       return <CharacterSelection store={store} />;
     case 1:
       return <PositionSelector store={store} />;
-    case 2:
-      return null; // <ContributionSelector store={store} />;
     default:
       return (
         <Typography>

@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import * as AppModel from '../models/AppModel';
 import DebateTester from '../components/debate/DebateTester';
 import { useTranslation } from 'react-i18next';
+import LoaderMsg from 'components/Loading';
 
 interface State {
   peer?: PeerService;
@@ -19,8 +20,10 @@ export default observer(function DebateRouter() {
   const [state, setState] = useState({ peer: null });
 
   // Auth guard
-  if (store.auth.isNotLoggedIn) store.router.push('/');
-  else if (!store.auth.user) return null;
+  if (store.auth.isNotLoggedIn) {
+    store.router.push('/');
+    return <LoaderMsg/>;
+  }
 
   const onPeer = (peer: any) => {
     setState({ peer });

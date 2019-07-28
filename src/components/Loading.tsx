@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 
-const loader = () => {
+const LoaderMsg = () => {
     return (
       <div>
         <br />
@@ -12,5 +12,5 @@ const loader = () => {
     );
   };
 
-export default loader;
+export default LoaderMsg;
 // <Typography variant="h3" align="center" style={{color:'#555555'}}>Loading...</Typography>

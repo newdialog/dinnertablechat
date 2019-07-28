@@ -128,20 +128,4 @@ const authenticated = (
 };
 */
 
-/*
-<Route path="/rtc" component={RTCHome}/>
-<DefaultRoute component={Home} />
-*/
 export default observer(DTCRouter);
-
-/*
-<Route
-        exact={true}
-        path="/signout"
-        render={() => {
-          // PATCH, redirects not working
-          store.router.push('/');
-          return null;
-        }}
-      />
-*/
