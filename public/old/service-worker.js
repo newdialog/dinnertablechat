@@ -21,7 +21,7 @@ importScripts(
 
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7fbb1d79dec8e54d607a12612324c75e",
+    "revision": "7fbb1d79dec8e54d607a12612324aaaa",
     "url": "https://dinnertable.chat/index.html"
   }
 ]);
