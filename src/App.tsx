@@ -106,15 +106,7 @@ export const Base = observer(function _Base(props: Props) {
       // return <Loading />;
       // cant do this as it would cause quickmatch to bug
       // else if(s.auth.isAuthenticated()) s.router.push('/quickmatch');
-    } 
-      /* no longer needed with auto guest login
-      else if (store.auth.isNotLoggedIn && isDebateTime) {
-      // Feature: faster flow
-      console.log('setting quickmatch');
-      // localStorage.setItem('quickmatch', 'y');
-      //  return <Loading />;
-    } */ 
-    else if (isHome && isDebateTime && store.auth.isAuthenticated()) {
+    } else if (isHome && isDebateTime && store.auth.isAuthenticated()) {
       // Move both guest and auth user here
       store.router.push('/quickmatch'); // /home
     }

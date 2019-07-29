@@ -9,8 +9,12 @@ interface Props {
   options: any;
   speed?: number;
   threshold?: number;
+  width?: number;
+  height?: number;
 }
 export default function WaypointLottie(props: Props) {
+  const width = props.width || 300;
+  const height = props.height || 300;
   // console.log('props', props);
   const ref = useRef<LottieType>();
   // const [state, setState] = useState<any>({});
@@ -38,7 +42,7 @@ export default function WaypointLottie(props: Props) {
   }
 
     return (
-      <LazyLoadComp fallback={<span/>} onVisibleChange={onVisibleChange} threshold={props.threshold || 0.1}>
+      <LazyLoadComp width={width} height={height} fallback={<span/>} onVisibleChange={onVisibleChange} threshold={props.threshold || 0.1}>
         <Lottie
           options={props.options}
           speed={props.speed}

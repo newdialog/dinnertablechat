@@ -7,8 +7,8 @@ import LocalStorageBackend from 'i18next-localstorage-backend';
 
 i18n
   // .use(XHR)
-  .use(LanguageDetector)
-  .use(Backend)
+  .use( (LanguageDetector as any) )
+  .use( (Backend as any) )
   .init({
     react: {
       useSuspense: false, // true,

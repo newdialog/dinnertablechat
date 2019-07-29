@@ -175,7 +175,7 @@ const useStyles = makeStyles(
       maxWidth: '720px',
       margin: 'auto',
       position: 'relative',
-      width: '100vw',
+      width: '100%',
       paddingTop: '51%',
       marginTop: '40px'
     }

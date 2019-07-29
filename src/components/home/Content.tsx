@@ -227,15 +227,6 @@ export default function HomeContent() {
               {t('home-intro')}
             </Typography>
             <div style={{ width: '100%', textAlign: 'center' }}>
-              <a href="https://play.google.com/store/apps/details?id=chat.dinnertable&pcampaignid=MKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1">
-                <img
-                  alt="Get it on Google Play"
-                  className="lazyload"
-                  data-src="/imgs/en_badge_web_generic.png"
-                  width="170px"
-                />
-              </a>
-              <br />
               Are you a student or a teacher? Read about our{' '}
               <a href="/campus" target="_self" style={{ color: '#bd4c4c' }}>
                 Campus Program.
@@ -329,7 +320,7 @@ export default function HomeContent() {
           </Grid>
           <Grid item xs={12} md={12}>
             <div className={classes.paper}>
-                <div style={{ width: '120%', margin: '-74px -4em -94px -1.8em' }}>
+                <div style={{ width: '120%', maxWidth:'90vw', margin: '-74px -4em -94px -1.8em' }}>
                   <WaypointLottie
                     speed={1.6}
                     options={diningOptions}

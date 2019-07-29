@@ -102,7 +102,7 @@ export default function WorkerUpdate(props: Props) {
     setTimeout(()=> {
       // failsafe
       window.location.reload(true);
-    }, 3000);
+    }, 3200);
   };
 
   useEffect(() => {
@@ -121,7 +121,9 @@ export default function WorkerUpdate(props: Props) {
       
       switch (event.data) {
         case 'reload-window':
-          window.location.reload();
+          setTimeout( () =>
+            window.location.reload(true)
+           , 80);
           break;
         default:
           // NOOP
