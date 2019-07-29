@@ -155,10 +155,11 @@ export default observer(function MenuHome(props: Props) {
     store.debate.resetQueue();
   };
 
+  /* user is always logged in
   if (store.auth.isNotLoggedIn) {
     store.router.push('/');
     return <div />;
-  }
+  } */
   let step = 3;
 
   if (store.debate.contribution === -1) step = 2; // skip contribution

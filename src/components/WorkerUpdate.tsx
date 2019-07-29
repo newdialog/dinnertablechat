@@ -61,7 +61,6 @@ interface State {
   registration?: ServiceWorkerRegistration;
 }
 
-//
 var refreshing: boolean = false;
 var updating: boolean = false;
 export default function WorkerUpdate(props: Props) {
@@ -98,11 +97,6 @@ export default function WorkerUpdate(props: Props) {
 
     // if(registration.waiting) 
     refresh(registration);
-
-    setTimeout(()=> {
-      // failsafe
-      window.location.reload(true);
-    }, 3200);
   };
 
   useEffect(() => {
@@ -121,9 +115,7 @@ export default function WorkerUpdate(props: Props) {
       
       switch (event.data) {
         case 'reload-window':
-          setTimeout( () =>
-            window.location.reload(true)
-           , 80);
+          setTimeout( () => window.location.reload(true), 20);
           break;
         default:
           // NOOP
@@ -137,11 +129,15 @@ export default function WorkerUpdate(props: Props) {
     registration = registration || state.registration;
     updating = true;
 
-    if(!registration) return;
+    bust();
+
+    if(!registration) {
+      console.error('cant find registration');
+      setTimeout( () => window.location.reload(true), 101);
+    };
     if(registration!.waiting) registration!.waiting!.postMessage('skipWaiting');
     if(registration!.active) registration!.active!.postMessage('skipWaiting');
     
-    bust();
     console.log('worker update click');
   }
 
@@ -149,6 +145,11 @@ export default function WorkerUpdate(props: Props) {
     setState(p => ({ ...p, disableRefresh: true }));
     // var r = confirm('New dinnertable update available!');
     refresh(state.registration!);
+
+    setTimeout(()=> {
+      // failsafe
+      window.location.reload(true);
+    }, 3200);
   };
 
   // Ensure not in a match
