@@ -21,8 +21,8 @@ importScripts(
 
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7fbb1d79dec8e54d607a12612324aaab",
-    "url": "https://dinnertable.chat/index.html"
+    "revision": "7fbb1d79dec8e54d607a12612324aaac",
+    "url": "https://dinnertable.chat/index2.html"
   }
 ]);
 
@@ -42,7 +42,7 @@ workbox.core.clientsClaim();
 self.__precacheManifest = [].concat(self.__precacheManifest || []);
 workbox.precaching.precacheAndRoute(self.__precacheManifest, {});
 
-workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("https://dinnertable.chat/index.html"), {
+workbox.routing.registerNavigationRoute(workbox.precaching.getCacheKeyForURL("https://dinnertable.chat/index2.html"), {
   
   blacklist: [/^\/_/,/\/[^\/]+\.[^\/]+$/],
 });
