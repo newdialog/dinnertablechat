@@ -99,8 +99,6 @@ export function match2(getAllData: any, maxGroups: number = 2) {
     x => x.length !== 0
   );
 
-  console.log('result', JSON.stringify(result));
-
   // unwrangle into user[] = [answers]
   const obj = result.map(g =>
     g.reduce((acc, x) => {
@@ -164,7 +162,7 @@ export function match(
   // console.log('k-means clusters');
   // console.log('groups', JSON.stringify(groups));
 
-  const tables = 3;
+  const tables = k;
   // Diversify them into new groups!
   var r2 = diversify(groups, r.assignments.length, counts, tables);
 

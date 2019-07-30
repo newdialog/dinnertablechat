@@ -31,6 +31,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
+import ConfAdminTable from './ConfAdminTable';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -59,19 +60,12 @@ const useStyles = makeStyles(
       // padding: `${theme.spacing(4)}px 0`,
     },
     card: {
-      minWidth: '300px',
-      width: '50vw',
-      maxWidth: '500px',
-      height: '100%',
+      // minWidth: '300px',
+      // width: '50vw',
+      // maxWidth: '500px',
+      // height: '100%',
       textAlign: 'center',
-      flexDirection: 'column',
-
-      [theme.breakpoints.down('md')]: {
-        width: '80vw'
-      },
-      [theme.breakpoints.down('sm')]: {
-        width: '100vw'
-      }
+      flexDirection: 'column'
     },
     bgCardColor: {
       backgroundColor: '#eceadb'
@@ -107,7 +101,7 @@ interface State {
   myGroup?: any;
   ready: boolean;
   submitBlocked: boolean;
-  numUsers?:number;
+  numUsers?: number;
 }
 
 function showData(state: State) {
@@ -176,8 +170,10 @@ export default function PleaseWaitResults(props: Props) {
 
   const pos = store.conf.positions;
   const isAdminPage = !pos || Object.keys(pos).length === 0;
-  const conf = props.id || '111';
+  const confid = props.id || '111';
   const user = store.getRID();
+
+  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`)) || 1;
 
   /* const checkReady = async (forceReady: boolean | null = null) => {
     // if(state.ready) return; // end checking if ready is true
@@ -199,7 +195,7 @@ export default function PleaseWaitResults(props: Props) {
 
     const ready = state.ready; // await checkReady();
 
-    if (!ready) await submit(pos, conf, user);
+    if (!ready) await submit(pos, confid, user);
     // .then(checkReady);
     else {
       setState(p => ({ ...p, submitBlocked: true }));
@@ -220,30 +216,33 @@ export default function PleaseWaitResults(props: Props) {
   }, []);
 
   const matchUp = async () => {
-    const rdata = await getAll(conf);
+    console.log('matchup: numGroups', numGroups);
+    const rdata = await getAll(confid);
     // if (rdata.results) await checkReady(rdata.meta ? rdata.meta.ready : null);
 
     var data: Data = rdata.results;
-    const result = match2(data);
+    const result = match2(data, numGroups); // TODO: numGroups
+
+    console.log('result', JSON.stringify(result));
 
     return result;
   };
 
   const onRefresh = async () => {
-    const result = (await getResults(conf)) || [];
+    const result = (await getResults(confid)) || [];
     const ready = result.length > 0;
 
     // console.log('onRefresh result', result);
 
     if (isAdminPage) {
-      const rdata = await getAll(conf);
+      const rdata = await getAll(confid);
       console.warn(rdata);
 
       const numUsers = rdata.results.length;
       setState(p => ({ ...p, numUsers }));
     }
 
-    setState(p => ({ ...p, data: result, ready  }));
+    setState(p => ({ ...p, data: result, ready }));
     // console.log('r', JSON.stringify(result));
   };
 
@@ -251,14 +250,14 @@ export default function PleaseWaitResults(props: Props) {
     if (state.checks > 5) return;
     onRefresh();
     setState(p => ({ ...p, checks: state.checks + 1 }));
-  }, [conf, user, state.checks]);
+  }, [confid, user, state.checks]);
 
   useInterval(onInterval, 20 * 1000);
 
   const onAdminReady = async (toggle: boolean) => {
     const results = await matchUp();
-    await submitReady(toggle, conf, results); // .then(x=>checkReady());
-    
+    await submitReady(toggle, confid, results); // .then(x=>checkReady());
+
     // checkReady();
     onRefresh();
   };
@@ -269,14 +268,11 @@ export default function PleaseWaitResults(props: Props) {
 
   return (
     <div className={classes.layout}>
-      <Grid container spacing={2} justify="center">
-        <Grid sm={10} md={10} lg={10} item>
+      <Grid container spacing={2} justify="center" style={{ width: '100%' }}>
+        <Grid sm={12} md={6} lg={6} item>
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
-              <Typography variant="body2">
                 {showDataAdmin(state, classes)}
-              </Typography>
-              <ConfGraph store={store} data={state.data as any} />
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
               <Button
@@ -288,20 +284,32 @@ export default function PleaseWaitResults(props: Props) {
               >
                 Reload
               </Button>
-              {isAdminPage && (
-                <Button
-                  variant="contained"
-                  // disabled={state.ready}
-                  // size="small"
-                  color="secondary"
-                  className={classes.btn}
-                  onClick={() => onAdminReady(!state.ready)}
-                >
-                  {!state.ready ? 'Set Ready' : 'Unready'}
-                </Button>
-              )}
+
+              <Button
+                variant="contained"
+                // disabled={state.ready}
+                // size="small"
+                color="secondary"
+                className={classes.btn}
+                onClick={() => onAdminReady(!state.ready)}
+              >
+                {!state.ready ? 'Set Ready' : 'Unready'}
+              </Button>
             </CardActions>
           </Card>
+        </Grid>
+
+        <Grid sm={12} md={6} lg={6} item>
+          <Card className={classes.card + ' ' + classes.bgCardColor}>
+            <CardContent className={classes.cardContent}>
+              <Typography variant="body2">Charts</Typography>
+              <ConfGraph store={store} data={state.data as any} />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid sm={12} md={6} lg={6} item>
+          <ConfAdminTable data={state.data}/>
         </Grid>
       </Grid>
     </div>

@@ -14,7 +14,8 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     pagebody: {
       backgroundColor: '#ddd1bb',
-      minHeight: '100vh'
+      minHeight: '100vh',
+      height: '100%'
     },
     container: {
       marginTop: '0px',
@@ -23,7 +24,8 @@ const useStyles = makeStyles(
       width: 'auto',
       maxWidth: '100%',
       padding: '1em 1em 0 1em',
-      minWidth: '300px'
+      minWidth: '300px',
+      minHeight: '100vh'
     },
     appBar: {
       position: 'relative'
@@ -62,7 +64,6 @@ const useStyles = makeStyles(
       // padding: theme.spacing(6)
       width: '100%',
       margin: '0 auto',
-      position: 'absolute',
       bottom: '1em',
       textAlign: 'center'
     },
@@ -131,7 +132,6 @@ export default observer(function CAdmin(props: Props) {
   const [state, setState] = useState<any>({});
 
   const id = props.id;
-  // console.log('id', props.id);
 
   // console.log(store.auth.snapshot());
 
@@ -226,6 +226,7 @@ export default observer(function CAdmin(props: Props) {
               >
                 {PAGE_NAME} Admin
               </Typography>
+              {step === 0 &&
               <Typography
                 className={classes.herotext}
                 variant="h3"
@@ -236,45 +237,48 @@ export default observer(function CAdmin(props: Props) {
                 Talk to people with different opinions.
                 <br />
                 Discussion via mixed viewpoint matchmaking.
-              </Typography>
+              </Typography>}
             </div>
           </div>
 
-          <div className={classes.verticalCenter}>
+          
             {step === 0 && (
-              <Reveal effect="fadeInUp" duration={2200}>
-                <Typography
-                  variant="h4"
-                  align="center"
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  To start matching, please visit:
-                </Typography>
-                <Typography
-                  variant="h2"
-                  align="center"
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  {window.location.origin}/c/{id}
-                </Typography>
-                <Button
-                  variant="contained"
-                  // size="small"
-                  color="secondary"
-                  onClick={show}
-                >
-                  Show Results
-                </Button>
-              </Reveal>
+              <div className={classes.verticalCenter}>
+                <Reveal effect="fadeInUp" duration={2200}>
+                  <Typography
+                    variant="h4"
+                    align="center"
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    To start matching, please visit:
+                  </Typography>
+                  <Typography
+                    variant="h2"
+                    align="center"
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    {window.location.origin}/c/{id}
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    // size="small"
+                    color="secondary"
+                    onClick={show}
+                  >
+                    Show Results
+                  </Button>
+                </Reveal>
+              </div>
             )}
             {step === 1 && (
-              <Reveal effect="fadeInUp" duration={1100}>
-                <ConfAdmin id={id} store={store} />
-              </Reveal>
+              <div style={{marginBottom: '2em'}}>
+                <Reveal effect="fadeInUp" duration={1100}>
+                  <ConfAdmin id={id} store={store} />
+                </Reveal>
+              </div>
             )}
-          </div>
         </main>
         <div className={classes.footer}>
           <b>

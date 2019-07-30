@@ -1,18 +1,9 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Typography
-} from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../models/AppModel';
-import * as TopicInfo from '../../utils/TopicInfo';
 import { ResponsiveBubble } from '@nivo/circle-packing';
 
 const useStyles = makeStyles(
@@ -21,18 +12,11 @@ const useStyles = makeStyles(
       width: '100%',
       height: '30vh',
       marginLeft: 'auto',
-      marginRight: 'auto',
-      [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
-        // width: 1100,
-        // marginLeft: 'auto',
-        // marginRight: 'auto',
-      }
+      marginRight: 'auto'
     },
     btn: {
-      // marginLeft: '1.5em',
       color: '#ffffff',
       fontSize: '1.1em'
-      // color: theme.palette.secondary.main
     },
     submit: {
       width: '100px',
