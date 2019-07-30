@@ -152,7 +152,8 @@ const AuthModel = types
       return self.user.groups.indexOf('conf_admins') !== -1;
     },
     geCogId() {
-      return self.aws!.region + ':' + self.user!.id;
+      if (!self.user) throw new Error('no user');
+      return self.user!.id;
     },
     isAuthenticated() {
       return self.user && self.aws && !self.isNotLoggedIn;

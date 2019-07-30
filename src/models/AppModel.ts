@@ -35,7 +35,7 @@ const AppModel = types
     },*/
     getRID() {
       if (self.auth.user) return self.auth.geCogId();
-
+      /*
       let rid = localStorage.getItem('guestSeed'); // reuse guest seed
       if (!rid) {
         rid = uuid.generate();
@@ -43,6 +43,7 @@ const AppModel = types
         localStorage.setItem('guestSeed', rid);
       }
       return rid;
+      */
     },
     isGuest() {
       if (!self.auth.user) return false;

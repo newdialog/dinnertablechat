@@ -142,6 +142,8 @@ export interface AwsAuth {
   SessionToken: string;
 }
 
+const REGION = 'us-east-1';
+
 // let cacheCred: any = null;
 export async function refreshCredentials(): Promise<any> {
   // ICredentials |
@@ -156,15 +158,17 @@ export async function refreshCredentials(): Promise<any> {
   // cacheCred = { flag: false };
 
   const currentCredentials = await Auth.currentCredentials();
-  (currentCredentials as any).region = 'us-east-1';
+  const cr = currentCredentials as any;
+  cr.region = REGION;
   /* const credentials = (cacheCred = Auth.essentialCredentials(
     currentCredentials
   )); */
-
-  const params = (currentCredentials as any).params;
+  if (!cr._identityId && cr.params.IdentityId)
+    cr._identityId = cr.params.IdentityId;
+  const params = cr.params;
   // console.log('currentCredentials', params);
 
-  AWS.config.credentials = new AWS.CognitoIdentityCredentials(params as any);
+  AWS.config.credentials = new AWS.CognitoIdentityCredentials(params);
   /* AWS.config.update({
     credentials: new AWS.Credentials(credentials)
   });*/
@@ -223,7 +227,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
     email = session.getIdToken().payload['email'];
     name = session.getIdToken().payload['name'];
     groups = session.getIdToken().payload['cognito:groups'];
-    id = session.getIdToken().payload['sub'];
+    id = REGION + ':' + session.getIdToken().payload['sub'];
     // identityId = 'us-east1:' + session.getIdToken().payload['sub'];
   } else if (cr) {
     console.log('unauth user', cr);

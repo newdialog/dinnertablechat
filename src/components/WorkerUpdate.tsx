@@ -115,7 +115,7 @@ export default function WorkerUpdate(props: Props) {
       
       switch (event.data) {
         case 'reload-window':
-          setTimeout( () => window.location.reload(true), 20);
+          setTimeout( () => window.location.reload(true), 10);
           break;
         default:
           // NOOP
@@ -149,7 +149,7 @@ export default function WorkerUpdate(props: Props) {
     setTimeout(()=> {
       // failsafe
       window.location.reload(true);
-    }, 3200);
+    }, 3000);
   };
 
   // Ensure not in a match

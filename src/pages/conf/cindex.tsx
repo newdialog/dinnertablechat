@@ -1,15 +1,15 @@
 import { Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
+import ConfUserPanel from 'components/conf/ConfUserPanel';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import Reveal from 'react-reveal/Reveal';
 
-import * as AppModel from '../../models/AppModel';
-import * as Times from '../../services/TimeService';
 import PositionSelector from '../../components/saas/menus/SPositionSelector';
-import PleaseWaitResults from 'components/conf/PleaseWaitResults';
+import * as AppModel from '../../models/AppModel';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -125,6 +125,8 @@ function onHelp(store: AppModel.Type) {
   store.router.push('/tutorial');
 }
 
+const PAGE_NAME = "DebateConference";
+
 export default observer(function CIndex(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
@@ -198,6 +200,11 @@ export default observer(function CIndex(props: Props) {
 
   return (
     <div className={classes.pagebody}>
+      <Helmet title={PAGE_NAME}>
+        <meta itemProp="name" content={PAGE_NAME} />
+        <meta name="og:title" content={PAGE_NAME} />
+        <meta name="title" property="og:title" content={PAGE_NAME} />
+      </Helmet>
       <main className={classes.container}>
         {/* Hero unit */}
         <div className={classes.heroUnit}>
@@ -210,7 +217,7 @@ export default observer(function CIndex(props: Props) {
               className={classes.heroLogoText}
               gutterBottom
             >
-              DebateConference
+              {PAGE_NAME}
               </Typography>
             <Typography
               className={classes.herotext}
@@ -234,7 +241,7 @@ export default observer(function CIndex(props: Props) {
           )}
           {step === 1 && (
             <Reveal effect="fadeInUp" duration={1100}>
-              <PleaseWaitResults id={id} store={store}/>
+              <ConfUserPanel id={id} store={store}/>
             </Reveal>
           )}
         </div>

@@ -35,21 +35,24 @@ let identityId: string = '';
 export async function init() {
   if (docClient) return docClient;
 
-  const f = x => (x && !!x.accessKeyId) || docClient;
+  const f = x => x && !!x.identityId; // || docClient;
 
-  let cr = await defer(() => refreshCredentials())
+  let cr = await interval(1000)
+    .pipe(flatMap(_ => defer(() => refreshCredentials())))
     .pipe(
-      throttleTime(3000),
       filter(f),
-      take(1),
-      map(x => x || docClient)
+      take(1)
     )
     .toPromise();
 
-  identityId = cr.identityId;
+  if (docClient) return docClient; // already set
 
   console.log('DB init');
-  console.log('DB cr', cr); // , Object.keys(cr).length < 2);
+  console.log('DB cr', cr);
+
+  if (!identityId) identityId = cr.identityId;
+
+  // , Object.keys(cr).length < 2);
 
   /// console.log('DB cred', cr);
   docClient = DynamodbFactory(new DynamoDB(cr)); // await refreshCredentials()));
@@ -112,7 +115,7 @@ export async function delAll(conf: string) {
 export async function submit(positions: any, conf: string, user?: string) {
   if (!docClient) await init();
 
-  user = identityId;
+  if (!user) user = identityId;
 
   console.log('submit user', user);
 

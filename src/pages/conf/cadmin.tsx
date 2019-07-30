@@ -1,15 +1,14 @@
-import { Typography, Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
+import ConfAdmin from 'components/conf/ConfAdminPanel';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import Reveal from 'react-reveal/Reveal';
 
 import * as AppModel from '../../models/AppModel';
-import * as Times from '../../services/TimeService';
-import PositionSelector from '../../components/saas/menus/SPositionSelector';
-import PleaseWaitResults from 'components/conf/PleaseWaitResults';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -95,22 +94,22 @@ const useStyles = makeStyles(
       width: '400px',
       [theme.breakpoints.down(500)]: {
         fontSize: '4.85vw',
-        width: '100vw',
+        width: '100vw'
       }
     },
     heroLogo: {
-      height: '3em', 
+      height: '3em',
       cursor: 'pointer',
       [theme.breakpoints.down(480)]: {
-        width: '90vw',
+        width: '90vw'
       }
     },
     heroLogoText: {
       color: '#9f7b74',
-      fontSize: '2.6em', 
+      fontSize: '2.6em',
       cursor: 'pointer',
       [theme.breakpoints.down(550)]: {
-        fontSize: '8vw',
+        fontSize: '8vw'
       }
     }
   }),
@@ -119,12 +118,10 @@ const useStyles = makeStyles(
 
 interface Props {
   isTest?: boolean;
-  id:string;
+  id: string;
 }
 
-function onHelp(store: AppModel.Type) {
-  store.router.push('/tutorial');
-}
+const PAGE_NAME = "DebateConference";
 
 export default observer(function CAdmin(props: Props) {
   const store = useContext(AppModel.Context)!;
@@ -144,15 +141,15 @@ export default observer(function CAdmin(props: Props) {
   }, []);
 
   useEffect(() => {
-    if(store.auth.isAuthenticated() && !store.auth.isAdmin()) store.auth.logout();
+    if (store.auth.isAuthenticated() && !store.auth.isAdmin())
+      store.auth.logout();
     // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
-    if(store.auth.isAuthenticated()) return;
-    if(!store.auth.isNotLoggedIn) return;
-    
-    if(!store.auth.user) {
+    if (store.auth.isAuthenticated()) return;
+    if (!store.auth.isNotLoggedIn) return;
+
+    if (!store.auth.user) {
       store.auth.login(window.location.pathname);
-    }
-    else console.log('user', store.auth.user);
+    } else console.log('user', store.auth.user);
   }, [store.auth.isNotLoggedIn, store.auth.user]);
 
   useEffect(() => {
@@ -174,12 +171,16 @@ export default observer(function CAdmin(props: Props) {
   }, []);
 
   const handleReset = () => {
-    if(store.conf.positions) store.conf.resetQueue();
+    if (store.conf.positions) store.conf.resetQueue();
   };
 
   if (store.auth.isNotLoggedIn) {
     store.auth.login();
-    return <div className={classes.pagebody}><h3>Authorizing...</h3></div>;
+    return (
+      <div className={classes.pagebody}>
+        <h3>Authorizing...</h3>
+      </div>
+    );
   }
 
   let step = 0;
@@ -195,82 +196,100 @@ export default observer(function CAdmin(props: Props) {
   };
 
   const show = () => {
-    setState({show:true});
-  }
+    setState({ show: true });
+  };
 
   return (
-    <div className={classes.pagebody}>
-      <main className={classes.container}>
-        {/* Hero unit */}
-        <div className={classes.heroUnit}>
-          <div className={classes.heroContent}>
-            { store.auth.isAdmin() ? <button onClick={()=>store.auth.logout()}>logout</button>  : 'not an admin' }
-            {props.isTest && <h2>TEST MODE (/test)</h2>}
-            <Typography
-              variant="h1"
-              align="left"
-              color="textSecondary"
-              className={classes.heroLogoText}
-              gutterBottom
-            >
-              DebateConference Admin
-              </Typography>
-            <Typography
-              className={classes.herotext}
-              variant="h3"
-              align="left"
-              color="textSecondary"
-              gutterBottom
-            >
-              Talk to people with different opinions.
-              <br />
-              Discussion via mixed viewpoint matchmaking.
-            </Typography>
-          </div>
-        </div>
-
-        <div className={classes.verticalCenter}>
-          {step === 0 && (
-            <Reveal effect="fadeInUp" duration={2200}>
-                <Typography
-              variant="h4"
-              align="center"
-              color="textSecondary"
-              gutterBottom
-            >
-              To start matching, please visit:
-            </Typography>
+    <>
+      <Helmet title={PAGE_NAME}>
+        <meta itemProp="name" content={PAGE_NAME} />
+        <meta name="og:title" content={PAGE_NAME} />
+        <meta name="title" property="og:title" content={PAGE_NAME} />
+      </Helmet>
+      <div className={classes.pagebody}>
+        <main className={classes.container}>
+          {/* Hero unit */}
+          <div className={classes.heroUnit}>
+            <div className={classes.heroContent}>
+              {store.auth.isAdmin() ? (
+                <button onClick={() => store.auth.logout()}>logout</button>
+              ) : (
+                'not an admin'
+              )}
+              {props.isTest && <h2>TEST MODE (/test)</h2>}
               <Typography
-              variant="h2"
-              align="center"
-              color="textSecondary"
-              gutterBottom
+                variant="h1"
+                align="left"
+                color="textSecondary"
+                className={classes.heroLogoText}
+                gutterBottom
+              >
+                {PAGE_NAME} Admin
+              </Typography>
+              <Typography
+                className={classes.herotext}
+                variant="h3"
+                align="left"
+                color="textSecondary"
+                gutterBottom
+              >
+                Talk to people with different opinions.
+                <br />
+                Discussion via mixed viewpoint matchmaking.
+              </Typography>
+            </div>
+          </div>
+
+          <div className={classes.verticalCenter}>
+            {step === 0 && (
+              <Reveal effect="fadeInUp" duration={2200}>
+                <Typography
+                  variant="h4"
+                  align="center"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  To start matching, please visit:
+                </Typography>
+                <Typography
+                  variant="h2"
+                  align="center"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  {window.location.origin}/c/{id}
+                </Typography>
+                <Button
+                  variant="contained"
+                  // size="small"
+                  color="secondary"
+                  onClick={show}
+                >
+                  Show Results
+                </Button>
+              </Reveal>
+            )}
+            {step === 1 && (
+              <Reveal effect="fadeInUp" duration={1100}>
+                <ConfAdmin id={id} store={store} />
+              </Reveal>
+            )}
+          </div>
+        </main>
+        <div className={classes.footer}>
+          <b>
+            Powered by{' '}
+            <a
+              href="https://www.dinnertable.chat/about"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              {window.location.origin}/c/{id}
-            </Typography>
-            <Button
-                    variant="contained"
-                    // size="small"
-                    color="secondary"
-                    onClick={show}
-                  >
-                    Show Results
-            </Button>
-            </Reveal>
-          )}
-          {step === 1 && (
-            <Reveal effect="fadeInUp" duration={1100}>
-              <PleaseWaitResults id={id} store={store}/>
-            </Reveal>
-          )}
+              dinnertable.chat
+            </a>
+          </b>
         </div>
-      </main>
-      <div className={classes.footer}>
-        <b>
-          Powered by <a href="https://www.dinnertable.chat/about" target="_blank" rel="noopener noreferrer">dinnertable.chat</a>
-        </b>
       </div>
-    </div>
+    </>
   );
 });
 
