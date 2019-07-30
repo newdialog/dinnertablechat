@@ -37,26 +37,45 @@ function diversify(
   k: number,
   tables: number
 ): Groups {
-  // const numAssigned = assignments.length;
-
+  // if only ony group, return it
+  if (groups.length < 2) return groups;
+  // Target Group
   const dgroups: Groups = Array(tables);
-  var l = len;
-  var rb = 0;
-  var rb2 = 0;
+
+  // Current pnt to work on
+  let l = len;
+  // Current group to get point
+  let rb = 0;
+  // Target diversified group to drop to
+  let rb2 = 0;
+
+  console.log('groups len', groups, len);
+
   while (l > 0) {
-    // console.log(rb, groups.length);
-    var pnt = groups[rb].pop();
+    // Origin group is clustered, and we're trying to diversify them
+    let pnt = groups[rb].pop();
+    // console.log('pnt', pnt, rb);
+    // break;
+    // If no point in this group, go to another group
     if (!pnt) {
       rb = ++rb % k;
       continue;
     }
 
+    // if taget group doesnt exist, create it
     if (!dgroups[rb2]) dgroups[rb2] = [];
+    // Add pnt to group
     dgroups[rb2] = dgroups[rb2].concat([pnt]);
+    // If target group pnter is even, increament the point. This will 'wait' to get two points from two different origin cycles.
     if (dgroups[rb2].length % 2 === 0) rb2 = ++rb2 % tables;
+    // Move onto next point
     --l;
+    // Move onto next origin group
     rb = ++rb % k;
   }
+
+  // If there's only one or less groups, just end
+  if (groups.length < 2) return dgroups;
 
   // remove single person groups
   // const removeSingleUserGroups: Groups = [];
@@ -164,7 +183,7 @@ export function match(
 
   const tables = k;
   // Diversify them into new groups!
-  var r2 = diversify(groups, r.assignments.length, counts, tables);
+  var r2 = diversify(groups, names.length, counts, tables);
 
   // console.log('-diversified table-');
   // console.log(r2);

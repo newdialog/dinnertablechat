@@ -71,10 +71,7 @@ export async function init() {
           KeyType: 'RANGE'
         }
       ]
-    }
-  ]);
-
-  docClient.schema([
+    },
     {
       TableName: 'conf-users',
       KeySchema: [
@@ -97,6 +94,8 @@ export async function submitAll(
   conf: string
 ) {
   if (!docClient) await init();
+
+  // TODO: low: batch
   return await Promise.all(
     users.map(user => submit(user.answers, conf, user.user))
   );
@@ -105,10 +104,12 @@ export async function submitAll(
 export async function delAll(conf: string) {
   if (!docClient) await init();
 
+  console.warn('Deleting all: conf=' + conf, ' from ' + USERS_TABLE);
+
   return docClient
     .table(USERS_TABLE)
-    .where('conf')
-    .eq(conf)
+    .where('user')
+    .not_null()
     .delete();
 }
 

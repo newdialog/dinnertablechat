@@ -22,7 +22,8 @@ import {
   getResults,
   submitReady,
   init,
-  waitForReady
+  waitForReady,
+  delAll
 } from '../../services/ConfService';
 import { match, match2, findMyGroup } from '../../services/ConfMath';
 import ConfGraph from './ConfGraph';
@@ -236,7 +237,7 @@ export default function PleaseWaitResults(props: Props) {
 
     if (isAdminPage) {
       const rdata = await getAll(confid);
-      console.warn(rdata);
+      // console.warn(rdata);
 
       const numUsers = rdata.results.length;
       setState(p => ({ ...p, numUsers }));
@@ -257,6 +258,15 @@ export default function PleaseWaitResults(props: Props) {
   const onAdminReady = async (toggle: boolean) => {
     const results = await matchUp();
     await submitReady(toggle, confid, results); // .then(x=>checkReady());
+
+    // checkReady();
+    onRefresh();
+  };
+
+  const onDeleteAll = async () => {
+    var r = window.confirm("Delete All Responses: Are you sure?");
+    if(!r) return;
+    await delAll(confid);
 
     // checkReady();
     onRefresh();
@@ -293,7 +303,18 @@ export default function PleaseWaitResults(props: Props) {
                 className={classes.btn}
                 onClick={() => onAdminReady(!state.ready)}
               >
-                {!state.ready ? 'Set Ready' : 'Unready'}
+                {!state.ready ? 'Assign All' : 'UnAssign All'}
+              </Button>
+
+              <Button
+                variant="contained"
+                // disabled={state.ready}
+                // size="small"
+                color="secondary"
+                className={classes.btn}
+                onClick={() => onDeleteAll()}
+              >
+                {'Delete All'}
               </Button>
             </CardActions>
           </Card>
