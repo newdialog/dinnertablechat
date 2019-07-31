@@ -29,14 +29,15 @@ let docClient: any; // DynamoDB.DocumentClient;
 let started: boolean = false;
 
 const USERS_TABLE = 'conf-users';
-const CONF_TABLE = 'conf';
+// const CONF_TABLE = 'conf';
 
 let identityId: string = '';
 export async function init() {
   if (docClient) return docClient;
 
-  const f = x => x && !!x.identityId; // || docClient;
+  const f = x => (x && !!x.identityId) || !!docClient; // || docClient;
 
+  // console.log('db: waiting on init');
   let cr = await interval(1000)
     .pipe(flatMap(_ => defer(() => refreshCredentials())))
     .pipe(
@@ -45,11 +46,10 @@ export async function init() {
     )
     .toPromise();
 
+  // console.log('db: init completed');
   if (docClient) return docClient; // already set
 
-  console.log('DB init');
   console.log('DB cr', cr);
-
   if (!identityId) identityId = cr.identityId;
 
   // , Object.keys(cr).length < 2);
@@ -104,13 +104,19 @@ export async function submitAll(
 export async function delAll(conf: string) {
   if (!docClient) await init();
 
-  console.warn('Deleting all: conf=' + conf, ' from ' + USERS_TABLE);
+  console.log('Deleting all: conf=' + conf, ' from ' + USERS_TABLE);
 
-  return docClient
-    .table(USERS_TABLE)
-    .where('user')
-    .not_null()
-    .delete();
+  const _getAll = await getAll(conf);
+  const users = _getAll.results.map(k => k.user);
+  if(_getAll.meta) users.push('_');
+
+  users.map(async (user) => {
+    return await docClient.table(USERS_TABLE).where('conf').eq(conf).where('user').eq(user).delete();
+  });
+
+  console.log('delete done', conf);
+
+  return true;
 }
 
 export async function submit(positions: any, conf: string, user?: string) {

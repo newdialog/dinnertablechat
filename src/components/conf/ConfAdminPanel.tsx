@@ -264,8 +264,14 @@ export default function PleaseWaitResults(props: Props) {
   };
 
   const onDeleteAll = async () => {
-    var r = window.confirm("Delete All Responses: Are you sure?");
-    if(!r) return;
+    var r = window.confirm('Delete All Responses: Are you sure?');
+    if(!r) {
+      console.log('cancelling');
+      return;
+    }
+
+    console.warn('deleting all responses from: ' + confid);
+
     await delAll(confid);
 
     // checkReady();
