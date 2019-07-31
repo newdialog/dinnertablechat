@@ -30,6 +30,7 @@
     "@material-ui/icons": "^4.2.1",
     "@material-ui/styles": "^4.2.1",
     "@material-ui/utils": "^4.1.0",
+    "@nivo/bar": "^0.59.2",
     "@nivo/circle-packing": "^0.59.1",
     "@segment/in-eu": "^0.2.1",
     "@use-it/interval": "^0.1.3",

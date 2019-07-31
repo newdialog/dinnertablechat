@@ -33,6 +33,7 @@ import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
 import ConfAdminTable from './ConfAdminTable';
+import ConfBars from './ConfBars';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -49,7 +50,8 @@ const useStyles = makeStyles(
     btn: {
       // marginLeft: '1.5em',
       color: '#ffffff',
-      fontSize: '1.1em'
+      fontSize: '0.9em',
+      marginRight: '0.3em'
       // color: theme.palette.secondary.main
     },
     submit: {
@@ -293,6 +295,7 @@ export default function PleaseWaitResults(props: Props) {
             <CardActions style={{ justifyContent: 'center' }}>
               <Button
                 variant="contained"
+                size="small"
                 // size="small"
                 color="secondary"
                 className={classes.btn}
@@ -303,6 +306,7 @@ export default function PleaseWaitResults(props: Props) {
 
               <Button
                 variant="contained"
+                size="small"
                 // disabled={state.ready}
                 // size="small"
                 color="secondary"
@@ -314,6 +318,7 @@ export default function PleaseWaitResults(props: Props) {
 
               <Button
                 variant="contained"
+                size="small"
                 // disabled={state.ready}
                 // size="small"
                 color="secondary"
@@ -329,8 +334,17 @@ export default function PleaseWaitResults(props: Props) {
         <Grid sm={12} md={6} lg={6} item>
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
-              <Typography variant="body2">Charts</Typography>
+              <Typography variant="body2">Group Layout</Typography>
               <ConfGraph store={store} data={state.data as any} />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        <Grid sm={12} md={6} lg={6} item>
+          <Card className={classes.card + ' ' + classes.bgCardColor}>
+            <CardContent className={classes.cardContent}>
+              <Typography variant="body2">Response Bars</Typography>
+              <ConfBars store={store} data={state.data as any} id={confid} />
             </CardContent>
           </Card>
         </Grid>

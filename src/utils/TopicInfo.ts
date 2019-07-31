@@ -23,7 +23,7 @@ export function getTopics(t: any): Card[] {
   return data;
 }
 
-export function getSaaSTopics(
+export function getOtherTopics(
   topicid: string,
   t: any,
   prefix?: string

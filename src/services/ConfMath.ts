@@ -49,7 +49,7 @@ function diversify(
   // Target diversified group to drop to
   let rb2 = 0;
 
-  console.log('groups len', groups, len);
+  // console.log('groups len', groups, len);
 
   while (l > 0) {
     // Origin group is clustered, and we're trying to diversify them

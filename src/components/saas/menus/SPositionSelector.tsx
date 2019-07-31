@@ -76,7 +76,7 @@ export default function PositionSelector(props: Props) {
   const [state, setState] = React.useState<any>({ready:false, selected: {}, submitted: false});
 
   const data: TopicInfo.Card[] = React.useMemo(
-    () => TopicInfo.getSaaSTopics(props.id, t, props.prefix),
+    () => TopicInfo.getOtherTopics(props.id, t, props.prefix),
     [props.id, t]
   );
 
