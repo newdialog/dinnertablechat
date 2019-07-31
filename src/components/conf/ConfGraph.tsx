@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../models/AppModel';
 import { ResponsiveBubble } from '@nivo/circle-packing';
+import { getGroupByIndex } from 'utils/TopicInfo';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -30,18 +31,7 @@ const useStyles = makeStyles(
 interface Props {
   store: AppModel.Type;
   data: any[];
-}
-
-interface User {
-  user: string;
-  answers: Array<any>;
-  answersHash?: Array<any>;
-}
-
-// type Data = Array<User>;
-interface State {
-  checks: number;
-  myGroup?: any;
+  confid: string;
 }
 
 export default function ConfGraph(props: Props) {
@@ -56,14 +46,15 @@ export default function ConfGraph(props: Props) {
   const data2 = props.data.map( (g, index) => {
     const children = Object.keys(g).map(k => {
       const val = g[k];
-      return { name: k, color: 'hsl(79, 70%, 50%)', loc: 100 }
+      return { name: 'USER: ' + k, color: 'hsl(79, 70%, 50%)', loc: 100 }
     });
 
-    return { name: ''+index, children, color: 'hsl(245, 70%, 50%)' }
+    const name = 'GROUP: ' + getGroupByIndex(props.confid, index, t);
+    return { name, children, color: 'hsl(245, 70%, 50%)' }
   });
 
   const valo = {
-    name: 'nivo',
+    name: 'TOTAL',
     color: 'hsl(34, 70%, 50%)',
     children: data2
   }
@@ -83,6 +74,11 @@ export default function ConfGraph(props: Props) {
         labelTextColor={{ from: 'color', modifiers: [['darker', 0.8]] }}
         borderWidth={2}
         borderColor={{ from: 'color' }}
+        tooltip={({ id, value, color }) => (
+          <strong style={{ color: 'black' }}>
+            {id}
+          </strong>
+        )}
         defs={[
           {
             id: 'lines',

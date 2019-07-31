@@ -84,7 +84,8 @@ const useStyles = makeStyles(
       textDecoration: 'none'
     },
     chip: {
-      margin: theme.spacing(1)
+      margin: theme.spacing(1),
+      fontSize: '2em'
     }
   }),
   { name: 'PositionSelector' }
@@ -110,56 +111,17 @@ interface State {
   numUsers?:number;
 }
 
-function showData(state: State) {
+function showData(state: State, confid:string, t:any) {
   // console.log('state.ready', state.ready);
-  if (!state.ready) return 'Waiting for assignments...';
 
   let groupId = -1;
   if (state.myGroup) groupId = state.myGroup.gid;
 
-  const msg = 'please see table: ' + groupId;
-  let test = groupId > -1 ? msg : 'Sorry, groups already assigned.'; // no group yet
+  const groupName = TopicInfo.getGroupByIndex(confid, groupId, t)
+
+  const msg = groupName;
+  let test = groupId > -1 ? msg : null; // 'Sorry, groups already assigned.'; // no group yet
   return test;
-  // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
-}
-
-function showDataAdmin(state: State, classes: any) {
-  const responses = state.numUsers || 0;
-  /* state.data
-    .map(x => Object.keys(x).length)
-    .reduce((a, b) => a + b, 0); */
-
-  return (
-    <>
-      <Chip
-        icon={<FaceIcon />}
-        label={'Groups: ' + state.data.length}
-        className={classes.chip}
-        color="primary"
-      />
-      <Chip
-        icon={<FaceIcon />}
-        label={'Responses: ' + responses}
-        className={classes.chip}
-        color="primary"
-      />
-    </>
-  );
-
-  // =====
-  /* 
-  const data = state.data;
-  return data.map((users, index) => {
-    let groupId = -1;
-    if (state.myGroup) groupId = state.myGroup.gid;
-
-    let test = (
-        <span key={index}>{'Group ' + index + ': ' + Object.keys(users).join(', ')}<br/></span>
-    );
-    return test;
-    // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
-  });
-  */
 }
 
 let checking = false;
@@ -175,7 +137,7 @@ export default function PleaseWaitResults(props: Props) {
   });
 
   const pos = store.conf.positions;
-  const conf = props.id || '111';
+  const confid = props.id || '111';
   const user = store.getRID();
 
   if(!user) throw new Error('no user');
@@ -183,10 +145,10 @@ export default function PleaseWaitResults(props: Props) {
   const onStart = async () => {
     console.log('sending data');
 
-    const ready = state.ready; // await checkReady();
+    // const ready = state.ready; // await checkReady();
 
     // if (!ready) 
-    await submit(pos, conf, user);
+    await submit(pos, confid, user);
     // .then(checkReady);
     // else {
     //   setState(p => ({ ...p, submitBlocked: true }));
@@ -202,7 +164,7 @@ export default function PleaseWaitResults(props: Props) {
   }, [user]);
 
   const onRefresh = async () => {
-    const result = (await getResults(conf)) || [];
+    const result = (await getResults(confid)) || [];
     const ready = result && result.length > 0;
 
     // console.log('onRefresh result', result);
@@ -223,13 +185,15 @@ export default function PleaseWaitResults(props: Props) {
     if (state.checks > 5) return;
     onRefresh();
     setState(p => ({ ...p, checks: state.checks + 1 }));
-  }, [conf, user, state.checks]);
+  }, [confid, user, state.checks]);
 
   useInterval(onInterval, 20 * 1000);
 
   React.useEffect(() => {
     init();
   }, []);
+
+  const group = state.ready ? showData(state, confid, t) : '';
 
   return (
     <div className={classes.layout}>
@@ -241,8 +205,19 @@ export default function PleaseWaitResults(props: Props) {
                 <Typography variant="h5">Please Wait</Typography>
               )}
               <Typography variant="body2">
-                {showData(state)}
+                {!state.ready && 'Waiting for assignments...'}
+                {state.ready && !group && 'Sorry, groups already assigned.'}
+                {group && `Your assigned group is:`}
               </Typography>
+              {group && 
+                <Chip
+                  label={group}
+                  className={classes.chip}
+                  color="secondary"
+                />
+              }
+             
+                
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
               <Button

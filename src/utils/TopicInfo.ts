@@ -23,6 +23,21 @@ export function getTopics(t: any): Card[] {
   return data;
 }
 
+export function getGroups(confid: string, t: any): string[] {
+  const groupNames = t(`conf-${confid}-groupNames`).split(', ');
+  // console.log('groupNames', groupNames);
+  return groupNames;
+}
+
+export function getGroupByIndex(confid: string, index: number, t: any) {
+  const groups = getGroups(confid, t);
+  if (index >= groups.length) {
+    console.error('invalid group', groups, index, confid);
+    return '' + index;
+  }
+  return groups[index];
+}
+
 export function getOtherTopics(
   topicid: string,
   t: any,

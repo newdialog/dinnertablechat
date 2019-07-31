@@ -335,7 +335,7 @@ export default function PleaseWaitResults(props: Props) {
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
               <Typography variant="body2">Group Layout</Typography>
-              <ConfGraph store={store} data={state.data as any} />
+              <ConfGraph store={store} data={state.data as any} confid={confid} />
             </CardContent>
           </Card>
         </Grid>

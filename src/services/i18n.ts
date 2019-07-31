@@ -3,16 +3,16 @@ import XHR from 'i18next-xhr-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Backend from 'i18next-chained-backend';
 // import { withI18n, reactI18nextModule } from 'react-i18next';
-import LocalStorageBackend from 'i18next-localstorage-backend';
+// import LocalStorageBackend from 'i18next-localstorage-backend';
 
 i18n
   // .use(XHR)
-  .use( (LanguageDetector as any) )
-  .use( (Backend as any) )
+  .use(LanguageDetector as any)
+  .use(Backend as any)
   .init({
     react: {
       useSuspense: false, // true,
-      wait: false,
+      wait: false
       // withRef: false,
       // bindI18n: 'languageChanged loaded',
       // bindStore: 'added removed',
@@ -21,19 +21,19 @@ i18n
     fallbackLng: 'en',
     debug: false,
     interpolation: {
-      escapeValue: false, // not needed for react as it escapes by default
+      escapeValue: false // not needed for react as it escapes by default
     },
     // ns: ['special', 'common'],
     // defaultNS: 'special',
     backend: {
       backends: [
-        LocalStorageBackend, // primary
+        // LocalStorageBackend, // primary
         XHR // fallback
       ],
       backendOptions: [
-        {
+        /* {
           expirationTime: 1 * 10 * 60 * 1000
-        },
+        },*/
         {
           // load from i18next-gitbook repo https://raw.githubusercontent.com/i18next/i18next-gitbook/master/locales/
           // loadPath: 'i18n/{{lng}}/{{ns}}.json',

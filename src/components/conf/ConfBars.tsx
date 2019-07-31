@@ -89,6 +89,11 @@ export default function ConfBars(props: Props) {
         padding={0.3}
         layout="horizontal"
         colors={{ scheme: 'nivo' }}
+        tooltip={({ id, value, color }) => (
+          <strong style={{ color: 'black' }}>
+            {id}
+          </strong>
+        )}
         // borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
         axisTop={null}
         axisRight={null}
