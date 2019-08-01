@@ -64,7 +64,7 @@ export default function ConfAdminTable({ data, confid }:Props) {
     const n = Object.keys(g).map(u => ({
       name: u,
       group: getGroupByIndex(confid, index, t),
-      answers: Object.values(g[u]).map(v => tdata[index].positions[v as number]).join(', ')
+      answers: Object.values(g[u]).map(v => tdata[index].positions[v as number]) //.join(', ')
     }));
     return acc.concat(n);
   }, []);
@@ -79,7 +79,9 @@ export default function ConfAdminTable({ data, confid }:Props) {
           <TableHead>
             <TableRow>
               <TableCell>Group</TableCell>
-              <TableCell align="right">Answers</TableCell>
+              { tdata.map( (x, index) =>
+                <TableCell align="right">Q{index+1} Answer</TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -88,7 +90,9 @@ export default function ConfAdminTable({ data, confid }:Props) {
                 <TableCell component="th" scope="row">
                   {row.group}
                 </TableCell>
-                <TableCell align="right">{row.answers}</TableCell>
+                { tdata.map( (x, index) =>
+                  <TableCell align="right">{row.answers[index]}</TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>

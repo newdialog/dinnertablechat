@@ -70,7 +70,7 @@ export default function ConfBars(props: Props) {
       if(keys.indexOf(qr)===-1) keys.push(qr);
       answ[qr] = data2.filter((u, index)=>u.answers[q.id]===i).length;
     });
-    return { id: ''+qindex, ...answ }
+    return { id: (qindex+1).toString(), ...answ }
   });
 
   // console.log('data3', data3, keys);
