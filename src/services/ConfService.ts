@@ -27,15 +27,18 @@ import {
 // use Guest Login, use RID or guestSeed
 let docClient: any; // DynamoDB.DocumentClient;
 let started: boolean = false;
+let readying: boolean = false;
 
 const USERS_TABLE = 'conf-users';
 // const CONF_TABLE = 'conf';
 
-let identityId: string = '';
+// let identityId: string = '';
 export async function init() {
-  if (docClient) return docClient;
+  //if(!docClient) readying = false;
+  // docClient = null;
+  // if (docClient) return docClient;
 
-  const f = x => (x && !!x.identityId) || !!docClient; // || docClient;
+  const f = x => x && !!x.identityId; // || !!readying; // || docClient;
 
   // console.log('db: waiting on init');
   let cr = await interval(1000)
@@ -48,9 +51,10 @@ export async function init() {
 
   // console.log('db: init completed');
   if (docClient) return docClient; // already set
+  readying = true;
 
   console.log('DB cr', cr);
-  if (!identityId) identityId = cr.identityId;
+  // if (!identityId) identityId = cr.identityId;
 
   // , Object.keys(cr).length < 2);
 
@@ -108,10 +112,16 @@ export async function delAll(conf: string) {
 
   const _getAll = await getAll(conf);
   const users = _getAll.results.map(k => k.user);
-  if(_getAll.meta) users.push('_');
+  if (_getAll.meta) users.push('_');
 
-  users.map(async (user) => {
-    return await docClient.table(USERS_TABLE).where('conf').eq(conf).where('user').eq(user).delete();
+  users.map(async user => {
+    return await docClient
+      .table(USERS_TABLE)
+      .where('conf')
+      .eq(conf)
+      .where('user')
+      .eq(user)
+      .delete();
   });
 
   console.log('delete done', conf);
@@ -119,10 +129,10 @@ export async function delAll(conf: string) {
   return true;
 }
 
-export async function submit(positions: any, conf: string, user?: string) {
+export async function submit(positions: any, conf: string, user: string) {
   if (!docClient) await init();
 
-  if (!user) user = identityId;
+  // if (!user) user = identityId;
 
   console.log('submit user', user);
 
@@ -171,7 +181,8 @@ export async function submitReady(ready: boolean, conf: string, results: any) {
       .eq(conf)
       .where('user')
       .eq('_')
-      .delete();
+      .delete()
+      .catch(e => window.alert('error: ' + e));
   }
   return docClient
     .table(USERS_TABLE)
@@ -180,7 +191,8 @@ export async function submitReady(ready: boolean, conf: string, results: any) {
       conf,
       user: '_',
       answers: { ready, results }
-    });
+    })
+    .catch(e => window.alert('error: ' + e));
 }
 
 export async function waitForReady(conf: string, targetState: boolean = true) {

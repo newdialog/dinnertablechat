@@ -178,44 +178,9 @@ export default function PleaseWaitResults(props: Props) {
 
   const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`)) || 1;
 
-  /* const checkReady = async (forceReady: boolean | null = null) => {
-    // if(state.ready) return; // end checking if ready is true
-    const ready = forceReady === null ? await isReady(conf) : forceReady;
-
-    // we have an update to submit but couldnt at start as we were in ready-state
-    if (!ready && state.submitBlocked === true) {
-      setState(p => ({ ...p, submitBlocked: false }));
-      await submit(pos, conf, user); // .then(onSelect);
-    }
-
-    setState(p => ({ ...p, ready }));
-    return ready;
-    // !ready && // check even if Ready, because admin might unready
-  }; */
-
-  const onStart = async () => {
-    console.log('sending data');
-
-    const ready = state.ready; // await checkReady();
-
-    if (!ready) await submit(pos, confid, user);
-    // .then(checkReady);
-    else {
-      setState(p => ({ ...p, submitBlocked: true }));
-    }
-    await onRefresh();
-
-    console.log('finished start');
-  };
-
   React.useEffect(() => {
     console.log('user', user);
-    if (isAdminPage) {
-      onRefresh();
-      // is teacher
-      return;
-    }
-    onStart();
+    onRefresh();
   }, []);
 
   const matchUp = async () => {
@@ -227,7 +192,6 @@ export default function PleaseWaitResults(props: Props) {
     const result = match2(data, numGroups); // TODO: numGroups
 
     console.log('result', JSON.stringify(result));
-
     return result;
   };
 
@@ -267,7 +231,7 @@ export default function PleaseWaitResults(props: Props) {
 
   const onDeleteAll = async () => {
     var r = window.confirm('Delete All Responses: Are you sure?');
-    if(!r) {
+    if (!r) {
       console.log('cancelling');
       return;
     }
@@ -290,7 +254,7 @@ export default function PleaseWaitResults(props: Props) {
         <Grid sm={12} md={6} lg={6} item>
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
-                {showDataAdmin(state, classes)}
+              {showDataAdmin(state, classes)}
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
               <Button
@@ -335,7 +299,11 @@ export default function PleaseWaitResults(props: Props) {
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
               <Typography variant="body2">Group Layout</Typography>
-              <ConfGraph store={store} data={state.data as any} confid={confid} />
+              <ConfGraph
+                store={store}
+                data={state.data as any}
+                confid={confid}
+              />
             </CardContent>
           </Card>
         </Grid>
@@ -350,7 +318,7 @@ export default function PleaseWaitResults(props: Props) {
         </Grid>
 
         <Grid sm={12} md={6} lg={6} item>
-          <ConfAdminTable data={state.data} confid={confid}/>
+          <ConfAdminTable data={state.data} confid={confid} />
         </Grid>
       </Grid>
     </div>
