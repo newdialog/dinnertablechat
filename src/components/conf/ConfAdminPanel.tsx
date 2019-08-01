@@ -350,7 +350,7 @@ export default function PleaseWaitResults(props: Props) {
         </Grid>
 
         <Grid sm={12} md={6} lg={6} item>
-          <ConfAdminTable data={state.data}/>
+          <ConfAdminTable data={state.data} confid={confid}/>
         </Grid>
       </Grid>
     </div>

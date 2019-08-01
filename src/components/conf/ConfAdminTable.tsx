@@ -7,6 +7,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { useTranslation } from 'react-i18next';
+import { getGroupByIndex, getOtherTopics } from 'utils/TopicInfo';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -38,7 +39,12 @@ const rows = [
   createData('Gingerbread', 356, 16.0, 49, 3.9)
 ];
 
-export default function ConfAdminTable({ data }) {
+interface Props {
+  data:any;
+  confid:string;
+}
+
+export default function ConfAdminTable({ data, confid }:Props) {
   const { t } = useTranslation();
 
   const classes = useStyles();
@@ -49,15 +55,21 @@ export default function ConfAdminTable({ data }) {
   // console.log('rrr', data);
   if (!r) return null;
 
+  // Get i18n info on answers
+  const tdata = getOtherTopics(confid, t, 'conf');
+
+  console.log('confid', confid)
+
   const data2 = r.reduce((acc, g, index) => {
     const n = Object.keys(g).map(u => ({
       name: u,
-      group: index,
-      answers: Object.values(g[u]).join(', ')
+      group: getGroupByIndex(confid, index, t),
+      answers: Object.values(g[u]).map(v => tdata[index].positions[v as number]).join(', ')
     }));
     return acc.concat(n);
   }, []);
 
+  
   // console.log('data2', data2);
 
   return (
