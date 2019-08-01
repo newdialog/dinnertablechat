@@ -117,6 +117,8 @@ function showData(state: State, confid:string, t:any) {
   let groupId = -1;
   if (state.myGroup) groupId = state.myGroup.gid;
 
+  console.log('groupId', groupId);
+
   const groupName = TopicInfo.getGroupByIndex(confid, groupId, t)
 
   const msg = groupName;

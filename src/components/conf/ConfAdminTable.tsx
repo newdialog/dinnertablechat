@@ -13,8 +13,8 @@ const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
     maxHeight: 300,
-    overflow:'auto',
-    paddingRight:'4px'
+    overflow: 'auto',
+    paddingRight: '4px'
   },
   paper: {
     marginTop: theme.spacing(1),
@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
     marginBottom: theme.spacing(1)
   },
   table: {
-    width: '100%',
+    width: '100%'
   }
 }));
 
@@ -40,36 +40,43 @@ const rows = [
 ];
 
 interface Props {
-  data:any;
-  confid:string;
+  data: any;
+  confid: string;
 }
 
-export default function ConfAdminTable({ data, confid }:Props) {
+export default function ConfAdminTable({ data, confid }: Props) {
   const { t } = useTranslation();
 
   const classes = useStyles();
 
   if (!data) return null;
 
-  const r = data;
   // console.log('rrr', data);
-  if (!r) return null;
+  // if (!r) return null;
 
   // Get i18n info on answers
   const tdata = getOtherTopics(confid, t, 'conf');
 
-  console.log('confid', confid)
+  // console.log('confid tdata', confid, tdata, data);
 
-  const data2 = r.reduce((acc, g, index) => {
-    const n = Object.keys(g).map(u => ({
-      name: u,
-      group: getGroupByIndex(confid, index, t),
-      answers: Object.values(g[u]).map(v => tdata[index].positions[v as number]) //.join(', ')
-    }));
+  const data2 = data.reduce((acc, g, index) => {
+    const n = Object.keys(g).map(u => {
+      const user = g[u];
+      // console.log('user tdata[index]', user, Object.values(user));
+
+      const answers = Object.values(user).map(
+        (v, qindex) => tdata[qindex].positions[v as number]
+      );
+
+      return {
+        name: u,
+        group: getGroupByIndex(confid, index, t),
+        answers
+      };
+    });
     return acc.concat(n);
   }, []);
 
-  
   // console.log('data2', data2);
 
   return (
@@ -79,9 +86,11 @@ export default function ConfAdminTable({ data, confid }:Props) {
           <TableHead>
             <TableRow>
               <TableCell>Group</TableCell>
-              { tdata.map( (x, index) =>
-                <TableCell align="right">Q{index+1} Answer</TableCell>
-              )}
+              {tdata.map((x, index) => (
+                <TableCell key={index} align="right">
+                  Q{index + 1} Answer
+                </TableCell>
+              ))}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -90,9 +99,11 @@ export default function ConfAdminTable({ data, confid }:Props) {
                 <TableCell component="th" scope="row">
                   {row.group}
                 </TableCell>
-                { tdata.map( (x, index) =>
-                  <TableCell align="right">{row.answers[index]}</TableCell>
-                )}
+                {tdata.map((x, index) => (
+                  <TableCell key={index} align="right">
+                    {row.answers[index]}
+                  </TableCell>
+                ))}
               </TableRow>
             ))}
           </TableBody>
