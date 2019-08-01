@@ -10,7 +10,8 @@ export default () => {
     <CookieConsent
       disableStyles={true}
       style={{
-        background: '#ffb9b9',
+        // background: '#ffb9b9',
+        border: '3px solid #555555',
         textAlign: 'center',
         borderRadius: '8px',
         padding: '6px',
