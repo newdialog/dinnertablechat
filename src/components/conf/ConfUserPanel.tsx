@@ -31,6 +31,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
+import Prando from 'prando';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -111,11 +112,12 @@ interface State {
   numUsers?:number;
 }
 
-function showData(state: State, confid:string, t:any) {
+function showGroup(groupId: any, confid:string, t:any) {
+  if(groupId===null || groupId === -1) return null;
   // console.log('state.ready', state.ready);
 
-  let groupId = -1;
-  if (state.myGroup) groupId = state.myGroup.gid;
+  // let groupId = -1;
+  // if (state.myGroup) groupId = state.myGroup.gid;
 
   console.log('groupId', groupId);
 
@@ -174,7 +176,9 @@ export default function PleaseWaitResults(props: Props) {
     if (ready) {
       console.log('store.auth.user!.id', user);
       const myGroup = findMyGroup(user, result);
-      console.log('myGroup', myGroup);
+      
+      if(myGroup) console.log('myGroup', myGroup);
+      else console.log('user not in the group');
 
       if (myGroup!==null) setState(p => ({ ...p, myGroup }));
     }
@@ -195,7 +199,14 @@ export default function PleaseWaitResults(props: Props) {
     init();
   }, []);
 
-  const group = state.ready ? showData(state, confid, t) : '';
+  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`)) || 1;
+  let group = state.ready ? showGroup(state.myGroup, confid, t) : null;
+
+  const tooLate = state.ready && !group;
+  if(tooLate) {
+    let rng = new Prando(user);
+     group = showGroup(Math.floor(rng.next() * numGroups), confid, t);
+  }
 
   return (
     <div className={classes.layout}>
@@ -207,9 +218,10 @@ export default function PleaseWaitResults(props: Props) {
                 <Typography variant="h5">Please Wait</Typography>
               )}
               <Typography variant="body2">
+                {tooLate && <>Groups have already been formed.<br/>Assigning to random table:<br/></>}
                 {!state.ready && 'Waiting for assignments...'}
                 {state.ready && !group && 'Sorry, groups already assigned.'}
-                {group && `Your assigned group is:`}
+                {!tooLate && group && `Your assigned group is:`}
               </Typography>
               {group && 
                 <Chip
