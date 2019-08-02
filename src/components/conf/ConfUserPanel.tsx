@@ -200,9 +200,13 @@ export default function PleaseWaitResults(props: Props) {
   }, []);
 
   const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`)) || 1;
-  let group = state.ready ? showGroup(state.myGroup, confid, t) : null;
 
-  const tooLate = state.ready && !group;
+  let group:string | null = null;
+  if(state.ready && state.myGroup) {
+    group = showGroup(state.myGroup.gid, confid, t);
+  }
+
+  const tooLate = state.ready && group===null;
   if(tooLate) {
     let rng = new Prando(user);
      group = showGroup(Math.floor(rng.next() * numGroups), confid, t);
