@@ -200,15 +200,15 @@ export default function PleaseWaitResults(props: Props) {
     const results = rdata.meta.results;
     const ready = results.length > 0 || rdata.meta.ready;
 
-    if(JSON.stringify(rdata) === JSON.stringify(state.payload)) {
-      // console.log('no change')
-      return; //already have its
-    }
-    console.warn(rdata);
-
     const numUsers = rdata.data.length;
 
     const payload = { data: rdata.data, results };
+
+    if(JSON.stringify(payload) === JSON.stringify(state.payload)) {
+      // console.log('no change')
+      return; //already have its
+    }
+
     setState(p => ({ ...p, payload, ready, numUsers }));
     // console.log('r', JSON.stringify(result));
   };

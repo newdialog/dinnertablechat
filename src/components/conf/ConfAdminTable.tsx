@@ -52,32 +52,28 @@ export default function ConfAdminTable({ payload, confid }: Props) {
 
   if (!payload.data) return null;
 
-  console.log('rrr', payload.data);
-  // if (!r) return null;
-
   // Get i18n info on answers
   const tdata = getOtherTopics(confid, t, 'conf');
 
   // console.log('confid tdata', confid, tdata, data);
 
   const data2 = payload.data.map(user => {
-      // console.log('user tdata[index]', user, Object.values(user));
+    // console.log('user tdata[index]', user, Object.values(user));
 
-      const answers = Object.values(user.answers).map(
-        (v, qindex) => tdata[qindex].positions[v as number]
-      );
+    const answers = Object.values(user.answers).map(
+      (v, qindex) => tdata[qindex].positions[v as number]
+    );
 
-      // debugger;
-      const g = findMyGroup(user.user, payload.results);
+    const g = findMyGroup(user.user, payload.results);
 
-      return {
-        name: user.user,
-        group: g ? getGroupByIndex(confid, g.gid, t) : 'Unassigned',
-        answers
-      };
-    });
+    return {
+      name: user.user,
+      group: g ? getGroupByIndex(confid, g.gid, t) : 'Unassigned',
+      answers
+    };
+  });
 
-  // console.log('data2', data2);
+  data2.sort((a, b) => (a.group < b.group ? -1 : 1));
 
   return (
     <div className={classes.root}>
