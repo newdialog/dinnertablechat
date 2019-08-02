@@ -94,6 +94,7 @@ export default function ConfBars(props: Props) {
             {id}
           </strong>
         )}
+        innerPadding={3}
         // borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
         axisTop={null}
         axisRight={null}

@@ -58,6 +58,7 @@
     "mobx-state-tree": "^3.14.1",
     "mst-middlewares": "^3.14.1",
     "mst-react-router": "^2.3.1",
+    "prando": "^5.1.1",
     "react": "^16.8.6",
     "react-add-to-calendar": "^0.1.5",
     "react-cookie-consent": "^2.3.2",
@@ -82,7 +83,6 @@
     "react-waypoint": "^9.0.2",
     "remotedev": "^0.2.9",
     "rxjs": "^6.5.2",
-    "prando": "^5.1.1",
     "short-uuid": "^3.1.1",
     "simple-peer": "^9.4.0",
     "webfontloader": "^1.6.28"

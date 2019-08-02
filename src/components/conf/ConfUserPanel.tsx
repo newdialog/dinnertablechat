@@ -97,12 +97,12 @@ interface Props {
   id: string;
 }
 
-interface User {
+/* interface User {
   user: string;
   answers: Array<any>;
   answersHash?: Array<any>;
-}
-type Data = Array<User>;
+} */
+// type Data = Array<User>;
 interface State {
   checks: number;
   data: any[];
@@ -128,7 +128,6 @@ function showGroup(groupId: any, confid:string, t:any) {
   return test;
 }
 
-let checking = false;
 export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});

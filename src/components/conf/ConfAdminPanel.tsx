@@ -222,6 +222,15 @@ export default function PleaseWaitResults(props: Props) {
   useInterval(onInterval, 20 * 1000);
 
   const onAdminReady = async (toggle: boolean) => {
+    let msg = '';
+    if(toggle) msg = 'Are you sure you want to assign seating now? Users that respond afterwards will be assigned to random tables.';
+    else msg = 'Are you sure you want to remove all seat assignments?';
+    var r = window.confirm(msg);
+    if (!r) {
+      console.log('cancelling');
+      return;
+    }
+
     const results = await matchUp();
     await submitReady(toggle, confid, results); // .then(x=>checkReady());
 
