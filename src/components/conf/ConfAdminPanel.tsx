@@ -34,6 +34,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
 import ConfAdminTable from './ConfAdminTable';
 import ConfBars from './ConfBars';
+import { any } from 'prop-types';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -100,7 +101,7 @@ interface User {
 type Data = Array<User>;
 interface State {
   checks: number;
-  data: any[];
+  payload: { results: any[], data: any[] };
   myGroup?: any;
   ready: boolean;
   submitBlocked: boolean;
@@ -122,15 +123,12 @@ function showData(state: State) {
 
 function showDataAdmin(state: State, classes: any) {
   const responses = state.numUsers || 0;
-  /* state.data
-    .map(x => Object.keys(x).length)
-    .reduce((a, b) => a + b, 0); */
 
   return (
     <>
       <Chip
         icon={<FaceIcon />}
-        label={'Groups: ' + state.data.length}
+        label={'Groups: ' + state.payload.results.length}
         className={classes.chip}
         color="primary"
       />
@@ -165,17 +163,16 @@ export default function PleaseWaitResults(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
   const [state, setState] = React.useState<State>({
-    data: [],
+    payload: { data: [], results: [] },
+    // results: [],
     checks: 0,
     ready: false,
     submitBlocked: false
   });
 
-  const pos = store.conf.positions;
-  const isAdminPage = !pos || Object.keys(pos).length === 0;
+  // const isAdminPage = !pos || Object.keys(pos).length === 0;
   const confid = props.id || '111';
   const user = store.getRID();
-
   const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`)) || 1;
 
   React.useEffect(() => {
@@ -186,9 +183,8 @@ export default function PleaseWaitResults(props: Props) {
   const matchUp = async () => {
     console.log('matchup: numGroups', numGroups);
     const rdata = await getAll(confid);
-    // if (rdata.results) await checkReady(rdata.meta ? rdata.meta.ready : null);
 
-    var data: Data = rdata.results;
+    var data: Data = rdata.data;
     const result = match2(data, numGroups); // TODO: numGroups
 
     console.log('result', JSON.stringify(result));
@@ -196,20 +192,24 @@ export default function PleaseWaitResults(props: Props) {
   };
 
   const onRefresh = async () => {
-    const result = (await getResults(confid)) || [];
-    const ready = result.length > 0;
-
+    // const result = (await getResults(confid)) || [];
     // console.log('onRefresh result', result);
 
-    if (isAdminPage) {
-      const rdata = await getAll(confid);
-      // console.warn(rdata);
+    const rdata = await getAll(confid);
+    // debugger;
+    const results = rdata.meta.results;
+    const ready = results.length > 0 || rdata.meta.ready;
 
-      const numUsers = rdata.results.length;
-      setState(p => ({ ...p, numUsers }));
+    if(JSON.stringify(rdata) === JSON.stringify(state.payload)) {
+      // console.log('no change')
+      return; //already have its
     }
+    console.warn(rdata);
 
-    setState(p => ({ ...p, data: result, ready }));
+    const numUsers = rdata.data.length;
+
+    const payload = { data: rdata.data, results };
+    setState(p => ({ ...p, payload, ready, numUsers }));
     // console.log('r', JSON.stringify(result));
   };
 
@@ -301,7 +301,7 @@ export default function PleaseWaitResults(props: Props) {
               <Typography variant="body2">Group Layout</Typography>
               <ConfGraph
                 store={store}
-                data={state.data as any}
+                data={state.payload.results}
                 confid={confid}
               />
             </CardContent>
@@ -312,13 +312,13 @@ export default function PleaseWaitResults(props: Props) {
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
               <Typography variant="body2">Response Bars</Typography>
-              <ConfBars store={store} data={state.data as any} id={confid} />
+              <ConfBars store={store} data={state.payload.results} id={confid} />
             </CardContent>
           </Card>
         </Grid>
 
         <Grid sm={12} md={6} lg={6} item>
-          <ConfAdminTable data={state.data} confid={confid} />
+          <ConfAdminTable payload={state.payload} confid={confid} />
         </Grid>
       </Grid>
     </div>

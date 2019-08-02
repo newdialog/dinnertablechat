@@ -8,6 +8,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { useTranslation } from 'react-i18next';
 import { getGroupByIndex, getOtherTopics } from 'utils/TopicInfo';
+import { findMyGroup } from 'services/ConfMath';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,18 +41,18 @@ const rows = [
 ];
 
 interface Props {
-  data: any;
+  payload: any;
   confid: string;
 }
 
-export default function ConfAdminTable({ data, confid }: Props) {
+export default function ConfAdminTable({ payload, confid }: Props) {
   const { t } = useTranslation();
 
   const classes = useStyles();
 
-  if (!data) return null;
+  if (!payload.data) return null;
 
-  // console.log('rrr', data);
+  console.log('rrr', payload.data);
   // if (!r) return null;
 
   // Get i18n info on answers
@@ -59,23 +60,22 @@ export default function ConfAdminTable({ data, confid }: Props) {
 
   // console.log('confid tdata', confid, tdata, data);
 
-  const data2 = data.reduce((acc, g, index) => {
-    const n = Object.keys(g).map(u => {
-      const user = g[u];
+  const data2 = payload.data.map(user => {
       // console.log('user tdata[index]', user, Object.values(user));
 
-      const answers = Object.values(user).map(
+      const answers = Object.values(user.answers).map(
         (v, qindex) => tdata[qindex].positions[v as number]
       );
 
+      // debugger;
+      const g = findMyGroup(user.user, payload.results);
+
       return {
-        name: u,
-        group: getGroupByIndex(confid, index, t),
+        name: user.user,
+        group: g ? getGroupByIndex(confid, g.gid, t) : 'Unassigned',
         answers
       };
     });
-    return acc.concat(n);
-  }, []);
 
   // console.log('data2', data2);
 

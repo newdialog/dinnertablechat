@@ -135,10 +135,7 @@ export function match2(getAllData: any, maxGroups: number = 2) {
   return obj;
 }
 
-export function findMyGroup(
-  user: string,
-  match2Data: Array<any>
-): any[] | null {
+export function findMyGroup(user: string, match2Data: Array<any>): any | null {
   const findGroup = match2Data
     .map((g, index) => {
       g = Object.assign({}, g);

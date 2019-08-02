@@ -35,7 +35,7 @@ interface Props {
 }
 
 export default function ConfGraph(props: Props) {
-  const store = props.store;
+  // const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
   // const [state, setState] = React.useState<State>({ data: [], checks: 0 });

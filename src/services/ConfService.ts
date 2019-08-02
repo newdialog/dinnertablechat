@@ -111,7 +111,7 @@ export async function delAll(conf: string) {
   console.log('Deleting all: conf=' + conf, ' from ' + USERS_TABLE);
 
   const _getAll = await getAll(conf);
-  const users = _getAll.results.map(k => k.user);
+  const users = _getAll.data.map(k => k.user);
   if (_getAll.meta) users.push('_');
 
   users.map(async user => {
@@ -252,7 +252,7 @@ export async function getResults(conf: string) {
 
 export async function getAll(
   conf: string
-): Promise<{ results: any[]; meta: any }> {
+): Promise<{ data: any[]; meta: any }> {
   if (!docClient) await init();
 
   return docClient
@@ -264,10 +264,16 @@ export async function getAll(
     .then(x => {
       const filterOut = x.filter(x => x.user !== '_');
       const filterFor = x.filter(x => x.user === '_');
+      let meta =
+        filterFor.length === 0
+          ? { results: [], ready: false }
+          : filterFor[0].answers;
+      // debugger;
+      // meta = meta.length === 0 ?
 
       return {
-        results: filterOut,
-        meta: filterFor.length === 0 ? null : filterFor[0].answers
+        data: filterOut,
+        meta
       };
     }); // remove metadata
 }
