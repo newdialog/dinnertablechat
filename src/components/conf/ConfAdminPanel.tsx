@@ -33,7 +33,7 @@ import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
 import ConfAdminTable from './ConfAdminTable';
-import ConfBars from './ConfBars';
+import ConfBars from './ConfAdminBars';
 import { any } from 'prop-types';
 
 const useStyles = makeStyles(

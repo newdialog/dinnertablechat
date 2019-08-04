@@ -17,7 +17,7 @@ const useStyles = makeStyles(
     },
     layout2: {
       width: '100%',
-      height: '50px',
+      height: '54px',
       marginLeft: 'auto',
       marginRight: 'auto'
     },
@@ -36,32 +36,33 @@ const useStyles = makeStyles(
 
 interface Props {
   store: AppModel.Type;
-  data: any[];
+  data: any;
   id: string;
 }
 
-export default function ConfBars(props: Props) {
+export default function ConfUserBars(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
   // const [state, setState] = React.useState<State>({ data: [], checks: 0 });
 
+  const data2 = props.data.members.map((x,i)=>({name:i, answers: x}));
   // console.log('ConfBars', props.data);
-  if(props.data.length === 0) return null;
+  /* if(data.length === 0) return null;
 
   // array of users ans answers
-  const data2 = props.data.flatMap( (g, index) => {
+  const data2 = data.flatMap( (g, index) => {
     return Object.keys(g).flatMap(k => {
       const val = g[k];
       return { name: k, answers: val }
     });
-  });
+  }); */
 
   // console.log('data2', data2);
 
   // get ansers
   const tdata = getOtherTopics(props.id, t, 'conf');
-  const numQ = tdata.length;
+  // const numQ = tdata.length;
 
   // console.log('tdata', tdata, numQ);
 
@@ -79,7 +80,7 @@ export default function ConfBars(props: Props) {
     return { id: (qindex+1).toString(), ...answ, proposition: q.proposition }
   });
 
-  console.log('data3', data3, tdata);
+  // console.log('data3', data3, tdata);
 
   // return null;
   // console.log(JSON.stringify(valo, null, 2));
@@ -87,7 +88,7 @@ export default function ConfBars(props: Props) {
   return (
     <div className={classes.layout}>
       {data3.map( (r, index) => {
-        console.log(r);
+        // console.log('r', r);
         return <div key={index} className={classes.layout2}>
           {makeBar([r], keys, index, index===data3.length-1)}
         </div>
@@ -116,15 +117,16 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
         axisLeft={null}
         indexBy={'id'}
         reverse={true}
-        margin={{ top: 22, right: 130, bottom: 0, left: 60 }}
+        margin={{ top: 20, right: 30, bottom: 0, left: 30 }}
         padding={0.1}
         layout="horizontal"
         colors={{ scheme: 'nivo' }}
         tooltip={({ id, value, color }) => (
           <strong style={{ color: 'black' }}>
-            {id}
+            {value + ' ' + id}
           </strong>
         )}
+        label={ ({ id, value }) => value + ' ' + id }
         innerPadding={4}
         // borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
         axisTop={null}
@@ -151,11 +153,11 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
         legends={ !showLegend ? undefined : [
             {
                 dataFrom: 'keys',
-                anchor: 'bottom-right',
-                direction: 'column',
+                anchor: 'bottom',
+                direction: 'row',
                 justify: false,
-                translateX: 120,
-                translateY: 0,
+                translateX: 0,
+                translateY: 20,
                 itemsSpacing: 2,
                 itemWidth: 100,
                 itemHeight: 20,

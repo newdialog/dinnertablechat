@@ -138,7 +138,7 @@ export function match2(getAllData: any, maxGroups: number = 2) {
 export function findMyGroup(user: string, match2Data: Array<any>): any | null {
   const findGroup = match2Data
     .map((g, index) => {
-      g = Object.assign({}, g);
+      g = {...g}
       g.gid = index;
       return g;
     })
@@ -146,6 +146,21 @@ export function findMyGroup(user: string, match2Data: Array<any>): any | null {
 
   if (findGroup.length === 0) return null;
   return findGroup[0];
+}
+
+export function groupByIndex(groupIndex: number, match2Data: Array<any>): any | null {
+  const findGroup = match2Data
+    .map((g, index) => {
+      g = {...g};
+      g.gid = index;
+      return g;
+    }) 
+    // .filter(group => !!group[user]);
+
+  if (groupIndex >= findGroup.length) {
+    throw new Error('invalid group index: ' + groupIndex + ' ' + findGroup.length);
+  }
+  return findGroup[groupIndex];
 }
 
 export function match(

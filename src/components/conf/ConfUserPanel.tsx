@@ -24,7 +24,7 @@ import {
   init,
   waitForReady
 } from '../../services/ConfService';
-import { match, match2, findMyGroup } from '../../services/ConfMath';
+import { match, match2, findMyGroup, groupByIndex } from '../../services/ConfMath';
 import ConfGraph from './ConfGraph';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -32,6 +32,7 @@ import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
 import Prando from 'prando';
+import ConfUserBars from './ConfUserBars';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -110,6 +111,7 @@ interface State {
   ready: boolean;
   submitBlocked: boolean;
   numUsers?:number;
+  isLate?:boolean;
 }
 
 function showGroup(groupId: any, confid:string, t:any) {
@@ -198,18 +200,39 @@ export default function PleaseWaitResults(props: Props) {
     init();
   }, []);
 
-  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`)) || 1;
+  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`),  10) || 1;
 
   let group:string | null = null;
+  let groupInfo: any = { members: [], gid: -1 };
   if(state.ready && state.myGroup) {
     group = showGroup(state.myGroup.gid, confid, t);
+    // groupInfo = state.myGroup;
+    groupInfo.gid = state.myGroup.gid;
+    groupInfo.membersHash = { ...state.myGroup };
+    delete groupInfo.membersHash.gid;
+    groupInfo.members = Object.values(groupInfo.membersHash);
   }
 
-  const tooLate = state.ready && group===null;
-  if(tooLate) {
-    let rng = new Prando(user);
-     group = showGroup(Math.floor(rng.next() * numGroups), confid, t);
+  const tooLate = !!state.isLate;
+  
+  if(state.ready && group===null) {
+    if(!state.myGroup && state.data) {
+      // group = showGroup(Math.floor(rng.next() * numGroups), confid, t);
+      let rng = new Prando(user);
+      const gid = Math.floor(rng.next() * numGroups);
+      console.log('gid', gid, state.data);
+      const myGroup = groupByIndex(gid, state.data);
+      console.log('myGroup', myGroup)
+      setState(p=>({...p, myGroup, isLate: true }));
+
+      return <div className={classes.layout}/>
+    }
+    
+     // group = showGroup(, confid, t);
+     // groupInfo = {};
   }
+
+  console.log('group', group, ' info ', groupInfo, 'tooLate', tooLate)
 
   return (
     <div className={classes.layout}>
@@ -227,11 +250,18 @@ export default function PleaseWaitResults(props: Props) {
                 {!tooLate && group && `Your assigned group is:`}
               </Typography>
               {group && 
-                <Chip
-                  label={group}
-                  className={classes.chip}
-                  color="secondary"
-                />
+                <>
+                  <Chip
+                    label={group}
+                    className={classes.chip}
+                    color="secondary"
+                  />
+                  <br/><br/>
+                  <Typography align="left">
+                    In your group, there are {groupInfo.members.length} people with the opinions:
+                  </Typography>
+                  <ConfUserBars id={confid} store={store} data={groupInfo} />
+                </>
               }
              
                 
