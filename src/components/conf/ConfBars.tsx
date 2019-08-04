@@ -6,12 +6,18 @@ import { ResponsiveBar } from '@nivo/bar';
 import * as AppModel from '../../models/AppModel';
 import { ResponsiveBubble } from '@nivo/circle-packing';
 import { getOtherTopics } from 'utils/TopicInfo';
+import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
     layout: {
       width: '100%',
-      height: '30vh',
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    },
+    layout2: {
+      width: '100%',
+      height: '50px',
       marginLeft: 'auto',
       marginRight: 'auto'
     },
@@ -70,23 +76,48 @@ export default function ConfBars(props: Props) {
       if(keys.indexOf(qr)===-1) keys.push(qr);
       answ[qr] = data2.filter((u, index)=>u.answers[q.id]===i).length;
     });
-    return { id: (qindex+1).toString(), ...answ }
+    return { id: (qindex+1).toString(), ...answ, proposition: q.proposition }
   });
 
-  // console.log('data3', data3, keys);
+  console.log('data3', data3, tdata);
 
   // return null;
   // console.log(JSON.stringify(valo, null, 2));
 
   return (
     <div className={classes.layout}>
-      <ResponsiveBar
+      {data3.map( (r, index) => {
+        console.log(r);
+        return <div key={index} className={classes.layout2}>
+          {makeBar([r], keys, index, index===data3.length-1)}
+        </div>
+      })}
+    </div>
+  );
+}
+
+const Notes = (props:any) => {
+  const { bars, xScale, yScale, data } = props;
+  // debugger
+  return <React.Fragment>{data.map( (bar, key) => {
+    return <text key={key} style={{color:'#444444'}}>
+            {bar.proposition}
+          </text>
+  })}</React.Fragment>
+}
+
+function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
+  return <ResponsiveBar
+        layers={['grid', 'axes', 'bars', Notes, 'markers', 'legends', 'annotations'] as any}
+        key={key}
         data={data3}
         keys={keys}
+        axisBottom={null}
+        axisLeft={null}
         indexBy={'id'}
         reverse={true}
-        margin={{ top: 50, right: 130, bottom: 50, left: 60 }}
-        padding={0.3}
+        margin={{ top: 22, right: 130, bottom: 0, left: 60 }}
+        padding={0.1}
         layout="horizontal"
         colors={{ scheme: 'nivo' }}
         tooltip={({ id, value, color }) => (
@@ -94,11 +125,11 @@ export default function ConfBars(props: Props) {
             {id}
           </strong>
         )}
-        innerPadding={3}
+        innerPadding={4}
         // borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
         axisTop={null}
         axisRight={null}
-        axisBottom={{
+        /* axisBottom={{
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
@@ -113,11 +144,11 @@ export default function ConfBars(props: Props) {
             legend: 'questions',
             legendPosition: 'middle',
             legendOffset: -40
-        }}
+        }} */
         labelSkipWidth={12}
         labelSkipHeight={12}
         labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-        legends={[
+        legends={ !showLegend ? undefined : [
             {
                 dataFrom: 'keys',
                 anchor: 'bottom-right',
@@ -145,6 +176,11 @@ export default function ConfBars(props: Props) {
         motionStiffness={90}
         motionDamping={15}
     />
-    </div>
-  );
 }
+
+/*
+
+          <Typography variant="body1">
+            {r.proposition}
+          </Typography>
+          */

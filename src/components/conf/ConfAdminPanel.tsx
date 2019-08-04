@@ -187,7 +187,7 @@ export default function PleaseWaitResults(props: Props) {
     var data: Data = rdata.data;
     const result = match2(data, numGroups); // TODO: numGroups
 
-    console.log('result', JSON.stringify(result));
+    // console.log('result', JSON.stringify(result));
     return result;
   };
 
