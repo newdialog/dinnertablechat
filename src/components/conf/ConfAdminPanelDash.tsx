@@ -183,7 +183,7 @@ export default function ConfAdminPanelDash(props: Props) {
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
               <Typography variant="body2">Response Bars</Typography>
-              <ConfBars store={store} data={payload.results} id={confid} />
+              <ConfBars store={store} payload={payload} id={confid} />
             </CardContent>
           </Card>
         </Grid>

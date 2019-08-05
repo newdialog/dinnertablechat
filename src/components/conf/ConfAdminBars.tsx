@@ -48,7 +48,7 @@ const useStyles = makeStyles(
 
 interface Props {
   store: AppModel.Type;
-  data: any[];
+  payload: any;
   id: string;
   large?: boolean;
 }
@@ -59,16 +59,14 @@ export default function ConfBars(props: Props) {
   const { t } = useTranslation();
   // const [state, setState] = React.useState<State>({ data: [], checks: 0 });
 
+  const data = props.payload.data; // .results
+  if(data.length === 0) return null;
+  
   // console.log('ConfBars', props.data);
-  if(props.data.length === 0) return null;
-
   // array of users ans answers
-  const data2 = props.data.flatMap( (g, index) => {
-    return Object.keys(g).flatMap(k => {
-      const val = g[k];
-      return { name: k, answers: val }
-    });
-  });
+  const data2 = data.map(u => {
+    return {name:u.user, answers: u.answers};
+  })
 
   // console.log('data2', data2);
 

@@ -126,7 +126,7 @@ export default function ConfAdminPanelSlides(props: Props) {
         <Grid hidden={page!==1}  sm={12} md={12} lg={12} item>
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
-              <Typography variant="body2">Groups Layout</Typography>
+              <Typography variant="body2">Groups have been assigned...</Typography>
               <ConfGraph store={store} data={payload.results} confid={confid} />
             </CardContent>
           </Card>
@@ -136,7 +136,7 @@ export default function ConfAdminPanelSlides(props: Props) {
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
               <Typography variant="body2">Responses</Typography>
-              <ConfBars large={true} store={store} data={payload.results} id={confid} />
+              <ConfBars large={true} store={store} payload={payload} id={confid} />
             </CardContent>
           </Card>
         </Grid>
