@@ -4,7 +4,8 @@ import {
   CardActions,
   CardContent,
   Grid,
-  Typography
+  Typography,
+  Chip
 } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
@@ -16,25 +17,15 @@ import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
 import {
-  submit,
   getAll,
-  isReady,
-  getResults,
   submitReady,
   init,
-  waitForReady,
   delAll
 } from '../../services/ConfService';
-import { match, match2, findMyGroup } from '../../services/ConfMath';
-import ConfGraph from './ConfGraph';
+import { match2, findMyGroup } from '../../services/ConfMath';
 
-import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
-import DoneIcon from '@material-ui/icons/Done';
-import ConfAdminTable from './ConfAdminTable';
-import ConfBars from './ConfAdminBars';
-import { any } from 'prop-types';
+import ConfAdminPanelDash from './ConfAdminPanelDash';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -55,42 +46,14 @@ const useStyles = makeStyles(
       marginRight: '0.3em'
       // color: theme.palette.secondary.main
     },
-    submit: {
-      width: '100px',
-      fontSize: '1.1em',
-      color: '#ffffff'
-    },
-    cardGrid: {
-      // padding: `${theme.spacing(4)}px 0`,
-    },
-    card: {
-      // minWidth: '300px',
-      // width: '50vw',
-      // maxWidth: '500px',
-      // height: '100%',
-      textAlign: 'center',
-      flexDirection: 'column'
-    },
-    bgCardColor: {
-      backgroundColor: '#eceadb'
-    },
-    cardMedia: {},
-    cardContent: {
-      flexGrow: 1
-    },
-    imgLink: {
-      textDecoration: 'none'
-    },
-    chip: {
-      margin: theme.spacing(1)
-    }
   }),
-  { name: 'PositionSelector' }
+  { name: 'ConfAdminPanel' }
 );
 
 interface Props {
   store: AppModel.Type;
   id: string;
+  view: any;
 }
 
 interface User {
@@ -121,45 +84,9 @@ function showData(state: State) {
   // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
 }
 
-function showDataAdmin(state: State, classes: any) {
-  const responses = state.numUsers || 0;
-
-  return (
-    <>
-      <Chip
-        icon={<FaceIcon />}
-        label={'Groups: ' + state.payload.results.length}
-        className={classes.chip}
-        color="primary"
-      />
-      <Chip
-        icon={<FaceIcon />}
-        label={'Responses: ' + responses}
-        className={classes.chip}
-        color="primary"
-      />
-    </>
-  );
-
-  // =====
-  /* 
-  const data = state.data;
-  return data.map((users, index) => {
-    let groupId = -1;
-    if (state.myGroup) groupId = state.myGroup.gid;
-
-    let test = (
-        <span key={index}>{'Group ' + index + ': ' + Object.keys(users).join(', ')}<br/></span>
-    );
-    return test;
-    // <div>myGroup: {JSON.stringify(state.myGroup)}</div>
-  });
-  */
-}
-
-let checking = false;
-export default function PleaseWaitResults(props: Props) {
+export default function ConfAdminPanel(props: Props) {
   const store = props.store;
+  const AdminView = props.view;
   const classes = useStyles({});
   const { t } = useTranslation();
   const [state, setState] = React.useState<State>({
@@ -173,7 +100,7 @@ export default function PleaseWaitResults(props: Props) {
   // const isAdminPage = !pos || Object.keys(pos).length === 0;
   const confid = props.id || '111';
   const user = store.getRID();
-  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`)) || 1;
+  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
 
   React.useEffect(() => {
     console.log('user', user);
@@ -257,79 +184,11 @@ export default function PleaseWaitResults(props: Props) {
     init();
   }, []);
 
+  const vprops = {onRefresh, onAdminReady, onDeleteAll, confid, 
+                  numUsers: state.numUsers, payload: state.payload,
+                  ready: state.ready}
+
   return (
-    <div className={classes.layout}>
-      <Grid container spacing={2} justify="center" style={{ width: '100%' }}>
-        <Grid sm={12} md={6} lg={6} item>
-          <Card className={classes.card + ' ' + classes.bgCardColor}>
-            <CardContent className={classes.cardContent}>
-              {showDataAdmin(state, classes)}
-            </CardContent>
-            <CardActions style={{ justifyContent: 'center' }}>
-              <Button
-                variant="contained"
-                size="small"
-                // size="small"
-                color="secondary"
-                className={classes.btn}
-                onClick={() => onRefresh()}
-              >
-                Reload
-              </Button>
-
-              <Button
-                variant="contained"
-                size="small"
-                // disabled={state.ready}
-                // size="small"
-                color="secondary"
-                className={classes.btn}
-                onClick={() => onAdminReady(!state.ready)}
-              >
-                {!state.ready ? 'Assign All' : 'UnAssign All'}
-              </Button>
-
-              <Button
-                variant="contained"
-                size="small"
-                // disabled={state.ready}
-                // size="small"
-                color="secondary"
-                className={classes.btn}
-                onClick={() => onDeleteAll()}
-              >
-                {'Delete All'}
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-
-        <Grid sm={12} md={6} lg={6} item>
-          <Card className={classes.card + ' ' + classes.bgCardColor}>
-            <CardContent className={classes.cardContent}>
-              <Typography variant="body2">Group Layout</Typography>
-              <ConfGraph
-                store={store}
-                data={state.payload.results}
-                confid={confid}
-              />
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid sm={12} md={6} lg={6} item>
-          <Card className={classes.card + ' ' + classes.bgCardColor}>
-            <CardContent className={classes.cardContent}>
-              <Typography variant="body2">Response Bars</Typography>
-              <ConfBars store={store} data={state.payload.results} id={confid} />
-            </CardContent>
-          </Card>
-        </Grid>
-
-        <Grid sm={12} md={6} lg={6} item>
-          <ConfAdminTable payload={state.payload} confid={confid} />
-        </Grid>
-      </Grid>
-    </div>
+    <AdminView store={store} {...vprops}/>
   );
 }

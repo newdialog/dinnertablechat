@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import Reveal from 'react-reveal/Reveal';
 
 import * as AppModel from '../../models/AppModel';
+import ConfAdminPanelDash from 'components/conf/ConfAdminPanelDash';
+import ConfAdminPanelSlides from 'components/conf/ConfAdminPanelSlides';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -122,14 +124,19 @@ interface Props {
   id: string;
 }
 
-const PAGE_NAME = "DebateConference";
+interface State {
+  view: 'slides' | 'dash';
+  show: boolean
+}
+
+const PAGE_NAME = 'DebateConference';
 
 export default observer(function CAdmin(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  const [state, setState] = useState<any>({});
+  const [state, setState] = useState<State>({view:'slides', show:false});
 
   const id = props.id;
 
@@ -191,13 +198,16 @@ export default observer(function CAdmin(props: Props) {
     console.log('move to next step');
   }
 
-  const handleStep = step2 => () => {
-    store.debate.resetQueue();
+  const show = () => {
+    setState(p=>({ ...p, show: true }));
   };
 
-  const show = () => {
-    setState({ show: true });
-  };
+  const toggleView = () => {
+    if(state.view!=='slides') setState(p=>({ ...p, view: 'slides' }));
+    else setState(p=>({ ...p, view: 'dash' }));
+  }
+  
+  const viewComp = state.view==='dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
 
   return (
     <>
@@ -216,6 +226,9 @@ export default observer(function CAdmin(props: Props) {
               ) : (
                 'not an admin'
               )}
+              {
+                <button onClick={() => toggleView()}>switch to {state.view==='slides'?'dash':'slides'}</button>
+              }
               {props.isTest && <h2>TEST MODE (/test)</h2>}
               <Typography
                 variant="h1"
@@ -275,7 +288,7 @@ export default observer(function CAdmin(props: Props) {
             {step === 1 && (
               <div style={{marginBottom: '2em'}}>
                 <Reveal effect="fadeInUp" duration={1100}>
-                  <ConfAdmin id={id} store={store} />
+                  <ConfAdmin id={id} store={store} view={viewComp} />
                 </Reveal>
               </div>
             )}

@@ -13,11 +13,23 @@ const useStyles = makeStyles(
     layout: {
       width: '100%',
       marginLeft: 'auto',
-      marginRight: 'auto'
+      marginRight: 'auto',
     },
     layout2: {
       width: '100%',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      minHeight: '50vh'
+    },
+    bar: {
+      width: '100%',
       height: '54px',
+      marginLeft: 'auto',
+      marginRight: 'auto'
+    },
+    barLarge: {
+      width: '100%',
+      height: 'calc(25vh)',
       marginLeft: 'auto',
       marginRight: 'auto'
     },
@@ -38,6 +50,7 @@ interface Props {
   store: AppModel.Type;
   data: any[];
   id: string;
+  large?: boolean;
 }
 
 export default function ConfBars(props: Props) {
@@ -84,11 +97,14 @@ export default function ConfBars(props: Props) {
   // return null;
   // console.log(JSON.stringify(valo, null, 2));
 
+  const layoutStyle = props.large ? classes.layout2 : classes.layout;
+  const barStyle = props.large ? classes.barLarge : classes.bar;
+
   return (
-    <div className={classes.layout}>
+    <div className={layoutStyle}>
       {data3.map( (r, index) => {
         // console.log('r', r);
-        return <div key={index} className={classes.layout2}>
+        return <div key={index} className={barStyle}>
           {makeBar([r], keys, index, index===data3.length-1)}
         </div>
       })}
