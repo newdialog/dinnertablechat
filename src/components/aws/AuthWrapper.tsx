@@ -68,7 +68,9 @@ function AuthComp(props: Props) {
   }, [store.auth]);
 
   useEffect( () => {
-    if(store.auth.doLogout) AuthService.logout().then( () => store.auth.logout(true));
+    if(!store.auth.doLogout) return;
+    
+    AuthService.logout().then( () => store.auth.logoutFinished());
   }, [store.auth.doLogout]);
 
   

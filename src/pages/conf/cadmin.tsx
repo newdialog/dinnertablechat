@@ -140,6 +140,8 @@ export default observer(function CAdmin(props: Props) {
 
   const id = props.id;
 
+  const isAdmin = store.auth.isAdmin();
+
   // console.log(store.auth.snapshot());
 
   // Guest login
@@ -148,16 +150,20 @@ export default observer(function CAdmin(props: Props) {
   }, []);
 
   useEffect(() => {
-    if (store.auth.isAuthenticated() && !store.auth.isAdmin())
-      store.auth.logout();
-    // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
-    if (store.auth.isAuthenticated()) return;
-    if (!store.auth.isNotLoggedIn) return;
+    if(!store.auth.isAuthenticated()) return;
 
-    if (!store.auth.user) {
-      store.auth.login(window.location.pathname);
-    } else console.log('user', store.auth.user);
-  }, [store.auth.isNotLoggedIn, store.auth.user]);
+    if (!isAdmin) {
+      console.log('isAdmin', isAdmin);
+      window.alert('Not logged in as an administrator');
+      store.auth.logoutLogin();
+    } else {
+      // if (store.auth.isNotLoggedIn) return;
+      console.log('Admin user:', store.auth.user);
+    }
+    // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
+    // if (store.auth.isAuthenticated()) return;
+
+  }, [store.auth.isNotLoggedIn, store.auth.user, isAdmin]);
 
   useEffect(() => {
     // store.setSaas(true);

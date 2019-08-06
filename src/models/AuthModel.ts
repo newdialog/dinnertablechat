@@ -65,17 +65,33 @@ const AuthModel = types
     signUp(loginTo?: string) {
       (self as any).login(loginTo);
     },
-    logout(didLogOut: boolean = false) {
-      if (didLogOut) {
-        self.doLogout = false;
-        self.isNotLoggedIn = true;
-        window.location.assign('/about');
-        return;
-      }
-
-      self.doLogout = true;
+    logoutFinished() {
       self.aws = undefined;
       self.user = undefined;
+      self.doLogout = false;
+      self.isNotLoggedIn = true;
+
+      const page = localStorage.getItem('logoutTo');
+      localStorage.removeItem('logoutTo');
+
+      if (page !== '' && page) window.location.assign(page);
+      else {
+        const loginPage = localStorage.getItem('loginTo');
+        console.log('loginPage', loginPage);
+        (self as any).login(loginPage);
+      }
+    },
+    logout(logoutTo?: string) {
+      if (logoutTo) localStorage.setItem('logoutTo', logoutTo || '/about');
+      else localStorage.removeItem('logoutTo');
+
+      self.doLogout = true;
+    },
+    logoutLogin(loginTo?: string) {
+      const current = window.location.href;
+      localStorage.setItem('loginTo', loginTo || current);
+      localStorage.setItem('logoutTo', '');
+      self.doLogout = true;
     },
     notLoggedIn() {
       self.isNotLoggedIn = true;
@@ -105,7 +121,7 @@ const AuthModel = types
       if (!seed) {
         seed = uuid.generate();
         console.log('generate seed', seed);
-        localStorage.setItem('guestSeed', seed);
+        localStorage.setItem('guestSeed', seed as string);
       }
 
       // Update analytics
@@ -148,6 +164,7 @@ const AuthModel = types
   }))
   .views(self => ({
     isAdmin() {
+      // console.log(self.isNotLoggedIn, !self.user);
       if (self.isNotLoggedIn || !self.user) return false;
       return self.user.groups.indexOf('conf_admins') !== -1;
     },

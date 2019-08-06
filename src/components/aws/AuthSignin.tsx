@@ -23,12 +23,17 @@ export default observer(function AuthSignin(props: Props) {
     // alow keep it around in case of back btn
     const redirectTo = localStorage.getItem('loginTo'); 
     if (redirectTo) {
-      store.router.push(redirectTo);
+      // console.log('redirectTo', redirectTo);
+      // localStorage.removeItem('loginTo');
+      if(redirectTo.charAt(0)==='/') store.router.push(redirectTo);
+      else window.location.assign(redirectTo); // needs to be assign
       setRefresh(true);
       return;
     }
+    console.log('no redirectTo', redirectTo);
     store.router.push('/');
     setRefresh(true);
+    
   }, [store.auth, store.auth.user]);
 
   useInterval(() => {

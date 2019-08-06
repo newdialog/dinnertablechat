@@ -117,7 +117,9 @@ export async function auth(cb: AwsCB, callbackPage: boolean = false) {
   });
   Hub.listen(
     'auth',
-    onHubCapsule.bind(null, cb, callbackPage)
+    x => {
+      onHubCapsule.bind(null, cb, callbackPage)(x);
+    }
     // { onHubCapsule: onHubCapsule.bind(null, cb, callbackPage) }
     // ,'AuthService'
   );
@@ -126,8 +128,12 @@ export async function auth(cb: AwsCB, callbackPage: boolean = false) {
 
   // Configure APIService
   // console.log('awsmobileInjected', awsmobileInjected);
-  const credentials = await refreshCredentials();
-  API.configure({ ...awsconfig, Auth: credentials, credentials });
+  try {
+    const credentials = await refreshCredentials();
+    API.configure({ ...awsconfig, Auth: credentials, credentials });
+  } catch (e) {
+    console.log('cannot figure API', e);
+  }
 }
 
 type AwsCB = (auth: AwsAuth | null) => void;
@@ -159,6 +165,7 @@ export async function refreshCredentials(): Promise<any> {
 
   const currentCredentials = await Auth.currentCredentials();
   const cr = currentCredentials as any;
+  if (!cr) throw new Error('not logged in');
   cr.region = REGION;
   /* const credentials = (cacheCred = Auth.essentialCredentials(
     currentCredentials
@@ -283,41 +290,12 @@ async function checkUser(cb: AwsCB, event: string = '') {
 
 // type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
 
-export async function logout() {
+export function logout() {
   // {global: true}
-  return await Auth.signOut()
-    .then()
+  return Auth.signOut({ global: false })
+    .then(x => console.log('logout', x))
     .catch((err: any) => console.log(err));
 }
-
-function uuidv4(): string {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
-    /[xy]/g,
-    (c: string) => {
-      const r = (Math.random() * 16) | 0;
-      const v = c === 'x' ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    }
-  );
-}
-
-/*
-export async function guestLogin() {
-  Hub.dispatch('auth', { event: LOGIN_EVENT });
-  return;
-  console.log('guestLogin');
-  try {
-    // await Auth.currentCredentials(); //
-    const user = await Auth.signIn('guest@dinnertable.chat', 'weallneed2talk'); // Guest
-    // console.log('user', user);
-    // Hub.dispatch('auth', { event: LOGIN_EVENT, ...user });
-  } catch (err) {
-    console.error('AuthServoce err', err.code, err);
-    // if (navigator.userAgent.toLocaleLowerCase().indexOf('headless') === -1)
-    //  window.location.reload(true);
-  }
-}
-*/
 
 /*
 if (err.code === 'UserNotConfirmedException') {
