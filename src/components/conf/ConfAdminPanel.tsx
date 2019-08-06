@@ -135,7 +135,7 @@ export default function ConfAdminPanel(props: Props) {
 
     if(JSON.stringify(payload) === JSON.stringify(state.payload)) {
       // console.log('no change')
-      return; //already have its
+      return; // already have its
     }
 
     setState(p => ({ ...p, payload, ready, numUsers }));

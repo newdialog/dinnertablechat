@@ -45,7 +45,7 @@ export function getOtherTopics(
 ): Card[] {
   if (!prefix) prefix = 'saas';
   // utility
-  const getSaaSQKey = topicid => i => prefix + '-' + topicid + '-q' + i;
+  const getSaaSQKey = _topicid => i => prefix + '-' + _topicid + '-q' + i;
   // topicid example "pub1"
   // const qCode = (new URLSearchParams(window.location.search).get('q'));
   // const urlParam = window.location.href.split('/').slice(-1)[0];

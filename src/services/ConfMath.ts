@@ -123,10 +123,10 @@ export function match2(getAllData: any, maxGroups: number = 2) {
     g.reduce((acc, x) => {
       // check if group is null
       if (x.user)
-        acc[x.user] = x.answers.reduce((acc, x, index) => {
+        acc[x.user] = x.answers.reduce((acc2, y, index) => {
           const key = rawListOfAnswersIds[index];
-          acc[key] = x;
-          return acc;
+          acc2[key] = y;
+          return acc2;
         }, {});
       return acc;
     }, {})
