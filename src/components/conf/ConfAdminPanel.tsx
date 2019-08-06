@@ -26,6 +26,7 @@ import { match2, findMyGroup } from '../../services/ConfMath';
 
 import FaceIcon from '@material-ui/icons/Face';
 import ConfAdminPanelDash from './ConfAdminPanelDash';
+import ConfThinking from './ConfThinking';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -69,6 +70,7 @@ interface State {
   ready: boolean;
   submitBlocked: boolean;
   numUsers?: number;
+  thinking?:boolean;
 }
 
 function showData(state: State) {
@@ -158,6 +160,11 @@ export default function ConfAdminPanel(props: Props) {
       return;
     }
 
+    if(toggle) {
+      setState(p => ({ ...p, thinking: true }));
+      return; // do THinking
+    }
+
     const results = await matchUp();
     await submitReady(toggle, confid, results); // .then(x=>checkReady());
 
@@ -184,11 +191,23 @@ export default function ConfAdminPanel(props: Props) {
     init();
   }, []);
 
+  const onCloseThinking = async () => {
+    setState(p => ({ ...p, thinking: false }));
+    const results = await matchUp();
+    await submitReady(true, confid, results); // .then(x=>checkReady());
+
+    // checkReady();
+    onRefresh();
+  }
+
   const vprops = {onRefresh, onAdminReady, onDeleteAll, confid, 
                   numUsers: state.numUsers, payload: state.payload,
                   ready: state.ready}
 
   return (
-    <AdminView store={store} {...vprops}/>
+    <>
+      {state.thinking && <ConfThinking onClose={onCloseThinking}/>}
+      <AdminView store={store} {...vprops}/>
+    </>
   );
 }

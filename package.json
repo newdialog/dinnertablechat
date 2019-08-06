@@ -125,6 +125,7 @@
     "env-cmd": "^9.0.3",
     "eslint-config-prettier": "^6.0.0",
     "fork-ts-checker-webpack-plugin": "^1.4.3",
+    "fsevents": "^2.0.7",
     "gh-pages": "^2.0.1",
     "http-proxy": "^1.17.0",
     "react-app-rewired": "^2.1.3",

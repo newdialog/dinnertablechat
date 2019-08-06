@@ -30,6 +30,7 @@ import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import ConfAdminTable from './ConfAdminTable';
 import ConfBars from './ConfAdminBars';
+import ConfThinking from './ConfThinking';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
