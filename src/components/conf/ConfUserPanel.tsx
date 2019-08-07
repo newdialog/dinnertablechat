@@ -230,7 +230,10 @@ export default function PleaseWaitResults(props: Props) {
     if (!state.myGroup && state.data) {
       // group = showGroup(Math.floor(rng.next() * numGroups), confid, t);
       let rng = new Prando(user);
-      const gid = Math.floor(rng.next() * numGroups);
+      // ensure dont pick group with no users
+      const maxCurrentGroups = Math.min(numGroups, state.data.length);
+      // find random group
+      const gid = Math.floor(rng.next() * maxCurrentGroups);
       console.log('gid', gid, state.data);
       const myGroup = groupByIndex(gid, state.data);
       console.log('myGroup', myGroup);
