@@ -43,7 +43,7 @@ const useStyles = makeStyles(
       color: '#ffffff'
     }
   }),
-  { name: 'ConfBars' }
+  { name: 'ConfAdminBars' }
 );
 
 interface Props {
@@ -53,7 +53,7 @@ interface Props {
   large?: boolean;
 }
 
-export default function ConfBars(props: Props) {
+export default function ConfAdminBars(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
@@ -165,7 +165,7 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
         legends={ !showLegend ? undefined : [
             {
                 dataFrom: 'keys',
-                anchor: 'bottom-right',
+                anchor: 'top-right',
                 direction: 'column',
                 justify: false,
                 translateX: 120,

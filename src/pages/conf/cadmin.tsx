@@ -126,7 +126,8 @@ interface Props {
 
 interface State {
   view: 'slides' | 'dash';
-  show: boolean
+  show: boolean,
+  kill: boolean
 }
 
 const PAGE_NAME = 'DebateConference';
@@ -136,7 +137,7 @@ export default observer(function CAdmin(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  const [state, setState] = useState<State>({view:'slides', show:false});
+  const [state, setState] = useState<State>({view:'slides', show:false, kill: false});
 
   const id = props.id;
 
@@ -150,12 +151,15 @@ export default observer(function CAdmin(props: Props) {
   }, []);
 
   useEffect(() => {
+    // already redirecting to login
+    if(state.kill) return;
     if(!store.auth.isAuthenticated()) return;
 
     if (!isAdmin) {
       console.log('isAdmin', isAdmin);
       window.alert('Not logged in as an administrator');
       store.auth.logoutLogin();
+      setState(p=>({...p, kill: true}));
     } else {
       // if (store.auth.isNotLoggedIn) return;
       console.log('Admin user:', store.auth.user);
