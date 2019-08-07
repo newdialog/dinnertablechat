@@ -24,7 +24,12 @@ import {
   init,
   waitForReady
 } from '../../services/ConfService';
-import { match, match2, findMyGroup, groupByIndex } from '../../services/ConfMath';
+import {
+  match,
+  match2,
+  findMyGroup,
+  groupByIndex
+} from '../../services/ConfMath';
 import ConfGraph from './ConfGraph';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -110,12 +115,12 @@ interface State {
   myGroup?: any;
   ready: boolean;
   submitBlocked: boolean;
-  numUsers?:number;
-  isLate?:boolean;
+  numUsers?: number;
+  isLate?: boolean;
 }
 
-function showGroup(groupId: any, confid:string, t:any) {
-  if(groupId===null || groupId === -1) return null;
+function showGroup(groupId: any, confid: string, t: any) {
+  if (groupId === null || groupId === -1) return null;
   // console.log('state.ready', state.ready);
 
   // let groupId = -1;
@@ -123,7 +128,7 @@ function showGroup(groupId: any, confid:string, t:any) {
 
   console.log('groupId', groupId);
 
-  const groupName = TopicInfo.getGroupByIndex(confid, groupId, t)
+  const groupName = TopicInfo.getGroupByIndex(confid, groupId, t);
 
   const msg = groupName;
   let test = groupId > -1 ? msg : null; // 'Sorry, groups already assigned.'; // no group yet
@@ -145,14 +150,14 @@ export default function PleaseWaitResults(props: Props) {
   const confid = props.id || '111';
   const user = store.getRID();
 
-  if(!user) throw new Error('no user');
+  if (!user) throw new Error('no user');
 
   const onStart = async () => {
     console.log('sending data');
 
     // const ready = state.ready; // await checkReady();
 
-    // if (!ready) 
+    // if (!ready)
     await submit(pos, confid, user);
     // .then(checkReady);
     // else {
@@ -177,14 +182,14 @@ export default function PleaseWaitResults(props: Props) {
     if (ready) {
       console.log('store.auth.user!.id', user);
       const myGroup = findMyGroup(user, result);
-      
-      if(myGroup) console.log('myGroup', myGroup);
+
+      if (myGroup) console.log('myGroup', myGroup);
       else console.log('user not in the group');
 
-      if (myGroup!==null) setState(p => ({ ...p, myGroup }));
+      if (myGroup !== null) setState(p => ({ ...p, myGroup }));
     }
 
-    setState(p => ({ ...p, data: result, ready  }));
+    setState(p => ({ ...p, data: result, ready }));
     // console.log('r', JSON.stringify(result));
   };
 
@@ -200,11 +205,11 @@ export default function PleaseWaitResults(props: Props) {
     init();
   }, []);
 
-  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`),  10) || 1;
+  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
 
-  let group:string | null = null;
+  let group: string | null = null;
   let groupInfo: any = { members: [], gid: -1 };
-  if(state.ready && state.myGroup) {
+  if (state.ready && state.myGroup) {
     group = showGroup(state.myGroup.gid, confid, t);
     // groupInfo = state.myGroup;
     groupInfo.gid = state.myGroup.gid;
@@ -214,25 +219,25 @@ export default function PleaseWaitResults(props: Props) {
   }
 
   const tooLate = !!state.isLate;
-  
-  if(state.ready && group===null) {
-    if(!state.myGroup && state.data) {
+
+  if (state.ready && group === null) {
+    if (!state.myGroup && state.data) {
       // group = showGroup(Math.floor(rng.next() * numGroups), confid, t);
       let rng = new Prando(user);
       const gid = Math.floor(rng.next() * numGroups);
       console.log('gid', gid, state.data);
       const myGroup = groupByIndex(gid, state.data);
-      console.log('myGroup', myGroup)
-      setState(p=>({...p, myGroup, isLate: true }));
+      console.log('myGroup', myGroup);
+      setState(p => ({ ...p, myGroup, isLate: true }));
 
-      return <div className={classes.layout}/>
+      return <div className={classes.layout} />;
     }
-    
-     // group = showGroup(, confid, t);
-     // groupInfo = {};
+
+    // group = showGroup(, confid, t);
+    // groupInfo = {};
   }
 
-  console.log('group', group, ' info ', groupInfo, 'tooLate', tooLate)
+  console.log('group', group, ' info ', groupInfo, 'tooLate', tooLate);
 
   return (
     <div className={classes.layout}>
@@ -244,27 +249,34 @@ export default function PleaseWaitResults(props: Props) {
                 <Typography variant="h5">Please Wait</Typography>
               )}
               <Typography variant="body2">
-                {tooLate && <>Groups have already been formed.<br/>Assigning to random table:<br/></>}
+                {tooLate && (
+                  <>
+                    Groups have already been formed.
+                    <br />
+                    Assigning to random table:
+                    <br />
+                  </>
+                )}
                 {!state.ready && 'Waiting for assignments...'}
                 {state.ready && !group && 'Sorry, groups already assigned.'}
                 {!tooLate && group && `Your assigned group is:`}
               </Typography>
-              {group && 
+              {group && (
                 <>
                   <Chip
                     label={group}
                     className={classes.chip}
                     color="secondary"
                   />
-                  <br/><br/>
+                  <br />
+                  <br />
                   <Typography align="left">
-                    In your group, there are {groupInfo.members.length} people with the opinions:
+                    In your group, there are {groupInfo.members.length} people
+                    with the opinions:
                   </Typography>
                   <ConfUserBars id={confid} store={store} data={groupInfo} />
                 </>
-              }
-             
-                
+              )}
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
               <Button

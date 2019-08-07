@@ -7,6 +7,8 @@ import * as AppModel from '../../models/AppModel';
 import { ResponsiveBubble } from '@nivo/circle-packing';
 import { getOtherTopics } from 'utils/TopicInfo';
 import { Typography } from '@material-ui/core';
+// import { linearGradientDef } from '@nivo/core';
+const {linearGradientDef} = require('@nivo/core') 
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -23,13 +25,13 @@ const useStyles = makeStyles(
     },
     bar: {
       width: '100%',
-      height: '54px',
+      height: '64px',
       marginLeft: 'auto',
       marginRight: 'auto'
     },
     barLarge: {
       width: '100%',
-      height: 'calc(25vh)',
+      height: `calc(50vh / 5)`,
       marginLeft: 'auto',
       marginRight: 'auto'
     },
@@ -55,11 +57,12 @@ interface Props {
 
 export default function ConfAdminBars(props: Props) {
   const store = props.store;
-  const classes = useStyles({});
   const { t } = useTranslation();
   // const [state, setState] = React.useState<State>({ data: [], checks: 0 });
 
   const data = props.payload.data; // .results
+  const classes = useStyles({numElem:data.length});
+
   if(data.length === 0) return null;
   
   // console.log('ConfBars', props.data);
@@ -87,7 +90,11 @@ export default function ConfAdminBars(props: Props) {
       if(keys.indexOf(qr)===-1) keys.push(qr);
       answ[qr] = data2.filter((u, index)=>u.answers[q.id]===i).length;
     });
-    return { id: (qindex+1).toString(), ...answ, proposition: q.proposition }
+
+    let propo = q.proposition;
+    if(propo.length > 48) propo = propo.slice(0, (48 - propo.length)) + '...';
+    
+    return { id: (qindex+1).toString(), ...answ, proposition: propo}
   });
 
   // console.log('data3', data3, tdata);
@@ -97,12 +104,12 @@ export default function ConfAdminBars(props: Props) {
 
   const layoutStyle = props.large ? classes.layout2 : classes.layout;
   const barStyle = props.large ? classes.barLarge : classes.bar;
+  const barStyleOv = props.large ? {height:`calc(50vh / ${data3.length})`} : {};
 
   return (
     <div className={layoutStyle}>
       {data3.map( (r, index) => {
-        // console.log('r', r);
-        return <div key={index} className={barStyle}>
+        return <div key={index} className={barStyle} style={barStyleOv}>
           {makeBar([r], keys, index, index===data3.length-1)}
         </div>
       })}
@@ -143,6 +150,47 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
         // borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
         axisTop={null}
         axisRight={null}
+
+        defs={[
+          linearGradientDef('gradientA', [
+            { offset: 0, color: '#ff896b' }
+        ]),
+        linearGradientDef('gradientB', [
+            { offset: 0, color: '#06a7bf' }
+        ]),
+          {
+              id: 'dots',
+              type: 'patternDots',
+              background: 'inherit',
+              color: '#38bcb2',
+              size: 4,
+              padding: 1,
+              stagger: true
+          },
+          {
+              id: 'lines',
+              type: 'patternLines',
+              background: 'inherit',
+              color: '#eed312',
+              rotation: -45,
+              lineWidth: 6,
+              spacing: 10
+          }
+      ]}
+      fill={[
+          {
+              match: {
+                  id: keys[1]
+              },
+              id: 'gradientA'
+          },
+          {
+              match: {
+                id: keys[0]
+              },
+              id: 'gradientB'
+          }
+      ]}
         /* axisBottom={{
             tickSize: 5,
             tickPadding: 5,
@@ -165,7 +213,7 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
         legends={ !showLegend ? undefined : [
             {
                 dataFrom: 'keys',
-                anchor: 'top-right',
+                anchor: 'bottom-right',
                 direction: 'column',
                 justify: false,
                 translateX: 120,

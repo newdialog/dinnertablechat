@@ -41,23 +41,23 @@ export default function ConfGraph(props: Props) {
   // const [state, setState] = React.useState<State>({ data: [], checks: 0 });
 
   // console.log('ConfGraph', props.data);
-  if(props.data.length === 0) return null;
+  if (props.data.length === 0) return null;
 
-  const data2 = props.data.map( (g, index) => {
+  const data2 = props.data.map((g, index) => {
     const children = Object.keys(g).map(k => {
       const val = g[k];
-      return { name: 'USER: ' + k, color: 'hsl(79, 70%, 50%)', loc: 100 }
+      return { name: 'USER: ' + k, color: 'hsl(79, 70%, 50%)', loc: 100 };
     });
 
     const name = 'GROUP: ' + getGroupByIndex(props.confid, index, t);
-    return { name, children, color: 'hsl(245, 70%, 50%)' }
+    return { name, children, color: 'hsl(245, 70%, 50%)' };
   });
 
   const valo = {
     name: 'TOTAL',
     color: 'hsl(34, 70%, 50%)',
     children: data2
-  }
+  };
 
   // console.log(JSON.stringify(valo, null, 2));
 
@@ -75,9 +75,7 @@ export default function ConfGraph(props: Props) {
         borderWidth={2}
         borderColor={{ from: 'color' }}
         tooltip={({ id, value, color }) => (
-          <strong style={{ color: 'black' }}>
-            {id}
-          </strong>
+          <strong style={{ color: 'black' }}>{id}</strong>
         )}
         defs={[
           {

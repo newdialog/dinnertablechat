@@ -16,12 +16,7 @@ import * as AppModel from '../../models/AppModel';
 import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
-import {
-  getAll,
-  submitReady,
-  init,
-  delAll
-} from '../../services/ConfService';
+import { getAll, submitReady, init, delAll } from '../../services/ConfService';
 import { match2, findMyGroup } from '../../services/ConfMath';
 
 import FaceIcon from '@material-ui/icons/Face';
@@ -46,7 +41,7 @@ const useStyles = makeStyles(
       fontSize: '0.9em',
       marginRight: '0.3em'
       // color: theme.palette.secondary.main
-    },
+    }
   }),
   { name: 'ConfAdminPanel' }
 );
@@ -65,12 +60,12 @@ interface User {
 type Data = Array<User>;
 interface State {
   checks: number;
-  payload: { results: any[], data: any[] };
+  payload: { results: any[]; data: any[] };
   myGroup?: any;
   ready: boolean;
   submitBlocked: boolean;
   numUsers?: number;
-  thinking?:boolean;
+  thinking?: boolean;
 }
 
 function showData(state: State) {
@@ -133,7 +128,7 @@ export default function ConfAdminPanel(props: Props) {
 
     const payload = { data: rdata.data, results };
 
-    if(JSON.stringify(payload) === JSON.stringify(state.payload)) {
+    if (JSON.stringify(payload) === JSON.stringify(state.payload)) {
       // console.log('no change')
       return; // already have its
     }
@@ -152,7 +147,9 @@ export default function ConfAdminPanel(props: Props) {
 
   const onAdminReady = async (toggle: boolean) => {
     let msg = '';
-    if(toggle) msg = 'Are you sure you want to assign seating now? Users that respond afterwards will be assigned to random tables.';
+    if (toggle)
+      msg =
+        'Are you sure you want to assign seating now? Users that respond afterwards will be assigned to random tables.';
     else msg = 'Are you sure you want to remove all seat assignments?';
     var r = window.confirm(msg);
     if (!r) {
@@ -160,7 +157,7 @@ export default function ConfAdminPanel(props: Props) {
       return;
     }
 
-    if(toggle) {
+    if (toggle) {
       setState(p => ({ ...p, thinking: true }));
       return; // do THinking
     }
@@ -198,16 +195,22 @@ export default function ConfAdminPanel(props: Props) {
 
     // checkReady();
     onRefresh();
-  }
+  };
 
-  const vprops = {onRefresh, onAdminReady, onDeleteAll, confid, 
-                  numUsers: state.numUsers, payload: state.payload,
-                  ready: state.ready}
+  const vprops = {
+    onRefresh,
+    onAdminReady,
+    onDeleteAll,
+    confid,
+    numUsers: state.numUsers,
+    payload: state.payload,
+    ready: state.ready
+  };
 
   return (
     <>
-      {state.thinking && <ConfThinking onClose={onCloseThinking}/>}
-      <AdminView store={store} {...vprops}/>
+      {state.thinking && <ConfThinking onClose={onCloseThinking} />}
+      <AdminView store={store} {...vprops} />
     </>
   );
 }

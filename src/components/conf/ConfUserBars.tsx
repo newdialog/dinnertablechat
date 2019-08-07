@@ -46,7 +46,7 @@ export default function ConfUserBars(props: Props) {
   const { t } = useTranslation();
   // const [state, setState] = React.useState<State>({ data: [], checks: 0 });
 
-  const data2 = props.data.members.map((x,i)=>({name:i, answers: x}));
+  const data2 = props.data.members.map((x, i) => ({ name: i, answers: x }));
   // console.log('ConfBars', props.data);
   /* if(data.length === 0) return null;
 
@@ -68,16 +68,16 @@ export default function ConfUserBars(props: Props) {
 
   // Users into question response totals
   // ex [{id: "conf-pub1-q0-id", Yes: 11, No: 2}]
-  const keys:string[] = [];
-  const data3 = tdata.map( (q, qindex) => {
+  const keys: string[] = [];
+  const data3 = tdata.map((q, qindex) => {
     const pss = q.positions;
     const answ = {};
-    pss.forEach((qr,i) => {
+    pss.forEach((qr, i) => {
       // console.log('q', qr, i);
-      if(keys.indexOf(qr)===-1) keys.push(qr);
-      answ[qr] = data2.filter((u, index)=>u.answers[q.id]===i).length;
+      if (keys.indexOf(qr) === -1) keys.push(qr);
+      answ[qr] = data2.filter((u, index) => u.answers[q.id] === i).length;
     });
-    return { id: (qindex+1).toString(), ...answ, proposition: q.proposition }
+    return { id: (qindex + 1).toString(), ...answ, proposition: q.proposition };
   });
 
   // console.log('data3', data3, tdata);
@@ -87,51 +87,68 @@ export default function ConfUserBars(props: Props) {
 
   return (
     <div className={classes.layout}>
-      {data3.map( (r, index) => {
+      {data3.map((r, index) => {
         // console.log('r', r);
-        return <div key={index} className={classes.layout2}>
-          {makeBar([r], keys, index, index===data3.length-1)}
-        </div>
+        return (
+          <div key={index} className={classes.layout2}>
+            {makeBar([r], keys, index, index === data3.length - 1)}
+          </div>
+        );
       })}
     </div>
   );
 }
 
-const Notes = (props:any) => {
+const Notes = (props: any) => {
   const { bars, xScale, yScale, data } = props;
   // debugger
-  return <React.Fragment>{data.map( (bar, key) => {
-    return <text key={key} style={{color:'#444444'}}>
+  return (
+    <React.Fragment>
+      {data.map((bar, key) => {
+        return (
+          <text key={key} style={{ color: '#444444' }}>
             {bar.proposition}
           </text>
-  })}</React.Fragment>
-}
+        );
+      })}
+    </React.Fragment>
+  );
+};
 
-function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
-  return <ResponsiveBar
-        layers={['grid', 'axes', 'bars', Notes, 'markers', 'legends', 'annotations'] as any}
-        key={key}
-        data={data3}
-        keys={keys}
-        axisBottom={null}
-        axisLeft={null}
-        indexBy={'id'}
-        reverse={true}
-        margin={{ top: 20, right: 30, bottom: 0, left: 30 }}
-        padding={0.1}
-        layout="horizontal"
-        colors={{ scheme: 'nivo' }}
-        tooltip={({ id, value, color }) => (
-          <strong style={{ color: 'black' }}>
-            {value + ' ' + id}
-          </strong>
-        )}
-        label={ ({ id, value }) => value + ' ' + id }
-        innerPadding={4}
-        // borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-        axisTop={null}
-        axisRight={null}
-        /* axisBottom={{
+function makeBar(data3: any, keys: any, key: number, showLegend: boolean) {
+  return (
+    <ResponsiveBar
+      layers={
+        [
+          'grid',
+          'axes',
+          'bars',
+          Notes,
+          'markers',
+          'legends',
+          'annotations'
+        ] as any
+      }
+      key={key}
+      data={data3}
+      keys={keys}
+      axisBottom={null}
+      axisLeft={null}
+      indexBy={'id'}
+      reverse={true}
+      margin={{ top: 20, right: 30, bottom: 0, left: 30 }}
+      padding={0.1}
+      layout="horizontal"
+      colors={{ scheme: 'nivo' }}
+      tooltip={({ id, value, color }) => (
+        <strong style={{ color: 'black' }}>{value + ' ' + id}</strong>
+      )}
+      label={({ id, value }) => value + ' ' + id}
+      innerPadding={4}
+      // borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
+      axisTop={null}
+      axisRight={null}
+      /* axisBottom={{
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 0,
@@ -147,11 +164,14 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
             legendPosition: 'middle',
             legendOffset: -40
         }} */
-        labelSkipWidth={12}
-        labelSkipHeight={12}
-        labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-        legends={ !showLegend ? undefined : [
-            {
+      labelSkipWidth={12}
+      labelSkipHeight={12}
+      labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+      legends={
+        !showLegend
+          ? undefined
+          : [
+              {
                 dataFrom: 'keys',
                 anchor: 'bottom',
                 direction: 'row',
@@ -165,19 +185,21 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
                 itemOpacity: 0.85,
                 symbolSize: 20,
                 effects: [
-                    {
-                        on: 'hover',
-                        style: {
-                            itemOpacity: 1
-                        }
+                  {
+                    on: 'hover',
+                    style: {
+                      itemOpacity: 1
                     }
+                  }
                 ]
-            }
-        ]}
-        animate={true}
-        motionStiffness={90}
-        motionDamping={15}
+              }
+            ]
+      }
+      animate={true}
+      motionStiffness={90}
+      motionDamping={15}
     />
+  );
 }
 
 /*

@@ -16,18 +16,16 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     pagebody: {
       backgroundColor: '#ddd1bb',
-      minHeight: '100vh',
-      height: '100%'
+      minHeight: '100vh'
     },
     container: {
       marginTop: '0px',
       marginLeft: 'auto',
       marginRight: 'auto',
-      width: 'auto',
+      width: '100%',
       maxWidth: '100%',
       padding: '1em 1em 0 1em',
-      minWidth: '300px',
-      minHeight: '100vh'
+      minWidth: '300px'
     },
     appBar: {
       position: 'relative'
@@ -44,12 +42,6 @@ const useStyles = makeStyles(
       margin: '0 auto',
       padding: `0`
     },
-    micButton: {
-      maxWidth: 600,
-      textAlign: 'center',
-      margin: '0 auto',
-      padding: `0px 0 0px`
-    },
     button: {
       marginTop: theme.spacing(1),
       marginRight: theme.spacing(1),
@@ -62,11 +54,13 @@ const useStyles = makeStyles(
       padding: theme.spacing(3)
     },
     footer: {
+      zIndex: 0,
       // backgroundColor: '#1b6f7b',
       // padding: theme.spacing(6)
       width: '100%',
-      margin: '0 auto',
-      bottom: '1em',
+      margin: '2em auto 0.07em auto',
+      // position: 'absolute',
+      // bottom: '.15em',
       textAlign: 'center'
     },
     linkhome: {
@@ -78,17 +72,20 @@ const useStyles = makeStyles(
       fontWeight: 'bold'
     },
     verticalCenter: {
-      margin: 0,
       textAlign: 'center',
-      position: 'absolute',
-      marginTop: '1em',
-      top: '50%',
-      left: '50%',
-      transform: 'translateY(-50%) translateX(-50%)',
+      margin: '1.4em auto 0 auto',
+      // position: 'absolute',
+      // minWidth: '100%',
+      width: '100%',
+      maxWidth: '1400px',
+      minHeight: 'calc(100vh - 250px)'
+      // top: '50%',
+      // left: '50%',
+      /* transform: 'translateY(-50%) translateX(-50%)',
       '@media screen and ( max-height: 495px )': {
         bottom: '1em',
         top: 'auto'
-      }
+      }*/
     },
     herotext: {
       fontSize: '1.2em',
@@ -116,7 +113,7 @@ const useStyles = makeStyles(
       }
     }
   }),
-  { name: 'MenuHome' }
+  { name: 'CAdmin' }
 );
 
 interface Props {
@@ -126,8 +123,8 @@ interface Props {
 
 interface State {
   view: 'slides' | 'dash';
-  show: boolean,
-  kill: boolean
+  show: boolean;
+  kill: boolean;
 }
 
 const PAGE_NAME = 'DebateConference';
@@ -137,7 +134,11 @@ export default observer(function CAdmin(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  const [state, setState] = useState<State>({view:'slides', show:false, kill: false});
+  const [state, setState] = useState<State>({
+    view: 'slides',
+    show: false,
+    kill: false
+  });
 
   const id = props.id;
 
@@ -152,21 +153,20 @@ export default observer(function CAdmin(props: Props) {
 
   useEffect(() => {
     // already redirecting to login
-    if(state.kill) return;
-    if(!store.auth.isAuthenticated()) return;
+    if (state.kill) return;
+    if (!store.auth.isAuthenticated()) return;
 
     if (!isAdmin) {
       console.log('isAdmin', isAdmin);
       window.alert('Not logged in as an administrator');
       store.auth.logoutLogin();
-      setState(p=>({...p, kill: true}));
+      setState(p => ({ ...p, kill: true }));
     } else {
       // if (store.auth.isNotLoggedIn) return;
       console.log('Admin user:', store.auth.user);
     }
     // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
     // if (store.auth.isAuthenticated()) return;
-
   }, [store.auth.isNotLoggedIn, store.auth.user, isAdmin]);
 
   useEffect(() => {
@@ -209,15 +209,16 @@ export default observer(function CAdmin(props: Props) {
   }
 
   const show = () => {
-    setState(p=>({ ...p, show: true }));
+    setState(p => ({ ...p, show: true }));
   };
 
   const toggleView = () => {
-    if(state.view!=='slides') setState(p=>({ ...p, view: 'slides' }));
-    else setState(p=>({ ...p, view: 'dash' }));
-  }
-  
-  const viewComp = state.view==='dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
+    if (state.view !== 'slides') setState(p => ({ ...p, view: 'slides' }));
+    else setState(p => ({ ...p, view: 'dash' }));
+  };
+
+  const viewComp =
+    state.view === 'dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
 
   return (
     <>
@@ -237,7 +238,9 @@ export default observer(function CAdmin(props: Props) {
                 'not an admin'
               )}
               {
-                <button onClick={() => toggleView()}>switch to {state.view==='slides'?'dash':'slides'}</button>
+                <button onClick={() => toggleView()}>
+                  switch to {state.view === 'slides' ? 'dash' : 'slides'}
+                </button>
               }
               {props.isTest && <h2>TEST MODE (/test)</h2>}
               <Typography
@@ -249,59 +252,62 @@ export default observer(function CAdmin(props: Props) {
               >
                 {PAGE_NAME} Admin
               </Typography>
-              {step === 0 &&
-              <Typography
-                className={classes.herotext}
-                variant="h3"
-                align="left"
-                color="textSecondary"
-                gutterBottom
-              >
-                Talk to people with different opinions.
-                <br />
-                Discussion via mixed viewpoint matchmaking.
-              </Typography>}
+              {step === 0 && (
+                <Typography
+                  className={classes.herotext}
+                  variant="h3"
+                  align="left"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  Talk to people with different opinions.
+                  <br />
+                  Discussion via mixed viewpoint matchmaking.
+                </Typography>
+              )}
             </div>
           </div>
 
-          
-            {step === 0 && (
-              <div className={classes.verticalCenter}>
-                <Reveal effect="fadeInUp" duration={2200}>
-                  <Typography
-                    variant="h4"
-                    align="center"
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    To start matching, please visit:
-                  </Typography>
-                  <Typography
-                    variant="h2"
-                    align="center"
-                    color="textSecondary"
-                    gutterBottom
-                  >
-                    {window.location.origin}/c/{id}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    // size="small"
-                    color="secondary"
-                    onClick={show}
-                  >
-                    Show Results
-                  </Button>
-                </Reveal>
-              </div>
-            )}
-            {step === 1 && (
-              <div style={{marginBottom: '2em'}}>
-                <Reveal effect="fadeInUp" duration={1100}>
-                  <ConfAdmin id={id} store={store} view={viewComp} />
-                </Reveal>
-              </div>
-            )}
+          {step === 0 && (
+            <div className={classes.verticalCenter}>
+              <Reveal effect="fadeInUp" duration={2200}>
+                <Typography
+                  variant="h4"
+                  align="center"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  To start matching, please visit:
+                </Typography>
+                <Typography
+                  variant="h2"
+                  align="center"
+                  color="textSecondary"
+                  gutterBottom
+                >
+                  {window.location.origin}/c/{id}
+                </Typography>
+                <Button
+                  variant="contained"
+                  // size="small"
+                  color="secondary"
+                  onClick={show}
+                >
+                  Show Results
+                </Button>
+              </Reveal>
+            </div>
+          )}
+          {step === 1 && (
+            <div
+              style={{ marginBottom: '2em' }}
+              className={classes.verticalCenter}
+            >
+              <Reveal effect="fadeInUp" duration={1100}>
+                <ConfAdmin id={id} store={store} view={viewComp} />
+              </Reveal>
+            </div>
+          )}
         </main>
         <div className={classes.footer}>
           <b>
@@ -319,11 +325,3 @@ export default observer(function CAdmin(props: Props) {
     </>
   );
 });
-
-// took this out as height is a little wierd on page
-// <Footer className={classes.footer}/>
-/*
-<div className={classes.micButton}>
-          <MicPermissionsBtn store={store} />
-        </div>
-*/

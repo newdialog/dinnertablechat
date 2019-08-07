@@ -116,36 +116,55 @@ export default function ConfAdminPanelSlides(props: Props) {
   const responses = numUsers || 0;
 
   let page = 0;
-  if(ready) page = 1;
+  if (ready) page = 1;
 
   return (
     <div className={classes.layout}>
-      <Grid container alignContent="center" alignItems="center" spacing={2} 
-      justify="center" style={{ width: '100%', height:'80vh' }}>
-
-        <Grid hidden={page!==1}  sm={12} md={12} lg={12} item>
+      <Grid
+        container
+        alignItems="center"
+        spacing={2}
+        justify="center"
+        style={{ width: '100%', height: '80vh' }}
+      >
+        <Grid hidden={page !== 1} sm={12} md={12} lg={12} item>
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
-              <Typography variant="body2">Groups have been assigned...</Typography>
+              <Typography
+                variant="h1"
+                style={{ fontSize: '1.6em', color: '#9f7b74' }}
+              >
+                Groups have been assigned...
+              </Typography>
               <ConfGraph store={store} data={payload.results} confid={confid} />
             </CardContent>
           </Card>
         </Grid>
 
-        <Grid hidden={page!==0} sm={12} md={12} lg={12} item>
+        <Grid hidden={page !== 0} sm={12} md={12} lg={12} item>
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
-              <Typography variant="body2">Responses</Typography>
-              <ConfBars large={true} store={store} payload={payload} id={confid} />
+              <Typography
+                variant="h1"
+                style={{ fontSize: '1.6em', color: '#9f7b74' }}
+              >
+                Responses
+              </Typography>
+              <ConfBars
+                large={true}
+                store={store}
+                payload={payload}
+                id={confid}
+              />
             </CardContent>
           </Card>
         </Grid>
 
-        <Grid hidden={page!==2} sm={12} md={12} lg={12} item>
+        <Grid hidden={page !== 2} sm={12} md={12} lg={12} item>
           <ConfAdminTable payload={payload} confid={confid} />
         </Grid>
 
-        { /* bottom */ }
+        {/* bottom */}
         <Grid sm={12} md={12} lg={12} item>
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>

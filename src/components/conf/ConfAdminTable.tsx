@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
   table: {
     width: '100%'
   }
-}));
+}), { name: 'ConfAdminTable' });
 
 interface Props {
   payload: any;

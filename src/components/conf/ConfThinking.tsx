@@ -8,23 +8,23 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import useInterval from '@use-it/interval';
 
-const Transition = React.forwardRef(function Transition2(props:any, ref:any) {
+const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 interface Props {
-    onClose?:()=>void;
+  onClose?: () => void;
 }
 
-export default function ConfThinking(props:Props) {
+export default function ConfThinking(props: Props) {
   const [open, setOpen] = React.useState(true);
 
   var close = () => {
-    if(props.onClose) props.onClose();
+    if (props.onClose) props.onClose();
     handleClose();
-  }
+  };
 
-  useInterval( ()=> {
+  useInterval(() => {
     close();
   }, 5000);
 
@@ -46,12 +46,16 @@ export default function ConfThinking(props:Props) {
         aria-labelledby="alert-dialog-slide-title"
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle id="alert-dialog-slide-title">Please wait<br/><span style={{fontSize:'.75em'}}>maximizing group diversity...</span></DialogTitle>
-        <DialogContent style={{textAlign:'center'}}>
-            <img src="/conf/Blocks-1s-200px.svg" alt="loading spinned"/>
-          <DialogContentText id="alert-dialog-slide-description">
-            
-          </DialogContentText>
+        <DialogTitle id="alert-dialog-slide-title">
+          Please wait
+          <br />
+          <span style={{ fontSize: '.75em' }}>
+            maximizing group diversity...
+          </span>
+        </DialogTitle>
+        <DialogContent style={{ textAlign: 'center' }}>
+          <img src="/conf/Blocks-1s-200px.svg" alt="loading spinned" />
+          <DialogContentText id="alert-dialog-slide-description" />
         </DialogContent>
         <DialogActions>
           <Button color="primary" onClick={close}>

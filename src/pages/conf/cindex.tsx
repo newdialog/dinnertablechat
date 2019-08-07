@@ -117,7 +117,7 @@ const useStyles = makeStyles(
       }
     }
   }),
-  { name: 'MenuHome' }
+  { name: 'CIndex' }
 );
 
 interface Props {
