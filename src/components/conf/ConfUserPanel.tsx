@@ -194,7 +194,9 @@ export default function PleaseWaitResults(props: Props) {
     // console.log('r', JSON.stringify(result));
   };
 
-  const inFocus = useFocus();
+  const inFocus = useFocus(null, true, inFocus => {
+    inFocus && onRefresh();
+  });
 
   const onInterval = React.useCallback(() => {
     console.log('state.checks', state.checks, inFocus);
@@ -243,7 +245,16 @@ export default function PleaseWaitResults(props: Props) {
 
   const showRefresh = state.checks < 1 || !inFocus;
 
-  console.log('group', group, ' info ', groupInfo, 'tooLate', tooLate, 'state.checks', state.checks);
+  console.log(
+    'group',
+    group,
+    ' info ',
+    groupInfo,
+    'tooLate',
+    tooLate,
+    'state.checks',
+    state.checks
+  );
 
   return (
     <div className={classes.layout}>
@@ -285,15 +296,17 @@ export default function PleaseWaitResults(props: Props) {
               )}
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
-              {showRefresh && <Button
-                variant="contained"
-                // size="small"
-                color="secondary"
-                className={classes.btn}
-                onClick={() => onRefresh()}
-              >
-                Refresh
-              </Button> }
+              {showRefresh && (
+                <Button
+                  variant="contained"
+                  // size="small"
+                  color="secondary"
+                  className={classes.btn}
+                  onClick={() => onRefresh()}
+                >
+                  Refresh
+                </Button>
+              )}
             </CardActions>
           </Card>
         </Grid>

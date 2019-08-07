@@ -92,7 +92,7 @@ export default function ConfAdminPanel(props: Props) {
   const [state, setState] = React.useState<State>({
     payload: { data: [], results: [] },
     // results: [],
-    checks: CHECKS, 
+    checks: CHECKS,
     ready: false,
     submitBlocked: false
   });
@@ -140,7 +140,9 @@ export default function ConfAdminPanel(props: Props) {
     // console.log('r', JSON.stringify(result));
   };
 
-  const inFocus = useFocus();
+  const inFocus = useFocus(null, true, inFocus => {
+    inFocus && onRefresh();
+  });
 
   const onInterval = React.useCallback(() => {
     if (state.checks < 1 || !inFocus) return;
