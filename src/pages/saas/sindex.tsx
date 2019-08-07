@@ -22,7 +22,7 @@ const useStyles = makeStyles(
       marginTop: '0px',
       marginLeft: 'auto',
       marginRight: 'auto',
-      width: 'auto',
+      width: '100%',
       maxWidth: '100%',
       padding: '1em 1em 0 1em',
       minWidth: '300px'
@@ -63,9 +63,9 @@ const useStyles = makeStyles(
       // backgroundColor: '#1b6f7b',
       // padding: theme.spacing(6)
       width: '100%',
-      margin: '0 auto',
-      position: 'absolute',
-      bottom: '1em',
+      margin: '2em auto 0.07em auto',
+      // position: 'absolute',
+      // bottom: '.15em',
       textAlign: 'center'
     },
     linkhome: {
@@ -77,16 +77,20 @@ const useStyles = makeStyles(
       fontWeight: 'bold'
     },
     verticalCenter: {
-      margin: 0,
-      position: 'absolute',
-      marginTop: '1em',
-      top: '50%',
-      left: '50%',
-      transform: 'translateY(-50%) translateX(-50%)',
+      textAlign: 'center',
+      margin:'1.4em auto 0 auto',
+      // position: 'absolute',
+      // minWidth: '100%',
+      width: '100%',
+      maxWidth: '680px',
+      minHeight: 'calc(100vh - 250px)',
+      // top: '50%',
+      // left: '50%',
+      /* transform: 'translateY(-50%) translateX(-50%)',
       '@media screen and ( max-height: 495px )': {
         bottom: '1em',
         top: 'auto'
-      }
+      }*/
     },
     herotext: {
       fontSize: '1.2em',

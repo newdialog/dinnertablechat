@@ -43,7 +43,7 @@ const useStyles = makeStyles(
       color: '#ffffff'
     }
   }),
-  { name: 'PositionSelector' }
+  { name: 'ConfBars' }
 );
 
 interface Props {

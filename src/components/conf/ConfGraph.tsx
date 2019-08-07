@@ -25,7 +25,7 @@ const useStyles = makeStyles(
       color: '#ffffff'
     }
   }),
-  { name: 'PositionSelector' }
+  { name: 'ConfGraph' }
 );
 
 interface Props {

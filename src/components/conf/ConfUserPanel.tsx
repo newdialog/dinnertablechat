@@ -90,7 +90,7 @@ const useStyles = makeStyles(
       fontSize: '2em'
     }
   }),
-  { name: 'PositionSelector' }
+  { name: 'PleaseWaitResults' }
 );
 
 interface Props {

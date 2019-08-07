@@ -11,13 +11,15 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     layout: {
       width: '100%',
-      marginLeft: 'auto',
-      marginRight: 'auto',
+
       [theme.breakpoints.up(1100 + theme.spacing(3) * 2)]: {
         // width: 1100,
         // marginLeft: 'auto',
         // marginRight: 'auto',
       }
+    },
+    full: {
+      width:'100%',
     },
     btn: {
       // marginLeft: '1.5em',
@@ -28,24 +30,24 @@ const useStyles = makeStyles(
     submit: {
       width: '100px',
       fontSize: '1.1em',
-      color: '#ffffff'
+      color: '#ffffff',
+      margin: '.5em 0 2em 0'
     },
     cardGrid: {
       // padding: `${theme.spacing(4)}px 0`,
     },
     card: {
-      minWidth: '300px',
-      width: '50vw',
-      maxWidth: '500px',
+      width: '100%',
+      // maxWidth: '500px',
       height: '100%',
       textAlign: 'center',
       flexDirection: 'column',
       
       [theme.breakpoints.down('md')]: {
-        width: '80vw'
+        width: '100%',
       },
       [theme.breakpoints.down('sm')]: {
-        width: '100vw'
+        width: '100%',
       }
     },
     bgCardColor: {
@@ -59,7 +61,7 @@ const useStyles = makeStyles(
       textDecoration: 'none'
     }
   }),
-  { name: 'PositionSelector' }
+  { name: 'SPositionSelector' }
 );
 
 interface Props {
@@ -69,7 +71,7 @@ interface Props {
   onSubmit: (selected:any) => void;
 }
 
-export default function PositionSelector(props: Props) {
+export default function SPositionSelector(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
@@ -102,9 +104,9 @@ export default function PositionSelector(props: Props) {
 
   return (
     <div className={classes.layout}>
-      <Grid container spacing={2} justify="center">
+      <Grid container spacing={1} justify="center" className={classes.full}>
         {data.map((card, i) => (
-          <Grid key={i} sm={10} md={10} lg={10} item>
+          <Grid key={i} sm={10} md={10} lg={10} item className={classes.full}>
             <Card className={classes.card + ' ' + classes.bgCardColor}>
               <CardContent className={classes.cardContent}>
                 <Typography variant="h5">{card.proposition}</Typography>
@@ -114,7 +116,7 @@ export default function PositionSelector(props: Props) {
                   <Button
                     disabled={state.selected[card.id]===positionIndex}
                     variant="contained"
-                    // size="small"
+                    size="small"
                     style={{marginLeft: (positionIndex > 0) ? '1em':0}}
                     key={positionIndex}
                     color="secondary"

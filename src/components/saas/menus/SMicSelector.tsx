@@ -75,7 +75,7 @@ const useStyles = makeStyles(
       marginRight:'.5em'
     }
   }),
-  { name: 'PositionSelector' }
+  { name: 'SMicSelector' }
 );
 
 interface Props {
