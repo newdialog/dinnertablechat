@@ -38,6 +38,7 @@ import FaceIcon from '@material-ui/icons/Face';
 import DoneIcon from '@material-ui/icons/Done';
 import Prando from 'prando';
 import ConfUserBars from './ConfUserBars';
+import { useFocus } from 'utils/useFocus';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -141,7 +142,7 @@ export default function PleaseWaitResults(props: Props) {
   const { t } = useTranslation();
   const [state, setState] = React.useState<State>({
     data: [],
-    checks: 0,
+    checks: 6 * 5, // 5min
     ready: false,
     submitBlocked: false
   });
@@ -193,13 +194,16 @@ export default function PleaseWaitResults(props: Props) {
     // console.log('r', JSON.stringify(result));
   };
 
-  const onInterval = React.useCallback(() => {
-    if (state.checks > 5) return;
-    onRefresh();
-    setState(p => ({ ...p, checks: state.checks + 1 }));
-  }, [confid, user, state.checks]);
+  const inFocus = useFocus();
 
-  useInterval(onInterval, 20 * 1000);
+  const onInterval = React.useCallback(() => {
+    console.log('state.checks', state.checks, inFocus);
+    if (state.checks < 1 || !inFocus) return;
+    onRefresh();
+    setState(p => ({ ...p, checks: p.checks - 1 }));
+  }, [state.checks, inFocus]);
+
+  useInterval(onInterval, 10 * 1000);
 
   React.useEffect(() => {
     init();
@@ -237,7 +241,9 @@ export default function PleaseWaitResults(props: Props) {
     // groupInfo = {};
   }
 
-  console.log('group', group, ' info ', groupInfo, 'tooLate', tooLate);
+  const showRefresh = state.checks < 1 || !inFocus;
+
+  console.log('group', group, ' info ', groupInfo, 'tooLate', tooLate, 'state.checks', state.checks);
 
   return (
     <div className={classes.layout}>
@@ -279,15 +285,15 @@ export default function PleaseWaitResults(props: Props) {
               )}
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
-              <Button
+              {showRefresh && <Button
                 variant="contained"
                 // size="small"
                 color="secondary"
                 className={classes.btn}
                 onClick={() => onRefresh()}
               >
-                Reload
-              </Button>
+                Refresh
+              </Button> }
             </CardActions>
           </Card>
         </Grid>

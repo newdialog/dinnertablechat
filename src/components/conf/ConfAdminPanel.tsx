@@ -22,6 +22,7 @@ import { match2, findMyGroup } from '../../services/ConfMath';
 import FaceIcon from '@material-ui/icons/Face';
 import ConfAdminPanelDash from './ConfAdminPanelDash';
 import ConfThinking from './ConfThinking';
+import { useFocus } from 'utils/useFocus';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -68,6 +69,8 @@ interface State {
   thinking?: boolean;
 }
 
+const CHECKS = 6 * 5; // 5m
+
 function showData(state: State) {
   // console.log('state.ready', state.ready);
   if (!state.ready) return 'Waiting for assignments...';
@@ -89,7 +92,7 @@ export default function ConfAdminPanel(props: Props) {
   const [state, setState] = React.useState<State>({
     payload: { data: [], results: [] },
     // results: [],
-    checks: 0,
+    checks: CHECKS, 
     ready: false,
     submitBlocked: false
   });
@@ -137,13 +140,15 @@ export default function ConfAdminPanel(props: Props) {
     // console.log('r', JSON.stringify(result));
   };
 
-  const onInterval = React.useCallback(() => {
-    if (state.checks > 5) return;
-    onRefresh();
-    setState(p => ({ ...p, checks: state.checks + 1 }));
-  }, [confid, user, state.checks]);
+  const inFocus = useFocus();
 
-  useInterval(onInterval, 20 * 1000);
+  const onInterval = React.useCallback(() => {
+    if (state.checks < 1 || !inFocus) return;
+    onRefresh();
+    setState(p => ({ ...p, checks: p.checks - 1 }));
+  }, [state.checks]);
+
+  useInterval(onInterval, 10 * 1000);
 
   const onAdminReady = async (toggle: boolean) => {
     let msg = '';
@@ -165,9 +170,13 @@ export default function ConfAdminPanel(props: Props) {
     const results = await matchUp();
     await submitReady(toggle, confid, results); // .then(x=>checkReady());
 
-    // checkReady();
     onRefresh();
+    resetChecks();
   };
+
+  function resetChecks() {
+    setState(p => ({ ...p, checks: CHECKS }));
+  }
 
   const onDeleteAll = async () => {
     var r = window.confirm('Delete All Responses: Are you sure?');
@@ -180,8 +189,8 @@ export default function ConfAdminPanel(props: Props) {
 
     await delAll(confid);
 
-    // checkReady();
     onRefresh();
+    resetChecks();
   };
 
   React.useEffect(() => {
@@ -204,7 +213,8 @@ export default function ConfAdminPanel(props: Props) {
     confid,
     numUsers: state.numUsers,
     payload: state.payload,
-    ready: state.ready
+    ready: state.ready,
+    showRefresh: state.checks < 1 || !inFocus
   };
 
   return (

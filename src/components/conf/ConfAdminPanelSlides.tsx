@@ -92,6 +92,7 @@ interface Props {
   numUsers?: number;
   payload: any;
   ready?: boolean;
+  showRefresh: boolean;
 }
 
 interface State {}
@@ -105,7 +106,8 @@ export default function ConfAdminPanelSlides(props: Props) {
     onDeleteAll,
     confid,
     numUsers,
-    payload
+    payload,
+    showRefresh
   } = props;
 
   const classes = useStyles({});
@@ -182,7 +184,7 @@ export default function ConfAdminPanelSlides(props: Props) {
               />
             </CardContent>
             <CardActions style={{ justifyContent: 'center' }}>
-              <Button
+              {showRefresh && <Button
                 variant="contained"
                 size="small"
                 // size="small"
@@ -190,8 +192,8 @@ export default function ConfAdminPanelSlides(props: Props) {
                 className={classes.btn}
                 onClick={() => onRefresh()}
               >
-                Reload
-              </Button>
+                Refresh
+              </Button>}
 
               <Button
                 variant="contained"
