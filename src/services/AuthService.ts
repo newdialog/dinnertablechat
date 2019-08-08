@@ -169,9 +169,9 @@ export async function refreshCredentials(): Promise<any> {
   // cacheCred = { flag: false };
 
   const currentCredentials = await Auth.currentUserCredentials();
-  console.log('currentCredentials', currentCredentials);
-  const currentCredentials2 = await Auth.currentCredentials();
-  console.log('currentCredentials2', currentCredentials2);
+  // console.log('currentCredentials', currentCredentials);
+  // const currentCredentials2 = await Auth.currentCredentials();
+  // console.log('currentCredentials2', currentCredentials2);
 
   const cr = currentCredentials as any;
   if (!cr) throw new Error('not logged in');
@@ -287,7 +287,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
   };
   // const user = data.attributes;
 
-  console.log('user', user);
+  // console.log('user', user);
 
   //// AWS.config.credentials = new AWS.Credentials(credentials);
   // FIX: https://github.com/aws-amplify/amplify-js/issues/581

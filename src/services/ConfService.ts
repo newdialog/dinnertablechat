@@ -53,7 +53,7 @@ export async function init() {
   if (docClient) return docClient; // already set
   readying = true;
 
-  console.log('DB cr', cr);
+  // console.log('DB cr', cr);
   // if (!identityId) identityId = cr.identityId;
 
   // , Object.keys(cr).length < 2);

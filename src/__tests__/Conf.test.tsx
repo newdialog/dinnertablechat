@@ -5,10 +5,23 @@ import { match2 } from '../services/ConfMath';
 
 const TEST_CONF_ID = 'test';
 
-function makeResponse(user: string, ans: number[]) {
+function makeResponse(
+  conf: string,
+  user: string,
+  questionsNum: number,
+  ans: number[]
+) {
+  const keys: string[] = [];
+  for (var i = 0; i < questionsNum; i++) keys.push(`conf-${conf}-q${i}-id`);
+
+  const answers = keys.reduce((acc, k, i) => {
+    acc[k] = ans[i];
+    return acc;
+  }, {});
+
   return {
     user,
-    answers: { 'conf-test-q0-id': ans[0], 'conf-test-q1-id': ans[1] }
+    answers
   };
 }
 
@@ -16,16 +29,20 @@ function rndUser() {
   return '' + Math.floor(Math.random() * 100000);
 }
 
-function genRandomResponses() {
+function genRandomResponses(conf: string, questionsNum: number, count:number = 10) {
   let ans: any[] = [];
   const rr = () => randRange(2);
-  for (let i = 0; i < 100; i++) {
-    ans.push(makeResponse(rndUser(), [rr(), rr()]));
+  for (let i = 0; i < count; i++) {
+    const ansList: number[] = [];
+    for (let j = 0; j < questionsNum; j++) {
+      ansList.push(rr());
+    }
+    ans.push(makeResponse(conf, rndUser(), questionsNum, ansList));
   }
   return ans;
 }
 
-function randRange(maxExclusive:number) {
+function randRange(maxExclusive: number) {
   return Math.floor(Math.random() * maxExclusive);
 }
 
@@ -42,7 +59,7 @@ const TEST_DATA = [
 ];
 
 beforeAll(async () => {
-    // Authenticate
+  // Authenticate
   configure();
   await Auth.signIn(process.env.TEST_USER_NAME!, process.env.TEST_USER_PW!);
 
@@ -57,9 +74,10 @@ beforeAll(async () => {
 afterAll(() => {});
 
 it('add_users_to_db', async () => {
-  const r = genRandomResponses();
-  // console.log(r);
-  // await submitAll(r, TEST_CONF_ID);
+    const TABLE = 'pub1';
+  // let r = genRandomResponses(TABLE, 5, 400);
+
+  // await submitAll(r, TABLE);
 
   // console.log('submitAll done')
   // delAll(TEST_CONF_ID);
