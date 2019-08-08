@@ -59,7 +59,7 @@ export async function init() {
   // , Object.keys(cr).length < 2);
 
   /// console.log('DB cred', cr);
-  docClient = DynamodbFactory(new DynamoDB(cr)); // await refreshCredentials()));
+  docClient = DynamodbFactory(new DynamoDB({ credentials: cr })); // await refreshCredentials()));
   started = true;
 
   docClient.schema([
@@ -134,7 +134,7 @@ export async function submit(positions: any, conf: string, user: string) {
 
   // if (!user) user = identityId;
 
-  console.log('submit user', user);
+  // console.log('submit user', user, conf, positions);
 
   return docClient
     .table(USERS_TABLE)

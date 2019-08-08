@@ -107,6 +107,10 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   } else if (payload.event === 'configured' && !callbackPage) checkUser(cb);
 }
 
+export async function configure() {
+  Auth.configure(awsconfig);
+}
+
 export async function auth(cb: AwsCB, callbackPage: boolean = false) {
   // console.log('auth aws');
   // const awsmobileInjected = injectConfig(awsmobile);
@@ -123,7 +127,8 @@ export async function auth(cb: AwsCB, callbackPage: boolean = false) {
     // { onHubCapsule: onHubCapsule.bind(null, cb, callbackPage) }
     // ,'AuthService'
   );
-  Auth.configure(awsconfig);
+
+  configure();
   // checkUser(cb); // required by amplify, for existing login
 
   // Configure APIService
@@ -163,19 +168,37 @@ export async function refreshCredentials(): Promise<any> {
   */
   // cacheCred = { flag: false };
 
-  const currentCredentials = await Auth.currentCredentials();
+  const currentCredentials = await Auth.currentUserCredentials();
+  console.log('currentCredentials', currentCredentials);
+  const currentCredentials2 = await Auth.currentCredentials();
+  console.log('currentCredentials2', currentCredentials2);
+
   const cr = currentCredentials as any;
   if (!cr) throw new Error('not logged in');
   cr.region = REGION;
   /* const credentials = (cacheCred = Auth.essentialCredentials(
     currentCredentials
   )); */
-  if (!cr._identityId && cr.params.IdentityId)
-    cr._identityId = cr.params.IdentityId;
-  const params = cr.params;
+
+  // console.log(cr);
+  const params = cr.webIdentityCredentials.params;
+
+  if (!params) {
+    console.log('cr', cr);
+    throw new Error('no cred');
+  }
+
+  if (!cr._identityId && params && params.IdentityId)
+    cr._identityId = params.IdentityId;
+
+  if (!cr.identityId && params && params.IdentityId)
+    cr.identityId = params.IdentityId;
+
   // console.log('currentCredentials', params);
 
-  AWS.config.credentials = new AWS.CognitoIdentityCredentials(params);
+  if (cr.webIdentityCredentials) {
+    AWS.config.credentials = cr; //new AWS.CognitoIdentityCredentials(params);
+  }
   /* AWS.config.update({
     credentials: new AWS.Credentials(credentials)
   });*/
@@ -229,7 +252,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
   let id: string | null = null;
 
   if (session) {
-    console.log('session', session);
+    // console.log('session', session);
 
     email = session.getIdToken().payload['email'];
     name = session.getIdToken().payload['name'];
@@ -237,7 +260,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
     id = REGION + ':' + session.getIdToken().payload['sub'];
     // identityId = 'us-east1:' + session.getIdToken().payload['sub'];
   } else if (cr) {
-    console.log('unauth user', cr);
+    // console.log('unauth user', cr);
     // const newCred = await refreshCredentials(); // needed for dynamo labs
     // console.log('newCred', newCred);
     id = cr.identityId; // newCred.identityId;
