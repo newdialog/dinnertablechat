@@ -12,6 +12,8 @@ import * as AppModel from '../../models/AppModel';
 import ConfAdminPanelDash from 'components/conf/ConfAdminPanelDash';
 import ConfAdminPanelSlides from 'components/conf/ConfAdminPanelSlides';
 
+import QRCode from 'qrcode.react';
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     pagebody: {
@@ -220,6 +222,8 @@ export default observer(function CAdmin(props: Props) {
   const viewComp =
     state.view === 'dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
 
+  const url = window.location.origin+'/c/'+id;
+
   return (
     <>
       <Helmet title={PAGE_NAME}>
@@ -270,6 +274,7 @@ export default observer(function CAdmin(props: Props) {
 
           {step === 0 && (
             <div className={classes.verticalCenter}>
+              <QRCode value={url}/><br/><br/>
               <Reveal effect="fadeInUp" duration={2200}>
                 <Typography
                   variant="h4"
@@ -285,7 +290,7 @@ export default observer(function CAdmin(props: Props) {
                   color="textSecondary"
                   gutterBottom
                 >
-                  {window.location.origin}/c/{id}
+                  {url}
                 </Typography>
                 <Button
                   variant="contained"
