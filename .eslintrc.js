@@ -30,3 +30,29 @@ module.exports = {
         // << add your own custom rules here >>
     },
 };
+
+/*
+'use strict';
+
+const rules = {
+    // Remove with next npm release of eslint-config-react-app:
+    'react-hooks/exhaustive-deps': 'off',
+    'default-case': 'off',
+    'no-useless-constructor': 'off',
+    '@typescript-eslint/no-useless-constructor': 'warn',
+    'no-dupe-class-members': 'off',
+
+    // << add your own custom rules here >>
+    '@typescript-eslint/no-unused-vars': 'off',
+    '@typescript-eslint/no-parameter-properties': 'off',
+    '@typescript-eslint/no-explicit-any': 'off'
+  };
+
+const base = {
+// overrides: { rules },
+  rules,
+  "extends": ["react-app"], // , "shared-config"
+};
+
+export default { ...base, "eslintConfig": base };
+*/

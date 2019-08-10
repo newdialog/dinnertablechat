@@ -162,5 +162,8 @@
     "coverageReporters": [
       "text"
     ]
+  },
+  "eslintConfig": {
+    "extends": ["react-app", "./.eslintrc.js"]
   }
 }
