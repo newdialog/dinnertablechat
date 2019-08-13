@@ -222,7 +222,10 @@ export default observer(function CAdmin(props: Props) {
   const viewComp =
     state.view === 'dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
 
-  const url = window.location.origin+'/c/'+id;
+  const i18Url = t(`conf-${id}-optional-url`);
+
+  let url = window.location.origin + '/c/' + id;
+  if (i18Url.indexOf('http') !== -1) url = i18Url;
 
   return (
     <>
@@ -274,7 +277,9 @@ export default observer(function CAdmin(props: Props) {
 
           {step === 0 && (
             <div className={classes.verticalCenter}>
-              <QRCode value={url}/><br/><br/>
+              <QRCode value={url} />
+              <br />
+              <br />
               <Reveal effect="fadeInUp" duration={2200}>
                 <Typography
                   variant="h4"
