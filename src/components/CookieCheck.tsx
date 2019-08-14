@@ -17,7 +17,7 @@ export default () => {
   const [dismissed, setDis] = useState(false);
 
   const classes = useStyles({});
-  const _inEU = !inEU();
+  const _inEU = inEU();
 
   useEffect(() => {
     if (!_inEU) return;
