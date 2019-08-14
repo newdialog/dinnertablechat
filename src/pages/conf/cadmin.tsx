@@ -129,7 +129,7 @@ interface State {
   kill: boolean;
 }
 
-const PAGE_NAME = 'DebateConference';
+const PAGE_NAME = 'DialogMixer';
 
 export default observer(function CAdmin(props: Props) {
   const store = useContext(AppModel.Context)!;
@@ -224,7 +224,10 @@ export default observer(function CAdmin(props: Props) {
 
   const i18Url = t(`conf-${id}-optional-url`);
 
+  // url gen
+  const isMixer = window.location.hostname.match('mixer.');
   let url = window.location.origin + '/c/' + id;
+  if(isMixer) url = window.location.origin + '/' + id; // use root
   if (i18Url.indexOf('http') !== -1) url = i18Url;
 
   return (

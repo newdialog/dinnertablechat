@@ -49,21 +49,57 @@ const DTCRouter = ({
   store: AppModel.Type;
 }) => {
   const live = store.isLive;
+  const isMixer = window.location.hostname.match('mixer.');
+
+  if (isMixer) {
+    return (
+      <Router history={history}>
+        <Switch>
+          <Route exact path="/" render={() => <p>No id provided</p>} />
+          <Redirect from="/signout" to="/" />
+          <Route path="/callback" component={AuthSignin} />
+          <Route path="/CALLBACK" component={AuthSignin} />{' '}
+          {/* do not redirect */}
+          <Route exact path="/signin" component={AuthSignin} />
+          <Route exact path="/privacy" component={Privacy} />
+          {/* conference app */}
+          <Route
+            exact
+            path="/c/:id/admin"
+            render={props => <CAdmin id={props.match.params.id} />}
+          />
+          <Route
+            exact
+            path="/c/:id"
+            render={props => <CHome id={props.match.params.id} />}
+          />
+          <Route exact path="/c" render={props => <CHome id={''} />} />
+          <Route
+            exact
+            path="/:id/admin"
+            render={props => <CAdmin id={props.match.params.id} />}
+          />
+          <Route
+            exact
+            path="/:id"
+            render={props => <CHome id={props.match.params.id} />}
+          />
+          <Route render={() => <Redirect to="/" />} />
+        </Switch>
+      </Router>
+    );
+  }
+
   return (
     <Router history={history}>
       <Switch>
         <Redirect from="/signout" to="/" />
-        <Route
-          exact
-          path="/saas"
-          render={props => (
-            <Redirect to={`/r`} />
-          )}
-        />
+        <Route exact path="/saas" render={props => <Redirect to={`/r`} />} />
         <Route exact path="/" component={Home} />
         <Route exact path="/about" component={Home} />
         <Route path="/callback" component={AuthSignin} />
-        <Route path="/CALLBACK" component={AuthSignin} /> { /* do not redirect */ }
+        <Route path="/CALLBACK" component={AuthSignin} />{' '}
+        {/* do not redirect */}
         <Route exact path="/signin" component={AuthSignin} />
         <Route exact path="/feedback" component={DebateFeedback} />
         <Route exact path="/tutorial" component={Tutorial} />
@@ -74,31 +110,28 @@ const DTCRouter = ({
         <Route exact path="/quickmatch" component={Play} />
         <Route exact path="/match" component={Debate} />
         <Route exact path="/hosting" component={SPitch} />
-        
-        { /* saas */ }
-        <Route exact path="/r/:id" render={props => (
-            <SHome id={props.match.params.id} />
-          )} />
-        <Route exact path="/r" render={props => (
-            <SHome id={''} />
-        )} />
+        {/* saas */}
+        <Route
+          exact
+          path="/r/:id"
+          render={props => <SHome id={props.match.params.id} />}
+        />
+        <Route exact path="/r" render={props => <SHome id={''} />} />
         <Route exact path="/saasmatch" component={SRouter} />
-
-        { /* conference app */ }
-        <Route exact path="/c/:id/admin" render={props => (
-            <CAdmin id={props.match.params.id} />
-          )} />
-        <Route exact path="/c/:id" render={props => (
-            <CHome id={props.match.params.id} />
-          )} />
-        <Route exact path="/c" render={props => (
-            <CHome id={''} />
-        )} />
-
-        { /* dev routes */ }
-        {!live && (
-          <Route exact path="/saasend" component={SClosed} />
-        )}
+        {/* conference app */}
+        <Route
+          exact
+          path="/c/:id/admin"
+          render={props => <CAdmin id={props.match.params.id} />}
+        />
+        <Route
+          exact
+          path="/c/:id"
+          render={props => <CHome id={props.match.params.id} />}
+        />
+        <Route exact path="/c" render={props => <CHome id={''} />} />
+        {/* dev routes */}
+        {!live && <Route exact path="/saasend" component={SClosed} />}
         {!live && <Route exact path="/test2" component={Tester} />}
         {!live && (
           <Route

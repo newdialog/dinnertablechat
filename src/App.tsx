@@ -71,6 +71,7 @@ export const Base = observer(function _Base(props: Props) {
 
     const isTest = path === '/test' || path === '/test2';
     const isSaasDomain = window.location.hostname.match('debateplatform');
+    const isMixer = window.location.hostname.match('mixer.');
     if (isTest) return;
 
     const isHome = path === '/' || path === '';
@@ -79,7 +80,10 @@ export const Base = observer(function _Base(props: Props) {
     if (!isHome) return; // j1, not sure if this fixes anything
 
     // App flow
-    if (isSaasDomain) {
+    if(isMixer) {
+      // ignore other root rules
+    }
+    else if (isSaasDomain) {
       store.router.push('/r');
     } else if (
       store.isStandalone() &&
