@@ -93,10 +93,10 @@ const useStyles = makeStyles(
       fontSize: '1.2em',
       fontWeight: 400,
       paddingBottom: '0',
-      width: '400px',
+      // width: '400px',
       [theme.breakpoints.down(500)]: {
         fontSize: '4.85vw',
-        width: '100vw'
+        // width: '100vw'
       }
     },
     heroLogo: {
