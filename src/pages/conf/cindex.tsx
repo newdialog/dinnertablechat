@@ -266,7 +266,7 @@ export default observer(function CIndex(props: Props) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            newdialog.org
+            NewDialog.org
           </a>
         </b>
       </div>

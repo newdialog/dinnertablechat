@@ -330,7 +330,7 @@ export default observer(function CAdmin(props: Props) {
               target="_blank"
               rel="noopener noreferrer"
             >
-              newdialog.org
+              NewDialog.org
             </a>
           </b>
         </div>

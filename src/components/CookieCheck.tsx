@@ -54,7 +54,7 @@ export default () => {
       contentClasses="text-capitalize"
       ButtonComponent={Button}
     >
-      This website uses cookies to enhance the user experience.{' '}
+      This website uses cookies to operate.{' '}
       <span style={{ fontSize: '10px' }}>
         <a href="/privacy" style={{ color: 'black' }}>
           -privacy policy

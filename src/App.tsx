@@ -65,13 +65,14 @@ export const Base = observer(function _Base(props: Props) {
   const store = props.store;
   const history = props.history;
 
-  useEffect(() => {
-    const path = (store.router.location as any).pathname;
-    // console.log('path', path);
+  const path = (store.router.location as any).pathname;
+  const isTest = path === '/test' || path === '/test2';
+  const isSaasDomain = window.location.hostname.match('debateplatform');
+  const isMixer =
+    window.location.hostname.match('mixer.') ||
+    window.location.href.match('/c/');
 
-    const isTest = path === '/test' || path === '/test2';
-    const isSaasDomain = window.location.hostname.match('debateplatform');
-    const isMixer = window.location.hostname.match('mixer.');
+  useEffect(() => {
     if (isTest) return;
 
     const isHome = path === '/' || path === '';
@@ -80,10 +81,9 @@ export const Base = observer(function _Base(props: Props) {
     if (!isHome) return; // j1, not sure if this fixes anything
 
     // App flow
-    if(isMixer) {
+    if (isMixer) {
       // ignore other root rules
-    }
-    else if (isSaasDomain) {
+    } else if (isSaasDomain) {
       store.router.push('/r');
     } else if (
       store.isStandalone() &&
@@ -97,17 +97,13 @@ export const Base = observer(function _Base(props: Props) {
         console.log('Auth guest to signup');
         store.auth.login();
       } else if (!store.isGuest() && !store.auth.isNotLoggedIn) {
-        // console.log('finished Auth guest to signup');
         // localStorage.removeItem('signup');
       }
-      // return <Loading />;
     } else if (store.isQuickmatch()) {
       // Feature: force quickmatch flow
       console.log('isQuickmatch');
       localStorage.setItem('quickmatch', 'y');
-      // store.auth.guestLogin();
       store.router.push('/quickmatch');
-      // return <Loading />;
       // cant do this as it would cause quickmatch to bug
       // else if(s.auth.isAuthenticated()) s.router.push('/quickmatch');
     } else if (isHome && isDebateTime && store.auth.isAuthenticated()) {
@@ -116,18 +112,33 @@ export const Base = observer(function _Base(props: Props) {
     }
   }, [store, store.auth, store.auth.user]);
 
-  return (
-    <WorkerUpdate store={store}>
+  // disable worker prompt
+  useEffect(() => {
+    if (!isMixer) return;
+    require('./serviceWorker').unregister();
+    window.addEventListener('beforeinstallprompt', function(e) {
+      e.preventDefault();
+      return false;
+    });
+  }, []);
+
+  const root = (
+    <>
       <Suspense fallback={null}>
         <AppBar store={store} />
-        <AuthWrapper store={store} login={store.auth.doLogin}/>
+        <AuthWrapper store={store} login={store.auth.doLogin} />
       </Suspense>
       <Suspense fallback={LoadingMsg()}>
         <AppRouter history={history} store={store} />
       </Suspense>
       <Suspense fallback={null}>
-        <CookieCheck/>
+        <CookieCheck />
       </Suspense>
-    </WorkerUpdate>
+    </>
   );
+
+  // dont even install a worker
+  if (isMixer) return root;
+
+  return <WorkerUpdate store={store}>{root}</WorkerUpdate>;
 });
