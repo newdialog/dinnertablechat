@@ -77,12 +77,12 @@ const useStyles = makeStyles(
     },
     verticalCenter: {
       textAlign: 'center',
-      margin:'1.4em auto 0 auto',
+      margin: '1.4em auto 0 auto',
       // position: 'absolute',
       // minWidth: '100%',
       width: '100%',
       maxWidth: '680px',
-      minHeight: 'calc(100vh - 250px)',
+      minHeight: 'calc(100vh - 250px)'
       // top: '50%',
       // left: '50%',
       /* transform: 'translateY(-50%) translateX(-50%)',
@@ -98,22 +98,22 @@ const useStyles = makeStyles(
       width: '400px',
       [theme.breakpoints.down(500)]: {
         fontSize: '4.85vw',
-        width: '100vw',
+        width: '100vw'
       }
     },
     heroLogo: {
-      height: '3em', 
+      height: '3em',
       cursor: 'pointer',
       [theme.breakpoints.down(480)]: {
-        width: '90vw',
+        width: '90vw'
       }
     },
     heroLogoText: {
       color: '#9f7b74',
-      fontSize: '2.6em', 
+      fontSize: '2.6em',
       cursor: 'pointer',
       [theme.breakpoints.down(550)]: {
-        fontSize: '8vw',
+        fontSize: '8vw'
       }
     }
   }),
@@ -122,14 +122,14 @@ const useStyles = makeStyles(
 
 interface Props {
   isTest?: boolean;
-  id:string;
+  id: string;
 }
 
 function onHelp(store: AppModel.Type) {
   store.router.push('/tutorial');
 }
 
-const PAGE_NAME = "DialogMixer";
+const PAGE_NAME = 'DialogMixer';
 
 export default observer(function CIndex(props: Props) {
   const store = useContext(AppModel.Context)!;
@@ -148,15 +148,14 @@ export default observer(function CIndex(props: Props) {
 
   useEffect(() => {
     // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
-    if(store.auth.isAuthenticated()) return;
-    if(!store.auth.isNotLoggedIn) return;
+    if (store.auth.isAuthenticated()) return;
+    if (!store.auth.isNotLoggedIn) return;
 
     console.log('--logging in as guest');
-    
-    if(!store.auth.user) {
+
+    if (!store.auth.user) {
       store.auth.login();
-    }
-    else console.log('user', store.auth.user);
+    } else console.log('user', store.auth.user);
   }, [store.auth.isNotLoggedIn, store.auth.user]);
 
   useEffect(() => {
@@ -178,12 +177,16 @@ export default observer(function CIndex(props: Props) {
   }, []);
 
   const handleReset = () => {
-    if(store.conf.positions) store.conf.resetQueue();
+    if (store.conf.positions) store.conf.resetQueue();
   };
 
   if (store.auth.isNotLoggedIn) {
     // store.auth.login();
-    return <div className={classes.pagebody}><h3>Authorizing...</h3></div>;
+    return (
+      <div className={classes.pagebody}>
+        <h3>Authorizing...</h3>
+      </div>
+    );
   }
 
   let step = 0;
@@ -198,9 +201,9 @@ export default observer(function CIndex(props: Props) {
     store.debate.resetQueue();
   };
 
-  const onSubmit = (positions:any) => {
+  const onSubmit = (positions: any) => {
     store.conf.setPosition(positions);
-  }
+  };
 
   return (
     <div className={classes.pagebody}>
@@ -222,7 +225,7 @@ export default observer(function CIndex(props: Props) {
               gutterBottom
             >
               {PAGE_NAME}
-              </Typography>
+            </Typography>
             <Typography
               className={classes.herotext}
               variant="h3"
@@ -240,19 +243,31 @@ export default observer(function CIndex(props: Props) {
         <div className={classes.verticalCenter}>
           {step === 0 && (
             <Reveal effect="fadeInUp" duration={2200}>
-              <PositionSelector onSubmit={onSubmit} id={props.id} store={store} prefix="conf" />
+              <PositionSelector
+                onSubmit={onSubmit}
+                id={props.id}
+                store={store}
+                prefix="conf"
+              />
             </Reveal>
           )}
           {step === 1 && (
             <Reveal effect="fadeInUp" duration={1100}>
-              <ConfUserPanel id={id} store={store}/>
+              <ConfUserPanel id={id} store={store} />
             </Reveal>
           )}
         </div>
       </main>
       <div className={classes.footer}>
         <b>
-          Powered by <a href="https://www.dinnertable.chat/about" target="_blank" rel="noopener noreferrer">dinnertable.chat</a>
+          Powered by{' '}
+          <a
+            href="https://www.newdialog.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            newdialog.org
+          </a>
         </b>
       </div>
     </div>

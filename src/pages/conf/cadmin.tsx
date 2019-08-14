@@ -326,11 +326,11 @@ export default observer(function CAdmin(props: Props) {
           <b>
             Powered by{' '}
             <a
-              href="https://www.dinnertable.chat/about"
+              href="https://www.newdialog.org"
               target="_blank"
               rel="noopener noreferrer"
             >
-              dinnertable.chat
+              newdialog.org
             </a>
           </b>
         </div>
