@@ -123,12 +123,12 @@ function registerValidSW(swUrl: string, config?: Config) {
         });
       });
 
-      if(checkOnce) return;
+      if (checkOnce) return;
       checkOnce = true;
 
       setInterval(() => {
         registration.update();
-      }, 10 * 1000);
+      }, 60 * 1000);
 
       registration.update();
       return registration;
