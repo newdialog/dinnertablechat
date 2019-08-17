@@ -37,7 +37,7 @@ export default () => {
     <CookieConsent
       disableStyles={true}
       style={{
-        background: '#ffffff',
+        background: '#eeece6',
         border: '3px solid #555555',
         textAlign: 'center',
         borderRadius: '8px',
@@ -45,21 +45,24 @@ export default () => {
         left: '50%',
         width: '380px',
         position: 'absolute',
-        bottom: 0,
+        // bottom: 0,
+        top: 5,
         transform: 'translate(-50%,-3px)'
       }}
-      location={'bottom'}
+      location={'none'}
       buttonClasses={'btn btn-primary ' + classes.button}
       containerClasses="alert alert-warning col-lg-12"
       contentClasses="text-capitalize"
       ButtonComponent={Button}
     >
-      This website uses cookies to operate.{' '}
-      <span style={{ fontSize: '10px' }}>
-        <a href="/privacy" style={{ color: 'black' }}>
-          -privacy policy
+      <div style={{ fontSize: '.80rem', textAlign: 'center' }}>
+        <a href="/privacy" >
+          privacy policy link
         </a>
-      </span>
+        <br/>
+      </div>
+      This website uses cookies to operate.{' '}
+      
     </CookieConsent>
   );
 };

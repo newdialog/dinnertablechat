@@ -230,6 +230,8 @@ export default observer(function CAdmin(props: Props) {
   if(isMixer) url = window.location.origin + '/' + id; // use root
   if (i18Url.indexOf('http') !== -1) url = i18Url;
 
+  // url += 'aaaaaaaaaaaa.';
+
   return (
     <>
       <Helmet title={PAGE_NAME}>
@@ -297,6 +299,7 @@ export default observer(function CAdmin(props: Props) {
                   align="center"
                   color="textSecondary"
                   gutterBottom
+                  style={{fontSize: 200 / url.length + 'vmin'}}
                 >
                   {url}
                 </Typography>
