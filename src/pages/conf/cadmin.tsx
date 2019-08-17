@@ -255,7 +255,8 @@ export default observer(function CAdmin(props: Props) {
                 </button>
               }
               {props.isTest && <h2>TEST MODE (/test)</h2>}
-              <Typography
+              {step === 0 && (
+              <><Typography
                 variant="h1"
                 align="left"
                 color="textSecondary"
@@ -264,7 +265,7 @@ export default observer(function CAdmin(props: Props) {
               >
                 {PAGE_NAME} Admin
               </Typography>
-              {step === 0 && (
+             
                 <Typography
                   className={classes.herotext}
                   variant="h3"
@@ -275,7 +276,7 @@ export default observer(function CAdmin(props: Props) {
                   Talk to people with different opinions.
                   <br />
                   Discussion via mixed viewpoint matchmaking.
-                </Typography>
+                </Typography></>
               )}
             </div>
           </div>
@@ -319,6 +320,14 @@ export default observer(function CAdmin(props: Props) {
               style={{ marginBottom: '2em' }}
               className={classes.verticalCenter}
             >
+              <Typography
+                  variant="h2"
+                  align="center"
+                  color="textSecondary"
+                  style={{fontSize: 200 / url.length + 'vmin'}}
+                >
+                  {url}
+                </Typography>
               <Reveal effect="fadeInUp" duration={1100}>
                 <ConfAdmin id={id} store={store} view={viewComp} />
               </Reveal>
