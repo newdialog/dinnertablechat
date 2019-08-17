@@ -129,7 +129,7 @@ interface State {
   kill: boolean;
 }
 
-const PAGE_NAME = 'DialogMixer';
+const PAGE_NAME = 'NewDialog Mixer';
 
 export default observer(function CAdmin(props: Props) {
   const store = useContext(AppModel.Context)!;
@@ -230,6 +230,8 @@ export default observer(function CAdmin(props: Props) {
   if(isMixer) url = window.location.origin + '/' + id; // use root
   if (i18Url.indexOf('http') !== -1) url = i18Url;
 
+  url = url.replace('http://', '').replace('https://', '');
+
   // url += 'aaaaaaaaaaaa.';
 
   return (
@@ -244,6 +246,7 @@ export default observer(function CAdmin(props: Props) {
           {/* Hero unit */}
           <div className={classes.heroUnit}>
             <div className={classes.heroContent}>
+              <div style={{textAlign:'right', float:'right'}}>
               {store.auth.isAdmin() ? (
                 <button onClick={() => store.auth.logout()}>logout</button>
               ) : (
@@ -254,6 +257,7 @@ export default observer(function CAdmin(props: Props) {
                   switch to {state.view === 'slides' ? 'dash' : 'slides'}
                 </button>
               }
+              </div>
               {props.isTest && <h2>TEST MODE (/test)</h2>}
               {step === 0 && (
               <><Typography
@@ -263,7 +267,7 @@ export default observer(function CAdmin(props: Props) {
                 className={classes.heroLogoText}
                 gutterBottom
               >
-                {PAGE_NAME} Admin
+                {PAGE_NAME}
               </Typography>
              
                 <Typography

@@ -129,7 +129,7 @@ function onHelp(store: AppModel.Type) {
   store.router.push('/tutorial');
 }
 
-const PAGE_NAME = 'DialogMixer';
+const PAGE_NAME = 'NewDialog Mixer';
 
 export default observer(function CIndex(props: Props) {
   const store = useContext(AppModel.Context)!;
