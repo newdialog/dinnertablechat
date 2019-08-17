@@ -279,7 +279,7 @@ export default function PleaseWaitResults(props: Props) {
                 )}
                 {!state.ready && 'Waiting for assignments...'}
                 {state.ready && !group && 'Sorry, groups already assigned.'}
-                {!tooLate && group && `Your assigned group is:`}
+                {!tooLate && group && `Please join your group`}
               </Typography>
               {group && (
                 <>
@@ -290,11 +290,16 @@ export default function PleaseWaitResults(props: Props) {
                   />
                   <br />
                   <br />
-                  <Typography align="left">
+                  <Typography align="center" style={{padding:'0 2em'}}>
                     In your group, there are {groupInfo.members.length} people
                     with the opinions:
                   </Typography>
+                  <br/>
                   <ConfUserBars id={confid} store={store} data={groupInfo} />
+                  <br/><br/>
+                  <Card>
+                    Do you like this tool?<br/>Use it on your next event!<br/>Go to <a href="https://www.newdialog.org" target="_blank" >NewDialog.org</a>
+                  </Card>
                 </>
               )}
             </CardContent>
