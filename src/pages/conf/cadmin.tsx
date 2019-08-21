@@ -230,8 +230,7 @@ export default observer(function CAdmin(props: Props) {
   if(isMixer) url = window.location.origin + '/' + id; // use root
   if (i18Url.indexOf('http') !== -1) url = i18Url;
 
-  url = url.replace('http://', '').replace('https://', '');
-
+  const visualURL = url.replace('http://', '').replace('https://', '');
   // url += 'aaaaaaaaaaaa.';
 
   return (
@@ -306,7 +305,7 @@ export default observer(function CAdmin(props: Props) {
                   gutterBottom
                   style={{fontSize: 200 / url.length + 'vmin'}}
                 >
-                  {url}
+                  {visualURL}
                 </Typography>
                 <Button
                   variant="contained"
@@ -330,7 +329,7 @@ export default observer(function CAdmin(props: Props) {
                   color="textSecondary"
                   style={{fontSize: 200 / url.length + 'vmin'}}
                 >
-                  {url}
+                  {visualURL}
                 </Typography>
               <Reveal effect="fadeInUp" duration={1100}>
                 <ConfAdmin id={id} store={store} view={viewComp} />
