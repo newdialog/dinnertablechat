@@ -297,9 +297,6 @@ export default function PleaseWaitResults(props: Props) {
                   <br/>
                   <ConfUserBars id={confid} store={store} data={groupInfo} />
                   <br/><br/>
-                  <Card>
-                    Do you like this tool?<br/>Use it on your next event!<br/>Go to <a href="https://www.newdialog.org" target="_blank" >NewDialog.org</a>
-                  </Card>
                 </>
               )}
             </CardContent>

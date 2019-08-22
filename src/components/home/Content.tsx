@@ -34,9 +34,9 @@ const useStyles = makeStyles(
       }
     },
     logoText: {
-      marginTop: '-1.25em !important',
+      marginTop: '-2.6rem !important',
       [theme.breakpoints.down('xs')]: {
-        marginTop: '-0.6em !important'
+        marginTop: '-1.5rem !important'
       }
     },
     containerRev: {
@@ -218,8 +218,13 @@ export default function HomeContent() {
             </div>
           </Grid>
           <Grid item xs={12} md={12} style={{ paddingTop: '0' }}>
+          <Typography className={classes.logoText} align="center" style={{ fontSize: '1.0rem' }}>
+                      A partner of <a
+                href="https://www.newdialog.org"
+              >New Dialog Foundation</a>
+              <br /><br />
+            </Typography>
             <Typography
-              className={classes.logoText}
               variant="h3"
               gutterBottom
               align="center"
@@ -227,10 +232,15 @@ export default function HomeContent() {
               {t('home-intro')}
             </Typography>
             <div style={{ width: '100%', textAlign: 'center' }}>
+            
+
               Are you a student or a teacher? Read about our{' '}
               <a href="/campus" target="_self" style={{ color: '#bd4c4c' }}>
                 Campus Program.
               </a>
+
+              <br/>
+              
             </div>
           </Grid>
           <Grid item xs={12} md={12}>

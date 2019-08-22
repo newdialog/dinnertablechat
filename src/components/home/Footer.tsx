@@ -49,6 +49,13 @@ export default function Footer(props: Props) {
 
   return (
     <footer className={classes.centered + ' ' + cn}>
+       <Typography style={{ fontSize: '0.8em', color: 'white' }}>
+                A partner of <a
+          href="https://www.newdialog.org"
+          className={classes.links}
+        >New Dialog Foundation</a>
+        <br />
+        </Typography>
       <section id="social_icon_footer">
         <div className="container">
           <div className="text-center center-block">
@@ -109,7 +116,6 @@ export default function Footer(props: Props) {
         </div>
       </section>
       <Typography style={{ fontSize: '0.8em', color: 'white' }}>
-        <br />
         PAGES:{' '}
         { !isHome && <><a
           href="/about"
