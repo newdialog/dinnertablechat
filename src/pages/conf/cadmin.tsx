@@ -143,6 +143,7 @@ export default observer(function CAdmin(props: Props) {
   });
 
   const id = props.id;
+  const confid = id;
 
   const isAdmin = store.auth.isAdmin();
 
@@ -183,14 +184,21 @@ export default observer(function CAdmin(props: Props) {
     }
     handleReset();
 
-    window.gtag('event', 'saas_debate_match_menu', {
-      event_category: 'splash',
-      guest: store.isGuest()
+    window.gtag('event', ('conf_admin_splash_'+confid), {
+      event_category: 'conf',
+      confid: confid
     });
   }, []);
 
   const handleReset = () => {
-    if (store.conf.positions) store.conf.resetQueue();
+    if (store.conf.positions) {
+      store.conf.resetQueue();
+      window.gtag('event', ('conf_admin_reset_'+confid), {
+        event_category: 'conf',
+        confid: confid,
+        non_interaction: false
+      });
+    }
   };
 
   if (store.auth.isNotLoggedIn) {

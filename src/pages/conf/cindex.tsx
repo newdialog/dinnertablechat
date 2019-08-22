@@ -137,6 +137,7 @@ export default observer(function CIndex(props: Props) {
   const { t } = useTranslation();
 
   const id = props.id;
+  const confid = id;
   // console.log('id', props.id);
 
   // console.log(store.auth.snapshot());
@@ -170,9 +171,9 @@ export default observer(function CIndex(props: Props) {
     }
     handleReset();
 
-    window.gtag('event', 'saas_debate_match_menu', {
-      event_category: 'splash',
-      guest: store.isGuest()
+    window.gtag('event', ('conf_user_splash_'+confid), {
+      event_category: 'conf',
+      confid: confid
     });
   }, []);
 
@@ -202,6 +203,11 @@ export default observer(function CIndex(props: Props) {
   };
 
   const onSubmit = (positions: any) => {
+    window.gtag('event', ('conf_user_submit_'+confid), {
+      event_category: 'conf',
+      confid: confid,
+      non_interaction: false
+    });
     store.conf.setPosition(positions);
   };
 

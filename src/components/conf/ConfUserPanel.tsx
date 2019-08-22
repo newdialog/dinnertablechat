@@ -184,7 +184,16 @@ export default function PleaseWaitResults(props: Props) {
       console.log('store.auth.user!.id', user);
       const myGroup = findMyGroup(user, result);
 
-      if (myGroup) console.log('myGroup', myGroup);
+      if (myGroup) {
+        console.log('myGroup', myGroup);
+        // gtag when first time ready
+        if(!state.ready) {
+          window.gtag('event', ('conf_user_assigned_' + confid), {
+            event_category: 'conf',
+            non_interaction: false
+          });
+        }
+      }
       else console.log('user not in the group');
 
       if (myGroup !== null) setState(p => ({ ...p, myGroup }));

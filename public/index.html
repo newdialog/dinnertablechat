@@ -63,17 +63,22 @@
   </script>
    <!-- <script async src="/js/pwacompat.209.min.js"></script> -->
   <script async src="/js/zenscroll-min.js"></script>
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119131630-1"></script>
+  <!-- Global DTC site tag (gtag.js) - Google Analytics -->
+  <!--  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119131630-1"></script> -->
+  <!-- for mixer -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119131630-4"></script>
   <!-- <script async src="js/simplepeer.min.js"></script> -->
   <script>
+    const id = 'UA-119131630-4';
+    console.log('gid', id);
+    
     window.dataLayer = window.dataLayer || [];
 
     const h = window.location.hostname;
     window.isLive = (
         h.indexOf('test') === -1 && // disallow test domain
         // h.indexOf('.dinnertable') === -1 && // allow test domain
-        h.indexOf('dinnertable.chat') !== -1
+        (h.indexOf('dinnertable.chat') !== -1 || h.indexOf('mixer.newdialog') === 0)
       );
 
     function gtag() {
@@ -91,8 +96,8 @@
     }
     gtag('js', new Date());
 
-    gtag('config', 'UA-119131630-1');
-    gtag('create', 'UA-119131630-1', 'auto');
+    gtag('config', id);
+    gtag('create', id, 'auto');
 
     function trackOutboundLink(url, nonInteraction, newWin) {
       console.log('trackOutboundLink');

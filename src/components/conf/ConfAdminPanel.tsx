@@ -164,6 +164,11 @@ export default function ConfAdminPanel(props: Props) {
       return;
     }
 
+    window.gtag('event', ('conf_admin_ready_'+confid+'_'+toggle), {
+      event_category: 'conf',
+      confid: confid
+    });
+
     if (toggle) {
       setState(p => ({ ...p, thinking: true }));
       return; // do THinking
