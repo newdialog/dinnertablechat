@@ -25,8 +25,6 @@ import {
   waitForReady
 } from '../../services/ConfService';
 import {
-  match,
-  match2,
   findMyGroup,
   groupByIndex
 } from '../../services/ConfMath';

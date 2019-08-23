@@ -35,7 +35,8 @@ function diversify(
   groups: Groups,
   len: number,
   k: number,
-  tables: number
+  tables: number,
+  minGroupUserPairs: number = 1
 ): Groups {
   // if only ony group, return it
   if (groups.length < 2) return groups;
@@ -48,6 +49,8 @@ function diversify(
   let rb = 0;
   // Target diversified group to drop to
   let rb2 = 0;
+
+  const rotateModBy = minGroupUserPairs * 2;
 
   // console.log('groups len', groups, len);
 
@@ -67,7 +70,7 @@ function diversify(
     // Add pnt to group
     dgroups[rb2] = dgroups[rb2].concat([pnt]);
     // If target group pnter is even, increament the point. This will 'wait' to get two points from two different origin cycles.
-    if (dgroups[rb2].length % 2 === 0) rb2 = ++rb2 % tables;
+    if (dgroups[rb2].length % rotateModBy === 0) rb2 = ++rb2 % tables;
     // Move onto next point
     --l;
     // Move onto next origin group
@@ -93,7 +96,11 @@ function diversify(
 }
 
 // Basically just convert data types
-export function match2(getAllData: any, maxGroups: number = 2) {
+export function match2(
+  getAllData: any,
+  maxGroups: number = 2,
+  minGroupUserPairs: number = 1
+) {
   const data = getAllData;
   if (data.length === 0) return [];
 
@@ -114,9 +121,12 @@ export function match2(getAllData: any, maxGroups: number = 2) {
   const names = data.map(x => x.user);
 
   // console.log('rawListOfAnswers', JSON.stringify(rawListOfAnswers));
-  const result = match(maxGroups, rawListOfAnswers, names).filter(
-    x => x.length !== 0
-  );
+  const result = match(
+    maxGroups,
+    minGroupUserPairs,
+    rawListOfAnswers,
+    names
+  ).filter(x => x.length !== 0);
 
   // unwrangle into user[] = [answers]
   const obj = result.map(g =>
@@ -138,7 +148,7 @@ export function match2(getAllData: any, maxGroups: number = 2) {
 export function findMyGroup(user: string, match2Data: Array<any>): any | null {
   const findGroup = match2Data
     .map((g, index) => {
-      g = {...g}
+      g = { ...g };
       g.gid = index;
       return g;
     })
@@ -148,23 +158,28 @@ export function findMyGroup(user: string, match2Data: Array<any>): any | null {
   return findGroup[0];
 }
 
-export function groupByIndex(groupIndex: number, match2Data: Array<any>): any | null {
-  const findGroup = match2Data
-    .map((g, index) => {
-      g = {...g};
-      g.gid = index;
-      return g;
-    }) 
-    // .filter(group => !!group[user]);
+export function groupByIndex(
+  groupIndex: number,
+  match2Data: Array<any>
+): any | null {
+  const findGroup = match2Data.map((g, index) => {
+    g = { ...g };
+    g.gid = index;
+    return g;
+  });
+  // .filter(group => !!group[user]);
 
   if (groupIndex >= findGroup.length) {
-    throw new Error('invalid group index: ' + groupIndex + ' ' + findGroup.length);
+    throw new Error(
+      'invalid group index: ' + groupIndex + ' ' + findGroup.length
+    );
   }
   return findGroup[groupIndex];
 }
 
 export function match(
   clusters: number,
+  minGroupUserPairs: number,
   people: Array<Array<number>>,
   names?: Array<string>
 ): Person[][] {
@@ -195,7 +210,7 @@ export function match(
 
   const tables = k;
   // Diversify them into new groups!
-  var r2 = diversify(groups, names.length, counts, tables);
+  var r2 = diversify(groups, names.length, counts, tables, minGroupUserPairs);
 
   // console.log('-diversified table-');
   // console.log(r2);

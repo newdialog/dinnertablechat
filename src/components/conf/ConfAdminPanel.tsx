@@ -17,7 +17,7 @@ import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
 import { getAll, submitReady, init, delAll } from '../../services/ConfService';
-import { match2, findMyGroup } from '../../services/ConfMath';
+import { match2 } from '../../services/ConfMath';
 
 import FaceIcon from '@material-ui/icons/Face';
 import ConfAdminPanelDash from './ConfAdminPanelDash';
@@ -101,6 +101,7 @@ export default function ConfAdminPanel(props: Props) {
   const confid = props.id || '111';
   const user = store.getRID();
   const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
+  const minGroupUserPairs = Number.parseInt(t(`conf-${confid}-minGroupUserPairs`), 10) || 1;
 
   React.useEffect(() => {
     console.log('user', user);
@@ -112,7 +113,7 @@ export default function ConfAdminPanel(props: Props) {
     const rdata = await getAll(confid);
 
     var data: Data = rdata.data;
-    const result = match2(data, numGroups); // TODO: numGroups
+    const result = match2(data, numGroups, minGroupUserPairs); // TODO: numGroups
 
     // console.log('result', JSON.stringify(result));
     return result;
