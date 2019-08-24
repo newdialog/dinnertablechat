@@ -17,7 +17,7 @@ const useStyles = makeStyles(
     },
     layout2: {
       width: '100%',
-      height: '54px',
+      height: '64px',
       marginLeft: 'auto',
       marginRight: 'auto'
     },
@@ -90,15 +90,20 @@ export default function ConfUserBars(props: Props) {
       {data3.map((r, index) => {
         // console.log('r', r);
         return (
-          <div key={index} className={classes.layout2}>
-            {makeBar([r], keys, index, index === data3.length - 1)}
-          </div>
+          <>
+            <Typography variant="body1">
+              {r.proposition}
+            </Typography>
+            <div key={index} className={classes.layout2}>
+              {makeBar([r], keys, index, false)} 
+            </div>
+          </>
         );
       })}
     </div>
   );
 }
-
+// index === data3.length - 1
 const Notes = (props: any) => {
   const { bars, xScale, yScale, data } = props;
   // debugger
@@ -106,9 +111,9 @@ const Notes = (props: any) => {
     <React.Fragment>
       {data.map((bar, key) => {
         return (
-          <text key={key} style={{ color: '#444444' }}>
-            {bar.proposition}
-          </text>
+          <foreignObject width="100%" height="200" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
+            <span>{bar.proposition}</span>
+          </foreignObject>
         );
       })}
     </React.Fragment>
@@ -121,9 +126,9 @@ function makeBar(data3: any, keys: any, key: number, showLegend: boolean) {
       layers={
         [
           'grid',
-          'axes',
+          // 'axes',
           'bars',
-          Notes,
+          // Notes,
           'markers',
           'legends',
           'annotations'
@@ -136,7 +141,7 @@ function makeBar(data3: any, keys: any, key: number, showLegend: boolean) {
       axisLeft={null}
       indexBy={'id'}
       reverse={true}
-      margin={{ top: 20, right: 30, bottom: 0, left: 30 }}
+      margin={{ top: 3, right: 20, bottom: 10, left: 20 }}
       padding={0.1}
       layout="horizontal"
       colors={{ scheme: 'nivo' }}

@@ -157,6 +157,7 @@ export default function PleaseWaitResults(props: Props) {
     // const ready = state.ready; // await checkReady();
 
     // if (!ready)
+    window.scrollTo(0, 0);
     await submit(pos, confid, user);
     // .then(checkReady);
     // else {
@@ -177,15 +178,17 @@ export default function PleaseWaitResults(props: Props) {
     const ready = result && result.length > 0;
 
     // console.log('onRefresh result', result);
+    let myGroup:any = null;
 
     if (ready) {
       console.log('store.auth.user!.id', user);
-      const myGroup = findMyGroup(user, result);
+      myGroup = findMyGroup(user, result);
 
       if (myGroup) {
         console.log('myGroup', myGroup);
         // gtag when first time ready
-        if(!state.ready) {
+        if(ready !== state.ready && !!ready) {
+          window.scrollTo(0, 0);
           window.gtag('event', ('conf_user_assigned_' + confid), {
             event_category: 'conf',
             non_interaction: false
@@ -194,10 +197,10 @@ export default function PleaseWaitResults(props: Props) {
       }
       else console.log('user not in the group');
 
-      if (myGroup !== null) setState(p => ({ ...p, myGroup }));
+      // if (myGroup !== null) setState(p => ({ ...p, myGroup }));
     }
 
-    setState(p => ({ ...p, data: result, ready }));
+    if(state.ready !== ready || myGroup !== state.myGroup) setState(p => ({ ...p, data: result, ready, myGroup }));
     // console.log('r', JSON.stringify(result));
   };
 
@@ -298,10 +301,10 @@ export default function PleaseWaitResults(props: Props) {
                   <br />
                   <br />
                   <Typography align="center" style={{padding:'0 2em'}}>
-                    In your group, there are {groupInfo.members.length} people
-                    with the opinions:
+                    <i>In your group, there are {groupInfo.members.length} people
+                    with the opinions:</i>
+                    <hr/>
                   </Typography>
-                  <br/>
                   <ConfUserBars id={confid} store={store} data={groupInfo} />
                   <br/><br/>
                 </>

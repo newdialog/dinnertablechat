@@ -232,8 +232,6 @@ export default function HomeContent() {
               {t('home-intro')}
             </Typography>
             <div style={{ width: '100%', textAlign: 'center' }}>
-            
-
               Are you a student or a teacher? Read about our{' '}
               <a href="/campus" target="_self" style={{ color: '#bd4c4c' }}>
                 Campus Program.
