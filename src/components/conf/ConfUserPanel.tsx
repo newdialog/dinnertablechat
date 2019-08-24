@@ -24,10 +24,7 @@ import {
   init,
   waitForReady
 } from '../../services/ConfService';
-import {
-  findMyGroup,
-  groupByIndex
-} from '../../services/ConfMath';
+import { findMyGroup, groupByIndex } from '../../services/ConfMath';
 import ConfGraph from './ConfGraph';
 
 import Avatar from '@material-ui/core/Avatar';
@@ -178,7 +175,7 @@ export default function PleaseWaitResults(props: Props) {
     const ready = result && result.length > 0;
 
     // console.log('onRefresh result', result);
-    let myGroup:any = null;
+    let myGroup: any = null;
 
     if (ready) {
       console.log('store.auth.user!.id', user);
@@ -187,20 +184,20 @@ export default function PleaseWaitResults(props: Props) {
       if (myGroup) {
         console.log('myGroup', myGroup);
         // gtag when first time ready
-        if(ready !== state.ready && !!ready) {
+        if (ready !== state.ready && !!ready) {
           window.scrollTo(0, 0);
-          window.gtag('event', ('conf_user_assigned_' + confid), {
+          window.gtag('event', 'conf_user_assigned_' + confid, {
             event_category: 'conf',
             non_interaction: false
           });
         }
-      }
-      else console.log('user not in the group');
+      } else console.log('user not in the group');
 
       // if (myGroup !== null) setState(p => ({ ...p, myGroup }));
     }
 
-    if(state.ready !== ready || myGroup !== state.myGroup) setState(p => ({ ...p, data: result, ready, myGroup }));
+    if (state.ready !== ready || myGroup !== state.myGroup)
+      setState(p => ({ ...p, data: result, ready, myGroup }));
     // console.log('r', JSON.stringify(result));
   };
 
@@ -276,7 +273,21 @@ export default function PleaseWaitResults(props: Props) {
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
               {state.data.length < 1 && (
-                <Typography variant="h5">Please Wait</Typography>
+                <>
+                  <Typography variant="h5">Please Wait</Typography>
+                  <Typography variant="body1">till everyone else has answered...
+                  <hr />
+                  While you wait please be quite and you may want to study the <i>Rules of the
+                  Game: </i><br/><br/></Typography>
+                  <Typography variant="body1" align="left">You don’t have to talk about all the questions. Maybe
+                  pick the group’s favourites first. <br/><br/>Be honest, dare to say what
+                  you think. Argue rationally and based on facts. Don’t
+                  generalize. <br/><br/>Don’t insult and, in turn, don’t take anything
+                  personally. Avoid a one-(wo)man show - everyone in the group
+                  should talk. Everyone’s on eye level. Shake your opponents'
+                  hands after the discussion!<br/><br/><br/>
+                  </Typography>
+                </>
               )}
               <Typography variant="body2">
                 {tooLate && (
@@ -300,13 +311,16 @@ export default function PleaseWaitResults(props: Props) {
                   />
                   <br />
                   <br />
-                  <Typography align="center" style={{padding:'0 2em'}}>
-                    <i>In your group, there are {groupInfo.members.length} people
-                    with the opinions:</i>
-                    <hr/>
+                  <Typography align="center" style={{ padding: '0 2em' }}>
+                    <i>
+                      In your group, there are {groupInfo.members.length} people
+                      with the opinions:
+                    </i>
+                    <hr />
                   </Typography>
                   <ConfUserBars id={confid} store={store} data={groupInfo} />
-                  <br/><br/>
+                  <br />
+                  <br />
                 </>
               )}
             </CardContent>
