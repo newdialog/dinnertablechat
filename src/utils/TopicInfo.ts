@@ -8,32 +8,58 @@ export interface Card {
   proposition: string;
 }
 
+/*
+export function getCardSet(i: number, t: any): Card[] {
+  const getSaaSQKey = _topicid => i => prefix + '-' + _topicid + '-q' + i;
+
+  const positionsStr = t('topic' + i + '-positions', 'Yes, No');
+  const positions = positionsStr.split(', ');
+
+  return {
+    topic: t('topic' + i + '-topic', ''),
+    photo: t('topic' + i + '-photo', ''),
+    positions,
+    proposition: t('topic' + i + '-proposition'),
+    id: t('topic' + i + '-id')
+  };
+}
+*/
+
 export function getTopics(t: any): Card[] {
   const topics = Number.parseInt(t('topics-num'), 10);
 
   const data: Card[] = [];
-  for (let i = 0; i < topics; i++)
+  for (let i = 0; i < topics; i++) {
+    const positionsStr = t('topic' + i + '-positions', 'Yes, No');
+    const positions = positionsStr.split(', ');
+
     data.push({
-      topic: t('topic' + i + '-topic'),
-      photo: t('topic' + i + '-photo'),
-      positions: t('topic' + i + '-positions').split(', '),
+      topic: t('topic' + i + '-topic', ''),
+      photo: t('topic' + i + '-photo', ''),
+      positions,
       proposition: t('topic' + i + '-proposition'),
       id: t('topic' + i + '-id')
     });
+  }
   return data;
 }
 
 export function getGroups(confid: string, t: any): string[] {
-  const groupNames = t(`conf-${confid}-groupNames`).split(', ');
+  const groupNames = t(`conf-${confid}-groupNames`, '');
+  if (groupNames === '') return [];
+
+  const grousps = groupNames.split(', ');
   // console.log('groupNames', groupNames);
-  return groupNames;
+  return grousps;
 }
 
 export function getGroupByIndex(confid: string, index: number, t: any) {
   const groups = getGroups(confid, t);
   if (index >= groups.length) {
     console.error('invalid group', groups, index, confid);
-    return '' + index;
+
+    const startWithOne = index + 1;
+    return startWithOne.toString(); // toString
   }
   return groups[index];
 }
@@ -72,7 +98,7 @@ export function getOtherTopics(
     data.push({
       topic: t(qs + '-topic'),
       photo: t(qs + '-photo'),
-      positions: t(qs + '-positions').split(', '),
+      positions: t(qs + '-positions', 'Yes, No').split(', '),
       proposition: t(qs + '-proposition'),
       id: t(qs + '-id')
     });
@@ -96,7 +122,7 @@ export function getOldTopics(t: any) {
     data.push({
       topic: t(id + '-topic'),
       photo: t(id + '-photo'),
-      positions: t(id + '-positions').split(', '),
+      positions: t(id + '-positions', 'Yes, No').split(', '),
       proposition: t(id + '-proposition'),
       id: t(id + '-id')
     });
