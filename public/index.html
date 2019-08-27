@@ -69,7 +69,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119131630-4"></script>
   <!-- <script async src="js/simplepeer.min.js"></script> -->
   <script>
-    const id = 'UA-119131630-4';
+    const id = 'UA-119131630-4'; // 1 = dtc, 4 = mixer
     console.log('gid', id);
     
     window.dataLayer = window.dataLayer || [];
@@ -87,7 +87,7 @@
       // Mixpanel
       if(window["mixpanel"] && arguments[0] && arguments[0] === 'event') {
         if(arguments.length > 2 && arguments[2].event_category) {
-          window.mixpanel.track(arguments[1], {...arguments[2]});
+          /// BUG with ...: window.mixpanel.track(arguments[1], {...arguments[2]});
         }
         else window.mixpanel.track(arguments[1]);
       }
