@@ -215,30 +215,21 @@ async function checkUser(cb: AwsCB, event: string = '') {
   let cr: any = null;
   // cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
-    // console.time('currentAuthenticatedUser');
-    // data = await Auth.currentAuthenticatedUser();
     cr = await Auth.currentUserCredentials();
-
-    session = await Auth.currentSession();
-    // bypassCheck; // Auth.currentUserCredentials();
-    // console.timeEnd('currentAuthenticatedUser');
   } catch (e) {
-    // console.timeEnd('currentAuthenticatedUser');
     console.log(
-      '---currentAuthenticatedUser not logged in, double checking',
+      '-currentUserCredentials',
       e
     );
-    // await delay(1600);
-    // console.time('currentAuthenticatedUser2');
-    // data = await Auth.currentAuthenticatedUser().catch(e => {
-    // console.log('---currentAuthenticatedUser not logged in:', e);
-    ///// cb(null);
-    ////return;
-    //   return null;
-    // });
-    // console.timeEnd('currentAuthenticatedUser2');
-    // if (!data) return;
-    // else console.log('+++ currentAuthenticatedUser found on retry');
+  }
+
+  try {
+    session = await Auth.currentSession();
+  } catch (e) {
+    console.log(
+      '-currentSession',
+      e
+    );
   }
 
   // const idenity = cr.identityId;
@@ -250,6 +241,8 @@ async function checkUser(cb: AwsCB, event: string = '') {
   let name: string = '';
   let groups: string[] = [];
   let id: string | null = null;
+  let debugSource = 'session';
+  let debugObj: any = null;
 
   if (session) {
     // console.log('session', session);
@@ -266,6 +259,8 @@ async function checkUser(cb: AwsCB, event: string = '') {
     id = cr.identityId; // newCred.identityId;
     name = 'Guest';
     email = 'guest@dinnertable.chat';
+    debugSource = 'cr.identityId';
+    debugObj = cr.identityId;
     // identityId = cr.identityId;
   } else {
     cb(null);
@@ -277,7 +272,10 @@ async function checkUser(cb: AwsCB, event: string = '') {
   // const name = session.getIdToken().payload['name'] || 'Guest';
   // const groups = session.getIdToken().payload['cognito:groups'];
 
-  if (!id) throw new Error('checkuser: no id');
+  if (!id) {
+    console.log()
+    throw new Error('checkuser: no id');
+  }
 
   const user = {
     name,
