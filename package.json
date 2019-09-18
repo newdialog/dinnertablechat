@@ -126,7 +126,7 @@
     "@types/simple-peer": "^6.1.6",
     "aws-amplify": "^1.1.36",
     "core-js": "^3.2.1",
-    "customize-cra": "^0.6.0",
+    "customize-cra": "^0.7.0",
     "env-cmd": "^10.0.1",
     "eslint-config-prettier": "^6.0.0",
     "fork-ts-checker-webpack-plugin": "^1.4.3",
