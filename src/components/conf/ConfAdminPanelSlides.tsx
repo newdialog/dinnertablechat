@@ -12,18 +12,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../models/AppModel';
-import * as TopicInfo from '../../utils/TopicInfo';
 
-import {
-  submit,
-  getAll,
-  isReady,
-  getResults,
-  submitReady,
-  init,
-  waitForReady,
-  delAll
-} from '../../services/ConfService';
 import ConfGraph from './ConfGraph';
 
 import Chip from '@material-ui/core/Chip';

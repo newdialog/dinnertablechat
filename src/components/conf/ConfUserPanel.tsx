@@ -17,12 +17,9 @@ import useInterval from '@use-it/interval';
 
 import {
   submit,
-  getAll,
-  isReady,
   getResults,
   submitReady,
   init,
-  waitForReady
 } from '../../services/ConfService';
 import { findMyGroup, groupByIndex } from '../../services/ConfMath';
 import ConfGraph from './ConfGraph';

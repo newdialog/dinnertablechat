@@ -12,25 +12,12 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../models/AppModel';
-import * as TopicInfo from '../../utils/TopicInfo';
-
-import {
-  submit,
-  getAll,
-  isReady,
-  getResults,
-  submitReady,
-  init,
-  waitForReady,
-  delAll
-} from '../../services/ConfService';
 import ConfGraph from './ConfGraph';
 
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import ConfAdminTable from './ConfAdminTable';
 import ConfBars from './ConfAdminBars';
-import ConfThinking from './ConfThinking';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({

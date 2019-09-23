@@ -29,8 +29,8 @@ let docClient: any; // DynamoDB.DocumentClient;
 let started: boolean = false;
 let readying: boolean = false;
 
-const USERS_TABLE = 'conf-users';
-// const CONF_TABLE = 'conf';
+const TABLE_USERS = 'conf-users';
+const TABLE_ID = 'conf_id';
 
 // let identityId: string = '';
 export async function init() {
@@ -64,20 +64,20 @@ export async function init() {
 
   docClient.schema([
     {
-      TableName: 'conf',
+      TableName: TABLE_USERS,
       KeySchema: [
         {
-          AttributeName: 'conf',
+          AttributeName: 'user',
           KeyType: 'HASH'
         },
         {
-          AttributeName: 'user',
+          AttributeName: 'conf',
           KeyType: 'RANGE'
         }
       ]
     },
     {
-      TableName: 'conf-users',
+      TableName: TABLE_ID,
       KeySchema: [
         {
           AttributeName: 'user',
@@ -85,7 +85,7 @@ export async function init() {
         },
         {
           AttributeName: 'conf',
-          KeyType: 'RANGE'
+          KeyType: 'HASH' // 'RANGE'
         }
       ]
     }
@@ -108,7 +108,7 @@ export async function submitAll(
 export async function delAll(conf: string) {
   if (!docClient) await init();
 
-  console.log('Deleting all: conf=' + conf, ' from ' + USERS_TABLE);
+  console.log('Deleting all: conf=' + conf, ' from ' + TABLE_USERS);
 
   const _getAll = await getAll(conf);
   const users = _getAll.data.map(k => k.user);
@@ -116,7 +116,7 @@ export async function delAll(conf: string) {
 
   users.map(async user => {
     return await docClient
-      .table(USERS_TABLE)
+      .table(TABLE_USERS)
       .where('conf')
       .eq(conf)
       .where('user')
@@ -137,7 +137,7 @@ export async function submit(positions: any, conf: string, user: string) {
   // console.log('submit user', user, conf, positions);
 
   return docClient
-    .table(USERS_TABLE)
+    .table(TABLE_USERS)
     .return(docClient.UPDATED_OLD)
     .insert_or_update({
       conf,
@@ -156,7 +156,7 @@ export async function submitSeats(
 
   let batch = docClient
     .batch()
-    .table(USERS_TABLE)
+    .table(TABLE_USERS)
     .return(docClient.UPDATED_OLD);
 
   seatIndex.forEach((seat, index) => {
@@ -176,7 +176,7 @@ export async function submitReady(ready: boolean, conf: string, results: any) {
 
   if (!ready) {
     return await docClient
-      .table(USERS_TABLE)
+      .table(TABLE_USERS)
       .where('conf')
       .eq(conf)
       .where('user')
@@ -185,7 +185,7 @@ export async function submitReady(ready: boolean, conf: string, results: any) {
       .catch(e => window.alert('error: ' + e));
   }
   return docClient
-    .table(USERS_TABLE)
+    .table(TABLE_USERS)
     .return(docClient.UPDATED_OLD)
     .insert_or_update({
       conf,
@@ -210,7 +210,7 @@ export async function isReady(conf: string) {
   if (!docClient) await init();
 
   const p = docClient // new Promise( (resolve, reject) => {
-    .table(USERS_TABLE)
+    .table(TABLE_USERS)
     .return(docClient.UPDATED_OLD)
     .select('user', 'answers')
     .having('user')
@@ -218,6 +218,8 @@ export async function isReady(conf: string) {
     .having('conf')
     .eq(conf)
     .scan();
+
+  console.log('isReady', p);
 
   const re = (await p) as any[];
   if (re && re.length > 0) console.log(re[0].answers);
@@ -231,7 +233,7 @@ export async function getResults(conf: string) {
   if (!docClient) await init();
 
   const p = docClient // new Promise( (resolve, reject) => {
-    .table(USERS_TABLE)
+    .table(TABLE_USERS)
     .return(docClient.UPDATED_OLD)
     .select('user', 'answers')
     .having('user')
@@ -256,7 +258,7 @@ export async function getAll(
   if (!docClient) await init();
 
   return docClient
-    .table(USERS_TABLE)
+    .table(TABLE_USERS)
     .select('user', 'answers')
     .having('conf')
     .eq(conf)
