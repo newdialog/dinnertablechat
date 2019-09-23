@@ -1,7 +1,6 @@
 import { Button, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
-import ConfAdmin from 'components/conf/ConfAdminPanel';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -9,10 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Reveal from 'react-reveal/Reveal';
 
 import * as AppModel from '../../models/AppModel';
-import ConfAdminPanelDash from 'components/conf/ConfAdminPanelDash';
-import ConfAdminPanelSlides from 'components/conf/ConfAdminPanelSlides';
-
-import QRCode from 'qrcode.react';
+import ConfMakerForm from 'components/conf/ConfMakerForm';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -119,37 +115,31 @@ const useStyles = makeStyles(
 );
 
 interface Props {
-  isTest?: boolean;
-  id: string;
+  id?: string;
 }
 
 interface State {
-  view: 'slides' | 'dash';
+  view: 'dash' | 'new';
   show: boolean;
   kill: boolean;
 }
 
 const PAGE_NAME = 'Event Debate Tool';
 
-export default observer(function CAdmin(props: Props) {
+export default observer(function CMaker(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
 
   const [state, setState] = useState<State>({
-    view: 'slides',
+    view: 'dash',
     show: false,
     kill: false
   });
 
-  const id = props.id;
+  const id = ''; // props.id;
   const confid = id;
 
-  const isAdmin = store.auth.isAdmin();
-
-  // console.log(store.auth.snapshot());
-
-  // Guest login
   useEffect(() => {
     store.hideNavbar();
   }, []);
@@ -159,32 +149,12 @@ export default observer(function CAdmin(props: Props) {
     if (state.kill) return;
     if (!store.auth.isAuthenticated()) return;
 
-    if (!isAdmin) {
-      console.log('isAdmin', isAdmin);
-      window.alert('Not logged in as an administrator');
-      store.auth.logoutLogin();
-      setState(p => ({ ...p, kill: true }));
-    } else {
-      // if (store.auth.isNotLoggedIn) return;
-      console.log('Admin user:', store.auth.user);
-    }
-    // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
-    // if (store.auth.isAuthenticated()) return;
-  }, [store.auth.isNotLoggedIn, store.auth.user, isAdmin]);
+  }, [store.auth.isNotLoggedIn, store.auth.user]);
 
   useEffect(() => {
-    // store.setSaas(true);
-
-    const isTest = !!localStorage.getItem('test');
-    localStorage.removeItem('test');
-
-    if (isTest) console.log('props.isTest', isTest);
-    if (isTest !== store.debate.isTest) {
-      store.debate.setTest(isTest);
-    }
     handleReset();
 
-    window.gtag('event', ('conf_admin_splash_'+confid), {
+    window.gtag('event', ('conf_new_splash_'+confid), {
       event_category: 'conf',
       confid: confid
     });
@@ -192,8 +162,8 @@ export default observer(function CAdmin(props: Props) {
 
   const handleReset = () => {
     if (store.conf.positions) {
-      store.conf.resetQueue();
-      window.gtag('event', ('conf_admin_reset_'+confid), {
+      // store.conf.resetQueue();
+      window.gtag('event', ('conf_new_reset_'+confid), {
         event_category: 'conf',
         confid: confid,
         non_interaction: false
@@ -210,36 +180,9 @@ export default observer(function CAdmin(props: Props) {
     );
   }
 
-  let step = 0;
-  const posBit = state.show ? 1 : 0;
-  step = posBit;
-
-  if (step === 1) {
-    console.log('move to next step');
-  }
-
   const show = () => {
     setState(p => ({ ...p, show: true }));
   };
-
-  const toggleView = () => {
-    if (state.view !== 'slides') setState(p => ({ ...p, view: 'slides' }));
-    else setState(p => ({ ...p, view: 'dash' }));
-  };
-
-  const viewComp =
-    state.view === 'dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
-
-  const i18Url = t(`conf-${id}-optional-url`);
-
-  // url gen
-  const isMixer = window.location.hostname.match('mixer.');
-  let url = window.location.origin + '/c/' + id;
-  if(isMixer) url = window.location.origin + '/' + id; // use root
-  if (i18Url.indexOf('http') !== -1) url = i18Url;
-
-  const visualURL = url.replace('http://', '').replace('https://', '');
-  // url += 'aaaaaaaaaaaa.';
 
   return (
     <>
@@ -254,19 +197,8 @@ export default observer(function CAdmin(props: Props) {
           <div className={classes.heroUnit}>
             <div className={classes.heroContent}>
               <div style={{textAlign:'right', float:'right'}}>
-              {store.auth.isAdmin() ? (
-                <button onClick={() => store.auth.logout()}>logout</button>
-              ) : (
-                'not an admin'
-              )}
-              {
-                <button onClick={() => toggleView()}>
-                  switch to {state.view === 'slides' ? 'dash' : 'slides'}
-                </button>
-              }
               </div>
-              {props.isTest && <h2>TEST MODE (/test)</h2>}
-              {step === 0 && (
+              {true && (
               <><Typography
                 variant="h1"
                 align="left"
@@ -292,29 +224,9 @@ export default observer(function CAdmin(props: Props) {
             </div>
           </div>
 
-          {step === 0 && (
+          
             <div className={classes.verticalCenter}>
-              <QRCode value={url} />
-              <br />
-              <br />
-              <Reveal effect="fadeInUp" duration={2200}>
-                <Typography
-                  variant="h4"
-                  align="center"
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  To start matching, please visit:
-                </Typography>
-                <Typography
-                  variant="h2"
-                  align="center"
-                  color="textSecondary"
-                  gutterBottom
-                  style={{fontSize: 200 / url.length + 'vmin'}}
-                >
-                  {visualURL}
-                </Typography>
+                <ConfMakerForm/>
                 <Button
                   variant="contained"
                   // size="small"
@@ -323,27 +235,8 @@ export default observer(function CAdmin(props: Props) {
                 >
                   Show Results
                 </Button>
-              </Reveal>
             </div>
-          )}
-          {step === 1 && (
-            <div
-              style={{ marginBottom: '2em' }}
-              className={classes.verticalCenter}
-            >
-              <Typography
-                  variant="h2"
-                  align="center"
-                  color="textSecondary"
-                  style={{fontSize: 200 / url.length + 'vmin'}}
-                >
-                  {visualURL}
-                </Typography>
-              <Reveal effect="fadeInUp" duration={1100}>
-                <ConfAdmin id={id} store={store} view={viewComp} />
-              </Reveal>
-            </div>
-          )}
+          
         </main>
         <div className={classes.footer}>
           <b>

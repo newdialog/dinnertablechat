@@ -279,3 +279,89 @@ export async function getAll(
       };
     }); // remove metadata
 }
+
+// =================
+export interface TableIdRow {
+  questions: any;
+  ready: boolean;
+  user: string;
+  conf: string;
+}
+
+export interface TableIdQuestion {
+  question: string;
+  answers: string;
+}
+
+export interface TableIdQuestions {
+  questions: Array<TableIdQuestion>;
+  minGroupUserPairs: number;
+  maxGroups: number;
+}
+
+export function idNewQuestions():TableIdQuestions {
+  return {
+    questions: [],
+    minGroupUserPairs: 1,
+    maxGroups: 40
+  }
+}
+
+export function idNewQuestion(question:string, answers:string):TableIdQuestion {
+  return {
+    question,
+    answers
+  }
+}
+
+export async function idGet(
+  conf: string
+):Promise<TableIdRow> {
+  if (!docClient) await init();
+
+  return docClient
+    .table(TABLE_ID)
+    .index('conf-index')
+    .select('user', 'questions', 'ready', 'conf')
+    .having('conf')
+    .eq(conf)
+    .scan()
+    .then(x => {
+      return x.length > 0 ? x[0] : null;
+    }); // remove metadata
+}
+
+export async function idSubmit(conf: string, user: string, questions: any) {
+  if (!docClient) await init();
+
+  // if (!user) user = identityId;
+
+  // console.log('submit user', user, conf, positions);
+
+  return docClient
+    .table(TABLE_USERS)
+    .return(docClient.UPDATED_OLD)
+    .insert_or_update({
+      conf,
+      user,
+      questions,
+      ready: false
+    });
+}
+
+export async function idSubmitReady(conf: string, user: string, ready: boolean) {
+  if (!docClient) await init();
+
+  // if (!user) user = identityId;
+
+  // console.log('submit user', user, conf, positions);
+
+  return docClient
+    .table(TABLE_USERS)
+    .return(docClient.UPDATED_OLD)
+    .insert_or_update({
+      conf,
+      user,
+      ready
+    });
+}
