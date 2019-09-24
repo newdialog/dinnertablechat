@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import Reveal from 'react-reveal/Reveal';
 
 import * as AppModel from '../../models/AppModel';
-import ConfMakerForm from 'components/conf/ConfMakerForm';
+import ConfMakerForm from 'components/conf/ConfMakerForm2';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
