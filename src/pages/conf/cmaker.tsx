@@ -7,8 +7,10 @@ import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';
 import Reveal from 'react-reveal/Reveal';
 
+import * as ConfService from '../../services/ConfService';
+
 import * as AppModel from '../../models/AppModel';
-import ConfMakerForm from 'components/conf/ConfMakerForm2';
+import ConfMakerForm from 'components/conf/ConfMakerForm';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -119,9 +121,7 @@ interface Props {
 }
 
 interface State {
-  view: 'dash' | 'new';
-  show: boolean;
-  kill: boolean;
+  data?: any[];
 }
 
 const PAGE_NAME = 'Event Debate Tool';
@@ -132,9 +132,7 @@ export default observer(function CMaker(props: Props) {
   const { t } = useTranslation();
 
   const [state, setState] = useState<State>({
-    view: 'dash',
-    show: false,
-    kill: false
+    // data: []
   });
 
   const id = ''; // props.id;
@@ -144,12 +142,11 @@ export default observer(function CMaker(props: Props) {
     store.hideNavbar();
   }, []);
 
-  useEffect(() => {
-    // already redirecting to login
-    if (state.kill) return;
-    if (!store.auth.isAuthenticated()) return;
-
-  }, [store.auth.isNotLoggedIn, store.auth.user]);
+  useEffect(()=> {
+    ConfService.idGet('bbb').then(x=>{
+      setState(p=>({...p, data:x}));
+    })
+  }, []);
 
   useEffect(() => {
     handleReset();
@@ -226,15 +223,7 @@ export default observer(function CMaker(props: Props) {
 
           
             <div className={classes.verticalCenter}>
-                <ConfMakerForm/>
-                <Button
-                  variant="contained"
-                  // size="small"
-                  color="secondary"
-                  onClick={show}
-                >
-                  Show Results
-                </Button>
+              {state.data!==undefined && <ConfMakerForm data={state.data}/> }
             </div>
           
         </main>

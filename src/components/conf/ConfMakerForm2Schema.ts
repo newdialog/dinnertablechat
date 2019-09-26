@@ -1,11 +1,18 @@
+import { LongTextField } from 'uniforms';
 import Ajv from 'ajv';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
+
 const ajv = new Ajv({ allErrors: true, useDefaults: true });
 const schema = {
   title: 'Guest',
   type: 'object',
   properties: {
-    fullname: { type: 'string' },
+    fullname: {
+      type: 'string',
+      uniforms: {
+        component: LongTextField
+      }
+    },
     email: { type: 'string' },
     reemail: { type: 'string' },
     password: {

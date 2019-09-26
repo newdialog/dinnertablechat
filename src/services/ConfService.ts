@@ -299,24 +299,25 @@ export interface TableIdQuestions {
   maxGroups: number;
 }
 
-export function idNewQuestions():TableIdQuestions {
+export function idNewQuestions(): TableIdQuestions {
   return {
     questions: [],
     minGroupUserPairs: 1,
     maxGroups: 40
-  }
+  };
 }
 
-export function idNewQuestion(question:string, answers:string):TableIdQuestion {
+export function idNewQuestion(
+  question: string,
+  answers: string
+): TableIdQuestion {
   return {
     question,
     answers
-  }
+  };
 }
 
-export async function idGet(
-  conf: string
-):Promise<TableIdRow> {
+export async function idGet(conf: string): Promise<any> {
   if (!docClient) await init();
 
   return docClient
@@ -327,7 +328,11 @@ export async function idGet(
     .eq(conf)
     .scan()
     .then(x => {
-      return x.length > 0 ? x[0] : null;
+      if (!x || x.length === 0) return null;
+      const item = x[0];
+      if (item.questions) item.questions = JSON.parse(item.questions);
+      else item.questions = [];
+      return item;
     }); // remove metadata
 }
 
@@ -344,12 +349,16 @@ export async function idSubmit(conf: string, user: string, questions: any) {
     .insert_or_update({
       conf,
       user,
-      questions,
+      questions: JSON.stringify(questions),
       ready: false
     });
 }
 
-export async function idSubmitReady(conf: string, user: string, ready: boolean) {
+export async function idSubmitReady(
+  conf: string,
+  user: string,
+  ready: boolean
+) {
   if (!docClient) await init();
 
   // if (!user) user = identityId;
