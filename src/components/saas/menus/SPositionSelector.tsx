@@ -68,6 +68,7 @@ interface Props {
   store: AppModel.Type;
   id: string;
   prefix?: string;
+  data?: any[];
   onSubmit: (selected:any) => void;
 }
 
@@ -78,7 +79,7 @@ export default function SPositionSelector(props: Props) {
   const [state, setState] = React.useState<any>({ready:false, selected: {}, submitted: false});
 
   const data: TopicInfo.Card[] = React.useMemo(
-    () => TopicInfo.getOtherTopics(props.id, t, props.prefix),
+    () => props.data ? props.data : TopicInfo.getOtherTopics(props.id, t, props.prefix),
     [props.id, t]
   );
 
