@@ -121,7 +121,7 @@ interface Props {
 }
 
 interface State {
-  data?: any[];
+  data?: {conf:string, questions: any[]};
 }
 
 const PAGE_NAME = 'Event Debate Tool';
@@ -144,9 +144,28 @@ export default observer(function CMaker(props: Props) {
 
   useEffect(()=> {
     ConfService.idGet('bbb').then(x=>{
+      if(x.user!==store.getRID()) {
+        alert('Error: This is owned by a different user. Read-only mode.');
+      }
       setState(p=>({...p, data:x}));
     })
   }, []);
+
+  async function handleSubmit(data: {conf:string, user:string} | any) {
+    if(!data.user) throw new Error('no user');
+    if(!data.conf) throw new Error('no conf');
+    if(!data.questions || data.questions.length===0) throw new Error('no questions');
+
+    
+    console.log('saving', JSON.stringify(data));
+    try {
+      await ConfService.idSubmit(data.conf, data.user, data.questions);
+      alert('saved');
+    } catch(e) {
+      console.error(e);
+      if(e.toString().indexOf('authorized ') > 0) alert('Error: not authorized to update these questions');
+    }
+  }
 
   useEffect(() => {
     handleReset();
@@ -223,7 +242,8 @@ export default observer(function CMaker(props: Props) {
 
           
             <div className={classes.verticalCenter}>
-              {state.data!==undefined && <ConfMakerForm data={state.data}/> }
+              {state.data!==undefined && store.getRID() && 
+                <ConfMakerForm user={store.getRID()!} data={state.data} onSubmit={handleSubmit}/> }
             </div>
           
         </main>

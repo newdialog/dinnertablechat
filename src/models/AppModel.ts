@@ -4,7 +4,6 @@ import AuthModel from './AuthModel';
 import DebateModel from './DebateModel';
 import { Instance } from 'mobx-state-tree';
 import React from 'react';
-import uuid from 'short-uuid';
 import ConfModel from './ConfModel';
 
 // let cacheIsLive: boolean | null = null;

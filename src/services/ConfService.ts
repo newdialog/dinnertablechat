@@ -336,7 +336,7 @@ export async function idGet(conf: string): Promise<any> {
     }); // remove metadata
 }
 
-export async function idSubmit(conf: string, user: string, questions: any) {
+export async function idSubmit(conf: string, user: string, questions: any[]) {
   if (!docClient) await init();
 
   // if (!user) user = identityId;
@@ -344,11 +344,11 @@ export async function idSubmit(conf: string, user: string, questions: any) {
   // console.log('submit user', user, conf, positions);
 
   return docClient
-    .table(TABLE_USERS)
+    .table(TABLE_ID)
     .return(docClient.UPDATED_OLD)
     .insert_or_update({
-      conf,
       user,
+      conf,
       questions: JSON.stringify(questions),
       ready: false
     });
@@ -369,8 +369,8 @@ export async function idSubmitReady(
     .table(TABLE_USERS)
     .return(docClient.UPDATED_OLD)
     .insert_or_update({
-      conf,
       user,
+      conf,
       ready
     });
 }
