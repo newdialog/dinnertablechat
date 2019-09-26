@@ -12,6 +12,8 @@ import * as AppModel from '../../models/AppModel';
 import ConfAdminPanelDash from 'components/conf/ConfAdminPanelDash';
 import ConfAdminPanelSlides from 'components/conf/ConfAdminPanelSlides';
 
+import * as ConfService from '../../services/ConfService';
+
 import QRCode from 'qrcode.react';
 
 const useStyles = makeStyles(
@@ -127,6 +129,7 @@ interface State {
   view: 'slides' | 'dash';
   show: boolean;
   kill: boolean;
+  data?: any;
 }
 
 const PAGE_NAME = 'Event Debate Tool';
@@ -142,8 +145,8 @@ export default observer(function CAdmin(props: Props) {
     kill: false
   });
 
-  const id = props.id;
-  const confid = id;
+  const confid = props.id;
+  // const confid = id;
 
   const isAdmin = store.auth.isAdmin();
 
@@ -152,6 +155,27 @@ export default observer(function CAdmin(props: Props) {
   // Guest login
   useEffect(() => {
     store.hideNavbar();
+  }, []);
+
+  // Get question from DB
+  useEffect(() => {
+    ConfService.idGet(confid).then(d => {
+      if (!d) {
+        alert('no id exists');
+        return;
+      }
+      const a = d.questions.map((x, i) => {
+        return {
+          // topic: t(qs + '-topic'),
+          // photo: t(qs + '-photo'),
+          positions: x.answer.split(', '),
+          proposition: x.question,
+          id: `conf-${confid}-q${i}-id` // TODO x.i
+        }
+      });
+
+      setState(p => ({ ...p, data: a }));
+    })
   }, []);
 
   useEffect(() => {
@@ -184,7 +208,7 @@ export default observer(function CAdmin(props: Props) {
     }
     handleReset();
 
-    window.gtag('event', ('conf_admin_splash_'+confid), {
+    window.gtag('event', ('conf_admin_splash_' + confid), {
       event_category: 'conf',
       confid: confid
     });
@@ -193,7 +217,7 @@ export default observer(function CAdmin(props: Props) {
   const handleReset = () => {
     if (store.conf.positions) {
       store.conf.resetQueue();
-      window.gtag('event', ('conf_admin_reset_'+confid), {
+      window.gtag('event', ('conf_admin_reset_' + confid), {
         event_category: 'conf',
         confid: confid,
         non_interaction: false
@@ -230,13 +254,13 @@ export default observer(function CAdmin(props: Props) {
   const viewComp =
     state.view === 'dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
 
-  const i18Url = t(`conf-${id}-optional-url`);
+  // const i18Url = t(`conf-${confid}-optional-url`); // TODO readd
 
   // url gen
   const isMixer = window.location.hostname.match('mixer.');
-  let url = window.location.origin + '/c/' + id;
-  if(isMixer) url = window.location.origin + '/' + id; // use root
-  if (i18Url.indexOf('http') !== -1) url = i18Url;
+  let url = window.location.origin + '/c/' + confid;
+  if (isMixer) url = window.location.origin + '/' + confid; // use root
+  /// if (i18Url.indexOf('http') !== -1) url = i18Url; // TODO readd
 
   const visualURL = url.replace('http://', '').replace('https://', '');
   // url += 'aaaaaaaaaaaa.';
@@ -253,40 +277,40 @@ export default observer(function CAdmin(props: Props) {
           {/* Hero unit */}
           <div className={classes.heroUnit}>
             <div className={classes.heroContent}>
-              <div style={{textAlign:'right', float:'right'}}>
-              {store.auth.isAdmin() ? (
-                <button onClick={() => store.auth.logout()}>logout</button>
-              ) : (
-                'not an admin'
-              )}
-              {
-                <button onClick={() => toggleView()}>
-                  switch to {state.view === 'slides' ? 'dash' : 'slides'}
-                </button>
-              }
+              <div style={{ textAlign: 'right', float: 'right' }}>
+                {store.auth.isAdmin() ? (
+                  <button onClick={() => store.auth.logout()}>logout</button>
+                ) : (
+                    'not an admin'
+                  )}
+                {
+                  <button onClick={() => toggleView()}>
+                    switch to {state.view === 'slides' ? 'dash' : 'slides'}
+                  </button>
+                }
               </div>
               {props.isTest && <h2>TEST MODE (/test)</h2>}
               {step === 0 && (
-              <><Typography
-                variant="h1"
-                align="left"
-                color="textSecondary"
-                className={classes.heroLogoText}
-                gutterBottom
-              >
-                {PAGE_NAME}
-              </Typography>
-             
-                <Typography
-                  className={classes.herotext}
-                  variant="h3"
+                <><Typography
+                  variant="h1"
                   align="left"
                   color="textSecondary"
+                  className={classes.heroLogoText}
                   gutterBottom
                 >
-                  Talk to people with different opinions.
+                  {PAGE_NAME}
+                </Typography>
+
+                  <Typography
+                    className={classes.herotext}
+                    variant="h3"
+                    align="left"
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Talk to people with different opinions.
                   <br />
-                  Discussion via mixed viewpoint matchmaking.
+                    Discussion via mixed viewpoint matchmaking.
                 </Typography></>
               )}
             </div>
@@ -311,7 +335,7 @@ export default observer(function CAdmin(props: Props) {
                   align="center"
                   color="textSecondary"
                   gutterBottom
-                  style={{fontSize: 200 / url.length + 'vmin'}}
+                  style={{ fontSize: 200 / url.length + 'vmin' }}
                 >
                   {visualURL}
                 </Typography>
@@ -332,15 +356,15 @@ export default observer(function CAdmin(props: Props) {
               className={classes.verticalCenter}
             >
               <Typography
-                  variant="h2"
-                  align="center"
-                  color="textSecondary"
-                  style={{fontSize: 200 / url.length + 'vmin'}}
-                >
-                  {visualURL}
-                </Typography>
+                variant="h2"
+                align="center"
+                color="textSecondary"
+                style={{ fontSize: 200 / url.length + 'vmin' }}
+              >
+                {visualURL}
+              </Typography>
               <Reveal effect="fadeInUp" duration={1100}>
-                <ConfAdmin id={id} store={store} view={viewComp} />
+                <ConfAdmin id={confid} store={store} view={viewComp} />
               </Reveal>
             </div>
           )}

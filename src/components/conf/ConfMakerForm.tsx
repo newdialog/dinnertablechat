@@ -54,7 +54,7 @@ const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
 
 interface Props {
   onClose?: () => void;
-  data: { conf: string, questions: any[] };
+  data: { conf: string, questions: any[], maxGroups?:number, minGroupUserPairs?:number };
   // questions?: any;
   user: string;
   onSubmit: (x: any) => void;
@@ -82,6 +82,8 @@ export default (props: Props) => {
     }, {});
 
     d.conf = props.data.conf;
+    d.maxGroups = props.data.maxGroups || 10;
+    d.minGroupUserPairs = props.data.minGroupUserPairs || 1;
     return d;
   }, [props.data]);
 
@@ -95,6 +97,9 @@ export default (props: Props) => {
         .max(80, 'Must be 80 characters or less')
         .min(3, 'Must be at least 3 characters')
         .required('Required'),
+        minGroupUserPairs: Yup.number().required(),
+        maxGroups: Yup.number().required(),
+      maxUsers: Yup.number(),
     }),
 
     onSubmit: async values => {
@@ -114,6 +119,8 @@ export default (props: Props) => {
       const payload = {
         conf: values.conf,
         user: props.user,
+        maxGroups: values.maxGroups,
+        minGroupUserPairs: values.minGroupUserPairs,
         questions
       }
 
@@ -139,6 +146,8 @@ export default (props: Props) => {
 
   const fields = [
     { name: 'conf', label: 'id', type: 'input', short: true },
+    { name: 'maxGroups', label: 'maxGroups', type: 'input'},
+    { name: 'minGroupUserPairs', label: 'minGroupUserPairs', type: 'input'},
     { name: 'questions', type: 'array' }
   ];
 

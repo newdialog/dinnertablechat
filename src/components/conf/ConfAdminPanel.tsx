@@ -100,6 +100,8 @@ export default function ConfAdminPanel(props: Props) {
   // const isAdminPage = !pos || Object.keys(pos).length === 0;
   const confid = props.id || '111';
   const user = store.getRID();
+
+  // TODO CHANGE THIS NOW
   const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
   const minGroupUserPairs = Number.parseInt(t(`conf-${confid}-minGroupUserPairs`), 10) || 1;
 

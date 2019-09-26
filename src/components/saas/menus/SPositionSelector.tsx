@@ -91,7 +91,7 @@ export default function SPositionSelector(props: Props) {
   };
 
   React.useEffect(()=>{
-    if(Object.keys(state.selected).length === numQ) setState(x=>({...x, ready: true }));
+    if(Object.keys(state.selected).length === numQ && !state.ready) setState(x=>({...x, ready: true }));
   }, [state]);
 
   const submit = () => {

@@ -37,6 +37,7 @@ const useStyles = makeStyles(
 interface Props {
   store: AppModel.Type;
   data: any;
+  qdata: any;
   id: string;
 }
 
@@ -61,7 +62,7 @@ export default function ConfUserBars(props: Props) {
   // console.log('data2', data2);
 
   // get ansers
-  const tdata = getOtherTopics(props.id, t, 'conf');
+  const tdata = props.qdata; // getOtherTopics(props.id, t, 'conf');
   // const numQ = tdata.length;
 
   // console.log('tdata', tdata, numQ);

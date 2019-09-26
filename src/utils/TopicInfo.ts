@@ -2,8 +2,8 @@
 
 export interface Card {
   id: string;
-  topic: string;
-  photo: string;
+  topic?: string;
+  photo?: string;
   positions: string[];
   proposition: string;
 }

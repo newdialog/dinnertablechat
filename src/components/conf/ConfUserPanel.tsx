@@ -94,6 +94,7 @@ const useStyles = makeStyles(
 interface Props {
   store: AppModel.Type;
   id: string;
+  // data: any;
 }
 
 /* interface User {
@@ -315,7 +316,7 @@ export default function PleaseWaitResults(props: Props) {
                     </i>
                     <hr />
                   </Typography>
-                  <ConfUserBars id={confid} store={store} data={groupInfo} />
+                  <ConfUserBars id={confid} store={store} data={groupInfo} qdata={state.data} />
                   <br />
                   <br />
                 </>

@@ -151,7 +151,7 @@ export default observer(function CMaker(props: Props) {
     })
   }, []);
 
-  async function handleSubmit(data: {conf:string, user:string} | any) {
+  async function handleSubmit(data: {conf:string, user:string, maxGroups:number, minGroupUserPairs:number} | any) {
     if(!data.user) throw new Error('no user');
     if(!data.conf) throw new Error('no conf');
     if(!data.questions || data.questions.length===0) throw new Error('no questions');
@@ -159,7 +159,7 @@ export default observer(function CMaker(props: Props) {
     
     console.log('saving', JSON.stringify(data));
     try {
-      await ConfService.idSubmit(data.conf, data.user, data.questions);
+      await ConfService.idSubmit(data.conf, data.user, data.questions, data.maxGroups, data.minGroupUserPairs);
       alert('saved');
     } catch(e) {
       console.error(e);

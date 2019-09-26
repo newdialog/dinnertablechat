@@ -11,7 +11,6 @@ import Reveal from 'react-reveal/Reveal';
 import PositionSelector from '../../components/saas/menus/SPositionSelector';
 import * as AppModel from '../../models/AppModel';
 import * as ConfService from '../../services/ConfService';
-import o from 'vendors';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -188,13 +187,13 @@ export default observer(function CIndex(props: Props) {
         alert('no id exists');
         return;
       }
-      const a = d.questions.map(x => {
+      const a = d.questions.map( (x,i) => {
         return {
           // topic: t(qs + '-topic'),
           // photo: t(qs + '-photo'),
           positions: x.answer.split(', '),
           proposition: x.question,
-          id: confid
+          id: `conf-${confid}-q${i}-id` // TODO x.i
         }
       });
 

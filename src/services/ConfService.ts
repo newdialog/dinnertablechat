@@ -24,6 +24,17 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
+export type ConfIdQuestion = {i: number, question: string, answer: string};
+export type ConfIdQuestions = Array<ConfIdQuestion>;
+export interface ConfIdRow {
+  user: string,
+  conf: string,
+  questions: ConfIdQuestions,
+  maxGroups: number,
+  minGroupUserPairs: number,
+  ready: boolean
+}
+
 // use Guest Login, use RID or guestSeed
 let docClient: any; // DynamoDB.DocumentClient;
 let started: boolean = false;
@@ -317,13 +328,13 @@ export function idNewQuestion(
   };
 }
 
-export async function idGet(conf: string): Promise<any> {
+export async function idGet(conf: string): Promise<ConfIdRow> {
   if (!docClient) await init();
 
   return docClient
     .table(TABLE_ID)
     .index('conf-index')
-    .select('user', 'questions', 'ready', 'conf')
+    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs')
     .having('conf')
     .eq(conf)
     .scan()
@@ -336,22 +347,28 @@ export async function idGet(conf: string): Promise<any> {
     }); // remove metadata
 }
 
-export async function idSubmit(conf: string, user: string, questions: any[]) {
+export async function idSubmit(conf: string, user: string, questions: any[], maxGroups:number, minGroupUserPairs:number) {
   if (!docClient) await init();
 
   // if (!user) user = identityId;
 
   // console.log('submit user', user, conf, positions);
 
+  const vo = {
+    user,
+    conf,
+    maxGroups,
+    minGroupUserPairs,
+    questions: JSON.stringify(questions),
+    ready: false
+  };
+
+  console.log('saving', JSON.stringify(vo));
+
   return docClient
     .table(TABLE_ID)
     .return(docClient.UPDATED_OLD)
-    .insert_or_update({
-      user,
-      conf,
-      questions: JSON.stringify(questions),
-      ready: false
-    });
+    .insert_or_update(vo);
 }
 
 export async function idSubmitReady(
