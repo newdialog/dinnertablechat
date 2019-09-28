@@ -45,12 +45,17 @@ export function getTopics(t: any): Card[] {
 }
 
 export function getGroups(confid: string, t: any): string[] {
+  return [];
+
+  // TODO custom group names from DB
+  /*
   const groupNames = t(`conf-${confid}-groupNames`, '');
   if (groupNames === '') return [];
 
   const grousps = groupNames.split(', ');
   // console.log('groupNames', groupNames);
   return grousps;
+  */
 }
 
 export function getGroupByIndex(confid: string, index: number, t: any) {

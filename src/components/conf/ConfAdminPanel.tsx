@@ -13,14 +13,11 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../models/AppModel';
-import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
-import { getAll, submitReady, init, delAll } from '../../services/ConfService';
+import { getAll, submitReady, init, delAll, ConfIdRow } from '../../services/ConfService';
 import { match2 } from '../../services/ConfMath';
 
-import FaceIcon from '@material-ui/icons/Face';
-import ConfAdminPanelDash from './ConfAdminPanelDash';
 import ConfThinking from './ConfThinking';
 import { useFocus } from 'utils/useFocus';
 
@@ -51,6 +48,8 @@ interface Props {
   store: AppModel.Type;
   id: string;
   view: any;
+  table: ConfIdRow;
+  questions: any;
 }
 
 interface User {
@@ -102,8 +101,8 @@ export default function ConfAdminPanel(props: Props) {
   const user = store.getRID();
 
   // TODO CHANGE THIS NOW
-  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
-  const minGroupUserPairs = Number.parseInt(t(`conf-${confid}-minGroupUserPairs`), 10) || 1;
+  const numGroups = props.table.maxGroups || 2; // Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
+  const minGroupUserPairs = props.table.minGroupUserPairs || 1;
 
   React.useEffect(() => {
     console.log('user', user);
@@ -224,7 +223,8 @@ export default function ConfAdminPanel(props: Props) {
     numUsers: state.numUsers,
     payload: state.payload,
     ready: state.ready,
-    showRefresh: state.checks < 1 || !inFocus
+    showRefresh: state.checks < 1 || !inFocus,
+    questions: props.questions
   };
 
   return (

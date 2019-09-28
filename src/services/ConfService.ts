@@ -24,17 +24,6 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
-export type ConfIdQuestion = {i: number, question: string, answer: string};
-export type ConfIdQuestions = Array<ConfIdQuestion>;
-export interface ConfIdRow {
-  user: string,
-  conf: string,
-  questions: ConfIdQuestions,
-  maxGroups: number,
-  minGroupUserPairs: number,
-  ready: boolean
-}
-
 // use Guest Login, use RID or guestSeed
 let docClient: any; // DynamoDB.DocumentClient;
 let started: boolean = false;
@@ -292,39 +281,55 @@ export async function getAll(
 }
 
 // =================
-export interface TableIdRow {
+/* export interface TableIdRow {
   questions: any;
   ready: boolean;
   user: string;
   conf: string;
-}
-
-export interface TableIdQuestion {
+} */
+export interface ConfIdQuestion {
   question: string;
-  answers: string;
+  answer: string;
+  i: number;
 }
-
-export interface TableIdQuestions {
-  questions: Array<TableIdQuestion>;
+/* export interface TableIdQuestions {
+  questions: Array<ConfIdQuestion>;
   minGroupUserPairs: number;
   maxGroups: number;
+} */
+// ==================
+// export type ConfIdQuestion = {i: number, question: string, answer: string};
+export type ConfIdQuestions = Array<ConfIdQuestion>;
+export interface ConfIdRow {
+  user: string,
+  conf: string,
+  questions: ConfIdQuestions,
+  maxGroups: number,
+  minGroupUserPairs: number,
+  ready: boolean
 }
+// ====================
 
-export function idNewQuestions(): TableIdQuestions {
+export function idNewQuestions(): ConfIdRow {
   return {
     questions: [],
     minGroupUserPairs: 1,
-    maxGroups: 40
+    maxGroups: 40,
+    user: '',
+    conf: '',
+    ready: false
   };
 }
 
 export function idNewQuestion(
   question: string,
-  answers: string
-): TableIdQuestion {
+  answer: string,
+  index: number
+): ConfIdQuestion {
   return {
     question,
-    answers
+    answer,
+    i: index
   };
 }
 

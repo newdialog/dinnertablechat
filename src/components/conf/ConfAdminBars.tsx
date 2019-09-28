@@ -5,9 +5,8 @@ import { useTranslation } from 'react-i18next';
 import { ResponsiveBar } from '@nivo/bar';
 import * as AppModel from '../../models/AppModel';
 import { ResponsiveBubble } from '@nivo/circle-packing';
-import { getOtherTopics } from 'utils/TopicInfo';
+// import { getOtherTopics } from 'utils/TopicInfo';
 import { Typography } from '@material-ui/core';
-// import { linearGradientDef } from '@nivo/core';
 const {linearGradientDef} = require('@nivo/core') 
 
 const useStyles = makeStyles(
@@ -53,6 +52,7 @@ interface Props {
   payload: any;
   id: string;
   large?: boolean;
+  questions: any;
 }
 
 export default function ConfAdminBars(props: Props) {
@@ -74,7 +74,7 @@ export default function ConfAdminBars(props: Props) {
   // console.log('data2', data2);
 
   // get ansers
-  const tdata = getOtherTopics(props.id, t, 'conf');
+  const tdata = props.questions; // getOtherTopics(props.id, t, 'conf');
   // const numQ = tdata.length;
 
   // console.log('tdata', tdata, numQ);

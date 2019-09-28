@@ -137,7 +137,7 @@ export default observer(function CIndex(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  const [state, setState] = useState<any>({ data: null });
+  const [state, setState] = useState<{table?:ConfService.ConfIdRow, questions?:any}>({ });
 
   // const id = props.id;
   const confid = props.id;
@@ -197,7 +197,7 @@ export default observer(function CIndex(props: Props) {
         }
       });
 
-      setState(p => ({ ...p, data: a }));
+      setState(p => ({ ...p, table: d, questions: a }));
     })
   }, []);
 
@@ -267,11 +267,11 @@ export default observer(function CIndex(props: Props) {
         </div>
 
         <div className={classes.verticalCenter}>
-          {step === 0 && state.data && (
+          {step === 0 && state.questions && (
             <Reveal effect="fadeInUp" duration={2200}>
               <PositionSelector
                 onSubmit={onSubmit}
-                data={state.data}
+                data={state.questions}
                 id={confid}
                 store={store}
                 prefix="conf"
@@ -280,7 +280,7 @@ export default observer(function CIndex(props: Props) {
           )}
           {step === 1 && (
             <Reveal effect="fadeInUp" duration={1100}>
-              <ConfUserPanel id={confid} store={store} />
+              {state.table && <ConfUserPanel id={confid} store={store} table={state.table}/>}
             </Reveal>
           )}
         </div>

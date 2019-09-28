@@ -129,7 +129,8 @@ interface State {
   view: 'slides' | 'dash';
   show: boolean;
   kill: boolean;
-  data?: any;
+  table?: ConfService.ConfIdRow;
+  questions?: any;
 }
 
 const PAGE_NAME = 'Event Debate Tool';
@@ -174,7 +175,7 @@ export default observer(function CAdmin(props: Props) {
         }
       });
 
-      setState(p => ({ ...p, data: a }));
+      setState(p => ({ ...p, table: d, questions: a }));
     })
   }, []);
 
@@ -364,7 +365,7 @@ export default observer(function CAdmin(props: Props) {
                 {visualURL}
               </Typography>
               <Reveal effect="fadeInUp" duration={1100}>
-                <ConfAdmin id={confid} store={store} view={viewComp} />
+                {state.table && <ConfAdmin id={confid} store={store} view={viewComp} table={state.table} questions={state.questions!} />}
               </Reveal>
             </div>
           )}

@@ -20,6 +20,7 @@ import {
   getResults,
   submitReady,
   init,
+  ConfIdRow,
 } from '../../services/ConfService';
 import { findMyGroup, groupByIndex } from '../../services/ConfMath';
 import ConfGraph from './ConfGraph';
@@ -94,6 +95,7 @@ const useStyles = makeStyles(
 interface Props {
   store: AppModel.Type;
   id: string;
+  table: ConfIdRow;
   // data: any;
 }
 
@@ -216,7 +218,7 @@ export default function PleaseWaitResults(props: Props) {
     init();
   }, []);
 
-  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
+  const numGroups = props.table.maxGroups || 1; // Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
 
   let group: string | null = null;
   let groupInfo: any = { members: [], gid: -1 };
