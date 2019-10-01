@@ -110,7 +110,7 @@ export default (props: Props) => {
               // debugger;
               // setState(p => ({ ...p, confid: rowData.conf }))
               const id = (rowData as any).conf;
-              var win = window.open(window.location.href.replace('new', id), '_blank');
+              var win = window.open(window.location.href.replace('admin', id), '_blank');
               win!.focus();
               // Do save operation
             }
@@ -122,7 +122,7 @@ export default (props: Props) => {
               // debugger;
               // setState(p => ({ ...p, confid: rowData.conf }))
               const id = (rowData as any).conf;
-              var win = window.open(window.location.href.replace('new', id + '/admin'), '_blank');
+              var win = window.open(window.location.href.replace('admin', id + '/admin'), '_blank');
               win!.focus();
               // Do save operation
             }
@@ -132,9 +132,10 @@ export default (props: Props) => {
             tooltip: 'Edit',
             onClick: (event, rowData) => {
               const id = (rowData as any).conf;
+              const ready = (rowData as any).ready;
               // debugger;
               // setState(p => ({ ...p, confid: rowData.conf }))
-              if(id) {
+              if(ready) {
                 var r = window.confirm("Editing a debate that's already been active is unstable. Continue?");
                 if(!r) return;
               }
@@ -146,6 +147,7 @@ export default (props: Props) => {
             icon: tableIcons.Delete as any,
             tooltip: 'Delete',
             onClick: (event, rowData) => {
+              console.log('rowData del', rowData);
               const id = (rowData as any).conf;
               const ready = (rowData as any).ready;
               if(ready) {

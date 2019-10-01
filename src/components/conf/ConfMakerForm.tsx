@@ -57,7 +57,7 @@ const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
 interface Props {
   onClose: () => void;
   confid: string | null,
-  data: { conf: string, questions: any[], maxGroups?: number, minGroupUserPairs?: number };
+  data: { conf: string, questions: any[], maxGroups?: number, minGroupUserPairs?: number, ready: boolean };
   // questions?: any;
   user: string;
   updater: number;
@@ -79,9 +79,12 @@ export default (props: Props) => {
   const data = props.data;
 
   useEffect( () => {
-    setState(p => ({ ...p, questions: data.questions || [] }));
-  }, [props.data, props.updater]);
+    const qs = data.questions || state.questions || [];
 
+    if(qs.length===0) qs.push(newQuestions());
+
+    setState(p => ({ ...p, questions: qs }));
+  }, [data, props.updater]);
 
   const initialValues = React.useMemo(() => {
     if(!data) return {};
@@ -96,9 +99,9 @@ export default (props: Props) => {
     d.conf = data.conf;
     d.maxGroups = data.maxGroups || 10;
     d.minGroupUserPairs = data.minGroupUserPairs || 1;
-    console.log('d', d)
+    // console.log('d', d)
     return d;
-  }, [state.questions, props.data]);
+  }, [data, state.questions]); // , state.questions
 
   // console.log('qHash', initialValues)
 
@@ -134,25 +137,25 @@ export default (props: Props) => {
         user: props.user,
         maxGroups: values.maxGroups,
         minGroupUserPairs: values.minGroupUserPairs,
-        questions
+        questions,
+        ready: props.data.ready
       }
 
       console.log('payload', JSON.stringify(payload));
 
       // , questions: questions
-      setState(p => ({ ...p, saved: true }));
+      
 
       try {
+        setState(p => ({ ...p, saved: true }));
         await props.onSubmit(payload);
       } catch (e) {
         // debugger;
         console.warn('error', e);
-        alert(e.message);
-      }
-
-      setTimeout(x => {
+        alert('Save failed: ' + e.message);
+      } finally {
         setState(p => ({ ...p, saved: false }));
-      }, 3000);
+      }
 
       // alert(JSON.stringify(payload, null, 2));
 
@@ -172,20 +175,23 @@ export default (props: Props) => {
   const questionNodes = state.questions; // Object.keys(state.questions).filter(x => x.indexOf("question") === 0);
   let numQuestions = questionNodes.length;
 
+
+  const newQuestions = () => {
+    return { 'question': '', answer: 'Yes, No', id: uuid.generate() };
+  }
+
   const addQuestion = () => {
     const q = [...state.questions]; // Object.assign({}, state.questions);
     // q['question' + numQuestions] = '';
     // q['answer' + numQuestions] = 'Yes, No';
-    q.push({ 'question': '', answer: 'Yes, No', id: uuid.generate() });
+    q.push(newQuestions());
 
-    console.log('addQuestion', q)
+    // console.log('addQuestion', q)
     setState(p => ({ ...p, questions: q }));
   }
 
-  if (numQuestions === 0) addQuestion();
-
   const onRemove = (index) => {
-    console.log('remove', index);
+    // console.log('remove', index);
     const removeQ = state.questions[index];
 
     const q = [...state.questions];
@@ -203,7 +209,7 @@ export default (props: Props) => {
     setState(p => ({ ...p, questions: q }));
   }
 
-  const url = window.location.href.replace('new', formik.values['conf']);
+  const url = window.location.href.replace('admin', formik.values['conf']);
 
   return (
     <div>
@@ -243,10 +249,10 @@ export default (props: Props) => {
           if (!x.name) return null;
 
           return (<span key={x.name}>
-            <Tf key={x.name} className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
+            <Tf className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
 
             {x.name === 'conf' &&
-              <Typography key={'hint-' + x.name} variant="subtitle1" align="right" style={{ color: 'gray', marginTop: '-0.7em', marginBottom: '1em' }}>url: {url}</Typography>
+              <Typography variant="subtitle1" align="right" style={{ color: 'gray', marginTop: '-0.7em', marginBottom: '1em' }}>url: {url}</Typography>
             }
           </span>
           );
@@ -288,7 +294,6 @@ function Tf(props: any) {
   return (
     <span key={props.key || props.id}>
       <TextField
-        key={props.id}
         margin="normal"
         // id={props.id}
         label={props.label || props.id}
@@ -301,7 +306,6 @@ function Tf(props: any) {
       />
       {formik.touched[props.id] && formik.errors[props.id] ? (
         <Typography
-          key={'err-' + props.id}
           gutterBottom={false}
           align="center"
           variant="subtitle1"

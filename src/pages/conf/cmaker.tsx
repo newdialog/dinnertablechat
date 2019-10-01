@@ -151,10 +151,10 @@ export default observer(function CMaker(props: Props) {
     if(!data.user) throw new Error('no user');
     if(!data.conf) throw new Error('no conf');
     if(data.conf.length < 3) throw new Error('conf id must be longer than 3 characters');
-    if(!data.questions || data.questions.length===0) throw new Error('no questions');
+    if(!data.questions || data.questions.length===0) throw new Error('must have at least one question');
 
     const existing = await ConfService.idGet(data.conf);
-    if(existing && existing.user !== user) throw new Error('conference id already taken');
+    if(existing && existing.user !== user) throw new Error('conference id already taken by another user');
 
     
     console.log('saving', JSON.stringify(data));
