@@ -1,37 +1,18 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Typography
-} from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
+import Chip from '@material-ui/core/Chip';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
+import useInterval from '@use-it/interval';
+import Prando from 'prando';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFocus } from 'utils/useFocus';
 
 import * as AppModel from '../../models/AppModel';
-import * as TopicInfo from '../../utils/TopicInfo';
-import useInterval from '@use-it/interval';
-
-import {
-  submit,
-  getResults,
-  submitReady,
-  init,
-  ConfIdRow,
-} from '../../services/ConfService';
 import { findMyGroup, groupByIndex } from '../../services/ConfMath';
-import ConfGraph from './ConfGraph';
-
-import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
-import FaceIcon from '@material-ui/icons/Face';
-import DoneIcon from '@material-ui/icons/Done';
-import Prando from 'prando';
+import { ConfIdRow, getResults, init, submit } from '../../services/ConfService';
+import * as TopicInfo from '../../utils/TopicInfo';
 import ConfUserBars from './ConfUserBars';
-import { useFocus } from 'utils/useFocus';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -96,14 +77,9 @@ interface Props {
   store: AppModel.Type;
   id: string;
   table: ConfIdRow;
+  questions: any;
   // data: any;
 }
-
-/* interface User {
-  user: string;
-  answers: Array<any>;
-  answersHash?: Array<any>;
-} */
 // type Data = Array<User>;
 interface State {
   checks: number;
@@ -124,7 +100,7 @@ function showGroup(groupId: any, confid: string, t: any) {
 
   console.log('groupId', groupId);
 
-  const groupName = TopicInfo.getGroupByIndex(confid, groupId, t);
+  const groupName = TopicInfo.getGroupByIndex(confid, groupId, t); // cant
 
   const msg = groupName;
   let test = groupId > -1 ? msg : null; // 'Sorry, groups already assigned.'; // no group yet
@@ -276,7 +252,7 @@ export default function PleaseWaitResults(props: Props) {
                 <>
                   <Typography variant="h5">Please Wait</Typography>
                   <Typography variant="body1">till everyone else has answered...
-                  <hr />
+                  <br />
                   While you wait please be quite and you may want to study the <i>Rules of the
                   Game: </i><br/><br/></Typography>
                   <Typography variant="body1" align="left">You don’t have to talk about all the questions. Maybe
@@ -318,7 +294,7 @@ export default function PleaseWaitResults(props: Props) {
                     </i>
                     <hr />
                   </Typography>
-                  <ConfUserBars id={confid} store={store} data={groupInfo} qdata={state.data} />
+                  <ConfUserBars id={confid} store={store} data={groupInfo} qdata={state.data} questions={props.questions} />
                   <br />
                   <br />
                 </>

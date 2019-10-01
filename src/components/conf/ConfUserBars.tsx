@@ -39,6 +39,7 @@ interface Props {
   data: any;
   qdata: any;
   id: string;
+  questions: any;
 }
 
 export default function ConfUserBars(props: Props) {
@@ -48,24 +49,18 @@ export default function ConfUserBars(props: Props) {
   // const [state, setState] = React.useState<State>({ data: [], checks: 0 });
 
   const data2 = props.data.members.map((x, i) => ({ name: i, answers: x }));
-  // console.log('ConfBars', props.data);
-  /* if(data.length === 0) return null;
 
-  // array of users ans answers
-  const data2 = data.flatMap( (g, index) => {
-    return Object.keys(g).flatMap(k => {
-      const val = g[k];
-      return { name: k, answers: val }
-    });
-  }); */
-
-  // console.log('data2', data2);
+  /*
+  qdata {
+  0:
+    us-east-1:996b8af9-c5bd-41c8-bee7-4068792f28e0:
+      conf-bbb-q0-id: 0
+      conf-bbb-q1-id: 1
+  */
 
   // get ansers
-  const tdata = props.qdata; // getOtherTopics(props.id, t, 'conf');
-  // const numQ = tdata.length;
-
-  // console.log('tdata', tdata, numQ);
+  const tdata = props.questions; // getOtherTopics(props.id, t, 'conf');
+  // debugger;
 
   // Users into question response totals
   // ex [{id: "conf-pub1-q0-id", Yes: 11, No: 2}]

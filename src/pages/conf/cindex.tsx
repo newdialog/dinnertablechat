@@ -280,7 +280,7 @@ export default observer(function CIndex(props: Props) {
           )}
           {step === 1 && (
             <Reveal effect="fadeInUp" duration={1100}>
-              {state.table && <ConfUserPanel id={confid} store={store} table={state.table}/>}
+              {state.table && <ConfUserPanel id={confid} store={store} table={state.table} questions={state.questions}/>}
             </Reveal>
           )}
         </div>
