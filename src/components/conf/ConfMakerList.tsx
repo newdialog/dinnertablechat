@@ -147,7 +147,8 @@ export default (props: Props) => {
             tooltip: 'Delete',
             onClick: (event, rowData) => {
               const id = (rowData as any).conf;
-              if(id) {
+              const ready = (rowData as any).ready;
+              if(ready) {
                 var r = window.alert("Delete a debate that's already been active is not currently possible.");
                 return;
               }
