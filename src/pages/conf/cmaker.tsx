@@ -141,6 +141,7 @@ export default observer(function CMaker(props: Props) {
 
   // const id = ''; // props.id;
   const confid = state.confid;
+  const user = store.getRID();
 
   useEffect(() => {
     store.hideNavbar();
@@ -151,6 +152,9 @@ export default observer(function CMaker(props: Props) {
     if(!data.conf) throw new Error('no conf');
     if(data.conf.length < 3) throw new Error('conf id must be longer than 3 characters');
     if(!data.questions || data.questions.length===0) throw new Error('no questions');
+
+    const existing = await ConfService.idGet(data.conf);
+    if(existing && existing.user !== user) throw new Error('conference id already taken');
 
     
     console.log('saving', JSON.stringify(data));
@@ -179,7 +183,6 @@ export default observer(function CMaker(props: Props) {
     });
   }, [confid]);
 
-  const user = store.getRID();
   // Get Row Data
   useEffect(() => {
     if (!state.confid) {
