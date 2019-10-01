@@ -126,7 +126,7 @@ export default function ConfAdminPanel(props: Props) {
 
     const rdata = await getAll(confid);
     // debugger;
-    const results = rdata.meta.results;
+    const results = rdata.meta.results!;
     const ready = results.length > 0 || rdata.meta.ready;
 
     const numUsers = rdata.data.length;
@@ -175,9 +175,10 @@ export default function ConfAdminPanel(props: Props) {
       setState(p => ({ ...p, thinking: true }));
       return; // do THinking
     }
+    // ELSE
 
     const results = await matchUp();
-    await submitReady(toggle, confid, results); // .then(x=>checkReady());
+    await submitReady(toggle, confid, results, store.getRID()!); // .then(x=>checkReady());
 
     onRefresh();
     resetChecks();
@@ -209,7 +210,7 @@ export default function ConfAdminPanel(props: Props) {
   const onCloseThinking = async () => {
     setState(p => ({ ...p, thinking: false }));
     const results = await matchUp();
-    await submitReady(true, confid, results); // .then(x=>checkReady());
+    await submitReady(true, confid, results, store.getRID()!); // .then(x=>checkReady());
 
     // checkReady();
     onRefresh();

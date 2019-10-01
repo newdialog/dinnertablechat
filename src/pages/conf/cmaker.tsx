@@ -121,7 +121,7 @@ interface Props {
 }
 
 interface State {
-  data?: {conf:string, questions: any[]};
+  data?: {conf:string, user:string, ready:boolean, questions: any[]};
 }
 
 const PAGE_NAME = 'Event Debate Tool';
@@ -132,7 +132,6 @@ export default observer(function CMaker(props: Props) {
   const { t } = useTranslation();
 
   const [state, setState] = useState<State>({
-    // data: []
   });
 
   const id = ''; // props.id;
@@ -144,10 +143,15 @@ export default observer(function CMaker(props: Props) {
 
   useEffect(()=> {
     ConfService.idGet('bbb').then(x=>{
-      if(x.user!==store.getRID()) {
+      if(x && x.user!==store.getRID()) {
         alert('Error: This is owned by a different user. Read-only mode.');
       }
-      setState(p=>({...p, data:x}));
+      // init model if not exists
+      if(!x) {
+        x = ConfService.idNewQuestions('', store.getRID()!);
+      }
+
+      if(x!==null) setState(p=>({...p, data: x as ConfService.ConfIdRow}));
     })
   }, []);
 

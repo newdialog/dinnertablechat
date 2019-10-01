@@ -148,6 +148,7 @@ export default function PleaseWaitResults(props: Props) {
 
   const onRefresh = async () => {
     const result = (await getResults(confid)) || [];
+    console.log(result, result ? result.length : '');
     const ready = result && result.length > 0;
 
     // console.log('onRefresh result', result);
