@@ -11,6 +11,7 @@ import * as ConfService from '../../services/ConfService';
 
 import * as AppModel from '../../models/AppModel';
 import ConfMakerForm from 'components/conf/ConfMakerForm';
+import ConfMakerList from 'components/conf/ConfMakerList';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -121,7 +122,9 @@ interface Props {
 }
 
 interface State {
+  confid: string | null,
   data?: {conf:string, user:string, ready:boolean, questions: any[]};
+  updater: number;
 }
 
 const PAGE_NAME = 'Event Debate Tool';
@@ -132,17 +135,21 @@ export default observer(function CMaker(props: Props) {
   const { t } = useTranslation();
 
   const [state, setState] = useState<State>({
+    confid: null,
+    updater: 0
   });
 
-  const id = ''; // props.id;
-  const confid = id;
+  // const id = ''; // props.id;
+  const confid = state.confid;
 
   useEffect(() => {
     store.hideNavbar();
   }, []);
 
   useEffect(()=> {
-    ConfService.idGet('bbb').then(x=>{
+    if(!state.confid) return;
+
+    ConfService.idGet(state.confid).then(x=>{
       if(x && x.user!==store.getRID()) {
         alert('Error: This is owned by a different user. Read-only mode.');
       }
@@ -153,11 +160,12 @@ export default observer(function CMaker(props: Props) {
 
       if(x!==null) setState(p=>({...p, data: x as ConfService.ConfIdRow}));
     })
-  }, []);
+  }, [state.confid, state.updater]);
 
   async function handleSubmit(data: {conf:string, user:string, maxGroups:number, minGroupUserPairs:number} | any) {
     if(!data.user) throw new Error('no user');
     if(!data.conf) throw new Error('no conf');
+    if(data.conf.length < 3) throw new Error('conf id must be longer than 3 characters');
     if(!data.questions || data.questions.length===0) throw new Error('no questions');
 
     
@@ -165,6 +173,7 @@ export default observer(function CMaker(props: Props) {
     try {
       await ConfService.idSubmit(data.conf, data.user, data.questions, data.maxGroups, data.minGroupUserPairs);
       alert('saved');
+      setState(p=>({...p, updater: p.updater+1 }));
     } catch(e) {
       console.error(e);
       if(e.toString().indexOf('authorized ') > 0) alert('Error: not authorized to update these questions');
@@ -176,25 +185,15 @@ export default observer(function CMaker(props: Props) {
     if(store.isGuest()) store.login();
   }, [store.isGuest()]);
 
+  // TODO cleanup
   useEffect(() => {
-    handleReset();
+    if(!confid) return;
 
     window.gtag('event', ('conf_new_splash_'+confid), {
       event_category: 'conf',
       confid: confid
     });
-  }, []);
-
-  const handleReset = () => {
-    if (store.conf.positions) {
-      // store.conf.resetQueue();
-      window.gtag('event', ('conf_new_reset_'+confid), {
-        event_category: 'conf',
-        confid: confid,
-        non_interaction: false
-      });
-    }
-  };
+  }, [confid]);
 
   if (store.auth.isNotLoggedIn) {
     store.auth.login();
@@ -204,11 +203,18 @@ export default observer(function CMaker(props: Props) {
       </div>
     );
   }
+  
+  const onEdit = (conf?:string) => {
+    setState(p=>({...p, confid: conf || null, updater: p.updater+1 }));
+  }
 
-  const show = () => {
-    setState(p => ({ ...p, show: true }));
-  };
+  const onIdDel = async (conf:string) => {
+    if(!conf) throw new Error('no conf id');
 
+    await ConfService.idDel(conf, store.getRID()!)
+    setState(p=>({...p, confid: null, updater: p.updater+1 }));
+  }
+  
   return (
     <>
       <Helmet title={PAGE_NAME}>
@@ -251,8 +257,12 @@ export default observer(function CMaker(props: Props) {
 
           
             <div className={classes.verticalCenter}>
-              {state.data!==undefined && store.getRID() && 
-                <ConfMakerForm user={store.getRID()!} data={state.data} onSubmit={handleSubmit}/> }
+              {state.confid && state.data!==undefined && store.getRID() && 
+                <>
+                  <ConfMakerForm user={store.getRID()!} data={state.data} onSubmit={handleSubmit} onClose={onEdit}/>
+                </>
+              }
+              {!state.confid && store.getRID() && <ConfMakerList user={store.getRID()!} onEdit={onEdit} onIdDel={onIdDel} updater={state.updater} /> }
             </div>
           
         </main>

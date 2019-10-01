@@ -392,6 +392,22 @@ export async function submitReady(ready: boolean, conf: string, results: any[], 
     .catch(e => window.alert('error: ' + e));
 }
 
+export async function idDel(conf: string, user: string) {
+  if (!docClient) await init();
+
+  return await docClient
+  .table(TABLE_ID)
+  .where('conf')
+  .eq(conf)
+  .where('user')
+  .eq(user)
+  .delete();
+
+  console.log('delete done', conf);
+
+  return true;
+}
+
 /*
 export async function isReady(conf: string) {
   if (!docClient) await init();
@@ -426,5 +442,24 @@ export async function idGet(conf: string): Promise<ConfIdRow | null> {
       if (item.questions) item.questions = JSON.parse(item.questions);
       else item.questions = [];
       return item;
+    }); // remove metadata
+}
+
+export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
+  if (!docClient) await init();
+
+  return docClient
+    .table(TABLE_ID)
+    .index('user-index')
+    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs', 'results')
+    .having('user')
+    .eq(user)
+    .scan()
+    .then(xs => {
+      // console.log('xx', x, x && x[0])
+      if (!xs || xs.length === 0) return null;
+
+      xs.forEach(x => x.questions = JSON.parse(x.questions));
+      return xs as ConfIdRow[];
     }); // remove metadata
 }

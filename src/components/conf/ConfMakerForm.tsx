@@ -53,8 +53,8 @@ const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
 });
 
 interface Props {
-  onClose?: () => void;
-  data: { conf: string, questions: any[], maxGroups?:number, minGroupUserPairs?:number };
+  onClose: () => void;
+  data: { conf: string, questions: any[], maxGroups?: number, minGroupUserPairs?: number };
   // questions?: any;
   user: string;
   onSubmit: (x: any) => void;
@@ -97,8 +97,8 @@ export default (props: Props) => {
         .max(80, 'Must be 80 characters or less')
         .min(3, 'Must be at least 3 characters')
         .required('Required'),
-        minGroupUserPairs: Yup.number().required(),
-        maxGroups: Yup.number().required(),
+      minGroupUserPairs: Yup.number().required(),
+      maxGroups: Yup.number().required(),
       maxUsers: Yup.number(),
     }),
 
@@ -110,10 +110,10 @@ export default (props: Props) => {
           acc.push({
             // id,
             i: i,
-            question: values[k], 
+            question: values[k],
             answer: values[k.replace('question', 'answer')] || 'Yes, No'
-          }); 
-          return acc; 
+          });
+          return acc;
         }, [] as any[]);
 
       const payload = {
@@ -129,7 +129,13 @@ export default (props: Props) => {
       // , questions: questions
       setState(p => ({ ...p, saved: true }));
 
-      await props.onSubmit(payload);
+      try {
+        await props.onSubmit(payload);
+      } catch(e) {
+        // debugger;
+        console.warn('error', e);
+        alert(e.message);
+      }
 
       setTimeout(x => {
         setState(p => ({ ...p, saved: false }));
@@ -143,11 +149,10 @@ export default (props: Props) => {
   const getFieldProps = formik.getFieldProps.bind(formik);
 
   // const TF = wrap(formik).tf;
-
   const fields = [
-    { name: 'conf', label: 'id', type: 'input', short: true },
-    { name: 'maxGroups', label: 'maxGroups', type: 'input'},
-    { name: 'minGroupUserPairs', label: 'minGroupUserPairs', type: 'input'},
+    { name: 'conf', label: 'id', type: 'input', short: true, disabled: !!props.data.conf },
+    { name: 'maxGroups', label: 'maxGroups', type: 'input' },
+    { name: 'minGroupUserPairs', label: 'minGroupUserPairs', type: 'input' },
     { name: 'questions', type: 'array' }
   ];
 
@@ -211,6 +216,7 @@ export default (props: Props) => {
                     label={'answer'}
                     formik={formik}
                     data={state.questions[i].answer}
+                    disabled={true}
                   />
                 </CardContent>
                 <CardActions>
@@ -220,13 +226,14 @@ export default (props: Props) => {
             ));
           }
           if (!x.name) return null;
-          return (<>
-            <Tf key={x.name} className={classes.textField} id={x.name} label={x.label} formik={formik} />
+
+          return (<span key={x.name}>
+            <Tf key={x.name} className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
 
             {x.name === 'conf' &&
-              <Typography key={'hint-'+x.name} variant="subtitle1" align="right" style={{ color: 'gray', marginTop: '-0.7em', marginBottom: '1em' }}>https://mixer.newdialog.org/{formik.values[x.name]}</Typography>
+              <Typography key={'hint-' + x.name} variant="subtitle1" align="right" style={{ color: 'gray', marginTop: '-0.7em', marginBottom: '1em' }}>url: https://mixer.newdialog.org/{formik.values[x.name]}</Typography>
             }
-          </>
+          </span>
           );
         })}
         <div style={{ textAlign: 'right', width: '100%' }}><Button onClick={addQuestion}>Add Question</Button></div>
@@ -235,6 +242,9 @@ export default (props: Props) => {
           <Button variant="contained" type="submit">
             Submit
           </Button>
+          <Button style={{margin: '0 0 0 40px'}} variant="contained" onClick={(e) => { e.preventDefault(); props.onClose() }}>
+            Return to list
+        </Button>
         </div>
         {state.saved && <Typography
           gutterBottom={false}
@@ -245,6 +255,9 @@ export default (props: Props) => {
           Saved
         </Typography>}
       </form>
+      <br />
+
+      <br />
       <br />
       <br />
     </div>
@@ -258,7 +271,7 @@ function Tf(props: any) {
   const multiline = props.multiline;
 
   return (
-    <>
+    <span key={props.key || props.id}>
       <TextField
         key={props.id}
         margin="normal"
@@ -273,17 +286,18 @@ function Tf(props: any) {
       />
       {formik.touched[props.id] && formik.errors[props.id] ? (
         <Typography
-          key={'err-'+props.id}
+          key={'err-' + props.id}
           gutterBottom={false}
           align="center"
           variant="subtitle1"
           className={classes.err}
+          style={{width:'100%'}}
         >
           ↳ {formik.errors[props.id]}
         </Typography>
       ) : (
           <br />
         )}
-    </>
+    </span>
   );
 }
