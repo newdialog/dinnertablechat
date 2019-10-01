@@ -171,6 +171,11 @@ export default observer(function CMaker(props: Props) {
     }
   }
 
+  // Ensure use is not unregistered guest
+  useEffect(() => {
+    if(store.isGuest()) store.login();
+  }, [store.isGuest()]);
+
   useEffect(() => {
     handleReset();
 
