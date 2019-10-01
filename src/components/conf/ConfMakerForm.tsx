@@ -18,6 +18,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import uuid from 'short-uuid';
 
+import * as ConfService from '../../services/ConfService';
+
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
@@ -54,26 +56,36 @@ const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
 
 interface Props {
   onClose: () => void;
+  confid: string | null,
   data: { conf: string, questions: any[], maxGroups?: number, minGroupUserPairs?: number };
   // questions?: any;
   user: string;
+  updater: number;
   onSubmit: (x: any) => void;
+}
+
+interface State {
+  saved: boolean,
+  questions: any[],
+  data?: any
 }
 
 export default (props: Props) => {
   const classes = useStyles();
+  const user = props.user;
 
-  const [state, setState] = useState<any>({ saved: false, questions: [] });
+  const [state, setState] = useState<State>({ saved: false, questions: [] });
 
-  // const data = props.data;
+  const data = props.data;
 
-  // Populate state with question data
-  useEffect(() => {
-    setState(p => ({ questions: props.data.questions || [] }));
-  }, []);
+  useEffect( () => {
+    setState(p => ({ ...p, questions: data.questions || [] }));
+  }, [props.data, props.updater]);
+
 
   const initialValues = React.useMemo(() => {
-    const d = props.data.questions.reduce((acc, x, i) => {
+    if(!data) return {};
+    const d = state.questions.reduce((acc, x, i) => {
       const _i = x.id || uuid.generate(); // i.toString();
       // if(x.index===undefined) throw new Error('no index');
       acc['question_' + _i] = x.question;
@@ -81,11 +93,12 @@ export default (props: Props) => {
       return acc;
     }, {});
 
-    d.conf = props.data.conf;
-    d.maxGroups = props.data.maxGroups || 10;
-    d.minGroupUserPairs = props.data.minGroupUserPairs || 1;
+    d.conf = data.conf;
+    d.maxGroups = data.maxGroups || 10;
+    d.minGroupUserPairs = data.minGroupUserPairs || 1;
+    console.log('d', d)
     return d;
-  }, [props.data]);
+  }, [state.questions, props.data]);
 
   // console.log('qHash', initialValues)
 
@@ -131,7 +144,7 @@ export default (props: Props) => {
 
       try {
         await props.onSubmit(payload);
-      } catch(e) {
+      } catch (e) {
         // debugger;
         console.warn('error', e);
         alert(e.message);
@@ -150,7 +163,7 @@ export default (props: Props) => {
 
   // const TF = wrap(formik).tf;
   const fields = [
-    { name: 'conf', label: 'id', type: 'input', short: true, disabled: !!props.data.conf },
+    { name: 'conf', label: 'id', type: 'input', short: true, disabled: !!props.confid },
     { name: 'maxGroups', label: 'maxGroups', type: 'input' },
     { name: 'minGroupUserPairs', label: 'minGroupUserPairs', type: 'input' },
     { name: 'questions', type: 'array' }
@@ -189,6 +202,8 @@ export default (props: Props) => {
     // console.log('q', q)
     setState(p => ({ ...p, questions: q }));
   }
+
+  const url = window.location.href.replace('new', formik.values['conf']);
 
   return (
     <div>
@@ -231,7 +246,7 @@ export default (props: Props) => {
             <Tf key={x.name} className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
 
             {x.name === 'conf' &&
-              <Typography key={'hint-' + x.name} variant="subtitle1" align="right" style={{ color: 'gray', marginTop: '-0.7em', marginBottom: '1em' }}>url: https://mixer.newdialog.org/{formik.values[x.name]}</Typography>
+              <Typography key={'hint-' + x.name} variant="subtitle1" align="right" style={{ color: 'gray', marginTop: '-0.7em', marginBottom: '1em' }}>url: {url}</Typography>
             }
           </span>
           );
@@ -242,7 +257,7 @@ export default (props: Props) => {
           <Button variant="contained" type="submit">
             Submit
           </Button>
-          <Button style={{margin: '0 0 0 40px'}} variant="contained" onClick={(e) => { e.preventDefault(); props.onClose() }}>
+          <Button style={{ margin: '0 0 0 40px' }} variant="contained" onClick={(e) => { e.preventDefault(); props.onClose() }}>
             Return to list
         </Button>
         </div>
@@ -291,7 +306,7 @@ function Tf(props: any) {
           align="center"
           variant="subtitle1"
           className={classes.err}
-          style={{width:'100%'}}
+          style={{ width: '100%' }}
         >
           ↳ {formik.errors[props.id]}
         </Typography>

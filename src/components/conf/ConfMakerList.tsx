@@ -90,10 +90,12 @@ export default (props: Props) => {
   }
 
   const makeListItem = () => {
-    props.onEdit('NEW');
+    props.onEdit('');
   }
 
   if (!state.rows) return null;
+
+  console.log('aa', state.rows)
 
   return (
     <div style={{ maxWidth: "100%", textAlign:'left' }}>
@@ -101,6 +103,30 @@ export default (props: Props) => {
       <MaterialTable
         icons={tableIcons as any}
         actions={[
+          {
+            icon: tableIcons.Check as any,
+            tooltip: 'View',
+            onClick: (event, rowData) => {
+              // debugger;
+              // setState(p => ({ ...p, confid: rowData.conf }))
+              const id = (rowData as any).conf;
+              var win = window.open(window.location.href.replace('new', id), '_blank');
+              win!.focus();
+              // Do save operation
+            }
+          },
+          {
+            icon: tableIcons.Search as any,
+            tooltip: 'Admin View',
+            onClick: (event, rowData) => {
+              // debugger;
+              // setState(p => ({ ...p, confid: rowData.conf }))
+              const id = (rowData as any).conf;
+              var win = window.open(window.location.href.replace('new', id + '/admin'), '_blank');
+              win!.focus();
+              // Do save operation
+            }
+          },
           {
             icon: tableIcons.Edit as any,
             tooltip: 'Edit',

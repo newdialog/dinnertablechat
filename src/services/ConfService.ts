@@ -402,10 +402,6 @@ export async function idDel(conf: string, user: string) {
   .where('user')
   .eq(user)
   .delete();
-
-  console.log('delete done', conf);
-
-  return true;
 }
 
 /*

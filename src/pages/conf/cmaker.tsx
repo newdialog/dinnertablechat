@@ -146,22 +146,6 @@ export default observer(function CMaker(props: Props) {
     store.hideNavbar();
   }, []);
 
-  useEffect(()=> {
-    if(!state.confid) return;
-
-    ConfService.idGet(state.confid).then(x=>{
-      if(x && x.user!==store.getRID()) {
-        alert('Error: This is owned by a different user. Read-only mode.');
-      }
-      // init model if not exists
-      if(!x) {
-        x = ConfService.idNewQuestions('', store.getRID()!);
-      }
-
-      if(x!==null) setState(p=>({...p, data: x as ConfService.ConfIdRow}));
-    })
-  }, [state.confid, state.updater]);
-
   async function handleSubmit(data: {conf:string, user:string, maxGroups:number, minGroupUserPairs:number} | any) {
     if(!data.user) throw new Error('no user');
     if(!data.conf) throw new Error('no conf');
@@ -195,6 +179,33 @@ export default observer(function CMaker(props: Props) {
     });
   }, [confid]);
 
+  const user = store.getRID();
+  // Get Row Data
+  useEffect(() => {
+    if (!state.confid) {
+      const x = ConfService.idNewQuestions('', user!);
+      setState(p => ({ ...p, data: x as ConfService.ConfIdRow }));
+      return;
+    }
+
+    ConfService.idGet(state.confid as string).then(x => {
+      if (x && x.user !== user) {
+        alert('Error: This is owned by a different user. Read-only mode.');
+      }
+      // init model if not exists
+      if (!x) {
+        x = ConfService.idNewQuestions('', user!);
+      }
+
+      if (x !== null) {
+        const data = x as ConfService.ConfIdRow;
+        setState(p => ({ ...p, data }));
+        // Populate state with question data
+        // setState(p => ({ ...p, questions: data.questions || [] }));
+      }
+    })
+  }, [state.confid, state.updater]);
+
   if (store.auth.isNotLoggedIn) {
     store.auth.login();
     return (
@@ -204,8 +215,8 @@ export default observer(function CMaker(props: Props) {
     );
   }
   
-  const onEdit = (conf?:string) => {
-    setState(p=>({...p, confid: conf || null, updater: p.updater+1 }));
+  const onEdit = (conf:string | null) => {
+    setState(p=>({...p, confid: conf, updater: p.updater+1 }));
   }
 
   const onIdDel = async (conf:string) => {
@@ -257,12 +268,12 @@ export default observer(function CMaker(props: Props) {
 
           
             <div className={classes.verticalCenter}>
-              {state.confid && state.data!==undefined && store.getRID() && 
+              {state.confid!==null && state.data && store.getRID() && 
                 <>
-                  <ConfMakerForm user={store.getRID()!} data={state.data} onSubmit={handleSubmit} onClose={onEdit}/>
+                  <ConfMakerForm user={store.getRID()!} data={state.data} confid={state.confid} onSubmit={handleSubmit} onClose={()=>onEdit(null)} updater={state.updater}/>
                 </>
               }
-              {!state.confid && store.getRID() && <ConfMakerList user={store.getRID()!} onEdit={onEdit} onIdDel={onIdDel} updater={state.updater} /> }
+              {state.confid===null && store.getRID() && <ConfMakerList user={store.getRID()!} onEdit={onEdit} onIdDel={onIdDel} updater={state.updater} /> }
             </div>
           
         </main>
