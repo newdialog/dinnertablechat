@@ -131,9 +131,14 @@ export default (props: Props) => {
             icon: tableIcons.Edit as any,
             tooltip: 'Edit',
             onClick: (event, rowData) => {
+              const id = (rowData as any).conf;
               // debugger;
               // setState(p => ({ ...p, confid: rowData.conf }))
-              props.onEdit((rowData as any).conf);
+              if(id) {
+                var r = window.confirm("Editing a debate that's already been active is unstable. Continue?");
+                if(!r) return;
+              }
+              props.onEdit(id);
               // Do save operation
             }
           },
@@ -141,7 +146,12 @@ export default (props: Props) => {
             icon: tableIcons.Delete as any,
             tooltip: 'Delete',
             onClick: (event, rowData) => {
-              props.onIdDel((rowData as any).conf);
+              const id = (rowData as any).conf;
+              if(id) {
+                var r = window.alert("Delete a debate that's already been active is not currently possible.");
+                return;
+              }
+              props.onIdDel(id);
               // Do save operation
             }
           },
@@ -156,7 +166,7 @@ export default (props: Props) => {
         ]}
         columns={[
           { title: "id", field: "conf" },
-          { title: "ready", field: "ready", lookup: { true: "started", false: "not started" } }
+          { title: "Status", field: "ready", lookup: { true: "assigned", false: "unassigned" } }
         ]}
         data={state.rows!}
         title="Debate Sessions"

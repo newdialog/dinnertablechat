@@ -222,6 +222,9 @@ export default observer(function CMaker(props: Props) {
   const onIdDel = async (conf:string) => {
     if(!conf) throw new Error('no conf id');
 
+    var r = window.confirm("Are you sure you want to delete?");
+    if(!r) return;
+
     await ConfService.idDel(conf, store.getRID()!)
     setState(p=>({...p, confid: null, updater: p.updater+1 }));
   }
