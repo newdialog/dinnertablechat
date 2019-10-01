@@ -2474,9 +2474,9 @@ aws-amplify@^1.1.36:
     "@aws-amplify/xr" "^0.1.24"
 
 aws-sdk@2.518.0, aws-sdk@^2.432.0, aws-sdk@^2.496.0:
-  version "2.539.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.539.0.tgz#4bae923b20723d78fbe4e208847f07de2965f87a"
-  integrity sha512-jPnggqa676kqFHFPCJvfckN2SKI/+IQJREL+XxOocS1lyI+5iGxbJvlU0BLEsY2Is4LvMjsnxdqSAVIL5NRbyw==
+  version "2.540.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.540.0.tgz#3a636c32f48e657904f5b38592c057ceb87ae535"
+  integrity sha512-CQdXuMED/xPW7y50vObadERIzrVB6Zr87Ln9RIm3VyJuIWUWS92Z7DKAe9F+LdFh1/6zKVd/iLDJ7Fsd/pAEmA==
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -7917,10 +7917,10 @@ node-fetch@^1.0.1:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
-node-forge@0.8.2:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.8.2.tgz#b4bcc59fb12ce77a8825fc6a783dfe3182499c5a"
-  integrity sha512-mXQ9GBq1N3uDCyV1pdSzgIguwgtVpM7f5/5J4ipz12PKWElmPpVWLDuWl8iXmhysr21+WmX/OJ5UKx82wjomgg==
+node-forge@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.9.0.tgz#d624050edbb44874adca12bb9a52ec63cb782579"
+  integrity sha512-7ASaDa3pD+lJ3WvXFsxekJQelBKRpne+GOVbLbtHYdd7pFspyeuJHnWfLplGf3SwKGbfs/aYl5V/JCIaHVUKKQ==
 
 node-forge@^0.7.1:
   version "0.7.6"
@@ -10625,11 +10625,11 @@ select-hose@^2.0.0:
   integrity sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo=
 
 selfsigned@^1.9.1:
-  version "1.10.6"
-  resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-1.10.6.tgz#7b3cd37ed9c2034261a173af1a1aae27d8169b67"
-  integrity sha512-i3+CeqxL7DpAazgVpAGdKMwHuL63B5nhJMh9NQ7xmChGkA3jNFflq6Jyo1LLJYcr3idWiNOPWHCrm4zMayLG4w==
+  version "1.10.7"
+  resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-1.10.7.tgz#da5819fd049d5574f28e88a9bcc6dbc6e6f3906b"
+  integrity sha512-8M3wBCzeWIJnQfl43IKwOmC4H/RAp50S8DF60znzjW5GVqTcSe2vWclt7hmYVPkKPlHWOu5EaWOMZ2Y6W8ZXTA==
   dependencies:
-    node-forge "0.8.2"
+    node-forge "0.9.0"
 
 "semver@2 || 3 || 4 || 5", semver@^5.3.0, semver@^5.4.1, semver@^5.5.0, semver@^5.5.1, semver@^5.6.0:
   version "5.7.1"
