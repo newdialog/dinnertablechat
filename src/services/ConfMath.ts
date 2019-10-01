@@ -170,9 +170,10 @@ export function groupByIndex(
   // .filter(group => !!group[user]);
 
   if (groupIndex >= findGroup.length) {
-    throw new Error(
+    return groupIndex + 1; // give fallback numeric value
+    /* throw new Error(
       'invalid group index: ' + groupIndex + ' ' + findGroup.length
-    );
+    ); */
   }
   return findGroup[groupIndex];
 }

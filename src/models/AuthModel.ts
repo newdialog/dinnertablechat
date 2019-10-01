@@ -160,6 +160,8 @@ const AuthModel = types
       self.isNotLoggedIn = false;
       self.doGuestLogin = false;
       self.doLogin = false;
+
+      console.log('user:', self.user!.id);
     }
   }))
   .views(self => ({

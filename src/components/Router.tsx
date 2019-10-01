@@ -24,6 +24,7 @@ const SHome = lazy(() => import('../pages/saas/sindex'));
 
 const CHome = lazy(() => import('../pages/conf/cindex'));
 const CAdmin = lazy(() => import('../pages/conf/cadmin'));
+const CMaker = lazy(() => import('../pages/conf/cmaker'));
 
 // https://news.ycombinator.com/item?id=19449279
 // const scrollToTop = () => document.getElementById('root').scrollIntoView();
@@ -119,6 +120,11 @@ const DTCRouter = ({
         <Route exact path="/r" render={props => <SHome id={''} />} />
         <Route exact path="/saasmatch" component={SRouter} />
         {/* conference app */}
+        <Route
+          exact
+          path="/c/admin"
+          component={CMaker}
+        />
         <Route
           exact
           path="/c/:id/admin"

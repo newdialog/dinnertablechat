@@ -171,6 +171,7 @@ export async function submitSeats(
   return batch.write();
 }
 
+/*
 export async function submitReady(ready: boolean, conf: string, results: any) {
   if (!docClient) await init();
 
@@ -194,7 +195,9 @@ export async function submitReady(ready: boolean, conf: string, results: any) {
     })
     .catch(e => window.alert('error: ' + e));
 }
+*/
 
+/*
 export async function waitForReady(conf: string, targetState: boolean = true) {
   return intervalBackoff({ initialInterval: 5000, maxInterval: 9000 })
     .pipe(
@@ -204,57 +207,40 @@ export async function waitForReady(conf: string, targetState: boolean = true) {
       takeWhile(x => x !== targetState)
     )
     .toPromise();
-}
+} */
 
-export async function isReady(conf: string) {
-  if (!docClient) await init();
 
-  const p = docClient // new Promise( (resolve, reject) => {
-    .table(TABLE_USERS)
-    .return(docClient.UPDATED_OLD)
-    .select('user', 'answers')
-    .having('user')
-    .eq('_')
-    .having('conf')
-    .eq(conf)
-    .scan();
-
-  console.log('isReady', p);
-
-  const re = (await p) as any[];
-  if (re && re.length > 0) console.log(re[0].answers);
-
-  if (!re) return false;
-  if (re.length === 0) return false;
-  return re[0].answers.ready === true;
-}
 
 export async function getResults(conf: string) {
   if (!docClient) await init();
 
-  const p = docClient // new Promise( (resolve, reject) => {
-    .table(TABLE_USERS)
-    .return(docClient.UPDATED_OLD)
-    .select('user', 'answers')
-    .having('user')
-    .eq('_')
-    .having('conf')
-    .eq(conf)
-    .scan();
-
-  const re = (await p) as any[];
-  if (re && re.length > 0) console.log(re[0].answers);
-
-  if (!re) return null;
-  if (re.length === 0) return null;
-
-  if (re[0].answers.ready === true) return re[0].answers.results;
-  else return null;
+  const r = await idGet(conf);
+  return r ? r.results : null;
+  /*
+   const p = docClient // new Promise( (resolve, reject) => {
+     .table(TABLE_USERS)
+     .return(docClient.UPDATED_OLD)
+     .select('user', 'answers')
+     .having('user')
+     .eq('_')
+     .having('conf')
+     .eq(conf)
+     .scan();
+ 
+   const re = (await p) as any[];
+   if (re && re.length > 0) console.log(re[0].answers);
+ 
+   if (!re) return null;
+   if (re.length === 0) return null;
+ 
+   if (re[0].answers.ready === true) return re[0].answers.results;
+   else return null;
+   */
 }
 
 export async function getAll(
   conf: string
-): Promise<{ data: any[]; meta: any }> {
+): Promise<{ data: any[]; meta: ConfIdRow }> {
   if (!docClient) await init();
 
   return docClient
@@ -263,13 +249,18 @@ export async function getAll(
     .having('conf')
     .eq(conf)
     .scan()
-    .then(x => {
+    .then(async x => {
       const filterOut = x.filter(x => x.user !== '_');
-      const filterFor = x.filter(x => x.user === '_');
-      let meta =
-        filterFor.length === 0
-          ? { results: [], ready: false }
-          : filterFor[0].answers;
+
+      const idRow = await idGet(conf);
+      let meta:ConfIdRow = idNewQuestions(conf, '');
+
+      console.log('idRow', idRow)
+      
+      if (idRow !== null) { //  && (idRow as any).answers
+        meta = idRow as any;
+        meta.results = meta.results || Array<any>();
+      }
       // debugger;
       // meta = meta.length === 0 ?
 
@@ -277,5 +268,194 @@ export async function getAll(
         data: filterOut,
         meta
       };
+    }); // remove metadata
+}
+
+// =================
+/* export interface TableIdRow {
+  questions: any;
+  ready: boolean;
+  user: string;
+  conf: string;
+} */
+export interface ConfIdQuestion {
+  question: string;
+  answer: string;
+  i: number;
+}
+/* export interface TableIdQuestions {
+  questions: Array<ConfIdQuestion>;
+  minGroupUserPairs: number;
+  maxGroups: number;
+} */
+// ==================
+// export type ConfIdQuestion = {i: number, question: string, answer: string};
+export type ConfIdQuestions = Array<ConfIdQuestion>;
+export type GroupResult = any[]; // [ { [q:string]: any} ];
+export interface ConfIdRow {
+  user: string,
+  conf: string,
+  questions: ConfIdQuestions,
+  maxGroups: number,
+  minGroupUserPairs: number,
+  ready: boolean,
+  results?: GroupResult
+}
+// ====================
+
+export function idNewQuestions(conf: string, user: string): ConfIdRow {
+  return {
+    questions: [],
+    minGroupUserPairs: 1,
+    maxGroups: 40,
+    user,
+    conf,
+    ready: false
+  };
+}
+
+export function idNewQuestion(
+  question: string,
+  answer: string,
+  index: number
+): ConfIdQuestion {
+  return {
+    question,
+    answer,
+    i: index
+  };
+}
+
+export async function idSubmit(conf: string, user: string, questions: any[], maxGroups: number, minGroupUserPairs: number) {
+  if (!docClient) await init();
+
+  // if (!user) user = identityId;
+
+  // console.log('submit user', user, conf, positions);
+
+  const vo = {
+    user,
+    conf,
+    maxGroups,
+    minGroupUserPairs,
+    questions: JSON.stringify(questions),
+    ready: false
+  };
+
+  console.log('saving', JSON.stringify(vo));
+
+  return docClient
+    .table(TABLE_ID)
+    .return(docClient.UPDATED_OLD)
+    .insert_or_update(vo);
+}
+
+/*
+export async function idSubmitReady(
+  conf: string,
+  user: string,
+  ready: boolean
+) {
+  if (!docClient) await init();
+
+  // if (!user) user = identityId;
+
+  // console.log('submit user', user, conf, positions);
+
+  return docClient
+    .table(TABLE_USERS)
+    .return(docClient.UPDATED_OLD)
+    .insert_or_update({
+      user,
+      conf,
+      ready
+    });
+} */
+
+export async function submitReady(ready: boolean, conf: string, results: any[], user: string) {
+  if (!docClient) await init();
+
+  console.log('submitReady', ready, conf, user, results);
+
+  return await docClient
+    .table(TABLE_ID)
+    .where('conf')
+    .eq(conf)
+    .where('user')
+    .eq(user)
+    .insert_or_update({
+      conf,
+      user,
+      ready: ready === true,
+      results: ready ? results : null
+    })
+    .catch(e => window.alert('error: ' + e));
+}
+
+export async function idDel(conf: string, user: string) {
+  if (!docClient) await init();
+
+  return await docClient
+  .table(TABLE_ID)
+  .where('conf')
+  .eq(conf)
+  .where('user')
+  .eq(user)
+  .delete();
+}
+
+/*
+export async function isReady(conf: string) {
+  if (!docClient) await init();
+
+  const re = await idGet(conf);
+
+  console.log('isReady re', re);
+  // const re = (await p) as any[];
+  // if (re && re.length > 0) console.log(re[0].answers);
+
+  // if (!re) return false;
+  // if (re.length === 0) return false;
+  // return re[0].answers.ready === true;
+  return re && re.ready;
+}
+*/
+
+export async function idGet(conf: string): Promise<ConfIdRow | null> {
+  if (!docClient) await init();
+
+  return docClient
+    .table(TABLE_ID)
+    .index('conf-index')
+    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs', 'results')
+    .having('conf')
+    .eq(conf)
+    .scan()
+    .then(x => {
+      // console.log('xx', x, x && x[0])
+      if (!x || x.length === 0) return null;
+      const item = x[0];
+      if (item.questions) item.questions = JSON.parse(item.questions);
+      else item.questions = [];
+      return item;
+    }); // remove metadata
+}
+
+export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
+  if (!docClient) await init();
+
+  return docClient
+    .table(TABLE_ID)
+    .index('user-index')
+    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs', 'results')
+    .having('user')
+    .eq(user)
+    .scan()
+    .then(xs => {
+      // console.log('xx', x, x && x[0])
+      if (!xs || xs.length === 0) return null;
+
+      xs.forEach(x => x.questions = JSON.parse(x.questions));
+      return xs as ConfIdRow[];
     }); // remove metadata
 }

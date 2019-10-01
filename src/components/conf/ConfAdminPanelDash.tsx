@@ -81,6 +81,7 @@ interface Props {
   payload: any;
   ready?: boolean;
   showRefresh: boolean;
+  questions: any;
 }
 
 interface State {}
@@ -95,7 +96,8 @@ export default function ConfAdminPanelDash(props: Props) {
     confid,
     numUsers,
     payload,
-    showRefresh
+    showRefresh,
+    questions
   } = props;
 
   const classes = useStyles({});
@@ -173,13 +175,13 @@ export default function ConfAdminPanelDash(props: Props) {
           <Card className={classes.card + ' ' + classes.bgCardColor}>
             <CardContent className={classes.cardContent}>
               <Typography variant="body2">Response Bars</Typography>
-              <ConfBars store={store} payload={payload} id={confid} />
+              <ConfBars store={store} payload={payload} id={confid} questions={questions} />
             </CardContent>
           </Card>
         </Grid>
 
         <Grid sm={12} md={6} lg={6} item>
-          <ConfAdminTable payload={payload} confid={confid} />
+          <ConfAdminTable payload={payload} confid={confid} questions={questions} />
         </Grid>
       </Grid>
     </div>

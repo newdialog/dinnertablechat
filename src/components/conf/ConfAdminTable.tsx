@@ -9,6 +9,7 @@ import Paper from '@material-ui/core/Paper';
 import { useTranslation } from 'react-i18next';
 import { getGroupByIndex, getOtherTopics } from 'utils/TopicInfo';
 import { findMyGroup } from 'services/ConfMath';
+import { ConfIdRow } from 'services/ConfService';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,9 +32,10 @@ const useStyles = makeStyles(theme => ({
 interface Props {
   payload: any;
   confid: string;
+  questions: any;
 }
 
-export default function ConfAdminTable({ payload, confid }: Props) {
+export default function ConfAdminTable({ payload, confid, questions }: Props) {
   const { t } = useTranslation();
 
   const classes = useStyles();
@@ -41,7 +43,7 @@ export default function ConfAdminTable({ payload, confid }: Props) {
   if (!payload.data) return null;
 
   // Get i18n info on answers
-  const tdata = getOtherTopics(confid, t, 'conf');
+  const tdata = questions; // getOtherTopics(confid, t, 'conf');
 
   // console.log('confid tdata', confid, tdata, data);
 

@@ -82,6 +82,7 @@ interface Props {
   payload: any;
   ready?: boolean;
   showRefresh: boolean;
+  questions: any;
 }
 
 interface State {}
@@ -96,7 +97,8 @@ export default function ConfAdminPanelSlides(props: Props) {
     confid,
     numUsers,
     payload,
-    showRefresh
+    showRefresh,
+    questions
   } = props;
 
   const classes = useStyles({});
@@ -146,13 +148,14 @@ export default function ConfAdminPanelSlides(props: Props) {
                 store={store}
                 payload={payload}
                 id={confid}
+                questions={questions}
               />
             </CardContent>
           </Card>
         </Grid>
 
         <Grid hidden={page !== 2} sm={12} md={12} lg={12} item>
-          <ConfAdminTable payload={payload} confid={confid} />
+          <ConfAdminTable payload={payload} confid={confid} questions={questions} />
         </Grid>
 
         {/* bottom */}

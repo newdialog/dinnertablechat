@@ -13,14 +13,11 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../../models/AppModel';
-import * as TopicInfo from '../../utils/TopicInfo';
 import useInterval from '@use-it/interval';
 
-import { getAll, submitReady, init, delAll } from '../../services/ConfService';
+import { getAll, submitReady, init, delAll, ConfIdRow } from '../../services/ConfService';
 import { match2 } from '../../services/ConfMath';
 
-import FaceIcon from '@material-ui/icons/Face';
-import ConfAdminPanelDash from './ConfAdminPanelDash';
 import ConfThinking from './ConfThinking';
 import { useFocus } from 'utils/useFocus';
 
@@ -51,6 +48,8 @@ interface Props {
   store: AppModel.Type;
   id: string;
   view: any;
+  table: ConfIdRow;
+  questions: any;
 }
 
 interface User {
@@ -100,8 +99,10 @@ export default function ConfAdminPanel(props: Props) {
   // const isAdminPage = !pos || Object.keys(pos).length === 0;
   const confid = props.id || '111';
   const user = store.getRID();
-  const numGroups = Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
-  const minGroupUserPairs = Number.parseInt(t(`conf-${confid}-minGroupUserPairs`), 10) || 1;
+
+  // TODO CHANGE THIS NOW
+  const numGroups = props.table.maxGroups || 2; // Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
+  const minGroupUserPairs = props.table.minGroupUserPairs || 1;
 
   React.useEffect(() => {
     console.log('user', user);
@@ -125,7 +126,7 @@ export default function ConfAdminPanel(props: Props) {
 
     const rdata = await getAll(confid);
     // debugger;
-    const results = rdata.meta.results;
+    const results = rdata.meta.results!;
     const ready = results.length > 0 || rdata.meta.ready;
 
     const numUsers = rdata.data.length;
@@ -174,9 +175,10 @@ export default function ConfAdminPanel(props: Props) {
       setState(p => ({ ...p, thinking: true }));
       return; // do THinking
     }
+    // ELSE
 
     const results = await matchUp();
-    await submitReady(toggle, confid, results); // .then(x=>checkReady());
+    await submitReady(toggle, confid, results, store.getRID()!); // .then(x=>checkReady());
 
     onRefresh();
     resetChecks();
@@ -208,7 +210,7 @@ export default function ConfAdminPanel(props: Props) {
   const onCloseThinking = async () => {
     setState(p => ({ ...p, thinking: false }));
     const results = await matchUp();
-    await submitReady(true, confid, results); // .then(x=>checkReady());
+    await submitReady(true, confid, results, store.getRID()!); // .then(x=>checkReady());
 
     // checkReady();
     onRefresh();
@@ -222,7 +224,8 @@ export default function ConfAdminPanel(props: Props) {
     numUsers: state.numUsers,
     payload: state.payload,
     ready: state.ready,
-    showRefresh: state.checks < 1 || !inFocus
+    showRefresh: state.checks < 1 || !inFocus,
+    questions: props.questions
   };
 
   return (

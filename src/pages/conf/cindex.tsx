@@ -10,6 +10,7 @@ import Reveal from 'react-reveal/Reveal';
 
 import PositionSelector from '../../components/saas/menus/SPositionSelector';
 import * as AppModel from '../../models/AppModel';
+import * as ConfService from '../../services/ConfService';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -129,15 +130,17 @@ function onHelp(store: AppModel.Type) {
   store.router.push('/tutorial');
 }
 
-const PAGE_NAME = 'NewDialog Mixer';
+const PAGE_NAME = 'Event Debate Tool';
 
 export default observer(function CIndex(props: Props) {
   const store = useContext(AppModel.Context)!;
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  const id = props.id;
-  const confid = id;
+  const [state, setState] = useState<{table?:ConfService.ConfIdRow, questions?:any}>({ });
+
+  // const id = props.id;
+  const confid = props.id;
   // console.log('id', props.id);
 
   // console.log(store.auth.snapshot());
@@ -171,10 +174,31 @@ export default observer(function CIndex(props: Props) {
     }
     handleReset();
 
-    window.gtag('event', ('conf_user_splash_'+confid), {
+    window.gtag('event', ('conf_user_splash_' + confid), {
       event_category: 'conf',
       confid: confid
     });
+  }, []);
+
+  // Get question from DB
+  useEffect(() => {
+    ConfService.idGet(confid).then(d => {
+      if(!d) {
+        alert('no id exists');
+        return;
+      }
+      const a = d.questions.map( (x,i) => {
+        return {
+          // topic: t(qs + '-topic'),
+          // photo: t(qs + '-photo'),
+          positions: x.answer.split(', '),
+          proposition: x.question,
+          id: `conf-${confid}-q${i}-id` // TODO x.i
+        }
+      });
+
+      setState(p => ({ ...p, table: d, questions: a }));
+    })
   }, []);
 
   const handleReset = () => {
@@ -198,12 +222,8 @@ export default observer(function CIndex(props: Props) {
     console.log('move to next step');
   }
 
-  const handleStep = step2 => () => {
-    store.debate.resetQueue();
-  };
-
   const onSubmit = (positions: any) => {
-    window.gtag('event', ('conf_user_submit_'+confid), {
+    window.gtag('event', ('conf_user_submit_' + confid), {
       event_category: 'conf',
       confid: confid,
       non_interaction: false
@@ -247,11 +267,12 @@ export default observer(function CIndex(props: Props) {
         </div>
 
         <div className={classes.verticalCenter}>
-          {step === 0 && (
+          {step === 0 && state.questions && (
             <Reveal effect="fadeInUp" duration={2200}>
               <PositionSelector
                 onSubmit={onSubmit}
-                id={props.id}
+                data={state.questions}
+                id={confid}
                 store={store}
                 prefix="conf"
               />
@@ -259,7 +280,7 @@ export default observer(function CIndex(props: Props) {
           )}
           {step === 1 && (
             <Reveal effect="fadeInUp" duration={1100}>
-              <ConfUserPanel id={id} store={store} />
+              {state.table && <ConfUserPanel id={confid} store={store} table={state.table} questions={state.questions}/>}
             </Reveal>
           )}
         </div>

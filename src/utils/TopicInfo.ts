@@ -2,8 +2,8 @@
 
 export interface Card {
   id: string;
-  topic: string;
-  photo: string;
+  topic?: string;
+  photo?: string;
   positions: string[];
   proposition: string;
 }
@@ -45,18 +45,23 @@ export function getTopics(t: any): Card[] {
 }
 
 export function getGroups(confid: string, t: any): string[] {
+  return [];
+
+  // TODO custom group names from DB
+  /*
   const groupNames = t(`conf-${confid}-groupNames`, '');
   if (groupNames === '') return [];
 
   const grousps = groupNames.split(', ');
   // console.log('groupNames', groupNames);
   return grousps;
+  */
 }
 
 export function getGroupByIndex(confid: string, index: number, t: any) {
   const groups = getGroups(confid, t);
   if (index >= groups.length) {
-    console.error('invalid group', groups, index, confid);
+    // intentionall console.error('invalid group', groups, index, confid);
 
     const startWithOne = index + 1;
     return startWithOne.toString(); // toString
@@ -72,11 +77,6 @@ export function getOtherTopics(
   if (!prefix) prefix = 'saas';
   // utility
   const getSaaSQKey = _topicid => i => prefix + '-' + _topicid + '-q' + i;
-  // topicid example "pub1"
-  // const qCode = (new URLSearchParams(window.location.search).get('q'));
-  // const urlParam = window.location.href.split('/').slice(-1)[0];
-  // let topicid =  urlParam || qCode;
-  // console.log('topicid', topicid);
   // if not exists in sheet, use default
   if (!topicid || topicid === '') {
     topicid = t(prefix + '-DEFAULT-id');
@@ -85,7 +85,6 @@ export function getOtherTopics(
   if (!topicid) throw new Error('no matching default question');
   // get number of questions
   const keyT = prefix + '-' + topicid + '-qnum';
-  // console.log('keyT', keyT);
   const topics = Number.parseInt(t(keyT), 10);
   if (!topics) console.log('found no topics: ');
 
@@ -94,7 +93,6 @@ export function getOtherTopics(
   const data: Card[] = [];
   for (let i = 0; i < topics; i++) {
     const qs = q(i);
-    // console.log('qs:', qs, 'topic:',qs + '-topic');
     data.push({
       topic: t(qs + '-topic'),
       photo: t(qs + '-photo'),
