@@ -122,7 +122,7 @@ const DTCRouter = ({
         {/* conference app */}
         <Route
           exact
-          path="/c/new"
+          path="/c/admin"
           component={CMaker}
         />
         <Route
