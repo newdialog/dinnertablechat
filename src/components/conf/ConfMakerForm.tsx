@@ -19,6 +19,7 @@ import CardContent from '@material-ui/core/CardContent';
 import uuid from 'short-uuid';
 
 import * as ConfService from '../../services/ConfService';
+import { ConfIdRow } from '../../services/ConfService';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,17 +58,17 @@ const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
 interface Props {
   onClose: () => void;
   confid: string | null,
-  data: { conf: string, questions: any[], maxGroups?: number, minGroupUserPairs?: number, ready: boolean };
+  data: ConfIdRow // { questions: any[], maxGroups?: number, minGroupUserPairs?: number, ready: boolean }; // conf: string, 
   // questions?: any;
   user: string;
   updater: number;
-  onSubmit: (x: any) => void;
+  onSubmit: (x: ConfIdRow) => void;
 }
 
 interface State {
   saved: boolean,
   questions: any[],
-  data?: any
+  data?: ConfIdRow
 }
 
 export default (props: Props) => {
@@ -79,15 +80,16 @@ export default (props: Props) => {
   const data = props.data;
 
   useEffect( () => {
-    const qs = data.questions || state.questions || [];
+    // if(state.questions.length > 0 ) return; // prevent override
+    
+    const qs = data.questions || [];
 
     if(qs.length===0) qs.push(newQuestions());
-
     setState(p => ({ ...p, questions: qs }));
-  }, [data, props.updater]);
+  }, [props.data.questions, props.confid]); // , props.updater
 
   const initialValues = React.useMemo(() => {
-    if(!data) return {};
+    // if(!data|| state.questions) return {};
     const d = state.questions.reduce((acc, x, i) => {
       const _i = x.id || uuid.generate(); // i.toString();
       // if(x.index===undefined) throw new Error('no index');
@@ -96,18 +98,20 @@ export default (props: Props) => {
       return acc;
     }, {});
 
-    d.conf = data.conf;
+    d.conf = props.confid; // data.conf || '';
     d.maxGroups = data.maxGroups || 10;
     d.minGroupUserPairs = data.minGroupUserPairs || 1;
-    // console.log('d', d)
+    d.curl = data.curl || '';
+    
+    console.log('d', d);
     return d;
-  }, [data, state.questions]); // , state.questions
+  }, [state.questions]); // , state.questions
 
   // console.log('qHash', initialValues)
 
   const formik = useFormik({
     initialValues,
-    enableReinitialize: true,
+    enableReinitialize: false,
     validationSchema: Yup.object({
       conf: Yup.string().trim()
         .max(80, 'Must be 80 characters or less')
@@ -119,9 +123,14 @@ export default (props: Props) => {
     }),
 
     onSubmit: async values => {
+      
+      // console.log('state.question', state.questions);
+      // return;
       const questions = Object.keys(values)
         .filter(x => x.indexOf('question') === 0)
         .reduce((acc, k, i) => {
+          // if(state.questions.findIndex( (x)=>x. ))
+
           const id = k.replace('question_', '');
           acc.push({
             // id,
@@ -132,33 +141,29 @@ export default (props: Props) => {
           return acc;
         }, [] as any[]);
 
-      const payload = {
+      const payload:ConfIdRow = {
         conf: values.conf,
         user: props.user,
         maxGroups: values.maxGroups,
         minGroupUserPairs: values.minGroupUserPairs,
         questions,
-        ready: props.data.ready
-      }
+        ready: props.data.ready,
+        curl: values.curl
+      } 
 
+      console.log(values);
       console.log('payload', JSON.stringify(payload));
-
-      // , questions: questions
+      // return;
       
-
       try {
         setState(p => ({ ...p, saved: true }));
         await props.onSubmit(payload);
       } catch (e) {
-        // debugger;
         console.warn('error', e);
         alert('Save failed: ' + e.message);
       } finally {
         setState(p => ({ ...p, saved: false }));
       }
-
-      // alert(JSON.stringify(payload, null, 2));
-
     }
   });
 
@@ -166,15 +171,14 @@ export default (props: Props) => {
 
   // const TF = wrap(formik).tf;
   const fields = [
-    { name: 'conf', label: 'id', type: 'input', short: true, disabled: !!props.confid },
-    { name: 'maxGroups', label: 'maxGroups', type: 'input' },
-    { name: 'minGroupUserPairs', label: 'minGroupUserPairs', type: 'input' },
+    { name: 'conf', label: 'Provide a short ID for this session', type: 'input', short: true, disabled: !!props.confid },
+    { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
+    { name: 'minGroupUserPairs', label: 'Minimum pairs per group', type: 'input' },
+    { name: 'curl', label: 'short url (optional)', type: 'input' },
     { name: 'questions', type: 'array' }
   ];
 
   const questionNodes = state.questions; // Object.keys(state.questions).filter(x => x.indexOf("question") === 0);
-  let numQuestions = questionNodes.length;
-
 
   const newQuestions = () => {
     return { 'question': '', answer: 'Yes, No', id: uuid.generate() };
@@ -229,14 +233,14 @@ export default (props: Props) => {
                     id={'question_' + y.id}
                     label={'question'}
                     formik={formik}
-                    data={state.questions[i].question}
+                    // data={state.questions[i].question}
                   />
                   <Tf
                     className={classes.textField}
                     id={'answer_' + y.id}
                     label={'answer'}
                     formik={formik}
-                    data={state.questions[i].answer}
+                    // data={state.questions[i].answer}
                     disabled={true}
                   />
                 </CardContent>
@@ -291,6 +295,8 @@ function Tf(props: any) {
   // const data = props.data;
   const multiline = props.multiline;
 
+  console.log('formik.getFieldProps(props.id)', props.id, formik.getFieldProps(props.id))
+
   return (
     <span key={props.key || props.id}>
       <TextField
@@ -299,9 +305,9 @@ function Tf(props: any) {
         label={props.label || props.id}
         variant="outlined"
         onChange={formik.handleChange}
-        value={formik.values[props.id] || props.data}
+        // value={formik.values[props.id] || props.data}
         multiline={multiline}
-        // {...formik.getFieldProps(props.id)}
+        {...formik.getFieldProps(props.id)}
         {...props}
       />
       {formik.touched[props.id] && formik.errors[props.id] ? (

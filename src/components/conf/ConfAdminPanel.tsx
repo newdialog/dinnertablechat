@@ -101,7 +101,7 @@ export default function ConfAdminPanel(props: Props) {
   const user = store.getRID();
 
   // TODO CHANGE THIS NOW
-  const numGroups = props.table.maxGroups || 2; // Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
+  const numGroups = props.table.maxGroups || 2;
   const minGroupUserPairs = props.table.minGroupUserPairs || 1;
 
   React.useEffect(() => {

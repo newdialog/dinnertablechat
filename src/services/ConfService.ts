@@ -271,23 +271,11 @@ export async function getAll(
     }); // remove metadata
 }
 
-// =================
-/* export interface TableIdRow {
-  questions: any;
-  ready: boolean;
-  user: string;
-  conf: string;
-} */
 export interface ConfIdQuestion {
   question: string;
   answer: string;
-  i: number;
+  i?: number;
 }
-/* export interface TableIdQuestions {
-  questions: Array<ConfIdQuestion>;
-  minGroupUserPairs: number;
-  maxGroups: number;
-} */
 // ==================
 // export type ConfIdQuestion = {i: number, question: string, answer: string};
 export type ConfIdQuestions = Array<ConfIdQuestion>;
@@ -299,7 +287,9 @@ export interface ConfIdRow {
   maxGroups: number,
   minGroupUserPairs: number,
   ready: boolean,
-  results?: GroupResult
+  results?: GroupResult,
+  curl?: string,
+  updated?: number
 }
 // ====================
 
@@ -326,51 +316,22 @@ export function idNewQuestion(
   };
 }
 
-export async function idSubmit(conf: string, user: string, questions: any[], maxGroups: number, minGroupUserPairs: number) {
+export async function idSubmit(data:ConfIdRow) {
   if (!docClient) await init();
-
+  // conf: string, user: string, questions: any[], maxGroups: number, minGroupUserPairs: number, curl?: string
   // if (!user) user = identityId;
 
   // console.log('submit user', user, conf, positions);
 
-  const vo = {
-    user,
-    conf,
-    maxGroups,
-    minGroupUserPairs,
-    questions: JSON.stringify(questions),
-    ready: false
-  };
+  data.updated = Math.floor(Date.now() / 1000);
 
-  console.log('saving', JSON.stringify(vo));
+  console.log('saving', JSON.stringify(data));
 
   return docClient
     .table(TABLE_ID)
     .return(docClient.UPDATED_OLD)
-    .insert_or_update(vo);
+    .insert_or_update(data);
 }
-
-/*
-export async function idSubmitReady(
-  conf: string,
-  user: string,
-  ready: boolean
-) {
-  if (!docClient) await init();
-
-  // if (!user) user = identityId;
-
-  // console.log('submit user', user, conf, positions);
-
-  return docClient
-    .table(TABLE_USERS)
-    .return(docClient.UPDATED_OLD)
-    .insert_or_update({
-      user,
-      conf,
-      ready
-    });
-} */
 
 export async function submitReady(ready: boolean, conf: string, results: any[], user: string) {
   if (!docClient) await init();
@@ -404,30 +365,13 @@ export async function idDel(conf: string, user: string) {
   .delete();
 }
 
-/*
-export async function isReady(conf: string) {
-  if (!docClient) await init();
-
-  const re = await idGet(conf);
-
-  console.log('isReady re', re);
-  // const re = (await p) as any[];
-  // if (re && re.length > 0) console.log(re[0].answers);
-
-  // if (!re) return false;
-  // if (re.length === 0) return false;
-  // return re[0].answers.ready === true;
-  return re && re.ready;
-}
-*/
-
 export async function idGet(conf: string): Promise<ConfIdRow | null> {
   if (!docClient) await init();
 
   return docClient
     .table(TABLE_ID)
     .index('conf-index')
-    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs', 'results')
+    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs', 'results', 'curl', 'updated')
     .having('conf')
     .eq(conf)
     .scan()
@@ -435,8 +379,8 @@ export async function idGet(conf: string): Promise<ConfIdRow | null> {
       // console.log('xx', x, x && x[0])
       if (!x || x.length === 0) return null;
       const item = x[0];
-      if (item.questions) item.questions = JSON.parse(item.questions);
-      else item.questions = [];
+      // if (item.questions) item.questions = JSON.parse(item.questions);
+      if (!item.questions) item.questions = [];
       return item;
     }); // remove metadata
 }
@@ -447,7 +391,7 @@ export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
   return docClient
     .table(TABLE_ID)
     .index('user-index')
-    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs', 'results')
+    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs', 'results', 'curl', 'updated')
     .having('user')
     .eq(user)
     .scan()
@@ -455,7 +399,8 @@ export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
       // console.log('xx', x, x && x[0])
       if (!xs || xs.length === 0) return null;
 
-      xs.forEach(x => x.questions = JSON.parse(x.questions));
+      // xs.forEach(x => x.questions = JSON.parse(x.questions));
+      xs.forEach(x => x.questions = x.questions || []);
       return xs as ConfIdRow[];
     }); // remove metadata
 }

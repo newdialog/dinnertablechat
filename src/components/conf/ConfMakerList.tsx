@@ -52,14 +52,10 @@ const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
 });
 
 interface Props {
-  // onClose?: () => void;
-  // data: { conf: string, questions: any[], maxGroups?:number, minGroupUserPairs?:number };
-  // questions?: any;
   user: string;
   onEdit: (conf: string) => void;
   onIdDel: (conf: string) => void;
   updater: number;
-  // onSubmit: (x: any) => void;
 }
 
 interface State {

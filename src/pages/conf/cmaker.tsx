@@ -12,6 +12,7 @@ import * as ConfService from '../../services/ConfService';
 import * as AppModel from '../../models/AppModel';
 import ConfMakerForm from 'components/conf/ConfMakerForm';
 import ConfMakerList from 'components/conf/ConfMakerList';
+import { ConfIdRow } from '../../services/ConfService';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -123,7 +124,7 @@ interface Props {
 
 interface State {
   confid: string | null,
-  data?: {conf:string, user:string, ready:boolean, questions: any[]};
+  data?: ConfIdRow, // {conf:string, user:string, ready:boolean, questions: any[]};
   updater: number;
 }
 
@@ -147,7 +148,8 @@ export default observer(function CMaker(props: Props) {
     store.hideNavbar();
   }, []);
 
-  async function handleSubmit(data: {conf:string, user:string, maxGroups:number, minGroupUserPairs:number} | any) {
+  // {conf:string, user:string, maxGroups:number, minGroupUserPairs:number} | any
+  async function handleSubmit(data: ConfIdRow ) {
     if(!data.user) throw new Error('no user');
     if(!data.conf) throw new Error('no conf');
     if(data.conf.length < 3) throw new Error('conf id must be longer than 3 characters');
@@ -159,7 +161,7 @@ export default observer(function CMaker(props: Props) {
     
     console.log('saving', JSON.stringify(data));
     try {
-      await ConfService.idSubmit(data.conf, data.user, data.questions, data.maxGroups, data.minGroupUserPairs);
+      await ConfService.idSubmit(data);
       alert('saved');
       setState(p=>({...p, updater: p.updater+1 }));
     } catch(e) {
@@ -274,12 +276,12 @@ export default observer(function CMaker(props: Props) {
 
           
             <div className={classes.verticalCenter}>
-              {state.confid!==null && state.data && store.getRID() && 
+              {state.confid!==null && state.data && user && 
                 <>
-                  <ConfMakerForm user={store.getRID()!} data={state.data} confid={state.confid} onSubmit={handleSubmit} onClose={()=>onEdit(null)} updater={state.updater}/>
+                  <ConfMakerForm user={user!} data={state.data} confid={state.confid} onSubmit={handleSubmit} onClose={()=>onEdit(null)} updater={state.updater}/>
                 </>
               }
-              {state.confid===null && store.getRID() && <ConfMakerList user={store.getRID()!} onEdit={onEdit} onIdDel={onIdDel} updater={state.updater} /> }
+              {state.confid===null && user && <ConfMakerList user={user!} onEdit={onEdit} onIdDel={onIdDel} updater={state.updater} /> }
             </div>
           
         </main>

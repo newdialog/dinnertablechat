@@ -255,13 +255,13 @@ export default observer(function CAdmin(props: Props) {
   const viewComp =
     state.view === 'dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
 
-  // const i18Url = t(`conf-${confid}-optional-url`); // TODO readd
-
   // url gen
   const isMixer = window.location.hostname.match('mixer.');
   let url = window.location.origin + '/c/' + confid;
   if (isMixer) url = window.location.origin + '/' + confid; // use root
-  /// if (i18Url.indexOf('http') !== -1) url = i18Url; // TODO readd
+
+  if(state.table && state.table.curl) url = state.table.curl;
+  if(state.table) console.log('state.table.curl', state.table.curl);
 
   const visualURL = url.replace('http://', '').replace('https://', '');
   // url += 'aaaaaaaaaaaa.';
