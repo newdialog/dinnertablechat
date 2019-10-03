@@ -77,14 +77,6 @@ export default (props: Props) => {
 
   // Populate state with question data
 
-  const addDebate = () => {
-
-  }
-
-  const onRemoveDebate = (index) => {
-    console.log('remove', index);
-  }
-
   const makeListItem = () => {
     props.onEdit('');
   }

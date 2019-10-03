@@ -124,7 +124,7 @@ interface Props {
 
 interface State {
   confid: string | null,
-  data?: ConfIdRow, // {conf:string, user:string, ready:boolean, questions: any[]};
+  data?: ConfIdRow,
   updater: number;
 }
 
@@ -166,6 +166,7 @@ export default observer(function CMaker(props: Props) {
       // setState(p=>({...p, updater: p.updater+1 }));
     } catch(e) {
       console.error(e);
+      alert('Error saving: ' + e.toString());
       if(e.toString().indexOf('authorized ') > 0) alert('Error: not authorized to update these questions');
     }
   }
@@ -187,8 +188,14 @@ export default observer(function CMaker(props: Props) {
 
   // Get Row Data
   useEffect(() => {
-    if (!state.confid) {
+    if (state.confid === null || state.confid === undefined) {
        //  setState(p => ({ ...p, data: null }));
+      return;
+    }
+
+    if(state.confid==='') {
+      const x = ConfService.idNewQuestions('', user!);
+      setState(p => ({ ...p, data: x }));
       return;
     }
 
@@ -277,7 +284,7 @@ export default observer(function CMaker(props: Props) {
             <div className={classes.verticalCenter}>
               {state.confid!==null && state.data && user && 
                 <>
-                  <ConfMakerForm user={user!} data={state.data} confid={state.confid} onSubmit={handleSubmit} onClose={()=>onEdit(null)} updater={state.updater}/>
+                  <ConfMakerForm user={user!} data={state.data} confid={state.confid} onSubmit={handleSubmit} onClose={()=>onEdit(null)} />
                 </>
               }
               {state.confid===null && user && <ConfMakerList user={user!} onEdit={onEdit} onIdDel={onIdDel} updater={state.updater} /> }

@@ -58,16 +58,13 @@ const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
 interface Props {
   onClose: () => void;
   confid: string | null;
-  data: ConfIdRow; // { questions: any[], maxGroups?: number, minGroupUserPairs?: number, ready: boolean }; // conf: string, 
-  // questions?: any;
+  data: ConfIdRow;
   user: string;
-  updater: number;
   onSubmit: (x: ConfIdRow) => void;
 }
 
 interface State {
   saved: boolean;
-  // questions: any[];
   data?: ConfIdRow;
   last?: ConfIdRow;
 }
@@ -95,14 +92,13 @@ export default (props: Props) => {
     const d = { ...data, ...q };
     delete d.questions;
 
-    if (props.confid) d.conf = props.confid; // data.conf || '';
+    if (props.confid) d.conf = props.confid;
     d.maxGroups = data.maxGroups || 10;
     d.minGroupUserPairs = data.minGroupUserPairs || 1;
     d.curl = data.curl || '';
 
-    // console.log('d', d);
     return d;
-  }, [props.data, props.data.questions]); // , state.questions
+  }, [props.data, props.data.questions]);
 
   // Clone for state
   useEffect(() => {
@@ -111,7 +107,7 @@ export default (props: Props) => {
     if (d.questions.length === 0) d.questions.push(newQuestions());
 
     setState(p => ({ ...p, data: d }));
-  }, [props.data, props.data.questions]); // , props.updater props.data.questions, 
+  }, [props.data, props.data.questions]);
 
   const formik = useFormik({
     initialValues: initialValues,
