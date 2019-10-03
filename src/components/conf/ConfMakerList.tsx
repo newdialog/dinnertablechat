@@ -91,8 +91,6 @@ export default (props: Props) => {
 
   if (!state.rows) return null;
 
-  console.log('aa', state.rows)
-
   return (
     <div style={{ maxWidth: "100%", textAlign:'left' }}>
       <Button style={{margin:'10px'}} onClick={makeListItem} variant={'contained'}>New Debate</Button>

@@ -274,7 +274,8 @@ export async function getAll(
 export interface ConfIdQuestion {
   question: string;
   answer: string;
-  i?: number;
+  // i?: number;
+  id?: string;
 }
 // ==================
 // export type ConfIdQuestion = {i: number, question: string, answer: string};
@@ -307,12 +308,12 @@ export function idNewQuestions(conf: string, user: string): ConfIdRow {
 export function idNewQuestion(
   question: string,
   answer: string,
-  index: number
+  id: string
 ): ConfIdQuestion {
   return {
     question,
     answer,
-    i: index
+    id
   };
 }
 

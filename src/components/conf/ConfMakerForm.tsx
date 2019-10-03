@@ -19,7 +19,7 @@ import CardContent from '@material-ui/core/CardContent';
 import uuid from 'short-uuid';
 
 import * as ConfService from '../../services/ConfService';
-import { ConfIdRow } from '../../services/ConfService';
+import { ConfIdRow, ConfIdQuestion } from '../../services/ConfService';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,8 +57,8 @@ const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
 
 interface Props {
   onClose: () => void;
-  confid: string | null,
-  data: ConfIdRow // { questions: any[], maxGroups?: number, minGroupUserPairs?: number, ready: boolean }; // conf: string, 
+  confid: string | null;
+  data: ConfIdRow; // { questions: any[], maxGroups?: number, minGroupUserPairs?: number, ready: boolean }; // conf: string, 
   // questions?: any;
   user: string;
   updater: number;
@@ -66,51 +66,55 @@ interface Props {
 }
 
 interface State {
-  saved: boolean,
-  questions: any[],
-  data?: ConfIdRow
+  saved: boolean;
+  // questions: any[];
+  data?: ConfIdRow;
+  last?: ConfIdRow;
 }
 
 export default (props: Props) => {
   const classes = useStyles();
   const user = props.user;
 
-  const [state, setState] = useState<State>({ saved: false, questions: [] });
+  const [state, setState] = useState<State>({ saved: false });
 
-  const data = props.data;
+  const data = state.data || props.data;
 
-  useEffect( () => {
-    // if(state.questions.length > 0 ) return; // prevent override
-    
-    const qs = data.questions || [];
+  // make sure all input data has an id
+  data.questions.forEach((x, i) => x.id = x.id || uuid.generate());
 
-    if(qs.length===0) qs.push(newQuestions());
-    setState(p => ({ ...p, questions: qs }));
-  }, [props.data.questions, props.confid]); // , props.updater
-
+  // Set once the initial data
   const initialValues = React.useMemo(() => {
-    // if(!data|| state.questions) return {};
-    const d = state.questions.reduce((acc, x, i) => {
-      const _i = x.id || uuid.generate(); // i.toString();
-      // if(x.index===undefined) throw new Error('no index');
+    const q = data.questions.reduce((acc, x, i) => {
+      const _i = x.id;
       acc['question_' + _i] = x.question;
       acc['answer_' + _i] = x.answer;
       return acc;
     }, {});
 
-    d.conf = props.confid; // data.conf || '';
+    const d = { ...data, ...q };
+    delete d.questions;
+
+    if (props.confid) d.conf = props.confid; // data.conf || '';
     d.maxGroups = data.maxGroups || 10;
     d.minGroupUserPairs = data.minGroupUserPairs || 1;
     d.curl = data.curl || '';
-    
-    console.log('d', d);
-    return d;
-  }, [state.questions]); // , state.questions
 
-  // console.log('qHash', initialValues)
+    // console.log('d', d);
+    return d;
+  }, [props.data, props.data.questions]); // , state.questions
+
+  // Clone for state
+  useEffect(() => {
+    const d: ConfIdRow = { ...props.data, questions: [...props.data.questions] };
+
+    if (d.questions.length === 0) d.questions.push(newQuestions());
+
+    setState(p => ({ ...p, data: d }));
+  }, [props.data, props.data.questions]); // , props.updater props.data.questions, 
 
   const formik = useFormik({
-    initialValues,
+    initialValues: initialValues,
     enableReinitialize: false,
     validationSchema: Yup.object({
       conf: Yup.string().trim()
@@ -119,29 +123,32 @@ export default (props: Props) => {
         .required('Required'),
       minGroupUserPairs: Yup.number().required(),
       maxGroups: Yup.number().required(),
-      maxUsers: Yup.number(),
+      curl2: Yup.string().trim().min(3, 'Must be at least 3 characters')
     }),
-
+    validateOnChange: true,
     onSubmit: async values => {
-      
-      // console.log('state.question', state.questions);
-      // return;
-      const questions = Object.keys(values)
+
+      let questions = Object.keys(values)
         .filter(x => x.indexOf('question') === 0)
         .reduce((acc, k, i) => {
-          // if(state.questions.findIndex( (x)=>x. ))
 
           const id = k.replace('question_', '');
+          const vk = k.replace('question', 'answer');
           acc.push({
-            // id,
-            i: i,
+            id,
             question: values[k],
-            answer: values[k.replace('question', 'answer')] || 'Yes, No'
+            answer: values[vk] || 'Yes, No'
           });
           return acc;
         }, [] as any[]);
 
-      const payload:ConfIdRow = {
+      // Filter out questions removed
+      questions = questions.filter(q => state.data!.questions.findIndex(y => q.id === y.id) > -1);
+
+      // cleanup
+      questions.forEach(q=>delete q.id);
+
+      const payload: ConfIdRow = {
         conf: values.conf,
         user: props.user,
         maxGroups: values.maxGroups,
@@ -149,12 +156,12 @@ export default (props: Props) => {
         questions,
         ready: props.data.ready,
         curl: values.curl
-      } 
+      }
 
       console.log(values);
       console.log('payload', JSON.stringify(payload));
       // return;
-      
+
       try {
         setState(p => ({ ...p, saved: true }));
         await props.onSubmit(payload);
@@ -167,8 +174,6 @@ export default (props: Props) => {
     }
   });
 
-  const getFieldProps = formik.getFieldProps.bind(formik);
-
   // const TF = wrap(formik).tf;
   const fields = [
     { name: 'conf', label: 'Provide a short ID for this session', type: 'input', short: true, disabled: !!props.confid },
@@ -178,28 +183,30 @@ export default (props: Props) => {
     { name: 'questions', type: 'array' }
   ];
 
-  const questionNodes = state.questions; // Object.keys(state.questions).filter(x => x.indexOf("question") === 0);
+  const questionNodes = data.questions;
+  // console.log('questionNodes', questionNodes, formik.values)
 
-  const newQuestions = () => {
+  const newQuestions = (): ConfIdQuestion => {
     return { 'question': '', answer: 'Yes, No', id: uuid.generate() };
   }
 
   const addQuestion = () => {
-    const q = [...state.questions]; // Object.assign({}, state.questions);
+    // const q = [...state.questions]; // Object.assign({}, state.questions);
     // q['question' + numQuestions] = '';
     // q['answer' + numQuestions] = 'Yes, No';
-    q.push(newQuestions());
-
+    state.data!.questions.push(newQuestions());
+    console.log('state.data!.questions', JSON.stringify(state.data!.questions));
     // console.log('addQuestion', q)
-    setState(p => ({ ...p, questions: q }));
+    setState(p => ({ ...p, data: state.data }));
   }
 
   const onRemove = (index) => {
     // console.log('remove', index);
-    const removeQ = state.questions[index];
+    const removeQ = state.data!.questions[index];
 
-    const q = [...state.questions];
+    const q = [...state.data!.questions];
     q.splice(index, 1);
+    const d = { ...state.data!, questions: q };
 
     // formik.setFieldValue("", "");
     // formik.
@@ -210,7 +217,7 @@ export default (props: Props) => {
     // let numQuestions = questionNodes.length;
 
     // console.log('q', q)
-    setState(p => ({ ...p, questions: q }));
+    setState(p => ({ ...p, data: d }));
   }
 
   const url = window.location.href.replace('admin', formik.values['conf']);
@@ -225,23 +232,25 @@ export default (props: Props) => {
         {fields.map(x => {
           if (x.type === 'array') {
             return questionNodes.map((y, i) => (
-              <Card key={'q' + i.toString()} style={{ marginBottom: '1em' }}>
+              <Card key={'q' + y.id!} style={{ marginBottom: '1em' }}>
                 <CardContent>
                   <Tf
                     multiline={true}
                     className={classes.textField}
-                    id={'question_' + y.id}
+                    id={`question_${y.id!}`}
                     label={'question'}
                     formik={formik}
-                    // data={state.questions[i].question}
+                    data={y.question}
+                  // data={state.questions[i].question}
                   />
                   <Tf
                     className={classes.textField}
-                    id={'answer_' + y.id}
+                    id={`answer_${y.id!}`}
                     label={'answer'}
                     formik={formik}
                     // data={state.questions[i].answer}
                     disabled={true}
+                    data={y.answer}
                   />
                 </CardContent>
                 <CardActions>
@@ -289,28 +298,34 @@ export default (props: Props) => {
   );
 };
 
-function Tf(props: any) {
+function Tf({ id, formik, ...props }: any) {
   const classes = useStyles();
-  const formik = props.formik;
   // const data = props.data;
   const multiline = props.multiline;
 
-  console.log('formik.getFieldProps(props.id)', props.id, formik.getFieldProps(props.id))
+  // console.log('formik.getFieldProps(props.id)', props.id, formik.getFieldProps(props.id, 'input'))
+  // if (props.id === 'curl') console.log('formik.values', formik.values);
 
   return (
-    <span key={props.key || props.id}>
+    <span key={props.key || id}>
       <TextField
         margin="normal"
-        // id={props.id}
-        label={props.label || props.id}
+        id={id}
+        // error={}
+        label={props.label || id}
         variant="outlined"
-        onChange={formik.handleChange}
-        // value={formik.values[props.id] || props.data}
+        onChange={(e) => {
+          const v = e.currentTarget.value;
+
+          formik.handleChange(e);
+        }}
+        onBlur={formik.handleBlur}
+        value={formik.values[id] || props.data || ''} // || props.data}
         multiline={multiline}
-        {...formik.getFieldProps(props.id)}
+        // {...formik.getFieldProps(id)}
         {...props}
       />
-      {formik.touched[props.id] && formik.errors[props.id] ? (
+      {formik.touched[id] && formik.errors[id] ? (
         <Typography
           gutterBottom={false}
           align="center"
@@ -318,7 +333,7 @@ function Tf(props: any) {
           className={classes.err}
           style={{ width: '100%' }}
         >
-          ↳ {formik.errors[props.id]}
+          ↳ {formik.errors[id]}
         </Typography>
       ) : (
           <br />

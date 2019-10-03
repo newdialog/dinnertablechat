@@ -163,7 +163,7 @@ export default observer(function CMaker(props: Props) {
     try {
       await ConfService.idSubmit(data);
       alert('saved');
-      setState(p=>({...p, updater: p.updater+1 }));
+      // setState(p=>({...p, updater: p.updater+1 }));
     } catch(e) {
       console.error(e);
       if(e.toString().indexOf('authorized ') > 0) alert('Error: not authorized to update these questions');
@@ -188,8 +188,7 @@ export default observer(function CMaker(props: Props) {
   // Get Row Data
   useEffect(() => {
     if (!state.confid) {
-      const x = ConfService.idNewQuestions('', user!);
-      setState(p => ({ ...p, data: x as ConfService.ConfIdRow }));
+       //  setState(p => ({ ...p, data: null }));
       return;
     }
 
@@ -204,12 +203,12 @@ export default observer(function CMaker(props: Props) {
 
       if (x !== null) {
         const data = x as ConfService.ConfIdRow;
-        setState(p => ({ ...p, data }));
+        setState(p => ({ ...p, data, updater: p.updater+1 }));
         // Populate state with question data
         // setState(p => ({ ...p, questions: data.questions || [] }));
       }
     })
-  }, [state.confid, state.updater]);
+  }, [state.confid]); // , state.updater
 
   if (store.auth.isNotLoggedIn) {
     store.auth.login();
@@ -221,7 +220,7 @@ export default observer(function CMaker(props: Props) {
   }
   
   const onEdit = (conf:string | null) => {
-    setState(p=>({...p, confid: conf, updater: p.updater+1 }));
+    setState(p=>({...p, confid: conf, data: undefined, updater: p.updater+1 }));
   }
 
   const onIdDel = async (conf:string) => {
