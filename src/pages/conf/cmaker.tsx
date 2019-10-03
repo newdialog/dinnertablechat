@@ -277,7 +277,7 @@ export default observer(function CMaker(props: Props) {
             <div className={classes.verticalCenter}>
               {state.confid!==null && state.data && user && 
                 <>
-                  <ConfMakerForm user={user!} data={state.data} confid={state.confid} onSubmit={handleSubmit} onClose={()=>onEdit(null)} updater={state.updater}/>
+                  <ConfMakerForm user={user!} data={state.data} confid={state.confid} onSubmit={handleSubmit} onClose={()=>onEdit(null)} />
                 </>
               }
               {state.confid===null && user && <ConfMakerList user={user!} onEdit={onEdit} onIdDel={onIdDel} updater={state.updater} /> }
