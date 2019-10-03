@@ -124,7 +124,7 @@ interface Props {
 
 interface State {
   confid: string | null,
-  data?: ConfIdRow, // {conf:string, user:string, ready:boolean, questions: any[]};
+  data?: ConfIdRow,
   updater: number;
 }
 
@@ -187,8 +187,14 @@ export default observer(function CMaker(props: Props) {
 
   // Get Row Data
   useEffect(() => {
-    if (!state.confid) {
+    if (state.confid === null || state.confid === undefined) {
        //  setState(p => ({ ...p, data: null }));
+      return;
+    }
+
+    if(state.confid==='') {
+      const x = ConfService.idNewQuestions('', user!);
+      setState(p => ({ ...p, data: x }));
       return;
     }
 
