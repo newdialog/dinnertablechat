@@ -11,7 +11,7 @@ const schema = {
             type: 'object',
             properties: {
                 question: { type: 'string', minimum: 2 },
-                answer: { type: 'string', minimum: 2, defaultValue: 'Yes, No' }
+                answer: { type: 'string', minimum: 2, value: 'Yes, No', disabled: true }
             },
             required: ['question', 'answer']
         },
@@ -23,30 +23,29 @@ const schema = {
             type: 'integer',
             minimum: 1,
             maximum: 200,
-            defaultValue: 20
+            // defaultValue: 20
         },
         minGroupUserPairs: {
             description: 'Minimum pairs of users per group',
             type: 'integer',
             minimum: 1,
             maximum: 100,
-            defaultValue: 1
+            // defaultValue: 1
         },
-        curl: { type: 'string' },
+        curl: { type: 'string', label: 'custom short url (optional)' },
 
         questions: {
-            type: 'array', minCount: 1, items: {
+            type: 'array', items: {
                 $ref: '#/definitions/question'
             },
-            defaultValue: [{question:'', answer: ''}]
+            // minCount: 1, 
+            // defaultValue: [{question:'', answer: ''}]
         },
     },
     required: [
         'conf',
         'maxGroups',
-        'minGroupUserPairs',
-        'curl',
-        'questions'
+        'minGroupUserPairs'
     ]
 };
 function createValidator(schema) {

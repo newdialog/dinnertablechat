@@ -91,7 +91,6 @@
     "simple-peer": "^9.4.0",
     "uniforms": "^2.4.1",
     "uniforms-bridge-json-schema": "^2.4.1",
-    "uniforms-bridge-simple-schema-2": "^2.4.1",
     "uniforms-material": "^2.4.1",
     "webfontloader": "^1.6.28",
     "yup": "^0.27.0"
