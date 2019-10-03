@@ -326,6 +326,9 @@ export async function idSubmit(data:ConfIdRow) {
 
   data.updated = Math.floor(Date.now() / 1000);
 
+  // Strings cannot be empty for dynamo
+  if(data.curl === '') delete data.curl;
+
   console.log('saving', JSON.stringify(data));
 
   return docClient

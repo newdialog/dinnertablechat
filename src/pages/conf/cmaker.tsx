@@ -166,6 +166,7 @@ export default observer(function CMaker(props: Props) {
       // setState(p=>({...p, updater: p.updater+1 }));
     } catch(e) {
       console.error(e);
+      alert('Error saving: ' + e.toString());
       if(e.toString().indexOf('authorized ') > 0) alert('Error: not authorized to update these questions');
     }
   }
