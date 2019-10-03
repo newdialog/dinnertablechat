@@ -316,7 +316,7 @@ function Tf({ id, formik, ...props }: any) {
           formik.handleChange(e);
         }}
         onBlur={formik.handleBlur}
-        value={formik.values[id] || props.data || ''} // || props.data}
+        value={formik.values[id]!==undefined ? formik.values[id] : (props.data || '')} // || props.data}
         multiline={multiline}
         // {...formik.getFieldProps(id)}
         {...props}
