@@ -8,6 +8,9 @@ import React, { useEffect, useState } from 'react';
 import uuid from 'short-uuid';
 import * as Yup from 'yup';
 
+import schema from './ConfMakerSchema';
+import { AutoForm } from 'uniforms-material';
+
 import { ConfIdRow } from '../../services/ConfService';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -78,18 +81,21 @@ export default (props: Props) => {
   }, [props.data.questions, props.confid]); // , props.updater
 
   const initialValues = React.useMemo(() => {
+    const d = data;
     // if(!data|| state.questions) return {};
-    const d = state.questions.reduce((acc, x, i) => {
+    /* const d = state.questions.reduce((acc, x, i) => {
       const _i = x.id || uuid.generate(); // i.toString();
       // if(x.index===undefined) throw new Error('no index');
       acc['question_' + _i] = x.question;
       acc['answer_' + _i] = x.answer;
       return acc;
-    }, {});
+    }, {}); */
 
-    d.conf = props.confid; // data.conf || '';
-    d.maxGroups = data.maxGroups || 10;
-    d.minGroupUserPairs = data.minGroupUserPairs || 1;
+    // d.questions = state.questions;
+    if(!d.questions || d.questions.length===0) d.questions = [{question:'', answer:'Yes, No'}];
+    d.conf = props.confid || ''; // data.conf || '';
+    // d.maxGroups = data.maxGroups || 10;
+    // d.minGroupUserPairs = data.minGroupUserPairs || 1;
     d.curl = data.curl || '';
 
     console.log('d', d);
@@ -98,9 +104,11 @@ export default (props: Props) => {
 
   const onSubmit = async (values) => {
 
+    // console.log(values);
+
     // console.log('state.question', state.questions);
     // return;
-    const questions = Object.keys(values)
+    /* const questions = Object.keys(values)
       .filter(x => x.indexOf('question') === 0)
       .reduce((acc, k, i) => {
         // if(state.questions.findIndex( (x)=>x. ))
@@ -114,6 +122,9 @@ export default (props: Props) => {
         });
         return acc;
       }, [] as any[]);
+      */
+     const questions = values.questions;
+     questions.forEach((q,i)=>q.i = i);
 
     const payload: ConfIdRow = {
       conf: values.conf,
@@ -125,7 +136,7 @@ export default (props: Props) => {
       curl: values.curl
     }
 
-    console.log(values);
+    console.log('values', values);
     console.log('payload', JSON.stringify(payload));
     // return;
 
@@ -187,80 +198,16 @@ export default (props: Props) => {
   // const url = window.location.href.replace('admin', formik.values['conf']);
 
   return (
-    <Formik
-      initialValues={initialValues}
-      enableReinitialize={true}
-      validationSchema={Yup.object({
-        conf: Yup.string().trim()
-          .max(80, 'Must be 80 characters or less')
-          .min(3, 'Must be at least 3 characters')
-          .required('Required'),
-        minGroupUserPairs: Yup.number().required(),
-        maxGroups: Yup.number().required(),
-        maxUsers: Yup.number(),
-      })}
-      onSubmit={(values, { setSubmitting }) => {
-        onSubmit(values);
-      }}
-      render={({ submitForm, isSubmitting, values, setFieldValue }) => (
-
-        <Form
-          className={classes.container}
-          noValidate
-        >
-          <Field id="conf" component={TextField} fullWidth margin="normal" />
-          <Field id="maxGroups" component={TextField} fullWidth margin="normal" />
-          <Field id="curl" component={TextField} fullWidth margin="normal" />
-          <Button
-            variant="contained"
-            color="primary"
-            disabled={isSubmitting}
-            onClick={submitForm}
-          >
-            Submit
+    <div className={classes.container}>
+      <AutoForm
+        schema={schema}
+        model={initialValues}
+        onSubmit={model => onSubmit(model)}
+      />
+      <br/>
+      <Button style={{ margin: '0 0 0 40px' }} variant="contained" onClick={(e) => { e.preventDefault(); props.onClose() }}>
+        Return to list
         </Button>
-        </Form>
-      )}
-    >
-
-    </Formik>
+    </div>
   );
 };
-
-function Tf(props: any) {
-  const classes = useStyles();
-  const formik = props.formik;
-  // const data = props.data;
-  const multiline = props.multiline;
-
-  console.log('formik.getFieldProps(props.id)', props.id, formik.getFieldProps(props.id))
-
-  return (
-    <span key={props.key || props.id}>
-      <TextField
-        margin="normal"
-        // id={props.id}
-        label={props.label || props.id}
-        variant="outlined"
-        onChange={formik.handleChange}
-        // value={formik.values[props.id] || props.data}
-        multiline={multiline}
-        {...formik.getFieldProps(props.id)}
-        {...props}
-      />
-      {formik.touched[props.id] && formik.errors[props.id] ? (
-        <Typography
-          gutterBottom={false}
-          align="center"
-          variant="subtitle1"
-          className={classes.err}
-          style={{ width: '100%' }}
-        >
-          ↳ {formik.errors[props.id]}
-        </Typography>
-      ) : (
-          <br />
-        )}
-    </span>
-  );
-}

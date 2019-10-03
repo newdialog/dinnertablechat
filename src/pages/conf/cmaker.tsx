@@ -10,7 +10,7 @@ import Reveal from 'react-reveal/Reveal';
 import * as ConfService from '../../services/ConfService';
 
 import * as AppModel from '../../models/AppModel';
-import ConfMakerForm from 'components/conf/ConfMakerForm';
+import ConfMakerForm from 'components/conf/ConfMakerForm2';
 import ConfMakerList from 'components/conf/ConfMakerList';
 import { ConfIdRow } from '../../services/ConfService';
 
