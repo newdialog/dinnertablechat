@@ -49,9 +49,9 @@ export default function ConfAdminTable({ payload, confid, questions }: Props) {
 
   const data2 = payload.data.map(user => {
     // console.log('user tdata[index]', user, Object.values(user));
-
+    // debugger;
     const answers = Object.values(user.answers).map(
-      (v, qindex) => tdata[qindex].positions[v as number]
+      (v, qindex) => tdata[qindex] ? tdata[qindex].positions[v as number] : 'n/a'
     );
 
     const g = findMyGroup(user.user, payload.results);

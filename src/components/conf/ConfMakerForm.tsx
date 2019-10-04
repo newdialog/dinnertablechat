@@ -1,25 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Slide from '@material-ui/core/Slide';
-import useInterval from '@use-it/interval';
-import { Formik, Field, FormikProps, FormikValues, useFormik } from 'formik';
 import { TextField, Typography } from '@material-ui/core';
-import * as Yup from 'yup';
-import classes from '*.module.scss';
-
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import Slide from '@material-ui/core/Slide';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import uuid from 'short-uuid';
+import * as Yup from 'yup';
 
-import * as ConfService from '../../services/ConfService';
-import { ConfIdRow, ConfIdQuestion } from '../../services/ConfService';
+import { ConfIdQuestion, ConfIdRow } from '../../services/ConfService';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -51,10 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 interface Props {
   onClose: () => void;
   confid: string | null;
@@ -70,8 +57,10 @@ interface State {
 }
 
 export default (props: Props) => {
-  const classes = useStyles();
-  const user = props.user;
+  const classes = useStyles({});
+  // const user = props.user;
+  const confid = props.confid === 'new' ? '' : props.confid;
+  if(props.data.conf==='new') props.data.conf = '';
 
   const [state, setState] = useState<State>({ saved: false });
 
@@ -92,7 +81,7 @@ export default (props: Props) => {
     const d = { ...data, ...q };
     delete d.questions;
 
-    if (props.confid) d.conf = props.confid;
+    if (confid) d.conf = confid;
     d.maxGroups = data.maxGroups || 10;
     d.minGroupUserPairs = data.minGroupUserPairs || 1;
     d.curl = data.curl || '';
@@ -162,8 +151,12 @@ export default (props: Props) => {
         setState(p => ({ ...p, saved: true }));
         await props.onSubmit(payload);
       } catch (e) {
-        console.warn('error', e);
-        alert('Save failed: ' + e.message);
+        if(e.message.indexOf('aborted') > -1) {
+          // do nothing
+        } else {
+          console.warn('error', e);
+          alert('Save failed: ' + e.message);
+        }
       } finally {
         setState(p => ({ ...p, saved: false }));
       }
@@ -172,7 +165,7 @@ export default (props: Props) => {
 
   // const TF = wrap(formik).tf;
   const fields = [
-    { name: 'conf', label: 'Provide a short ID for this session', type: 'input', short: true, disabled: !!props.confid },
+    { name: 'conf', label: 'Provide a short ID for this session', type: 'input', short: true, disabled: !!confid },
     { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
     { name: 'minGroupUserPairs', label: 'Minimum pairs per group', type: 'input' },
     { name: 'curl', label: 'short url (optional)', type: 'input' },
@@ -295,7 +288,7 @@ export default (props: Props) => {
 };
 
 function Tf({ id, formik, ...props }: any) {
-  const classes = useStyles();
+  const classes = useStyles({});
   // const data = props.data;
   const multiline = props.multiline;
 

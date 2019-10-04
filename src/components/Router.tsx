@@ -86,6 +86,14 @@ const DTCRouter = ({
             path="/admin"
             component={CMaker}
           />
+
+          <Route
+            exact
+            path="/:id/edit"
+            // component={CMaker}
+            render={props => <CMaker id={props.match.params.id} />}
+          />
+
           <Route
             exact
             path="/:id/admin"
@@ -136,6 +144,14 @@ const DTCRouter = ({
           path="/c/admin"
           component={CMaker}
         />
+
+        <Route
+            exact
+            path="/c/:id/edit"
+            // component={CMaker}
+            render={props => <CMaker id={props.match.params.id} />}
+          />
+
         <Route
           exact
           path="/c/:id/admin"

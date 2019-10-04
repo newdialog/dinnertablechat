@@ -136,7 +136,7 @@ export default observer(function CMaker(props: Props) {
   const { t } = useTranslation();
 
   const [state, setState] = useState<State>({
-    confid: null,
+    confid: props.id || null,
     updater: 0
   });
 
@@ -148,6 +148,10 @@ export default observer(function CMaker(props: Props) {
     store.hideNavbar();
   }, []);
 
+  useEffect( ()=> {
+    setState(p => ({...p, confid: props.id ? props.id : null}));
+  }, [props.id]);
+
   // {conf:string, user:string, maxGroups:number, minGroupUserPairs:number} | any
   async function handleSubmit(data: ConfIdRow ) {
     if(!data.user) throw new Error('no user');
@@ -158,6 +162,8 @@ export default observer(function CMaker(props: Props) {
     const existing = await ConfService.idGet(data.conf);
     if(existing && existing.user !== user) throw new Error('conference id already taken by another user');
 
+    var r = window.confirm('This event has already assigned groups. Editing may cause reporting issues. Continue?');
+    if(!r) throw new Error('aborted');
     
     console.log('saving', JSON.stringify(data));
     try {
@@ -201,6 +207,7 @@ export default observer(function CMaker(props: Props) {
 
     ConfService.idGet(state.confid as string).then(x => {
       if (x && x.user !== user) {
+        console.log('x.user', x, user);
         alert('Error: This is owned by a different user. Read-only mode.');
       }
       // init model if not exists
@@ -227,13 +234,24 @@ export default observer(function CMaker(props: Props) {
   }
   
   const onEdit = (conf:string | null) => {
+    const l = window.location.href;
+    // const i = l.indexOf('admin');
+    const prefix = l.includes('/c/') ? '/c/' : '/';
+
+    if(conf!==null) {
+      if(conf==='') conf = 'new';
+      store.router.push(prefix+conf+'/edit');
+    } else {
+      store.router.push(prefix+'admin');
+    }
+
     setState(p=>({...p, confid: conf, data: undefined, updater: p.updater+1 }));
   }
 
   const onIdDel = async (conf:string) => {
     if(!conf) throw new Error('no conf id');
 
-    var r = window.confirm("Are you sure you want to delete?");
+    var r = window.confirm('Are you sure you want to delete?');
     if(!r) return;
 
     await ConfService.idDel(conf, store.getRID()!)
@@ -260,6 +278,7 @@ export default observer(function CMaker(props: Props) {
                 align="left"
                 color="textSecondary"
                 className={classes.heroLogoText}
+                onClick={ () => onEdit(null) }
                 gutterBottom
               >
                 {PAGE_NAME}

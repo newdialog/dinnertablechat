@@ -1,23 +1,11 @@
-import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Slide from '@material-ui/core/Slide';
-import useInterval from '@use-it/interval';
-import { TextField, Typography } from '@material-ui/core';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import MaterialTable from 'material-table';
+import React, { useEffect, useState } from 'react';
+import { ConfIdRow, idGetByUser } from 'services/ConfService';
 
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import uuid from 'short-uuid';
-
-import MaterialTable from "material-table";
-import tableIcons from "../../utils/TableIcons";
-import { idGetByUser, ConfIdRow, idDel } from 'services/ConfService';
+import tableIcons from '../../utils/TableIcons';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -84,7 +72,7 @@ export default (props: Props) => {
   if (!state.rows) return null;
 
   return (
-    <div style={{ maxWidth: "100%", textAlign:'left' }}>
+    <div style={{ maxWidth: '100%', textAlign:'left' }}>
       <Button style={{margin:'10px'}} onClick={makeListItem} variant={'contained'}>New Debate</Button>
       <MaterialTable
         icons={tableIcons as any}
@@ -122,7 +110,7 @@ export default (props: Props) => {
               // debugger;
               // setState(p => ({ ...p, confid: rowData.conf }))
               if(ready) {
-                var r = window.confirm("Editing a debate that's already been active is unstable. Continue?");
+                var r = window.confirm('Editing a debate that\'s already been active is unstable. Continue?');
                 if(!r) return;
               }
               props.onEdit(id);
@@ -137,7 +125,7 @@ export default (props: Props) => {
               const id = (rowData as any).conf;
               const ready = (rowData as any).ready;
               if(ready) {
-                var r = window.alert("Delete a debate that's already been active is not currently possible.");
+                var r = window.alert('Delete a debate that\'s already been active is not currently possible.');
                 return;
               }
               props.onIdDel(id);
@@ -154,8 +142,8 @@ export default (props: Props) => {
           }
         ]}
         columns={[
-          { title: "id", field: "conf" },
-          { title: "Status", field: "ready", lookup: { true: "assigned", false: "unassigned" } }
+          { title: 'id', field: 'conf' },
+          { title: 'Status', field: 'ready', lookup: { true: 'assigned', false: 'unassigned' } }
         ]}
         data={state.rows!}
         title="Debate Sessions"
