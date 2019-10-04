@@ -177,7 +177,7 @@ export default (props: Props) => {
 
   // const TF = wrap(formik).tf;
   const fields = [
-    { name: 'conf', label: 'Short name for the debate session', type: 'input', short: true, disabled: !!confid },
+    { name: 'conf', label: 'Short name for the event', type: 'input', short: true, disabled: !!confid },
     { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
     { name: 'minGroupUserPairs', label: 'Minimum pairs per group', type: 'input' },
     { name: 'curl', label: 'short url (optional)', type: 'input' },
