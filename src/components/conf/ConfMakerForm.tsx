@@ -15,8 +15,14 @@ import { ConfIdQuestion, ConfIdRow } from '../../services/ConfService';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
+      
+    },
+    form: {
+      backgroundColor: '#ffffff',
+      width: '550px',
       margin: '0 auto',
-      width: '550px'
+      borderRadius: '10px',
+      // padding: '0 10 0 0'
       // display: 'flex',
       // flexWrap: 'wrap'
     },
@@ -103,11 +109,17 @@ export default (props: Props) => {
     enableReinitialize: false,
     validationSchema: Yup.object({
       conf: Yup.string().trim()
+        .test(
+          'is-word',
+          '${path} must contain only a word',
+          (value:string) => !value.includes(' '),
+        )
         .max(80, 'Must be 80 characters or less')
         .min(3, 'Must be at least 3 characters')
+        .lowercase()
         .required('Required'),
-      minGroupUserPairs: Yup.number().required(),
-      maxGroups: Yup.number().required(),
+      minGroupUserPairs: Yup.number().min(1).max(10).required(),
+      maxGroups: Yup.number().min(1).max(500).required(),
       curl2: Yup.string().trim().min(3, 'Must be at least 3 characters')
     }),
     validateOnChange: true,
@@ -165,7 +177,7 @@ export default (props: Props) => {
 
   // const TF = wrap(formik).tf;
   const fields = [
-    { name: 'conf', label: 'Provide a short ID for this session', type: 'input', short: true, disabled: !!confid },
+    { name: 'conf', label: 'Short name for the debate session', type: 'input', short: true, disabled: !!confid },
     { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
     { name: 'minGroupUserPairs', label: 'Minimum pairs per group', type: 'input' },
     { name: 'curl', label: 'short url (optional)', type: 'input' },
@@ -209,18 +221,18 @@ export default (props: Props) => {
     setState(p => ({ ...p, data: d }));
   }
 
-  const url = window.location.href.replace('admin', formik.values['conf']);
+  const url = window.location.href.replace(/(new.)*edit/g, formik.values['conf']).toLowerCase();
 
   return (
-    <div>
+    <div className={classes.container}>
       <form
-        className={classes.container}
+        className={classes.form}
         noValidate
         onSubmit={formik.handleSubmit}
       >
         {fields.map(x => {
           if (x.type === 'array') {
-            return questionNodes.map((y, i) => (
+            return questionNodes.map((y, i:number) => (
               <Card key={'q' + y.id!} style={{ marginBottom: '1em' }}>
                 <CardContent>
                   <Tf
@@ -243,7 +255,7 @@ export default (props: Props) => {
                   />
                 </CardContent>
                 <CardActions>
-                  <Typography variant="subtitle1" align="left" style={{ color: 'gray' }}>#{i}</Typography><Button onClick={() => onRemove(i)} style={{ fontSize: '.5em' }} size="small">Remove Question</Button>
+                  <Typography variant="subtitle1" align="left" style={{ color: 'gray' }}>#{i+1}</Typography><Button onClick={() => onRemove(i)} style={{ fontSize: '.5em' }} size="small">Remove Question</Button>
                 </CardActions>
               </Card>
             ));
@@ -254,7 +266,7 @@ export default (props: Props) => {
             <Tf className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
 
             {x.name === 'conf' &&
-              <Typography variant="subtitle1" align="right" style={{ color: 'gray', marginTop: '-0.7em', marginBottom: '1em' }}>url: {url}</Typography>
+              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin:'-0.7em 1em 1em 0' }}>url: {url} </Typography>
             }
           </span>
           );
@@ -298,6 +310,7 @@ function Tf({ id, formik, ...props }: any) {
   return (
     <span key={props.key || id}>
       <TextField
+        style={{width:'95%'}}
         margin="normal"
         id={id}
         // error={}

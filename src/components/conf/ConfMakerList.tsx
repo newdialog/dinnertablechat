@@ -75,6 +75,7 @@ export default (props: Props) => {
     <div style={{ maxWidth: '100%', textAlign:'left' }}>
       <Button style={{margin:'10px'}} onClick={makeListItem} variant={'contained'}>New Debate</Button>
       <MaterialTable
+        options={{pageSize: 20, paging: false}}
         icons={tableIcons as any}
         actions={[
           {
