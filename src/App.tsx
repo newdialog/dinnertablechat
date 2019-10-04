@@ -116,7 +116,7 @@ export const Base = observer(function _Base(props: Props) {
   useEffect(() => {
     if (!isMixer) return;
     require('./serviceWorker').unregister();
-    window.addEventListener('beforeinstallprompt', function(e) {
+    window.addEventListener('beforeinstallprompt', function(e:any) {
       e.preventDefault();
       return false;
     });
@@ -132,7 +132,7 @@ export const Base = observer(function _Base(props: Props) {
         <AppRouter history={history} store={store} />
       </Suspense>
       <Suspense fallback={null}>
-        <CookieCheck />
+        { store.isGuest() && <CookieCheck /> }
       </Suspense>
     </>
   );

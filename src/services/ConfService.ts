@@ -32,13 +32,9 @@ let readying: boolean = false;
 const TABLE_USERS = 'conf-users';
 const TABLE_ID = 'conf_id';
 
-// let identityId: string = '';
 export async function init() {
-  //if(!docClient) readying = false;
-  // docClient = null;
-  // if (docClient) return docClient;
 
-  const f = x => x && !!x.identityId; // || !!readying; // || docClient;
+  const f = x => x && !!x.identityId;
 
   // console.log('db: waiting on init');
   let cr = await interval(1000)

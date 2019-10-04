@@ -95,7 +95,7 @@ const useStyles = makeStyles(
       paddingBottom: '0',
       // width: '400px',
       [theme.breakpoints.down(500)]: {
-        fontSize: '4.85vw',
+        fontSize: '4.85vw'
         // width: '100vw'
       }
     },
@@ -123,8 +123,8 @@ interface Props {
 }
 
 interface State {
-  confid: string | null,
-  data?: ConfIdRow,
+  confid: string | null;
+  data?: ConfIdRow;
   updater: number;
 }
 
@@ -148,45 +148,51 @@ export default observer(function CMaker(props: Props) {
     store.hideNavbar();
   }, []);
 
-  useEffect( ()=> {
-    setState(p => ({...p, confid: props.id ? props.id : null}));
+  useEffect(() => {
+    setState(p => ({ ...p, confid: props.id ? props.id : null }));
   }, [props.id]);
 
   // {conf:string, user:string, maxGroups:number, minGroupUserPairs:number} | any
-  async function handleSubmit(data: ConfIdRow ) {
-    if(!data.user) throw new Error('no user');
-    if(!data.conf) throw new Error('no conf');
-    if(data.conf.length < 3) throw new Error('conf id must be longer than 3 characters');
-    if(!data.questions || data.questions.length===0) throw new Error('must have at least one question');
+  async function handleSubmit(data: ConfIdRow) {
+    if (!data.user) throw new Error('no user');
+    if (!data.conf) throw new Error('no conf');
+    if (data.conf.length < 3)
+      throw new Error('conf id must be longer than 3 characters');
+    if (!data.questions || data.questions.length === 0)
+      throw new Error('must have at least one question');
 
     const existing = await ConfService.idGet(data.conf);
-    if(existing && existing.user !== user) throw new Error('conference id already taken by another user');
+    if (existing && existing.user !== user)
+      throw new Error('conference id already taken by another user');
 
-    var r = window.confirm('This event has already assigned groups. Editing may cause reporting issues. Continue?');
-    if(!r) throw new Error('aborted');
-    
+    var r = window.confirm(
+      'This event has already assigned groups. Editing may cause reporting issues. Continue?'
+    );
+    if (!r) throw new Error('aborted');
+
     console.log('saving', JSON.stringify(data));
     try {
       await ConfService.idSubmit(data);
       alert('saved');
       // setState(p=>({...p, updater: p.updater+1 }));
-    } catch(e) {
+    } catch (e) {
       console.error(e);
       alert('Error saving: ' + e.toString());
-      if(e.toString().indexOf('authorized ') > 0) alert('Error: not authorized to update these questions');
+      if (e.toString().indexOf('authorized ') > 0)
+        alert('Error: not authorized to update these questions');
     }
   }
 
   // Ensure use is not unregistered guest
   useEffect(() => {
-    if(store.isGuest()) store.login();
+    if (store.isGuest()) store.login();
   }, [store.isGuest()]);
 
   // TODO cleanup
   useEffect(() => {
-    if(!confid) return;
+    if (!confid) return;
 
-    window.gtag('event', ('conf_new_splash_'+confid), {
+    window.gtag('event', 'conf_new_splash_' + confid, {
       event_category: 'conf',
       confid: confid
     });
@@ -195,11 +201,14 @@ export default observer(function CMaker(props: Props) {
   // Get Row Data
   useEffect(() => {
     if (state.confid === null || state.confid === undefined) {
-       //  setState(p => ({ ...p, data: null }));
+      // setState(p => ({ ...p, data: null }));
+      return;
+    }
+    if (!user || store.isGuest()) {
       return;
     }
 
-    if(state.confid==='') {
+    if (state.confid === '') {
       const x = ConfService.idNewQuestions('', user!);
       setState(p => ({ ...p, data: x }));
       return;
@@ -207,7 +216,7 @@ export default observer(function CMaker(props: Props) {
 
     ConfService.idGet(state.confid as string).then(x => {
       if (x && x.user !== user) {
-        console.log('x.user', x, user);
+        console.log('x.user', JSON.stringify(x), x.user, user);
         alert('Error: This is owned by a different user. Read-only mode.');
       }
       // init model if not exists
@@ -217,12 +226,12 @@ export default observer(function CMaker(props: Props) {
 
       if (x !== null) {
         const data = x as ConfService.ConfIdRow;
-        setState(p => ({ ...p, data, updater: p.updater+1 }));
+        setState(p => ({ ...p, data, updater: p.updater + 1 }));
         // Populate state with question data
         // setState(p => ({ ...p, questions: data.questions || [] }));
       }
-    })
-  }, [state.confid]); // , state.updater
+    });
+  }, [state.confid, store.auth.user, user]); // , state.updater
 
   if (store.auth.isNotLoggedIn) {
     store.auth.login();
@@ -232,32 +241,37 @@ export default observer(function CMaker(props: Props) {
       </div>
     );
   }
-  
-  const onEdit = (conf:string | null) => {
+
+  const onEdit = (conf: string | null) => {
     const l = window.location.href;
     // const i = l.indexOf('admin');
     const prefix = l.includes('/c/') ? '/c/' : '/';
 
-    if(conf!==null) {
-      if(conf==='') conf = 'new';
-      store.router.push(prefix+conf+'/edit');
+    if (conf !== null) {
+      if (conf === '') conf = 'new';
+      store.router.push(prefix + conf + '/edit');
     } else {
-      store.router.push(prefix+'admin');
+      store.router.push(prefix + 'admin');
     }
 
-    setState(p=>({...p, confid: conf, data: undefined, updater: p.updater+1 }));
-  }
+    setState(p => ({
+      ...p,
+      confid: conf,
+      data: undefined,
+      updater: p.updater + 1
+    }));
+  };
 
-  const onIdDel = async (conf:string) => {
-    if(!conf) throw new Error('no conf id');
+  const onIdDel = async (conf: string) => {
+    if (!conf) throw new Error('no conf id');
 
     var r = window.confirm('Are you sure you want to delete?');
-    if(!r) return;
+    if (!r) return;
 
-    await ConfService.idDel(conf, store.getRID()!)
-    setState(p=>({...p, confid: null, updater: p.updater+1 }));
-  }
-  
+    await ConfService.idDel(conf, store.getRID()!);
+    setState(p => ({ ...p, confid: null, updater: p.updater + 1 }));
+  };
+
   return (
     <>
       <Helmet title={PAGE_NAME}>
@@ -270,45 +284,57 @@ export default observer(function CMaker(props: Props) {
           {/* Hero unit */}
           <div className={classes.heroUnit}>
             <div className={classes.heroContent}>
-              <div style={{textAlign:'right', float:'right'}}>
-              </div>
+              <div style={{ textAlign: 'right', float: 'right' }}></div>
               {true && (
-              <><Typography
-                variant="h1"
-                align="left"
-                color="textSecondary"
-                className={classes.heroLogoText}
-                onClick={ () => onEdit(null) }
-                gutterBottom
-              >
-                {PAGE_NAME}
-              </Typography>
-             
-                <Typography
-                  className={classes.herotext}
-                  variant="h3"
-                  align="left"
-                  color="textSecondary"
-                  gutterBottom
-                >
-                  Talk to people with different opinions.
-                  <br />
-                  Discussion via mixed viewpoint matchmaking.
-                </Typography></>
+                <>
+                  <Typography
+                    variant="h1"
+                    align="left"
+                    color="textSecondary"
+                    className={classes.heroLogoText}
+                    onClick={() => onEdit(null)}
+                    gutterBottom
+                  >
+                    {PAGE_NAME}
+                  </Typography>
+
+                  <Typography
+                    className={classes.herotext}
+                    variant="h3"
+                    align="left"
+                    color="textSecondary"
+                    gutterBottom
+                  >
+                    Talk to people with different opinions.
+                    <br />
+                    Discussion via mixed viewpoint matchmaking.
+                  </Typography>
+                </>
               )}
             </div>
           </div>
 
-          
-            <div className={classes.verticalCenter}>
-              {state.confid!==null && state.data && user && 
-                <>
-                  <ConfMakerForm user={user!} data={state.data} confid={state.confid} onSubmit={handleSubmit} onClose={()=>onEdit(null)} />
-                </>
-              }
-              {state.confid===null && user && <ConfMakerList user={user!} onEdit={onEdit} onIdDel={onIdDel} updater={state.updater} /> }
-            </div>
-          
+          <div className={classes.verticalCenter}>
+            {state.confid !== null && state.data && user && (
+              <>
+                <ConfMakerForm
+                  user={user!}
+                  data={state.data}
+                  confid={state.confid}
+                  onSubmit={handleSubmit}
+                  onClose={() => onEdit(null)}
+                />
+              </>
+            )}
+            {state.confid === null && user && (
+              <ConfMakerList
+                user={user!}
+                onEdit={onEdit}
+                onIdDel={onIdDel}
+                updater={state.updater}
+              />
+            )}
+          </div>
         </main>
         <div className={classes.footer}>
           <b>
