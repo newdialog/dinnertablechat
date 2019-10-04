@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: '550px',
       margin: '0 auto',
       borderRadius: '10px',
+      padding: '0 0 30px 0'
       // padding: '0 10 0 0'
       // display: 'flex',
       // flexWrap: 'wrap'
@@ -273,7 +274,7 @@ export default (props: Props) => {
         })}
         <div style={{ textAlign: 'right', width: '100%' }}><Button onClick={addQuestion}>Add Question</Button></div>
 
-        <div>
+        <div style={{marginTop:'1em'}}>
           <Button variant="contained" type="submit">
             Submit
           </Button>
