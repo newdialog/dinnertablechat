@@ -1,31 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import Slide from '@material-ui/core/Slide';
-import useInterval from '@use-it/interval';
-import { Formik, Field, FormikProps, FormikValues, useFormik } from 'formik';
 import { TextField, Typography } from '@material-ui/core';
-import * as Yup from 'yup';
-import classes from '*.module.scss';
-
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import Slide from '@material-ui/core/Slide';
+import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { useFormik } from 'formik';
+import React, { useEffect, useState } from 'react';
 import uuid from 'short-uuid';
+import * as Yup from 'yup';
 
-import * as ConfService from '../../services/ConfService';
-import { ConfIdRow, ConfIdQuestion } from '../../services/ConfService';
+import { ConfIdQuestion, ConfIdRow } from '../../services/ConfService';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
+      
+    },
+    form: {
+      backgroundColor: '#ffffff',
+      width: '550px',
       margin: '0 auto',
-      width: '550px'
+      borderRadius: '10px',
+      // padding: '0 10 0 0'
       // display: 'flex',
       // flexWrap: 'wrap'
     },
@@ -51,10 +48,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 interface Props {
   onClose: () => void;
   confid: string | null;
@@ -70,8 +63,10 @@ interface State {
 }
 
 export default (props: Props) => {
-  const classes = useStyles();
-  const user = props.user;
+  const classes = useStyles({});
+  // const user = props.user;
+  const confid = props.confid === 'new' ? '' : props.confid;
+  if(props.data.conf==='new') props.data.conf = '';
 
   const [state, setState] = useState<State>({ saved: false });
 
@@ -92,7 +87,7 @@ export default (props: Props) => {
     const d = { ...data, ...q };
     delete d.questions;
 
-    if (props.confid) d.conf = props.confid;
+    if (confid) d.conf = confid;
     d.maxGroups = data.maxGroups || 10;
     d.minGroupUserPairs = data.minGroupUserPairs || 1;
     d.curl = data.curl || '';
@@ -114,11 +109,17 @@ export default (props: Props) => {
     enableReinitialize: false,
     validationSchema: Yup.object({
       conf: Yup.string().trim()
+        .test(
+          'is-word',
+          '${path} must contain only a word',
+          (value:string) => !value.includes(' '),
+        )
         .max(80, 'Must be 80 characters or less')
         .min(3, 'Must be at least 3 characters')
+        .lowercase()
         .required('Required'),
-      minGroupUserPairs: Yup.number().required(),
-      maxGroups: Yup.number().required(),
+      minGroupUserPairs: Yup.number().min(1).max(10).required(),
+      maxGroups: Yup.number().min(1).max(500).required(),
       curl2: Yup.string().trim().min(3, 'Must be at least 3 characters')
     }),
     validateOnChange: true,
@@ -162,8 +163,12 @@ export default (props: Props) => {
         setState(p => ({ ...p, saved: true }));
         await props.onSubmit(payload);
       } catch (e) {
-        console.warn('error', e);
-        alert('Save failed: ' + e.message);
+        if(e.message.indexOf('aborted') > -1) {
+          // do nothing
+        } else {
+          console.warn('error', e);
+          alert('Save failed: ' + e.message);
+        }
       } finally {
         setState(p => ({ ...p, saved: false }));
       }
@@ -172,7 +177,7 @@ export default (props: Props) => {
 
   // const TF = wrap(formik).tf;
   const fields = [
-    { name: 'conf', label: 'Provide a short ID for this session', type: 'input', short: true, disabled: !!props.confid },
+    { name: 'conf', label: 'Short name for the event', type: 'input', short: true, disabled: !!confid },
     { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
     { name: 'minGroupUserPairs', label: 'Minimum pairs per group', type: 'input' },
     { name: 'curl', label: 'short url (optional)', type: 'input' },
@@ -216,18 +221,18 @@ export default (props: Props) => {
     setState(p => ({ ...p, data: d }));
   }
 
-  const url = window.location.href.replace('admin', formik.values['conf']);
+  const url = window.location.href.replace(/(new.)*edit/g, formik.values['conf']).toLowerCase();
 
   return (
-    <div>
+    <div className={classes.container}>
       <form
-        className={classes.container}
+        className={classes.form}
         noValidate
         onSubmit={formik.handleSubmit}
       >
         {fields.map(x => {
           if (x.type === 'array') {
-            return questionNodes.map((y, i) => (
+            return questionNodes.map((y, i:number) => (
               <Card key={'q' + y.id!} style={{ marginBottom: '1em' }}>
                 <CardContent>
                   <Tf
@@ -250,7 +255,7 @@ export default (props: Props) => {
                   />
                 </CardContent>
                 <CardActions>
-                  <Typography variant="subtitle1" align="left" style={{ color: 'gray' }}>#{i}</Typography><Button onClick={() => onRemove(i)} style={{ fontSize: '.5em' }} size="small">Remove Question</Button>
+                  <Typography variant="subtitle1" align="left" style={{ color: 'gray' }}>#{i+1}</Typography><Button onClick={() => onRemove(i)} style={{ fontSize: '.5em' }} size="small">Remove Question</Button>
                 </CardActions>
               </Card>
             ));
@@ -261,7 +266,7 @@ export default (props: Props) => {
             <Tf className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
 
             {x.name === 'conf' &&
-              <Typography variant="subtitle1" align="right" style={{ color: 'gray', marginTop: '-0.7em', marginBottom: '1em' }}>url: {url}</Typography>
+              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin:'-0.7em 1em 1em 0' }}>url: {url} </Typography>
             }
           </span>
           );
@@ -295,7 +300,7 @@ export default (props: Props) => {
 };
 
 function Tf({ id, formik, ...props }: any) {
-  const classes = useStyles();
+  const classes = useStyles({});
   // const data = props.data;
   const multiline = props.multiline;
 
@@ -305,6 +310,7 @@ function Tf({ id, formik, ...props }: any) {
   return (
     <span key={props.key || id}>
       <TextField
+        style={{width:'95%'}}
         margin="normal"
         id={id}
         // error={}

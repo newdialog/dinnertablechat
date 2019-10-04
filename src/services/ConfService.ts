@@ -32,13 +32,9 @@ let readying: boolean = false;
 const TABLE_USERS = 'conf-users';
 const TABLE_ID = 'conf_id';
 
-// let identityId: string = '';
 export async function init() {
-  //if(!docClient) readying = false;
-  // docClient = null;
-  // if (docClient) return docClient;
 
-  const f = x => x && !!x.identityId; // || !!readying; // || docClient;
+  const f = x => x && !!x.identityId;
 
   // console.log('db: waiting on init');
   let cr = await interval(1000)
@@ -250,7 +246,7 @@ export async function getAll(
     .eq(conf)
     .scan()
     .then(async x => {
-      const filterOut = x.filter(x => x.user !== '_');
+      const filterOut = x.filter(y => y.user !== '_');
 
       const idRow = await idGet(conf);
       let meta:ConfIdRow = idNewQuestions(conf, '');
