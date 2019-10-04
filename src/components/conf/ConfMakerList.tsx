@@ -73,9 +73,9 @@ export default (props: Props) => {
 
   return (
     <div style={{ maxWidth: '100%', textAlign:'left' }}>
-      <Button style={{margin:'10px'}} onClick={makeListItem} variant={'contained'}>New Debate</Button>
+      <Button style={{margin:'10px'}} onClick={makeListItem} variant={'contained'}>Add new event debate</Button>
       <MaterialTable
-        options={{pageSize: 20, paging: false}}
+        options={{pageSize: 20, paging: false, actionsColumnIndex:1}}
         icons={tableIcons as any}
         actions={[
           {
@@ -133,18 +133,18 @@ export default (props: Props) => {
               // Do save operation
             }
           },
-          {
+          /* {
             icon: tableIcons.Add as any,
             tooltip: 'Add Debate',
             isFreeAction: true,
             onClick: (event) => {
               makeListItem();
             }
-          }
+          }*/
         ]}
         columns={[
-          { title: 'id', field: 'conf' },
-          { title: 'Status', field: 'ready', lookup: { true: 'assigned', false: 'unassigned' } }
+          { title: 'Name of event', field: 'conf' },
+          /* { title: 'Status', field: 'ready', lookup: { true: 'assigned', false: 'unassigned' } } */
         ]}
         data={state.rows!}
         title="Debate Sessions"

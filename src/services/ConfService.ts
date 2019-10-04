@@ -246,7 +246,7 @@ export async function getAll(
     .eq(conf)
     .scan()
     .then(async x => {
-      const filterOut = x.filter(x => x.user !== '_');
+      const filterOut = x.filter(y => y.user !== '_');
 
       const idRow = await idGet(conf);
       let meta:ConfIdRow = idNewQuestions(conf, '');
