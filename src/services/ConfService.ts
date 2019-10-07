@@ -257,8 +257,6 @@ export async function getAll(
         meta = idRow as any;
         meta.results = meta.results || Array<any>();
       }
-      // debugger;
-      // meta = meta.length === 0 ?
 
       return {
         data: filterOut,

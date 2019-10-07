@@ -114,7 +114,14 @@ export default function ConfAdminPanel(props: Props) {
     const rdata = await getAll(confid);
 
     var data: Data = rdata.data;
-    const result = match2(data, numGroups, minGroupUserPairs); // TODO: numGroups
+
+    // OVERRIDE numgroups for now
+    const numUsers = data.length;
+    // Users 100 / 10pairs(20ppl per table) = 5 tables
+    let NUM_GROUPS = Math.ceil(numUsers / (minGroupUserPairs * 2));
+    if (NUM_GROUPS < 2) NUM_GROUPS = 2;
+
+    const result = match2(data, NUM_GROUPS, minGroupUserPairs); // TODO: numGroups
 
     // console.log('result', JSON.stringify(result));
     return result;
@@ -166,7 +173,7 @@ export default function ConfAdminPanel(props: Props) {
       return;
     }
 
-    window.gtag('event', ('conf_admin_ready_'+confid+'_'+toggle), {
+    window.gtag('event', ('conf_admin_ready_' + confid + '_' + toggle), {
       event_category: 'conf',
       confid: confid
     });

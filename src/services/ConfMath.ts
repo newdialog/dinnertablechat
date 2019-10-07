@@ -97,7 +97,7 @@ function diversify(
 
 // Basically just convert data types
 export function match2(
-  getAllData: any,
+  getAllData: any[],
   maxGroups: number = 2,
   minGroupUserPairs: number = 1
 ) {
