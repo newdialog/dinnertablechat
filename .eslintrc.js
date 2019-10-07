@@ -19,7 +19,7 @@ module.exports = {
                 'no-useless-constructor': 'off',
                 '@typescript-eslint/no-useless-constructor': 'warn',
                 'no-dupe-class-members': 'off',
-
+                "no-template-curly-in-string": "off",
                 // << add your own custom rules here >>
                 '@typescript-eslint/no-unused-vars': 'off'
             },

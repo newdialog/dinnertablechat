@@ -61,6 +61,7 @@ interface State {
   saved: boolean;
   data?: ConfIdRow;
   last?: ConfIdRow;
+  created: boolean;
 }
 
 export default (props: Props) => {
@@ -69,7 +70,7 @@ export default (props: Props) => {
   const confid = props.confid === 'new' ? '' : props.confid;
   if(props.data.conf==='new') props.data.conf = '';
 
-  const [state, setState] = useState<State>({ saved: false });
+  const [state, setState] = useState<State>({ saved: false, created: false });
 
   const data = state.data || props.data;
 
@@ -102,7 +103,7 @@ export default (props: Props) => {
 
     if (d.questions.length === 0) d.questions.push(newQuestions());
 
-    setState(p => ({ ...p, data: d }));
+    setState(p => ({ ...p, data: d, created: !!d.updated }));
   }, [props.data, props.data.questions]);
 
   const formik = useFormik({
@@ -222,7 +223,7 @@ export default (props: Props) => {
     setState(p => ({ ...p, data: d }));
   }
 
-  const url = window.location.href.replace(/(new.)*edit/g, formik.values['conf']).toLowerCase();
+  const url = window.location.href.replace(/(new\/)+edit/, formik.values['conf']).replace(/(\/)+edit/, '').toLowerCase();
 
   return (
     <div className={classes.container}>
