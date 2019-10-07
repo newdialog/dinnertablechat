@@ -15,7 +15,7 @@ import { ConfIdQuestion, ConfIdRow } from '../../services/ConfService';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      
+
     },
     form: {
       backgroundColor: '#ffffff',
@@ -55,6 +55,7 @@ interface Props {
   data: ConfIdRow;
   user: string;
   onSubmit: (x: ConfIdRow) => void;
+  onIdDel: (conf: string) => void;
 }
 
 interface State {
@@ -68,7 +69,7 @@ export default (props: Props) => {
   const classes = useStyles({});
   // const user = props.user;
   const confid = props.confid === 'new' ? '' : props.confid;
-  if(props.data.conf==='new') props.data.conf = '';
+  if (props.data.conf === 'new') props.data.conf = '';
 
   const [state, setState] = useState<State>({ saved: false, created: false });
 
@@ -114,7 +115,7 @@ export default (props: Props) => {
         .test(
           'is-word',
           '${path} must contain only a word',
-          (value:string) => !value.includes(' '),
+          (value: string) => !value.includes(' '),
         )
         .max(80, 'Must be 80 characters or less')
         .min(3, 'Must be at least 3 characters')
@@ -145,7 +146,7 @@ export default (props: Props) => {
       questions = questions.filter(q => state.data!.questions.findIndex(y => q.id === y.id) > -1);
 
       // cleanup
-      questions.forEach(q=>delete q.id);
+      questions.forEach(q => delete q.id);
 
       const payload: ConfIdRow = {
         conf: values.conf,
@@ -165,7 +166,7 @@ export default (props: Props) => {
         setState(p => ({ ...p, saved: true }));
         await props.onSubmit(payload);
       } catch (e) {
-        if(e.message.indexOf('aborted') > -1) {
+        if (e.message.indexOf('aborted') > -1) {
           // do nothing
         } else {
           console.warn('error', e);
@@ -227,14 +228,31 @@ export default (props: Props) => {
 
   return (
     <div className={classes.container}>
+
       <form
         className={classes.form}
         noValidate
         onSubmit={formik.handleSubmit}
       >
+      { state.created && <div style={{ marginTop: '1em' }}>
+          <Button onClick={(event) => {
+            var win = window.open(url, '_blank');
+            win!.focus();
+            // Do save operation
+          }} style={{ borderColor: 'green' }} variant="outlined">
+            Questionnaire link
+      </Button>
+          <Button style={{ margin: '0 0 0 40px', borderColor: 'green' }} variant="outlined" onClick={(event) => {
+            var win = window.open(url+'/admin', '_blank');
+            win!.focus();
+            // Do save operation
+          }}>
+            Administrator link
+      </Button>
+        </div>}
         {fields.map(x => {
           if (x.type === 'array') {
-            return questionNodes.map((y, i:number) => (
+            return questionNodes.map((y, i: number) => (
               <Card key={'q' + y.id!} style={{ marginBottom: '1em' }}>
                 <CardContent>
                   <Tf
@@ -257,7 +275,7 @@ export default (props: Props) => {
                   />
                 </CardContent>
                 <CardActions>
-                  <Typography variant="subtitle1" align="left" style={{ color: 'gray' }}>#{i+1}</Typography><Button onClick={() => onRemove(i)} style={{ fontSize: '.5em' }} size="small">Remove Question</Button>
+                  <Typography variant="subtitle1" align="left" style={{ color: 'gray' }}>#{i + 1}</Typography><Button onClick={() => onRemove(i)} style={{ fontSize: '.5em' }} size="small">Remove Question</Button>
                 </CardActions>
               </Card>
             ));
@@ -268,20 +286,31 @@ export default (props: Props) => {
             <Tf className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
 
             {x.name === 'conf' &&
-              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin:'-0.7em 1em 1em 0' }}>url: {url} </Typography>
+              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin: '-0.7em 1em 1em 0' }}>url: {url} </Typography>
             }
           </span>
           );
         })}
         <div style={{ textAlign: 'right', width: '100%' }}><Button onClick={addQuestion}>Add Question</Button></div>
 
-        <div style={{marginTop:'1em'}}>
+        <div style={{ marginTop: '1em' }}>
           <Button variant="contained" type="submit">
             Submit
           </Button>
           <Button style={{ margin: '0 0 0 40px' }} variant="contained" onClick={(e) => { e.preventDefault(); props.onClose() }}>
             Return to list
-        </Button>
+          </Button>
+          { state.created && <><br/><Button onClick={(event) => {
+            const id = state.data!.conf;
+            const ready = state.data!.ready;
+            if(ready) {
+              var r = window.alert('Delete a debate that\'s already been active is not currently possible.');
+              return;
+            }
+            props.onIdDel(id);
+          }} style={{ margin: '20px 0 0 0' }} variant="contained" color="secondary">
+            Delete
+          </Button></>}
         </div>
         {state.saved && <Typography
           gutterBottom={false}
@@ -312,7 +341,7 @@ function Tf({ id, formik, ...props }: any) {
   return (
     <span key={props.key || id}>
       <TextField
-        style={{width:'95%'}}
+        style={{ width: '95%' }}
         margin="normal"
         id={id}
         // error={}
@@ -324,7 +353,7 @@ function Tf({ id, formik, ...props }: any) {
           formik.handleChange(e);
         }}
         onBlur={formik.handleBlur}
-        value={formik.values[id]!==undefined ? formik.values[id] : (props.data || '')} // || props.data}
+        value={formik.values[id] !== undefined ? formik.values[id] : (props.data || '')} // || props.data}
         multiline={multiline}
         // {...formik.getFieldProps(id)}
         {...props}

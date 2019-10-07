@@ -78,7 +78,7 @@ export default (props: Props) => {
         options={{pageSize: 20, paging: false, actionsColumnIndex:1}}
         icons={tableIcons as any}
         actions={[
-          {
+          /* {
             icon: tableIcons.Check as any,
             tooltip: 'View',
             onClick: (event, rowData) => {
@@ -101,14 +101,13 @@ export default (props: Props) => {
               win!.focus();
               // Do save operation
             }
-          },
+          },*/
           {
             icon: tableIcons.Edit as any,
             tooltip: 'Edit',
             onClick: (event, rowData) => {
               const id = (rowData as any).conf;
               const ready = (rowData as any).ready;
-              // debugger;
               // setState(p => ({ ...p, confid: rowData.conf }))
               if(ready) {
                 var r = window.confirm('Editing a debate that\'s already been active is unstable. Continue?');
@@ -118,10 +117,10 @@ export default (props: Props) => {
               // Do save operation
             }
           },
-          {
+          /*{
             icon: tableIcons.Delete as any,
             tooltip: 'Delete',
-            onClick: (event, rowData) => {
+            onClick: async (event, rowData) => {
               console.log('rowData del', rowData);
               const id = (rowData as any).conf;
               const ready = (rowData as any).ready;
@@ -129,10 +128,18 @@ export default (props: Props) => {
                 var r = window.alert('Delete a debate that\'s already been active is not currently possible.');
                 return;
               }
-              props.onIdDel(id);
+
+              try {
+                await props.onIdDel(id);
+                alert('deleted');
+                props.onEdit('');
+              } catch(e) {
+                alert('deletion error: ' + e.message);
+              }
+
               // Do save operation
             }
-          },
+          }, */
           /* {
             icon: tableIcons.Add as any,
             tooltip: 'Add Debate',
