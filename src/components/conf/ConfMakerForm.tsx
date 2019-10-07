@@ -295,7 +295,7 @@ export default (props: Props) => {
 
         <div style={{ marginTop: '1em' }}>
           <Button variant="contained" type="submit">
-            Submit
+            Save
           </Button>
           <Button style={{ margin: '0 0 0 40px' }} variant="contained" onClick={(e) => { e.preventDefault(); props.onClose() }}>
             Return to list
@@ -308,7 +308,7 @@ export default (props: Props) => {
               return;
             }
             props.onIdDel(id);
-          }} style={{ margin: '20px 0 0 0' }} variant="contained" color="secondary">
+          }} style={{ margin: '20px 0 0 0' }} variant="text" color="secondary">
             Delete
           </Button></>}
         </div>
