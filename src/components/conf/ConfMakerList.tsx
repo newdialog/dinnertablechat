@@ -108,11 +108,6 @@ export default (props: Props) => {
             onClick: (event, rowData) => {
               const id = (rowData as any).conf;
               const ready = (rowData as any).ready;
-              // setState(p => ({ ...p, confid: rowData.conf }))
-              if(ready) {
-                var r = window.confirm('Editing a debate that\'s already been active is unstable. Continue?');
-                if(!r) return;
-              }
               props.onEdit(id);
               // Do save operation
             }
