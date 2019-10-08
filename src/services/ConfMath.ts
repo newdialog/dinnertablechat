@@ -187,7 +187,14 @@ export function match(
   // K clusters
   var k = clusters;
 
-  const p = people;
+  let p = [...people];
+
+  // ensure matches on all matching answer lens
+  // fixes bug when admin removes a question
+  const minLen = people.reduce((mi, x) => Math.min(mi, x.length), 1000);
+  if(people.length > 0) {
+    p = p.filter(_as => _as.length !== minLen);
+  }
   // Run k-means
   var r = kmpp(p, {
     k: k,

@@ -93,8 +93,8 @@ export default (props: Props) => {
     if (confid) d.conf = confid;
     d.maxGroups = data.maxGroups || 10;
     
-    d.minGroupUserPairs = data.minGroupUserPairs || 2;
-    if(d.minGroupUserPairs < 2) d.minGroupUserPairs = 2; // overwrite default
+    d.minGroupUserPairs = (data.minGroupUserPairs || 1) * 2;
+    // if(d.minGroupUserPairs < 2) d.minGroupUserPairs = 2; // overwrite default
 
     d.curl = data.curl || '';
 
