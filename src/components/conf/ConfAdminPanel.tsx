@@ -183,14 +183,13 @@ export default function ConfAdminPanel(props: Props) {
     if (toggle) {
       setState(p => ({ ...p, thinking: true }));
       return; // do THinking
+    } else {
+      // const results = await matchUp();
+      await submitReady(false, confid, [], store.getRID()!); // .then(x=>checkReady());
+
+      onRefresh();
+      resetChecks();
     }
-    // ELSE
-
-    const results = await matchUp();
-    await submitReady(toggle, confid, results, store.getRID()!); // .then(x=>checkReady());
-
-    onRefresh();
-    resetChecks();
   };
 
   function resetChecks() {

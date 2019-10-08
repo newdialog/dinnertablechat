@@ -124,7 +124,7 @@
     "@types/node": "^12.6.8",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.4",
-    "@types/react-responsive": "^3.0.3",
+    "@types/react-responsive": "^8.0.0",
     "@types/simple-peer": "^6.1.6",
     "aws-amplify": "^1.1.36",
     "core-js": "^3.2.1",
