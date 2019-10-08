@@ -121,6 +121,8 @@ export default function ConfAdminPanel(props: Props) {
     let NUM_GROUPS = Math.ceil(numUsers / (minGroupUserPairs * 2));
     if (NUM_GROUPS < 2) NUM_GROUPS = 2;
 
+    // console.log('data, NUM_GROUPS, minGroupUserPairs', data, NUM_GROUPS, minGroupUserPairs);
+
     const result = match2(data, NUM_GROUPS, minGroupUserPairs); // TODO: numGroups
 
     // console.log('result', JSON.stringify(result));

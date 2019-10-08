@@ -193,8 +193,10 @@ export function match(
   // fixes bug when admin removes a question
   const minLen = people.reduce((mi, x) => Math.min(mi, x.length), 1000);
   if(people.length > 0) {
-    p = p.filter(_as => _as.length !== minLen);
+    // p = p.filter(_as => _as.length === minLen);
+    p = p.map(_ans => _ans.slice(0, minLen+1));
   }
+  console.log('p k, minGroupUserPairs', p, k, minGroupUserPairs);
   // Run k-means
   var r = kmpp(p, {
     k: k,
