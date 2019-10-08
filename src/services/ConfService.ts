@@ -24,6 +24,13 @@ import {
   takeWhile
 } from 'rxjs/operators';
 
+export interface UserRow {
+  user: string;
+  answers: { [k:string]: number }; // Array<any>;
+  answersArr?: Array<number>;
+}
+export type UserRows = Array<UserRow>;
+
 // use Guest Login, use RID or guestSeed
 let docClient: any; // DynamoDB.DocumentClient;
 let started: boolean = false;

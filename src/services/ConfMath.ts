@@ -1,4 +1,5 @@
 import kmpp from 'kmpp';
+import { UserRow, UserRows } from './ConfService';
 
 interface Person {
   index: number;
@@ -97,27 +98,27 @@ function diversify(
 
 // Basically just convert data types
 export function match2(
-  getAllData: any[],
+  data: UserRows,
   maxGroups: number = 2,
   minGroupUserPairs: number = 1
 ) {
-  const data = getAllData;
   if (data.length === 0) return [];
+  data = [...data]; // clone
 
   let rawListOfAnswersIds: string[] = [];
 
   data.map(x => {
-    x.answersHash = x.answers;
+    // x.answersHash = x.answers;
     // stable sorting answers
-    const sortedKeys: string[] = Object.keys(x.answersHash).sort();
-    x.answers = sortedKeys.map(k => x.answersHash![k]) as number[][];
+    const sortedKeys: string[] = Object.keys(x.answers).sort();
+    x.answersArr = sortedKeys.map(k => x.answers[k]); // as number[][];
     // if not set, set the keys
     if (rawListOfAnswersIds.length === 0)
       rawListOfAnswersIds = sortedKeys.concat([]);
     return x;
   });
 
-  const rawListOfAnswers = data.map(x => x.answers);
+  const rawListOfAnswers = data.map(x => x.answersArr!);
   const names = data.map(x => x.user);
 
   // console.log('rawListOfAnswers', JSON.stringify(rawListOfAnswers));
@@ -189,14 +190,6 @@ export function match(
 
   let p = [...people];
 
-  // ensure matches on all matching answer lens
-  // fixes bug when admin removes a question
-  const minLen = people.reduce((mi, x) => Math.min(mi, x.length), 1000);
-  if(people.length > 0) {
-    // p = p.filter(_as => _as.length === minLen);
-    p = p.map(_ans => _ans.slice(0, minLen+1));
-  }
-  console.log('p k, minGroupUserPairs', p, k, minGroupUserPairs);
   // Run k-means
   var r = kmpp(p, {
     k: k,
