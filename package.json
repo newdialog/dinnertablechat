@@ -14,7 +14,8 @@
   "resolutions": {
     "aws-sdk": "^2.496.0",
     "**/aws-sdk": "^2.496.0",
-    "**/moment": "^2.24.0"
+    "**/moment": "^2.24.0",
+    "**/fork-ts-checker-webpack-plugin": "^1.5.0"
   },
   "dependencies": {
     "@awspilot/dynamodb": "^1.5.0",
@@ -63,6 +64,7 @@
     "qrcode.react": "^0.9.3",
     "react": "^16.10.0",
     "react-add-to-calendar": "^0.1.5",
+    "react-app-polyfill": "^1.0.4",
     "react-cookie-consent": "^2.3.2",
     "react-copy-to-clipboard": "^5.0.1",
     "react-countdown-now": "^2.1.1",
@@ -111,7 +113,6 @@
     "old_patchsq": "sed -i.bak '/workbox.clientsClaim();/i workbox.skipWaiting();' ./build/service-worker.js && rm ./build/service-worker.js.bak"
   },
   "devDependencies": {
-    "@babel/polyfill": "^7.4.4",
     "@fortawesome/fontawesome-free": "^5.9.0",
     "@testing-library/dom": "^6.1.0",
     "@testing-library/jest-dom": "^4.0.0",
@@ -131,11 +132,11 @@
     "customize-cra": "^0.8.0",
     "env-cmd": "^10.0.1",
     "eslint-config-prettier": "^6.0.0",
-    "fork-ts-checker-webpack-plugin": "^1.4.3",
+    "fork-ts-checker-webpack-plugin": "^1.5.0",
     "gh-pages": "^2.0.1",
     "http-proxy": "^1.17.0",
     "react-app-rewired": "^2.1.3",
-    "react-scripts": "^3.1.2",
+    "react-scripts": "^3.2.0",
     "regenerator-runtime": "^0.13.3",
     "source-map-explorer": "^2.0.1",
     "typescript": "^3.7.0-beta"
