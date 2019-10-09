@@ -165,11 +165,12 @@ export default observer(function CMaker(props: Props) {
     if (existing && existing.user !== user)
       throw new Error('conference id already taken by another user');
 
-    var r = window.confirm(
-      'This event has already assigned groups. Editing may cause reporting issues. Continue?'
-    );
-    if (!r) throw new Error('aborted');
-
+    if (data.ready) {
+      var r = window.confirm(
+        'This event has already assigned groups. Editing may cause reporting issues. Continue?'
+      );
+      if (!r) throw new Error('aborted');
+    }
     console.log('saving', JSON.stringify(data));
     try {
       await ConfService.idSubmit(data);
@@ -323,6 +324,7 @@ export default observer(function CMaker(props: Props) {
                   confid={state.confid}
                   onSubmit={handleSubmit}
                   onClose={() => onEdit(null)}
+                  onIdDel={onIdDel}
                 />
               </>
             )}

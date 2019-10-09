@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 import * as AppModel from '../../models/AppModel';
 import useInterval from '@use-it/interval';
 
-import { getAll, submitReady, init, delAll, ConfIdRow } from '../../services/ConfService';
+import { getAll, submitReady, init, delAll, ConfIdRow, UserRow, UserRows } from '../../services/ConfService';
 import { match2 } from '../../services/ConfMath';
 
 import ConfThinking from './ConfThinking';
@@ -51,13 +51,6 @@ interface Props {
   table: ConfIdRow;
   questions: any;
 }
-
-interface User {
-  user: string;
-  answers: Array<any>;
-  answersHash?: Array<any>;
-}
-type Data = Array<User>;
 interface State {
   checks: number;
   payload: { results: any[]; data: any[] };
@@ -110,11 +103,33 @@ export default function ConfAdminPanel(props: Props) {
   }, []);
 
   const matchUp = async () => {
-    console.log('matchup: numGroups', numGroups);
     const rdata = await getAll(confid);
 
-    var data: Data = rdata.data;
-    const result = match2(data, numGroups, minGroupUserPairs); // TODO: numGroups
+    let data: UserRows = rdata.data;
+    
+    // #section: hack in case questions are removed
+    console.log('q', props.table.questions);
+    console.log('data ans', data.map(x=>x.answers));
+
+    const qlen = props.table.questions.length;
+    data = data.map(x => {
+      x.answers = Object.fromEntries(Object.entries(x.answers).slice(0, qlen));
+      return x;
+    });
+
+    console.log('pruned', data);
+    // throw new Error('-');
+    // #endsection
+
+    // OVERRIDE numgroups for now
+    const numUsers = data.length;
+    // Users 100 / 10pairs(20ppl per table) = 5 tables
+    let NUM_GROUPS = Math.ceil(numUsers / (minGroupUserPairs * 2));
+    if (NUM_GROUPS < 2) NUM_GROUPS = 2;
+
+    // console.log('data, NUM_GROUPS, minGroupUserPairs', data, NUM_GROUPS, minGroupUserPairs);
+
+    const result = match2(data, NUM_GROUPS, minGroupUserPairs); // TODO: numGroups
 
     // console.log('result', JSON.stringify(result));
     return result;
@@ -166,7 +181,7 @@ export default function ConfAdminPanel(props: Props) {
       return;
     }
 
-    window.gtag('event', ('conf_admin_ready_'+confid+'_'+toggle), {
+    window.gtag('event', ('conf_admin_ready_' + confid + '_' + toggle), {
       event_category: 'conf',
       confid: confid
     });
@@ -174,14 +189,13 @@ export default function ConfAdminPanel(props: Props) {
     if (toggle) {
       setState(p => ({ ...p, thinking: true }));
       return; // do THinking
+    } else {
+      // const results = await matchUp();
+      await submitReady(false, confid, [], store.getRID()!); // .then(x=>checkReady());
+
+      onRefresh();
+      resetChecks();
     }
-    // ELSE
-
-    const results = await matchUp();
-    await submitReady(toggle, confid, results, store.getRID()!); // .then(x=>checkReady());
-
-    onRefresh();
-    resetChecks();
   };
 
   function resetChecks() {

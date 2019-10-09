@@ -15,13 +15,14 @@ import { ConfIdQuestion, ConfIdRow } from '../../services/ConfService';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     container: {
-      
+
     },
     form: {
       backgroundColor: '#ffffff',
       width: '550px',
       margin: '0 auto',
       borderRadius: '10px',
+      padding: '0 0 30px 0'
       // padding: '0 10 0 0'
       // display: 'flex',
       // flexWrap: 'wrap'
@@ -54,21 +55,23 @@ interface Props {
   data: ConfIdRow;
   user: string;
   onSubmit: (x: ConfIdRow) => void;
+  onIdDel: (conf: string) => void;
 }
 
 interface State {
   saved: boolean;
   data?: ConfIdRow;
   last?: ConfIdRow;
+  created: boolean;
 }
 
 export default (props: Props) => {
   const classes = useStyles({});
   // const user = props.user;
   const confid = props.confid === 'new' ? '' : props.confid;
-  if(props.data.conf==='new') props.data.conf = '';
+  if (props.data.conf === 'new') props.data.conf = '';
 
-  const [state, setState] = useState<State>({ saved: false });
+  const [state, setState] = useState<State>({ saved: false, created: false });
 
   const data = state.data || props.data;
 
@@ -89,7 +92,10 @@ export default (props: Props) => {
 
     if (confid) d.conf = confid;
     d.maxGroups = data.maxGroups || 10;
-    d.minGroupUserPairs = data.minGroupUserPairs || 1;
+    
+    d.minGroupUserPairs = (data.minGroupUserPairs || 1) * 2;
+    // if(d.minGroupUserPairs < 2) d.minGroupUserPairs = 2; // overwrite default
+
     d.curl = data.curl || '';
 
     return d;
@@ -101,7 +107,7 @@ export default (props: Props) => {
 
     if (d.questions.length === 0) d.questions.push(newQuestions());
 
-    setState(p => ({ ...p, data: d }));
+    setState(p => ({ ...p, data: d, created: !!d.updated }));
   }, [props.data, props.data.questions]);
 
   const formik = useFormik({
@@ -109,18 +115,26 @@ export default (props: Props) => {
     enableReinitialize: false,
     validationSchema: Yup.object({
       conf: Yup.string().trim()
+        .required('Required')
         .test(
           'is-word',
           '${path} must contain only a word',
-          (value:string) => !value.includes(' '),
+          (value: string) => value && !value.includes(' '),
         )
         .max(80, 'Must be 80 characters or less')
         .min(3, 'Must be at least 3 characters')
-        .lowercase()
-        .required('Required'),
-      minGroupUserPairs: Yup.number().min(1).max(10).required(),
-      maxGroups: Yup.number().min(1).max(500).required(),
-      curl2: Yup.string().trim().min(3, 'Must be at least 3 characters')
+        .lowercase(),
+      minGroupUserPairs: Yup.number('must be a number')
+        .min(2, 'Must be greater than or equal to 2')
+        .max(60, 'Must be less than or equal to 60')
+        .required('Number of users per group is required')
+        .test(
+          'is-even',
+          'must be an even number of users',
+          (value: number) => (value % 2) === 0,
+      ),
+      // maxGroups: Yup.number().min(1).max(500).required(),
+      curl2: Yup.string('Must be a string').trim().min(3, 'Must be at least 3 characters')
     }),
     validateOnChange: true,
     onSubmit: async values => {
@@ -143,13 +157,13 @@ export default (props: Props) => {
       questions = questions.filter(q => state.data!.questions.findIndex(y => q.id === y.id) > -1);
 
       // cleanup
-      questions.forEach(q=>delete q.id);
+      questions.forEach(q => delete q.id);
 
       const payload: ConfIdRow = {
         conf: values.conf,
         user: props.user,
-        maxGroups: values.maxGroups,
-        minGroupUserPairs: values.minGroupUserPairs,
+        maxGroups: 100, // values.maxGroups, // hardcoded for now
+        minGroupUserPairs: Math.floor(values.minGroupUserPairs / 2),
         questions,
         ready: props.data.ready,
         curl: values.curl
@@ -162,8 +176,9 @@ export default (props: Props) => {
       try {
         setState(p => ({ ...p, saved: true }));
         await props.onSubmit(payload);
+        setState(p => ({ ...p, created: true }));
       } catch (e) {
-        if(e.message.indexOf('aborted') > -1) {
+        if (e.message.indexOf('aborted') > -1) {
           // do nothing
         } else {
           console.warn('error', e);
@@ -178,8 +193,8 @@ export default (props: Props) => {
   // const TF = wrap(formik).tf;
   const fields = [
     { name: 'conf', label: 'Short name for the event', type: 'input', short: true, disabled: !!confid },
-    { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
-    { name: 'minGroupUserPairs', label: 'Minimum pairs per group', type: 'input' },
+    // { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
+    { name: 'minGroupUserPairs', label: 'Number of people in a group', type: 'input' },
     { name: 'curl', label: 'short url (optional)', type: 'input' },
     { name: 'questions', type: 'array' }
   ];
@@ -221,18 +236,35 @@ export default (props: Props) => {
     setState(p => ({ ...p, data: d }));
   }
 
-  const url = window.location.href.replace(/(new.)*edit/g, formik.values['conf']).toLowerCase();
+  const url = window.location.href.replace(/(new\/)+edit/, formik.values['conf']).replace(/(\/)+edit/, '').toLowerCase();
 
   return (
     <div className={classes.container}>
+
       <form
         className={classes.form}
         noValidate
         onSubmit={formik.handleSubmit}
       >
+        {state.created && <div style={{ marginTop: '1em' }}>
+          <Button onClick={(event) => {
+            var win = window.open(url, '_blank');
+            win!.focus();
+            // Do save operation
+          }} style={{ borderColor: 'green' }} variant="outlined">
+            Questionnaire link
+      </Button>
+          <Button style={{ margin: '0 0 0 40px', borderColor: 'green' }} variant="outlined" onClick={(event) => {
+            var win = window.open(url + '/admin', '_blank');
+            win!.focus();
+            // Do save operation
+          }}>
+            Administrator link
+      </Button>
+        </div>}
         {fields.map(x => {
           if (x.type === 'array') {
-            return questionNodes.map((y, i:number) => (
+            return questionNodes.map((y, i: number) => (
               <Card key={'q' + y.id!} style={{ marginBottom: '1em' }}>
                 <CardContent>
                   <Tf
@@ -255,7 +287,7 @@ export default (props: Props) => {
                   />
                 </CardContent>
                 <CardActions>
-                  <Typography variant="subtitle1" align="left" style={{ color: 'gray' }}>#{i+1}</Typography><Button onClick={() => onRemove(i)} style={{ fontSize: '.5em' }} size="small">Remove Question</Button>
+                  <Typography variant="subtitle1" align="left" style={{ color: 'gray' }}>#{i + 1}</Typography><Button onClick={() => onRemove(i)} style={{ fontSize: '.5em' }} size="small">Remove Question</Button>
                 </CardActions>
               </Card>
             ));
@@ -266,20 +298,31 @@ export default (props: Props) => {
             <Tf className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
 
             {x.name === 'conf' &&
-              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin:'-0.7em 1em 1em 0' }}>url: {url} </Typography>
+              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin: '-0.7em 1em 1em 0' }}>url: {url} </Typography>
             }
           </span>
           );
         })}
         <div style={{ textAlign: 'right', width: '100%' }}><Button onClick={addQuestion}>Add Question</Button></div>
 
-        <div>
+        <div style={{ marginTop: '1em' }}>
           <Button variant="contained" type="submit">
-            Submit
+            Save
           </Button>
           <Button style={{ margin: '0 0 0 40px' }} variant="contained" onClick={(e) => { e.preventDefault(); props.onClose() }}>
             Return to list
-        </Button>
+          </Button>
+          {state.created && <><br /><Button onClick={(event) => {
+            const id = state.data!.conf;
+            const ready = state.data!.ready;
+            if (ready) {
+              var r = window.alert('Delete a debate that\'s already been active is not currently possible.');
+              return;
+            }
+            props.onIdDel(id);
+          }} style={{ margin: '20px 0 0 0' }} variant="text" color="secondary">
+            Delete
+          </Button></>}
         </div>
         {state.saved && <Typography
           gutterBottom={false}
@@ -310,7 +353,7 @@ function Tf({ id, formik, ...props }: any) {
   return (
     <span key={props.key || id}>
       <TextField
-        style={{width:'95%'}}
+        style={{ width: '95%' }}
         margin="normal"
         id={id}
         // error={}
@@ -322,7 +365,7 @@ function Tf({ id, formik, ...props }: any) {
           formik.handleChange(e);
         }}
         onBlur={formik.handleBlur}
-        value={formik.values[id]!==undefined ? formik.values[id] : (props.data || '')} // || props.data}
+        value={formik.values[id] !== undefined ? formik.values[id] : (props.data || '')} // || props.data}
         multiline={multiline}
         // {...formik.getFieldProps(id)}
         {...props}
