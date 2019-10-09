@@ -4,10 +4,11 @@ import { Theme } from '@material-ui/core/styles';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
 import { makeStyles } from '@material-ui/styles';
 import React, { ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
-// import { useTranslation } from 'react-i18next';
 
 import * as AppModel from '../models/AppModel';
 import * as serviceWorker from '../serviceWorker';
+
+// import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {

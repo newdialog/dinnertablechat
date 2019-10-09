@@ -1,29 +1,11 @@
-import { retryBackoff, intervalBackoff } from 'backoff-rxjs';
-// import { Auth, API } from 'aws-amplify';
-import DynamoDB from 'aws-sdk/clients/dynamodb';
 import DynamodbFactory from '@awspilot/dynamodb';
+import DynamoDB from 'aws-sdk/clients/dynamodb';
+import { defer, interval } from 'rxjs';
+import { filter, flatMap, take } from 'rxjs/operators';
+
 import { refreshCredentials } from './AuthService';
 
-import { from, defer, throwError, of, interval, fromEvent, empty } from 'rxjs';
-import {
-  // delay as delayRx,
-  map,
-  filter,
-  // retry as retryRx,
-  tap,
-  concatMap,
-  timeout,
-  take,
-  takeUntil,
-  throttleTime,
-  last,
-  bufferTime,
-  combineLatest,
-  flatMap,
-  throttle,
-  takeWhile
-} from 'rxjs/operators';
-
+// import { Auth, API } from 'aws-amplify';
 export interface UserRow {
   user: string;
   answers: { [k:string]: number }; // Array<any>;
