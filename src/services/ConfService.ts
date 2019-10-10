@@ -90,7 +90,7 @@ export async function submitAll(
   );
 }
 
-export async function delAll(conf: string) {
+export async function delAll(conf: string, user:string) {
   if (!docClient) await init();
 
   console.log('Deleting all: conf=' + conf, ' from ' + TABLE_USERS);
@@ -108,6 +108,8 @@ export async function delAll(conf: string) {
       .eq(user)
       .delete();
   });
+
+  submitReady(false, conf, [], user);
 
   console.log('delete done', conf);
 

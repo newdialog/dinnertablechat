@@ -49,9 +49,7 @@ const AppModel = types
       return self.auth.user!.email === 'guest@dinnertable.chat';
     },
     isAdmin() {
-      return (
-        self.auth.user && self.auth.user!.id === 'Google_111841421166386376573'
-      );
+      return self.auth.isAdmin();
     },
     isStandalone() {
       if (self._isStandalone) return true;
