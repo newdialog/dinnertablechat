@@ -201,7 +201,7 @@ export default function ConfAdminPanel(props: Props) {
 
     console.warn('deleting all responses from: ' + confid);
 
-    await delAll(confid);
+    await delAll(confid, store.getRID()!);
 
     onRefresh();
     resetChecks();
