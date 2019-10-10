@@ -46,7 +46,6 @@ export default function ConfUserBars(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
-  // const [state, setState] = React.useState<State>({ data: [], checks: 0 });
 
   const data2 = props.data.members.map((x, i) => ({ name: i, answers: x }));
 

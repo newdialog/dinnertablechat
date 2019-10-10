@@ -311,8 +311,13 @@ export async function idSubmit(data:ConfIdRow) {
 
   // Strings cannot be empty for dynamo
   if(data.curl === '') delete data.curl;
+  // Clear previous results
+  delete data.results;
+  data.ready = false;
 
   console.log('saving', JSON.stringify(data));
+  // clear out old entry, including assignments results
+  await idDel(data.conf, data.user);
 
   return docClient
     .table(TABLE_ID)

@@ -100,6 +100,7 @@ export default function ConfAdminPanel(props: Props) {
     console.log('q', props.table.questions);
     console.log('data ans', data.map(x=>x.answers));
 
+    // shorten result answers due to an incomplete answer
     const qlen = props.table.questions.length;
     data = data.map(x => {
       x.answers = Object.fromEntries(Object.entries(x.answers).slice(0, qlen));

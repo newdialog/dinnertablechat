@@ -14,8 +14,7 @@
   "resolutions": {
     "aws-sdk": "^2.496.0",
     "**/aws-sdk": "^2.496.0",
-    "**/moment": "^2.24.0",
-    "**/fork-ts-checker-webpack-plugin": "^1.5.0"
+    "**/moment": "^2.24.0"
   },
   "dependencies": {
     "@awspilot/dynamodb": "^1.5.0",
@@ -93,7 +92,7 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "analyze": "npm run build -- --stats && npx source-map-explorer 'build/static/js/*.js' --html result.html",
     "postinstall": "npm run i18n",
     "start": "env-cmd -f ./.env.development react-app-rewired start",
     "build": "env-cmd -f ./.env.staging react-app-rewired build -- --stats && cp -f CNAME ./build/ && npm run patchsw",
@@ -144,7 +143,7 @@
   "optionalDependencies": {},
   "browserslist": {
     "production": [
-      ">0.2%",
+      ">0.8%",
       "Firefox ESR",
       "Safari 9",
       "not dead",

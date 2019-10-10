@@ -103,12 +103,13 @@ export default (props: Props) => {
 
   // Clone for state
   useEffect(() => {
+    console.log('set state', props.data);
     const d: ConfIdRow = { ...props.data, questions: [...props.data.questions] };
 
     if (d.questions.length === 0) d.questions.push(newQuestions());
 
     setState(p => ({ ...p, data: d, created: !!d.updated }));
-  }, [props.data, props.data.questions]);
+  }, [props.data, props.data.questions, props.data.ready]);
 
   const formik = useFormik({
     initialValues: initialValues,
@@ -156,9 +157,6 @@ export default (props: Props) => {
       // Filter out questions removed
       questions = questions.filter(q => state.data!.questions.findIndex(y => q.id === y.id) > -1);
 
-      // cleanup
-      questions.forEach(q => delete q.id);
-
       const payload: ConfIdRow = {
         conf: values.conf,
         user: props.user,
@@ -169,8 +167,8 @@ export default (props: Props) => {
         curl: values.curl
       }
 
-      console.log(values);
-      console.log('payload', JSON.stringify(payload));
+      // console.log(values);
+      console.log('payload', JSON.stringify(payload), values);
       // return;
 
       try {
