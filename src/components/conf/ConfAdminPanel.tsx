@@ -1,25 +1,14 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Typography,
-  Chip
-} from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/styles';
+import useInterval from '@use-it/interval';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFocus } from 'utils/useFocus';
 
 import * as AppModel from '../../models/AppModel';
-import useInterval from '@use-it/interval';
-
-import { getAll, submitReady, init, delAll, ConfIdRow, UserRow, UserRows } from '../../services/ConfService';
 import { match2 } from '../../services/ConfMath';
-
+import { ConfIdRow, delAll, getAll, init, submitReady, UserRows } from '../../services/ConfService';
 import ConfThinking from './ConfThinking';
-import { useFocus } from 'utils/useFocus';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -111,6 +100,7 @@ export default function ConfAdminPanel(props: Props) {
     console.log('q', props.table.questions);
     console.log('data ans', data.map(x=>x.answers));
 
+    // shorten result answers due to an incomplete answer
     const qlen = props.table.questions.length;
     data = data.map(x => {
       x.answers = Object.fromEntries(Object.entries(x.answers).slice(0, qlen));

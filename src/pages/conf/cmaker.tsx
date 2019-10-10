@@ -167,15 +167,15 @@ export default observer(function CMaker(props: Props) {
 
     if (data.ready) {
       var r = window.confirm(
-        'This event has already assigned groups. Editing may cause reporting issues. Continue?'
+        'This event has already assigned groups. Editing will unassign groups and may cause reporting issues. Continue?'
       );
       if (!r) throw new Error('aborted');
     }
-    console.log('saving', JSON.stringify(data));
+    // console.log('saving', JSON.stringify(data));
     try {
       await ConfService.idSubmit(data);
+      setState(p=>({...p, updater: p.updater+1 }));
       alert('saved');
-      // setState(p=>({...p, updater: p.updater+1 }));
     } catch (e) {
       console.error(e);
       alert('Error saving: ' + e.toString());
@@ -227,12 +227,12 @@ export default observer(function CMaker(props: Props) {
 
       if (x !== null) {
         const data = x as ConfService.ConfIdRow;
-        setState(p => ({ ...p, data, updater: p.updater + 1 }));
+        setState(p => ({ ...p, data })); // , updater: p.updater + 1
         // Populate state with question data
         // setState(p => ({ ...p, questions: data.questions || [] }));
       }
     });
-  }, [state.confid, store.auth.user, user]); // , state.updater
+  }, [state.confid, store.auth.user, user, state.updater]);
 
   if (store.auth.isNotLoggedIn) {
     store.auth.login();

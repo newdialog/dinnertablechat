@@ -867,14 +867,6 @@
     "@babel/helper-regex" "^7.4.4"
     regexpu-core "^4.6.0"
 
-"@babel/polyfill@^7.4.4":
-  version "7.6.0"
-  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.6.0.tgz#6d89203f8b6cd323e8d946e47774ea35dc0619cc"
-  integrity sha512-q5BZJI0n/B10VaQQvln1IlDK3BTBJFbADx7tv+oXDPIDZuTo37H5Adb9jhlXm/fEN4Y7/64qD9mnrJJG7rmaTw==
-  dependencies:
-    core-js "^2.6.5"
-    regenerator-runtime "^0.13.2"
-
 "@babel/preset-env@7.6.0":
   version "7.6.0"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.6.0.tgz#aae4141c506100bb2bfaa4ac2a5c12b395619e50"
@@ -1690,9 +1682,9 @@
     wait-for-expect "^1.3.0"
 
 "@testing-library/jest-dom@^4.0.0":
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-4.1.1.tgz#fe063a97784c8e58fc0498869e689151faeceda3"
-  integrity sha512-4tMKJ6loIPPoERJoeqSWd0CQDsU+RPdXB1V4dgHgUpJVrObjb+TsWTG2VL32tVeUMZoXqk7cUh14YQXceFzfxg==
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@testing-library/jest-dom/-/jest-dom-4.1.2.tgz#e523047191379abd67cf0896dfd93cabc7e33eab"
+  integrity sha512-fNf2rCfu0dBD4DmpzqR2ibsaFlFojrWI/EuU8LLqv73CzFIMvT2RMq88p5JVRe4DfeNj0mu0MQ5FTG4mQ0qFaA==
   dependencies:
     "@babel/runtime" "^7.5.1"
     chalk "^2.4.1"
@@ -2485,9 +2477,9 @@ aws-amplify@^1.1.36:
     "@aws-amplify/xr" "^0.1.24"
 
 aws-sdk@2.518.0, aws-sdk@^2.432.0, aws-sdk@^2.496.0:
-  version "2.545.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.545.0.tgz#98c50ddfc806376a18cf72f4d4c3d2fdfe25046d"
-  integrity sha512-oQjpvvTkh2a7CvWhSUcFQWkpfkM3wVpzvLgGMInoZ6QIOsuQ+oNKz+zq48yQ619/GP8XnOh0zBQJLcYaa3XAKw==
+  version "2.546.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.546.0.tgz#48bf5fa56ce880973467452427024e77336d6098"
+  integrity sha512-SA+vL10oz8fwH0zicFqTthVEotjg7eGcP2lB/C6DOcNM/P/NMJpXEuR3Dt5eQmuNtjJBZ6kOIOrpq3IglzMmuQ==
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -4343,9 +4335,9 @@ ejs@^2.7.1:
   integrity sha512-kS/gEPzZs3Y1rRsbGX4UOSjtP/CeJP0CxSNZHYxGfVM/VgLcv0ZqM7C45YyTj2DI2g7+P9Dd24C+IMIg6D0nYQ==
 
 electron-to-chromium@^1.3.247:
-  version "1.3.277"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.277.tgz#38b7b297f9b3f67ea900a965c1b11a555de526ec"
-  integrity sha512-Czmsrgng89DOgJlIknnw9bn5431QdtnUwGp5YYiPwU1DbZQUxCLF+rc1ZC09VNAdalOPcvH6AE8BaA0H5HjI/w==
+  version "1.3.280"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.280.tgz#5f8950c8329e3e11b59c705fd59b4b8d9b3de5b9"
+  integrity sha512-qYWNMjKLEfQAWZF2Sarvo+ahigu0EArnpCFSoUuZJS3W5wIeVfeEvsgmT2mgIrieQkeQ0+xFmykK3nx2ezekPQ==
 
 elliptic@^6.0.0:
   version "6.5.1"
@@ -5157,7 +5149,7 @@ forever-agent@~0.6.1:
   resolved "https://registry.yarnpkg.com/forever-agent/-/forever-agent-0.6.1.tgz#fbc71f0c41adeb37f96c577ad1ed42d8fdacca91"
   integrity sha1-+8cfDEGt6zf5bFd60e1C2P2sypE=
 
-fork-ts-checker-webpack-plugin@1.5.0, fork-ts-checker-webpack-plugin@^1.4.3:
+fork-ts-checker-webpack-plugin@1.5.0, fork-ts-checker-webpack-plugin@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/fork-ts-checker-webpack-plugin/-/fork-ts-checker-webpack-plugin-1.5.0.tgz#ce1d77190b44d81a761b10b6284a373795e41f0c"
   integrity sha512-zEhg7Hz+KhZlBhILYpXy+Beu96gwvkROWJiTXOCyOOMMrdBIRPvsBpBqgTI4jfJGrJXcqGwJR8zsBGDmzY0jsA==
@@ -5876,9 +5868,9 @@ i18next-xhr-backend@*, i18next-xhr-backend@^3.0.0:
     "@babel/runtime" "^7.5.5"
 
 i18next@^17.0.6:
-  version "17.0.18"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-17.0.18.tgz#cca2503125af2370daa4657c5320d5ef6924c23a"
-  integrity sha512-FpLbLwzYV/qen9ZTA+mOHiNzLxESnF+sQCe5wT7UShssfDiW/df5JdXuxnPsPQiUd+M1kpB3Jaawcn9RN6atig==
+  version "17.1.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-17.1.0.tgz#7f9fd49becf0c5634750d8af657ff311e9db5639"
+  integrity sha512-OecCfr3GjgQk0KycJhUfFPaQ1SDv/mozg8nAYT58O37dQbRHSQ3YYv7L0VwJhRswiXIBKJc0XOgrXSMSnJE1lA==
   dependencies:
     "@babel/runtime" "^7.3.1"
 
@@ -5919,9 +5911,9 @@ iferr@^0.1.5:
   integrity sha1-xg7taebY/bazEEofy8ocGS3FtQE=
 
 ignore-walk@^3.0.1:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/ignore-walk/-/ignore-walk-3.0.2.tgz#99d83a246c196ea5c93ef9315ad7b0819c35069b"
-  integrity sha512-EXyErtpHbn75ZTsOADsfx6J/FPo6/5cjev46PXrcTpd8z3BoRkXgYu9/JVqrI7tusjmwCZutGeRJeU0Wo1e4Cw==
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/ignore-walk/-/ignore-walk-3.0.3.tgz#017e2447184bfeade7c238e4aefdd1e8f95b1e37"
+  integrity sha512-m7o6xuOaT1aqheYHKf8W6J5pYH85ZI9w077erOzLje3JsB1gkafkAhHHY19dqjulgIZHFm32Cp5uNZgcQqdJKw==
   dependencies:
     minimatch "^3.0.4"
 
@@ -8097,9 +8089,9 @@ npm-bundled@^1.0.1:
   integrity sha512-8/JCaftHwbd//k6y2rEWp6k1wxVfpFzB6t1p825+cUb7Ym2XQfhwIC5KwhrvzZRJu+LtDE585zVaS32+CGtf0g==
 
 npm-packlist@^1.1.6:
-  version "1.4.4"
-  resolved "https://registry.yarnpkg.com/npm-packlist/-/npm-packlist-1.4.4.tgz#866224233850ac534b63d1a6e76050092b5d2f44"
-  integrity sha512-zTLo8UcVYtDU3gdeaFu2Xu0n0EvelfHDGuqtNIn5RO7yQj4H1TqNdBc/yZjxnWA0PVB8D3Woyp0i5B43JwQ6Vw==
+  version "1.4.6"
+  resolved "https://registry.yarnpkg.com/npm-packlist/-/npm-packlist-1.4.6.tgz#53ba3ed11f8523079f1457376dd379ee4ea42ff4"
+  integrity sha512-u65uQdb+qwtGvEJh/DgQgW1Xg7sqeNbmxYyrvlNznaVTjV3E5P6F/EFjM+BVHXl7JJlsdG8A64M0XI8FI/IOlg==
   dependencies:
     ignore-walk "^3.0.1"
     npm-bundled "^1.0.1"
@@ -9941,7 +9933,7 @@ react-router@5.1.2, react-router@^5.1.1:
     tiny-invariant "^1.0.2"
     tiny-warning "^1.0.0"
 
-react-scripts@^3.1.2:
+react-scripts@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-3.2.0.tgz#58ccd6b4ffa27f1b4d2986cbdcaa916660e9e33c"
   integrity sha512-6LzuKbE2B4eFQG6i1FnTScn9HDcWBfXXnOwW9xKFPJ/E3rK8i1ufbOZ0ocKyRPxJAKdN7iqg3i7lt0+oxkSVOA==
@@ -11670,9 +11662,9 @@ typedarray@^0.0.6:
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
 typescript@^3.7.0-beta:
-  version "3.7.0-dev.20191008"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.0-dev.20191008.tgz#45f29daf2c95b4a1e84f094b158766f97eebafc1"
-  integrity sha512-6Q9Tk1+5DvAKdIpjLNDDEJszYcDsaagykZtE+INTwGydt0fPffrB+M6/TDWPu/iDASjWLDw3HBC02/bEyFK1aw==
+  version "3.7.0-dev.20191009"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.7.0-dev.20191009.tgz#852e49dca797bb35acf930583ef65e7b3b23fc01"
+  integrity sha512-Vk/wZedTpVd3QAhr3mG1+sbUHcpJ1wfw49Wo1NCQvzMa0vHCJeocEwWzaV2yWprsuuFv4+e8tjCj1Vnme2CMHg==
 
 ua-parser-js@^0.7.18:
   version "0.7.20"

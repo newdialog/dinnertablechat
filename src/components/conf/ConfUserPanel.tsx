@@ -119,6 +119,16 @@ export default function PleaseWaitResults(props: Props) {
   });
 
   const pos = store.conf.positions;
+  /* 
+  const posKeys = Object.keys(pos);
+  props.table!.questions.map( (q, i) => {
+    const q = posKeys.findIndex( x => x.includes('q'+i) );
+    if(q) {
+
+    }
+  });
+  */
+
   const confid = props.id || '111';
   const user = store.getRID();
 
