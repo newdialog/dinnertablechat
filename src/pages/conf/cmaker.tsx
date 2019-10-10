@@ -174,7 +174,7 @@ export default observer(function CMaker(props: Props) {
     // console.log('saving', JSON.stringify(data));
     try {
       await ConfService.idSubmit(data);
-      setState(p=>({...p, updater: p.updater+1 }));
+      setState(p => ({ ...p, updater: p.updater + 1 }));
       alert('saved');
     } catch (e) {
       console.error(e);
@@ -282,6 +282,11 @@ export default observer(function CMaker(props: Props) {
       </Helmet>
       <div className={classes.pagebody}>
         <main className={classes.container}>
+          <div style={{ textAlign: 'right', float: 'right' }}>
+            {store.isNotGuest() &&
+              <button onClick={() => store.auth.logout()}>logout</button>
+            }
+          </div>
           {/* Hero unit */}
           <div className={classes.heroUnit}>
             <div className={classes.heroContent}>

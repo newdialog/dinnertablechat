@@ -175,7 +175,8 @@ const AuthModel = types
       return self.user!.id;
     },
     isAuthenticated() {
-      return self.user && self.aws && !self.isNotLoggedIn;
+      if(!self.user|| !self.aws) return false;
+      return !self.isNotLoggedIn;
     }
   }));
 

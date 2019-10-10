@@ -48,6 +48,11 @@ const AppModel = types
       if (!self.auth.user) return false;
       return self.auth.user!.email === 'guest@dinnertable.chat';
     },
+    isNotGuest() {
+      if (!self.auth.isAuthenticated()) return false;
+      if (!self.auth.user) return false;
+      return !this.isGuest();
+    },
     isAdmin() {
       return self.auth.isAdmin();
     },

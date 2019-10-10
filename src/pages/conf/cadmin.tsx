@@ -149,7 +149,7 @@ export default observer(function CAdmin(props: Props) {
   const confid = props.id;
   // const confid = id;
 
-  const isAdmin = store.auth.isAdmin();
+  const isNotGuest = store.isNotGuest();
 
   // console.log(store.auth.snapshot());
 
@@ -184,8 +184,8 @@ export default observer(function CAdmin(props: Props) {
     if (state.kill) return;
     if (!store.auth.isAuthenticated()) return;
 
-    if (!isAdmin) {
-      console.log('isAdmin', isAdmin);
+    if (!isNotGuest) {
+      console.log('isAdmin', isNotGuest);
       window.alert('Not logged in as an administrator');
       store.auth.logoutLogin();
       setState(p => ({ ...p, kill: true }));
@@ -195,7 +195,7 @@ export default observer(function CAdmin(props: Props) {
     }
     // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
     // if (store.auth.isAuthenticated()) return;
-  }, [store.auth.isNotLoggedIn, store.auth.user, isAdmin]);
+  }, [store.auth.isNotLoggedIn, store.auth.user, isNotGuest]);
 
   useEffect(() => {
     // store.setSaas(true);
@@ -260,8 +260,8 @@ export default observer(function CAdmin(props: Props) {
   let url = window.location.origin + '/c/' + confid;
   if (isMixer) url = window.location.origin + '/' + confid; // use root
 
-  if(state.table && state.table.curl) url = state.table.curl;
-  if(state.table) console.log('state.table.curl', state.table.curl);
+  if (state.table && state.table.curl) url = state.table.curl;
+  if (state.table) console.log('state.table.curl', state.table.curl);
 
   const visualURL = url.replace('http://', '').replace('https://', '');
   // url += 'aaaaaaaaaaaa.';
@@ -275,15 +275,14 @@ export default observer(function CAdmin(props: Props) {
       </Helmet>
       <div className={classes.pagebody}>
         <main className={classes.container}>
+
           {/* Hero unit */}
           <div className={classes.heroUnit}>
             <div className={classes.heroContent}>
               <div style={{ textAlign: 'right', float: 'right' }}>
-                {store.auth.isAdmin() ? (
+                {isNotGuest && (
                   <button onClick={() => store.auth.logout()}>logout</button>
-                ) : (
-                    'not an admin'
-                  )}
+                )}
                 {
                   <button onClick={() => toggleView()}>
                     switch to {state.view === 'slides' ? 'dash' : 'slides'}
