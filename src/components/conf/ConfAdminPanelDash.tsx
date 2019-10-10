@@ -148,7 +148,7 @@ export default function ConfAdminPanelDash(props: Props) {
                 {!ready ? 'Assign All' : 'UnAssign All'}
               </Button>
 
-              <Button
+              { store.isAdmin() && <Button
                 variant="contained"
                 size="small"
                 // size="small"
@@ -157,7 +157,7 @@ export default function ConfAdminPanelDash(props: Props) {
                 onClick={() => onDeleteAll()}
               >
                 {'Delete All'}
-              </Button>
+              </Button> }
             </CardActions>
           </Card>
         </Grid>
