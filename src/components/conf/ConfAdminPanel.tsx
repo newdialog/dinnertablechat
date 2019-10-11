@@ -100,12 +100,20 @@ export default function ConfAdminPanel(props: Props) {
     console.log('q', props.table.questions);
     console.log('data ans', data.map(x=>x.answers));
 
+    
+
+    // filter out users with bad question
+    const table = props.table.questions;
+    // Every user answer matches to Some table definition of that id
+    // fixes users who over (bad question) or under answered since updates
+    data = data.filter(x => Object.entries(x.answers).every( ([k,v]) => table.some(q => q.id === k) ));
     // shorten result answers due to an incomplete answer
-    const qlen = props.table.questions.length;
+    /*
     data = data.map(x => {
-      x.answers = Object.fromEntries(Object.entries(x.answers).slice(0, qlen));
+      x.answers = Object.fromEntries( Object.entries(x.answers).filter( ([k,v]) => !!table.find(q=>q.id === k) )); // .slice(0, qlen)
       return x;
     });
+    */
 
     console.log('pruned', data);
     // throw new Error('-');

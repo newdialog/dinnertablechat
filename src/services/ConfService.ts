@@ -119,6 +119,7 @@ export async function submit(positions: any, conf: string, user: string) {
   if (!docClient) await init();
 
   // if (!user) user = identityId;
+  const updated = Math.floor(Date.now() / 1000);
 
   // console.log('submit user', user, conf, positions);
 
@@ -128,7 +129,8 @@ export async function submit(positions: any, conf: string, user: string) {
     .insert_or_update({
       conf,
       user,
-      answers: positions
+      answers: positions,
+      updated
     });
 }
 
@@ -254,6 +256,12 @@ export async function getAll(
     }); // remove metadata
 }
 
+export interface ConfUIQuestion {
+  positions: string[];
+  proposition: string;
+  id: string;
+}
+
 export interface ConfIdQuestion {
   question: string;
   answer: string;
@@ -261,11 +269,11 @@ export interface ConfIdQuestion {
   id?: string;
 }
 // ==================
-// export type ConfIdQuestion = {i: number, question: string, answer: string};
-export type ConfIdQuestions = Array<ConfIdQuestion>;
+export type ConfIdQuestions = ConfIdQuestion[];
 export type GroupResult = any[]; // [ { [q:string]: any} ];
 export interface ConfIdRow {
   user: string;
+  userPoolId: string;
   conf: string;
   questions: ConfIdQuestions;
   maxGroups: number;
@@ -284,7 +292,8 @@ export function idNewQuestions(conf: string, user: string): ConfIdRow {
     maxGroups: 40,
     user,
     conf,
-    ready: false
+    ready: false,
+    userPoolId: ''
   };
 }
 

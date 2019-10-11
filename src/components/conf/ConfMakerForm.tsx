@@ -165,8 +165,11 @@ export default (props: Props) => {
         minGroupUserPairs: Math.floor(values.minGroupUserPairs / 2),
         questions,
         ready: props.data.ready,
-        curl: values.curl
+        curl: values.curl,
+        userPoolId: store.auth.user!.userPoolId!
       }
+
+      if(!payload.userPoolId) throw new Error('no userPoolId');
 
       // console.log(values);
       console.log('payload', JSON.stringify(payload), values);

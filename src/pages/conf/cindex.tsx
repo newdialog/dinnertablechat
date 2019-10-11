@@ -189,11 +189,9 @@ export default observer(function CIndex(props: Props) {
       }
       const a = d.questions.map( (x,i) => {
         return {
-          // topic: t(qs + '-topic'),
-          // photo: t(qs + '-photo'),
           positions: x.answer.split(', '),
           proposition: x.question,
-          id: `conf-${confid}-q${i}-id` // TODO x.i
+          id: x.id! || `q${i}-id`
         }
       });
 

@@ -11,6 +11,7 @@ import Reveal from 'react-reveal/Reveal';
 import * as AppModel from '../../models/AppModel';
 import ConfAdminPanelDash from 'components/conf/ConfAdminPanelDash';
 import ConfAdminPanelSlides from 'components/conf/ConfAdminPanelSlides';
+import { ConfUIQuestion } from 'services/ConfService';
 
 import * as ConfService from '../../services/ConfService';
 
@@ -165,13 +166,11 @@ export default observer(function CAdmin(props: Props) {
         alert('no id exists');
         return;
       }
-      const a = d.questions.map((x, i) => {
+      const a = d.questions.map((x, i):ConfUIQuestion => {
         return {
-          // topic: t(qs + '-topic'),
-          // photo: t(qs + '-photo'),
           positions: x.answer.split(', '),
           proposition: x.question,
-          id: `conf-${confid}-q${i}-id` // TODO x.i
+          id: x.id! || `q${i}-id` // TODO x.i
         }
       });
 

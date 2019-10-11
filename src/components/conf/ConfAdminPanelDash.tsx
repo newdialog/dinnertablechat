@@ -18,6 +18,7 @@ import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import ConfAdminTable from './ConfAdminTable';
 import ConfBars from './ConfAdminBars';
+import { ConfUIQuestion } from 'services/ConfService';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -81,7 +82,7 @@ interface Props {
   payload: any;
   ready?: boolean;
   showRefresh: boolean;
-  questions: any;
+  questions: ConfUIQuestion[];
 }
 
 interface State {}

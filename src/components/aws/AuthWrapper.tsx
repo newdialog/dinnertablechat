@@ -94,15 +94,9 @@ function AuthComp(props: Props) {
     // console.log('+login, type:', awsUser.event);
 
     const viaLogin = awsUser.event === AuthService.LOGIN_EVENT;
-    s.auth.authenticated(awsUser, viaLogin);
+    s.auth.authenticated(awsUser!, viaLogin);
     if (viaLogin) s.authenticated();
-    /// else s.authenticated(false); // not sure if needed
-
-    // TODO: cleanup guest login flow
-
-    /* if(awsUser.event !== AuthService.LOGIN_EVENT) {
-      if(props.store.isStandalone()) props.store.router.push('/home');
-    } */
+    
   };
 
   // console.log('props.store.auth.doLogin', props.store.auth.doLogin, props.login)

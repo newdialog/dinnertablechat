@@ -144,13 +144,19 @@ export async function auth(cb: AwsCB, callbackPage: boolean = false) {
 type AwsCB = (auth: AwsAuth | null) => void;
 
 export interface AwsAuth {
+  // event: string;
+  // user: any;
+  name: string;
+  email: string;
+  groups: string[];
+  id: string;
   event: string;
-  user: any;
   // username: string;
-  region: string;
-  AccessKeyId: string;
-  SecretAccessKey: string;
-  SessionToken: string;
+  // region: string;
+  // AccessKeyId: string;
+  // SecretAccessKey: string;
+  // SessionToken: string;
+  userPoolId?: string;
 }
 
 const REGION = 'us-east-1';
@@ -217,19 +223,13 @@ async function checkUser(cb: AwsCB, event: string = '') {
   try {
     cr = await Auth.currentUserCredentials();
   } catch (e) {
-    console.log(
-      '-currentUserCredentials',
-      e
-    );
+    console.log('-currentUserCredentials', e);
   }
 
   try {
     session = await Auth.currentSession();
   } catch (e) {
-    console.log(
-      '-currentSession',
-      e
-    );
+    console.log('-currentSession', e);
   }
 
   // const idenity = cr.identityId;
@@ -240,9 +240,10 @@ async function checkUser(cb: AwsCB, event: string = '') {
   let email: string = '';
   let name: string = '';
   let groups: string[] = [];
-  let id: string | null = null;
+  let id: string = '';
   let debugSource = 'session';
   let debugObj: any = null;
+  let userPoolId: any = null; // versus identity
 
   if (session) {
     // console.log('session', session);
@@ -250,8 +251,9 @@ async function checkUser(cb: AwsCB, event: string = '') {
     email = session.getIdToken().payload['email'];
     name = session.getIdToken().payload['name'];
     groups = session.getIdToken().payload['cognito:groups'];
-    id = REGION + ':' + session.getIdToken().payload['sub'];
-    // identityId = 'us-east1:' + session.getIdToken().payload['sub'];
+
+    id = cr.identityId;
+    userPoolId = session.getIdToken().payload['sub'];
   } else if (cr) {
     // console.log('unauth user', cr);
     // const newCred = await refreshCredentials(); // needed for dynamo labs
@@ -261,7 +263,6 @@ async function checkUser(cb: AwsCB, event: string = '') {
     email = 'guest@dinnertable.chat';
     debugSource = 'cr.identityId';
     debugObj = cr.identityId;
-    // identityId = cr.identityId;
   } else {
     cb(null);
     return;
@@ -273,16 +274,23 @@ async function checkUser(cb: AwsCB, event: string = '') {
   // const groups = session.getIdToken().payload['cognito:groups'];
 
   if (!id) {
-    console.log()
     throw new Error('checkuser: no id');
   }
 
-  const user = {
+  const authParams: any = {
+    region: 'us-east-1',
+    event: event || ''
+  };
+
+  const user: AwsAuth = {
     name,
     email,
     id, // data.username,
-    groups
+    groups,
+    ...authParams
   };
+  if (userPoolId) user.userPoolId = userPoolId;
+
   // const user = data.attributes;
 
   // console.log('user', user);
@@ -293,20 +301,14 @@ async function checkUser(cb: AwsCB, event: string = '') {
     dynamoDbCrc32: false
   });
 
-  const authParams: any = {
-    region: 'us-east-1',
-    event: event || ''
-  };
   if (!user.name || !user.email) {
     //  || !authParams.accessKeyId
     console.log('aws: no valid returned-');
     cb(null);
     return;
   }
-  cb({
-    user,
-    ...authParams
-  });
+
+  cb(user);
 }
 
 // type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;

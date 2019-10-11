@@ -12,7 +12,7 @@ function makeResponse(
   ans: number[]
 ) {
   const keys: string[] = [];
-  for (var i = 0; i < questionsNum; i++) keys.push(`conf-${conf}-q${i}-id`);
+  for (var i = 0; i < questionsNum; i++) keys.push(`q${i}-id`);
 
   const answers = keys.reduce((acc, k, i) => {
     acc[k] = ans[i];

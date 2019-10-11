@@ -1,4 +1,11 @@
-import { types, Instance, flow, getSnapshot } from 'mobx-state-tree';
+import { AwsAuth } from './../services/AuthService';
+import {
+  types,
+  Instance,
+  flow,
+  getSnapshot,
+  SnapshotIn
+} from 'mobx-state-tree';
 import uuid from 'short-uuid';
 // import { signIn } from 'components/aws/AuthWrapper';
 
@@ -9,7 +16,8 @@ const UserModel = types
     id: types.string,
     groups: types.array(types.string),
     guestSeed: types.string,
-    numDebates: types.number
+    numDebates: types.number,
+    userPoolId: types.maybe(types.string)
     // creds: types.maybeNull(types.frozen<any>())
   })
   .actions(self => ({
@@ -96,21 +104,10 @@ const AuthModel = types
     notLoggedIn() {
       self.isNotLoggedIn = true;
     },
-    authenticated(authServiceData: any, viaLogin: boolean) {
-      const {
-        user,
-        region
-      }: {
-        user: {
-          name: string;
-          email: string;
-          id: string;
-          groups: Array<string>;
-        };
-        region: any;
-      } = authServiceData;
+    authenticated(adata: AwsAuth, viaLogin: boolean) {
+      const { id } = adata;
 
-      if (!user.id) throw new Error('no id');
+      if (!id) throw new Error('no id');
 
       // self.didLogin = viaLogin;
       /* if (!self.user)
@@ -128,29 +125,31 @@ const AuthModel = types
       // const isGuest = user.id === '78439c31-beef-4f4d-afbb-e948e3d3c932';
       // let idWithSeed = !isGuest ? user.id : user.id + '__' + seed;
       // console.log('idWithSeed', idWithSeed);
-      window.gtag('set', 'userId', user.id);
+      if (window.gtag) window.gtag('set', 'userId', id);
       // mixpanel auth
       if (window.mixpanel) {
-        (window.mixpanel as any).identify(user.id);
-        user.email &&
+        (window.mixpanel as any).identify(id);
+        adata.email &&
           (window.mixpanel as any).people.set({
-            $email: user.email,
+            $email: adata.email,
             $last_login: new Date()
           });
       }
       // ======
-
-      const umodel = {
-        name: user.name,
-        email: user.email,
-        groups: user.groups,
-        id: user.id,
+      const umodel: SnapshotIn<typeof UserModel> = {
+        // name: adata.name,
+        // email: adata.email,
+        // groups: adata.groups,
+        // id: adata.id,
+        ...adata,
         guestSeed: seed,
         numDebates: 0
       };
 
+      if (adata.userPoolId) umodel.userPoolId = adata.userPoolId;
+
       const aws: Instance<typeof AWSModel> = {
-        region
+        region: 'us-east-1'
       };
 
       self.aws = aws;
