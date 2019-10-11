@@ -6,10 +6,10 @@ import CardContent from '@material-ui/core/CardContent';
 import Slide from '@material-ui/core/Slide';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import uuid from 'short-uuid';
 import * as Yup from 'yup';
-
+import * as AppModel from '../../models/AppModel';
 import { ConfIdQuestion, ConfIdRow } from '../../services/ConfService';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -67,6 +67,7 @@ interface State {
 
 export default (props: Props) => {
   const classes = useStyles({});
+  const store = useContext(AppModel.Context)!;
   // const user = props.user;
   const confid = props.confid === 'new' ? '' : props.confid;
   if (props.data.conf === 'new') props.data.conf = '';
@@ -193,9 +194,9 @@ export default (props: Props) => {
     { name: 'conf', label: 'Short name for the event', type: 'input', short: true, disabled: !!confid },
     // { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
     { name: 'minGroupUserPairs', label: 'Number of people in a group', type: 'input' },
-    { name: 'curl', label: 'short url (optional)', type: 'input' },
+    { name: 'curl', label: 'short url (optional)', type: 'input', adminOnly: true },
     { name: 'questions', type: 'array' }
-  ];
+  ].filter(x=> !x.adminOnly || (!!x.adminOnly && store.auth.isAdmin()) );
 
   const questionNodes = data.questions;
   // console.log('questionNodes', questionNodes, formik.values)

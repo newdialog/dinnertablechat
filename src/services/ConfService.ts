@@ -8,7 +8,7 @@ import { refreshCredentials } from './AuthService';
 // import { Auth, API } from 'aws-amplify';
 export interface UserRow {
   user: string;
-  answers: { [k:string]: number }; // Array<any>;
+  answers: { [k: string]: number }; // Array<any>;
   answersArr?: Array<number>;
 }
 export type UserRows = Array<UserRow>;
@@ -22,7 +22,6 @@ const TABLE_USERS = 'conf-users';
 const TABLE_ID = 'conf_id';
 
 export async function init() {
-
   const f = x => x && !!x.identityId;
 
   // console.log('db: waiting on init');
@@ -90,7 +89,7 @@ export async function submitAll(
   );
 }
 
-export async function delAll(conf: string, user:string) {
+export async function delAll(conf: string, user: string) {
   if (!docClient) await init();
 
   console.log('Deleting all: conf=' + conf, ' from ' + TABLE_USERS);
@@ -196,8 +195,6 @@ export async function waitForReady(conf: string, targetState: boolean = true) {
     .toPromise();
 } */
 
-
-
 export async function getResults(conf: string) {
   if (!docClient) await init();
 
@@ -240,11 +237,12 @@ export async function getAll(
       const filterOut = x.filter(y => y.user !== '_');
 
       const idRow = await idGet(conf);
-      let meta:ConfIdRow = idNewQuestions(conf, '');
+      let meta: ConfIdRow = idNewQuestions(conf, '');
 
-      console.log('idRow', idRow)
-      
-      if (idRow !== null) { //  && (idRow as any).answers
+      console.log('idRow', idRow);
+
+      if (idRow !== null) {
+        //  && (idRow as any).answers
         meta = idRow as any;
         meta.results = meta.results || Array<any>();
       }
@@ -267,15 +265,15 @@ export interface ConfIdQuestion {
 export type ConfIdQuestions = Array<ConfIdQuestion>;
 export type GroupResult = any[]; // [ { [q:string]: any} ];
 export interface ConfIdRow {
-  user: string,
-  conf: string,
-  questions: ConfIdQuestions,
-  maxGroups: number,
-  minGroupUserPairs: number,
-  ready: boolean,
-  results?: GroupResult,
-  curl?: string,
-  updated?: number
+  user: string;
+  conf: string;
+  questions: ConfIdQuestions;
+  maxGroups: number;
+  minGroupUserPairs: number;
+  ready: boolean;
+  results?: GroupResult;
+  curl?: string;
+  updated?: number;
 }
 // ====================
 
@@ -302,7 +300,7 @@ export function idNewQuestion(
   };
 }
 
-export async function idSubmit(data:ConfIdRow) {
+export async function idSubmit(data: ConfIdRow) {
   if (!docClient) await init();
   // conf: string, user: string, questions: any[], maxGroups: number, minGroupUserPairs: number, curl?: string
   // if (!user) user = identityId;
@@ -312,14 +310,14 @@ export async function idSubmit(data:ConfIdRow) {
   data.updated = Math.floor(Date.now() / 1000);
 
   // Strings cannot be empty for dynamo
-  if(data.curl === '') delete data.curl;
+  if (data.curl === '') delete data.curl;
   // Clear previous results
   delete data.results;
   data.ready = false;
 
   console.log('saving', JSON.stringify(data));
   // clear out old entry, including assignments results
-  await idDel(data.conf, data.user);
+  if (!!data.updated) await idDel(data.conf, data.user);
 
   return docClient
     .table(TABLE_ID)
@@ -327,7 +325,12 @@ export async function idSubmit(data:ConfIdRow) {
     .insert_or_update(data);
 }
 
-export async function submitReady(ready: boolean, conf: string, results: any[], user: string) {
+export async function submitReady(
+  ready: boolean,
+  conf: string,
+  results: any[],
+  user: string
+) {
   if (!docClient) await init();
 
   console.log('submitReady', ready, conf, user, results);
@@ -351,12 +354,12 @@ export async function idDel(conf: string, user: string) {
   if (!docClient) await init();
 
   return await docClient
-  .table(TABLE_ID)
-  .where('conf')
-  .eq(conf)
-  .where('user')
-  .eq(user)
-  .delete();
+    .table(TABLE_ID)
+    .where('conf')
+    .eq(conf)
+    .where('user')
+    .eq(user)
+    .delete();
 }
 
 export async function idGet(conf: string): Promise<ConfIdRow | null> {
@@ -365,7 +368,17 @@ export async function idGet(conf: string): Promise<ConfIdRow | null> {
   return docClient
     .table(TABLE_ID)
     .index('conf-index')
-    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs', 'results', 'curl', 'updated')
+    .select(
+      'user',
+      'questions',
+      'ready',
+      'conf',
+      'maxGroups',
+      'minGroupUserPairs',
+      'results',
+      'curl',
+      'updated'
+    )
     .having('conf')
     .eq(conf)
     .scan()
@@ -385,7 +398,17 @@ export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
   return docClient
     .table(TABLE_ID)
     .index('user-index')
-    .select('user', 'questions', 'ready', 'conf', 'maxGroups', 'minGroupUserPairs', 'results', 'curl', 'updated')
+    .select(
+      'user',
+      'questions',
+      'ready',
+      'conf',
+      'maxGroups',
+      'minGroupUserPairs',
+      'results',
+      'curl',
+      'updated'
+    )
     .having('user')
     .eq(user)
     .scan()
@@ -394,7 +417,7 @@ export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
       if (!xs || xs.length === 0) return null;
 
       // xs.forEach(x => x.questions = JSON.parse(x.questions));
-      xs.forEach(x => x.questions = x.questions || []);
+      xs.forEach(x => (x.questions = x.questions || []));
       return xs as ConfIdRow[];
     }); // remove metadata
 }

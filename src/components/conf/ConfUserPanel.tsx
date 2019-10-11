@@ -199,7 +199,7 @@ export default function PleaseWaitResults(props: Props) {
     setState(p => ({ ...p, checks: p.checks - 1 }));
   }, [state.checks, inFocus]);
 
-  useInterval(onInterval, 10 * 1000);
+  useInterval(onInterval, 9 * 1000);
 
   React.useEffect(() => {
     init();

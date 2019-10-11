@@ -172,10 +172,10 @@ const AuthModel = types
     },
     geCogId() {
       if (!self.user) throw new Error('no user');
-      return self.user!.id;
+      return self.user!.id; // .replace('us-east-1:', '');
     },
     isAuthenticated() {
-      if(!self.user|| !self.aws) return false;
+      if (!self.user || !self.aws) return false;
       return !self.isNotLoggedIn;
     }
   }));

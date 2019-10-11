@@ -157,7 +157,7 @@ export default function ConfAdminPanel(props: Props) {
     setState(p => ({ ...p, checks: p.checks - 1 }));
   }, [state.checks]);
 
-  useInterval(onInterval, 10 * 1000);
+  useInterval(onInterval, 9 * 1000);
 
   const onAdminReady = async (toggle: boolean) => {
     let msg = '';
