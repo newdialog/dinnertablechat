@@ -5,7 +5,7 @@ import { Theme } from '@material-ui/core/styles';
 
 import * as AppModel from '../../../models/AppModel';
 import * as Times from '../../../services/TimeService';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {

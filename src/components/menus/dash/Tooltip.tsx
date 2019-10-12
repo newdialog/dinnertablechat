@@ -1,7 +1,7 @@
 import { Paper, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import Info from '@material-ui/icons/Info';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

@@ -1,5 +1,5 @@
 import CssBaseline from '@material-ui/core/CssBaseline';
-import { ThemeProvider } from '@material-ui/styles';
+import { ThemeProvider } from'@material-ui/core/styles';
 import { createBrowserHistory } from 'history';
 import { observer } from 'mobx-react-lite';
 import { connectReduxDevtools } from 'mst-middlewares';

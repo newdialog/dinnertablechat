@@ -3,7 +3,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { Theme } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
 import FaceIcon from '@material-ui/icons/Face';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Bounce from 'react-reveal/Bounce';

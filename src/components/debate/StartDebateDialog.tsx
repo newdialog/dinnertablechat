@@ -5,7 +5,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { Theme } from '@material-ui/core/styles';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import React, { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 

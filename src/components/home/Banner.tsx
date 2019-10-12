@@ -14,7 +14,7 @@ import * as Times from '../../services/TimeService';
 import ReactPlayer from 'react-player';
 
 // import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import { useTheme, makeStyles } from'@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
 
 const useStyles = makeStyles(

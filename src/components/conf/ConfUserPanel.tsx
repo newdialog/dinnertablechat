@@ -1,7 +1,7 @@
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import useInterval from '@use-it/interval';
 import Prando from 'prando';
 import * as React from 'react';

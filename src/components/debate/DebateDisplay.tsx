@@ -1,7 +1,7 @@
 import Lottie from '@jadbox/lottie-react-web';
 import { Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import rottie, {AnimationEventName} from 'lottie-web';
 import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';

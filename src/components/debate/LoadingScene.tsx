@@ -3,7 +3,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';

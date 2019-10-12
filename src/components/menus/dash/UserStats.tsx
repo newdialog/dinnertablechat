@@ -1,7 +1,7 @@
 import { Grid, Typography } from '@material-ui/core';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

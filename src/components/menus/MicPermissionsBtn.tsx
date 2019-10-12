@@ -3,7 +3,7 @@ import { Theme } from '@material-ui/core/styles';
 import { Button } from '@material-ui/core';
 import * as AppModel from '../../models/AppModel';
 import { useTranslation } from 'react-i18next';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import getMedia from '../../utils/getMedia';
 import Info from '@material-ui/icons/Info';
 import { observer } from 'mobx-react-lite';

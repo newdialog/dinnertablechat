@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import { Typography } from '@material-ui/core';
 import * as AppModel from '../../models/AppModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 const trackOutboundLinkClick = window.trackOutboundLinkClick;
 
 const useStyles = makeStyles((theme: any) => ({

@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import Info from '@material-ui/icons/Info';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 

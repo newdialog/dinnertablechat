@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import React, { useContext } from 'react';
 import { Helmet } from 'react-helmet';
 import { useTranslation } from 'react-i18next';

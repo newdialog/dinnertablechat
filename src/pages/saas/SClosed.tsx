@@ -7,7 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Theme } from '@material-ui/core/styles';
 import DraftsIcon from '@material-ui/icons/ChatBubbleOutlineRounded';
 import InboxIcon from '@material-ui/icons/MicRounded';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import classNames from 'classnames';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';

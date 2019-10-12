@@ -2,7 +2,7 @@ import { Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import { Theme } from '@material-ui/core/styles';
 import QueueIcon from '@material-ui/icons/QueuePlayNext';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import React, { ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import * as AppModel from '../models/AppModel';

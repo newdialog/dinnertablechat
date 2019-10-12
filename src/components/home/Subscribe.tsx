@@ -4,7 +4,7 @@ import { Typography, TextField, Button } from '@material-ui/core';
 import { createStyles, Theme } from '@material-ui/core/styles';
 import Reveal from 'react-reveal/Reveal';
 import { useTranslation } from 'react-i18next';
-import { useTheme, makeStyles } from '@material-ui/styles';
+import { useTheme, makeStyles } from'@material-ui/core/styles';
 const useStyles = makeStyles((theme: any) => ({
   root: {
     textAlign: 'center',

@@ -1,6 +1,6 @@
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 

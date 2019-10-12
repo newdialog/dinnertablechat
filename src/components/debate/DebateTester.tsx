@@ -1,6 +1,6 @@
 import { Button } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from '@material-ui/styles';
+import { makeStyles } from'@material-ui/core/styles';
 import hark, { SpeechEvent } from 'hark';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import FPSStats from 'react-fps-stats';
