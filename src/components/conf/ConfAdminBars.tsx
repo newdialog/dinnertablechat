@@ -55,6 +55,21 @@ interface Props {
   questions: any;
 }
 
+const btheme = {
+  legends: {
+    text: {
+      fontSize: '1em',
+      fontWeight: 500
+    }
+  },
+  labels: {
+    text: {
+      fontSize: '1.4em',
+      fontWeight: 500
+    }
+  }
+};
+
 export default function ConfAdminBars(props: Props) {
   const store = props.store;
   const { t } = useTranslation();
@@ -81,14 +96,15 @@ export default function ConfAdminBars(props: Props) {
 
   // Users into question response totals
   // ex [{id: "conf-pub1-q0-id", Yes: 11, No: 2}]
-  const keys:string[] = [];
+  let keys:string[] = [];
   const data3 = tdata.map( (q, qindex) => {
     const pss = q.positions;
     const answ = {};
     pss.forEach((qr,i) => {
-      // console.log('q', qr, i);
       if(keys.indexOf(qr)===-1) keys.push(qr);
-      answ[qr] = data2.filter((u, index)=>u.answers[q.id]===i).length;
+
+      const tally = data2.filter((u, index)=>u.answers[q.id]===i).length;
+      answ[qr] = tally === 0 ? 0.01 : tally;
     });
 
     let propo = q.proposition;
@@ -97,7 +113,7 @@ export default function ConfAdminBars(props: Props) {
     return { id: (qindex+1).toString(), ...answ, proposition: propo}
   });
 
-  // console.log('data3', data3, tdata);
+  console.log('data3', data3, tdata);
 
   // return null;
   // console.log(JSON.stringify(valo, null, 2));
@@ -121,14 +137,15 @@ const Notes = (props:any) => {
   const { bars, xScale, yScale, data } = props;
   // debugger
   return <React.Fragment>{data.map( (bar, key) => {
-    return <text key={key} style={{color:'#444444'}}>
-            {bar.proposition}
+    return <text key={key} style={{color:'#444444', fontSize: '1.15em'}}>
+            {(key+1)}. {bar.proposition}
           </text>
   })}</React.Fragment>
 }
 
 function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
   return <ResponsiveBar
+        theme={btheme}
         layers={['grid', 'axes', 'bars', Notes, 'markers', 'legends', 'annotations'] as any}
         key={key}
         data={data3}
@@ -209,7 +226,8 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
         }} */
         labelSkipWidth={12}
         labelSkipHeight={12}
-        labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
+        labelTextColor='white'
+        // labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
         legends={ !showLegend ? undefined : [
             {
                 dataFrom: 'keys',
