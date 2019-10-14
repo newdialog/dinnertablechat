@@ -150,7 +150,7 @@ export default observer(function CAdmin(props: Props) {
   const confid = props.id;
   // const confid = id;
 
-  const isNotGuest = store.isNotGuest();
+  const isAuthUser = store.isNotGuest();
 
   // console.log(store.auth.snapshot());
 
@@ -178,6 +178,7 @@ export default observer(function CAdmin(props: Props) {
     })
   }, []);
 
+  /*
   useEffect(() => {
     // already redirecting to login
     if (state.kill) return;
@@ -185,16 +186,15 @@ export default observer(function CAdmin(props: Props) {
 
     if (!isNotGuest) {
       console.log('isAdmin', isNotGuest);
-      window.alert('Not logged in as an administrator');
+      window.alert('Please login to continue.');
       store.auth.logoutLogin();
       setState(p => ({ ...p, kill: true }));
     } else {
       // if (store.auth.isNotLoggedIn) return;
       console.log('Admin user:', store.auth.user);
     }
-    // console.log('aa', store.auth.isAuthenticated , !store.auth.isNotLoggedIn)
-    // if (store.auth.isAuthenticated()) return;
   }, [store.auth.isNotLoggedIn, store.auth.user, isNotGuest]);
+  */
 
   useEffect(() => {
     // store.setSaas(true);
@@ -225,6 +225,7 @@ export default observer(function CAdmin(props: Props) {
     }
   };
 
+  /*
   if (store.auth.isNotLoggedIn) {
     store.auth.login();
     return (
@@ -233,6 +234,7 @@ export default observer(function CAdmin(props: Props) {
       </div>
     );
   }
+  */
 
   let step = 0;
   const posBit = state.show ? 1 : 0;
@@ -279,7 +281,7 @@ export default observer(function CAdmin(props: Props) {
           <div className={classes.heroUnit}>
             <div className={classes.heroContent}>
               <div style={{ textAlign: 'right', float: 'right' }}>
-                {isNotGuest && (
+                {isAuthUser && (
                   <button onClick={() => store.auth.logout()}>logout</button>
                 )}
                 {

@@ -10,7 +10,7 @@ import * as AuthService from '../../services/AuthService';
 // import { withOAuth } from 'aws-amplify-react';
 interface Props {
   store: Store.Type;
-  login: boolean;
+  login: number;
   children?: any;
 }
 
@@ -101,10 +101,12 @@ function AuthComp(props: Props) {
 
   // console.log('props.store.auth.doLogin', props.store.auth.doLogin, props.login)
   // console.log('props.login', props.login);
-  if (props.login) {
+  if (props.login===1) {
     // props.login) {
     // props.OAuthSignIn()
     signIn();
+  } else if(props.login===2) {
+    signUp();
   }
 
   return (

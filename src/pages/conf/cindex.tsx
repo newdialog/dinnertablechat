@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import Reveal from 'react-reveal/Reveal';
 
 import PositionSelector from '../../components/saas/menus/SPositionSelector';
+import ConfWelcome from '../../components/conf/ConfWelcome';
 import * as AppModel from '../../models/AppModel';
 import * as ConfService from '../../services/ConfService';
 
@@ -182,6 +183,7 @@ export default observer(function CIndex(props: Props) {
 
   // Get question from DB
   useEffect(() => {
+    if(!confid) return;
     ConfService.idGet(confid).then(d => {
       if(!d) {
         alert('no id exists');
@@ -219,6 +221,8 @@ export default observer(function CIndex(props: Props) {
   if (step === 1) {
     console.log('move to next step');
   }
+
+  if(!confid) step = -1;
 
   const onSubmit = (positions: any) => {
     window.gtag('event', ('conf_user_submit_' + confid), {
@@ -265,6 +269,7 @@ export default observer(function CIndex(props: Props) {
         </div>
 
         <div className={classes.verticalCenter}>
+          {step === -1 && <ConfWelcome/> }
           {step === 0 && state.questions && (
             <Reveal effect="fadeInUp" duration={2200}>
               <PositionSelector

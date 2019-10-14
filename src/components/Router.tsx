@@ -66,23 +66,6 @@ const DTCRouter = ({
           {/* conference app */}
           <Route
             exact
-            path="/c/admin"
-            component={CMaker}
-          />
-          <Route
-            exact
-            path="/c/:id/admin"
-            render={props => <CAdmin id={props.match.params.id} />}
-          />
-          <Route
-            exact
-            path="/c/:id"
-            render={props => <CHome id={props.match.params.id} />}
-          />
-          <Route exact path="/c" render={props => <CHome id={''} />} />
-
-          <Route
-            exact
             path="/admin"
             component={CMaker}
           />
@@ -104,6 +87,7 @@ const DTCRouter = ({
             path="/:id"
             render={props => <CHome id={props.match.params.id} />}
           />
+          <Route exact path="/" render={props => <CHome id={''} />} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
       </Router>

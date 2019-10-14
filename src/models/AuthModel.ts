@@ -38,7 +38,7 @@ const AuthModel = types
   .model({
     user: types.maybe(UserModel),
     aws: types.maybe(AWSModel),
-    doLogin: false,
+    doLogin: 0,
     doGuestLogin: false,
     doLogout: false,
     // didLogin: false,
@@ -57,7 +57,7 @@ const AuthModel = types
     snapshot() {
       return JSON.stringify(getSnapshot(self));
     },
-    login(loginTo?: string) {
+    login(loginTo?: string, register:boolean=false) {
       if (!self.doLogin)
         window.gtag('event', 'login_action', {
           event_category: 'auth'
@@ -67,11 +67,12 @@ const AuthModel = types
       const current = window.location.href;
       localStorage.setItem('loginTo', loginTo || current);
       //}
-      self.doLogin = true;
+      if(register) self.doLogin = 2;
+      else self.doLogin = 1;
       // signIn();
     },
     signUp(loginTo?: string) {
-      (self as any).login(loginTo);
+      (self as any).login(loginTo, true);
     },
     logoutFinished() {
       self.aws = undefined;
@@ -158,7 +159,7 @@ const AuthModel = types
       // self.loggedIn = true;
       self.isNotLoggedIn = false;
       self.doGuestLogin = false;
-      self.doLogin = false;
+      self.doLogin = 0;
 
       console.log('user:', self.user!.id);
     }
