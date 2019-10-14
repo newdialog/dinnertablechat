@@ -138,7 +138,7 @@ const Notes = (props:any) => {
   // debugger
   return <React.Fragment>{data.map( (bar, key) => {
     return <text key={key} style={{color:'#444444', fontSize: '1.15em'}}>
-            {(key+1)}. {bar.proposition}
+              &#9724; {bar.proposition}
           </text>
   })}</React.Fragment>
 }

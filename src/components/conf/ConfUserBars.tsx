@@ -42,6 +42,21 @@ interface Props {
   questions: any;
 }
 
+const btheme = {
+  legends: {
+    text: {
+      fontSize: '1em',
+      fontWeight: 500
+    }
+  },
+  labels: {
+    text: {
+      fontSize: '1.4em',
+      fontWeight: 500
+    }
+  }
+};
+
 export default function ConfUserBars(props: Props) {
   const store = props.store;
   const classes = useStyles({});
@@ -118,6 +133,7 @@ const Notes = (props: any) => {
 function makeBar(data3: any, keys: any, key: number, showLegend: boolean) {
   return (
     <ResponsiveBar
+      theme={btheme}
       layers={
         [
           'grid',
@@ -166,7 +182,8 @@ function makeBar(data3: any, keys: any, key: number, showLegend: boolean) {
         }} */
       labelSkipWidth={12}
       labelSkipHeight={12}
-      labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
+      labelTextColor='#282828'
+      // labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
       legends={
         !showLegend
           ? undefined
