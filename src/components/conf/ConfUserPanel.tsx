@@ -141,7 +141,7 @@ export default function PleaseWaitResults(props: Props) {
 
     // if (!ready)
     window.scrollTo(0, 0);
-    await submit(pos, confid, user);
+    await submit(pos, confid, user, props.table.version);
     // .then(checkReady);
     // else {
     //   setState(p => ({ ...p, submitBlocked: true }));

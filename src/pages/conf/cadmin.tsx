@@ -1,6 +1,6 @@
 import { Button, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from'@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import ConfAdmin from 'components/conf/ConfAdminPanel';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react';
@@ -131,7 +131,7 @@ interface State {
   show: boolean;
   kill: boolean;
   table?: ConfService.ConfIdRow;
-  questions?: any;
+  questions?: ConfUIQuestion[];
 }
 
 const PAGE_NAME = 'Event Debate Tool';
@@ -159,23 +159,31 @@ export default observer(function CAdmin(props: Props) {
     store.hideNavbar();
   }, []);
 
+  const refreshTable = async () => {
+    if (!confid) return null;
+    const d = await ConfService.idGet(confid);
+    if (!d) {
+      alert('no id exists');
+      window.location.href = '/';
+      return null;
+    }
+    const a = d.questions.map((x, i): ConfUIQuestion => {
+      return {
+        version: d.version,
+        positions: x.answer.split(', '),
+        proposition: x.question,
+        id: x.id! || `q${i}-id` // TODO x.i
+      }
+    });
+
+    setState(p => ({ ...p, table: d, questions: a }));
+
+    return d!;
+  }
+
   // Get question from DB
   useEffect(() => {
-    ConfService.idGet(confid).then(d => {
-      if (!d) {
-        alert('no id exists');
-        return;
-      }
-      const a = d.questions.map((x, i):ConfUIQuestion => {
-        return {
-          positions: x.answer.split(', '),
-          proposition: x.question,
-          id: x.id! || `q${i}-id` // TODO x.i
-        }
-      });
-
-      setState(p => ({ ...p, table: d, questions: a }));
-    })
+    refreshTable();
   }, []);
 
   /*
@@ -365,7 +373,7 @@ export default observer(function CAdmin(props: Props) {
                 {visualURL}
               </Typography>
               <Reveal effect="fadeInUp" duration={1100}>
-                {state.table && <ConfAdmin id={confid} store={store} view={viewComp} table={state.table} questions={state.questions!} />}
+                {state.table && <ConfAdmin id={confid} refreshTable={refreshTable} store={store} view={viewComp} table={state.table} questions={state.questions!} />}
               </Reveal>
             </div>
           )}

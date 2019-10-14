@@ -110,7 +110,7 @@ export default function ConfAdminBars(props: Props) {
     let propo = q.proposition;
     if(propo.length > 48) propo = propo.slice(0, (48 - propo.length)) + '...';
     
-    return { id: (qindex+1).toString(), ...answ, proposition: propo}
+    return { id: (qindex+1).toString(), ...answ, proposition: propo, version: props.questions.version! }
   });
 
   console.log('data3', data3, tdata);

@@ -166,7 +166,9 @@ export default (props: Props) => {
         questions,
         ready: props.data.ready,
         curl: values.curl,
-        userPoolId: store.auth.user!.userPoolId!
+        userPoolId: store.auth.user!.userPoolId!,
+        version: props.data.version,
+        updated: props.data.updated
       }
 
       if(!payload.userPoolId) throw new Error('no userPoolId');
@@ -177,8 +179,10 @@ export default (props: Props) => {
 
       try {
         setState(p => ({ ...p, saved: true }));
+        const isNew = !payload.updated;
         await props.onSubmit(payload);
         setState(p => ({ ...p, created: true }));
+        if(isNew) props.onClose();
       } catch (e) {
         if (e.message.indexOf('aborted') > -1) {
           // do nothing

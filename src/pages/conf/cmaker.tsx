@@ -1,6 +1,6 @@
 import { Button, Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from'@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
@@ -115,7 +115,7 @@ const useStyles = makeStyles(
       }
     }
   }),
-  { name: 'CAdmin' }
+  { name: 'Cmaker' }
 );
 
 interface Props {
@@ -165,12 +165,21 @@ export default observer(function CMaker(props: Props) {
     if (existing && existing.user !== user)
       throw new Error('conference id already taken by another user');
 
+    const isNew = !data.updated;
+
+    let r: any = null;
     if (data.ready) {
-      var r = window.confirm(
-        'This event has already assigned groups. Editing will unassign groups and may cause reporting issues. Continue?'
+      r = window.confirm(
+        'This event has already assigned groups. Editing will unassign groups and will remove user submitted answers. All users will need to refresh to see changes. Continue?'
+      );
+      if (!r) throw new Error('aborted');
+    } else if (!isNew) {
+      r = window.confirm(
+        'Saving will remove any existing user submitted answers. All users will need to refresh to see changes. Continue?'
       );
       if (!r) throw new Error('aborted');
     }
+    console.log('data.updated', data.updated, !!data.updated)
     // console.log('saving', JSON.stringify(data));
     try {
       await ConfService.idSubmit(data);

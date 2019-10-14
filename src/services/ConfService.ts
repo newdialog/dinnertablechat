@@ -5,11 +5,11 @@ import { filter, flatMap, take } from 'rxjs/operators';
 
 import { refreshCredentials } from './AuthService';
 
-// import { Auth, API } from 'aws-amplify';
 export interface UserRow {
   user: string;
-  answers: { [k: string]: number }; // Array<any>;
+  answers: { [k: string]: number };
   answersArr?: Array<number>;
+  version?: number; // TODO make manditory
 }
 export type UserRows = Array<UserRow>;
 
@@ -79,13 +79,14 @@ export async function init() {
 
 export async function submitAll(
   users: Array<{ user: string; answers: {} }>,
-  conf: string
+  conf: string,
+  version: number = 0
 ) {
   if (!docClient) await init();
 
   // TODO: low: batch
   return await Promise.all(
-    users.map(user => submit(user.answers, conf, user.user))
+    users.map(user => submit(user.answers, conf, user.user, version))
   );
 }
 
@@ -96,7 +97,6 @@ export async function delAll(conf: string, user: string) {
 
   const _getAll = await getAll(conf);
   const users = _getAll.data.map(k => k.user);
-  if (_getAll.meta) users.push('_');
 
   users.map(async user => {
     return await docClient
@@ -115,7 +115,7 @@ export async function delAll(conf: string, user: string) {
   return true;
 }
 
-export async function submit(positions: any, conf: string, user: string) {
+export async function submit(positions: any, conf: string, user: string, version: number) {
   if (!docClient) await init();
 
   // if (!user) user = identityId;
@@ -130,6 +130,7 @@ export async function submit(positions: any, conf: string, user: string) {
       conf,
       user,
       answers: positions,
+      version,
       updated
     });
 }
@@ -225,38 +226,46 @@ export async function getResults(conf: string) {
 }
 
 export async function getAll(
-  conf: string
-): Promise<{ data: any[]; meta: ConfIdRow }> {
+  conf: string,
+  byVersion = -1
+): Promise<{ data: UserRow[] }> {
   if (!docClient) await init();
+
+  console.log('fetching', byVersion)
 
   return docClient
     .table(TABLE_USERS)
     .select('user', 'answers')
     .having('conf')
     .eq(conf)
+    .select('answers', 'user', 'updated', 'version')
     .scan()
     .then(async x => {
-      const filterOut = x.filter(y => y.user !== '_');
+      const filterOut = byVersion > -1 ? x.filter(y => {
+        // if (y.version === null || y.version === undefined) return true; // for older entries // take it out as it messes up existing conf after all
+        return y.version === byVersion;
+      }) : x;
 
       const idRow = await idGet(conf);
       let meta: ConfIdRow = idNewQuestions(conf, '');
 
-      console.log('idRow', idRow);
+      // console.log('idRow', idRow);
 
-      if (idRow !== null) {
+      /* if (idRow !== null) {
         //  && (idRow as any).answers
         meta = idRow as any;
         meta.results = meta.results || Array<any>();
-      }
+      } */
 
       return {
         data: filterOut,
-        meta
+        // meta
       };
     }); // remove metadata
 }
 
 export interface ConfUIQuestion {
+  version?: number;
   positions: string[];
   proposition: string;
   id: string;
@@ -265,7 +274,6 @@ export interface ConfUIQuestion {
 export interface ConfIdQuestion {
   question: string;
   answer: string;
-  // i?: number;
   id?: string;
 }
 // ==================
@@ -282,6 +290,7 @@ export interface ConfIdRow {
   results?: GroupResult;
   curl?: string;
   updated?: number;
+  version: number;
 }
 // ====================
 
@@ -293,7 +302,8 @@ export function idNewQuestions(conf: string, user: string): ConfIdRow {
     user,
     conf,
     ready: false,
-    userPoolId: ''
+    userPoolId: '',
+    version: 0
   };
 }
 
@@ -318,6 +328,8 @@ export async function idSubmit(data: ConfIdRow) {
 
   data.updated = Math.floor(Date.now() / 1000);
 
+  data.version = (data.version === null || data.version === undefined) ? 0 : data.version + 1;
+
   // Strings cannot be empty for dynamo
   if (data.curl === '') delete data.curl;
   // Clear previous results
@@ -326,12 +338,12 @@ export async function idSubmit(data: ConfIdRow) {
 
   console.log('saving', JSON.stringify(data));
   // clear out old entry, including assignments results
-  if (!!data.updated) await idDel(data.conf, data.user);
+  // if (!!data.updated) await idDel(data.conf, data.user);
 
   return docClient
     .table(TABLE_ID)
-    .return(docClient.UPDATED_OLD)
-    .insert_or_update(data);
+    .return(docClient.ALL_OLD) // UPDATED_OLD
+    .insert_or_replace(data); // .insert_or_update
 }
 
 export async function submitReady(
@@ -386,7 +398,8 @@ export async function idGet(conf: string): Promise<ConfIdRow | null> {
       'minGroupUserPairs',
       'results',
       'curl',
-      'updated'
+      'updated',
+      'version'
     )
     .having('conf')
     .eq(conf)
@@ -416,7 +429,8 @@ export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
       'minGroupUserPairs',
       'results',
       'curl',
-      'updated'
+      'updated',
+      'version'
     )
     .having('user')
     .eq(user)

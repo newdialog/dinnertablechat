@@ -38,6 +38,7 @@ interface Props {
   id: string;
   view: any;
   table: ConfIdRow;
+  refreshTable: () => Promise<ConfIdRow | null>;
   questions: any;
 }
 interface State {
@@ -92,28 +93,23 @@ export default function ConfAdminPanel(props: Props) {
   }, []);
 
   const matchUp = async () => {
-    const rdata = await getAll(confid);
+    const table = await props.refreshTable();
+    if(!table) throw new Error('no table found ' + table);
+    const rdata = await getAll(confid, table.version);
 
     let data: UserRows = rdata.data;
     
     // #section: hack in case questions are removed
-    console.log('q', props.table.questions);
+    console.log('q', table.questions);
     console.log('data ans', data.map(x=>x.answers));
 
     
 
     // filter out users with bad question
-    const table = props.table.questions;
+    const questions = table.questions;
     // Every user answer matches to Some table definition of that id
     // fixes users who over (bad question) or under answered since updates
-    data = data.filter(x => Object.entries(x.answers).every( ([k,v]) => table.some(q => q.id === k) ));
-    // shorten result answers due to an incomplete answer
-    /*
-    data = data.map(x => {
-      x.answers = Object.fromEntries( Object.entries(x.answers).filter( ([k,v]) => !!table.find(q=>q.id === k) )); // .slice(0, qlen)
-      return x;
-    });
-    */
+    data = data.filter(x => Object.entries(x.answers).every( ([k,v]) => questions.some(q => q.id === k) ));
 
     console.log('pruned', data);
     // throw new Error('-');
@@ -137,12 +133,17 @@ export default function ConfAdminPanel(props: Props) {
     // const result = (await getResults(confid)) || [];
     // console.log('onRefresh result', result);
 
-    const rdata = await getAll(confid);
+    const table = await props.refreshTable();
+    if(!table) return;
+
+    const rdata = await getAll(confid, table.version);
     // debugger;
-    const results = rdata.meta.results!;
-    const ready = results.length > 0 || rdata.meta.ready;
+    const results = table.results || []; // rdata.meta.results!;
+    const ready = results.length > 0 || table.ready;
 
     const numUsers = rdata.data.length;
+
+    console.log(rdata, numUsers, table.version);
 
     const payload = { data: rdata.data, results };
 

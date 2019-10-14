@@ -187,6 +187,7 @@ export default observer(function CIndex(props: Props) {
     ConfService.idGet(confid).then(d => {
       if(!d) {
         alert('no id exists');
+        window.location.href = '/';
         return;
       }
       const a = d.questions.map( (x,i) => {
