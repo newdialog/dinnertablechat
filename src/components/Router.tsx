@@ -56,7 +56,6 @@ const DTCRouter = ({
     return (
       <Router history={history}>
         <Switch>
-          <Route exact path="/" render={() => <p>No id provided</p>} />
           <Redirect from="/signout" to="/" />
           <Route path="/callback" component={AuthSignin} />
           <Route path="/CALLBACK" component={AuthSignin} />{' '}
@@ -87,7 +86,7 @@ const DTCRouter = ({
             path="/:id"
             render={props => <CHome id={props.match.params.id} />}
           />
-          <Route exact path="/" render={props => <CHome id={''} />} />
+          <Route path="/" render={props => <CHome id={''} />} />
           <Route render={() => <Redirect to="/" />} />
         </Switch>
       </Router>
