@@ -125,7 +125,7 @@ export default (props: Props) => {
         )
         .max(80, 'Must be 80 characters or less')
         .min(3, 'Must be at least 3 characters')
-        .lowercase(),
+        .lowercase('Must be lowercase').strict(true),
       minGroupUserPairs: Yup.number('must be a number')
         .min(2, 'Must be greater than or equal to 2')
         .max(60, 'Must be less than or equal to 60')
