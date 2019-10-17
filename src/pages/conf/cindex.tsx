@@ -131,6 +131,12 @@ function onHelp(store: AppModel.Type) {
   store.router.push('/tutorial');
 }
 
+interface State {
+  table?:ConfService.ConfIdRow;
+  questions?:any;
+  resetFlag: number;
+}
+
 const PAGE_NAME = 'Event Debate Tool';
 
 export default observer(function CIndex(props: Props) {
@@ -138,7 +144,7 @@ export default observer(function CIndex(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  const [state, setState] = useState<{table?:ConfService.ConfIdRow, questions?:any}>({ });
+  const [state, setState] = useState<State>({ resetFlag:0 });
 
   // const id = props.id;
   const confid = props.id;
@@ -200,10 +206,11 @@ export default observer(function CIndex(props: Props) {
 
       setState(p => ({ ...p, table: d, questions: a }));
     })
-  }, []);
+  }, [state.resetFlag]);
 
   const handleReset = () => {
     if (store.conf.positions) store.conf.resetQueue();
+    setState(p => ({ ...p, resetFlag: Date.now() }));
   };
 
   if (store.auth.isNotLoggedIn) {
@@ -284,7 +291,7 @@ export default observer(function CIndex(props: Props) {
           )}
           {step === 1 && (
             <Reveal effect="fadeInUp" duration={1100}>
-              {state.table && <ConfUserPanel id={confid} store={store} table={state.table} questions={state.questions}/>}
+              {state.table && <ConfUserPanel key={state.resetFlag} id={confid} store={store} table={state.table} questions={state.questions} handleReset={handleReset}/>}
             </Reveal>
           )}
         </div>

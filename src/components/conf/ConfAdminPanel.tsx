@@ -7,7 +7,7 @@ import { useFocus } from 'utils/useFocus';
 
 import * as AppModel from '../../models/AppModel';
 import { match2 } from '../../services/ConfMath';
-import { ConfIdRow, delAll, getAll, init, submitReady, UserRows } from '../../services/ConfService';
+import { ConfIdRow, delAll, getAll, init, submitReady, UserRows, idIncVersion, ConfUIQuestion, UserRow } from '../../services/ConfService';
 import ConfThinking from './ConfThinking';
 
 const useStyles = makeStyles(
@@ -39,11 +39,11 @@ interface Props {
   view: any;
   table: ConfIdRow;
   refreshTable: () => Promise<ConfIdRow | null>;
-  questions: any;
+  questions: ConfUIQuestion[];
 }
 interface State {
   checks: number;
-  payload: { results: any[]; data: any[] };
+  payload: { results: any[]; data: UserRow[] };
   myGroup?: any;
   ready: boolean;
   submitBlocked: boolean;
@@ -130,9 +130,6 @@ export default function ConfAdminPanel(props: Props) {
   };
 
   const onRefresh = async () => {
-    // const result = (await getResults(confid)) || [];
-    // console.log('onRefresh result', result);
-
     const table = await props.refreshTable();
     if(!table) return;
 
@@ -143,7 +140,7 @@ export default function ConfAdminPanel(props: Props) {
 
     const numUsers = rdata.data.length;
 
-    console.log(rdata, numUsers, table.version);
+    console.log('rdata, numUsers, table.version', rdata, numUsers, table.version);
 
     const payload = { data: rdata.data, results };
 
@@ -168,19 +165,26 @@ export default function ConfAdminPanel(props: Props) {
 
   useInterval(onInterval, 9 * 1000);
 
-  const onAdminReady = async (toggle: boolean) => {
+  const onAdminReady = async (toggle: boolean, noPrompt:boolean) => {
+    if(toggle) {
+      if(state.payload.data.length === 0) {
+        window.alert('No users have responded yet to the questions.');
+        return;
+      }
+    }
+    
     let msg = '';
     if (toggle)
       msg =
         'Are you sure you want to assign seating now? Users that respond afterwards will be assigned to random tables.';
     else msg = 'Are you sure you want to remove all seat assignments?';
-    var r = window.confirm(msg);
+    var r = noPrompt || window.confirm(msg);
     if (!r) {
       console.log('cancelling');
       return;
     }
 
-    window.gtag('event', ('conf_admin_ready_' + confid + '_' + toggle), {
+    if(window.gtag) window.gtag('event', ('conf_admin_ready_' + confid + '_' + toggle), {
       event_category: 'conf',
       confid: confid
     });
@@ -190,7 +194,7 @@ export default function ConfAdminPanel(props: Props) {
       return; // do THinking
     } else {
       // const results = await matchUp();
-      await submitReady(false, confid, [], store.getRID()!); // .then(x=>checkReady());
+      await submitReady(false, confid, [], user!); // .then(x=>checkReady());
 
       onRefresh();
       resetChecks();
@@ -201,8 +205,13 @@ export default function ConfAdminPanel(props: Props) {
     setState(p => ({ ...p, checks: CHECKS }));
   }
 
-  const onDeleteAll = async () => {
-    var r = window.confirm('Delete All Responses: Are you sure?');
+  const onDeleteAll = async (soft?:boolean) => {
+    if(state.payload.data.length === 0) {
+      window.alert('No users have responded yet to the questions.');
+      return;
+    }
+
+    var r = window.confirm('Reset all user responses: are you sure?');
     if (!r) {
       console.log('cancelling');
       return;
@@ -210,7 +219,13 @@ export default function ConfAdminPanel(props: Props) {
 
     console.warn('deleting all responses from: ' + confid);
 
-    await delAll(confid, store.getRID()!);
+    if(!soft) await delAll(confid, user!);
+    else if(soft) {
+      if(props.table.ready) await onAdminReady(false, true);
+      console.log('resetted assignment');
+      await idIncVersion(confid, user!);
+      console.log('incremented the version');
+    }
 
     onRefresh();
     resetChecks();
@@ -223,7 +238,7 @@ export default function ConfAdminPanel(props: Props) {
   const onCloseThinking = async () => {
     setState(p => ({ ...p, thinking: false }));
     const results = await matchUp();
-    await submitReady(true, confid, results, store.getRID()!); // .then(x=>checkReady());
+    await submitReady(true, confid, results, user!); // .then(x=>checkReady());
 
     // checkReady();
     onRefresh();

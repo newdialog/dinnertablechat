@@ -249,7 +249,7 @@ export default observer(function CAdmin(props: Props) {
   step = posBit;
 
   if (step === 1) {
-    console.log('move to next step');
+    // console.log('move to next step');
   }
 
   const show = () => {
@@ -270,7 +270,6 @@ export default observer(function CAdmin(props: Props) {
   if (isMixer) url = window.location.origin + '/' + confid; // use root
 
   if (state.table && state.table.curl) url = state.table.curl;
-  if (state.table) console.log('state.table.curl', state.table.curl);
 
   const visualURL = url.replace('http://', '').replace('https://', '');
   // url += 'aaaaaaaaaaaa.';

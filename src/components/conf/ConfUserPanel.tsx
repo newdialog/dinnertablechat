@@ -78,6 +78,7 @@ interface Props {
   id: string;
   table: ConfIdRow;
   questions: any;
+  handleReset: ()=>void;
   // data: any;
 }
 // type Data = Array<User>;
@@ -89,6 +90,7 @@ interface State {
   submitBlocked: boolean;
   numUsers?: number;
   isLate?: boolean;
+  version: number;
 }
 
 function showGroup(groupId: any, confid: string, t: any) {
@@ -115,24 +117,17 @@ export default function PleaseWaitResults(props: Props) {
     data: [],
     checks: 6 * 5, // 5min
     ready: false,
-    submitBlocked: false
+    submitBlocked: false,
+    version: -1
   });
 
   const pos = store.conf.positions;
-  /* 
-  const posKeys = Object.keys(pos);
-  props.table!.questions.map( (q, i) => {
-    const q = posKeys.findIndex( x => x.includes('q'+i) );
-    if(q) {
 
-    }
-  });
-  */
-
-  const confid = props.id || '111';
+  const confid = props.id;
   const user = store.getRID();
 
   if (!user) throw new Error('no user');
+  if (!confid) throw new Error('no confid');
 
   const onStart = async () => {
     console.log('sending data');
@@ -154,12 +149,26 @@ export default function PleaseWaitResults(props: Props) {
   React.useEffect(() => {
     console.log('user', user);
     onStart();
-  }, [user]);
+  }, [user, pos, confid]);
 
   const onRefresh = async () => {
-    const result = (await getResults(confid)) || [];
-    console.log(result, result ? result.length : '');
-    const ready = result && result.length > 0;
+    const _data = await getResults(confid);
+    if(!_data) throw new Error('cannot find results');
+    
+    console.log('data', _data);
+    const result = _data.results || [];
+    const version = _data.version;
+
+    const ready = _data.ready;
+
+    // const resetOnUnReady = !ready && state.ready === true; // already being accounted for
+    const resetFlag = _data.version !== state.version && state.version > -1;
+
+    if(resetFlag) {
+      setState(p => ({ ...p, data: [], ready: false, version: -1 }));
+      props.handleReset();
+      return;
+    }
 
     // console.log('onRefresh result', result);
     let myGroup: any = null;
@@ -184,7 +193,7 @@ export default function PleaseWaitResults(props: Props) {
     }
 
     if (state.ready !== ready || myGroup !== state.myGroup)
-      setState(p => ({ ...p, data: result, ready, myGroup }));
+      setState(p => ({ ...p, data: result, ready, myGroup, version }));
     // console.log('r', JSON.stringify(result));
   };
 
@@ -303,8 +312,8 @@ export default function PleaseWaitResults(props: Props) {
                       In your group, there are {groupInfo.members.length} people
                       with the opinions:
                     </i>
-                    <hr />
                   </Typography>
+                  <hr />
                   <ConfUserBars id={confid} store={store} data={groupInfo} qdata={state.data} questions={props.questions} />
                   <br />
                   <br />

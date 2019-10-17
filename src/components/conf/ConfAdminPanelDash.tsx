@@ -76,7 +76,7 @@ interface Props {
   store: AppModel.Type;
   onRefresh: () => void;
   onAdminReady: (toggle: boolean) => void;
-  onDeleteAll: () => void;
+  onDeleteAll: (soft?:boolean) => void;
   confid: string;
   numUsers?: number;
   payload: any;
@@ -147,6 +147,17 @@ export default function ConfAdminPanelDash(props: Props) {
                 onClick={() => onAdminReady(!ready)}
               >
                 {!ready ? 'Assign All' : 'UnAssign All'}
+              </Button>
+
+              <Button
+                variant="contained"
+                size="small"
+                // size="small"
+                color="secondary"
+                className={classes.btn}
+                onClick={() => onDeleteAll(true)}
+              >
+                {'Reset User Answers'}
               </Button>
 
               { store.isAdmin() && <Button

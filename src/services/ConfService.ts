@@ -115,7 +115,12 @@ export async function delAll(conf: string, user: string) {
   return true;
 }
 
-export async function submit(positions: any, conf: string, user: string, version: number) {
+export async function submit(
+  positions: any,
+  conf: string,
+  user: string,
+  version: number
+) {
   if (!docClient) await init();
 
   // if (!user) user = identityId;
@@ -202,27 +207,11 @@ export async function getResults(conf: string) {
   if (!docClient) await init();
 
   const r = await idGet(conf);
-  return r ? r.results : null;
-  /*
-   const p = docClient // new Promise( (resolve, reject) => {
-     .table(TABLE_USERS)
-     .return(docClient.UPDATED_OLD)
-     .select('user', 'answers')
-     .having('user')
-     .eq('_')
-     .having('conf')
-     .eq(conf)
-     .scan();
- 
-   const re = (await p) as any[];
-   if (re && re.length > 0) console.log(re[0].answers);
- 
-   if (!re) return null;
-   if (re.length === 0) return null;
- 
-   if (re[0].answers.ready === true) return re[0].answers.results;
-   else return null;
-   */
+  if (!r) return null;
+  if (r.results === null || r.results === undefined)
+    return { results: [], ready: false, version: r.version };
+
+  return { results: r.results, ready: r.ready, version: r.version };
 }
 
 export async function getAll(
@@ -231,7 +220,7 @@ export async function getAll(
 ): Promise<{ data: UserRow[] }> {
   if (!docClient) await init();
 
-  console.log('fetching', byVersion)
+  console.log('fetching', byVersion);
 
   return docClient
     .table(TABLE_USERS)
@@ -241,10 +230,13 @@ export async function getAll(
     .select('answers', 'user', 'updated', 'version')
     .scan()
     .then(async x => {
-      const filterOut = byVersion > -1 ? x.filter(y => {
-        // if (y.version === null || y.version === undefined) return true; // for older entries // take it out as it messes up existing conf after all
-        return y.version === byVersion;
-      }) : x;
+      const filterOut =
+        byVersion > -1
+          ? x.filter(y => {
+              // if (y.version === null || y.version === undefined) return true; // for older entries // take it out as it messes up existing conf after all
+              return y.version === byVersion;
+            })
+          : x;
 
       const idRow = await idGet(conf);
       let meta: ConfIdRow = idNewQuestions(conf, '');
@@ -258,7 +250,7 @@ export async function getAll(
       } */
 
       return {
-        data: filterOut,
+        data: filterOut
         // meta
       };
     }); // remove metadata
@@ -319,6 +311,27 @@ export function idNewQuestion(
   };
 }
 
+export async function idIncVersion(conf: string, user: string) {
+  if (!docClient) await init();
+
+  if (!user) throw new Error('No user specified');
+
+  const data = await idGet(conf);
+  if (!data) throw new Error('no id found');
+
+  const version =
+    data.version === null || data.version === undefined ? 0 : data.version + 1;
+
+  return docClient
+    .table(TABLE_ID)
+    .where('conf')
+    .eq(conf)
+    .where('user')
+    .eq(user)
+    .return(docClient.ALL_OLD) // UPDATED_OLD
+    .update({ version }); // .insert_or_update
+}
+
 export async function idSubmit(data: ConfIdRow) {
   if (!docClient) await init();
   // conf: string, user: string, questions: any[], maxGroups: number, minGroupUserPairs: number, curl?: string
@@ -328,7 +341,8 @@ export async function idSubmit(data: ConfIdRow) {
 
   data.updated = Math.floor(Date.now() / 1000);
 
-  data.version = (data.version === null || data.version === undefined) ? 0 : data.version + 1;
+  data.version =
+    data.version === null || data.version === undefined ? 0 : data.version + 1;
 
   // Strings cannot be empty for dynamo
   if (data.curl === '') delete data.curl;

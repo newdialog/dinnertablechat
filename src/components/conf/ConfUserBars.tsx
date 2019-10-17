@@ -100,14 +100,14 @@ export default function ConfUserBars(props: Props) {
       {data3.map((r, index) => {
         // console.log('r', r);
         return (
-          <>
+          <span key={index}>
             <Typography variant="body1">
               {r.proposition}
             </Typography>
             <div key={index} className={classes.layout2}>
               {makeBar([r], keys, index, false)} 
             </div>
-          </>
+          </span>
         );
       })}
     </div>

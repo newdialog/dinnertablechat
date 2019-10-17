@@ -80,19 +80,15 @@ export default function ConfAdminBars(props: Props) {
 
   if(data.length === 0) return null;
   
-  // console.log('ConfBars', props.data);
   // array of users ans answers
   const data2 = data.map(u => {
     return {name:u.user, answers: u.answers};
   })
 
-  // console.log('data2', data2);
 
   // get ansers
   const tdata = props.questions; // getOtherTopics(props.id, t, 'conf');
   // const numQ = tdata.length;
-
-  // console.log('tdata', tdata, numQ);
 
   // Users into question response totals
   // ex [{id: "conf-pub1-q0-id", Yes: 11, No: 2}]
@@ -113,10 +109,7 @@ export default function ConfAdminBars(props: Props) {
     return { id: (qindex+1).toString(), ...answ, proposition: propo, version: props.questions.version! }
   });
 
-  console.log('data3', data3, tdata);
-
-  // return null;
-  // console.log(JSON.stringify(valo, null, 2));
+  // console.log('data3', data3, tdata);
 
   const layoutStyle = props.large ? classes.layout2 : classes.layout;
   const barStyle = props.large ? classes.barLarge : classes.bar;
