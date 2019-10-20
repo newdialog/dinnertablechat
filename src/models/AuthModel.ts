@@ -57,7 +57,7 @@ const AuthModel = types
     snapshot() {
       return JSON.stringify(getSnapshot(self));
     },
-    login(loginTo?: string, register:boolean=false) {
+    login(loginTo?: string, register: boolean = false) {
       if (!self.doLogin)
         window.gtag('event', 'login_action', {
           event_category: 'auth'
@@ -67,7 +67,7 @@ const AuthModel = types
       const current = window.location.href;
       localStorage.setItem('loginTo', loginTo || current);
       //}
-      if(register) self.doLogin = 2;
+      if (register) self.doLogin = 2;
       else self.doLogin = 1;
       // signIn();
     },
@@ -169,6 +169,12 @@ const AuthModel = types
       // console.log(self.isNotLoggedIn, !self.user);
       if (self.isNotLoggedIn || !self.user) return false;
       return self.user.groups.indexOf('conf_admins') !== -1;
+    },
+    isPaidUser() {
+      // console.log(self.isNotLoggedIn, !self.user);
+      if (self.isNotLoggedIn || !self.user) return false;
+      console.log('self.user.groups', [...self.user.groups]);
+      return self.user.groups.indexOf('paid') !== -1;
     },
     geCogId() {
       if (!self.user) throw new Error('no user');
