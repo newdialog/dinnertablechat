@@ -51,9 +51,9 @@ export default function Footer(props: Props) {
     <footer className={classes.centered + ' ' + cn}>
        <Typography style={{ fontSize: '0.8em', color: 'white' }}>
                 A partner of <a
-          href="https://www.newdialog.org"
+          href="https://www.newdialogue.org"
           className={classes.links}
-        >New Dialog Foundation</a>
+        >New Dialogue Foundation</a>
         <br />
         </Typography>
       <section id="social_icon_footer">

@@ -381,11 +381,11 @@ export default observer(function CAdmin(props: Props) {
           <b>
             Powered by{' '}
             <a
-              href="https://www.newdialog.org"
+              href="https://www.newdialogue.org"
               target="_blank"
               rel="noopener noreferrer"
             >
-              NewDialog.org
+              NewDialogue.org
             </a>
           </b>
         </div>

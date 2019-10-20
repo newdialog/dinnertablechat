@@ -52,7 +52,7 @@ export default function ConfWelcome(props: Props) {
             <Button variant="contained" color="secondary" onClick={handleReg} style={{marginLeft:'1.5em'}}>Register</Button>
             <br/><br/>
             <Typography variant="body1" style={{ fontSize: '1em' }}>
-              Learn more about us at <a href="https://www.newdialog.org">our homepage</a>.
+              Learn more about us at <a href="https://www.newdialogue.org">our homepage</a>.
            </Typography>
           </div>
         </CardActions>

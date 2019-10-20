@@ -220,8 +220,8 @@ export default function HomeContent() {
           <Grid item xs={12} md={12} style={{ paddingTop: '0' }}>
           <Typography className={classes.logoText} align="center" style={{ fontSize: '1.0rem' }}>
                       A partner of <a
-                href="https://www.newdialog.org"
-              >New Dialog Foundation</a>
+                href="https://www.newdialogue.org"
+              >New Dialogue Foundation</a>
               <br /><br />
             </Typography>
             <Typography

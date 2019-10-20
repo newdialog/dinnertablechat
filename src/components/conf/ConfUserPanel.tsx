@@ -127,9 +127,9 @@ export default function PleaseWaitResults(props: Props) {
   const user = store.getRID();
 
   if (!user) throw new Error('no user');
-  if (!confid) throw new Error('no confid');
 
   const onStart = async () => {
+    if (!confid) return;
     console.log('sending data');
 
     // const ready = state.ready; // await checkReady();
