@@ -137,7 +137,7 @@
     "react-scripts": "^3.2.0",
     "regenerator-runtime": "^0.13.3",
     "source-map-explorer": "^2.0.1",
-    "typescript": "^3.7.0-beta"
+    "typescript": "^3.7.1-rc"
   },
   "optionalDependencies": {},
   "browserslist": {
