@@ -134,7 +134,7 @@ interface State {
   questions?: ConfUIQuestion[];
 }
 
-const PAGE_NAME = 'Event Debate Tool';
+const PAGE_NAME = 'Mix Opinions';
 
 export default observer(function CAdmin(props: Props) {
   const store = useContext(AppModel.Context)!;
@@ -265,9 +265,9 @@ export default observer(function CAdmin(props: Props) {
     state.view === 'dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
 
   // url gen
-  const isMixer = window.location.hostname.match('mixer.');
   let url = window.location.origin + '/c/' + confid;
-  if (isMixer) url = window.location.origin + '/' + confid; // use root
+  if (store.isMixerProd()) url = window.location.origin + '/' + confid; // use root
+  console.log('store.isMixerProd()', store.isMixerProd());
 
   if (state.table && state.table.curl) url = state.table.curl;
 

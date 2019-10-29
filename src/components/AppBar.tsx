@@ -82,7 +82,7 @@ export default observer(function ButtonAppBar(props: Props) {
     if(store.debate.match && store.debate.match.sync) return null;
     if (!store.showNav) return null;
     if (store.isSaas) return null;
-    if(window.location.hostname.match('mixer.')) return null;
+    if (store.isMixer()) return null;
 
     return (<div className={classes.root}>
       <AppBar

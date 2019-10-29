@@ -24,7 +24,7 @@ export default function ConfWelcome(props: Props) {
 
   // TODO: clean this up
   // check if local development
-  const prefix = window.location.href.includes('0/c') ? '/c/' : '';
+  const prefix = window.location.href.includes('/c') ? '/c/' : '';
 
   const handleClose = () => {
     store.auth.login(prefix + 'admin');
@@ -39,7 +39,6 @@ export default function ConfWelcome(props: Props) {
       <Card>
         <CardHeader color="secondaryText" title={'Getting Started'} id="alert-dialog-slide-title"></CardHeader>
         <CardContent style={{ textAlign: 'center' }}>
-          <img src="https://uploads-ssl.webflow.com/5d585c391e139837ab1d6f06/5d5c42616b9318501fed3028_logond2.png" height="40%" style={{margin:'-5% 0 -15%'}}/>
           <Typography variant="h2" style={{ fontSize: '1em' }}>
             Please login to create or edit events to host. If you're here attending an event, double check the event URL.
           </Typography>

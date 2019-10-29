@@ -68,9 +68,7 @@ export const Base = observer(function _Base(props: Props) {
   const path = (store.router.location as any).pathname;
   const isTest = path === '/test' || path === '/test2';
   const isSaasDomain = window.location.hostname.match('debateplatform');
-  const isMixer =
-    window.location.hostname.match('mixer.') ||
-    window.location.href.match('/c/');
+  const isMixer = store.isMixer();
 
   useEffect(() => {
     if (isTest) return;

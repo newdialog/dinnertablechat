@@ -50,7 +50,7 @@ const DTCRouter = ({
   store: AppModel.Type;
 }) => {
   const live = store.isLive;
-  const isMixer = window.location.hostname.match('mixer.');
+  const isMixer = store.isMixerProd();
 
   if (isMixer) {
     return (

@@ -6,12 +6,9 @@ import { Instance } from 'mobx-state-tree';
 import React from 'react';
 import ConfModel from './ConfModel';
 
-// let cacheIsLive: boolean | null = null;
-function isLive(): boolean {
-  // if (cacheIsLive !== null) return cacheIsLive;
+function isLive() {
   const h = window.location.hostname;
   const live = h.indexOf('test') === -1 && h.indexOf('dinnertable.chat') !== -1;
-  // cacheIsLive = live;
   return live;
 }
 
@@ -25,8 +22,8 @@ const AppModel = types
     _isStandalone: false,
     dailyOpen: false, // only use for invalidation
     micAllowed: false,
+    isSaas: false,
     isLive: isLive(),
-    isSaas: false
   })
   .views(self => ({
     /* isDailyOpen() {
@@ -55,6 +52,13 @@ const AppModel = types
     },
     isAdmin() {
       return self.auth.isAdmin();
+    },
+    isMixer() {
+      return (self as any).isMixerProd() ||
+        !!window.location.href.match('/c/');
+    },
+    isMixerProd() {
+      return !!window.location.hostname.match('mixopinions.com');
     },
     isStandalone() {
       if (self._isStandalone) return true;

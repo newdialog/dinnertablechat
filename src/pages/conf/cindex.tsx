@@ -137,7 +137,7 @@ interface State {
   resetFlag: number;
 }
 
-const PAGE_NAME = 'Event Debate Tool';
+const PAGE_NAME = 'Mix Opinions';
 
 export default observer(function CIndex(props: Props) {
   const store = useContext(AppModel.Context)!;
