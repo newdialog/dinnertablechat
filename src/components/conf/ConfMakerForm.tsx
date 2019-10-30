@@ -319,7 +319,7 @@ export default (props: Props) => {
             win!.focus();
             // Do save operation
           }}>
-            Administrator link
+            Presenter link
       </Button>
         </div>}
         {fields.map(x => {

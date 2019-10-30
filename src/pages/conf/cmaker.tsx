@@ -179,7 +179,7 @@ export default observer(function CMaker(props: Props) {
       );
       if (!r) throw new Error('aborted');
     }
-    console.log('data.updated', data.updated, !!data.updated)
+    console.log('data.updated', data.updated, !!data.updated);
     // console.log('saving', JSON.stringify(data));
     try {
       await ConfService.idSubmit(data);
@@ -292,9 +292,9 @@ export default observer(function CMaker(props: Props) {
       <div className={classes.pagebody}>
         <main className={classes.container}>
           <div style={{ textAlign: 'right', float: 'right' }}>
-            {store.isNotGuest() &&
+            {store.isNotGuest() && (
               <button onClick={() => store.auth.logout()}>logout</button>
-            }
+            )}
           </div>
           {/* Hero unit */}
           <div className={classes.heroUnit}>
@@ -320,9 +320,9 @@ export default observer(function CMaker(props: Props) {
                     color="textSecondary"
                     gutterBottom
                   >
-                    Talk to people with different opinions.
+                    Mix people with different opinions
                     <br />
-                    Discussion via mixed viewpoint matchmaking.
+                    in groups for a respectful discussion
                   </Typography>
                 </>
               )}

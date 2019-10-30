@@ -1,6 +1,6 @@
 import { Typography } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from'@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import ConfUserPanel from 'components/conf/ConfUserPanel';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useState } from 'react';
@@ -99,7 +99,7 @@ const useStyles = makeStyles(
       paddingBottom: '0',
       // width: '400px',
       [theme.breakpoints.down(500)]: {
-        fontSize: '4.85vw',
+        fontSize: '4.85vw'
         // width: '100vw'
       }
     },
@@ -132,8 +132,8 @@ function onHelp(store: AppModel.Type) {
 }
 
 interface State {
-  table?:ConfService.ConfIdRow;
-  questions?:any;
+  table?: ConfService.ConfIdRow;
+  questions?: any;
   resetFlag: number;
 }
 
@@ -144,7 +144,7 @@ export default observer(function CIndex(props: Props) {
   const classes = useStyles({});
   const { t } = useTranslation();
 
-  const [state, setState] = useState<State>({ resetFlag:0 });
+  const [state, setState] = useState<State>({ resetFlag: 0 });
 
   // const id = props.id;
   const confid = props.id;
@@ -181,7 +181,7 @@ export default observer(function CIndex(props: Props) {
     }
     handleReset();
 
-    window.gtag('event', ('conf_user_splash_' + confid), {
+    window.gtag('event', 'conf_user_splash_' + confid, {
       event_category: 'conf',
       confid: confid
     });
@@ -189,23 +189,23 @@ export default observer(function CIndex(props: Props) {
 
   // Get question from DB
   useEffect(() => {
-    if(!confid) return;
+    if (!confid) return;
     ConfService.idGet(confid).then(d => {
-      if(!d) {
+      if (!d) {
         alert('no id exists');
         window.location.href = '/';
         return;
       }
-      const a = d.questions.map( (x,i) => {
+      const a = d.questions.map((x, i) => {
         return {
           positions: x.answer.split(', '),
           proposition: x.question,
           id: x.id! || `q${i}-id`
-        }
+        };
       });
 
       setState(p => ({ ...p, table: d, questions: a }));
-    })
+    });
   }, [state.resetFlag]);
 
   const handleReset = () => {
@@ -230,10 +230,10 @@ export default observer(function CIndex(props: Props) {
     console.log('move to next step');
   }
 
-  if(!confid) step = -1;
+  if (!confid) step = -1;
 
   const onSubmit = (positions: any) => {
-    window.gtag('event', ('conf_user_submit_' + confid), {
+    window.gtag('event', 'conf_user_submit_' + confid, {
       event_category: 'conf',
       confid: confid,
       non_interaction: false
@@ -269,15 +269,15 @@ export default observer(function CIndex(props: Props) {
               color="textSecondary"
               gutterBottom
             >
-              Talk to people with different opinions.
+              Mix people with different opinions
               <br />
-              Discussion via mixed viewpoint matchmaking.
+              in groups for a respectful discussion
             </Typography>
           </div>
         </div>
 
         <div className={classes.verticalCenter}>
-          {step === -1 && <ConfWelcome/> }
+          {step === -1 && <ConfWelcome />}
           {step === 0 && state.questions && (
             <Reveal effect="fadeInUp" duration={2200}>
               <PositionSelector
@@ -291,7 +291,16 @@ export default observer(function CIndex(props: Props) {
           )}
           {step === 1 && (
             <Reveal effect="fadeInUp" duration={1100}>
-              {state.table && <ConfUserPanel key={state.resetFlag} id={confid} store={store} table={state.table} questions={state.questions} handleReset={handleReset}/>}
+              {state.table && (
+                <ConfUserPanel
+                  key={state.resetFlag}
+                  id={confid}
+                  store={store}
+                  table={state.table}
+                  questions={state.questions}
+                  handleReset={handleReset}
+                />
+              )}
             </Reveal>
           )}
         </div>

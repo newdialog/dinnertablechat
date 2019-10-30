@@ -98,7 +98,7 @@ const useStyles = makeStyles(
       paddingBottom: '0',
       // width: '400px',
       [theme.breakpoints.down(500)]: {
-        fontSize: '4.85vw',
+        fontSize: '4.85vw'
         // width: '100vw'
       }
     },
@@ -167,19 +167,21 @@ export default observer(function CAdmin(props: Props) {
       window.location.href = '/';
       return null;
     }
-    const a = d.questions.map((x, i): ConfUIQuestion => {
-      return {
-        version: d.version,
-        positions: x.answer.split(', '),
-        proposition: x.question,
-        id: x.id! || `q${i}-id` // TODO x.i
+    const a = d.questions.map(
+      (x, i): ConfUIQuestion => {
+        return {
+          version: d.version,
+          positions: x.answer.split(', '),
+          proposition: x.question,
+          id: x.id! || `q${i}-id` // TODO x.i
+        };
       }
-    });
+    );
 
     setState(p => ({ ...p, table: d, questions: a }));
 
     return d!;
-  }
+  };
 
   // Get question from DB
   useEffect(() => {
@@ -216,7 +218,7 @@ export default observer(function CAdmin(props: Props) {
     }
     handleReset();
 
-    window.gtag('event', ('conf_admin_splash_' + confid), {
+    window.gtag('event', 'conf_admin_splash_' + confid, {
       event_category: 'conf',
       confid: confid
     });
@@ -225,7 +227,7 @@ export default observer(function CAdmin(props: Props) {
   const handleReset = () => {
     if (store.conf.positions) {
       store.conf.resetQueue();
-      window.gtag('event', ('conf_admin_reset_' + confid), {
+      window.gtag('event', 'conf_admin_reset_' + confid, {
         event_category: 'conf',
         confid: confid,
         non_interaction: false
@@ -283,7 +285,6 @@ export default observer(function CAdmin(props: Props) {
       </Helmet>
       <div className={classes.pagebody}>
         <main className={classes.container}>
-
           {/* Hero unit */}
           <div className={classes.heroUnit}>
             <div className={classes.heroContent}>
@@ -299,15 +300,16 @@ export default observer(function CAdmin(props: Props) {
               </div>
               {props.isTest && <h2>TEST MODE (/test)</h2>}
               {step === 0 && (
-                <><Typography
-                  variant="h1"
-                  align="left"
-                  color="textSecondary"
-                  className={classes.heroLogoText}
-                  gutterBottom
-                >
-                  {PAGE_NAME}
-                </Typography>
+                <>
+                  <Typography
+                    variant="h1"
+                    align="left"
+                    color="textSecondary"
+                    className={classes.heroLogoText}
+                    gutterBottom
+                  >
+                    {PAGE_NAME}
+                  </Typography>
 
                   <Typography
                     className={classes.herotext}
@@ -316,10 +318,11 @@ export default observer(function CAdmin(props: Props) {
                     color="textSecondary"
                     gutterBottom
                   >
-                    Talk to people with different opinions.
-                  <br />
-                    Discussion via mixed viewpoint matchmaking.
-                </Typography></>
+                    Mix people with different opinions
+                    <br />
+                    in groups for a respectful discussion
+                  </Typography>
+                </>
               )}
             </div>
           </div>
@@ -372,7 +375,16 @@ export default observer(function CAdmin(props: Props) {
                 {visualURL}
               </Typography>
               <Reveal effect="fadeInUp" duration={1100}>
-                {state.table && <ConfAdmin id={confid} refreshTable={refreshTable} store={store} view={viewComp} table={state.table} questions={state.questions!} />}
+                {state.table && (
+                  <ConfAdmin
+                    id={confid}
+                    refreshTable={refreshTable}
+                    store={store}
+                    view={viewComp}
+                    table={state.table}
+                    questions={state.questions!}
+                  />
+                )}
               </Reveal>
             </div>
           )}
