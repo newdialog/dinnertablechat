@@ -119,7 +119,7 @@ export default function ConfAdminBars(props: Props) {
     <div className={layoutStyle}>
       {data3.map( (r, index) => {
         return <div key={index} className={barStyle} style={barStyleOv}>
-          {makeBar([r], keys, index, index===data3.length-1)}
+          {makeBar([r], keys, index, true)}
         </div>
       })}
     </div>

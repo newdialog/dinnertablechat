@@ -140,23 +140,56 @@ export default (props: Props) => {
     }),
     validateOnChange: true,
     onSubmit: async values => {
-
-      let questions = Object.keys(values)
+      
+        let questions:any[] = [];
+        try {
+          questions = Object.keys(values)
         .filter(x => x.indexOf('question') === 0)
         .reduce((acc, k, i) => {
 
           const id = k.replace('question_', '');
           const vk = k.replace('question', 'answer');
+
+          const ans = values[vk] as string;
+
+          const validateAnswers = (ans:string) => {
+            let valid = !!ans.includes(',');
+            if(!valid) {
+              throw new Error('answer options must have a comma')
+            }
+
+            const ansList = ans.replace(/\s/g, '').split(',').filter(x=>x!=='');
+
+            if(ansList.length < 2) {
+              throw new Error('answer options must have at least two answers');
+            }
+
+            if(ansList.length > 3) {
+              throw new Error('answer options cannot have more than 3 choices');
+            }
+
+            return ansList.join(', ');
+          }
+          const ansFormetted = validateAnswers(ans);
+          if(!ansFormetted) throw new Error('invalid answer format');
+
           acc.push({
             id,
             question: values[k],
-            answer: values[vk] || 'Yes, No'
+            answer: ansFormetted, // || 'Yes, No'
           });
           return acc;
         }, [] as any[]);
+      } catch(e) {
+        alert(e.message);
+        return null;
+      }
 
       // Filter out questions removed
       questions = questions.filter(q => state.data!.questions.findIndex(y => q.id === y.id) > -1);
+
+      console.log('questions data', questions);
+      // return;
 
       const payload: ConfIdRow = {
         conf: values.conf,
@@ -290,10 +323,10 @@ export default (props: Props) => {
                   <Tf
                     className={classes.textField}
                     id={`answer_${y.id!}`}
-                    label={'answer'}
+                    label={'answer options [comma seperated]'}
                     formik={formik}
                     // data={state.questions[i].answer}
-                    disabled={true}
+                    // disabled={true}
                     data={y.answer}
                   />
                 </CardContent>
