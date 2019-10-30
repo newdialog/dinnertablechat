@@ -150,8 +150,20 @@ export default (props: Props) => {
 
           const id = k.replace('question_', '');
           const vk = k.replace('question', 'answer');
+          const question = values[k];
 
-          const ans = values[vk] as string;
+          // remove questions that where removed
+          if(state.data!.questions.findIndex(y => id === y.id) === -1) return acc;
+
+          const ans = values[vk] as string || 'Yes, No'; // must provide default here for default value
+
+          if(!ans) {
+            throw new Error('answer options cannot be blank');
+          }
+
+          if(!question) {
+            throw new Error('question cannot be blank');
+          }
 
           const validateAnswers = (ans:string) => {
             let valid = !!ans.includes(',');
@@ -176,7 +188,7 @@ export default (props: Props) => {
 
           acc.push({
             id,
-            question: values[k],
+            question,
             answer: ansFormetted, // || 'Yes, No'
           });
           return acc;
@@ -187,7 +199,7 @@ export default (props: Props) => {
       }
 
       // Filter out questions removed
-      questions = questions.filter(q => state.data!.questions.findIndex(y => q.id === y.id) > -1);
+      questions = questions.filter(q => !!q); // .filter(q => state.data!.questions.findIndex(y => q.id === y.id) > -1);
 
       console.log('questions data', questions);
       // return;
