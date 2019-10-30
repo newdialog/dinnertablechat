@@ -283,6 +283,7 @@ export interface ConfIdRow {
   curl?: string;
   updated?: number;
   version: number;
+  waitmsg?: string;
 }
 // ====================
 
@@ -413,7 +414,8 @@ export async function idGet(conf: string): Promise<ConfIdRow | null> {
       'results',
       'curl',
       'updated',
-      'version'
+      'version',
+      'waitmsg'
     )
     .having('conf')
     .eq(conf)
@@ -444,7 +446,8 @@ export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
       'results',
       'curl',
       'updated',
-      'version'
+      'version',
+      'waitmsg'
     )
     .having('user')
     .eq(user)

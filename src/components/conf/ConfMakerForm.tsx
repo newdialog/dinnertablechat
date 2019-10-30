@@ -116,6 +116,7 @@ export default (props: Props) => {
     initialValues: initialValues,
     enableReinitialize: false,
     validationSchema: Yup.object({
+      waitmsg: Yup.string().trim(),
       conf: Yup.string().trim()
         .required('Required')
         .test(
@@ -204,6 +205,8 @@ export default (props: Props) => {
         updated: props.data.updated
       }
 
+      if(values.waitmsg && values.waitmsg !== ' ') payload.waitmsg = values.waitmsg;
+
       if(!payload.userPoolId) throw new Error('no userPoolId');
 
       // console.log(values);
@@ -235,6 +238,7 @@ export default (props: Props) => {
     // { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
     { name: 'minGroupUserPairs', label: 'Number of people in a group', type: 'input' },
     { name: 'curl', label: 'short url (optional)', type: 'input', adminOnly: true },
+    { name: 'waitmsg', label: 'waiting message (optional)', type: 'input' },
     { name: 'questions', type: 'array' }
   ].filter(x=> !x.adminOnly || (!!x.adminOnly && store.auth.isAdmin()) );
 

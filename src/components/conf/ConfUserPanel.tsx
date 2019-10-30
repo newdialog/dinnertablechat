@@ -270,19 +270,29 @@ export default function PleaseWaitResults(props: Props) {
             <CardContent className={classes.cardContent}>
               {state.data.length < 1 && (
                 <>
-                  <Typography variant="h5">Please Wait</Typography>
-                  <Typography variant="body1">till everyone else has answered...
-                  <br />
-                  While you wait please be quite and you may want to study the <i>Rules of the
-                  Game: </i><br/><br/></Typography>
-                  <Typography variant="body1" align="left">You don’t have to talk about all the questions. Maybe
-                  pick the group’s favourites first. <br/><br/>Be honest, dare to say what
-                  you think. Argue rationally and based on facts. Don’t
-                  generalize. <br/><br/>Don’t insult and, in turn, don’t take anything
-                  personally. Avoid a one-(wo)man show - everyone in the group
-                  should talk. Everyone’s on eye level. Shake your opponents'
-                  hands after the discussion!<br/><br/><br/>
+                  <Typography variant="h5">
+                  {!state.ready && 'Waiting for assignments...'}
+                  {state.ready && !group && 'Sorry, groups already assigned.'}
+                  {!tooLate && group && `Please join your group`}
                   </Typography>
+                  { !!props.table!.waitmsg && 
+                    <Typography variant="body1" align="left">{props.table!.waitmsg}<br/><br/><br/></Typography> 
+                  }
+                  { !props.table!.waitmsg && <>
+                    <Typography variant="body1">till everyone else has answered...
+                    <br />
+                    While you wait please be quite and you may want to study the <i>Rules of the
+                    Game: </i><br/><br/></Typography>
+                    <Typography variant="body1" align="left">You don’t have to talk about all the questions. Maybe
+                    pick the group’s favourites first. <br/><br/>Be honest, dare to say what
+                    you think. Argue rationally and based on facts. Don’t
+                    generalize. <br/><br/>Don’t insult and, in turn, don’t take anything
+                    personally. Avoid a one-(wo)man show - everyone in the group
+                    should talk. Everyone’s on eye level. Shake your opponents'
+                    hands after the discussion!<br/><br/><br/>
+                    </Typography>
+                    </>
+                  }
                 </>
               )}
               <Typography variant="body2">
@@ -294,9 +304,7 @@ export default function PleaseWaitResults(props: Props) {
                     <br />
                   </>
                 )}
-                {!state.ready && 'Waiting for assignments...'}
-                {state.ready && !group && 'Sorry, groups already assigned.'}
-                {!tooLate && group && `Please join your group`}
+                
               </Typography>
               {group && (
                 <>
