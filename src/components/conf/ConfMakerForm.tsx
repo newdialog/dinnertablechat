@@ -263,7 +263,7 @@ export default (props: Props) => {
     { name: 'name', label: 'The name of the event', type: 'input' },
     { name: 'conf', label: 'Short name for URL [3-7 lowercase letters or numbers]', type: 'input', short: true, disabled: !!confid },
     // { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
-    { name: 'curl', label: '[optional] 3rd-party url shorter to above link', type: 'input', adminOnly: false }, // true && !initialValues.curl
+    { name: 'curl', label: '[optional] 3rd-party shortener to above URL', type: 'input', adminOnly: false }, // true && !initialValues.curl
     { name: 'minGroupUserPairs', label: 'Number of people in a group', type: 'input' },
     { name: 'waitmsg', label: '[optional] User waiting message', type: 'input' },
     { name: 'questions', type: 'array' }
@@ -371,7 +371,7 @@ export default (props: Props) => {
             <Tf className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
 
             {x.name === 'conf' &&
-              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin: '-0.7em 1em 1em 0' }}>url: {url} </Typography>
+              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin: '-0.7em 1em 1em 0' }}>public url: {url} </Typography>
             }
           </span>
           );
