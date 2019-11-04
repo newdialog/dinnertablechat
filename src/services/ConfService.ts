@@ -274,6 +274,7 @@ export type GroupResult = any[]; // [ { [q:string]: any} ];
 export interface ConfIdRow {
   user: string;
   userPoolId: string;
+  name: string;
   conf: string;
   questions: ConfIdQuestions;
   maxGroups: number;
@@ -293,6 +294,7 @@ export function idNewQuestions(conf: string, user: string): ConfIdRow {
     minGroupUserPairs: 1,
     maxGroups: 40,
     user,
+    name: '',
     conf,
     ready: false,
     userPoolId: '',
@@ -415,7 +417,8 @@ export async function idGet(conf: string): Promise<ConfIdRow | null> {
       'curl',
       'updated',
       'version',
-      'waitmsg'
+      'waitmsg',
+      'name'
     )
     .having('conf')
     .eq(conf)
@@ -447,7 +450,8 @@ export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
       'curl',
       'updated',
       'version',
-      'waitmsg'
+      'waitmsg',
+      'name'
     )
     .having('user')
     .eq(user)

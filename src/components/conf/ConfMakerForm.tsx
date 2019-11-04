@@ -99,6 +99,8 @@ export default (props: Props) => {
 
     d.curl = data.curl || '';
 
+    d.name = data.name || d.conf;
+
     return d;
   }, [props.data, props.data.questions]);
 
@@ -117,6 +119,11 @@ export default (props: Props) => {
     enableReinitialize: false,
     validationSchema: Yup.object({
       waitmsg: Yup.string().trim(),
+      name: Yup.string().trim()
+        .required('Required')
+        .max(32, 'Must be between 3-32 characters to make the url short')
+        .min(3, 'Must be between 3-32 characters to make the url short')
+        .strict(false),
       conf: Yup.string().trim()
         .required('Required')
         .test(
@@ -209,6 +216,7 @@ export default (props: Props) => {
       // return;
 
       const payload: ConfIdRow = {
+        name: values.name,
         conf: values.conf,
         user: props.user,
         maxGroups: 100, // values.maxGroups, // hardcoded for now
@@ -250,6 +258,7 @@ export default (props: Props) => {
 
   // const TF = wrap(formik).tf;
   const fields = [
+    { name: 'name', label: 'The name of the event', type: 'input' },
     { name: 'conf', label: 'Short name for URL [3-7 lowercase letters or numbers]', type: 'input', short: true, disabled: !!confid },
     // { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
     { name: 'minGroupUserPairs', label: 'Number of people in a group', type: 'input' },

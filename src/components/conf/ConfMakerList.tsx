@@ -58,7 +58,10 @@ export default (props: Props) => {
 
   useEffect(() => {
     idGetByUser(user).then(xs => {
-      if (xs) setState(p => ({ ...p, rows: xs }));
+      if (xs) {
+        xs.forEach(x => x.name = !!x.name ? x.name : x.conf);
+        setState(p => ({ ...p, rows: xs }));
+      }
       else setState(p => ({ ...p, rows: [] }));
     })
   }, [props.updater])
@@ -75,7 +78,7 @@ export default (props: Props) => {
     <div style={{ maxWidth: '100%', textAlign:'left' }}>
       <Button style={{margin:'10px'}} onClick={makeListItem} variant={'contained'}>Add new event debate</Button>
       <MaterialTable
-        options={{pageSize: 20, paging: false, actionsColumnIndex:1}}
+        options={{pageSize: 20, paging: false, actionsColumnIndex:2}}
         icons={tableIcons as any}
         actions={[
           /* {
@@ -145,7 +148,8 @@ export default (props: Props) => {
           }*/
         ]}
         columns={[
-          { title: 'Name of event', field: 'conf' },
+          { title: 'Event Name', field: 'name' },
+          { title: 'Event ID', field: 'conf' },
           /* { title: 'Status', field: 'ready', lookup: { true: 'assigned', false: 'unassigned' } } */
         ]}
         data={state.rows!}
