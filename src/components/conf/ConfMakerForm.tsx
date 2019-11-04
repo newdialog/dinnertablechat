@@ -148,7 +148,7 @@ export default (props: Props) => {
           (value: number) => (value % 2) === 0,
       ),
       // maxGroups: Yup.number().min(1).max(500).required(),
-      curl2: Yup.string('Must be a string').trim().min(3, 'Must be at least 3 characters')
+      curl: Yup.string().url('${path} must be a valid url').notRequired().nullable(true)
     }),
     validateOnChange: true,
     onSubmit: async values => {
@@ -256,14 +256,16 @@ export default (props: Props) => {
     }
   });
 
+  const url = window.location.href.replace(/(new\/)+edit/, formik.values['conf']).replace(/(\/)+edit/, '').toLowerCase();
+
   // const TF = wrap(formik).tf;
   const fields = [
     { name: 'name', label: 'The name of the event', type: 'input' },
     { name: 'conf', label: 'Short name for URL [3-7 lowercase letters or numbers]', type: 'input', short: true, disabled: !!confid },
     // { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
+    { name: 'curl', label: '[optional] 3rd-party url shorter to above link', type: 'input', adminOnly: false }, // true && !initialValues.curl
     { name: 'minGroupUserPairs', label: 'Number of people in a group', type: 'input' },
-    { name: 'curl', label: 'short url (optional)', type: 'input', adminOnly: true },
-    { name: 'waitmsg', label: 'waiting message (optional)', type: 'input' },
+    { name: 'waitmsg', label: '[optional] User waiting message', type: 'input' },
     { name: 'questions', type: 'array' }
   ].filter(x=> !x.adminOnly || (!!x.adminOnly && store.auth.isAdmin()) );
 
@@ -308,8 +310,6 @@ export default (props: Props) => {
     // console.log('q', q)
     setState(p => ({ ...p, data: d }));
   }
-
-  const url = window.location.href.replace(/(new\/)+edit/, formik.values['conf']).replace(/(\/)+edit/, '').toLowerCase();
 
   return (
     <div className={classes.container}>
