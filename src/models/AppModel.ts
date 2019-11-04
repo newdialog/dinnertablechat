@@ -58,7 +58,7 @@ const AppModel = types
         !!window.location.href.match('/c/');
     },
     isMixerProd() {
-      return !!window.location.hostname.match('mixopinions.com');
+      return !!window.location.hostname.match('mixopinions.com') || !!window.location.hostname.match('mxop.at');
     },
     isStandalone() {
       if (self._isStandalone) return true;

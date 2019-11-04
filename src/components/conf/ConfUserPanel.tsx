@@ -43,7 +43,7 @@ const useStyles = makeStyles(
     card: {
       minWidth: '300px',
       width: '50vw',
-      maxWidth: '500px',
+      maxWidth: '100%',
       height: '100%',
       textAlign: 'center',
       flexDirection: 'column',
@@ -249,7 +249,7 @@ export default function PleaseWaitResults(props: Props) {
     // groupInfo = {};
   }
 
-  const showRefresh = state.checks < 1 || !inFocus;
+  const showRefresh = !group && (state.checks < 1 || !inFocus);
 
   console.log(
     'group',
@@ -340,6 +340,18 @@ export default function PleaseWaitResults(props: Props) {
                   Refresh
                 </Button>
               )}
+
+          {group && (
+            <Button
+                style={{marginTop: '1em' }}
+                  variant="contained"
+                  // size="small"
+                  color="secondary"
+                  onClick={() => window.open('https://www.mixopinions.com', '_bank') }
+                >
+                  About MixOpinions.com
+            </Button>
+            )}
             </CardActions>
           </Card>
         </Grid>
