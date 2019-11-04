@@ -121,11 +121,15 @@ export default (props: Props) => {
         .required('Required')
         .test(
           'is-word',
-          '${path} must contain only a word',
+          '${path} must not contain spaces',
           (value: string) => value && !value.includes(' '),
         )
-        .max(80, 'Must be 80 characters or less')
-        .min(3, 'Must be at least 3 characters')
+        .matches(
+          /^[a-z0-9_-]+$/,
+          'allowed characters are lowcase letters, numbers, underscore and dash'
+        )
+        .max(6, 'Must be between 3-6 characters to make the url short')
+        .min(3, 'Must be between 3-6 characters to make the url short')
         .lowercase('Must be lowercase').strict(true),
       minGroupUserPairs: Yup.number('must be a number')
         .min(2, 'Must be greater than or equal to 2')
@@ -246,7 +250,7 @@ export default (props: Props) => {
 
   // const TF = wrap(formik).tf;
   const fields = [
-    { name: 'conf', label: 'Short name for the event', type: 'input', short: true, disabled: !!confid },
+    { name: 'conf', label: 'Short name for URL [3-6 lowercase letters or numbers]', type: 'input', short: true, disabled: !!confid },
     // { name: 'maxGroups', label: 'Max number of groups', type: 'input' },
     { name: 'minGroupUserPairs', label: 'Number of people in a group', type: 'input' },
     { name: 'curl', label: 'short url (optional)', type: 'input', adminOnly: true },
