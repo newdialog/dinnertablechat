@@ -1,7 +1,7 @@
 import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import { Theme } from '@material-ui/core/styles';
-import { makeStyles } from'@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import useInterval from '@use-it/interval';
 import Prando from 'prando';
 import * as React from 'react';
@@ -78,7 +78,7 @@ interface Props {
   id: string;
   table: ConfIdRow;
   questions: any;
-  handleReset: ()=>void;
+  handleReset: () => void;
   // data: any;
 }
 // type Data = Array<User>;
@@ -153,8 +153,8 @@ export default function PleaseWaitResults(props: Props) {
 
   const onRefresh = async () => {
     const _data = await getResults(confid);
-    if(!_data) throw new Error('cannot find results');
-    
+    if (!_data) throw new Error('cannot find results');
+
     console.log('data', _data);
     const result = _data.results || [];
     const version = _data.version;
@@ -164,7 +164,7 @@ export default function PleaseWaitResults(props: Props) {
     // const resetOnUnReady = !ready && state.ready === true; // already being accounted for
     const resetFlag = _data.version !== state.version && state.version > -1;
 
-    if(resetFlag) {
+    if (resetFlag) {
       setState(p => ({ ...p, data: [], ready: false, version: -1 }));
       props.handleReset();
       return;
@@ -271,27 +271,27 @@ export default function PleaseWaitResults(props: Props) {
               {state.data.length < 1 && (
                 <>
                   <Typography variant="h5">
-                  {!state.ready && 'Waiting for assignments...'}
-                  {state.ready && !group && 'Sorry, groups already assigned.'}
-                  {!tooLate && group && `Please join your group`}
+                    {!state.ready && 'Waiting for assignments...'}
+                    {state.ready && !group && 'Sorry, groups already assigned.'}
+                    {!tooLate && group && `Please join your group`}
                   </Typography>
-                  { !!props.table!.waitmsg && 
-                    <Typography variant="body1" align="left">{props.table!.waitmsg}<br/><br/><br/></Typography> 
+                  {!!props.table!.waitmsg &&
+                    <Typography variant="body1" align="left">{props.table!.waitmsg}<br /><br /><br /></Typography>
                   }
-                  { !props.table!.waitmsg && <>
+                  {!props.table!.waitmsg && <>
                     <Typography variant="body1">till everyone else has answered...
                     <br />
-                    While you wait please be quite and you may want to study the <i>Rules of the
-                    Game: </i><br/><br/></Typography>
+                      While you wait please be quite and you may want to study the <i>Rules of the
+                    Game: </i><br /><br /></Typography>
                     <Typography variant="body1" align="left">You don’t have to talk about all the questions. Maybe
-                    pick the group’s favourites first. <br/><br/>Be honest, dare to say what
-                    you think. Argue rationally and based on facts. Don’t
-                    generalize. <br/><br/>Don’t insult and, in turn, don’t take anything
-                    personally. Avoid a one-(wo)man show - everyone in the group
-                    should talk. Everyone’s on eye level. Shake your opponents'
-                    hands after the discussion!<br/><br/><br/>
+                    pick the group’s favourites first. <br /><br />Be honest, dare to say what
+                        you think. Argue rationally and based on facts. Don’t
+                    generalize. <br /><br />Don’t insult and, in turn, don’t take anything
+                        personally. Avoid a one-(wo)man show - everyone in the group
+                        should talk. Everyone’s on eye level. Shake your opponents'
+                    hands after the discussion!<br /><br /><br />
                     </Typography>
-                    </>
+                  </>
                   }
                 </>
               )}
@@ -304,7 +304,7 @@ export default function PleaseWaitResults(props: Props) {
                     <br />
                   </>
                 )}
-                
+
               </Typography>
               {group && (
                 <>
@@ -341,17 +341,26 @@ export default function PleaseWaitResults(props: Props) {
                 </Button>
               )}
 
-          {group && (
-            <Button
-                style={{marginTop: '1em' }}
+              {group && (
+                <><Button
+                  style={{ marginTop: '1em' }}
                   variant="contained"
                   // size="small"
-                  color="secondary"
-                  onClick={() => window.open('https://www.mixopinions.com', '_bank') }
+                  color="primary"
+                  onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSc26IYAyFjLEz3f7jkVylQHCywkZu4UQMGyJDbXltDjN_TjOQ/viewform?usp=sf_link', '_bank')}
                 >
-                  About MixOpinions.com
-            </Button>
-            )}
+                  User Feedback
+        </Button>
+                  <Button
+                    style={{ marginTop: '1em' }}
+                    variant="contained"
+                    // size="small"
+                    color="primary"
+                    onClick={() => window.open('https://www.mixopinions.com', '_bank')}
+                  >
+                    About MixOpinions.com
+            </Button></>
+              )}
             </CardActions>
           </Card>
         </Grid>

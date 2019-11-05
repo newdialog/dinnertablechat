@@ -114,12 +114,6 @@ export default function ConfAdminBars(props: Props) {
     return { id: (qindex+1).toString(), ...answ, proposition: propo, version: props.questions.version! }
   });
 
-  // console.log('data3', data3, tdata);
-
-  const layoutStyle = props.large ? classes.layout2 : classes.layout;
-  // const barStyle = props.large ? classes.barLarge : classes.bar;
-  // const barStyleOv = props.large ? {height:`calc(50vh / ${data3.length})`} : {};
-
   return (
     <div className={classes.layout}>
       {data3.map((r, index) => {

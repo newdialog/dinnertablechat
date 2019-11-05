@@ -142,7 +142,8 @@
   "optionalDependencies": {},
   "browserslist": {
     "production": [
-      ">0.2%",
+      ">0.6%",
+      "Safari 9",
       "not dead",
       "not op_mini all"
     ],
