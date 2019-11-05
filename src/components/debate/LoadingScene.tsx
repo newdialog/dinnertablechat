@@ -73,6 +73,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     textAlign: 'center',
+    color: 'white',
     width: 350,
     backgroundColor: theme.palette.common.white,
     '&:focus': {}
@@ -457,7 +458,6 @@ export default function LoadingScene(props: Props) {
               className={classes.textField}
               value={refURL}
               margin="normal"
-              color="white"
             />
             <CopyToClipboard
               onCopy={() => setState(p => ({ ...p, copied: true }))}

@@ -105,7 +105,7 @@ export default function ConfUserBars(props: Props) {
               {r.proposition}
             </Typography>
             <div key={index} className={classes.layout2}>
-              {makeBar([r], keys, index, false)} 
+              {makeBar([r], keys, index)} 
             </div>
           </span>
         );
@@ -113,33 +113,15 @@ export default function ConfUserBars(props: Props) {
     </div>
   );
 }
-// index === data3.length - 1
-const Notes = (props: any) => {
-  const { bars, xScale, yScale, data } = props;
-  // debugger
-  return (
-    <React.Fragment>
-      {data.map((bar, key) => {
-        return (
-          <foreignObject width="100%" height="200" requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility">
-            <span>{bar.proposition}</span>
-          </foreignObject>
-        );
-      })}
-    </React.Fragment>
-  );
-};
 
-function makeBar(data3: any, keys: any, key: number, showLegend: boolean) {
+function makeBar(data3: any, keys: any, key: number) {
   return (
     <ResponsiveBar
       theme={btheme}
       layers={
         [
           'grid',
-          // 'axes',
           'bars',
-          // Notes,
           'markers',
           'legends',
           'annotations'
@@ -161,67 +143,15 @@ function makeBar(data3: any, keys: any, key: number, showLegend: boolean) {
       )}
       label={({ id, value }) => value + ' ' + id}
       innerPadding={4}
-      // borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
       axisTop={null}
       axisRight={null}
-      /* axisBottom={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: 'responses',
-            legendPosition: 'middle',
-            legendOffset: 32
-        }}
-        axisLeft={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: 'questions',
-            legendPosition: 'middle',
-            legendOffset: -40
-        }} */
       labelSkipWidth={12}
       labelSkipHeight={12}
       labelTextColor='#282828'
-      // labelTextColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
-      legends={
-        !showLegend
-          ? undefined
-          : [
-              {
-                dataFrom: 'keys',
-                anchor: 'bottom',
-                direction: 'row',
-                justify: false,
-                translateX: 0,
-                translateY: 20,
-                itemsSpacing: 2,
-                itemWidth: 100,
-                itemHeight: 20,
-                itemDirection: 'left-to-right',
-                itemOpacity: 0.85,
-                symbolSize: 20,
-                effects: [
-                  {
-                    on: 'hover',
-                    style: {
-                      itemOpacity: 1
-                    }
-                  }
-                ]
-              }
-            ]
-      }
+      legends={undefined}
       animate={true}
       motionStiffness={90}
       motionDamping={15}
     />
   );
 }
-
-/*
-
-          <Typography variant="body1">
-            {r.proposition}
-          </Typography>
-          */

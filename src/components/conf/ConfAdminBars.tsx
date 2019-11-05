@@ -13,14 +13,15 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     layout: {
       width: '100%',
+      marginTop: '1em',
       marginLeft: 'auto',
-      marginRight: 'auto',
+      marginRight: 'auto'
     },
     layout2: {
       width: '100%',
+      height: '64px',
       marginLeft: 'auto',
-      marginRight: 'auto',
-      minHeight: '50vh'
+      marginRight: 'auto'
     },
     bar: {
       width: '100%',
@@ -87,7 +88,7 @@ export default function ConfAdminBars(props: Props) {
 
 
   // get ansers
-  const tdata = props.questions; // getOtherTopics(props.id, t, 'conf');
+  const tdata: [{proposition:string, id:string, positions: string[]}]  = props.questions; // getOtherTopics(props.id, t, 'conf');
   // const numQ = tdata.length;
 
   // Users into question response totals
@@ -96,15 +97,19 @@ export default function ConfAdminBars(props: Props) {
   const data3 = tdata.map( (q, qindex) => {
     const pss = q.positions;
     const answ = {};
+
+    let propo = q.proposition;
+    // const lineLimit = 100;
+    // if(propo.length > lineLimit) propo = propo.slice(0, (lineLimit - propo.length)) + '...';
+
     pss.forEach((qr,i) => {
       if(keys.indexOf(qr)===-1) keys.push(qr);
 
       const tally = data2.filter((u, index)=>u.answers[q.id]===i).length;
-      answ[qr] = tally === 0 ? 0.01 : tally;
+      answ[qr] = tally === 0 ? 0 : tally;
     });
 
-    let propo = q.proposition;
-    if(propo.length > 48) propo = propo.slice(0, (48 - propo.length)) + '...';
+    
     
     return { id: (qindex+1).toString(), ...answ, proposition: propo, version: props.questions.version! }
   });
@@ -112,34 +117,75 @@ export default function ConfAdminBars(props: Props) {
   // console.log('data3', data3, tdata);
 
   const layoutStyle = props.large ? classes.layout2 : classes.layout;
-  const barStyle = props.large ? classes.barLarge : classes.bar;
-  const barStyleOv = props.large ? {height:`calc(50vh / ${data3.length})`} : {};
+  // const barStyle = props.large ? classes.barLarge : classes.bar;
+  // const barStyleOv = props.large ? {height:`calc(50vh / ${data3.length})`} : {};
 
   return (
-    <div className={layoutStyle}>
-      {data3.map( (r, index) => {
-        return <div key={index} className={barStyle} style={barStyleOv}>
-          {makeBar([r], keys, index, true)}
-        </div>
+    <div className={classes.layout}>
+      {data3.map((r, index) => {
+        // console.log('r', r);
+        return (
+          <span key={index}>
+            <Typography align="left" variant="body1" style={{marginLeft:'20px'}}>
+              {r.proposition}
+            </Typography>
+            <div key={index} className={classes.layout2}>
+              {makeBar([r], keys, index)} 
+            </div>
+          </span>
+        );
       })}
     </div>
   );
 }
 
-const Notes = (props:any) => {
-  const { bars, xScale, yScale, data } = props;
-  // debugger
-  return <React.Fragment>{data.map( (bar, key) => {
-    return <text key={key} style={{color:'#444444', fontSize: '1.15em'}}>
-              &#9724; {bar.proposition}
-          </text>
-  })}</React.Fragment>
+function makeBar(data3: any, keys: any, key: number) {
+  return (
+    <ResponsiveBar
+      theme={btheme}
+      layers={
+        [
+          'grid',
+          'bars',
+          'markers',
+          'legends',
+          'annotations'
+        ] as any
+      }
+      key={key}
+      data={data3}
+      keys={keys}
+      axisBottom={null}
+      axisLeft={null}
+      indexBy={'id'}
+      reverse={true}
+      margin={{ top: 3, right: 20, bottom: 10, left: 20 }}
+      padding={0.1}
+      layout="horizontal"
+      colors={{ scheme: 'nivo' }}
+      tooltip={({ id, value, color }) => (
+        <strong style={{ color: 'black' }}>{value + ' ' + id}</strong>
+      )}
+      label={({ id, value }) => value + ' ' + id}
+      innerPadding={4}
+      axisTop={null}
+      axisRight={null}
+      labelSkipWidth={12}
+      labelSkipHeight={12}
+      labelTextColor='#282828'
+      legends={undefined}
+      animate={true}
+      motionStiffness={90}
+      motionDamping={15}
+      // labelTextColor='white'
+    />
+  );
 }
 
-function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
+function makeBar2(data3:any, keys:any, key:number) {
   return <ResponsiveBar
         theme={btheme}
-        layers={['grid', 'axes', 'bars', Notes, 'markers', 'legends', 'annotations'] as any}
+        layers={['bars', 'legends', 'annotations'] as any}
         key={key}
         data={data3}
         keys={keys}
@@ -147,7 +193,7 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
         axisLeft={null}
         indexBy={'id'}
         reverse={true}
-        margin={{ top: 22, right: 130, bottom: 0, left: 60 }}
+        margin={{ top: 22, right: 130, bottom: 0, left: 20 }}
         padding={0.1}
         layout="horizontal"
         colors={{ scheme: 'nivo' }}
@@ -201,27 +247,11 @@ function makeBar(data3:any, keys:any, key:number, showLegend:boolean) {
               id: 'gradientB'
           }
       ]}
-        /* axisBottom={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: 'responses',
-            legendPosition: 'middle',
-            legendOffset: 32
-        }}
-        axisLeft={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: 'questions',
-            legendPosition: 'middle',
-            legendOffset: -40
-        }} */
         labelSkipWidth={12}
         labelSkipHeight={12}
         labelTextColor='white'
         // labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-        legends={ !showLegend ? undefined : [
+        legends={ [
             {
                 dataFrom: 'keys',
                 anchor: 'bottom-right',
