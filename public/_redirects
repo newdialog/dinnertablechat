@@ -15,9 +15,14 @@ https://dinnertable.chat/*  https://www.dinnertable.chat/:splat 301!
 https://mxop.at/*  https://re.mixopinions.com/:splat 301!
 http://mxop.at/*  https://re.mixopinions.com/:splat 301!
 https://www.mxop.at/*  https://re.mixopinions.com/:splat 301!
+http://www.mxop.at/*  https://re.mixopinions.com/:splat 301!
+https://www.mxop.at  https://mixopinions.com 301!
+http://www.mxop.at  https://mixopinions.com 301!
 
-https://mixer.newdialog.org https://re.mixopinions.com/:splat 301!
-http://mixer.newdialog.org https://re.mixopinions.com/:splat 301!
+https://mixer.newdialog.org/* https://re.mixopinions.com/:splat 301!
+http://mixer.newdialog.org/* https://re.mixopinions.com/:splat 301!
+https://mixer.newdialog.org https://re.mixopinions.com 301!
+http://mixer.newdialog.org https://re.mixopinions.com 301!
 
 /saas q=:q  /r/:q  301!
 /r q=:q  /r/:q  301!

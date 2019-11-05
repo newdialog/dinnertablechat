@@ -93,7 +93,7 @@ export default (props: Props) => {
 
     if (confid) d.conf = confid;
     d.maxGroups = data.maxGroups || 10;
-    
+
     d.minGroupUserPairs = (data.minGroupUserPairs || 1) * 2;
     // if(d.minGroupUserPairs < 2) d.minGroupUserPairs = 2; // overwrite default
 
@@ -146,65 +146,65 @@ export default (props: Props) => {
           'is-even',
           'must be an even number of users',
           (value: number) => (value % 2) === 0,
-      ),
+        ),
       // maxGroups: Yup.number().min(1).max(500).required(),
       curl: Yup.string().url('${path} must be a valid url').notRequired().nullable(true)
     }),
     validateOnChange: true,
     onSubmit: async values => {
-      
-        let questions:any[] = [];
-        try {
-          questions = Object.keys(values)
-        .filter(x => x.indexOf('question') === 0)
-        .reduce((acc, k, i) => {
 
-          const id = k.replace('question_', '');
-          const vk = k.replace('question', 'answer');
-          const question = values[k];
+      let questions: any[] = [];
+      try {
+        questions = Object.keys(values)
+          .filter(x => x.indexOf('question') === 0)
+          .reduce((acc, k, i) => {
 
-          // remove questions that where removed
-          if(state.data!.questions.findIndex(y => id === y.id) === -1) return acc;
+            const id = k.replace('question_', '');
+            const vk = k.replace('question', 'answer');
+            const question = values[k];
 
-          const ans = values[vk] as string || 'Yes, No'; // must provide default here for default value
+            // remove questions that where removed
+            if (state.data!.questions.findIndex(y => id === y.id) === -1) return acc;
 
-          if(!ans) {
-            throw new Error('answer options cannot be blank');
-          }
+            const ans = values[vk] as string || 'Yes, No'; // must provide default here for default value
 
-          if(!question) {
-            throw new Error('question cannot be blank');
-          }
-
-          const validateAnswers = (ans:string) => {
-            let valid = !!ans.includes(',');
-            if(!valid) {
-              throw new Error('answer options must have a comma')
+            if (!ans) {
+              throw new Error('answer options cannot be blank');
             }
 
-            const ansList = ans.replace(/\s/g, '').split(',').filter(x=>x!=='');
-
-            if(ansList.length < 2) {
-              throw new Error('answer options must have at least two answers');
+            if (!question) {
+              throw new Error('question cannot be blank');
             }
 
-            if(ansList.length > 3) {
-              throw new Error('answer options cannot have more than 3 choices');
+            const validateAnswers = (ans: string) => {
+              let valid = !!ans.includes(',');
+              if (!valid) {
+                throw new Error('answer options must have a comma')
+              }
+
+              const ansList = ans.replace(/\s/g, '').split(',').filter(x => x !== '');
+
+              if (ansList.length < 2) {
+                throw new Error('answer options must have at least two answers');
+              }
+
+              if (ansList.length > 3) {
+                throw new Error('answer options cannot have more than 3 choices');
+              }
+
+              return ansList.join(', ');
             }
+            const ansFormetted = validateAnswers(ans);
+            if (!ansFormetted) throw new Error('invalid answer format');
 
-            return ansList.join(', ');
-          }
-          const ansFormetted = validateAnswers(ans);
-          if(!ansFormetted) throw new Error('invalid answer format');
-
-          acc.push({
-            id,
-            question,
-            answer: ansFormetted, // || 'Yes, No'
-          });
-          return acc;
-        }, [] as any[]);
-      } catch(e) {
+            acc.push({
+              id,
+              question,
+              answer: ansFormetted, // || 'Yes, No'
+            });
+            return acc;
+          }, [] as any[]);
+      } catch (e) {
         alert(e.message);
         return null;
       }
@@ -229,9 +229,9 @@ export default (props: Props) => {
         updated: props.data.updated
       }
 
-      if(values.waitmsg && values.waitmsg !== ' ') payload.waitmsg = values.waitmsg;
+      if (values.waitmsg && values.waitmsg !== ' ') payload.waitmsg = values.waitmsg;
 
-      if(!payload.userPoolId) throw new Error('no userPoolId');
+      if (!payload.userPoolId) throw new Error('no userPoolId');
 
       // console.log(values);
       console.log('payload', JSON.stringify(payload), values);
@@ -242,7 +242,7 @@ export default (props: Props) => {
         const isNew = !payload.updated;
         await props.onSubmit(payload);
         setState(p => ({ ...p, created: true }));
-        if(isNew) props.onClose();
+        if (isNew) props.onClose();
       } catch (e) {
         if (e.message.indexOf('aborted') > -1) {
           // do nothing
@@ -256,7 +256,13 @@ export default (props: Props) => {
     }
   });
 
-  const url = window.location.href.replace(/(new\/)+edit/, formik.values['conf']).replace(/(\/)+edit/, '').toLowerCase();
+  // url gen
+  let url = window.location.origin + '/c/' + confid;
+  if (store.isMixerProd()) url = 'https://mxop.at/' + confid; // window.location.origin + '/' + confid; // use root
+
+  const visualURL = url.replace('http://', '').replace('https://', '');
+
+  // window.location.href.replace(/(new\/)+edit/, formik.values['conf']).replace(/(\/)+edit/, '').toLowerCase();
 
   // const TF = wrap(formik).tf;
   const fields = [
@@ -267,7 +273,7 @@ export default (props: Props) => {
     { name: 'minGroupUserPairs', label: 'Number of people in a group', type: 'input' },
     { name: 'waitmsg', label: '[optional] User waiting message', type: 'input' },
     { name: 'questions', type: 'array' }
-  ].filter(x=> !x.adminOnly || (!!x.adminOnly && store.auth.isAdmin()) );
+  ].filter(x => !x.adminOnly || (!!x.adminOnly && store.auth.isAdmin()));
 
   const questionNodes = data.questions;
   // console.log('questionNodes', questionNodes, formik.values)
@@ -277,7 +283,7 @@ export default (props: Props) => {
   }
 
   const addQuestion = () => {
-    if(!store.auth.isPaidUser() && state.data!.questions.length > 1) {
+    if (!store.auth.isPaidUser() && state.data!.questions.length > 1) {
       window.alert('Sorry, only paid users can add more than two questions. Please contact us at: requests@newdialogue.org');
       window.open('https://www.newdialogue.org', '_blank');
       return;
@@ -371,7 +377,7 @@ export default (props: Props) => {
             <Tf className={classes.textField} id={x.name} label={x.label} formik={formik} disabled={x.disabled} />
 
             {x.name === 'conf' &&
-              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin: '-0.7em 1em 1em 0' }}>public url: {url} </Typography>
+              <Typography variant="subtitle1" align="right" style={{ color: 'gray', margin: '-0.7em 1em 1em 0' }}>public url: {visualURL} </Typography>
             }
           </span>
           );

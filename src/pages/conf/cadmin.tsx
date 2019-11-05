@@ -268,8 +268,8 @@ export default observer(function CAdmin(props: Props) {
 
   // url gen
   let url = window.location.origin + '/c/' + confid;
-  if (store.isMixerProd()) url = window.location.origin + '/' + confid; // use root
-  console.log('store.isMixerProd()', store.isMixerProd());
+  if (store.isMixerProd()) url = 'https://mxop.at/' + confid; // window.location.origin + '/' + confid; // use root
+  // console.log('store.isMixerProd()', store.isMixerProd());
 
   if (state.table && state.table.curl) url = state.table.curl;
 
