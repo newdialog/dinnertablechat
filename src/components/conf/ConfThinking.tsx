@@ -6,7 +6,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
-import useInterval from '@use-it/interval';
+import { useTimeoutFn, useInterval } from 'react-use';
 
 const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,7 +24,7 @@ export default function ConfThinking(props: Props) {
     handleClose();
   };
 
-  useInterval(() => {
+  useTimeoutFn(() => {
     close();
   }, 5000);
 

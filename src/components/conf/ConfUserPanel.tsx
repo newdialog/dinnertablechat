@@ -2,7 +2,7 @@ import { Button, Card, CardActions, CardContent, Grid, Typography } from '@mater
 import Chip from '@material-ui/core/Chip';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import useInterval from '@use-it/interval';
+import { useTimeoutFn, useInterval } from 'react-use';
 import Prando from 'prando';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -197,18 +197,19 @@ export default function PleaseWaitResults(props: Props) {
     // console.log('r', JSON.stringify(result));
   };
 
-  const inFocus = useFocus(null, true, inFocus => {
-    inFocus && onRefresh();
+  const inFocus = useFocus(null, true, _inFocus => {
+    if(_inFocus) onRefresh();
   });
 
   const onInterval = React.useCallback(() => {
     console.log('state.checks', state.checks, inFocus);
-    if (state.checks < 1 || !inFocus) return;
+    // if (state.checks < 1 || !inFocus) return;
     onRefresh();
     setState(p => ({ ...p, checks: p.checks - 1 }));
   }, [state.checks, inFocus]);
 
-  useInterval(onInterval, 9 * 1000);
+  const pauseTimer = state.checks < 1 || !inFocus;
+  useInterval(onInterval, pauseTimer ? null : 9 * 1000);
 
   React.useEffect(() => {
     init();

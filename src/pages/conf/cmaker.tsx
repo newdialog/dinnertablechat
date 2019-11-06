@@ -293,7 +293,7 @@ export default observer(function CMaker(props: Props) {
         <main className={classes.container}>
           <div style={{ textAlign: 'right', float: 'right' }}>
             {store.isNotGuest() && (
-              <button onClick={() => store.auth.logout()}>logout</button>
+              <button onClick={() => store.auth.logout(store.getRoot())}>logout</button>
             )}
           </div>
           {/* Hero unit */}

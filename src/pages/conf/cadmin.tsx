@@ -290,7 +290,7 @@ export default observer(function CAdmin(props: Props) {
             <div className={classes.heroContent}>
               <div style={{ textAlign: 'right', float: 'right' }}>
                 {isAuthUser && (
-                  <button onClick={() => store.auth.logout()}>logout</button>
+                  <button onClick={() => store.auth.logout(store.getRoot())}>logout</button>
                 )}
                 {
                   <button onClick={() => toggleView()}>

@@ -84,14 +84,15 @@ const AuthModel = types
       localStorage.removeItem('logoutTo');
 
       if (page !== '' && page) window.location.assign(page);
-      else {
+      else window.location.assign('/'); // window.location.assign('/');
+      /* else {
         const loginPage = localStorage.getItem('loginTo');
         console.log('loginPage', loginPage);
         (self as any).login(loginPage);
-      }
+      } */
     },
     logout(logoutTo?: string) {
-      if (logoutTo) localStorage.setItem('logoutTo', logoutTo || '/about');
+      if (logoutTo) localStorage.setItem('logoutTo', logoutTo); //  || '/about'
       else localStorage.removeItem('logoutTo');
 
       self.doLogout = true;

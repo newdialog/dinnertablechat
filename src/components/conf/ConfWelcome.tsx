@@ -1,25 +1,15 @@
-import React, { useContext } from 'react';
+import { Card, CardActions, CardContent, CardHeader, Typography } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
-import useInterval from '@use-it/interval';
-import * as AppModel from '../../models/AppModel';
-import { Card, CardActions, CardHeader, CardContent, Typography } from '@material-ui/core';
+import React, { useContext } from 'react';
 
-const Transition = React.forwardRef(function Transition2(props: any, ref: any) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
+import * as AppModel from '../../models/AppModel';
 
 interface Props {
   onClose?: () => void;
 }
 
 export default function ConfWelcome(props: Props) {
-  const [open, setOpen] = React.useState(true);
+  // const [open, setOpen] = React.useState(true);
   const store = useContext(AppModel.Context)!;
 
   // TODO: clean this up
