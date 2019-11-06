@@ -208,8 +208,8 @@ export default observer(function CIndex(props: Props) {
     });
   }, [state.resetFlag]);
 
-  const handleReset = () => {
-    if (store.conf.positions) store.conf.resetQueue();
+  const handleReset = (soft:boolean = false) => {
+    if (!soft && store.conf.positions) store.conf.resetQueue();
     setState(p => ({ ...p, resetFlag: Date.now() }));
   };
 

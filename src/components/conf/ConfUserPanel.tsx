@@ -78,7 +78,7 @@ interface Props {
   id: string;
   table: ConfIdRow;
   questions: any;
-  handleReset: () => void;
+  handleReset: (soft?:boolean) => void;
   // data: any;
 }
 // type Data = Array<User>;
@@ -192,8 +192,12 @@ export default function PleaseWaitResults(props: Props) {
       // if (myGroup !== null) setState(p => ({ ...p, myGroup }));
     }
 
-    if (state.ready !== ready || myGroup !== state.myGroup)
+    if(state.version > -1 && state.version !== _data.version) props.handleReset(true);
+    
+    if (state.ready !== ready || myGroup !== state.myGroup) {
       setState(p => ({ ...p, data: result, ready, myGroup, version }));
+      // props.handleReset(true);
+    }
     // console.log('r', JSON.stringify(result));
   };
 
