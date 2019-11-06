@@ -83,15 +83,18 @@ const AuthModel = types
       const page = localStorage.getItem('logoutTo');
       localStorage.removeItem('logoutTo');
 
+      console.log('page', page);
+
       if (page !== '' && page) window.location.assign(page);
-      else {
+      else window.location.assign('/'); // window.location.assign('/');
+      /* else {
         const loginPage = localStorage.getItem('loginTo');
         console.log('loginPage', loginPage);
         (self as any).login(loginPage);
-      }
+      } */
     },
     logout(logoutTo?: string) {
-      if (logoutTo) localStorage.setItem('logoutTo', logoutTo || '/about');
+      if (logoutTo) localStorage.setItem('logoutTo', logoutTo); //  || '/about'
       else localStorage.removeItem('logoutTo');
 
       self.doLogout = true;

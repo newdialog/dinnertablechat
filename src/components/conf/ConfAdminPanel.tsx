@@ -1,6 +1,6 @@
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from'@material-ui/core/styles';
-import useInterval from '@use-it/interval';
+import { useTimeoutFn, useInterval } from 'react-use';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFocus } from 'utils/useFocus';
@@ -158,12 +158,13 @@ export default function ConfAdminPanel(props: Props) {
   });
 
   const onInterval = React.useCallback(() => {
-    if (state.checks < 1 || !inFocus) return;
+    // if (state.checks < 1 || !inFocus) return;
     onRefresh();
     setState(p => ({ ...p, checks: p.checks - 1 }));
   }, [state.checks]);
 
-  useInterval(onInterval, 9 * 1000);
+  const pauseInterval = state.checks < 1 || !inFocus;
+  useInterval(onInterval, pauseInterval ? null : 9 * 1000);
 
   const onAdminReady = async (toggle: boolean, noPrompt:boolean) => {
     if(toggle) {

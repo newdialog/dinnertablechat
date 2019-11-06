@@ -50,6 +50,10 @@ const AppModel = types
       if (!self.auth.user) return false;
       return !this.isGuest();
     },
+    getRoot() {
+      if( !!window.location.href.match('/c/') ) return '/c';
+      else return '/';
+    },
     isAdmin() {
       return self.auth.isAdmin();
     },

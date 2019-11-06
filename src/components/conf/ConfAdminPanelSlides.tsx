@@ -199,7 +199,7 @@ export default function ConfAdminPanelSlides(props: Props) {
                 {!ready ? 'Assign All' : 'UnAssign All'}
               </Button>
 
-              <Button
+              {!ready && <Button
                 variant="contained"
                 size="small"
                 // size="small"
@@ -208,7 +208,7 @@ export default function ConfAdminPanelSlides(props: Props) {
                 onClick={() => onDeleteAll(true)}
               >
                 {'Reset User Answers'}
-              </Button>
+              </Button>}
 
               { store.isAdmin() && <Button
                 variant="contained"

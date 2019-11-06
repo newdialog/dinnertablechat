@@ -2,7 +2,7 @@ import { Button, Card, CardActions, CardContent, Grid, Typography } from '@mater
 import Chip from '@material-ui/core/Chip';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import useInterval from '@use-it/interval';
+import { useTimeoutFn, useInterval } from 'react-use';
 import Prando from 'prando';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -78,7 +78,7 @@ interface Props {
   id: string;
   table: ConfIdRow;
   questions: any;
-  handleReset: () => void;
+  handleReset: (soft?:boolean) => void;
   // data: any;
 }
 // type Data = Array<User>;
@@ -192,23 +192,28 @@ export default function PleaseWaitResults(props: Props) {
       // if (myGroup !== null) setState(p => ({ ...p, myGroup }));
     }
 
-    if (state.ready !== ready || myGroup !== state.myGroup)
+    if(state.version > -1 && state.version !== _data.version) props.handleReset(true);
+    
+    if (state.ready !== ready || myGroup !== state.myGroup) {
       setState(p => ({ ...p, data: result, ready, myGroup, version }));
+      // props.handleReset(true);
+    }
     // console.log('r', JSON.stringify(result));
   };
 
-  const inFocus = useFocus(null, true, inFocus => {
-    inFocus && onRefresh();
+  const inFocus = useFocus(null, true, _inFocus => {
+    if(_inFocus) onRefresh();
   });
 
   const onInterval = React.useCallback(() => {
     console.log('state.checks', state.checks, inFocus);
-    if (state.checks < 1 || !inFocus) return;
+    // if (state.checks < 1 || !inFocus) return;
     onRefresh();
     setState(p => ({ ...p, checks: p.checks - 1 }));
   }, [state.checks, inFocus]);
 
-  useInterval(onInterval, 9 * 1000);
+  const pauseTimer = state.checks < 1 || !inFocus;
+  useInterval(onInterval, pauseTimer ? null : 9 * 1000);
 
   React.useEffect(() => {
     init();
