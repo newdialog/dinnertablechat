@@ -83,6 +83,8 @@ const AuthModel = types
       const page = localStorage.getItem('logoutTo');
       localStorage.removeItem('logoutTo');
 
+      console.log('page', page);
+
       if (page !== '' && page) window.location.assign(page);
       else window.location.assign('/'); // window.location.assign('/');
       /* else {
