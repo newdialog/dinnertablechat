@@ -15,14 +15,16 @@ export type UserRows = Array<UserRow>;
 
 // use Guest Login, use RID or guestSeed
 let docClient: any; // DynamoDB.DocumentClient;
-let started: boolean = false;
-let readying: boolean = false;
-
 const TABLE_USERS = 'conf-users';
 const TABLE_ID = 'conf_id';
+const f = x => x && !!x.identityId;
 
 export async function init() {
-  const f = x => x && !!x.identityId;
+  if (docClient) {
+    // just make sure we're still logged in
+    await refreshCredentials();
+    return docClient;
+  }
 
   // console.log('db: waiting on init');
   let cr = await interval(1000)
@@ -35,16 +37,8 @@ export async function init() {
 
   // console.log('db: init completed');
   if (docClient) return docClient; // already set
-  readying = true;
 
-  // console.log('DB cr', cr);
-  // if (!identityId) identityId = cr.identityId;
-
-  // , Object.keys(cr).length < 2);
-
-  /// console.log('DB cred', cr);
   docClient = DynamodbFactory(new DynamoDB({ credentials: cr })); // await refreshCredentials()));
-  started = true;
 
   docClient.schema([
     {
@@ -82,7 +76,7 @@ export async function submitAll(
   conf: string,
   version: number = 0
 ) {
-  if (!docClient) await init();
+  await init();
 
   // TODO: low: batch
   return await Promise.all(
@@ -91,7 +85,7 @@ export async function submitAll(
 }
 
 export async function delAll(conf: string, user: string) {
-  if (!docClient) await init();
+  await init();
 
   console.log('Deleting all: conf=' + conf, ' from ' + TABLE_USERS);
 
@@ -105,7 +99,8 @@ export async function delAll(conf: string, user: string) {
       .eq(conf)
       .where('user')
       .eq(user)
-      .delete();
+      .delete()
+      .catch(errCatch);
   });
 
   submitReady(false, conf, [], user);
@@ -121,7 +116,7 @@ export async function submit(
   user: string,
   version: number
 ) {
-  if (!docClient) await init();
+  await init();
 
   // if (!user) user = identityId;
   const updated = Math.floor(Date.now() / 1000);
@@ -146,7 +141,7 @@ export async function submitSeats(
   conf: string
   // user: string
 ) {
-  if (!docClient) await init();
+  await init();
 
   let batch = docClient
     .batch()
@@ -165,46 +160,8 @@ export async function submitSeats(
   return batch.write();
 }
 
-/*
-export async function submitReady(ready: boolean, conf: string, results: any) {
-  if (!docClient) await init();
-
-  if (!ready) {
-    return await docClient
-      .table(TABLE_USERS)
-      .where('conf')
-      .eq(conf)
-      .where('user')
-      .eq('_')
-      .delete()
-      .catch(e => window.alert('error: ' + e));
-  }
-  return docClient
-    .table(TABLE_USERS)
-    .return(docClient.UPDATED_OLD)
-    .insert_or_update({
-      conf,
-      user: '_',
-      answers: { ready, results }
-    })
-    .catch(e => window.alert('error: ' + e));
-}
-*/
-
-/*
-export async function waitForReady(conf: string, targetState: boolean = true) {
-  return intervalBackoff({ initialInterval: 5000, maxInterval: 9000 })
-    .pipe(
-      tap(x => console.log('waiting', x)),
-      flatMap(() => isReady(conf)),
-      tap(x => console.log('waiting isReady', x)),
-      takeWhile(x => x !== targetState)
-    )
-    .toPromise();
-} */
-
 export async function getResults(conf: string) {
-  if (!docClient) await init();
+  await init();
 
   const r = await idGet(conf);
   if (!r) return null;
@@ -218,7 +175,7 @@ export async function getAll(
   conf: string,
   byVersion = -1
 ): Promise<{ data: UserRow[] }> {
-  if (!docClient) await init();
+  await init();
 
   console.log('fetching', byVersion);
 
@@ -315,7 +272,7 @@ export function idNewQuestion(
 }
 
 export async function idIncVersion(conf: string, user: string) {
-  if (!docClient) await init();
+  await init();
 
   if (!user) throw new Error('No user specified');
 
@@ -332,11 +289,12 @@ export async function idIncVersion(conf: string, user: string) {
     .where('user')
     .eq(user)
     .return(docClient.ALL_OLD) // UPDATED_OLD
-    .update({ version }); // .insert_or_update
+    .update({ version }) // .insert_or_update
+    .catch(errCatch);
 }
 
 export async function idSubmit(data: ConfIdRow) {
-  if (!docClient) await init();
+  await init();
   // conf: string, user: string, questions: any[], maxGroups: number, minGroupUserPairs: number, curl?: string
   // if (!user) user = identityId;
 
@@ -360,7 +318,8 @@ export async function idSubmit(data: ConfIdRow) {
   return docClient
     .table(TABLE_ID)
     .return(docClient.ALL_OLD) // UPDATED_OLD
-    .insert_or_replace(data); // .insert_or_update
+    .insert_or_replace(data) // .insert_or_update
+    .catch(errCatch);
 }
 
 export async function submitReady(
@@ -369,7 +328,7 @@ export async function submitReady(
   results: any[],
   user: string
 ) {
-  if (!docClient) await init();
+  await init();
 
   console.log('submitReady', ready, conf, user, results);
 
@@ -385,11 +344,20 @@ export async function submitReady(
       ready: ready === true,
       results: ready ? results : null
     })
-    .catch(e => window.alert('error: ' + e));
+    .catch(errCatch);
+}
+
+function errCatch(e: any) {
+  if (e && e.toString().indexOf('Missing credentials') > -1) {
+    console.warn('session expired');
+    window.location.reload();
+    return undefined;
+  }
+  window.alert('error: ' + e);
 }
 
 export async function idDel(conf: string, user: string) {
-  if (!docClient) await init();
+  await init();
 
   return await docClient
     .table(TABLE_ID)
@@ -397,11 +365,12 @@ export async function idDel(conf: string, user: string) {
     .eq(conf)
     .where('user')
     .eq(user)
-    .delete();
+    .delete()
+    .catch(errCatch);
 }
 
 export async function idGet(conf: string): Promise<ConfIdRow | null> {
-  if (!docClient) await init();
+  await init();
 
   return docClient
     .table(TABLE_ID)
@@ -430,11 +399,12 @@ export async function idGet(conf: string): Promise<ConfIdRow | null> {
       // if (item.questions) item.questions = JSON.parse(item.questions);
       if (!item.questions) item.questions = [];
       return item;
-    }); // remove metadata
+    }) // remove metadata
+    .catch(errCatch);
 }
 
 export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
-  if (!docClient) await init();
+  await init();
 
   return docClient
     .table(TABLE_ID)
@@ -463,5 +433,6 @@ export async function idGetByUser(user: string): Promise<ConfIdRow[] | null> {
       // xs.forEach(x => x.questions = JSON.parse(x.questions));
       xs.forEach(x => (x.questions = x.questions || []));
       return xs as ConfIdRow[];
-    }); // remove metadata
+    }) // remove metadata
+    .catch(errCatch);
 }

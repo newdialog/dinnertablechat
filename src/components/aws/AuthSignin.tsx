@@ -16,26 +16,36 @@ export default observer(function AuthSignin(props: Props) {
 
   const redirect = () => {
     if(refresh) return;
+    setRefresh(true);
 
+    // Never was authenticated
     if(!store.auth.isAuthenticated()) {
-      alert('Error authenticating- retrying');
+      // alert('Error authenticating- retrying');
+
+      // in case login is not working
+      setTimeout(()=>{
+        console.warn('full authentication failure- going back to root');
+        window.location.assign(store.getRoot())
+      }, 5200);
+
+      // try logging in again?
+      console.warn('semi authentication failure- trying to re-login');
       store.auth.login( localStorage.getItem('loginTo') || undefined );
-      // window.location.reload(true);
-    }
-
-    const redirectTo = localStorage.getItem('loginTo'); 
-    localStorage.removeItem('loginTo');
-
-    if (redirectTo) {
-      // localStorage.removeItem('loginTo');
-      if(redirectTo.charAt(0)==='/') store.router.push(redirectTo);
-      else window.location.assign(redirectTo); // needs to be assign
-      setRefresh(true);
       return;
     }
+
+    const redirectTo = localStorage.getItem('loginTo');
+
+    if (redirectTo) {
+      localStorage.removeItem('loginTo');
+      // if(redirectTo.charAt(0)==='/') store.router.push(redirectTo);
+      window.location.assign(redirectTo); // needs to be assign
+      return;
+    }
+    
     console.log('no redirectTo', redirectTo);
-    store.router.push('/');
-    setRefresh(true);
+    window.location.assign(store.getRoot());
+    // store.router.push('/');
   }
 
   useEffect(() => {
@@ -46,9 +56,9 @@ export default observer(function AuthSignin(props: Props) {
 
     // alow keep it around in case of back btn
     redirect();
-  }, [store.auth, store.auth.user]);
+  }, [store.auth.user]);
   
-  useTimeoutFn(() => redirect(), 5000);
+  useTimeoutFn(() => redirect(), 5200);
 
   return (
     <React.Fragment>
