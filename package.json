@@ -94,12 +94,12 @@
     "analyze": "npm run build -- --stats && npx source-map-explorer 'build/static/js/*.js' --html result.html",
     "postinstall": "npm run i18n",
     "start": "env-cmd -f ./.env.development react-scripts start",
-    "build": "env-cmd -f ./.env.staging react-app-rewired build -- --stats && cp -f CNAME ./build/ && npm run patchsw",
-    "build:prod": "mkdir -p ./build && env-cmd -f ./.env.production react-app-rewired build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && npm run patchsw && npm run postbuild",
-    "build:mixer": "mkdir -p ./build && env-cmd -f ./.env.mixer.production react-app-rewired build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && npm run patchsw && npm run postbuild",
+    "build": "env-cmd -f ./.env.staging react-scripts build -- --stats && cp -f CNAME ./build/ && npm run patchsw",
+    "build:prod": "mkdir -p ./build && env-cmd -f ./.env.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && npm run patchsw && npm run postbuild",
+    "build:mixer": "mkdir -p ./build && env-cmd -f ./.env.mixer.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && npm run patchsw && npm run postbuild",
     "postbuild": "",
     "postbuild:snap": "react-snap",
-    "test": "env-cmd -f ./.env.development.local react-app-rewired test --env=jsdom",
+    "test": "env-cmd -f ./.env.development.local react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "proxy": "node proxy.js",
     "deploy": "npm run build && npm run deploy2",
@@ -133,7 +133,6 @@
     "fork-ts-checker-webpack-plugin": "^3.0.1",
     "gh-pages": "^2.0.1",
     "http-proxy": "^1.17.0",
-    "react-app-rewired": "^2.1.3",
     "react-scripts": "^3.3.0-next.39",
     "regenerator-runtime": "^0.13.3",
     "source-map-explorer": "^2.0.1",
@@ -142,7 +141,7 @@
   "optionalDependencies": {},
   "browserslist": {
     "production": [
-      ">0.6%",
+      ">0.2%",
       "Safari 9",
       "not dead",
       "not op_mini all"
