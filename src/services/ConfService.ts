@@ -22,7 +22,7 @@ const f = x => x && !!x.identityId;
 export async function init() {
   if (docClient) {
     // just make sure we're still logged in
-    await refreshCredentials();
+    await refreshCredentials().catch(errCatch);
     return docClient;
   }
 
@@ -348,12 +348,14 @@ export async function submitReady(
 }
 
 function errCatch(e: any) {
-  if (e && e.toString().indexOf('Missing credentials') > -1) {
-    console.warn('session expired');
+  if (e && (e.toString() as string).toLowerCase().indexOf('credentials') > -1) {
+    console.warn('session expired- reloading');
     window.location.reload();
     return undefined;
+  } else {
+    window.alert('error: ' + e);
+    window.location.reload();
   }
-  window.alert('error: ' + e);
 }
 
 export async function idDel(conf: string, user: string) {
