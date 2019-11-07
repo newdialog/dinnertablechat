@@ -165,8 +165,9 @@ export default observer(function CIndex(props: Props) {
     console.log('--logging in as guest');
 
     if (!store.auth.user) {
-      store.auth.login();
-    } else console.log('user', store.auth.user);
+      // store.auth.login();
+      console.log('no user');
+    } else console.log('has user', store.auth.user);
   }, [store.auth.isNotLoggedIn, store.auth.user]);
 
   useEffect(() => {
@@ -213,14 +214,14 @@ export default observer(function CIndex(props: Props) {
     setState(p => ({ ...p, resetFlag: Date.now() }));
   };
 
-  if (store.auth.isNotLoggedIn) {
+  /* if (store.auth.isNotLoggedIn) {
     // store.auth.login();
     return (
       <div className={classes.pagebody}>
         <h3>Authorizing...</h3>
       </div>
     );
-  }
+  } */
 
   let step = 0;
   const posBit = store.conf.positions ? 1 : 0;

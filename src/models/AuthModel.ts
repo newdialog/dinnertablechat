@@ -63,10 +63,9 @@ const AuthModel = types
           event_category: 'auth'
         });
 
-      //if (loginTo) {
       const current = window.location.href;
       localStorage.setItem('loginTo', loginTo || current);
-      //}
+
       if (register) self.doLogin = 2;
       else self.doLogin = 1;
       // signIn();
@@ -83,9 +82,9 @@ const AuthModel = types
       const page = localStorage.getItem('logoutTo');
       localStorage.removeItem('logoutTo');
 
-      console.log('page', page);
+      console.log('logoutFinished page', page);
 
-      if (page !== '' && page) window.location.assign(page);
+      if (page) window.location.assign(page);
       else window.location.assign('/'); // window.location.assign('/');
       /* else {
         const loginPage = localStorage.getItem('loginTo');
@@ -97,14 +96,17 @@ const AuthModel = types
       if (logoutTo) localStorage.setItem('logoutTo', logoutTo); //  || '/about'
       else localStorage.removeItem('logoutTo');
 
+      localStorage.removeItem('loginTo');
+
       self.doLogout = true;
     },
+    /*
     logoutLogin(loginTo?: string) {
       const current = window.location.href;
       localStorage.setItem('loginTo', loginTo || current);
       localStorage.setItem('logoutTo', '');
       self.doLogout = true;
-    },
+    },*/
     notLoggedIn() {
       self.isNotLoggedIn = true;
     },

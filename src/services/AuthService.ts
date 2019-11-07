@@ -187,11 +187,11 @@ export async function refreshCredentials(): Promise<any> {
   )); */
 
   // console.log(cr);
-  const params = cr.webIdentityCredentials.params;
+  const params = cr.webIdentityCredentials ? cr.webIdentityCredentials.params : null;
 
   if (!params) {
-    console.log('cr', cr);
-    throw new Error('no cred');
+    // console.log('cr', cr);
+    throw new Error('no cred: ' + cr);
   }
 
   if (!cr._identityId && params && params.IdentityId)
@@ -316,8 +316,14 @@ async function checkUser(cb: AwsCB, event: string = '') {
 export function logout() {
   // {global: true}
   return Auth.signOut({ global: false })
-    .then(x => console.log('logout', x))
-    .catch((err: any) => console.log(err));
+    .then(x => {
+      console.log('logout', x)
+      return x;
+    })
+    .catch((err: any) => {
+      console.log('Error logging out: ' + err)
+      return null;
+    });
 }
 
 /*
