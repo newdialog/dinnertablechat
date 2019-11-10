@@ -1,10 +1,14 @@
 // import '@babel/polyfill';
+import 'react-app-polyfill/ie11';
 import 'react-app-polyfill/stable';
+import ProxyPolyfill from 'proxy-polyfill/src/proxy';
 
 import './index.css';
 import React from 'react';
 import { hydrate, render } from "react-dom";
-import {App} from './App';
+
+if(window) window.Proxy = ProxyPolyfill;
+const {App} = require('./App');
 // Setup History
 
 const rootElement = document.getElementById('root') as HTMLElement;
