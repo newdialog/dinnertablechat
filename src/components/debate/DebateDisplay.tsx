@@ -226,7 +226,7 @@ export default function DebateScene(props: Props) {
   const confettiRef = useRef<Lottie | any>();
 
   const trackDebateTimeEnd = () => {
-    window.gtag('event', 'debate_time_end', {
+    if(window.gtag) window.gtag('event', 'debate_time_end', {
       event_category: 'debate',
       non_interaction: true
     });

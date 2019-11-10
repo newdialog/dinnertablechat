@@ -141,7 +141,7 @@ export default observer(function MenuHome(props: Props) {
     }
     handleReset();
 
-    window.gtag('event', 'debate_match_menu', {
+    if(window.gtag) window.gtag('event', 'debate_match_menu', {
       event_category: 'splash',
       guest: store.isGuest()
     });

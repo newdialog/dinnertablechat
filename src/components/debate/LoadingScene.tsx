@@ -155,19 +155,19 @@ export default function LoadingScene(props: Props) {
     const position = store.debate.position;
 
     // analytics
-    window.gtag('event', 'debate_loading', {
+    if(window.gtag) window.gtag('event', 'debate_loading', {
       event_category: 'debate',
       guest: store.isGuest(),
       topic,
       position
     });
-    window.gtag('event', `debate_queue_${topic}_${position}`, {
+    if(window.gtag) window.gtag('event', `debate_queue_${topic}_${position}`, {
       event_category: 'debate',
       guest: store.isGuest()
     });
     // Also add a metric for guests in queue
     if (store.isGuest()) {
-      window.gtag('event', 'debate_loading_guest', {
+      if(window.gtag) window.gtag('event', 'debate_loading_guest', {
         event_category: 'debate',
         topic,
         position,
@@ -384,7 +384,7 @@ export default function LoadingScene(props: Props) {
   if (matchedsync) text = 'connected to match!';
 
   if (state.error && !loggedError) {
-    window.gtag('event', state.error, {
+    if(window.gtag) window.gtag('event', state.error, {
       event_category: 'error',
       non_interaction: true
     });

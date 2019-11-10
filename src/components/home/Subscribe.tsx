@@ -48,7 +48,7 @@ export default function ButtonAppBar(props: Props) {
 
   const onSubmit = useMemo(() => async (e) => {
     e.preventDefault();
-    window.gtag('event', 'subscribe_action', {
+    if(window.gtag) window.gtag('event', 'subscribe_action', {
       event_category: 'splash',
       non_interaction: false
     });
@@ -135,7 +135,7 @@ export default function ButtonAppBar(props: Props) {
 
   const { subscribe } = state;
   if (subscribe === 'success') {
-    window.gtag('event', 'subscribed', {
+    if(window.gtag) window.gtag('event', 'subscribed', {
       event_category: 'splash',
       non_interaction: false
     });
@@ -149,7 +149,7 @@ export default function ButtonAppBar(props: Props) {
       </div>
     );
   } else if (subscribe === 'error') {
-    window.gtag('event', 'subscribe_error', {
+    if(window.gtag) window.gtag('event', 'subscribe_error', {
       event_category: 'splash',
       non_interaction: false
     });

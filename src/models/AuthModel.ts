@@ -47,9 +47,10 @@ const AuthModel = types
   .actions(self => ({
     guestLogin: function() {
       if (self.doGuestLogin) return;
-      window.gtag('event', 'guest_login_action', {
-        event_category: 'auth'
-      });
+      if (window.gtag)
+        window.gtag('event', 'guest_login_action', {
+          event_category: 'auth'
+        });
 
       self.doGuestLogin = true;
       // self.loggedIn = true;
@@ -59,9 +60,10 @@ const AuthModel = types
     },
     login(loginTo?: string, register: boolean = false) {
       if (!self.doLogin)
-        window.gtag('event', 'login_action', {
-          event_category: 'auth'
-        });
+        if (window.gtag)
+          window.gtag('event', 'login_action', {
+            event_category: 'auth'
+          });
 
       const current = window.location.href;
       localStorage.setItem('loginTo', loginTo || current);
@@ -93,7 +95,8 @@ const AuthModel = types
       } */
     },
     logout(logoutTo?: string) {
-      if (logoutTo) localStorage.setItem('logoutTo', logoutTo); //  || '/about'
+      if (logoutTo) localStorage.setItem('logoutTo', logoutTo);
+      //  || '/about'
       else localStorage.removeItem('logoutTo');
 
       localStorage.removeItem('loginTo');
@@ -117,7 +120,7 @@ const AuthModel = types
 
       // self.didLogin = viaLogin;
       /* if (!self.user)
-        window.gtag('event', 'authenticated', {
+        if(window.gtag) window.gtag('event', 'authenticated', {
           event_category: 'auth'
         });*/
       let seed = localStorage.getItem('guestSeed');

@@ -218,7 +218,7 @@ export default observer(function CAdmin(props: Props) {
     }
     handleReset();
 
-    window.gtag('event', 'conf_admin_splash_' + confid, {
+    if(window.gtag) window.gtag('event', 'conf_admin_splash_' + confid, {
       event_category: 'conf',
       confid: confid
     });

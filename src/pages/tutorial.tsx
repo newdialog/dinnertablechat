@@ -143,7 +143,7 @@ export default function GettingStarted(props: Props) {
   };
 
   const routeToPlay = () => {
-    window.gtag('event', 'completed_tutorial', {
+    if(window.gtag) window.gtag('event', 'completed_tutorial', {
       event_category: 'splash',
       guest: store.isGuest()
     });
@@ -166,7 +166,7 @@ export default function GettingStarted(props: Props) {
     // TODO, do not apply to guests store.isGuest()
     if(localStorage.getItem('tutorialDone')==='y') routeToPlay();
     else {
-      window.gtag('event', 'tutorial_started', {
+      if(window.gtag) window.gtag('event', 'tutorial_started', {
         event_category: 'splash',
         guest: store.isGuest()
       });

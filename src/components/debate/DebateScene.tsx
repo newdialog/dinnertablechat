@@ -50,7 +50,7 @@ export default function DebateScene(props:Props) {
   useEffect(() => {
     gotMedia();
 
-    window.gtag('event', 'debate_start', {
+    if(window.gtag) window.gtag('event', 'debate_start', {
       event_category: 'debate',
       topic: props.store.debate.topic,
       position: props.store.debate.position,

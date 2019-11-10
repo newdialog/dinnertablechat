@@ -182,7 +182,7 @@ export default function PleaseWaitResults(props: Props) {
         // gtag when first time ready
         if (ready !== state.ready && !!ready) {
           window.scrollTo(0, 0);
-          window.gtag('event', 'conf_user_assigned_' + confid, {
+          if(window.gtag) window.gtag('event', 'conf_user_assigned_' + confid, {
             event_category: 'conf',
             non_interaction: false
           });

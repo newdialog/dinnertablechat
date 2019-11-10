@@ -182,7 +182,7 @@ export default observer(function CIndex(props: Props) {
     }
     handleReset();
 
-    window.gtag('event', 'conf_user_splash_' + confid, {
+    if(window.gtag) window.gtag('event', 'conf_user_splash_' + confid, {
       event_category: 'conf',
       confid: confid
     });
@@ -234,7 +234,7 @@ export default observer(function CIndex(props: Props) {
   if (!confid) step = -1;
 
   const onSubmit = (positions: any) => {
-    window.gtag('event', 'conf_user_submit_' + confid, {
+    if(window.gtag) window.gtag('event', 'conf_user_submit_' + confid, {
       event_category: 'conf',
       confid: confid,
       non_interaction: false

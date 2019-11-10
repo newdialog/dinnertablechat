@@ -7,7 +7,8 @@ import './index.css';
 import React from 'react';
 import { hydrate, render } from "react-dom";
 
-if(window) window.Proxy = ProxyPolyfill;
+if(window && !window.Proxy) window.Proxy = ProxyPolyfill;
+
 const {App} = require('./App');
 // Setup History
 

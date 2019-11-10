@@ -18,7 +18,7 @@ class DebateExitDialog extends React.Component<Props, any> {
   };
 
   handleExit = () => {
-    window.gtag('event', 'user_dialog_end', {
+    if(window.gtag) window.gtag('event', 'user_dialog_end', {
       event_category: 'debate'
     });
     this.props.onExit();

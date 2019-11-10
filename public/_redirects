@@ -12,17 +12,20 @@ http://test.debateplatform.org/* https://test.debateplatform.org/:splat 301!
 http://dinnertable.chat/* https://www.dinnertable.chat/:splat 301!
 https://dinnertable.chat/*  https://www.dinnertable.chat/:splat 301!
 
-https://mxop.at/*  https://re.mixopinions.com/:splat 301!
-http://mxop.at/*  https://re.mixopinions.com/:splat 301!
-https://www.mxop.at/*  https://re.mixopinions.com/:splat 301!
-http://www.mxop.at/*  https://re.mixopinions.com/:splat 301!
+https://mxop.at/*  https://app.mixopinions.com/:splat 301!
+http://mxop.at/*  https://app.mixopinions.com/:splat 301!
+https://www.mxop.at/*  https://app.mixopinions.com/:splat 301!
+http://www.mxop.at/*  https://app.mixopinions.com/:splat 301!
 https://www.mxop.at  https://mixopinions.com 301!
 http://www.mxop.at  https://mixopinions.com 301!
 
-https://mixer.newdialog.org/* https://re.mixopinions.com/:splat 301!
-http://mixer.newdialog.org/* https://re.mixopinions.com/:splat 301!
-https://mixer.newdialog.org https://re.mixopinions.com 301!
-http://mixer.newdialog.org https://re.mixopinions.com 301!
+https://mixer.newdialog.org/* https://app.mixopinions.com/:splat 301!
+http://mixer.newdialog.org/* https://app.mixopinions.com/:splat 301!
+https://mixer.newdialog.org https://app.mixopinions.com 301!
+http://mixer.newdialog.org https://app.mixopinions.com 301!
+
+https://re.mixopinions.com https://app.mixopinions.com 301!
+http://re.mixopinions.com https://app.mixopinions.com 301!
 
 /saas q=:q  /r/:q  301!
 /r q=:q  /r/:q  301!

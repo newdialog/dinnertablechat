@@ -179,7 +179,7 @@ export default observer(function DebateHistory(props: Props) {
   useEffect(() => {
     localStorage.removeItem('quickmatch'); // cancel quickmatch if nav here
 
-    window.gtag('event', 'history', {
+    if(window.gtag) window.gtag('event', 'history', {
       event_category: 'splash',
       first: !trackHistoryTrigger,
       guest: props.store.isGuest()

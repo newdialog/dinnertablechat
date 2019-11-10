@@ -107,7 +107,7 @@ const AgreementStep = ({ store }: { store: AppModel.Type }) => (
 );
 
 function track(store: AppModel.Type) {
-  window.gtag('event', 'debate_step_' + step, {
+  if(window.gtag) window.gtag('event', 'debate_step_' + step, {
     event_category: 'debate',
     step,
     topic: store.debate.topic,

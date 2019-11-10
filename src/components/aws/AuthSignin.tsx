@@ -50,7 +50,7 @@ export default observer(function AuthSignin(props: Props) {
 
   useEffect(() => {
     if (refresh || !store.auth.isAuthenticated()) return;
-    window.gtag('event', 'logged_in', {
+    if(window.gtag) window.gtag('event', 'logged_in', {
       event_category: 'auth'
     });
 

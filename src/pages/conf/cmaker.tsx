@@ -202,7 +202,7 @@ export default observer(function CMaker(props: Props) {
   useEffect(() => {
     if (!confid) return;
 
-    window.gtag('event', 'conf_new_splash_' + confid, {
+    if(window.gtag) window.gtag('event', 'conf_new_splash_' + confid, {
       event_category: 'conf',
       confid: confid
     });

@@ -146,7 +146,7 @@ export default function DebateFeedback(props: Props) {
   }
 
   useEffect(() => {
-    window.gtag('event', 'debate_feedback_page', {
+    if(window.gtag) window.gtag('event', 'debate_feedback_page', {
       event_category: 'debate',
       guest: store.isGuest()
     });
@@ -154,7 +154,7 @@ export default function DebateFeedback(props: Props) {
   }, []);
 
   const handleConfirm = async () => {
-    window.gtag('event', 'debate_feedback_page_submit', {
+    if(window.gtag) window.gtag('event', 'debate_feedback_page_submit', {
       event_category: 'debate',
       guest: store.isGuest()
     });
