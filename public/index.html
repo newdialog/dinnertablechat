@@ -53,31 +53,6 @@
         isUnknownBrowserOK: true
 			});
   </script>
-</head>
-
-<body>
-  <noscript>
-    You need to enable JavaScript to run this app.
-  </noscript>
-  <div id="root"></div>
-  <div id="outdated"></div>
-  <!--
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789"/>
-  -->
-  <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/js/animate.min.css"/>
-  
-  <script type='text/javascript'>
-    (function () {
-      if(/test\./.test(window.location.href)) return;
-      else if ( /\/\/dinnertable/.test(window.location.href))
-        window.location.replace(location.href.replace(/(https?:\/\/)[^/]+/,'%REACT_APP_HOST_URL%'));
-      else if (/github/.test(window.location.href) || /netlify/.test(window.location.href))
-        window.location.assign('%REACT_APP_HOST_URL%/');
-    })();
-  </script>
-   <!-- <script async src="/js/pwacompat.209.min.js"></script> -->
-  <script async src="/js/zenscroll-min.js"></script>
 
   <!-- Global DTC site tag (gtag.js) - Google Analytics -->
   <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119131630-1"></script> -->
@@ -86,12 +61,16 @@
 
   <!-- <script async src="js/simplepeer.min.js"></script> -->
   <script>
-    const id = '%REACT_APP_GTAG%'; // 1 = dtc, 4 = mixer
-    console.log('-gid', id);
+    if(!window.gtag) window.gtag = function() {};
+    // window._gtag = gtag;
+
+    var id = '%REACT_APP_GTAG%'; // 1 = dtc, 4 = mixer
+    // console.log('-gid', id);
+    // temporary empty function in case something goes wrong
     
     window.dataLayer = window.dataLayer || [];
 
-    const h = window.location.hostname;
+    var h = window.location.hostname;
     window.isLive = (
         h.indexOf('test') === -1 && // disallow test domain
         // h.indexOf('.dinnertable') === -1 && // allow test domain
@@ -132,7 +111,7 @@
           else Object.assign(document.createElement('a'), { target: '_blank', href: url}).click();
         }
       });
-      setTimeout(()=>{ 
+      setTimeout(function() { 
         if(redirected) return;
         redirected = true;
         if(!newWin) document.location = url;
@@ -145,7 +124,7 @@
     window.trackOutboundLink = trackOutboundLink;
 
     function trackOutboundLinkClick(url, nonInteraction, newWin) {
-      return (e) => {
+      return function(e) {
         e.preventDefault();
         trackOutboundLink(url, nonInteraction, newWin);
         return false;
@@ -155,6 +134,31 @@
 
     window.gtag = gtag;
   </script>
+</head>
+
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root"></div>
+  <div id="outdated"></div>
+  <!--
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789"/>
+  -->
+  <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/js/animate.min.css"/>
+  
+  <script type='text/javascript'>
+    (function () {
+      if(/test\./.test(window.location.href)) return;
+      else if ( /\/\/dinnertable/.test(window.location.href))
+        window.location.replace(location.href.replace(/(https?:\/\/)[^/]+/,'%REACT_APP_HOST_URL%'));
+      else if (/github/.test(window.location.href) || /netlify/.test(window.location.href))
+        window.location.assign('%REACT_APP_HOST_URL%/');
+    })();
+  </script>
+   <!-- <script async src="/js/pwacompat.209.min.js"></script> -->
+  <script async src="/js/zenscroll-min.js"></script>
   <script async src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
     <!--  <script src="https://cdn.jsdelivr.net/npm/producthunt-floating-prompt/lib/producthunt-floating-prompt.min.js"></script> -->
     <!-- start Mixpanel 

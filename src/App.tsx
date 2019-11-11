@@ -44,7 +44,7 @@ export const App = () => {
   catch(e) {
     console.log('possible browser compatibility issue');
     console.error(e);
-    return null;
+    throw new Error(e);
   }
   const { history, store } = initO;
 
