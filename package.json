@@ -14,8 +14,7 @@
   "resolutions": {
     "aws-sdk": "^2.496.0",
     "**/aws-sdk": "^2.496.0",
-    "**/moment": "^2.24.0",
-    "mobx": "^4.15.0"
+    "**/moment": "^2.24.0"
   },
   "dependencies": {
     "@awspilot/dynamodb": "^1.5.0",
@@ -53,14 +52,14 @@
     "material-auto-rotating-carousel": "^3.0.1",
     "material-table": "^1.51.0",
     "md5": "^2.2.1",
-    "mobx": "^4.15.0",
+    "mobx": "^5.15.0",
     "mobx-react-lite": "^1.4.1",
     "mobx-state-tree": "^3.14.1",
     "mst-middlewares": "^3.14.1",
     "mst-react-router": "^2.3.1",
     "prando": "^5.1.1",
     "proxy-polyfill": "^0.3.0",
-    "qrcode.react": "^0.9.3",
+    "qrcode.react": "^1.0.0",
     "react": "^16.10.0",
     "react-add-to-calendar": "^0.1.5",
     "react-app-polyfill": "^1.0.4",

@@ -35,10 +35,24 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
 
-  <!-- <link rel="preload" href="/i18n/en.json" as="fetch">  -->
-  <!--
-    <script src="js/hark.bundle.js"></script>
-  -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default,es6,Array.prototype.includes,Object.values,Object.keys"></script>
+  <link rel="stylesheet" href="/js/outdated-browser-rework.css"/>
+  <script src="/js/outdated-browser-rework.min.js"></script>
+  <script>
+    outdatedBrowserRework({
+				fullscreen: true,
+				browserSupport: {
+					'Chrome': 49,
+					'Edge': 12,
+					'Safari': 10,
+					'Mobile Safari': 10,
+					'Firefox': 18,
+					'Opera': 36,
+					'IE': false
+        },
+        isUnknownBrowserOK: true
+			});
+  </script>
 </head>
 
 <body>
@@ -46,13 +60,12 @@
     You need to enable JavaScript to run this app.
   </noscript>
   <div id="root"></div>
-  <!-- 
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789">
+  <div id="outdated"></div>
+  <!--
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789"/>
   -->
   <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/js/animate.min.css"/>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=default,es6,Array.prototype.includes,Object.values,Object.keys"></script>
   
   <script type='text/javascript'>
     (function () {

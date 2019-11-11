@@ -22,7 +22,7 @@ const AuthWrapper = React.lazy(() => import('./components/aws/AuthWrapper'));
 let _cache: any = null;
 function init() {
   if (_cache) return _cache;
-  const routerModel = (RouterModel as any).create(); // TS Hack
+  const routerModel = RouterModel.create(); // TS Hack
   const history = syncHistoryWithStore(createBrowserHistory(), routerModel);
 
   // Configure MST Store
@@ -36,7 +36,17 @@ function init() {
 }
 
 export const App = () => {
-  const { history, store } = init();
+  let initO: any = null;
+  try {
+    // test for compatibility
+    initO = init();
+  }
+  catch(e) {
+    console.log('possible browser compatibility issue');
+    console.error(e);
+    return null;
+  }
+  const { history, store } = initO;
 
   console.log('v1.3.11');
 
