@@ -134,10 +134,11 @@ export default function WorkerUpdate(props: Props) {
 
     if(!registration) {
       console.error('cant find registration');
-      setTimeout( () => window.location.reload(true), 101);
+      // setTimeout( () => window.location.reload(true), 101);
+      return;
     };
-    if(registration!.waiting) registration!.waiting!.postMessage('skipWaiting');
-    if(registration!.active) registration!.active!.postMessage('skipWaiting');
+    if(registration && registration!.waiting) registration!.waiting!.postMessage('skipWaiting');
+    if(registration && registration!.active) registration!.active!.postMessage('skipWaiting');
     
     console.log('worker update click');
   }
