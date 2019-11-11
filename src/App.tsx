@@ -29,8 +29,10 @@ function init() {
   const fetcher = url => window.fetch(url).then(response => response.json());
   const store = AppModel.create(routerModel, fetcher);
 
-  // if(!store.isLive)
-  connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting, prob bundled anyway
+  if(!store.isLive) {
+    connectReduxDevtools(require('remotedev'), store); // enable to troubleshooting, prob bundled anyway
+    console.log('dev mode');
+  }
 
   return (_cache = { history, store });
 }

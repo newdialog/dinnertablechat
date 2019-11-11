@@ -8,7 +8,9 @@ import ConfModel from './ConfModel';
 
 function isLive() {
   const h = window.location.hostname;
-  const live = h.indexOf('test') === -1 && h.indexOf('dinnertable.chat') !== -1;
+  const onDomain =
+    h.indexOf('dinnertable.chat') !== -1 || h.indexOf('mixopinions.com') !== -1;
+  const live = h.indexOf('test') === -1 && onDomain;
   return live;
 }
 
@@ -23,7 +25,7 @@ const AppModel = types
     dailyOpen: false, // only use for invalidation
     micAllowed: false,
     isSaas: false,
-    isLive: isLive(),
+    isLive: isLive()
   })
   .views(self => ({
     /* isDailyOpen() {
@@ -51,18 +53,20 @@ const AppModel = types
       return !this.isGuest();
     },
     getRoot() {
-      if( !!window.location.href.match('/c/') ) return '/c';
+      if (!!window.location.href.match('/c/')) return '/c';
       else return '/';
     },
     isAdmin() {
       return self.auth.isAdmin();
     },
     isMixer() {
-      return (self as any).isMixerProd() ||
-        !!window.location.href.match('/c/');
+      return (self as any).isMixerProd() || !!window.location.href.match('/c/');
     },
     isMixerProd() {
-      return !!window.location.hostname.match('mixopinions.com') || !!window.location.hostname.match('mxop.at');
+      return (
+        !!window.location.hostname.match('mixopinions.com') ||
+        !!window.location.hostname.match('mxop.at')
+      );
     },
     isStandalone() {
       if (self._isStandalone) return true;
