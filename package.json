@@ -35,7 +35,6 @@
     "async-retry": "^1.2.3",
     "aws-sdk": "^2.496.0",
     "backoff-rxjs": "^6.3.2",
-    "bowser": "^2.7.0",
     "eslint-plugin-prettier": "^3.1.0",
     "formik": "^2.0.1-rc.13",
     "hark": "^1.2.3",

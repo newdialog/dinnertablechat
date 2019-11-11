@@ -6,21 +6,18 @@ import ProxyPolyfill from 'proxy-polyfill/src/proxy';
 import './index.css';
 import React from 'react';
 import { hydrate, render } from "react-dom";
-// import * as Bowser from "bowser"; 
 
 if(window && !window.Proxy) window.Proxy = ProxyPolyfill;
 
 // error tracking
 window.onerror = function (msg, url, lineNo, columnNo) {
   console.log('logging error', msg);
-  // const browser = Bowser.getParser(window.navigator.userAgent);
 
   const _msg = {
     'msg': msg,
     'url': url,
     'lin': lineNo,
     'col': columnNo
-    // 'browser': browser.getBrowser().name + ':' + browser.getBrowser().version
   };
 
   if(window.gtag) window.gtag('event', 'exception', {

@@ -213,7 +213,7 @@ export default function HomeContent() {
       <div className={classes.centered2}>
         <Grid container spacing={3} className={classes.container}>
           <Grid item xs={12} md={12} style={{ paddingBottom: '0' }}>
-            <div className="paperimg" id="intro" style={{marginTop:'-58px', paddingTop: '90px'}}>
+            <div className="paperimg" id="intro" style={{marginTop:'-58px', paddingTop: '90px', pointerEvents:'none' }}>
               <WaypointLottie options={logoOptions}/>
             </div>
           </Grid>
