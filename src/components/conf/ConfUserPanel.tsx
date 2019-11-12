@@ -109,6 +109,7 @@ function showGroup(groupId: any, confid: string, t: any) {
   return test;
 }
 
+let assignedTag = false;
 export default function PleaseWaitResults(props: Props) {
   const store = props.store;
   const classes = useStyles({});
@@ -162,15 +163,16 @@ export default function PleaseWaitResults(props: Props) {
     const ready = _data.ready;
 
     // const resetOnUnReady = !ready && state.ready === true; // already being accounted for
+    // Version changed Flag
     const resetFlag = _data.version !== state.version && state.version > -1;
 
+    // Version changed
     if (resetFlag) {
       setState(p => ({ ...p, data: [], ready: false, version: -1 }));
       props.handleReset();
       return;
     }
 
-    // console.log('onRefresh result', result);
     let myGroup: any = null;
 
     if (ready) {
@@ -180,25 +182,26 @@ export default function PleaseWaitResults(props: Props) {
       if (myGroup) {
         console.log('myGroup', myGroup);
         // gtag when first time ready
-        if (ready !== state.ready && !!ready) {
+        if (ready !== state.ready && ready) {
           window.scrollTo(0, 0);
-          if(window.gtag) window.gtag('event', 'conf_user_assigned_' + confid, {
+          
+          if(window.gtag && !assignedTag) window.gtag('event', 'conf_user_assigned_' + confid, {
             event_category: 'conf',
             non_interaction: false
           });
+          assignedTag = true;
         }
       } else console.log('user not in the group');
 
       // if (myGroup !== null) setState(p => ({ ...p, myGroup }));
     }
-
-    if(state.version > -1 && state.version !== _data.version) props.handleReset(true);
     
+    // If ready changed or group changed
     if (state.ready !== ready || myGroup !== state.myGroup) {
+      if(!ready) assignedTag = false;
       setState(p => ({ ...p, data: result, ready, myGroup, version }));
       // props.handleReset(true);
     }
-    // console.log('r', JSON.stringify(result));
   };
 
   const inFocus = useFocus(null, true, _inFocus => {
