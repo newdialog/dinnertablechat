@@ -12,6 +12,7 @@
   },
   "lambda": {
     "memory": 256,
+    "runtime": "nodejs10.x",
     "policy": [
       {
         "Condition": {"ArnLike":{"AWS:SourceArn":"arn:aws:sns:us-east-1:681274315116:match-sns"}},

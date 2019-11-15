@@ -3,6 +3,7 @@
   "profile": "dinnertable",
   "regions": ["us-east-1"],
   "lambda": {
+    "runtime": "nodejs10.x",
     "memory": 128
   },
   "stages": {

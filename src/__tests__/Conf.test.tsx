@@ -58,6 +58,7 @@ const TEST_DATA = [
   { user: '999', answers: { '1': 1, '2': 1 } }
 ];
 
+/*
 beforeAll(async () => {
   // Authenticate
   configure();
@@ -70,16 +71,17 @@ beforeAll(async () => {
     // console.log('authed?', x);
   });
 }, 5000);
+*/
 
 afterAll(() => {});
 
 it('add_users_to_db', async () => {
     const TABLE = 'pub1';
-  // let r = genRandomResponses(TABLE, 5, 400);
+    let r = genRandomResponses(TABLE, 5, 400);
 
   // await submitAll(r, TABLE);
 
-  // console.log('submitAll done')
+  console.log('submitAll done',r  )
   // delAll(TEST_CONF_ID);
 }, 4000);
 
@@ -104,5 +106,5 @@ it('matches', async () => {
   expect(userKeys).toContain('999');
   expect(userKeys.length === TEST_DATA.length);
 
-  // console.log('result', result, Object.keys(result).length );
+  console.log('result', result, Object.keys(result).length );
 }, 4000);

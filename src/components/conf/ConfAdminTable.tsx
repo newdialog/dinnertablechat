@@ -14,7 +14,7 @@ import { ConfIdRow } from 'services/ConfService';
 const useStyles = makeStyles(theme => ({
   root: {
     width: '100%',
-    maxHeight: 300,
+    // maxHeight: 300,
     overflow: 'auto',
     paddingRight: '4px'
   },

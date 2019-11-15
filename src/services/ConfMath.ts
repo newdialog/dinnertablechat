@@ -1,5 +1,7 @@
 import kmpp from 'kmpp';
 import { UserRow, UserRows } from './ConfService';
+// import { distance } from 'mathjs';
+const distance = require('euclidean-distance');
 
 interface Person {
   index: number;
@@ -53,33 +55,69 @@ function diversify(
 
   const rotateModBy = minGroupUserPairs * 2;
 
-  // console.log('groups len', groups, len);
-
+  // Origin group is clustered, and we're trying to diversify them.
+  // Pull out a user from each source group and assign to target group
+  let emptyGroups = 0;
   while (l > 0) {
-    // Origin group is clustered, and we're trying to diversify them
+    // Pull out a user from source group.
     let pnt = groups[rb].pop();
-    // console.log('pnt', pnt, rb);
-    // break;
+
     // If no point in this group, go to another group
     if (!pnt) {
+      // only when group is exhauted, don't combine below
+      // safety from inf loop
+      if (groups[rb].length === 0) emptyGroups++;
+      if (emptyGroups === k) break;
+
       rb = ++rb % k;
       continue;
     }
 
-    // if taget group doesnt exist, create it
+    // if target group doesnt exist, create it
     if (!dgroups[rb2]) dgroups[rb2] = [];
     // Add pnt to group
     dgroups[rb2] = dgroups[rb2].concat([pnt]);
+
+    // If curent target has X mod users, change the target group to next group
     // If target group pnter is even, increament the point. This will 'wait' to get two points from two different origin cycles.
     if (dgroups[rb2].length % rotateModBy === 0) rb2 = ++rb2 % tables;
     // Move onto next point
     --l;
+
     // Move onto next origin group
-    rb = ++rb % k;
+    // rb = ++rb % k;
+    // No, find next farthest member
+
+    // IS THIS GROUP EVEN VALID AFTER FILTER
+
+    const nextIndex = groups
+      // .filter(g => g.length > 0)
+      .map(x => (x.length > 0 ? x[x.length - 1] : undefined)) // get last element
+      // .filter(x => !!x) // node is valid
+      .map(x => {
+        if (!x || !x.answers) return undefined;
+        const a1 = x.answers.length < 2 ? x.answers.concat([0]) : x.answers;
+        const a2 =
+          pnt!.answers.length < 2 ? pnt!.answers.concat([0]) : pnt!.answers;
+        // console.log('a1', a1, a2);
+        const dist = !!x ? distance(a1, a2) : undefined;
+        // console.log('dist', dist);
+        return dist;
+      })
+      .reduce(
+        (acc: number[], x: number, i: number) => (x > acc[1] ? [i, x] : acc),
+        [-1, -100]
+      )[0];
+
+    console.log('nextIndex', rb, nextIndex);
+
+    // use nextIndex unless no pick was found, then roundrobin
+    rb = nextIndex !== -1 ? nextIndex : ++rb % k;
   }
 
   // If there's only one or less groups, just end
-  if (groups.length < 2) return dgroups;
+  // Hrmm, already checked at top of dunc
+  // if (groups.length < 2) return dgroups;
 
   // remove single person groups
   // const removeSingleUserGroups: Groups = [];
@@ -88,8 +126,11 @@ function diversify(
       dgroups[i] = [];
       continue; // group is empty
     }
-    if (dgroups[i].length === 1 && i !== 0) {
-      dgroups[i - 1].push(dgroups[i].pop()!);
+    if (dgroups[i].length < rotateModBy && i !== 0) {
+      // Add all members from smaller group to last group
+      dgroups[i - 1] = dgroups[i - 1].concat(dgroups[i]);
+      dgroups[i] = [];
+      // dgroups[i - 1].push(dgroups[i].pop()!);
     }
   }
 
