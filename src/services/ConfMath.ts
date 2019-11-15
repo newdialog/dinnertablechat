@@ -126,7 +126,8 @@ function diversify(
       dgroups[i] = [];
       continue; // group is empty
     }
-    if (dgroups[i].length < rotateModBy && i !== 0) {
+    // 2 or less get merged to last group
+    if (dgroups[i].length < 3 && i !== 0) {
       // Add all members from smaller group to last group
       dgroups[i - 1] = dgroups[i - 1].concat(dgroups[i]);
       dgroups[i] = [];
