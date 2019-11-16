@@ -243,7 +243,7 @@ export default observer(function CIndex(props: Props) {
     store.conf.setPosition(positions);
   };
 
-  const onFirstInteraction = (positions: any) => {
+  const onFirstInteraction = () => {
     if(window.gtag) window.gtag('event', 'conf_user_interact', {
       event_category: 'conf',
       event_label: confid,
@@ -292,6 +292,7 @@ export default observer(function CIndex(props: Props) {
             <Reveal effect="fadeInUp" duration={2200}>
               <PositionSelector
                 onSubmit={onSubmit}
+                onFirstInteraction={onFirstInteraction}
                 data={state.questions}
                 id={confid}
                 store={store}
