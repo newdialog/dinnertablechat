@@ -230,6 +230,12 @@ export default function ConfAdminPanel(props: Props) {
 
     onRefresh();
     resetChecks();
+
+    if(window.gtag) window.gtag('event', 'conf_admin_deleteAll', {
+      event_category: 'conf',
+      event_label: confid,
+      non_interaction: false
+    });
   };
 
   React.useEffect(() => {
@@ -243,6 +249,12 @@ export default function ConfAdminPanel(props: Props) {
 
     // checkReady();
     onRefresh();
+
+    if(window.gtag) window.gtag('event', 'conf_admin_assignment', {
+      event_category: 'conf',
+      event_label: confid,
+      non_interaction: false
+    });
   };
 
   const vprops = {

@@ -218,18 +218,19 @@ export default observer(function CAdmin(props: Props) {
     }
     handleReset();
 
-    if(window.gtag) window.gtag('event', 'conf_admin_splash_' + confid, {
+    if(window.gtag) window.gtag('event', 'conf_admin_splash', {
       event_category: 'conf',
-      confid: confid
+      event_label: confid,
+      non_interaction: true
     });
   }, []);
 
   const handleReset = () => {
     if (store.conf.positions) {
       store.conf.resetQueue();
-      window.gtag('event', 'conf_admin_reset_' + confid, {
+      if(window.gtag) window.gtag('event', 'conf_admin_reset', {
         event_category: 'conf',
-        confid: confid,
+        event_label: confid,
         non_interaction: false
       });
     }

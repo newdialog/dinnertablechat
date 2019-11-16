@@ -70,13 +70,14 @@ interface Props {
   prefix?: string;
   data?: any[];
   onSubmit: (selected:any) => void;
+  onFirstInteraction?: ()=>void;
 }
 
 export default function SPositionSelector(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
-  const [state, setState] = React.useState<any>({ready:false, selected: {}, submitted: false});
+  const [state, setState] = React.useState<any>({ready:false, selected: {}, submitted: false, firstSelection: false});
 
   const data: TopicInfo.Card[] = React.useMemo(
     () => props.data ? props.data : TopicInfo.getOtherTopics(props.id, t, props.prefix),
@@ -87,7 +88,11 @@ export default function SPositionSelector(props: Props) {
 
   const onSelect = (position: number, card: TopicInfo.Card) => {
     if(state.submitted) return;
-    setState(x=>({...x, selected: {...x.selected, [card.id]: position } }));
+    
+    if(!state.firstSelection) {
+      if(props.onFirstInteraction) props.onFirstInteraction();
+    }
+    setState(x=>({...x, firstSelection: true, selected: {...x.selected, [card.id]: position } }));
   };
 
   React.useEffect(()=>{

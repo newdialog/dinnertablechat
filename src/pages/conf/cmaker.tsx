@@ -202,9 +202,10 @@ export default observer(function CMaker(props: Props) {
   useEffect(() => {
     if (!confid) return;
 
-    if(window.gtag) window.gtag('event', 'conf_new_splash_' + confid, {
+    if(window.gtag) window.gtag('event', 'conf_new_splash', {
       event_category: 'conf',
-      confid: confid
+      event_label: confid,
+      non_interaction: true
     });
   }, [confid]);
 

@@ -182,9 +182,10 @@ export default observer(function CIndex(props: Props) {
     }
     handleReset();
 
-    if(window.gtag) window.gtag('event', 'conf_user_splash_' + confid, {
+    if(window.gtag) window.gtag('event', 'conf_user_splash', {
       event_category: 'conf',
-      confid: confid
+      event_label: confid,
+      non_interaction: true
     });
   }, []);
 
@@ -234,12 +235,20 @@ export default observer(function CIndex(props: Props) {
   if (!confid) step = -1;
 
   const onSubmit = (positions: any) => {
-    if(window.gtag) window.gtag('event', 'conf_user_submit_' + confid, {
+    if(window.gtag) window.gtag('event', 'conf_user_submit', {
       event_category: 'conf',
-      confid: confid,
+      event_label: confid,
       non_interaction: false
     });
     store.conf.setPosition(positions);
+  };
+
+  const onFirstInteraction = (positions: any) => {
+    if(window.gtag) window.gtag('event', 'conf_user_interact', {
+      event_category: 'conf',
+      event_label: confid,
+      non_interaction: false
+    });
   };
 
   return (

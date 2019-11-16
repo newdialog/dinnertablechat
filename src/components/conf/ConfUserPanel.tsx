@@ -156,7 +156,7 @@ export default function PleaseWaitResults(props: Props) {
     const _data = await getResults(confid);
     if (!_data) throw new Error('cannot find results');
 
-    console.log('data', _data);
+    // console.log('data', _data);
     const result = _data.results || [];
     const version = _data.version;
 
@@ -176,19 +176,22 @@ export default function PleaseWaitResults(props: Props) {
     let myGroup: any = null;
 
     if (ready) {
-      console.log('store.auth.user!.id', user);
+      // console.log('store.auth.user!.id', user);
       myGroup = findMyGroup(user, result);
 
       if (myGroup) {
-        console.log('myGroup', myGroup);
+        // console.log('myGroup', myGroup);
         // gtag when first time ready
         if (ready !== state.ready && ready) {
           window.scrollTo(0, 0);
           
-          if(window.gtag && !assignedTag) window.gtag('event', 'conf_user_assigned_' + confid, {
-            event_category: 'conf',
-            non_interaction: false
-          });
+          if(!assignedTag) {
+            if(window.gtag) window.gtag('event', 'conf_user_assigned', {
+              event_category: 'conf',
+              event_label: confid,
+              non_interaction: false
+            });
+          }
           assignedTag = true;
         }
       } else console.log('user not in the group');
