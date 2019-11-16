@@ -1,6 +1,5 @@
 import kmpp from 'kmpp';
 import { UserRow, UserRows } from './ConfService';
-// import { distance } from 'mathjs';
 const distance = require('euclidean-distance');
 
 interface Person {
@@ -57,7 +56,7 @@ function diversify(
 
   // Origin group is clustered, and we're trying to diversify them.
   // Pull out a user from each source group and assign to target group
-  let emptyGroups = 0;
+  // let emptyGroups = 0;
   while (l > 0) {
     // Pull out a user from source group.
     let pnt = groups[rb].pop();
@@ -66,8 +65,9 @@ function diversify(
     if (!pnt) {
       // only when group is exhauted, don't combine below
       // safety from inf loop
-      if (groups[rb].length === 0) emptyGroups++;
-      if (emptyGroups === k) break;
+      // if (groups[rb].length === 0) emptyGroups++;
+      // if (emptyGroups === k) break;
+      if (groups.find(g => g.length > 0) === undefined) break;
 
       rb = ++rb % k;
       continue;
@@ -77,42 +77,72 @@ function diversify(
     if (!dgroups[rb2]) dgroups[rb2] = [];
     // Add pnt to group
     dgroups[rb2] = dgroups[rb2].concat([pnt]);
-
+    --l;
     // If curent target has X mod users, change the target group to next group
     // If target group pnter is even, increament the point. This will 'wait' to get two points from two different origin cycles.
-    if (dgroups[rb2].length % rotateModBy === 0) rb2 = ++rb2 % tables;
+    if (dgroups[rb2].length % rotateModBy === 0) {
+      // move target group
+      rb2 = ++rb2 % tables;
+
+      // Move source group
+      /// Doing this causes bug!!
+      /// rb = ++rb % k;
+      /// continue;
+    }
+
     // Move onto next point
-    --l;
+    // find next farthest member
+    const sourcePointAnswers =
+      pnt!.answers.length < 2 ? pnt!.answers.concat([0]) : pnt!.answers;
 
-    // Move onto next origin group
-    // rb = ++rb % k;
-    // No, find next farthest member
+    const distToGroupMember = groups
+      // record index for to preserve post filters
+      .map((xs, i) => ({ xs, i }))
+      // remove groups that are same index as current group inspected
+      .filter(x => x.i !== rb)
+      // get last element or ignore group
+      .filter(x => x.xs.length > 0)
+      .map(x => ({ x: x.xs[x.xs.length - 1], gi: x.i }))
+      // map to distance from origin point
+      .map(lastGroupItem => {
+        // if (!x.answers) return undefined;
 
-    // IS THIS GROUP EVEN VALID AFTER FILTER
+        // make sure a minimum for two dim for the Distance lib
+        const lastGroupItemAns = lastGroupItem.x.answers;
+        const a1 =
+          lastGroupItemAns.length < 2
+            ? lastGroupItemAns.concat([0])
+            : lastGroupItemAns;
 
-    const nextIndex = groups
-      // .filter(g => g.length > 0)
-      .map(x => (x.length > 0 ? x[x.length - 1] : undefined)) // get last element
-      // .filter(x => !!x) // node is valid
-      .map(x => {
-        if (!x || !x.answers) return undefined;
-        const a1 = x.answers.length < 2 ? x.answers.concat([0]) : x.answers;
-        const a2 =
-          pnt!.answers.length < 2 ? pnt!.answers.concat([0]) : pnt!.answers;
         // console.log('a1', a1, a2);
-        const dist = !!x ? distance(a1, a2) : undefined;
+        const dist = distance(a1, sourcePointAnswers);
         // console.log('dist', dist);
-        return dist;
-      })
+        return { x: dist, i: lastGroupItem.gi };
+      });
+
+    // sort descending
+    const distToGroupMemberSorted = distToGroupMember.sort((a, b) => b.x - a.x);
+
+    // Get mid point group to choose from (dont exhaust the extremes)
+    const m = Math.floor(distToGroupMemberSorted.length / 2);
+    // console.log('distToGroupMemberSorted', distToGroupMemberSorted);
+
+    // get middle group index
+    const r = distToGroupMemberSorted[m];
+
+    // console.log('r', rb, m, r);
+
+    // use ideal index, otherwise roundrobin
+    rb = !!r ? r.i : ++rb % k;
+
+    /*  const nextIndex = aa
       .reduce(
         (acc: number[], x: number, i: number) => (x > acc[1] ? [i, x] : acc),
         [-1, -100]
-      )[0];
-
-    console.log('nextIndex', rb, nextIndex);
+      )[0];*/
 
     // use nextIndex unless no pick was found, then roundrobin
-    rb = nextIndex !== -1 ? nextIndex : ++rb % k;
+    // rb = nextIndex !== -1 ? nextIndex : ++rb % k;
   }
 
   // If there's only one or less groups, just end
