@@ -185,7 +185,7 @@ export default observer(function CIndex(props: Props) {
     if(window.gtag) window.gtag('event', 'conf_user_splash', {
       event_category: 'conf',
       event_label: confid,
-      non_interaction: true
+      non_interaction: false // not recorded in realtime if true?
     });
   }, []);
 
