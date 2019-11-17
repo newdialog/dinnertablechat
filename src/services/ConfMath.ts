@@ -1,3 +1,4 @@
+/* eslint no-loop-func: "off" */
 import kmpp from 'kmpp';
 import { UserRow, UserRows } from './ConfService';
 const distance = require('euclidean-distance');
