@@ -1,7 +1,7 @@
 import DynamodbFactory from '@awspilot/dynamodb';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 import { defer, interval } from 'rxjs';
-import { filter, flatMap, take } from 'rxjs/operators';
+import { filter, flatMap, take, catchError } from 'rxjs/operators';
 
 import { refreshCredentials } from './AuthService';
 
@@ -19,6 +19,11 @@ const TABLE_USERS = 'conf-users';
 const TABLE_ID = 'conf_id';
 const f = x => x && !!x.identityId;
 
+// Error reporting
+/*
+
+*/
+
 export async function init() {
   if (docClient) {
     // just make sure we're still logged in
@@ -27,18 +32,28 @@ export async function init() {
   }
 
   // console.log('db: waiting on init');
-  let cr = await interval(1000)
+  let cr = await interval(3000)
     .pipe(flatMap(_ => defer(() => refreshCredentials())))
-    .pipe(
-      filter(f),
-      take(1)
-    )
+    .pipe(filter(f), take(1))
     .toPromise();
 
   // console.log('db: init completed');
   if (docClient) return docClient; // already set
 
   docClient = DynamodbFactory(new DynamoDB({ credentials: cr })); // await refreshCredentials()));
+
+  docClient.on('error', function(operation, error, payload) {
+    const err = { operation, error, payload };
+    console.error('dynerr', err);
+
+    if (window.gtag)
+      window.gtag('event', 'exception', {
+        description: JSON.stringify(err),
+        fatal: true
+      });
+    // you could use this to log call fails to LogWatch or
+    // insert into SQS and process it later
+  });
 
   docClient.schema([
     {
@@ -118,12 +133,15 @@ export async function submit(
 ) {
   await init();
 
+  // debugging
+  // await new Promise(r => setTimeout(r, 5000));
+
   // if (!user) user = identityId;
   const updated = Math.floor(Date.now() / 1000);
 
   // console.log('submit user', user, conf, positions);
 
-  return docClient
+  const result = docClient
     .table(TABLE_USERS)
     .return(docClient.UPDATED_OLD)
     .insert_or_update({
@@ -132,7 +150,16 @@ export async function submit(
       answers: positions,
       version,
       updated
+    })
+    .catch(async e => {
+      if (e.toString().indexOf('NetworkingError') === -1) catchError(e);
+      // console.error('err', e);
+      console.warn('retrying');
+      await new Promise(r => setTimeout(r, 5000));
+      return submit(positions, conf, user, version);
     });
+
+  return result;
 }
 
 export async function submitSeats(
@@ -353,7 +380,7 @@ function errCatch(e: any) {
     window.location.reload();
     return undefined;
   } else {
-    window.alert('error: ' + e);
+    window.alert(e);
     window.location.reload();
   }
 }
