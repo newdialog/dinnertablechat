@@ -53,6 +53,8 @@ function diversify(
   // Target diversified group to drop to
   let rb2 = 0;
 
+  console.log('minGroupUserPairs', minGroupUserPairs, k, tables);
+
   const rotateModBy = minGroupUserPairs * 2;
 
   // Origin group is clustered, and we're trying to diversify them.
@@ -157,8 +159,8 @@ function diversify(
       dgroups[i] = [];
       continue; // group is empty
     }
-    // 2 or less get merged to last group
-    if (dgroups[i].length < 3 && i !== 0) {
+    // Less than 2 get merged to last group
+    if (dgroups[i].length < 2 && i !== 0) {
       // Add all members from smaller group to last group
       dgroups[i - 1] = dgroups[i - 1].concat(dgroups[i]);
       dgroups[i] = [];

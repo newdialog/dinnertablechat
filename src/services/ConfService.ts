@@ -28,8 +28,8 @@ export async function init() {
     .toPromise();
 
   if (cred.refreshed === undefined) throw new Error('refreshed prop not found');
-  else if (docClient && cred.refreshed === true) {
-    console.warn('recycle db');
+  else if (docClient && cred.refreshed === false) {
+    // console.warn('recycle db');
     return docClient;
   }
 
@@ -213,7 +213,7 @@ export async function getAll(
       const filterOut =
         byVersion > -1
           ? x.filter(y => {
-              console.log(y.version === byVersion, y.version, byVersion);
+              // console.log(y.version === byVersion, y.version, byVersion);
               // if (y.version === null || y.version === undefined) return true; // for older entries // take it out as it messes up existing conf after all
               return y.version === byVersion;
             })
