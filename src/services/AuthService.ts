@@ -161,8 +161,20 @@ export interface AwsAuth {
 
 const REGION = 'us-east-1';
 
-// let cacheCred: any = null;
-export async function refreshCredentials(): Promise<any> {
+// reuse last call
+type Creds = { expired: boolean; refreshed: boolean } | any;
+let credRefresh: Promise<any> | null;
+let lastCred: Creds;
+
+export async function refreshCredentials(): Promise<Creds> {
+  if (lastCred && lastCred.expired === false) {
+    return Promise.resolve(lastCred).then((x: Creds) => {
+      x.refreshed = false;
+      return x;
+    });
+  }
+  // if(credRefresh) return credRefresh;
+  // else credRefresh = new Promise()
   // ICredentials |
   // if (cacheCred) return cacheCred;
   // wait while another call is configuring
@@ -174,43 +186,59 @@ export async function refreshCredentials(): Promise<any> {
   */
   // cacheCred = { flag: false };
 
-  const currentCredentials = await Auth.currentUserCredentials();
-  // console.log('currentCredentials', currentCredentials);
-  // const currentCredentials2 = await Auth.currentCredentials();
-  // console.log('currentCredentials2', currentCredentials2);
+  if (credRefresh) return credRefresh;
 
-  const cr = currentCredentials as any;
-  if (!cr) throw new Error('not logged in');
-  cr.region = REGION;
-  /* const credentials = (cacheCred = Auth.essentialCredentials(
+  return (credRefresh = Auth.currentUserCredentials().then(
+    currentCredentials => {
+      // const currentCredentials = await credRefresh;
+      credRefresh = null;
+      // console.log('currentCredentials', currentCredentials);
+      // const currentCredentials2 = await Auth.currentCredentials();
+      // console.log('currentCredentials2', currentCredentials2);
+
+      const cr = currentCredentials as any;
+      if (!cr) throw new Error('not logged in');
+      cr.region = REGION;
+      /* const credentials = (cacheCred = Auth.essentialCredentials(
     currentCredentials
   )); */
 
-  // console.log(cr);
-  const params = cr.webIdentityCredentials ? cr.webIdentityCredentials.params : null;
+      // console.log(cr);
+      const params = cr.webIdentityCredentials
+        ? cr.webIdentityCredentials.params
+        : null;
 
-  if (!params) {
-    // console.log('cr', cr);
-    throw new Error('no cred: ' + cr);
-  }
+      if (!params) {
+        // console.log('cr', cr);
+        throw new Error('no cred: ' + cr);
+      }
 
-  if (!cr._identityId && params && params.IdentityId)
-    cr._identityId = params.IdentityId;
+      if (!cr._identityId && params && params.IdentityId)
+        cr._identityId = params.IdentityId;
 
-  if (!cr.identityId && params && params.IdentityId)
-    cr.identityId = params.IdentityId;
+      if (!cr.identityId && params && params.IdentityId)
+        cr.identityId = params.IdentityId;
 
-  // console.log('currentCredentials', params);
+      // console.log('currentCredentials', params);
 
-  if (cr.webIdentityCredentials) {
-    AWS.config.credentials = cr; //new AWS.CognitoIdentityCredentials(params);
-  }
-  /* AWS.config.update({
+      if (cr.webIdentityCredentials) {
+        AWS.config.credentials = cr; //new AWS.CognitoIdentityCredentials(params);
+      }
+      /* AWS.config.update({
     credentials: new AWS.Credentials(credentials)
   });*/
-  // console.log('refreshCredentials', credentials);
+      // console.log('refreshCredentials', credentials);
 
-  return currentCredentials;
+      lastCred = currentCredentials as Creds;
+
+      lastCred.refreshed = true;
+      if (lastCred.expired === undefined)
+        throw new Error(
+          'no expired prop on cred: ' + JSON.stringify(currentCredentials)
+        );
+      return currentCredentials;
+    }
+  ));
 }
 
 // const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -221,7 +249,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
   let cr: any = null;
   // cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
-    cr = await Auth.currentUserCredentials();
+    cr = await refreshCredentials(); //Auth.currentUserCredentials();
   } catch (e) {
     console.log('-currentUserCredentials', e);
   }
@@ -317,11 +345,14 @@ export function logout() {
   // {global: true}
   return Auth.signOut({ global: false })
     .then(x => {
-      console.log('logout', x)
+      // remove auth tokens
+      lastCred = null;
+      credRefresh = null;
+      console.log('logout', x);
       return x;
     })
     .catch((err: any) => {
-      console.log('Error logging out: ' + err)
+      console.log('Error logging out: ' + err);
       return null;
     });
 }

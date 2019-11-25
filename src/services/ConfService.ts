@@ -1,7 +1,7 @@
 import DynamodbFactory from '@awspilot/dynamodb';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
-import { defer, interval } from 'rxjs';
-import { filter, flatMap, take, catchError } from 'rxjs/operators';
+import { defer, interval, merge, of } from 'rxjs';
+import { filter, flatMap, take, catchError, startWith } from 'rxjs/operators';
 
 import { refreshCredentials } from './AuthService';
 
@@ -17,30 +17,26 @@ export type UserRows = Array<UserRow>;
 let docClient: any; // DynamoDB.DocumentClient;
 const TABLE_USERS = 'conf-users';
 const TABLE_ID = 'conf_id';
-const f = x => x && !!x.identityId;
-
-// Error reporting
-/*
-
-*/
+const filterValid = filter((x: any) => x && !!x.identityId);
 
 export async function init() {
-  if (docClient) {
-    // just make sure we're still logged in
-    await refreshCredentials().catch(errCatch);
+  // console.log('db: waiting on init');
+  const cred = await interval(3000)
+    .pipe(startWith(0))
+    .pipe(flatMap(_ => defer(() => refreshCredentials())))
+    .pipe(filterValid, take(1))
+    .toPromise();
+
+  if (cred.refreshed === undefined) throw new Error('refreshed prop not found');
+  else if (docClient && cred.refreshed === true) {
+    console.warn('recycle db');
     return docClient;
   }
 
-  // console.log('db: waiting on init');
-  let cr = await interval(3000)
-    .pipe(flatMap(_ => defer(() => refreshCredentials())))
-    .pipe(filter(f), take(1))
-    .toPromise();
+  console.log('db: init completed', cred);
+  // if (docClient) return docClient; // already set
 
-  // console.log('db: init completed');
-  if (docClient) return docClient; // already set
-
-  docClient = DynamodbFactory(new DynamoDB({ credentials: cr })); // await refreshCredentials()));
+  docClient = DynamodbFactory(new DynamoDB({ credentials: cred })); // await refreshCredentials()));
 
   docClient.on('error', function(operation, error, payload) {
     const err = { operation, error, payload };
@@ -217,6 +213,7 @@ export async function getAll(
       const filterOut =
         byVersion > -1
           ? x.filter(y => {
+              console.log(y.version === byVersion, y.version, byVersion);
               // if (y.version === null || y.version === undefined) return true; // for older entries // take it out as it messes up existing conf after all
               return y.version === byVersion;
             })
