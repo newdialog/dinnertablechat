@@ -100,8 +100,6 @@ function showGroup(groupId: any, confid: string, t: any) {
   // let groupId = -1;
   // if (state.myGroup) groupId = state.myGroup.gid;
 
-  console.log('groupId', groupId);
-
   const groupName = TopicInfo.getGroupByIndex(confid, groupId, t); // cant
 
   const msg = groupName;

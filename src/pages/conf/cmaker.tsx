@@ -195,7 +195,7 @@ export default observer(function CMaker(props: Props) {
 
   // Ensure use is not unregistered guest
   useEffect(() => {
-    if (store.isGuest()) store.login(store.getRoot());
+    if (store.isGuest()) store.login(); // store.getRoot()
   }, [store.auth.user, store.isGuest()]);
 
   // TODO cleanup
@@ -244,19 +244,24 @@ export default observer(function CMaker(props: Props) {
     });
   }, [state.confid, store.auth.user, user, state.updater]);
 
-  if (store.auth.isNotLoggedIn) {
-    store.auth.login();
-    return (
-      <div className={classes.pagebody}>
-        <h3>Authorizing...</h3>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (store.auth.isNotLoggedIn) {
+      store.auth.login(window.location.href);
+    }
+}, [store.auth]);
+
+if (store.auth.isNotLoggedIn) {
+  return (
+    <div className={classes.pagebody}>
+      <h3>Authorizing...</h3>
+    </div>
+  );
+}
 
   const onEdit = (conf: string | null) => {
     const l = window.location.href;
     // const i = l.indexOf('admin');
-    const prefix = l.includes('/c/') ? '/c/' : '/';
+    const prefix = store.getRoot();
 
     if (conf !== null) {
       if (conf === '') conf = 'new';

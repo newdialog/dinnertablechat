@@ -106,7 +106,7 @@ export default (props: Props) => {
 
   // Clone for state
   useEffect(() => {
-    console.log('set state', props.data);
+    // console.log('set state', props.data);
     const d: ConfIdRow = { ...props.data, questions: [...props.data.questions] };
 
     if (d.questions.length === 0) d.questions.push(newQuestions());

@@ -268,7 +268,7 @@ export default observer(function CAdmin(props: Props) {
     state.view === 'dash' ? ConfAdminPanelDash : ConfAdminPanelSlides;
 
   // url gen
-  let url = window.location.origin + '/c/' + confid;
+  let url = store.getRoot() + confid;
   if (store.isMixerProd()) url = 'https://mxop.at/' + confid; // window.location.origin + '/' + confid; // use root
   // console.log('store.isMixerProd()', store.isMixerProd());
 

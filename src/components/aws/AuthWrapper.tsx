@@ -14,7 +14,7 @@ interface Props {
   children?: any;
 }
 
-let init = false;
+// let init = false;
 
 interface State {
   init: boolean;
@@ -53,22 +53,23 @@ export const signUp = () => {
 function AuthComp(props: Props) {
   const store = props.store;
   const s = props.store;
+  // console.log('authwrapper: AuthComp');
   // Auth/Provider/withOAuth.jsx
 
   // console.log('AuthComp');
   useEffect(() => {
-    if (init) {
-      // console.warn('stopping.. already logged in.');
+    if (store.auth.isAuthenticated() && !store.isGuest()) {
+      console.warn('authwrapper: stopping.. already logged in.');
       return; // not sure if needed
     }
-    init = true;
+    // init = true;
     const path = (store.router.location as any).pathname;
     const callbackPage = path.indexOf('callback') !== -1;
     AuthService.auth(handleAuth, callbackPage);
-  }, [store.auth]);
+  }, [store.auth.doLogin]);
 
   useEffect( () => {
-    if(!store.auth.doLogout || !store.auth.user) return;
+    if(!store.auth.doLogout) return; //  || !store.auth.user
     
     AuthService.logout().then( () => store.auth.logoutFinished());
   }, [store.auth.doLogout]);
@@ -84,7 +85,7 @@ function AuthComp(props: Props) {
     }
 
     if (!awsUser) {
-      console.log('+not logged in');
+      console.log('authwrapper: +not logged in');
       // if(props.store.isStandalone()) signIn(); // MOBILE
 
       s.auth.notLoggedIn();

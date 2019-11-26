@@ -33,7 +33,7 @@ export async function init() {
     return docClient;
   }
 
-  console.log('db: init completed', cred);
+  // console.log('db: init completed', cred);
   // if (docClient) return docClient; // already set
 
   docClient = DynamodbFactory(new DynamoDB({ credentials: cred })); // await refreshCredentials()));

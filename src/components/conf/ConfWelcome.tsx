@@ -12,9 +12,7 @@ export default function ConfWelcome(props: Props) {
   // const [open, setOpen] = React.useState(true);
   const store = useContext(AppModel.Context)!;
 
-  // TODO: clean this up
-  // check if local development
-  const prefix = window.location.href.includes('/c') ? '/c/' : '';
+  const prefix = store.getRoot();
 
   const handleClose = () => {
     store.auth.login(prefix + 'admin');

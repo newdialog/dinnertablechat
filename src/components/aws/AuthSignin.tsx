@@ -19,14 +19,14 @@ export default observer(function AuthSignin(props: Props) {
     setRefresh(true);
 
     // Never was authenticated
-    if(!store.auth.isAuthenticated()) {
+    if(!store.auth.isAuthenticated() || (store.auth.isAuthenticated() && store.isGuest())) {
       // alert('Error authenticating- retrying');
 
       // in case login is not working
       setTimeout(()=>{
         console.warn('full authentication failure- going back to root');
         window.location.assign(store.getRoot())
-      }, 5200);
+      }, 6000);
 
       // try logging in again?
       console.warn('semi authentication failure- trying to re-login');
@@ -38,13 +38,15 @@ export default observer(function AuthSignin(props: Props) {
 
     if (redirectTo) {
       localStorage.removeItem('loginTo');
+      console.warn('redirectTo', redirectTo);
       // if(redirectTo.charAt(0)==='/') store.router.push(redirectTo);
       window.location.assign(redirectTo); // needs to be assign
       return;
     }
     
-    console.log('no redirectTo', redirectTo);
-    window.location.assign(store.getRoot());
+    const rootURL = store.getRoot();
+    console.warn('no redirectTo', rootURL);
+    window.location.assign(rootURL);
     // store.router.push('/');
   }
 
@@ -58,7 +60,10 @@ export default observer(function AuthSignin(props: Props) {
     redirect();
   }, [store.auth.user]);
   
-  useTimeoutFn(() => redirect(), 5200);
+  useTimeoutFn(() => {
+    console.warn('auth: forcing redirect due to timeout');
+    redirect()
+  }, 8000);
 
   return (
     <React.Fragment>

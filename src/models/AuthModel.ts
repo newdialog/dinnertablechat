@@ -66,7 +66,9 @@ const AuthModel = types
           });
 
       const current = window.location.href;
-      localStorage.setItem('loginTo', loginTo || current);
+      const loginURL = loginTo || current;
+      console.log('loginURL', loginURL);
+      localStorage.setItem('loginTo', loginURL);
 
       if (register) self.doLogin = 2;
       else self.doLogin = 1;
@@ -83,33 +85,22 @@ const AuthModel = types
 
       const page = localStorage.getItem('logoutTo');
       localStorage.removeItem('logoutTo');
+      localStorage.removeItem('loginTo');
 
-      console.log('logoutFinished page', page);
+      console.warn('logoutFinished page', page);
 
       if (page) window.location.assign(page);
-      else window.location.assign('/'); // window.location.assign('/');
-      /* else {
-        const loginPage = localStorage.getItem('loginTo');
-        console.log('loginPage', loginPage);
-        (self as any).login(loginPage);
-      } */
+      else window.location.assign('/');
     },
     logout(logoutTo?: string) {
+      console.log('logout action', logoutTo);
       if (logoutTo) localStorage.setItem('logoutTo', logoutTo);
-      //  || '/about'
       else localStorage.removeItem('logoutTo');
 
       localStorage.removeItem('loginTo');
 
       self.doLogout = true;
     },
-    /*
-    logoutLogin(loginTo?: string) {
-      const current = window.location.href;
-      localStorage.setItem('loginTo', loginTo || current);
-      localStorage.setItem('logoutTo', '');
-      self.doLogout = true;
-    },*/
     notLoggedIn() {
       self.isNotLoggedIn = true;
     },

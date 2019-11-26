@@ -96,11 +96,12 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
 
   /// console.log('payload.event', channel, payload.event);
   if (payload.event === LOGOUT_EVENT) {
-    console.log('cog logout');
+    console.log('auth: cog logout event');
     /// checkUser(cb);
     // return;
   }
   if (payload.event === LOGIN_EVENT) {
+    console.log('auth: cog login event');
     //  || payload.event === 'cognitoHostedUI'
     // console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
@@ -112,7 +113,7 @@ export async function configure() {
 }
 
 export async function auth(cb: AwsCB, callbackPage: boolean = false) {
-  // console.log('auth aws');
+  console.log('auth: 0 start', callbackPage);
   // const awsmobileInjected = injectConfig(awsmobile);
 
   // Order is important
@@ -136,8 +137,9 @@ export async function auth(cb: AwsCB, callbackPage: boolean = false) {
   try {
     const credentials = await refreshCredentials();
     API.configure({ ...awsconfig, Auth: credentials, credentials });
+    console.log('auth: refreshCredentials finish');
   } catch (e) {
-    console.log('cannot figure API', e);
+    console.log('aud: cannot figure API', e);
   }
 }
 
@@ -348,7 +350,7 @@ export function logout() {
       // remove auth tokens
       lastCred = null;
       credRefresh = null;
-      console.log('logout', x);
+      // console.log('logout', x);
       return x;
     })
     .catch((err: any) => {
