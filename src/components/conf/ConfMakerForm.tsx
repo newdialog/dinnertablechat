@@ -182,7 +182,8 @@ export default (props: Props) => {
                 throw new Error('answer options must have a comma')
               }
 
-              const ansList = ans.replace(/\s/g, '').split(',').filter(x => x !== '');
+              const ansList = ans.replace(/,\s+/g, ',').split(',').filter(x => x !== '');
+              // console.log('ansList', ansList);
 
               if (ansList.length < 2) {
                 throw new Error('answer options must have at least two answers');
