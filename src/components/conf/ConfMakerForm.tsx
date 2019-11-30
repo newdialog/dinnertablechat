@@ -284,8 +284,8 @@ export default (props: Props) => {
   }
 
   const addQuestion = () => {
-    if (!store.auth.isPaidUser() && state.data!.questions.length > 1) {
-      window.alert('Sorry, only paid users can add more than two questions. Please contact us at: requests@newdialogue.org');
+    if (!store.auth.isPaidUser() && state.data!.questions.length >= 3) {
+      window.alert('Sorry, only paid users can add more than 3 questions. Please contact us at: sales@newdialogue.org');
       window.open('https://www.newdialogue.org', '_blank');
       return;
     }
