@@ -162,7 +162,8 @@ export default function PleaseWaitResults(props: Props) {
 
     // const resetOnUnReady = !ready && state.ready === true; // already being accounted for
     // Version changed Flag
-    const resetFlag = _data.version !== state.version && state.version > -1;
+    const resetFlag = version !== state.version && state.version > -1;
+    console.log('resetFlag', resetFlag, version, state.version)
 
     // Version changed
     if (resetFlag) {
@@ -198,7 +199,7 @@ export default function PleaseWaitResults(props: Props) {
     }
     
     // If ready changed or group changed
-    if (state.ready !== ready || myGroup !== state.myGroup) {
+    if (state.ready !== ready || myGroup !== state.myGroup || state.version !== version) {
       if(!ready) assignedTag = false;
       setState(p => ({ ...p, data: result, ready, myGroup, version }));
       // props.handleReset(true);
@@ -268,7 +269,8 @@ export default function PleaseWaitResults(props: Props) {
     'tooLate',
     tooLate,
     'state.checks',
-    state.checks
+    state.checks,
+    'ready', state.ready, 'version', state.version
   );
 
   return (
