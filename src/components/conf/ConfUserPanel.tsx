@@ -9,7 +9,7 @@ import {
 import Chip from '@material-ui/core/Chip';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
-import { useTimeoutFn, useInterval } from 'react-use';
+import { useTimeoutFn, useInterval, useDebounce } from 'react-use';
 import Prando from 'prando';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
@@ -103,14 +103,12 @@ interface State {
   numUsers?: number;
   isLate?: boolean;
   version: number;
+  refresh: number;
 }
 
 function showGroup(groupId: any, confid: string, t: any) {
   if (groupId === null || groupId === -1) return null;
   // console.log('state.ready', state.ready);
-
-  // let groupId = -1;
-  // if (state.myGroup) groupId = state.myGroup.gid;
 
   const groupName = TopicInfo.getGroupByIndex(confid, groupId, t); // cant
 
@@ -120,7 +118,7 @@ function showGroup(groupId: any, confid: string, t: any) {
 }
 
 let assignedTag = false;
-export default function PleaseWaitResults(props: Props) {
+export default function ConfUserPanel(props: Props) {
   const store = props.store;
   const classes = useStyles({});
   const { t } = useTranslation();
@@ -129,7 +127,9 @@ export default function PleaseWaitResults(props: Props) {
     checks: 6 * 5, // 5min
     ready: false,
     submitBlocked: false,
-    version: -1
+    version: -1,
+    myGroup: null,
+    refresh: 0
   });
 
   const pos = store.conf.positions;
@@ -141,7 +141,7 @@ export default function PleaseWaitResults(props: Props) {
 
   const onStart = async () => {
     if (!confid) return;
-    console.log('sending data');
+    // console.log('sending data');
 
     // const ready = state.ready; // await checkReady();
 
@@ -162,7 +162,8 @@ export default function PleaseWaitResults(props: Props) {
     onStart();
   }, [user, pos, confid]);
 
-  const onRefresh = async () => {
+  const onRefresh2 = async () => {
+    console.log('onRefresh2');
     const _data = await getResults(confid);
     if (!_data) throw new Error('cannot find results');
 
@@ -175,11 +176,19 @@ export default function PleaseWaitResults(props: Props) {
     // const resetOnUnReady = !ready && state.ready === true; // already being accounted for
     // Version changed Flag
     const resetFlag = version !== state.version && state.version > -1;
-    console.log('resetFlag', resetFlag, version, state.version);
+    if (resetFlag)
+      console.log('trig: resetFlag', resetFlag, version, state.version);
 
     // Version changed
     if (resetFlag) {
-      setState(p => ({ ...p, data: [], ready: false, version: -1 }));
+      setState(p => ({
+        ...p,
+        data: [],
+        ready: false,
+        version: -1,
+        myGroup: null,
+        isLate: false
+      }));
       props.handleReset();
       return;
     }
@@ -193,18 +202,88 @@ export default function PleaseWaitResults(props: Props) {
     }
 
     // If ready changed or group changed
-    if (
-      state.ready !== ready ||
-      myGroup !== state.myGroup ||
-      state.version !== version
-    ) {
-      setState(p => ({ ...p, data: result, ready, myGroup, version }));
-      // props.handleReset(true);
+    const groupNotMatched = (!!myGroup !== !!state.myGroup && !state.isLate);
+    const readyChange = state.ready !== ready;
+    const verChange = state.version !== version;
+    
+    if (readyChange || groupNotMatched || verChange) {
+      
+      if (readyChange)
+        console.log('trig: ready [state, new]', state.ready, ready);
+      if (verChange)
+        console.log('trig: version [state, new]', state.version, version);
+      if (groupNotMatched)
+        console.log(
+          'trig: groupNotMatched [state, new]',
+          state.myGroup,
+          myGroup
+        );
+
+      // metrics
+      if (ready && myGroup && groupNotMatched) {
+        // !assignedTag) {
+        // assignedTag = true;
+        window.scrollTo(0, 0);
+
+        if (window.gtag)
+          window.gtag('event', 'conf_user_assigned', {
+            event_category: 'conf',
+            event_label: confid,
+            non_interaction: false
+          });
+        console.log('logging: conf_user_assigned');
+      }
+
+      // User late, assign random table
+      let isLate = false;
+      if (ready && !myGroup) {
+        isLate = true;
+        const numGroups = props.table.maxGroups || 1;
+        let rng = new Prando(user);
+        // ensure dont pick group with no users
+        const maxCurrentGroups = Math.min(numGroups, result.length);
+        // find random group
+        const gid = Math.floor(rng.next() * maxCurrentGroups);
+        myGroup = groupByIndex(gid, result);
+        // console.log('rnd myGroup', myGroup, gid);
+
+        if (readyChange) {
+          //(!assignedTag)
+          if (window.gtag)
+            window.gtag('event', 'conf_user_assigned_late', {
+              event_category: 'conf',
+              event_label: confid,
+              non_interaction: false
+            });
+          // assignedTag = true;
+          console.log('logging: conf_user_assigned_late');
+        }
+      }
+
+      console.log(
+        'myGroup',
+        myGroup,
+        'isLate',
+        isLate,
+        'version',
+        version,
+        'ready',
+        ready,
+        'data',
+        result
+      );
+
+      setState(p => ({ ...p, data: result, ready, myGroup, version, isLate }));
     }
   };
 
+  useDebounce(onRefresh2, 2500, [state.refresh]);
+  const onRefresh = () => {
+    setState(p => ({ ...p, refresh: p.refresh + 1 }));
+  };
+
   const inFocus = useFocus(null, true, _inFocus => {
-    if (_inFocus) onRefresh();
+    if (_inFocus) onRefresh(); // This causes a bug that clears state
   });
 
   const onInterval = React.useCallback(() => {
@@ -212,7 +291,7 @@ export default function PleaseWaitResults(props: Props) {
     // if (state.checks < 1 || !inFocus) return;
     onRefresh();
     setState(p => ({ ...p, checks: p.checks - 1 }));
-  }, [state.checks, inFocus]);
+  }, [state.checks, inFocus, state.ready]);
 
   const pauseTimer = state.checks < 1 || !inFocus;
   useInterval(onInterval, pauseTimer ? null : 9 * 1000);
@@ -221,7 +300,7 @@ export default function PleaseWaitResults(props: Props) {
     init();
   }, []);
 
-  const numGroups = props.table.maxGroups || 1; // Number.parseInt(t(`conf-${confid}-maxGroups`), 10) || 1;
+  let tooLate = !!state.isLate;
 
   let group: string | null = null;
   let groupInfo: any = { members: [], gid: -1 };
@@ -233,61 +312,9 @@ export default function PleaseWaitResults(props: Props) {
     groupInfo.membersHash = { ...state.myGroup };
     delete groupInfo.membersHash.gid;
     groupInfo.members = Object.values(groupInfo.membersHash);
-
-    // metrics
-    if (!assignedTag) {
-      assignedTag = true;
-      // gtag when first time ready
-      window.scrollTo(0, 0);
-
-      if (window.gtag)
-        window.gtag('event', 'conf_user_assigned', {
-          event_category: 'conf',
-          event_label: confid,
-          non_interaction: false
-        });
-    }
   }
 
-  const tooLate = !!state.isLate;
-
-  // User late, assign random table
-  if (state.ready && group === null) {
-    if (!state.myGroup && state.data) {
-      // group = showGroup(Math.floor(rng.next() * numGroups), confid, t);
-      let rng = new Prando(user);
-      // ensure dont pick group with no users
-      const maxCurrentGroups = Math.min(numGroups, state.data.length);
-      // find random group
-      const gid = Math.floor(rng.next() * maxCurrentGroups);
-      console.log('gid', gid, state.data);
-      const myGroup = groupByIndex(gid, state.data);
-      console.log('myGroup', myGroup);
-      setState(p => ({ ...p, myGroup, isLate: true }));
-
-      return <div className={classes.layout} />;
-    }
-
-    // group = showGroup(, confid, t);
-    // groupInfo = {};
-  }
-
-  const showRefresh = !group && (state.checks < 1 || !inFocus);
-
-  console.log(
-    'group',
-    group,
-    ' info ',
-    groupInfo,
-    'tooLate',
-    tooLate,
-    'state.checks',
-    state.checks,
-    'ready',
-    state.ready,
-    'version',
-    state.version
-  );
+  const showRefresh = !state.ready; // !group && (state.checks < 1 || !inFocus);
 
   return (
     <div className={classes.layout}>

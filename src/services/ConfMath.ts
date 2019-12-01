@@ -246,7 +246,8 @@ export function groupByIndex(
   // .filter(group => !!group[user]);
 
   if (groupIndex >= findGroup.length) {
-    return groupIndex + 1; // give fallback numeric value
+    throw new Error(`groupByIndex ${groupIndex} >= ${findGroup.length}`);
+    // return groupIndex + 1; // give fallback numeric value
     /* throw new Error(
       'invalid group index: ' + groupIndex + ' ' + findGroup.length
     ); */
