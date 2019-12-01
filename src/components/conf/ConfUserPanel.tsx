@@ -1,4 +1,11 @@
-import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography
+} from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import { Theme } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,7 +17,12 @@ import { useFocus } from 'utils/useFocus';
 
 import * as AppModel from '../../models/AppModel';
 import { findMyGroup, groupByIndex } from '../../services/ConfMath';
-import { ConfIdRow, getResults, init, submit } from '../../services/ConfService';
+import {
+  ConfIdRow,
+  getResults,
+  init,
+  submit
+} from '../../services/ConfService';
 import * as TopicInfo from '../../utils/TopicInfo';
 import ConfUserBars from './ConfUserBars';
 
@@ -78,7 +90,7 @@ interface Props {
   id: string;
   table: ConfIdRow;
   questions: any;
-  handleReset: (soft?:boolean) => void;
+  handleReset: (soft?: boolean) => void;
   // data: any;
 }
 // type Data = Array<User>;
@@ -163,7 +175,7 @@ export default function PleaseWaitResults(props: Props) {
     // const resetOnUnReady = !ready && state.ready === true; // already being accounted for
     // Version changed Flag
     const resetFlag = version !== state.version && state.version > -1;
-    console.log('resetFlag', resetFlag, version, state.version)
+    console.log('resetFlag', resetFlag, version, state.version);
 
     // Version changed
     if (resetFlag) {
@@ -177,37 +189,22 @@ export default function PleaseWaitResults(props: Props) {
     if (ready) {
       // console.log('store.auth.user!.id', user);
       myGroup = findMyGroup(user, result);
-
-      if (myGroup) {
-        // console.log('myGroup', myGroup);
-        // gtag when first time ready
-        if (ready !== state.ready && ready) {
-          window.scrollTo(0, 0);
-          
-          if(!assignedTag) {
-            if(window.gtag) window.gtag('event', 'conf_user_assigned', {
-              event_category: 'conf',
-              event_label: confid,
-              non_interaction: false
-            });
-          }
-          assignedTag = true;
-        }
-      } else console.log('user not in the group');
-
       // if (myGroup !== null) setState(p => ({ ...p, myGroup }));
     }
-    
+
     // If ready changed or group changed
-    if (state.ready !== ready || myGroup !== state.myGroup || state.version !== version) {
-      if(!ready) assignedTag = false;
+    if (
+      state.ready !== ready ||
+      myGroup !== state.myGroup ||
+      state.version !== version
+    ) {
       setState(p => ({ ...p, data: result, ready, myGroup, version }));
       // props.handleReset(true);
     }
   };
 
   const inFocus = useFocus(null, true, _inFocus => {
-    if(_inFocus) onRefresh();
+    if (_inFocus) onRefresh();
   });
 
   const onInterval = React.useCallback(() => {
@@ -228,6 +225,7 @@ export default function PleaseWaitResults(props: Props) {
 
   let group: string | null = null;
   let groupInfo: any = { members: [], gid: -1 };
+  // User has been assigned
   if (state.ready && state.myGroup) {
     group = showGroup(state.myGroup.gid, confid, t);
     // groupInfo = state.myGroup;
@@ -235,10 +233,25 @@ export default function PleaseWaitResults(props: Props) {
     groupInfo.membersHash = { ...state.myGroup };
     delete groupInfo.membersHash.gid;
     groupInfo.members = Object.values(groupInfo.membersHash);
+
+    // metrics
+    if (!assignedTag) {
+      assignedTag = true;
+      // gtag when first time ready
+      window.scrollTo(0, 0);
+
+      if (window.gtag)
+        window.gtag('event', 'conf_user_assigned', {
+          event_category: 'conf',
+          event_label: confid,
+          non_interaction: false
+        });
+    }
   }
 
   const tooLate = !!state.isLate;
 
+  // User late, assign random table
   if (state.ready && group === null) {
     if (!state.myGroup && state.data) {
       // group = showGroup(Math.floor(rng.next() * numGroups), confid, t);
@@ -270,7 +283,10 @@ export default function PleaseWaitResults(props: Props) {
     tooLate,
     'state.checks',
     state.checks,
-    'ready', state.ready, 'version', state.version
+    'ready',
+    state.ready,
+    'version',
+    state.version
   );
 
   return (
@@ -286,24 +302,41 @@ export default function PleaseWaitResults(props: Props) {
                     {state.ready && !group && 'Sorry, groups already assigned.'}
                     {!tooLate && group && `Please join your group`}
                   </Typography>
-                  {!!props.table!.waitmsg &&
-                    <Typography variant="body1" align="left">{props.table!.waitmsg}<br /><br /><br /></Typography>
-                  }
-                  {!props.table!.waitmsg && <>
-                    <Typography variant="body1">till everyone else has answered...
-                    <br />
-                      While you wait please be quite and you may want to study the <i>Rules of the
-                    Game: </i><br /><br /></Typography>
-                    <Typography variant="body1" align="left">You don’t have to talk about all the questions. Maybe
-                    pick the group’s favourites first. <br /><br />Be honest, dare to say what
-                        you think. Argue rationally and based on facts. Don’t
-                    generalize. <br /><br />Don’t insult and, in turn, don’t take anything
-                        personally. Avoid a one-(wo)man show - everyone in the group
-                        should talk. Everyone’s on eye level. Shake your opponents'
-                    hands after the discussion!<br /><br /><br />
+                  {!!props.table!.waitmsg && (
+                    <Typography variant="body1" align="left">
+                      {props.table!.waitmsg}
+                      <br />
+                      <br />
+                      <br />
                     </Typography>
-                  </>
-                  }
+                  )}
+                  {!props.table!.waitmsg && (
+                    <>
+                      <Typography variant="body1">
+                        till everyone else has answered...
+                        <br />
+                        While you wait please be quite and you may want to study
+                        the <i>Rules of the Game: </i>
+                        <br />
+                        <br />
+                      </Typography>
+                      <Typography variant="body1" align="left">
+                        You don’t have to talk about all the questions. Maybe
+                        pick the group’s favourites first. <br />
+                        <br />
+                        Be honest, dare to say what you think. Argue rationally
+                        and based on facts. Don’t generalize. <br />
+                        <br />
+                        Don’t insult and, in turn, don’t take anything
+                        personally. Avoid a one-(wo)man show - everyone in the
+                        group should talk. Everyone’s on eye level. Shake your
+                        opponents' hands after the discussion!
+                        <br />
+                        <br />
+                        <br />
+                      </Typography>
+                    </>
+                  )}
                 </>
               )}
               <Typography variant="body2">
@@ -315,7 +348,6 @@ export default function PleaseWaitResults(props: Props) {
                     <br />
                   </>
                 )}
-
               </Typography>
               {group && (
                 <>
@@ -333,7 +365,13 @@ export default function PleaseWaitResults(props: Props) {
                     </i>
                   </Typography>
                   <hr />
-                  <ConfUserBars id={confid} store={store} data={groupInfo} qdata={state.data} questions={props.questions} />
+                  <ConfUserBars
+                    id={confid}
+                    store={store}
+                    data={groupInfo}
+                    qdata={state.data}
+                    questions={props.questions}
+                  />
                   <br />
                   <br />
                 </>
@@ -353,24 +391,33 @@ export default function PleaseWaitResults(props: Props) {
               )}
 
               {group && (
-                <><Button
-                  style={{ marginTop: '1em' }}
-                  variant="contained"
-                  // size="small"
-                  color="primary"
-                  onClick={() => window.open('https://docs.google.com/forms/d/e/1FAIpQLSc26IYAyFjLEz3f7jkVylQHCywkZu4UQMGyJDbXltDjN_TjOQ/viewform?usp=sf_link', '_bank')}
-                >
-                  User Feedback
-        </Button>
+                <>
                   <Button
                     style={{ marginTop: '1em' }}
                     variant="contained"
                     // size="small"
                     color="primary"
-                    onClick={() => window.open('https://www.mixopinions.com', '_bank')}
+                    onClick={() =>
+                      window.open(
+                        'https://docs.google.com/forms/d/e/1FAIpQLSc26IYAyFjLEz3f7jkVylQHCywkZu4UQMGyJDbXltDjN_TjOQ/viewform?usp=sf_link',
+                        '_bank'
+                      )
+                    }
+                  >
+                    User Feedback
+                  </Button>
+                  <Button
+                    style={{ marginTop: '1em' }}
+                    variant="contained"
+                    // size="small"
+                    color="primary"
+                    onClick={() =>
+                      window.open('https://www.mixopinions.com', '_bank')
+                    }
                   >
                     About MixOpinions.com
-            </Button></>
+                  </Button>
+                </>
               )}
             </CardActions>
           </Card>
