@@ -127,7 +127,7 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-responsive": "^8.0.0",
     "@types/simple-peer": "^9.6.0",
-    "aws-amplify": "^1.1.36",
+    "aws-amplify": "^2.2.0",
     "core-js": "^3.4.0",
     "env-cmd": "^10.0.1",
     "eslint-config-prettier": "^6.0.0",
