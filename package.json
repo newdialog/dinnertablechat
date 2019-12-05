@@ -15,7 +15,7 @@
     "aws-sdk": "^2.496.0",
     "**/aws-sdk": "^2.496.0",
     "**/moment": "^2.24.0",
-    "**/lodash": "latest"
+    "**/lodash": "^4.17.15"
   },
   "dependencies": {
     "@aws-amplify/api": "^2.1.1",
@@ -97,23 +97,21 @@
   },
   "scripts": {
     "analyze": "npx source-map-explorer 'build/static/js/*.*' && echo '--html result.html'",
-    "postinstall": "npm run i18n",
+    "postinstall": "yon run i18n",
     "start": "env-cmd -f ./.env.development react-scripts start",
-    "build": "env-cmd -f ./.env.staging react-scripts build && cp -f CNAME ./build/ && npm run patchsw",
-    "build:prod": "mkdir -p ./build && env-cmd -f ./.env.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && npm run patchsw && npm run postbuild",
-    "build:mixer": "mkdir -p ./build && env-cmd -f ./.env.mixer.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && npm run patchsw && npm run postbuild",
-    "postbuild": "",
+    "build": "env-cmd -f ./.env.staging react-scripts build && cp -f CNAME ./build/ && yon run patchsw",
+    "build:prod": "mkdir -p ./build && env-cmd -f ./.env.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && yon run patchsw && yon run postbuild",
+    "build:mixer": "mkdir -p ./build && env-cmd -f ./.env.mixer.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && yon run patchsw && yon run postbuild",
+    "postbuild": "echo 'build done'",
     "postbuild:snap": "react-snap",
     "test": "env-cmd -f ./.env.development.local react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "proxy": "node proxy.js",
-    "deploy": "npm run build && npm run deploy2",
-    "deploy2": "env-cmd -f ./.env.staging netlify deploy --prod --dir=build",
-    "deploy:prod": "npm run build:prod && env-cmd -f ./.env.production netlify deploy --prod --dir=build",
-    "deploy:mixer": "npm run build:mixer && env-cmd -f ./.env.mixer.production netlify deploy --prod --dir=build",
+    "deploy": "yon run build && env-cmd -f ./.env.staging netlify deploy --prod --dir=build",
+    "deploy:prod": "yon run build:prod && env-cmd -f ./.env.production netlify deploy --prod --dir=build",
+    "deploy:mixer": "yon run build:mixer && env-cmd -f ./.env.mixer.production netlify deploy --prod --dir=build",
     "i18n": "gstoi18n 1R85easxOUiw184YPJ3wI2-oC-yPyKZi_Xn6a38foQFc ./public/i18n/ -w 0 -w 1 -w 2",
-    "patchsw": "cat ./sw.js.append >> ./build/service-worker.js",
-    "old_patchsq": "sed -i.bak '/workbox.clientsClaim();/i workbox.skipWaiting();' ./build/service-worker.js && rm ./build/service-worker.js.bak"
+    "patchsw": "cat ./sw.js.append >> ./build/service-worker.js"
   },
   "devDependencies": {
     "@babel/polyfill": "^7.7.0",
@@ -142,7 +140,8 @@
     "react-scripts": "^3.3.0-next.39",
     "regenerator-runtime": "^0.13.3",
     "source-map-explorer": "^2.1.2",
-    "typescript": "^3.7.2"
+    "typescript": "^3.7.2",
+    "yarn-or-yon": "^3.0.1"
   },
   "optionalDependencies": {},
   "browserslist": {

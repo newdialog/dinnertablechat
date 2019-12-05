@@ -22,3 +22,5 @@
 /tmp
     Content-Security-Policy: frame-ancestors 'none';
     X-Frame-Options: DENY
+/static/*
+    cache-control: max-age=31536000,public

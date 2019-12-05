@@ -35,10 +35,27 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
 
+  <script>
+    if(!window.gtag) window.gtag = function() {};
+  </script>
+</head>
+
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root"></div>
+  <div id="outdated"></div>
+  <!--
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789"/>
+  -->
   <!-- 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default,es6,Array.prototype.includes,Object.values,Object.keys"></script>
   -->
-  <script src="/js/outdated-browser-rework.min.js"></script>
+  <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/js/animate.min.css"/>
+  <link rel="stylesheet" href="/js/outdated-browser-rework.css"/>
+  <script async src="/js/outdated-browser-rework.min.js"></script>
   <script>
     outdatedBrowserRework({
 				fullscreen: true,
@@ -59,8 +76,6 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_GTAG%"></script>
 
   <script>
-    if(!window.gtag) window.gtag = function() {};
-
     var id = '%REACT_APP_GTAG%';
     
     window.dataLayer = window.dataLayer || [];
@@ -129,20 +144,6 @@
 
     window.gtag = gtag;
   </script>
-</head>
-
-<body>
-  <noscript>
-    You need to enable JavaScript to run this app.
-  </noscript>
-  <div id="root"></div>
-  <div id="outdated"></div>
-  <!--
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789"/>
-  -->
-  <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/js/animate.min.css"/>
-  <link rel="stylesheet" href="/js/outdated-browser-rework.css"/>
 
   <script type='text/javascript'>
     (function () {
