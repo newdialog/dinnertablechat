@@ -1,7 +1,7 @@
 // Note: only include headers on non-IAM resources, guest accounts are only IAM
 
-// import API from '@aws-amplify/api';
-import { Auth, API } from 'aws-amplify'; // API
+import Auth from '@aws-amplify/auth';
+import API from '@aws-amplify/api';
 
 let _cfg = {};
 /* const API:any = {

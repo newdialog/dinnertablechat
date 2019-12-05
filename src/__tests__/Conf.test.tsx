@@ -1,6 +1,5 @@
 import { getAll, submit, delAll, submitAll } from '../services/ConfService';
 import { auth, configure } from '../services/AuthService';
-import { Auth } from 'aws-amplify';
 import { match2 } from '../services/ConfMath';
 
 const TEST_CONF_ID = 'test';

@@ -1,10 +1,5 @@
-// import AWS, { GameLift } from 'aws-sdk';
-
 import GameLift from 'aws-sdk/clients/gamelift';
-// import DynamoDB from 'aws-sdk/clients/dynamodb'
-// import AWS from 'aws-sdk/global';
 import { isLive } from '../utils/AppMeta';
-import { integer, float } from 'aws-sdk/clients/lightsail';
 import * as shake from './HandShakeService';
 import * as DebateModel from '../models/DebateModel';
 import { refreshCredentials } from './AuthService';
@@ -140,11 +135,11 @@ type ErrorString = string;
 type OnMatchedCB = (model: OnMatched | ErrorString) => void;
 export async function queueUp(
   topic: string,
-  side: integer,
+  side: number,
   playerId: string,
   // guestSeed: string,
-  donation: float,
-  chararacter: integer,
+  donation: number,
+  chararacter: number,
   onMatchedCB: OnMatchedCB
 ) {
   const env = isLive() ? 'prod' : 'dev';

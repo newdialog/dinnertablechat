@@ -14,10 +14,14 @@
   "resolutions": {
     "aws-sdk": "^2.496.0",
     "**/aws-sdk": "^2.496.0",
-    "**/moment": "^2.24.0"
+    "**/moment": "^2.24.0",
+    "**/lodash": "latest"
   },
   "dependencies": {
-    "@awspilot/dynamodb": "^1.5.0",
+    "@aws-amplify/api": "^2.1.1",
+    "@aws-amplify/auth": "^2.1.1",
+    "@aws-amplify/core": "^2.2.0",
+    "@awspilot/dynamodb": "jadbox/dynamodb-oop#nosql",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-brands-svg-icons": "^5.9.0",
     "@fortawesome/free-regular-svg-icons": "^5.9.0",
@@ -92,10 +96,10 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "analyze": "npm run build -- --stats && npx source-map-explorer 'build/static/js/*.js' --html result.html",
+    "analyze": "npx source-map-explorer 'build/static/js/*.*' && echo '--html result.html'",
     "postinstall": "npm run i18n",
     "start": "env-cmd -f ./.env.development react-scripts start",
-    "build": "env-cmd -f ./.env.staging react-scripts build -- --stats && cp -f CNAME ./build/ && npm run patchsw",
+    "build": "env-cmd -f ./.env.staging react-scripts build && cp -f CNAME ./build/ && npm run patchsw",
     "build:prod": "mkdir -p ./build && env-cmd -f ./.env.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && npm run patchsw && npm run postbuild",
     "build:mixer": "mkdir -p ./build && env-cmd -f ./.env.mixer.production react-scripts build && cp -f CNAME.PROD ./build/CNAME && rm build/robot.txt && npm run patchsw && npm run postbuild",
     "postbuild": "",
@@ -127,7 +131,6 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-responsive": "^8.0.0",
     "@types/simple-peer": "^9.6.0",
-    "aws-amplify": "^2.2.0",
     "core-js": "^3.4.0",
     "env-cmd": "^10.0.1",
     "eslint-config-prettier": "^6.0.0",
@@ -138,7 +141,7 @@
     "prettier": "^1.19.1",
     "react-scripts": "^3.3.0-next.39",
     "regenerator-runtime": "^0.13.3",
-    "source-map-explorer": "^2.0.1",
+    "source-map-explorer": "^2.1.2",
     "typescript": "^3.7.2"
   },
   "optionalDependencies": {},

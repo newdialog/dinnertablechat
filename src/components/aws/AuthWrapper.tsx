@@ -1,5 +1,5 @@
 // TODO HOOKS
-import { Auth } from 'aws-amplify';
+import Auth from '@aws-amplify/auth';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import MediaQuery from 'react-responsive';
@@ -7,7 +7,6 @@ import MediaQuery from 'react-responsive';
 import * as Store from '../../models/AppModel';
 import * as AuthService from '../../services/AuthService';
 
-// import { withOAuth } from 'aws-amplify-react';
 interface Props {
   store: Store.Type;
   login: number;

@@ -183,6 +183,7 @@ const useStyles = makeStyles(
   { name: 'Banner' }
 );
 
+/*
 const bgOptions = {
   loop: true,
   autoplay: false,
@@ -192,6 +193,7 @@ const bgOptions = {
     preserveAspectRatio: 'xMidYMid slice'
   }
 };
+*/
 
 interface Props {
   store: AppModel.Type;

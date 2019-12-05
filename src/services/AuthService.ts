@@ -5,20 +5,17 @@ import 'aws-sdk/lib/node_loader'; // first time only
 // import Core from 'aws-sdk/lib/core';
 import AWS from 'aws-sdk/global';
 
-// import Auth from '@aws-amplify/auth';
-import { Auth } from 'aws-amplify';
+import Auth from '@aws-amplify/auth';
 import * as API from './APIService'; // TODO refactor
 
-import retry from 'async-retry';
-// import { Logger } from 'aws-amplify';
-import { Hub } from 'aws-amplify';
+// import retry from 'async-retry';
+import { Hub } from '@aws-amplify/core';
 import { injectConfig } from '../configs/AWSconfig';
 
 // Fix analytics error message
-import { Analytics } from 'aws-amplify';
-import { CognitoUserSession } from 'amazon-cognito-identity-js';
+// import { CognitoUserSession } from 'amazon-cognito-identity-js';
 
-Analytics.configure({ disabled: true });
+// Analytics.configure({ disabled: true });
 
 // (window as any).LOG_LEVEL = 'DEBUG';
 // import { ConsoleLogger } from '@aws-amplify/core';
@@ -40,8 +37,8 @@ const delayFlag = async (obj: { flag: boolean }) =>
 */
 
 /* Debug only 
-import Amplify from 'aws-amplify';
-Amplify.Logger.LOG_LEVEL = 'DEBUG';
+import {Logger} from '@aws-amplify/core';
+Logger.LOG_LEVEL = 'DEBUG'; // Amplify.
 (window as any).LOG_LEVEL = 'DEBUG';
 */
 
@@ -247,7 +244,7 @@ export async function refreshCredentials(): Promise<Creds> {
 async function checkUser(cb: AwsCB, event: string = '') {
   // console.log('checkUser');
   // let data: any;
-  let session: CognitoUserSession | null = null;
+  let session: any | null = null; // CognitoUserSession
   let cr: any = null;
   // cacheCred = null; // clear apic cache, TODO: rework? check is token is still valid cache
   try {
