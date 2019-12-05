@@ -35,8 +35,9 @@
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=default,es6,Array.prototype.includes,Object.values,Object.keys"></script>
-  <link rel="stylesheet" href="/js/outdated-browser-rework.css"/>
+  <!-- 
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default,es6,Array.prototype.includes,Object.values,Object.keys"></script>
+  -->
   <script src="/js/outdated-browser-rework.min.js"></script>
   <script>
     outdatedBrowserRework({
@@ -55,18 +56,12 @@
   </script>
 
   <!-- Global DTC site tag (gtag.js) - Google Analytics -->
-  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=UA-119131630-1"></script> -->
-  <!-- for mixer -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_GTAG%"></script>
 
-  <!-- <script async src="js/simplepeer.min.js"></script> -->
   <script>
     if(!window.gtag) window.gtag = function() {};
-    // window._gtag = gtag;
 
-    var id = '%REACT_APP_GTAG%'; // 1 = dtc, 4 = mixer
-    // console.log('-gid', id);
-    // temporary empty function in case something goes wrong
+    var id = '%REACT_APP_GTAG%';
     
     window.dataLayer = window.dataLayer || [];
 
@@ -147,7 +142,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789"/>
   -->
   <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/js/animate.min.css"/>
-  
+  <link rel="stylesheet" href="/js/outdated-browser-rework.css"/>
+
   <script type='text/javascript'>
     (function () {
       if(/test\./.test(window.location.href)) return;

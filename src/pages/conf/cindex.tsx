@@ -289,7 +289,7 @@ export default observer(function CIndex(props: Props) {
         <div className={classes.verticalCenter}>
           {step === -1 && <ConfWelcome />}
           {step === 0 && state.questions && (
-            <Reveal effect="fadeInUp" duration={2200}>
+            <Reveal effect="fadeInUp" duration={100}>
               <PositionSelector
                 onSubmit={onSubmit}
                 onFirstInteraction={onFirstInteraction}

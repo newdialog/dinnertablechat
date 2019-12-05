@@ -23,7 +23,7 @@ export function isAfterEndTime() {
 export function isDuringDebate(isLive?: boolean) {
   // TESTING Flag: always lock session open
   if (isLive === false) {
-    return true; // !window.location.hostname.includes('jadbox');
+    return true;
   }
   const m = DateTime.utc();
   return (

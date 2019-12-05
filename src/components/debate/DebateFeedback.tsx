@@ -192,7 +192,7 @@ export default function DebateFeedback(props: Props) {
       .filter(k => hash[k])
       .reduce(
         (acc, x) => {
-          (goodTraits.includes(x) ? acc.pos : acc.neg).push(x);
+          (goodTraits.indexOf(x) > -1 ? acc.pos : acc.neg).push(x);
           return acc;
         },
         { pos: [] as string[], neg: [] as string[] }

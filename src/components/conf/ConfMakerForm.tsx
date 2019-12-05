@@ -129,7 +129,7 @@ export default (props: Props) => {
         .test(
           'is-word',
           '${path} must not contain spaces',
-          (value: string) => value && !value.includes(' '),
+          (value: string) => value && value.indexOf(' ') === -1,
         )
         .matches(
           /^[a-z0-9_-]+$/,
@@ -177,7 +177,7 @@ export default (props: Props) => {
             }
 
             const validateAnswers = (ans: string) => {
-              let valid = !!ans.includes(',');
+              let valid = ans.indexOf(',') > -1;
               if (!valid) {
                 throw new Error('answer options must have a comma')
               }
