@@ -141,7 +141,7 @@
     "regenerator-runtime": "^0.13.3",
     "source-map-explorer": "^2.1.2",
     "typescript": "^3.7.2",
-    "yarn-or-yon": "^3.0.1"
+    "yarn-or-npm": "^3.0.1"
   },
   "optionalDependencies": {},
   "browserslist": {
