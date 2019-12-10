@@ -71,7 +71,7 @@ const useStyles = makeStyles(
       textDecoration: 'none'
     }
   }),
-  { name: 'PositionSelector' }
+  { name: 'SClosed' }
 );
 
 interface Props {

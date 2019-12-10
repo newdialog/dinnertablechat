@@ -288,6 +288,17 @@ export default observer(function CIndex(props: Props) {
 
         <div className={classes.verticalCenter}>
           {step === -1 && <ConfWelcome />}
+          {step === 0 && !state.questions && 
+          <div className={classes.footer}>
+            <Typography
+              className={classes.herotext}
+              variant="h2"
+              align="center"
+              color="textSecondary"
+              gutterBottom
+            >Loading session...</Typography>
+          </div>
+          }
           {step === 0 && state.questions && (
             <Reveal effect="fadeInUp" duration={100}>
               <PositionSelector
