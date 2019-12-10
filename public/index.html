@@ -2,161 +2,166 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8" />
-  <title>%REACT_APP_TITLE%</title>
-  <meta name="keywords" content="debate politics communication conversation chat discorse"/>
-  <!-- Search Engine -->
-  <meta name="description" content="%REACT_APP_DESCRIPTION%" />
-  <meta name="image" content="%REACT_APP_HOST_URL%/logos/dtclogo3-1.png" />
-  <!-- Schema.org for Google -->
-  <meta itemprop="name" content="%REACT_APP_TITLE%" />
-  <meta itemprop="description" content="%REACT_APP_DESCRIPTION%" />
-  <meta itemprop="image" content="%REACT_APP_HOST_URL%/logos/dtclogo3-1.png" />
-  <!-- Open Graph general (Facebook, Pinterest & Google+) -->
-  <meta name="og:title_static" content="%REACT_APP_TITLE%" />
-  <meta name="og:description" content="%REACT_APP_DESCRIPTION%" />
-  <meta name="og:image" content="%REACT_APP_HOST_URL%/logos/dtclogo3-1.png" />
-  <meta name="image" property="og:image" content="%REACT_APP_HOST_URL%/logos/dtclogo3-1.png" />
-  <meta name="og:url_static" content="%REACT_APP_HOST_URL%" />
-  <meta name="og:site_name" content="%REACT_APP_TITLE%" />
-  <meta name="fb:admins" content="508265788" />
-  <meta name="fb:app_id" content="760218917642437" />
-  <meta name="og:type" content="website" />
-  <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no">
-  <meta name="theme-color" content="#000000" />
+    <meta charset="utf-8" />
+    <title>%REACT_APP_TITLE%</title>
+    <meta name="keywords" content="debate politics communication conversation chat discorse" />
+    <!-- Search Engine -->
+    <meta name="description" content="%REACT_APP_DESCRIPTION%" />
+    <meta name="image" content="%REACT_APP_HOST_URL%/logos/dtclogo3-1.png" />
+    <!-- Schema.org for Google -->
+    <meta itemprop="name" content="%REACT_APP_TITLE%" />
+    <meta itemprop="description" content="%REACT_APP_DESCRIPTION%" />
+    <meta itemprop="image" content="%REACT_APP_HOST_URL%/logos/dtclogo3-1.png" />
+    <!-- Open Graph general (Facebook, Pinterest & Google+) -->
+    <meta name="og:title_static" content="%REACT_APP_TITLE%" />
+    <meta name="og:description" content="%REACT_APP_DESCRIPTION%" />
+    <meta name="og:image" content="%REACT_APP_HOST_URL%/logos/dtclogo3-1.png" />
+    <meta name="image" property="og:image" content="%REACT_APP_HOST_URL%/logos/dtclogo3-1.png" />
+    <meta name="og:url_static" content="%REACT_APP_HOST_URL%" />
+    <meta name="og:site_name" content="%REACT_APP_TITLE%" />
+    <meta name="fb:admins" content="508265788" />
+    <meta name="fb:app_id" content="760218917642437" />
+    <meta name="og:type" content="website" />
+    <meta name="viewport" content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no">
+    <meta name="theme-color" content="#000000" />
 
-  <link rel="manifest" href="/manifest.json"/>
-  <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="shortcut icon" href="/favicon.ico" />
 
-  <link rel="icon" type="image/png" href="/logos/icons/android-192x192.png" sizes="192x192">
-  <link rel="apple-touch-icon" href="/logos/icons/apple-touch-icon-180x180.png" sizes="180x180">
-  <meta name="msapplication-config" content="/logos/icons/browserconfig.xml">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
+    <link rel="icon" type="image/png" href="/logos/icons/android-192x192.png" sizes="192x192">
+    <link rel="apple-touch-icon" href="/logos/icons/apple-touch-icon-180x180.png" sizes="180x180">
+    <meta name="msapplication-config" content="/logos/icons/browserconfig.xml">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
 
-  <script>
-    if(!window.gtag) window.gtag = function() {};
-  </script>
+    <script>
+        if (!window.gtag) window.gtag = function() {};
+    </script>
 </head>
 
 <body>
-  <noscript>
+    <noscript>
     You need to enable JavaScript to run this app.
   </noscript>
-  <div id="root"></div>
-  <div id="outdated"></div>
-  <!--
+    <div id="root"></div>
+    <div id="outdated"></div>
+    <!--
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789"/>
   -->
-  <!-- 
+    <!-- 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default,es6,Array.prototype.includes,Object.values,Object.keys"></script>
   -->
-  <link rel="preload" as="style" onload="this.onload=null;this.rel='stylesheet'" href="/js/animate.min.css"/>
-  <link rel="stylesheet" href="/js/outdated-browser-rework.css"/>
-  <script async src="/js/outdated-browser-rework.min.js"></script>
-  <script>
-    outdatedBrowserRework({
-				fullscreen: true,
-				browserSupport: {
-					'Chrome': 49,
-					'Edge': 12,
-					'Safari': 10,
-					'Mobile Safari': 10,
-					'Firefox': 18,
-					'Opera': 36,
-					'IE': false
-        },
-        isUnknownBrowserOK: true
-			});
-  </script>
+    <script async src="/js/outdated-browser-rework.min.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            outdatedBrowserRework({
+                fullscreen: true,
+                browserSupport: {
+                    'Chrome': 49,
+                    'Edge': 12,
+                    'Safari': 10,
+                    'Mobile Safari': 10,
+                    'Firefox': 18,
+                    'Opera': 36,
+                    'IE': false
+                },
+                isUnknownBrowserOK: true
+            });
+        });
+    </script>
 
-  <!-- Global DTC site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_GTAG%"></script>
+    <!-- Global DTC site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_GTAG%"></script>
 
-  <script>
-    var id = '%REACT_APP_GTAG%';
-    
-    window.dataLayer = window.dataLayer || [];
+    <script>
+        var id = '%REACT_APP_GTAG%';
 
-    var h = window.location.hostname;
-    window.isLive = (
-        h.indexOf('test') === -1 && // disallow test domain
-        // h.indexOf('.dinnertable') === -1 && // allow test domain
-        (h.indexOf('dinnertable.chat') !== -1 || h.indexOf('mixopinions') !== -1)
-      );
+        window.dataLayer = window.dataLayer || [];
 
-    function gtag() {
-      if(!window.isLive) return; // do not track
+        var h = window.location.hostname;
+        window.isLive = (
+            h.indexOf('test') === -1 && // disallow test domain
+            // h.indexOf('.dinnertable') === -1 && // allow test domain
+            (h.indexOf('dinnertable.chat') !== -1 || h.indexOf('mixopinions') !== -1)
+        );
 
-      // Mixpanel
-      if(window["mixpanel"] && arguments[0] && arguments[0] === 'event') {
-        if(arguments.length > 2 && arguments[2].event_category) {
-          /// BUG with ...: window.mixpanel.track(arguments[1], {...arguments[2]});
+        function gtag() {
+            if (!window.isLive) return; // do not track
+
+            // Mixpanel
+            if (window["mixpanel"] && arguments[0] && arguments[0] === 'event') {
+                if (arguments.length > 2 && arguments[2].event_category) {
+                    /// BUG with ...: window.mixpanel.track(arguments[1], {...arguments[2]});
+                } else window.mixpanel.track(arguments[1]);
+            }
+
+            dataLayer.push(arguments);
         }
-        else window.mixpanel.track(arguments[1]);
-      }
+        gtag('js', new Date());
 
-      dataLayer.push(arguments);
-    }
-    gtag('js', new Date());
+        gtag('config', id);
+        gtag('create', id, 'auto');
 
-    gtag('config', id);
-    gtag('create', id, 'auto');
+        function trackOutboundLink(url, nonInteraction, newWin) {
+            console.log('trackOutboundLink');
+            var redirected = false;
 
-    function trackOutboundLink(url, nonInteraction, newWin) {
-      console.log('trackOutboundLink');
-      var redirected = false;
+            gtag('event', 'click', {
+                'event_category': 'outbound',
+                'event_label': url,
+                'transport_type': 'beacon',
+                'non_interaction': nonInteraction === true,
+                'event_callback': function() {
+                    if (redirected) return;
+                    redirected = true;
+                    if (!newWin) document.location = url;
+                    else Object.assign(document.createElement('a'), {
+                        target: '_blank',
+                        href: url
+                    }).click();
+                }
+            });
+            setTimeout(function() {
+                if (redirected) return;
+                redirected = true;
+                if (!newWin) document.location = url;
+                else Object.assign(document.createElement('a'), {
+                    target: '_blank',
+                    href: url
+                }).click();
+                console.log('failsafe link used');
+            }, 750); // failsafe for gtag not loading
 
-      gtag('event', 'click', {
-        'event_category': 'outbound',
-        'event_label': url,
-        'transport_type': 'beacon',
-        'non_interaction': nonInteraction===true,
-        'event_callback': function () {
-          if(redirected) return;
-          redirected = true;
-          if(!newWin) document.location = url;
-          else Object.assign(document.createElement('a'), { target: '_blank', href: url}).click();
+            return false;
         }
-      });
-      setTimeout(function() { 
-        if(redirected) return;
-        redirected = true;
-        if(!newWin) document.location = url;
-        else Object.assign(document.createElement('a'), { target: '_blank', href: url}).click();
-        console.log('failsafe link used');
-      }, 750); // failsafe for gtag not loading
+        window.trackOutboundLink = trackOutboundLink;
 
-      return false;
-    }
-    window.trackOutboundLink = trackOutboundLink;
+        function trackOutboundLinkClick(url, nonInteraction, newWin) {
+            return function(e) {
+                e.preventDefault();
+                trackOutboundLink(url, nonInteraction, newWin);
+                return false;
+            }
+        }
+        window.trackOutboundLinkClick = trackOutboundLinkClick;
 
-    function trackOutboundLinkClick(url, nonInteraction, newWin) {
-      return function(e) {
-        e.preventDefault();
-        trackOutboundLink(url, nonInteraction, newWin);
-        return false;
-      }
-    }
-    window.trackOutboundLinkClick = trackOutboundLinkClick;
+        window.gtag = gtag;
+    </script>
 
-    window.gtag = gtag;
-  </script>
-
-  <script type='text/javascript'>
-    (function () {
-      if(/test\./.test(window.location.href)) return;
-      else if ( /\/\/dinnertable/.test(window.location.href))
-        window.location.replace(location.href.replace(/(https?:\/\/)[^/]+/,'%REACT_APP_HOST_URL%'));
-      else if (/github/.test(window.location.href) || /netlify/.test(window.location.href))
-        window.location.assign('%REACT_APP_HOST_URL%/');
-    })();
-  </script>
-   <!-- <script async src="/js/pwacompat.209.min.js"></script> -->
-  <script async src="/js/zenscroll-min.js"></script>
-  <script async src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
+    <script type='text/javascript'>
+        (function() {
+            if (/test\./.test(window.location.href)) return;
+            else if (/\/\/dinnertable/.test(window.location.href))
+                window.location.replace(location.href.replace(/(https?:\/\/)[^/]+/, '%REACT_APP_HOST_URL%'));
+            else if (/github/.test(window.location.href) || /netlify/.test(window.location.href))
+                window.location.assign('%REACT_APP_HOST_URL%/');
+        })();
+    </script>
+    <!-- <script async src="/js/pwacompat.209.min.js"></script> -->
+    <script async src="/js/zenscroll-min.js"></script>
+    <script async src="https://polyfill.io/v2/polyfill.min.js?features=IntersectionObserver"></script>
     <!--  <script src="https://cdn.jsdelivr.net/npm/producthunt-floating-prompt/lib/producthunt-floating-prompt.min.js"></script> -->
     <!-- start Mixpanel 
     <script type="text/javascript">(function(c,a){if(!a.__SV){var b=window;try{var d,m,j,k=b.location,f=k.hash;d=function(a,b){return(m=a.match(RegExp(b+"=([^&]*)")))?m[1]:null};f&&d(f,"state")&&(j=JSON.parse(decodeURIComponent(d(f,"state"))),"mpeditor"===j.action&&(b.sessionStorage.setItem("_mpcehash",f),history.replaceState(j.desiredHash||"",c.title,k.pathname+k.search)))}catch(n){}var l,h;window.mixpanel=a;a._i=[];a.init=function(b,d,g){function c(b,i){var a=i.split(".");2==a.length&&(b=b[a[0]],i=a[1]);b[i]=function(){b.push([i].concat(Array.prototype.slice.call(arguments,

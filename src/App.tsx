@@ -15,6 +15,9 @@ import i18n from './services/i18n';
 import * as TimeSerive from './services/TimeService';
 import { theme } from './withRoot';
 
+import 'css/outdated-browser-rework.css';
+import 'css/animate.min.css';
+
 const CookieCheck = React.lazy(() => import('./components/CookieCheck'));
 const AppBar = React.lazy(() => import('./components/AppBar'));
 const AuthWrapper = React.lazy(() => import('./components/aws/AuthWrapper'));
