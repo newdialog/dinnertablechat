@@ -53,7 +53,7 @@ const AppModel = types
       return !this.isGuest();
     },
     getRoot() {
-      if (!!window.location.href.match('/c/')) return '/c/';
+      if (window.location.href.indexOf('000/') > -1) return '/c/';
       else return '/';
     },
     isAdmin() {

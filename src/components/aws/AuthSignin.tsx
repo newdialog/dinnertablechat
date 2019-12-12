@@ -19,7 +19,7 @@ export default observer(function AuthSignin(props: Props) {
     setRefresh(true);
 
     // Never was authenticated
-    if(!store.auth.isAuthenticated() || (store.auth.isAuthenticated() && store.isGuest())) {
+    if(!store.auth.isAuthenticated() || store.isGuest()) {
       // alert('Error authenticating- retrying');
 
       // in case login is not working
@@ -55,6 +55,8 @@ export default observer(function AuthSignin(props: Props) {
     if(window.gtag) window.gtag('event', 'logged_in', {
       event_category: 'auth'
     });
+
+    console.log('isAuthenticated');
 
     // alow keep it around in case of back btn
     redirect();

@@ -250,7 +250,7 @@ export default observer(function CMaker(props: Props) {
     }
 }, [store.auth]);
 
-if (store.auth.isNotLoggedIn) {
+if (!store.auth.isAuthenticated()) {
   return (
     <div className={classes.pagebody}>
       <h3>Authorizing...</h3>

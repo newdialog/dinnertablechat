@@ -36,50 +36,14 @@
     <meta http-equiv="Expires" content="0" />
 
     <script>
-        if (!window.gtag) window.gtag = function() {};
-    </script>
-</head>
-
-<body>
-    <noscript>
-    You need to enable JavaScript to run this app.
-  </noscript>
-    <div id="root"></div>
-    <div id="outdated"></div>
-    <!--
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap"/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789"/>
-  -->
-    <!-- 
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=default,es6,Array.prototype.includes,Object.values,Object.keys"></script>
-  -->
-    <script async src="/js/outdated-browser-rework.min.js"></script>
-    <script>
-        window.addEventListener('load', function() {
-            outdatedBrowserRework({
-                fullscreen: true,
-                browserSupport: {
-                    'Chrome': 49,
-                    'Edge': 12,
-                    'Safari': 10,
-                    'Mobile Safari': 10,
-                    'Firefox': 18,
-                    'Opera': 36,
-                    'IE': false
-                },
-                isUnknownBrowserOK: true
-            });
-        });
-    </script>
-
-    <!-- Global DTC site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_GTAG%"></script>
-
-    <script>
         var id = '%REACT_APP_GTAG%';
 
         window.dataLayer = window.dataLayer || [];
 
+        // in case of a break
+        if (!window.gtag) window.gtag = function () { dataLayer.push(arguments); };
+
+        // normal logic
         var h = window.location.hostname;
         window.isLive = (
             h.indexOf('test') === -1 && // disallow test domain
@@ -87,8 +51,8 @@
             (h.indexOf('dinnertable.chat') !== -1 || h.indexOf('mixopinions') !== -1)
         );
 
-        function gtag() {
-            if (!window.isLive) return; // do not track
+        window.gtag = function gtag() {
+            // if (!window.isLive) return; // do not track
 
             // Mixpanel
             if (window["mixpanel"] && arguments[0] && arguments[0] === 'event') {
@@ -113,7 +77,7 @@
                 'event_label': url,
                 'transport_type': 'beacon',
                 'non_interaction': nonInteraction === true,
-                'event_callback': function() {
+                'event_callback': function () {
                     if (redirected) return;
                     redirected = true;
                     if (!newWin) document.location = url;
@@ -123,7 +87,7 @@
                     }).click();
                 }
             });
-            setTimeout(function() {
+            setTimeout(function () {
                 if (redirected) return;
                 redirected = true;
                 if (!newWin) document.location = url;
@@ -139,19 +103,53 @@
         window.trackOutboundLink = trackOutboundLink;
 
         function trackOutboundLinkClick(url, nonInteraction, newWin) {
-            return function(e) {
+            return function (e) {
                 e.preventDefault();
                 trackOutboundLink(url, nonInteraction, newWin);
                 return false;
             }
         }
         window.trackOutboundLinkClick = trackOutboundLinkClick;
+    </script>
+</head>
 
-        window.gtag = gtag;
+<body>
+    <noscript>
+        You need to enable JavaScript to run this app.
+    </noscript>
+    <div id="root"></div>
+    <div id="outdated"></div>
+    <!--
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,600&display=swap"/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono:300&display=swap&text=0123456789"/>
+  -->
+    <!-- 
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default,es6,Array.prototype.includes,Object.values,Object.keys"></script>
+  -->
+    <script async src="/js/outdated-browser-rework.min.js"></script>
+    <script>
+        window.addEventListener('load', function () {
+            outdatedBrowserRework({
+                fullscreen: true,
+                browserSupport: {
+                    'Chrome': 49,
+                    'Edge': 12,
+                    'Safari': 10,
+                    'Mobile Safari': 10,
+                    'Firefox': 18,
+                    'Opera': 36,
+                    'IE': false
+                },
+                isUnknownBrowserOK: true
+            });
+        });
     </script>
 
+    <!-- Global DTC site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=%REACT_APP_GTAG%"></script>
+
     <script type='text/javascript'>
-        (function() {
+        (function () {
             if (/test\./.test(window.location.href)) return;
             else if (/\/\/dinnertable/.test(window.location.href))
                 window.location.replace(location.href.replace(/(https?:\/\/)[^/]+/, '%REACT_APP_HOST_URL%'));

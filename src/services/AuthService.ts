@@ -44,11 +44,13 @@ Logger.LOG_LEVEL = 'DEBUG'; // Amplify.
 
 // https://github.com/aws-amplify/amplify-js/issues/1487
 
+const awsconfig = injectConfig(awsmobile);
+
 if (!AWS.config || !AWS.config.region) {
   AWS.config = new AWS.Config({ region: 'us-east-1' });
 }
-const awsconfig = injectConfig(awsmobile);
-configure(awsconfig); // just in case
+
+// configure(awsconfig); // just in case
 
 /*
 function getLoggger() {
@@ -112,8 +114,6 @@ export async function auth(cb: AwsCB, callbackPage: boolean = false) {
   console.log('auth: 0 start', callbackPage);
   // const awsmobileInjected = injectConfig(awsmobile);
 
-  await configure(awsconfig);
-
   // Order is important
   Hub.listen(/.*/, x => {
     // console.log('hubevent:', x);
@@ -126,6 +126,8 @@ export async function auth(cb: AwsCB, callbackPage: boolean = false) {
     // { onHubCapsule: onHubCapsule.bind(null, cb, callbackPage) }
     // ,'AuthService'
   );
+  await configure(awsconfig);
+  // ------------------ order important
 
   // ensure config is loaded
   // await (new Promise(r => setTimeout(r, 1)));
