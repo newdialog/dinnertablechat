@@ -32,8 +32,8 @@
     "@material-ui/core": "^4.2.1",
     "@material-ui/icons": "^4.2.1",
     "@material-ui/utils": "^4.1.0",
-    "@nivo/bar": "^0.59.2",
-    "@nivo/circle-packing": "^0.59.1",
+    "@nivo/bar": "^0.61.1",
+    "@nivo/circle-packing": "^0.61.0",
     "@segment/in-eu": "^0.3.0",
     "async-retry": "^1.2.3",
     "aws-sdk": "^2.496.0",
@@ -66,7 +66,7 @@
     "react": "^16.10.0",
     "react-add-to-calendar": "^0.1.5",
     "react-app-polyfill": "^1.0.4",
-    "react-cookie-consent": "^2.3.2",
+    "react-cookie-consent": "^3.0.0",
     "react-copy-to-clipboard": "^5.0.1",
     "react-countdown-now": "^2.1.1",
     "react-dom": "^16.10.0",
@@ -92,7 +92,7 @@
     "short-uuid": "^3.1.1",
     "simple-peer": "^9.4.0",
     "webfontloader": "^1.6.28",
-    "yup": "^0.27.0"
+    "yup": "^0.28.0"
   },
   "scripts": {
     "analyze": "npx source-map-explorer 'build/static/js/*.*' && echo '--html result.html'",
@@ -123,7 +123,7 @@
     "@types/i18next-xhr-backend": "^1.4.2",
     "@types/jest": "^24.0.15",
     "@types/luxon": "^1.15.2",
-    "@types/node": "^12.6.8",
+    "@types/node": "^13.1.1",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.4",
     "@types/react-responsive": "^8.0.0",
