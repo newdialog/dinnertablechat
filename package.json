@@ -82,7 +82,7 @@
     "react-reveal": "^1.2.2",
     "react-router": "^5.1.1",
     "react-router-dom": "^5.1.1",
-    "react-share": "^3.0.0",
+    "react-share": "^4.0.1",
     "react-swipeable-views": "^0.13.3",
     "react-use": "^13.2.2",
     "react-use-visibility": "^0.3.0",
