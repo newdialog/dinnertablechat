@@ -101,7 +101,7 @@ export function getOtherTopics(
       id: t(qs + '-id')
     });
   }
-  if (data.length === 0) console.log('found no questions:', topicid);
+  if (data.length === 0) console.log('found no questions:', topicid, keyT);
   return data;
 }
 

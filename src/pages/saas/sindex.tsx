@@ -192,9 +192,12 @@ export default observer(function MenuHome(props: Props) {
   // if (store.debate.position === -1) step = 0;
 
   if (step === 2) {
-    // goto 3rd page if debate session is not open
+    // TODO: time gating disabled for demo
+    /*
     if (Times.isDuringDebate(store.isLive) !== true) step = 3;
-    else store.router.push('/saasmatch'); //  && store.micAllowed :SAAS
+    else 
+    */
+    store.router.push('/saasmatch'); //  && store.micAllowed :SAAS
   }
 
   const handleStep = step2 => () => {
