@@ -3155,9 +3155,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30000981, caniuse-lite@^1.0.30001010, caniuse-lite@^1.0.30001020, caniuse-lite@^1.0.30001022:
-  version "1.0.30001022"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001022.tgz#9eeffe580c3a8f110b7b1742dcf06a395885e4c6"
-  integrity sha512-FjwPPtt/I07KyLPkBQ0g7/XuZg6oUkYBVnPHNj3VHJbOjmmJ/GdSo/GUY6MwINEQvjhP6WZVbX8Tvms8xh0D5A==
+  version "1.0.30001023"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001023.tgz#b82155827f3f5009077bdd2df3d8968bcbcc6fc4"
+  integrity sha512-C5TDMiYG11EOhVOA62W1p3UsJ2z4DsHtMBQtjzp3ZsUglcQn62WOUgW0y795c7A5uZ+GCEIvzkMatLIlAsbNTA==
 
 capture-exit@^2.0.0:
   version "2.0.0"
@@ -3279,9 +3279,9 @@ classnames@^2.2.5, classnames@^2.2.6:
   integrity sha512-JR/iSQOSt+LQIWwrwEzJ9uk0xfN3mTVYMwt1Ir5mUcSN6pU+V4zQFFaJsclJbPuAUQH+yfWef6tm7l1quW3C8Q==
 
 clean-css@4.2.x:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.1.tgz#2d411ef76b8569b6d0c84068dabe85b0aa5e5c17"
-  integrity sha512-4ZxI6dy4lrY6FHzfiy1aEOXgu4LIsW2MhwG0VBKdcoGoH/XLFgaHSdLTGr4O8Be6A8r3MOphEiI8Gc1n0ecf3g==
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/clean-css/-/clean-css-4.2.2.tgz#8519abda724b3e759bc79d196369906925d81a3f"
+  integrity sha512-yKycArwReQXbOD/3pmsPmt6p7oUBww8MisDabL2pCUWkbVONvCJoBdCjgY4ZVQmKX5juz/JB9oDcP6XzGUpjwQ==
   dependencies:
     source-map "~0.6.0"
 
@@ -6295,9 +6295,9 @@ inquirer@6.5.0:
     through "^2.3.6"
 
 inquirer@^7.0.0:
-  version "7.0.3"
-  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-7.0.3.tgz#f9b4cd2dff58b9f73e8d43759436ace15bed4567"
-  integrity sha512-+OiOVeVydu4hnCGLCSX+wedovR/Yzskv9BFqUNNKq9uU2qg7LCcCo3R86S2E7WLo0y/x2pnEZfZe1CoYnORUAw==
+  version "7.0.4"
+  resolved "https://registry.yarnpkg.com/inquirer/-/inquirer-7.0.4.tgz#99af5bde47153abca23f5c7fc30db247f39da703"
+  integrity sha512-Bu5Td5+j11sCkqfqmUTiwv+tWisMtP0L7Q8WrqA2C/BbBhy1YTdFrvjjlrKq8oagA/tLQBski2Gcx/Sqyi2qSQ==
   dependencies:
     ansi-escapes "^4.2.1"
     chalk "^2.4.2"
@@ -7779,9 +7779,9 @@ material-auto-rotating-carousel@^3.0.1:
     prop-types "^15.5.8"
 
 material-table@^1.51.0:
-  version "1.55.0"
-  resolved "https://registry.yarnpkg.com/material-table/-/material-table-1.55.0.tgz#7293832a0c223d2dca2422328227adcb9059efd8"
-  integrity sha512-2PuDvrLR+M012aXwfR7dfL88UB3CwN9A3dZbOR2tdPZcH3oBB/teKEbjY1vpkuSWhW1qCBPhHwJ6oSBVKE+S0Q==
+  version "1.56.1"
+  resolved "https://registry.yarnpkg.com/material-table/-/material-table-1.56.1.tgz#40be8c3430df4db62ad9bd0548051104db70b379"
+  integrity sha512-j1424uQxExXXTMaED4MI0ROw7gIq2R3bUo4yVrSH6rPwxc1TPjoNytOkW1i+h5YmXzHQ7Ak+ERlehUz8g5OgpA==
   dependencies:
     "@date-io/date-fns" "^1.1.0"
     "@material-ui/pickers" "^3.2.2"
