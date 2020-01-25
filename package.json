@@ -17,9 +17,9 @@
     "**/lodash": "^4.17.15"
   },
   "dependencies": {
-    "@aws-amplify/api": "^2.1.1",
-    "@aws-amplify/auth": "^2.1.1",
-    "@aws-amplify/core": "^2.2.0",
+    "@aws-amplify/api": "^2.1.3",
+    "@aws-amplify/auth": "^2.1.3",
+    "@aws-amplify/core": "^2.2.2",
     "@awspilot/dynamodb": "jadbox/dynamodb-oop#nosql",
     "@fortawesome/fontawesome-svg-core": "^1.2.19",
     "@fortawesome/free-brands-svg-icons": "^5.9.0",
