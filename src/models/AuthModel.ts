@@ -66,7 +66,18 @@ const AuthModel = types
           });
 
       const current = window.location.href;
-      const loginURL = loginTo || current;
+
+      let loginURL = loginTo || current;
+
+      // In case we're trying to relogin
+      if (loginURL.indexOf('/callback') > -1) {
+        const getRoot = () => {
+          if (window.location.href.indexOf('000/') > -1) return '/c/';
+          else return '/';
+        };
+        loginURL = getRoot();
+      }
+
       console.log('loginURL', loginURL);
       localStorage.setItem('loginTo', loginURL);
 

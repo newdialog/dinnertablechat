@@ -10,13 +10,14 @@ interface Props {
 }
 
 //
+let refresh = false;
 export default observer(function AuthSignin(props: Props) {
   const store = useContext(AppModel.Context)!;
-  let [refresh, setRefresh] = useState(false);
+  // let [refresh, setRefresh] = useState(false);
 
   const redirect = () => {
     if(refresh) return;
-    setRefresh(true);
+    refresh = true;
 
     // Never was authenticated
     if(!store.auth.isAuthenticated() || store.isGuest()) {
@@ -64,8 +65,8 @@ export default observer(function AuthSignin(props: Props) {
   
   useTimeoutFn(() => {
     console.warn('auth: forcing redirect due to timeout');
-    redirect()
-  }, 8000);
+    redirect();
+  }, 10000);
 
   return (
     <React.Fragment>
