@@ -35,7 +35,15 @@ export default observer(function AuthSignin(props: Props) {
       return;
     }
 
-    const redirectTo = localStorage.getItem('loginTo');
+    let redirectTo = localStorage.getItem('loginTo');
+
+    if (redirectTo && redirectTo.indexOf('/callback') > -1) {
+      const getRoot = () => {
+        if (window.location.href.indexOf('000/') > -1) return '/c/';
+        else return '/';
+      };
+      redirectTo = getRoot();
+    }
 
     if (redirectTo) {
       localStorage.removeItem('loginTo');
