@@ -20,6 +20,7 @@ interface State {
 }
 
 export const signIn = () => {
+  AuthService.clearCache();
   // const config = (Auth.configure(null) as any).oauth;
   // console.log('withOAuth configuration', config);
 
@@ -70,7 +71,9 @@ function AuthComp(props: Props) {
   useEffect( () => {
     if(!store.auth.doLogout) return; //  || !store.auth.user
     
-    AuthService.logout().then( () => store.auth.logoutFinished());
+    AuthService.logout().then( () => {
+      store.auth.logoutFinished();
+    });
   }, [store.auth.doLogout]);
 
   
