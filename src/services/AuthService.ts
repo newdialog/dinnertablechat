@@ -349,7 +349,11 @@ export function logout() {
   // {global: true}
   return Auth.signOut({ global: false })
     .then(x => {
-      // remove auth tokens
+      console.log('AWS.config', AWS.config);
+      if(AWS.config?.credentials?.['clearCachedId']) {
+        (AWS.config.credentials as any).clearCachedId()
+      }
+      // remove auth tokens 
       lastCred = null;
       credRefresh = null;
       // console.log('logout', x);
