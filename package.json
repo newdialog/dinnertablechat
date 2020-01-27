@@ -83,7 +83,7 @@
     "react-router": "^5.1.1",
     "react-router-dom": "^5.1.1",
     "react-share": "^4.0.1",
-    "react-swipeable-views": "^0.13.6",
+    "react-swipeable-views": "0.13.3",
     "react-use": "^13.2.2",
     "react-use-visibility": "^0.3.0",
     "react-waypoint": "^9.0.2",

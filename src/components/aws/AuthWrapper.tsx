@@ -20,6 +20,7 @@ interface State {
 }
 
 export const signIn = () => {
+  AuthService.clearCache();
   // const config = (Auth.configure(null) as any).oauth;
   // console.log('withOAuth configuration', config);
 

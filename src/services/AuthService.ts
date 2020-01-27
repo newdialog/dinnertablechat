@@ -93,6 +93,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   /// console.log('payload.event', channel, payload.event);
   if (payload.event === LOGOUT_EVENT) {
     console.log('auth: cog logout event');
+    clearCache();
     /// checkUser(cb);
     // return;
   }
@@ -105,14 +106,15 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
 }
 
 export async function configure(awsconfig) {
-  if(!awsconfig) throw new Error('AuthService cannot load config.');
+  if (!awsconfig) throw new Error('AuthService cannot load config.');
   Auth.configure(awsconfig);
   // return new Promise(r => setTimeout(r, 1));
 }
 
 export async function auth(cb: AwsCB, callbackPage: boolean = false) {
   console.log('auth: 0 start', callbackPage);
-  // const awsmobileInjected = injectConfig(awsmobile);
+  // Force id cache expire
+  // (AWS.config?.credentials as any)?.clearCachedId();
 
   // Order is important
   Hub.listen(/.*/, x => {
@@ -170,7 +172,6 @@ let credRefresh: Promise<any> | null;
 let lastCred: Creds;
 
 export async function refreshCredentials(): Promise<Creds> {
-
   if (lastCred && lastCred.expired === false) {
     return Promise.resolve(lastCred).then((x: Creds) => {
       x.refreshed = false;
@@ -345,15 +346,18 @@ async function checkUser(cb: AwsCB, event: string = '') {
 
 // type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
 
-export function logout() {
+export async function logout() {
   // {global: true}
-  return Auth.signOut({ global: false })
+  const currentUser = await Auth.currentUserPoolUser();
+  return Auth.signOut({ global: true })
     .then(x => {
-      console.log('AWS.config', AWS.config);
-      if(AWS.config?.credentials?.['clearCachedId']) {
-        (AWS.config.credentials as any).clearCachedId()
-      }
-      // remove auth tokens 
+      console.log('AWS.config signout', AWS.config?.credentials);
+
+      // Force log out
+      if (currentUser) currentUser.signOut();
+
+      clearCache();
+      // remove auth tokens
       lastCred = null;
       credRefresh = null;
       // console.log('logout', x);
@@ -363,6 +367,10 @@ export function logout() {
       console.log('Error logging out: ' + err);
       return null;
     });
+}
+
+export function clearCache() {
+  (AWS.config?.credentials as any)?.clearCachedId();
 }
 
 /*
