@@ -53,7 +53,7 @@ export const App = () => {
   }
   const { history, store } = initO;
 
-  console.log('v1.5');
+  console.log('v1.53', process.env.NODE_ENV);
 
   const AppBase = (
     <ThemeProvider theme={theme}>

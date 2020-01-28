@@ -88,7 +88,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   // getLoggger().onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
-  if (channel !== 'auth') return;
+  // if (channel !== 'auth') return;
 
   /// console.log('payload.event', channel, payload.event);
   if (payload.event === LOGOUT_EVENT) {
@@ -96,13 +96,13 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
     clearCache();
     /// checkUser(cb);
     // return;
-  }
-  if (payload.event === LOGIN_EVENT) {
+  } else if (payload.event === LOGIN_EVENT) {
     console.log('auth: cog login event');
     //  || payload.event === 'cognitoHostedUI'
     // console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
   } else if (payload.event === 'configured' && !callbackPage) checkUser(cb);
+  else console.log('event', payload);
 }
 
 export async function configure(awsconfig) {
@@ -347,14 +347,15 @@ async function checkUser(cb: AwsCB, event: string = '') {
 // type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
 
 export async function logout() {
-  // {global: true}
   const currentUser = await Auth.currentUserPoolUser();
   return Auth.signOut({ global: true })
     .then(x => {
       console.log('AWS.config signout', AWS.config?.credentials);
 
       // Force log out
-      if (currentUser) currentUser.signOut();
+      if (currentUser) {
+        currentUser.signOut();
+      }
 
       clearCache();
       // remove auth tokens

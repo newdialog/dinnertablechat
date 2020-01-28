@@ -299,7 +299,7 @@ if (!store.auth.isAuthenticated()) {
         <main className={classes.container}>
           <div style={{ textAlign: 'right', float: 'right' }}>
             {store.isNotGuest() && (
-              <button onClick={() => store.auth.logout(store.getRoot())}>logout</button>
+              <button onClick={() => store.auth.logout()}>logout</button>
             )}
           </div>
           {/* Hero unit */}

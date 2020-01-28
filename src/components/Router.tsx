@@ -16,6 +16,7 @@ const Dashboard = lazy(() => import('../pages/dashboard'));
 const DebateFeedback = lazy(() => import('./debate/DebateFeedback'));
 const Tutorial = lazy(() => import('../pages/tutorial'));
 const AuthSignin = lazy(() => import('./aws/AuthSignin'));
+const AuthLogOut = lazy(() => import('./aws/AuthLogOut'));
 
 const SRouter = lazy(() => import('../pages/saas/SRouter'));
 const SPitch = lazy(() => import('../pages/saas/SPitch'));
@@ -56,7 +57,7 @@ const DTCRouter = ({
     return (
       <Router history={history}>
         <Switch>
-          <Redirect from="/signout" to="/" />
+          <Route path="/signout" component={AuthLogOut} />
           <Route path="/callback" component={AuthSignin} />
           <Route path="/CALLBACK" component={AuthSignin} />{' '}
           {/* do not redirect */}
@@ -96,10 +97,10 @@ const DTCRouter = ({
   return (
     <Router history={history}>
       <Switch>
-        <Redirect from="/signout" to="/" />
         <Route exact path="/saas" render={props => <Redirect to={`/r`} />} />
         <Route exact path="/" component={Home} />
         <Route exact path="/about" component={Home} />
+        <Route path="/signout" component={AuthLogOut} />
         <Route path="/callback" component={AuthSignin} />
         <Route path="/CALLBACK" component={AuthSignin} />{' '}
         {/* do not redirect */}

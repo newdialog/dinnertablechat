@@ -9,6 +9,11 @@ import {
 import uuid from 'short-uuid';
 // import { signIn } from 'components/aws/AuthWrapper';
 
+const getRoot = () => {
+  if (window.location.href.indexOf('000/') > -1) return '/c/';
+  else return '/';
+};
+
 const UserModel = types
   .model({
     email: types.string,
@@ -71,10 +76,6 @@ const AuthModel = types
 
       // In case we're trying to relogin
       if (loginURL.indexOf('/callback') > -1) {
-        const getRoot = () => {
-          if (window.location.href.indexOf('000/') > -1) return '/c/';
-          else return '/';
-        };
         loginURL = getRoot();
       }
 
@@ -94,17 +95,16 @@ const AuthModel = types
       self.doLogout = false;
       self.isNotLoggedIn = true;
 
-      const page = localStorage.getItem('logoutTo');
-      localStorage.removeItem('logoutTo');
+      // localStorage.removeItem('logoutTo');
       localStorage.removeItem('loginTo');
 
-      console.warn('logoutFinished page', page);
-
-      if (page) window.location.assign(page);
-      else window.location.assign('/');
+      // if (page) window.location.assign(page);
+      // else window.location.assign('/');
     },
     logout(logoutTo?: string) {
       console.log('logout action', logoutTo);
+      if (!logoutTo) logoutTo = getRoot();
+
       if (logoutTo) localStorage.setItem('logoutTo', logoutTo);
       else localStorage.removeItem('logoutTo');
 
