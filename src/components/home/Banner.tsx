@@ -279,7 +279,7 @@ export default observer(function HomeBanner(props: Props) {
             </>
           )}
           {(!auth || store.isGuest()) && (
-            <Button
+            <><Button
               style={{
                 marginTop: '1vh',
                 marginLeft: '12px',
@@ -292,9 +292,25 @@ export default observer(function HomeBanner(props: Props) {
               color="secondary"
               size="large"
             >
-              Signup/Login
+              Login
               <QueueIcon style={{ marginLeft: '8px' }} />
             </Button>
+            <Button
+            style={{
+              marginTop: '1vh',
+              marginLeft: '12px',
+              lineHeight: '2.6em'
+            }}
+            onClick={() =>
+              store.auth.signUp('/home')
+            }
+            variant="contained"
+            color="secondary"
+            size="large"
+          >
+            Signup
+            <QueueIcon style={{ marginLeft: '8px' }} />
+          </Button></>
           )}
 
           <div className={classes.bannerTextDivider} />
