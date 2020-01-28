@@ -88,7 +88,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   // getLoggger().onHubCapsule(capsule);
 
   const { channel, payload } = capsule; // source
-  // if (channel !== 'auth') return;
+  if (channel !== 'auth') return;
 
   /// console.log('payload.event', channel, payload.event);
   if (payload.event === LOGOUT_EVENT) {
@@ -257,6 +257,7 @@ async function checkUser(cb: AwsCB, event: string = '') {
     cr = await refreshCredentials(); //Auth.currentUserCredentials();
   } catch (e) {
     console.log('-currentUserCredentials', e);
+    logout();
   }
 
   try {
@@ -307,7 +308,9 @@ async function checkUser(cb: AwsCB, event: string = '') {
   // const groups = session.getIdToken().payload['cognito:groups'];
 
   if (!id) {
-    throw new Error('checkuser: no id');
+    console.warn('checkuser: no id');
+    return;
+    // throw new Error('checkuser: no id');
   }
 
   const authParams: any = {
@@ -347,8 +350,17 @@ async function checkUser(cb: AwsCB, event: string = '') {
 // type EssentialCredentials = ReturnType<typeof Auth.essentialCredentials>;
 
 export async function logout() {
-  const currentUser = await Auth.currentUserPoolUser();
-  return Auth.signOut({ global: true })
+  let currentUser;
+  try {
+    currentUser = await Auth.currentUserPoolUser();
+  } catch (e) {}
+  return Auth.signOut({ global: false })
+    .finally(() => {
+      Object.entries(localStorage)
+        .map(x => x[0])
+        .filter(x => x.indexOf('CognitoIdentityId') > -1)
+        .map(x => localStorage.removeItem(x));
+    })
     .then(x => {
       console.log('AWS.config signout', AWS.config?.credentials);
 
