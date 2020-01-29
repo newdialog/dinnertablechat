@@ -354,7 +354,7 @@ export async function logout() {
   try {
     currentUser = await Auth.currentUserPoolUser();
   } catch (e) {}
-  return Auth.signOut({ global: false })
+  return Auth.signOut({ global: true })
     .finally(() => {
       Object.entries(localStorage)
         .map(x => x[0])
