@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useState, useEffect } from 'react';
-import { useTimeoutFn } from 'react-use';
+import { useTimeoutFn, useEffectOnce } from 'react-use';
 
 import * as AppModel from '../../models/AppModel';
 
@@ -14,6 +14,13 @@ let refresh = false;
 export default observer(function AuthLogOut(props: Props) {
   const store = useContext(AppModel.Context)!;
   // let [refresh, setRefresh] = useState(false);
+
+  useEffectOnce( () => {
+    refresh = false;
+    /* return () => { 
+      refresh = false;
+    } */
+  })
 
   const redirect = () => {
     if(refresh) return;
@@ -44,7 +51,8 @@ export default observer(function AuthLogOut(props: Props) {
   }
 
   useEffect(() => {
-    if (refresh || store.auth.isAuthenticated()) return;
+    //  || store.auth.isAuthenticated()
+    if (refresh) return;
     if(window.gtag) window.gtag('event', 'logged_out_finished', {
       event_category: 'auth'
     });
@@ -55,10 +63,11 @@ export default observer(function AuthLogOut(props: Props) {
     redirect();
   }, [store.auth.user]);
   
+  // Shouldnt happen
   useTimeoutFn(() => {
     console.warn('auth: forcing redirect due to timeout');
     redirect();
-  }, 10000);
+  }, 24000);
 
   return (
     <React.Fragment>
