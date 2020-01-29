@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import { observer } from 'mobx-react-lite';
 import React, { useContext, useState, useEffect } from 'react';
-import { useTimeoutFn } from 'react-use';
+import { useTimeoutFn, useEffectOnce } from 'react-use';
 
 import * as AppModel from '../../models/AppModel';
 
@@ -12,15 +12,24 @@ interface Props {
 //
 let refresh = false;
 export default observer(function AuthSignin(props: Props) {
+  // const [refresh, setRefresh] = useState(false);
   const store = useContext(AppModel.Context)!;
   // let [refresh, setRefresh] = useState(false);
 
+  useEffectOnce( () => {
+    refresh = false;
+    /* return () => { 
+      refresh = false;
+    } */
+  })
+
   const redirect = () => {
-    if(refresh) return;
-    refresh = true;
+    // if(refresh) return;
+    // refresh = true;
 
     // Never was authenticated
-    if(!store.auth.isAuthenticated() || store.isGuest()) {
+    //  || store.isGuest()
+    if(!store.auth.isAuthenticated()) {
       // alert('Error authenticating- retrying');
 
       // in case login is not working
@@ -72,9 +81,10 @@ export default observer(function AuthSignin(props: Props) {
   }, [store.auth.user]);
   
   useTimeoutFn(() => {
+    if (refresh || !store.auth.isAuthenticated()) return;
     console.warn('auth: forcing redirect due to timeout');
     redirect();
-  }, 10000);
+  }, 24000);
 
   return (
     <React.Fragment>
