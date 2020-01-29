@@ -19,10 +19,8 @@ interface State {
   init: boolean;
 }
 
-export const signIn = () => {
-  AuthService.clearCache();
-  
-  window.sessionStorage.removeItem('oauth_state'); // possible patch Invalid state in OAuth flow #3055
+export const signIn = async () => {
+  await AuthService.logout();
   
   // const config = (Auth.configure(null) as any).oauth;
   // console.log('withOAuth configuration', config);

@@ -18,14 +18,11 @@ export default observer(function AuthSignin(props: Props) {
 
   useEffectOnce( () => {
     refresh = false;
-    /* return () => { 
-      refresh = false;
-    } */
   })
 
   const redirect = () => {
-    // if(refresh) return;
-    // refresh = true;
+    if(refresh) return;
+    refresh = true;
 
     // Never was authenticated
     //  || store.isGuest()
@@ -81,10 +78,10 @@ export default observer(function AuthSignin(props: Props) {
   }, [store.auth.user]);
   
   useTimeoutFn(() => {
-    if (refresh || !store.auth.isAuthenticated()) return;
+    if (refresh) return; //  || !store.auth.isAuthenticated()
     console.warn('auth: forcing redirect due to timeout');
     redirect();
-  }, 24000);
+  }, 10000);
 
   return (
     <React.Fragment>

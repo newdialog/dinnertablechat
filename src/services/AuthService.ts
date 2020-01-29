@@ -93,7 +93,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
   /// console.log('payload.event', channel, payload.event);
   if (payload.event === LOGOUT_EVENT) {
     console.log('auth: cog logout event');
-    clearCache();
+    // clearCache();
     /// checkUser(cb);
     // return;
   } else if (payload.event === LOGIN_EVENT) {
@@ -102,7 +102,7 @@ function onHubCapsule(cb: AwsCB, callbackPage: boolean = false, capsule: any) {
     // console.log('onHubCapsule signIn', capsule);
     checkUser(cb, LOGIN_EVENT);
   } else if (payload.event === 'configured' && !callbackPage) checkUser(cb);
-  else console.log('event', payload);
+  else console.log('event', payload.event, JSON.stringify(payload));
 }
 
 export async function configure(awsconfig) {
@@ -113,8 +113,6 @@ export async function configure(awsconfig) {
 
 export async function auth(cb: AwsCB, callbackPage: boolean = false) {
   console.log('auth: 0 start', callbackPage);
-  // Force id cache expire
-  // (AWS.config?.credentials as any)?.clearCachedId();
 
   // Order is important
   Hub.listen(/.*/, x => {
@@ -354,25 +352,34 @@ export async function logout() {
   try {
     currentUser = await Auth.currentUserPoolUser();
   } catch (e) {}
-  return Auth.signOut({ global: true })
+  return Auth.signOut({ global: false })
     .finally(() => {
+      // Amplify cleanup
+      // console.log('Amplify Signout cleanup');
+      (AWS.config?.credentials as any)?.clearCachedId();
+      window.sessionStorage.removeItem('oauth_state'); // possible patch Invalid state in OAuth flow #3055
+
       Object.entries(localStorage)
         .map(x => x[0])
         .filter(x => x.indexOf('CognitoIdentityId') > -1)
         .map(x => localStorage.removeItem(x));
+
+      // remove auth tokens
+      lastCred = null;
+      credRefresh = null;
     })
     .then(x => {
-      console.log('AWS.config signout', AWS.config?.credentials);
+      console.log(
+        'Signout',
+        lastCred === null,
+        currentUser && currentUser.signOut
+      );
 
       // Force log out
       if (currentUser) {
         currentUser.signOut();
       }
 
-      clearCache();
-      // remove auth tokens
-      lastCred = null;
-      credRefresh = null;
       // console.log('logout', x);
       return x;
     })
@@ -382,9 +389,10 @@ export async function logout() {
     });
 }
 
-export function clearCache() {
-  (AWS.config?.credentials as any)?.clearCachedId();
-}
+/* export async function clearCache() {
+  await logout();
+  // (AWS.config?.credentials as any)?.clearCachedId();
+} */
 
 /*
 if (err.code === 'UserNotConfirmedException') {
