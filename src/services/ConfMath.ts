@@ -59,7 +59,6 @@ function diversify(
 
   // Origin group is clustered, and we're trying to diversify them.
   // Pull out a user from each source group and assign to target group
-  // let emptyGroups = 0;
   while (l > 0) {
     // Pull out a user from source group.
     let pnt = groups[rb].pop();
@@ -124,19 +123,36 @@ function diversify(
       });
 
     // sort descending
-    const distToGroupMemberSorted = distToGroupMember.sort((a, b) => b.x - a.x);
+    const distToGroupMemberSorted = 
+      distToGroupMember.sort((a, b) => b.x - a.x)
+      .filter(y=>y.i > 1); // remove similar groups
+
+    // console.log('distToGroupMemberSorted', distToGroupMemberSorted);
+    // throw new Error('a');
 
     // Get mid point group to choose from (dont exhaust the extremes)
-    const m = Math.floor(distToGroupMemberSorted.length / 2);
+    let m = Math.floor(distToGroupMemberSorted.length / 2);
+    // jitter
+    // m += Math.round(Math.random() * 1) % k;
     // console.log('distToGroupMemberSorted', distToGroupMemberSorted);
 
     // get middle group index
-    const r = distToGroupMemberSorted[m];
+    let r = distToGroupMemberSorted[m];
+    // No diff in view, chose from most diff
+    /// if(r && r.x <= 1) r = distToGroupMemberSorted[0];
+
+    // if Distance is 0, just round robin
+    if(!r) {
+      console.log('round robin');
+      rb = ++rb % k;
+    } else {
+      rb = r.i;
+    }
 
     // console.log('r', rb, m, r);
 
     // use ideal index, otherwise roundrobin
-    rb = !!r ? r.i : ++rb % k;
+    
 
     /*  const nextIndex = aa
       .reduce(
@@ -269,7 +285,7 @@ export function match(
   // Run k-means
   var r = kmpp(p, {
     k: k,
-    maxIterations: 30
+    maxIterations: 60
   });
 
   // console.log('p', JSON.stringify(p), names);
