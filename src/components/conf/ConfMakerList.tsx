@@ -72,11 +72,17 @@ export default (props: Props) => {
     props.onEdit('');
   }
 
+  const upgradeAcct = () => {
+    window.alert('Thank you for your interest in upgrading! Please contact us at: team@newdialogue.org');
+    window.open('mailto:team@newdialogue.org?subject=Upgrade request', '_blank');
+  }
+
   if (!state.rows) return null;
 
   return (
     <div style={{ maxWidth: '100%', textAlign:'left' }}>
       <Button style={{margin:'10px'}} onClick={makeListItem} variant={'contained'}>Add new event debate</Button>
+      <Button style={{margin:'10px'}} onClick={upgradeAcct} variant={'contained'}>Upgrade Account!</Button>
       <MaterialTable
         options={{pageSize: 20, paging: false, actionsColumnIndex:2}}
         icons={tableIcons as any}
