@@ -419,31 +419,10 @@ export default function ConfUserPanel(props: Props) {
 
               {group && (
                 <>
-                  <Button
-                    style={{ marginTop: '1em' }}
-                    variant="contained"
-                    // size="small"
-                    color="primary"
-                    onClick={() =>
-                      window.open(
-                        'https://docs.google.com/forms/d/e/1FAIpQLSc26IYAyFjLEz3f7jkVylQHCywkZu4UQMGyJDbXltDjN_TjOQ/viewform?usp=sf_link',
-                        '_bank'
-                      )
-                    }
-                  >
-                    User Feedback
-                  </Button>
-                  <Button
-                    style={{ marginTop: '1em' }}
-                    variant="contained"
-                    // size="small"
-                    color="primary"
-                    onClick={() =>
-                      window.open('https://www.mixopinions.com', '_bank')
-                    }
-                  >
-                    About MixOpinions.com
-                  </Button>
+                <Typography align="center" style={{ padding: '.1em' }}>
+                Do you like this tool? Use our service at your next onference or event.
+                <br/>Visit <a href="https://www.mixopinions.com" target="_bank">MixOpinions.com</a>
+                </Typography>
                 </>
               )}
             </CardActions>
