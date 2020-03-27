@@ -1,5 +1,6 @@
 // import '@babel/polyfill';
 // import 'react-app-polyfill/ie11'; // IE11 NOT SUPPORTED
+
 import 'react-app-polyfill/stable';
 import ProxyPolyfill from 'proxy-polyfill/src/proxy';
 
