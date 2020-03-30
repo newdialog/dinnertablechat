@@ -283,8 +283,6 @@ export default function ConfUserPanel(props: Props) {
         result
       );
 
-      ZoomMtg.init();
-
       setState(p => ({ ...p, data: result, ready, myGroup, version, isLate }));
     }
   };

@@ -1,11 +1,18 @@
-import { ZoomMtg } from '@zoomus/websdk';
+// import { ZoomMtg } from '@zoomus/websdk';
+
+// ZoomMtg.setZoomJSLib('https://dmogdx0jrul3u.cloudfront.net/1.7.2/lib', '/av');
+// ZoomMtg.setZoomJSLib('https://source.zoom.us/1.7.2/lib', '/av');
+
 
 const SIGNATURE_ENDPOINT = 'https://mixzoom.herokuapp.com/';
 
-ZoomMtg.preLoadWasm();
-ZoomMtg.prepareJssdk();
+let ZoomMtg: any;
 
 export function makeConfig(meeting:any) {
+	// ZoomMtg = document.getElementById("zmmtg-root") as any;
+	ZoomMtg.preLoadWasm();
+	ZoomMtg.prepareJssdk();
+	
     const meetConfig = {
         // apiKey: '3239845720934223459',
         meetingNumber: meeting || '123456789',
