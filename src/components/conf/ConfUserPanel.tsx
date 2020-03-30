@@ -26,6 +26,8 @@ import {
 import * as TopicInfo from '../../utils/TopicInfo';
 import ConfUserBars from './ConfUserBars';
 
+import * as Zoom from './Zoom';
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     layout: {
@@ -162,6 +164,14 @@ export default function ConfUserPanel(props: Props) {
     onStart();
   }, [user, pos, confid]);
 
+  const onZoom = async (group:string | null) => {
+    console.log('onZoom click');
+    if(group===null) return;
+    const config = Zoom.makeConfig(confid + '' + group);
+    Zoom.zoomConnect(config);
+    console.log('onZoom');
+  }
+
   const onRefresh2 = async () => {
     console.log('onRefresh2');
     const _data = await getResults(confid);
@@ -272,6 +282,8 @@ export default function ConfUserPanel(props: Props) {
         'data',
         result
       );
+
+      ZoomMtg.init();
 
       setState(p => ({ ...p, data: result, ready, myGroup, version, isLate }));
     }
@@ -384,6 +396,15 @@ export default function ConfUserPanel(props: Props) {
                     color="secondary"
                   />
                   <br />
+                  <Button
+                    variant="contained"
+                    // size="small"
+                    color="secondary"
+                    className={classes.btn}
+                    onClick={() => onZoom(group)}
+                  >
+                    Join by video
+                </Button>
                   <br />
                   <Typography align="center" style={{ padding: '0 2em' }}>
                     <i>
