@@ -26,6 +26,8 @@ import {
 import * as TopicInfo from '../../utils/TopicInfo';
 import ConfUserBars from './ConfUserBars';
 
+import * as Zoom from './Zoom';
+
 const useStyles = makeStyles(
   (theme: Theme) => ({
     layout: {
@@ -161,6 +163,20 @@ export default function ConfUserPanel(props: Props) {
     console.log('user', user);
     onStart();
   }, [user, pos, confid]);
+
+  const onZoom = async (group:string | null) => {
+    console.log('onZoom click');
+    if(group===null) {
+      alert('no group assigned  yet');
+      return;
+    }
+    // const config = Zoom.makeConfig(confid + '' + group);
+    const meeting = confid + '' + group;
+    const url = await Zoom.zoomConnect(meeting);
+    console.log('onZoom', url);
+
+    window.open(url, '_blank');
+  }
 
   const onRefresh2 = async () => {
     console.log('onRefresh2');
@@ -384,6 +400,15 @@ export default function ConfUserPanel(props: Props) {
                     color="secondary"
                   />
                   <br />
+                  <Button
+                    variant="contained"
+                    // size="small"
+                    color="secondary"
+                    className={classes.btn}
+                    onClick={() => onZoom(group)}
+                  >
+                    Join by video
+                </Button>
                   <br />
                   <Typography align="center" style={{ padding: '0 2em' }}>
                     <i>
