@@ -166,10 +166,16 @@ export default function ConfUserPanel(props: Props) {
 
   const onZoom = async (group:string | null) => {
     console.log('onZoom click');
-    if(group===null) return;
-    const config = Zoom.makeConfig(confid + '' + group);
-    Zoom.zoomConnect(config);
-    console.log('onZoom');
+    if(group===null) {
+      alert('no group assigned  yet');
+      return;
+    }
+    // const config = Zoom.makeConfig(confid + '' + group);
+    const meeting = confid + '' + group;
+    const url = await Zoom.zoomConnect(meeting);
+    console.log('onZoom', url);
+
+    window.open(url, '_blank');
   }
 
   const onRefresh2 = async () => {
