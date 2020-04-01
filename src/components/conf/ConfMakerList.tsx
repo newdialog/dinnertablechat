@@ -81,7 +81,7 @@ export default (props: Props) => {
 
   return (
     <div style={{ maxWidth: '100%', textAlign:'left' }}>
-      <Button style={{margin:'10px'}} onClick={makeListItem} variant={'contained'}>Add new event debate</Button>
+      <Button style={{margin:'10px'}} onClick={makeListItem} variant={'contained'}>Add new event</Button>
       <Button style={{margin:'10px'}} onClick={upgradeAcct} variant={'contained'}>Upgrade Account!</Button>
       <MaterialTable
         options={{pageSize: 20, paging: false, actionsColumnIndex:2}}
@@ -129,7 +129,7 @@ export default (props: Props) => {
               const id = (rowData as any).conf;
               const ready = (rowData as any).ready;
               if(ready) {
-                var r = window.alert('Delete a debate that\'s already been active is not currently possible.');
+                var r = window.alert('Delete a event that\'s already been active is not currently possible.');
                 return;
               }
 
@@ -146,7 +146,7 @@ export default (props: Props) => {
           }, */
           /* {
             icon: tableIcons.Add as any,
-            tooltip: 'Add Debate',
+            tooltip: 'Add Event',
             isFreeAction: true,
             onClick: (event) => {
               makeListItem();
@@ -159,7 +159,7 @@ export default (props: Props) => {
           /* { title: 'Status', field: 'ready', lookup: { true: 'assigned', false: 'unassigned' } } */
         ]}
         data={state.rows!}
-        title="Debate Sessions"
+        title="Event Sessions"
       />
     </div>
   );

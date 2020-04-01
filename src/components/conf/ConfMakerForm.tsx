@@ -397,7 +397,7 @@ export default (props: Props) => {
             const id = state.data!.conf;
             const ready = state.data!.ready;
             if (ready) {
-              var r = window.alert('Delete a debate that\'s already been active is not currently possible.');
+              var r = window.alert('Delete an event that\'s already been active is not currently possible.');
               return;
             }
             props.onIdDel(id);
