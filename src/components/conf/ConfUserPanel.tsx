@@ -126,7 +126,7 @@ export default function ConfUserPanel(props: Props) {
   const { t } = useTranslation();
   const [state, setState] = React.useState<State>({
     data: [],
-    checks: 6 * 5, // 5min
+    checks: 6 * 15, // 15min
     ready: false,
     submitBlocked: false,
     version: -1,
