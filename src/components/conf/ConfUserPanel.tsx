@@ -414,14 +414,14 @@ export default function ConfUserPanel(props: Props) {
                   >
                     Click to join group online
                 </Button>
-                  <br />
-                  <Typography align="center" style={{ padding: '0 2em' }}>
-                    <i>
+                  <br /><br />
+                  <Typography variant="body1" align="center" style={{ padding: '0 2em' }}>
+                    <b>
                       In your group, there are {groupInfo.members.length} people
                       with the opinions:
-                    </i>
+                    </b>
                   </Typography>
-                  <hr />
+                  <br/>
                   <ConfUserBars
                     id={confid}
                     store={store}
