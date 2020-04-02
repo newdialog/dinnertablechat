@@ -165,6 +165,9 @@ export default function ConfUserPanel(props: Props) {
   }, [user, pos, confid]);
 
   const onZoom = async (group:string | null) => {
+    const win = window.open();
+    win!.document.write("<h2>Please wait while connecting you to your group...</h2>");
+
     console.log('onZoom click');
     if(group===null) {
       alert('no group assigned  yet');
@@ -175,7 +178,9 @@ export default function ConfUserPanel(props: Props) {
     const url = await Zoom.zoomConnect(meeting);
     console.log('onZoom', url);
 
-    window.open(url, '_blank');
+    // window.open(url, '_blank');
+    // alert('Redirecting you to Zoo')
+    win!.location = url;
   }
 
   const onRefresh2 = async () => {
@@ -407,7 +412,7 @@ export default function ConfUserPanel(props: Props) {
                     className={classes.btn}
                     onClick={() => onZoom(group)}
                   >
-                    Join by video
+                    Click to join group online
                 </Button>
                   <br />
                   <Typography align="center" style={{ padding: '0 2em' }}>
