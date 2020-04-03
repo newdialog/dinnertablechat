@@ -401,6 +401,14 @@ export default observer(function CAdmin(props: Props) {
               NewDialogue.org
             </a>
           </b>
+          <br/>
+          <a
+              href="mailto:team@newdialogue.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Contact Us
+            </a>
         </div>
       </div>
     </>
