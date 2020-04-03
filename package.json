@@ -35,7 +35,6 @@
     "@nivo/bar": "^0.61.1",
     "@nivo/circle-packing": "^0.61.0",
     "@segment/in-eu": "^0.3.0",
-    "@zoomus/websdk": "^1.7.2",
     "async-retry": "^1.2.3",
     "aws-sdk": "^2.496.0",
     "backoff-rxjs": "^6.3.2",

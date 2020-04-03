@@ -21,7 +21,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     pagebody: {
       backgroundColor: '#ddd1bb',
-      minHeight: '100vh'
+      minHeight: '100vh',
     },
     container: {
       marginTop: '0px',
@@ -30,13 +30,13 @@ const useStyles = makeStyles(
       width: '100%',
       maxWidth: '100%',
       padding: '1em 1em 0 1em',
-      minWidth: '300px'
+      minWidth: '300px',
     },
     appBar: {
-      position: 'relative'
+      position: 'relative',
     },
     icon: {
-      marginRight: theme.spacing(2)
+      marginRight: theme.spacing(2),
     },
     heroUnit: {
       // backgroundColor: theme.palette.background.paper,
@@ -45,18 +45,18 @@ const useStyles = makeStyles(
       maxWidth: '100vw',
       textAlign: 'left',
       margin: '0 auto',
-      padding: `0`
+      padding: `0`,
     },
     button: {
       marginTop: theme.spacing(1),
       marginRight: theme.spacing(1),
-      color: theme.palette.primary.dark
+      color: theme.palette.primary.dark,
     },
     actionsContainer: {
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
     },
     resetContainer: {
-      padding: theme.spacing(3)
+      padding: theme.spacing(3),
     },
     footer: {
       zIndex: 0,
@@ -66,15 +66,15 @@ const useStyles = makeStyles(
       margin: '2em auto 0.07em auto',
       // position: 'absolute',
       // bottom: '.15em',
-      textAlign: 'center'
+      textAlign: 'center',
     },
     linkhome: {
-      color: theme.palette.primary.dark
+      color: theme.palette.primary.dark,
     },
     stepLabel: {
       fontSize: '1.1em !important',
       color: '#ffffff !important',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     },
     verticalCenter: {
       textAlign: 'center',
@@ -83,7 +83,7 @@ const useStyles = makeStyles(
       // minWidth: '100%',
       width: '100%',
       maxWidth: '1400px',
-      minHeight: 'calc(100vh - 250px)'
+      minHeight: 'calc(100vh - 250px)',
       // top: '50%',
       // left: '50%',
       /* transform: 'translateY(-50%) translateX(-50%)',
@@ -98,25 +98,25 @@ const useStyles = makeStyles(
       paddingBottom: '0',
       // width: '400px',
       [theme.breakpoints.down(500)]: {
-        fontSize: '4.85vw'
+        fontSize: '4.85vw',
         // width: '100vw'
-      }
+      },
     },
     heroLogo: {
       height: '3em',
       cursor: 'pointer',
       [theme.breakpoints.down(480)]: {
-        width: '90vw'
-      }
+        width: '90vw',
+      },
     },
     heroLogoText: {
       color: '#9f7b74',
       fontSize: '2.6em',
       cursor: 'pointer',
       [theme.breakpoints.down(550)]: {
-        fontSize: '8vw'
-      }
-    }
+        fontSize: '8vw',
+      },
+    },
   }),
   { name: 'CAdmin' }
 );
@@ -144,7 +144,7 @@ export default observer(function CAdmin(props: Props) {
   const [state, setState] = useState<State>({
     view: 'slides',
     show: false,
-    kill: false
+    kill: false,
   });
 
   const confid = props.id;
@@ -173,12 +173,12 @@ export default observer(function CAdmin(props: Props) {
           version: d.version,
           positions: x.answer.split(', '),
           proposition: x.question,
-          id: x.id! || `q${i}-id` // TODO x.i
+          id: x.id! || `q${i}-id`, // TODO x.i
         };
       }
     );
 
-    setState(p => ({ ...p, table: d, questions: a }));
+    setState((p) => ({ ...p, table: d, questions: a }));
 
     return d!;
   };
@@ -218,21 +218,23 @@ export default observer(function CAdmin(props: Props) {
     }
     handleReset();
 
-    if(window.gtag) window.gtag('event', 'conf_admin_splash', {
-      event_category: 'conf',
-      event_label: confid,
-      non_interaction: true
-    });
+    if (window.gtag)
+      window.gtag('event', 'conf_admin_splash', {
+        event_category: 'conf',
+        event_label: confid,
+        non_interaction: true,
+      });
   }, []);
 
   const handleReset = () => {
     if (store.conf.positions) {
       store.conf.resetQueue();
-      if(window.gtag) window.gtag('event', 'conf_admin_reset', {
-        event_category: 'conf',
-        event_label: confid,
-        non_interaction: false
-      });
+      if (window.gtag)
+        window.gtag('event', 'conf_admin_reset', {
+          event_category: 'conf',
+          event_label: confid,
+          non_interaction: false,
+        });
     }
   };
 
@@ -256,12 +258,12 @@ export default observer(function CAdmin(props: Props) {
   }
 
   const show = () => {
-    setState(p => ({ ...p, show: true }));
+    setState((p) => ({ ...p, show: true }));
   };
 
   const toggleView = () => {
-    if (state.view !== 'slides') setState(p => ({ ...p, view: 'slides' }));
-    else setState(p => ({ ...p, view: 'dash' }));
+    if (state.view !== 'slides') setState((p) => ({ ...p, view: 'slides' }));
+    else setState((p) => ({ ...p, view: 'dash' }));
   };
 
   const viewComp =
@@ -400,15 +402,15 @@ export default observer(function CAdmin(props: Props) {
             >
               NewDialogue.org
             </a>
-          </b>
-          <br/>
-          <a
+            {' '}|{' '}
+            <a
               href="mailto:team@newdialogue.org"
               target="_blank"
               rel="noopener noreferrer"
             >
               Contact Us
             </a>
+          </b>
         </div>
       </div>
     </>

@@ -368,6 +368,13 @@ if (!store.auth.isAuthenticated()) {
             >
               NewDialogue.org
             </a>
+            {' '}|{' '}<a
+              href="mailto:team@newdialogue.org"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Contact Us
+            </a>
           </b>
         </div>
       </div>

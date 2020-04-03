@@ -17,7 +17,7 @@ const useStyles = makeStyles(
   (theme: Theme) => ({
     pagebody: {
       backgroundColor: '#ddd1bb',
-      minHeight: '100vh'
+      minHeight: '100vh',
     },
     container: {
       marginTop: '0px',
@@ -26,13 +26,13 @@ const useStyles = makeStyles(
       width: '100%',
       maxWidth: '100%',
       padding: '1em 1em 0 1em',
-      minWidth: '300px'
+      minWidth: '300px',
     },
     appBar: {
-      position: 'relative'
+      position: 'relative',
     },
     icon: {
-      marginRight: theme.spacing(2)
+      marginRight: theme.spacing(2),
     },
     heroUnit: {
       // backgroundColor: theme.palette.background.paper,
@@ -41,24 +41,24 @@ const useStyles = makeStyles(
       maxWidth: '100vw',
       textAlign: 'left',
       margin: '0 auto',
-      padding: `0`
+      padding: `0`,
     },
     micButton: {
       maxWidth: 600,
       textAlign: 'center',
       margin: '0 auto',
-      padding: `0px 0 0px`
+      padding: `0px 0 0px`,
     },
     button: {
       marginTop: theme.spacing(1),
       marginRight: theme.spacing(1),
-      color: theme.palette.primary.dark
+      color: theme.palette.primary.dark,
     },
     actionsContainer: {
-      marginBottom: theme.spacing(2)
+      marginBottom: theme.spacing(2),
     },
     resetContainer: {
-      padding: theme.spacing(3)
+      padding: theme.spacing(3),
     },
     footer: {
       // backgroundColor: '#1b6f7b',
@@ -67,15 +67,15 @@ const useStyles = makeStyles(
       margin: '2em auto 0.07em auto',
       // position: 'absolute',
       // bottom: '.15em',
-      textAlign: 'center'
+      textAlign: 'center',
     },
     linkhome: {
-      color: theme.palette.primary.dark
+      color: theme.palette.primary.dark,
     },
     stepLabel: {
       fontSize: '1.1em !important',
       color: '#ffffff !important',
-      fontWeight: 'bold'
+      fontWeight: 'bold',
     },
     verticalCenter: {
       textAlign: 'center',
@@ -84,7 +84,7 @@ const useStyles = makeStyles(
       // minWidth: '100%',
       width: '100%',
       maxWidth: '680px',
-      minHeight: 'calc(100vh - 250px)'
+      minHeight: 'calc(100vh - 250px)',
       // top: '50%',
       // left: '50%',
       /* transform: 'translateY(-50%) translateX(-50%)',
@@ -99,25 +99,25 @@ const useStyles = makeStyles(
       paddingBottom: '0',
       // width: '400px',
       [theme.breakpoints.down(500)]: {
-        fontSize: '4.85vw'
+        fontSize: '4.85vw',
         // width: '100vw'
-      }
+      },
     },
     heroLogo: {
       height: '3em',
       cursor: 'pointer',
       [theme.breakpoints.down(480)]: {
-        width: '90vw'
-      }
+        width: '90vw',
+      },
     },
     heroLogoText: {
       color: '#9f7b74',
       fontSize: '2.6em',
       cursor: 'pointer',
       [theme.breakpoints.down(550)]: {
-        fontSize: '8vw'
-      }
-    }
+        fontSize: '8vw',
+      },
+    },
   }),
   { name: 'CIndex' }
 );
@@ -182,17 +182,18 @@ export default observer(function CIndex(props: Props) {
     }
     handleReset();
 
-    if(window.gtag) window.gtag('event', 'conf_user_splash', {
-      event_category: 'conf',
-      event_label: confid,
-      non_interaction: false // not recorded in realtime if true?
-    });
+    if (window.gtag)
+      window.gtag('event', 'conf_user_splash', {
+        event_category: 'conf',
+        event_label: confid,
+        non_interaction: false, // not recorded in realtime if true?
+      });
   }, []);
 
   // Get question from DB
   useEffect(() => {
     if (!confid) return;
-    ConfService.idGet(confid).then(d => {
+    ConfService.idGet(confid).then((d) => {
       if (!d) {
         alert('no id exists');
         window.location.href = '/';
@@ -202,17 +203,17 @@ export default observer(function CIndex(props: Props) {
         return {
           positions: x.answer.split(', '),
           proposition: x.question,
-          id: x.id! || `q${i}-id`
+          id: x.id! || `q${i}-id`,
         };
       });
 
-      setState(p => ({ ...p, table: d, questions: a }));
+      setState((p) => ({ ...p, table: d, questions: a }));
     });
   }, [state.resetFlag]);
 
-  const handleReset = (soft:boolean = false) => {
+  const handleReset = (soft: boolean = false) => {
     if (!soft && store.conf.positions) store.conf.resetQueue();
-    setState(p => ({ ...p, resetFlag: Date.now() }));
+    setState((p) => ({ ...p, resetFlag: Date.now() }));
   };
 
   /* if (store.auth.isNotLoggedIn) {
@@ -235,20 +236,22 @@ export default observer(function CIndex(props: Props) {
   if (!confid) step = -1;
 
   const onSubmit = (positions: any) => {
-    if(window.gtag) window.gtag('event', 'conf_user_submit', {
-      event_category: 'conf',
-      event_label: confid,
-      non_interaction: false
-    });
+    if (window.gtag)
+      window.gtag('event', 'conf_user_submit', {
+        event_category: 'conf',
+        event_label: confid,
+        non_interaction: false,
+      });
     store.conf.setPosition(positions);
   };
 
   const onFirstInteraction = () => {
-    if(window.gtag) window.gtag('event', 'conf_user_interact', {
-      event_category: 'conf',
-      event_label: confid,
-      non_interaction: false
-    });
+    if (window.gtag)
+      window.gtag('event', 'conf_user_interact', {
+        event_category: 'conf',
+        event_label: confid,
+        non_interaction: false,
+      });
   };
 
   return (
@@ -288,17 +291,19 @@ export default observer(function CIndex(props: Props) {
 
         <div className={classes.verticalCenter}>
           {step === -1 && <ConfWelcome />}
-          {step === 0 && !state.questions && 
-          <div className={classes.footer}>
-            <Typography
-              className={classes.herotext}
-              variant="h2"
-              align="center"
-              color="textSecondary"
-              gutterBottom
-            >Loading session...</Typography>
-          </div>
-          }
+          {step === 0 && !state.questions && (
+            <div className={classes.footer}>
+              <Typography
+                className={classes.herotext}
+                variant="h2"
+                align="center"
+                color="textSecondary"
+                gutterBottom
+              >
+                Loading session...
+              </Typography>
+            </div>
+          )}
           {step === 0 && state.questions && (
             <Reveal effect="fadeInUp" duration={100}>
               <PositionSelector
@@ -336,6 +341,14 @@ export default observer(function CIndex(props: Props) {
             rel="noopener noreferrer"
           >
             NewDialogue.org
+          </a>
+          {' '}|{' '}
+          <a
+            href="mailto:team@newdialogue.org"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Contact Us
           </a>
         </b>
       </div>
