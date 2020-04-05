@@ -11,7 +11,7 @@ export async function zoomConnect(meeting:string) {
 			body: JSON.stringify({ meeting: meeting, redirect: window.location.href }),
 		})
 		.then(result => result.json())
-		.then(result => result.join_url)
+		.then(result => result.murl)
 		.then(start_url => {
 			return start_url;
 		})
