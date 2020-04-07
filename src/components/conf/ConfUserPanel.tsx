@@ -26,7 +26,7 @@ import {
 import * as TopicInfo from '../../utils/TopicInfo';
 import ConfUserBars from './ConfUserBars';
 
-import * as Zoom from './Zoom';
+// import * as Zoom from './Zoom';
 
 const useStyles = makeStyles(
   (theme: Theme) => ({
@@ -175,12 +175,13 @@ export default function ConfUserPanel(props: Props) {
     }
     // const config = Zoom.makeConfig(confid + '' + group);
     const meeting = confid + '' + group;
-    const url = await Zoom.zoomConnect(meeting);
+    // const url = await Zoom.zoomConnect(meeting);
+    const url = `https://meet.jit.si/${meeting}`;
     console.log('onZoom', url);
 
     // window.open(url, '_blank');
     // alert('Redirecting you to Zoo')
-    win!.location = url;
+    win!.location.href = url;
   }
 
   const onRefresh2 = async () => {
