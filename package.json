@@ -139,7 +139,7 @@
     "react-scripts": "^3.3.0-next.39",
     "regenerator-runtime": "^0.13.3",
     "source-map-explorer": "^2.2.0",
-    "typescript": "^3.8.3",
+    "typescript": "^3.9.2",
     "yarn-or-npm": "^3.0.1"
   },
   "optionalDependencies": {},
